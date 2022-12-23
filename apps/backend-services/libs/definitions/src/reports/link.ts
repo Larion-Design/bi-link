@@ -1,6 +1,4 @@
-export interface Link {
-  label: string
-  url: string
-}
+import { Link as LinkType, LinkAPI as LinkAPIType } from 'defs'
 
-export interface LinkAPI extends Link {}
+export interface Link extends LinkType {}
+export interface LinkAPI extends LinkAPIType {}

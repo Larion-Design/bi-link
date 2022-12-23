@@ -7,19 +7,17 @@
   "license": "UNLICENSED",
   "scripts": {
     "prebuild": "rimraf dist",
-    "build": "nest build",
+    "build": "nest build api && nest build indexer && nest build files-parser && nest build graph && nest build user-actions-recorder",
+    "api": "nest start api --watch",
+    "indexer": "nest start indexer --watch",
+    "files-parser": "nest start files-parser --watch",
+    "graph": "nest start graph --watch",
+    "user-actions-recorder": "nest start user-actions-recorder --watch",
     "format": "prettier --write \"apps/**/*.ts\" \"libs/**/*.ts\"",
-    "start": "nest start",
-    "start:dev": "nest start --watch",
-    "start:debug": "nest start --debug --watch",
     "lint": "eslint --ext=.ts --quiet ./",
     "test": "jest --passWithNoTests",
-    "test:watch": "jest --watch --passWithNoTests",
-    "test:cov": "jest --coverage --passWithNoTests",
-    "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand --passWithNoTests",
     "test:e2e": "jest --config apps/api/test/jest-e2e.json --passWithNoTests",
-    "generate:docs": "npx @compodoc/compodoc -p tsconfig.json -s",
-    "webstorm-integration": "vitest --watch --reporter=dot --reporter=json --outputFile=.vitest-result.json"
+    "generate:docs": "npx @compodoc/compodoc -p tsconfig.json -s"
   },
   "dependencies": {
     "@elastic/elasticsearch": "^8.5.0",

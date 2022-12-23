@@ -6,7 +6,7 @@ import {
   ConnectedEntity,
   ConnectedPersonIndex,
 } from '@app/definitions/connectedEntity'
-import { NodesRelationship } from '@app/graph-module/types'
+import { NodesRelationship } from '@app/definitions/entitiesGraph'
 
 export interface Associate {
   role: string

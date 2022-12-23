@@ -10,8 +10,26 @@
     "build": {
       "dependsOn": ["type-check"],
       "outputs": ["dist/**"]
+    },
+    "build:native": {
+      "dependsOn": ["type-check"],
+      "outputs": ["dist/**"]
+    },
+    "api": {
+      "outputs": ["dist/**"]
+    },
+    "indexer": {
+      "outputs": ["dist/**"]
+    },
+    "files-parser": {
+      "outputs": ["dist/**"]
+    },
+    "graph": {
+      "outputs": ["dist/**"]
+    },
+    "user-actions-recorder": {
+      "outputs": ["dist/**"]
     }
   },
   "globalEnv": ["GITHUB_TOKEN"]
 }
-
