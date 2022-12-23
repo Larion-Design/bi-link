@@ -2,6 +2,7 @@
   "compilerOptions": {
     "baseUrl": ".",
     "module": "esnext",
+    "moduleResolution": "node",
     "allowJs": true,
     "strict": true,
     "noEmit": true,
@@ -10,6 +11,7 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "allowSyntheticDefaultImports": true,
+    "preserveWatchOutput": true,
     "target": "es2017",
     "sourceMap": true,
     "incremental": true,
@@ -21,6 +23,7 @@
     "forceConsistentCasingInFileNames": true,
     "noFallthroughCasesInSwitch": true,
     "importHelpers": true,
-    "include": ["./src"]
+    "include": ["./src"],
+    "exclude": ["node_modules"]
   }
 }
