@@ -1,0 +1,28 @@
+name: Build API Prod Image
+
+on:
+  push:
+    branches: [ main ]
+env:
+  REGISTRY: "registry.digitalocean.com/bi-link"
+  IMAGE_NAME: "link-backend"
+jobs:
+  run_build_docker_image_api:
+    runs-on: self-hosted
+    steps:
+      - name: Checkout the repo
+        uses: actions/checkout@v3
+
+      - name: Build image
+        run: docker build -t $(echo $REGISTRY)/$(echo $IMAGE_NAME) .
+
+      - name: Install doctl
+        uses: digitalocean/action-doctl@v2
+        with:
+          token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+
+      - name: Log in to DigitalOcean Container Registry with short-lived credentials
+        run: doctl registry login --expiry-seconds 900
+
+      - name: Push image to DigitalOcean Container Registry
+        run: docker push $(echo $REGISTRY)/$(echo $IMAGE_NAME)

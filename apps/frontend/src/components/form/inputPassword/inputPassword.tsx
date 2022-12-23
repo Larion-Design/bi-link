@@ -1,0 +1,65 @@
+import React, { useEffect, useState } from 'react'
+import TextField from '@mui/material/TextField'
+import { useDebounce } from 'usehooks-ts'
+import InputAdornment from '@mui/material/InputAdornment'
+import IconButton from '@mui/material/IconButton'
+import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined'
+import VisibilityOffOutlinedIcon from '@mui/icons-material/VisibilityOffOutlined'
+
+type Props = {
+  name?: string
+  label: string
+  onChange: (value: string) => void
+  error?: string
+  disabled?: boolean
+}
+
+export const InputPassword: React.FunctionComponent<Props> = ({
+  label,
+  onChange,
+  error,
+  name,
+  disabled,
+}) => {
+  const [value, setValue] = useState<string>('')
+  const [showPassword, setPasswordVisibility] = useState(false)
+  const debouncedValue = useDebounce(value, 100)
+
+  useEffect(() => {
+    onChange(debouncedValue)
+  }, [debouncedValue])
+
+  return (
+    <TextField
+      fullWidth
+      required
+      name={name}
+      type={showPassword ? 'text' : 'password'}
+      value={value}
+      label={label}
+      error={!!error}
+      helperText={error ?? ''}
+      onChange={({ target: { value } }) => setValue(value)}
+      disabled={disabled}
+      data-cy={name}
+      InputProps={{
+        endAdornment: (
+          <InputAdornment position={'end'}>
+            <IconButton
+              onClick={() =>
+                setPasswordVisibility((showPassword) => !showPassword)
+              }
+              edge={'end'}
+            >
+              {showPassword ? (
+                <VisibilityOffOutlinedIcon fontSize={'small'} />
+              ) : (
+                <VisibilityOutlinedIcon fontSize={'small'} />
+              )}
+            </IconButton>
+          </InputAdornment>
+        ),
+      }}
+    />
+  )
+}

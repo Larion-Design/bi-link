@@ -1,0 +1,9 @@
+{
+    "extends": "../tsconfig.json",
+    "compilerOptions": {
+        "allowJs": true,
+        "types": ["cypress", "node"],
+        "module": "NodeNext"
+    },
+    "include": ["**/*.ts", "../cypress.config.ts"]
+}

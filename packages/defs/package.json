@@ -1,0 +1,13 @@
+{
+  "name": "defs",
+  "version": "1.0.0",
+  "private": true,
+  "description": "BI Link types and definitions",
+  "scripts": {
+    "type-check": "tsc"
+  },
+  "devDependencies": {
+    "tslib": "^2.4.1",
+    "typescript": "^4.9.4"
+  }
+}

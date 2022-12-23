@@ -1,0 +1,27 @@
+{
+  "name": "link",
+  "version": "0.0.4",
+  "private": true,
+  "description": "BI Link monorepo",
+  "scripts": {
+    "build": "turbo run build",
+    "test": "turbo run test",
+    "lint": "turbo run lint",
+    "dev": "turbo run dev"
+  },
+  "keywords": [],
+  "author": "alextudor@duck.com",
+  "license": "proprietary",
+  "devDependencies": {
+    "turbo": "^1.6.3",
+    "@typescript-eslint/eslint-plugin": "^5.44.0",
+    "@typescript-eslint/parser": "^5.44.0",
+    "eslint": "^8.28.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "eslint-plugin-mui-unused-classes": "^1.0.3",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "eslint-plugin-simple-import-sort": "^7.0.0",
+    "prettier": "^2.8.1"
+  }
+}

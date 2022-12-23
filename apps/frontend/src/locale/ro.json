@@ -1,0 +1,14 @@
+{
+  "ADMIN": "Administrator",
+  "OPERATOR": "Operator",
+  "close": "Inchide",
+  "save": "Salvează",
+  "cancel": "Anulează",
+  "confirm": "Confirmă",
+  "fromDate": "De la data",
+  "untilDate": "Pana la data",
+  "Are you sure you want to cancel the changes you've made?": "Esti sigur(a) ca vrei sa anulezi modificările?",
+  "All unsaved changes will be lost": "Toate modificările nesalvate vor fi pierdute.",
+  "General Information": "Informatii generale",
+  "Additional Information": "Informatii suplimentare"
+}

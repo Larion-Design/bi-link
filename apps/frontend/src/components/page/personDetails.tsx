@@ -1,0 +1,78 @@
+import React, { useState } from 'react'
+import Typography from '@mui/material/Typography'
+import Box from '@mui/material/Box'
+import MenuItem from '@mui/material/MenuItem'
+import { getPersonFullName } from '../../utils/person'
+import { PersonAPIInput } from '../../types/person'
+import { PersonForm } from '../form/personForm'
+import { InputFieldMenu } from '../menu/inputFieldMenu'
+import { Graph } from '../entityViews/graph'
+
+type Props = {
+  personId?: string
+  personInfo?: PersonAPIInput
+  readonly: boolean
+  onSubmit: (data: PersonAPIInput) => void | Promise<void>
+}
+
+export const PersonDetails: React.FunctionComponent<Props> = ({
+  personId,
+  personInfo,
+  onSubmit,
+  readonly,
+}) => {
+  const [mainTabIndex, setMainTabIndex] = useState(0)
+  const canSwitchViews = !!personId
+
+  return (
+    <Box sx={{ width: 1, p: 4, mt: 2 }}>
+      <Box
+        sx={{
+          width: 1,
+          mb: 4,
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+        }}
+      >
+        <Typography variant={'h5'} data-cy={'pageTitle'} gutterBottom>
+          {!!personId && !!personInfo
+            ? `Detalii despre ${getPersonFullName(personInfo)}`
+            : 'Creaza o persoana'}
+        </Typography>
+        {!!personId && (
+          <InputFieldMenu label={'Optiuni'}>
+            <MenuItem onClick={() => setMainTabIndex(0)}>Informatii</MenuItem>
+            <MenuItem
+              disabled={!canSwitchViews}
+              onClick={() => setMainTabIndex(1)}
+            >
+              Grafic relational
+            </MenuItem>
+            <MenuItem disabled={true} onClick={() => setMainTabIndex(2)}>
+              Evenimente
+            </MenuItem>
+            <MenuItem disabled={true} onClick={() => setMainTabIndex(3)}>
+              Rapoarte
+            </MenuItem>
+            <MenuItem disabled={true} onClick={() => setMainTabIndex(4)}>
+              Conflicte
+            </MenuItem>
+          </InputFieldMenu>
+        )}
+      </Box>
+
+      <Box sx={{ width: 1 }}>
+        {mainTabIndex === 0 && (
+          <PersonForm
+            personId={personId}
+            personInfo={personInfo}
+            onSubmit={onSubmit}
+            readonly={readonly}
+          />
+        )}
+        {mainTabIndex === 1 && !!personId && <Graph entityId={personId} />}
+      </Box>
+    </Box>
+  )
+}

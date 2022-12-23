@@ -1,0 +1,17 @@
+{
+  "printWidth": 100,
+  "trailingComma": "all",
+  "tabWidth": 2,
+  "arrowParens": "always",
+  "semi": false,
+  "endOfLine": "lf",
+  "singleQuote": true,
+  "overrides": [
+    {
+      "files": ["*.ts?(x)", "*.js?(x)"],
+      "options": {
+        "parser": "babel-ts"
+      }
+    }
+  ]
+}

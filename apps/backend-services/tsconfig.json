@@ -1,0 +1,73 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "declaration": true,
+    "removeComments": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "allowSyntheticDefaultImports": true,
+    "target": "es2017",
+    "sourceMap": true,
+    "outDir": "./dist",
+    "baseUrl": "./",
+    "incremental": true,
+    "skipLibCheck": true,
+    "strictNullChecks": false,
+    "noImplicitAny": false,
+    "noUncheckedIndexedAccess": true,
+    "strictBindCallApply": false,
+    "forceConsistentCasingInFileNames": true,
+    "noFallthroughCasesInSwitch": false,
+    "importHelpers": true,
+    "paths": {
+      "@app/entities": [
+        "libs/entities/src"
+      ],
+      "@app/entities/*": [
+        "libs/entities/src/*"
+      ],
+      "@app/pub": [
+        "libs/pub/src"
+      ],
+      "@app/pub/*": [
+        "libs/pub/src/*"
+      ],
+      "@app/service-health": [
+        "libs/service-health/src"
+      ],
+      "@app/service-health/*": [
+        "libs/service-health/src/*"
+      ],
+      "@app/definitions": [
+        "libs/definitions/src"
+      ],
+      "@app/definitions/*": [
+        "libs/definitions/src/*"
+      ],
+      "@app/search-mapping-tools": [
+        "libs/search-mapping-tools/src"
+      ],
+      "@app/search-mapping-tools/*": [
+        "libs/search-mapping-tools/src/*"
+      ],
+      "@app/graph": [
+        "libs/graph/src"
+      ],
+      "@app/graph/*": [
+        "libs/graph/src/*"
+      ],
+      "@app/files": [
+        "libs/files/src"
+      ],
+      "@app/files/*": [
+        "libs/files/src/*"
+      ],
+      "@app/graph-module": [
+        "libs/graph-module/src"
+      ],
+      "@app/graph-module/*": [
+        "libs/graph-module/src/*"
+      ]
+    }
+  }
+}

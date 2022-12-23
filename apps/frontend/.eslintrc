@@ -1,0 +1,18 @@
+{
+  "parserOptions": {
+    "project": ["./tsconfig.json"]
+  },
+  "parser": "@typescript-eslint/parser",
+  "plugins": ["@typescript-eslint", "simple-import-sort", "mui-unused-classes"],
+  "extends": [
+    "eslint:recommended",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:@typescript-eslint/recommended-requiring-type-checking"
+    // "plugin:react-hooks/recommended"
+  ],
+  "rules": {
+    "@typescript-eslint/no-namespace": "off",
+    "simple-import-sort/imports": "off",
+    "simple-import-sort/exports": "off"
+  }
+}
