@@ -31,5 +31,5 @@ schema.graphql
 
 # Code formatting
 .eslintrc
-../../.prettierrc
-../../.prettierignore
+.prettierrc
+.prettierignore

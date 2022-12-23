@@ -27,4 +27,4 @@ coverage
 
 # GraphQL schema
 schema.gql
-schema.graphql
+../../schema.graphql
