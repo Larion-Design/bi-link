@@ -23,6 +23,9 @@ export default defineConfig({
     strictPort: true,
   },
   envPrefix: ['VITE_', 'TAURI_'],
+  optimizeDeps: {
+    include: ['defs'],
+  },
   build: {
     chunkSizeWarningLimit: 8192,
     reportCompressedSize: false,
@@ -30,7 +33,8 @@ export default defineConfig({
     minify: !process.env.TAURI_DEBUG || process.env.NODE_ENV === 'production' ? 'esbuild' : false,
     sourcemap: !!process.env.TAURI_DEBUG,
     commonjsOptions: {
-      include: [/node_modules/],
+      include: [/defs/],
+      transformMixedEsModules: true,
     },
   },
 })

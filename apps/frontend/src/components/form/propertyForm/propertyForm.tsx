@@ -17,7 +17,7 @@ import { propertyFormValidation, validatePropertyForm } from './validation/valid
 import { AutocompleteField } from '../autocompleteField'
 import { FormattedMessage, useIntl } from 'react-intl'
 import { Images } from '../images'
-import { PropertyAPIInput, VehicleInfo as VehicleInfoType } from '../../../types/property'
+import { PropertyAPIInput, VehicleInfo as VehicleInfoType } from 'defs'
 import { PropertyOwners } from '../propertyOwners'
 import { VehicleInfo } from '../vehicleInfo'
 
@@ -59,10 +59,7 @@ const Form: React.FunctionComponent<Props & FormikProps<PropertyAPIInput>> = ({
     [dialog],
   )
 
-  const navigateFromPropertyFormPage = useCallback(
-    () => navigate(routes.properties),
-    [navigate],
-  )
+  const navigateFromPropertyFormPage = useCallback(() => navigate(routes.properties), [navigate])
 
   return (
     <form data-cy={'propertyForm'}>
@@ -137,9 +134,7 @@ const Form: React.FunctionComponent<Props & FormikProps<PropertyAPIInput>> = ({
                 {values.type === 'Vehicul' && (
                   <VehicleInfo
                     vehicleInfo={values.vehicleInfo ?? createVehicleInfo()}
-                    updateVehicleInfo={(vehicleInfo) =>
-                      setFieldValue('vehicleInfo', vehicleInfo)
-                    }
+                    updateVehicleInfo={(vehicleInfo) => setFieldValue('vehicleInfo', vehicleInfo)}
                     error={errors.vehicleInfo}
                   />
                 )}
@@ -152,9 +147,7 @@ const Form: React.FunctionComponent<Props & FormikProps<PropertyAPIInput>> = ({
                 <CustomInputFields
                   fields={values.customFields}
                   setFieldValue={async (customFields) => {
-                    const error = await propertyFormValidation.customFields(
-                      customFields,
-                    )
+                    const error = await propertyFormValidation.customFields(customFields)
 
                     setFieldValue('customFields', customFields)
                     setFieldError('customFields', error)
@@ -185,9 +178,7 @@ const Form: React.FunctionComponent<Props & FormikProps<PropertyAPIInput>> = ({
                 files={values.files}
                 keepDeletedFiles={!!propertyId}
                 updateFiles={async (uploadedFiles) => {
-                  const error = await propertyFormValidation.files(
-                    uploadedFiles,
-                  )
+                  const error = await propertyFormValidation.files(uploadedFiles)
                   setFieldValue('files', uploadedFiles)
                   setFieldError('files', error)
                 }}
@@ -202,11 +193,7 @@ const Form: React.FunctionComponent<Props & FormikProps<PropertyAPIInput>> = ({
                 color={'error'}
                 disabled={isSubmitting || isValidating}
                 variant={'text'}
-                onClick={
-                  readonly
-                    ? navigateFromPropertyFormPage
-                    : () => displayFormCancelDialog()
-                }
+                onClick={readonly ? navigateFromPropertyFormPage : () => displayFormCancelDialog()}
                 sx={{ mr: 4 }}
               >
                 Anulează
@@ -239,8 +226,7 @@ const propertyInitialValues: PropertyAPIInput = {
 
 export const PropertyForm = withFormik<Props, PropertyAPIInput>({
   mapPropsToValues: ({ propertyInfo }) => propertyInfo ?? propertyInitialValues,
-  validate: async (values, { propertyId }) =>
-    validatePropertyForm(values, propertyId),
+  validate: async (values, { propertyId }) => validatePropertyForm(values, propertyId),
   validateOnChange: false,
   validateOnMount: false,
   validateOnBlur: false,

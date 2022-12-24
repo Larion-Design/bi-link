@@ -7,8 +7,8 @@ import {
   useSignInWithEmailAndPassword,
   useUpdateProfile,
 } from 'react-firebase-hooks/auth'
-import { Role } from 'defs'
 import { useIntl } from 'react-intl'
+import { Role } from 'defs'
 
 const firebaseApp = initializeApp({
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,

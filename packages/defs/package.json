@@ -1,11 +1,15 @@
 {
   "name": "defs",
   "version": "1.0.0",
-  "type": "commonjs",
   "private": true,
   "description": "BI Link types and definitions",
   "main": "dist/index.js",
   "types": "src/index.ts",
+  "files": ["dist"],
+  "exports": {
+    ".": "./dist/index.js",
+    "./package.json": "./package.json"
+  },
   "scripts": {
     "build": "tsc"
   },

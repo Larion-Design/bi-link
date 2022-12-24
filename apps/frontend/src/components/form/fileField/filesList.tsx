@@ -12,9 +12,9 @@ import {
 } from '@mui/x-data-grid'
 import { GridActionsColDef } from '@mui/x-data-grid/models/colDef/gridColDef'
 import { Textarea } from '../../dataGrid/textArea'
-import { FileAPIInput } from 'defs'
 import { getDownloadUrlRequest } from '../../../graphql/shared/queries/getDownloadUrl'
 import { RemoveRowsToolbarButton } from '../../dataGrid/removeRowsToolbarButton'
+import { FileAPIInput } from 'defs'
 
 type Props = {
   files: FileAPIInput[]

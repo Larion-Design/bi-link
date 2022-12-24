@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { VehicleInfo as VehicleInfoType } from '../../../types/property'
+import { VehicleInfo as VehicleInfoType } from 'defs'
 import Grid from '@mui/material/Grid'
 import { InputField } from '../inputField'
 import { AutocompleteField } from '../autocompleteField'
@@ -62,9 +62,7 @@ export const VehicleInfo: React.FunctionComponent<Props> = ({
           value={vehicleInfo.maker}
           error={error}
           suggestions={makers?.getMakers ?? []}
-          onValueChange={async (maker) =>
-            updateVehicleInfo({ ...vehicleInfo, maker })
-          }
+          onValueChange={async (maker) => updateVehicleInfo({ ...vehicleInfo, maker })}
         />
       </Grid>
       <Grid item xs={6}>
@@ -73,9 +71,7 @@ export const VehicleInfo: React.FunctionComponent<Props> = ({
           value={vehicleInfo.model}
           error={error}
           suggestions={models?.getModels ?? []}
-          onValueChange={async (model) =>
-            updateVehicleInfo({ ...vehicleInfo, model })
-          }
+          onValueChange={async (model) => updateVehicleInfo({ ...vehicleInfo, model })}
         />
       </Grid>
       <Grid item xs={6}>
@@ -84,9 +80,7 @@ export const VehicleInfo: React.FunctionComponent<Props> = ({
           value={vehicleInfo?.color}
           label={'Culoare'}
           error={error}
-          onChange={async (color) =>
-            updateVehicleInfo({ ...vehicleInfo, color })
-          }
+          onChange={async (color) => updateVehicleInfo({ ...vehicleInfo, color })}
         />
       </Grid>
     </>
