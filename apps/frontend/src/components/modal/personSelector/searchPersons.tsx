@@ -8,7 +8,7 @@ import PersonAddOutlinedIcon from '@mui/icons-material/PersonAddOutlined'
 import { DataGrid, GridColDef, GridSelectionModel } from '@mui/x-data-grid'
 import { searchPersonsRequest } from '../../../graphql/persons/queries/searchPersons'
 import { useDebounce } from 'usehooks-ts'
-import { PersonListRecord } from '../../../types/person'
+import { PersonListRecord } from 'defs'
 import { PersonSelectorView } from './personSelector'
 import { ModalHeader } from '../modalHeader'
 
@@ -77,9 +77,7 @@ export const SearchPersons: React.FunctionComponent<Props> = ({
             keepNonExistentRowsSelected
             onSelectionModelChange={(personsIds: GridSelectionModel) =>
               selectPersons((selectedPersons) =>
-                Array.from(
-                  new Set([...(personsIds as string[]), ...selectedPersons]),
-                ),
+                Array.from(new Set([...(personsIds as string[]), ...selectedPersons])),
               )
             }
             disableColumnSelector
@@ -91,12 +89,9 @@ export const SearchPersons: React.FunctionComponent<Props> = ({
             disableVirtualization
             getRowId={({ _id }: PersonListRecord) => _id}
             localeText={{
-              noRowsLabel:
-                'Nu au fost gasite persoane. Incearca alt termen de cautare.',
+              noRowsLabel: 'Nu au fost gasite persoane. Incearca alt termen de cautare.',
               footerRowSelected: (count) =>
-                count !== 1
-                  ? `${count} persoane selectate`
-                  : '1 persoana selectata',
+                count !== 1 ? `${count} persoane selectate` : '1 persoana selectata',
             }}
           />
         </Box>
@@ -112,12 +107,7 @@ export const SearchPersons: React.FunctionComponent<Props> = ({
         </Button>
 
         <Box display={'flex'}>
-          <Button
-            variant={'outlined'}
-            color={'error'}
-            onClick={closeModal}
-            sx={{ mr: 2 }}
-          >
+          <Button variant={'outlined'} color={'error'} onClick={closeModal} sx={{ mr: 2 }}>
             Inchide
           </Button>
           <Button

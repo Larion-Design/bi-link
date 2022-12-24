@@ -4,8 +4,7 @@ import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import { DatePicker } from '../datePicker'
 import { InputField } from '../inputField'
-import { CompanyListRecord } from '../../../types/company'
-import { PropertyOwnerAPI } from '../../../types/propertyOwner'
+import { CompanyListRecord, PropertyOwnerAPI } from 'defs'
 
 type Props = {
   companyInfo: CompanyListRecord

@@ -6,7 +6,16 @@ export interface User {
   active: boolean
 }
 
+export interface UserAPI extends User {}
+
 export const UserActions = {
   ENTITY_CREATED: 'ENTITY_CREATED',
   ENTITY_UPDATED: 'ENTITY_UPDATED',
+}
+
+export enum Role {
+  ADMIN = 'ADMIN',
+  OPERATOR = 'OPERATOR',
+  CI = 'CI',
+  DEV = 'DEV',
 }

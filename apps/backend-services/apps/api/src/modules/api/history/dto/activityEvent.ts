@@ -1,5 +1,5 @@
 import { Field, ObjectType } from '@nestjs/graphql'
-import { ActivityEvent as ActivityEventType } from '@app/definitions/activityEvent'
+import { ActivityEvent as ActivityEventType } from 'defs'
 
 @ObjectType()
 export class ActivityEvent implements ActivityEventType {

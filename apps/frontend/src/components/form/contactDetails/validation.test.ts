@@ -2,7 +2,7 @@ import { faker } from '@faker-js/faker'
 import { describe, expect, it } from 'vitest'
 
 import { validateEmailFields, validatePhoneNumberFields } from './validation'
-import { CustomField } from '../../../types/customField'
+import { CustomField } from 'defs'
 
 describe('validateDuplicateContactDetails', () => {
   it('should validate emails correctly', () => {

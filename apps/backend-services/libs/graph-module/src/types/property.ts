@@ -1,5 +1,4 @@
-import { EntityMetadata } from '@app/definitions/entitiesGraph'
-import { Property } from '@app/definitions/property'
+import { EntityMetadata, Property } from 'defs'
 
 export interface PropertyGraphNode
   extends Required<Pick<Property, 'type' | 'name'>>,

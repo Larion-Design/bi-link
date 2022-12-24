@@ -1,7 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
 import { Document, Types } from 'mongoose'
 import { PersonDocument } from './personModel'
-import { Relationship } from '@app/definitions/relationship'
+import { Relationship } from 'defs'
 
 @Schema({ _id: false })
 export class RelationshipModel implements Relationship {

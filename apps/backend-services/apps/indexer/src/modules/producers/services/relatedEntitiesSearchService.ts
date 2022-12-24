@@ -1,9 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common'
 import { ElasticsearchService } from '@nestjs/elasticsearch'
 import { INDEX_COMPANIES, INDEX_INCIDENTS, INDEX_PROPERTIES } from '@app/definitions/constants'
-import { CompanyIndex } from '@app/definitions/company'
-import { IncidentIndex } from '@app/definitions/incident'
-import { PropertyIndex } from '@app/definitions/property'
+import { CompanyIndex, IncidentIndex, PropertyIndex } from 'defs'
 
 @Injectable()
 export class RelatedEntitiesSearchService {

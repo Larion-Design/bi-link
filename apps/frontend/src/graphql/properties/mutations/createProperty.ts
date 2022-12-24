@@ -1,5 +1,5 @@
 import { gql, useMutation } from '@apollo/client'
-import { PropertyAPIInput, PropertyAPIOutput } from '../../../types/property'
+import { PropertyAPIInput, PropertyAPIOutput } from 'defs'
 
 type Params = {
   data: PropertyAPIInput

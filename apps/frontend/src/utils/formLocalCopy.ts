@@ -1,5 +1,5 @@
 import { useLocalStorage } from 'usehooks-ts'
-import { PersonAPIInput } from '../types/person'
+import { PersonAPIInput } from 'defs'
 import { validatePersonForm } from '../components/form/personForm/validation/validation'
 import { useEffect } from 'react'
 

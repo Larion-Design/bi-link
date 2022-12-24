@@ -1,7 +1,7 @@
 import { Field, ObjectType } from '@nestjs/graphql'
 import { CustomField } from '../../customFields/dto/customField'
 import { ConnectedEntity } from '../../common/dto/connectedEntity'
-import { PartyAPI } from '@app/definitions/party'
+import { PartyAPI } from 'defs'
 
 @ObjectType()
 export class Party implements PartyAPI {

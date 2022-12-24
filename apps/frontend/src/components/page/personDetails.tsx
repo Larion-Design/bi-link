@@ -3,7 +3,7 @@ import Typography from '@mui/material/Typography'
 import Box from '@mui/material/Box'
 import MenuItem from '@mui/material/MenuItem'
 import { getPersonFullName } from '../../utils/person'
-import { PersonAPIInput } from '../../types/person'
+import { PersonAPIInput } from 'defs'
 import { PersonForm } from '../form/personForm'
 import { InputFieldMenu } from '../menu/inputFieldMenu'
 import { Graph } from '../entityViews/graph'
@@ -43,10 +43,7 @@ export const PersonDetails: React.FunctionComponent<Props> = ({
         {!!personId && (
           <InputFieldMenu label={'Optiuni'}>
             <MenuItem onClick={() => setMainTabIndex(0)}>Informatii</MenuItem>
-            <MenuItem
-              disabled={!canSwitchViews}
-              onClick={() => setMainTabIndex(1)}
-            >
+            <MenuItem disabled={!canSwitchViews} onClick={() => setMainTabIndex(1)}>
               Grafic relational
             </MenuItem>
             <MenuItem disabled={true} onClick={() => setMainTabIndex(2)}>

@@ -2,8 +2,8 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
 import { Document, Types } from 'mongoose'
 import { PersonDocument, PersonModel } from './personModel'
 import { CustomFieldModel, CustomFieldSchema } from './customFieldModel'
-import { Associate } from '@app/definitions/associate'
-import { CompanyDocument } from '@app/entities/models/companyModel'
+import { Associate } from 'defs'
+import { CompanyDocument, CompanyModel } from '@app/entities/models/companyModel'
 
 @Schema({ _id: false })
 export class AssociateModel implements Associate {

@@ -3,7 +3,7 @@ import { Injectable, Logger } from '@nestjs/common'
 import { InjectModel } from '@nestjs/mongoose'
 import { PersonDocument, PersonModel } from '@app/entities/models/personModel'
 import { FileDocument, FileModel } from '@app/entities/models/fileModel'
-import { Person } from '@app/definitions/person'
+import { Person } from 'defs'
 
 @Injectable()
 export class PersonsService {

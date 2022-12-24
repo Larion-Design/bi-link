@@ -1,7 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common'
 import { ElasticsearchService } from '@nestjs/elasticsearch'
 import { INDEX_HISTORY } from '@app/definitions/constants'
-import { ActivityEventIndex } from '@app/definitions/activityEvent'
+import { ActivityEventIndex } from 'defs'
 
 @Injectable()
 export class SearchHistoryService {

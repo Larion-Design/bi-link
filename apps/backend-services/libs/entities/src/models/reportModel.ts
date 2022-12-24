@@ -1,5 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
-import { Report } from '@app/definitions/report'
+import { Report } from 'defs'
 import { Document, Types } from 'mongoose'
 import { PersonDocument, PersonModel } from '@app/entities/models/personModel'
 import { CompanyDocument, CompanyModel } from '@app/entities/models/companyModel'

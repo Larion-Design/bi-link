@@ -6,8 +6,7 @@ import { getPersonFullName } from '../../../../utils/person'
 import { PersonCardActions } from '../../../card/personCardActions'
 import { AssociateSwitchAction } from './associateSwitchAction'
 import { PersonAssociateInformation } from './personAssociateInformation'
-import { AssociateAPIInput } from '../../../../types/associate'
-import { PersonListRecordWithImage } from '../../../../types/person'
+import { AssociateAPIInput, PersonListRecordWithImage } from 'defs'
 import { LinkedEntityCustomFields } from '../../linkedEntityCustomFields'
 
 type Props = {
@@ -53,16 +52,10 @@ export const PersonAssociateCard: React.FunctionComponent<Props> = ({
           </Grid>
         </Grid>
       </CardContent>
-      <PersonCardActions
-        personId={_id}
-        name={fullName}
-        onRemove={() => removeAssociate(_id)}
-      >
+      <PersonCardActions personId={_id} name={fullName} onRemove={() => removeAssociate(_id)}>
         <AssociateSwitchAction
           isActive={isActive}
-          onStateChange={(isActive) =>
-            updateAssociate(_id, { ...associateInfo, isActive })
-          }
+          onStateChange={(isActive) => updateAssociate(_id, { ...associateInfo, isActive })}
         />
       </PersonCardActions>
     </Card>

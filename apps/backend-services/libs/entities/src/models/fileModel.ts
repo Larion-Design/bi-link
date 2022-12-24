@@ -1,6 +1,6 @@
 import { Document } from 'mongoose'
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
-import { File, FileSources } from '@app/definitions/file'
+import { File, FileSources } from 'defs'
 
 export type FileDocument = FileModel & Document
 

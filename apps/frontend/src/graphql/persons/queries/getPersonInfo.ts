@@ -1,5 +1,5 @@
 import { gql, useLazyQuery } from '@apollo/client'
-import { PersonAPIOutput } from '../../../types/person'
+import { PersonAPIOutput } from 'defs'
 
 type Params = {
   personId: string

@@ -1,6 +1,6 @@
 import { Inject, Injectable, Logger } from '@nestjs/common'
 import { ClientProxy } from '@nestjs/microservices'
-import { ActivityEventIndex } from '@app/definitions/activityEvent'
+import { ActivityEventIndex } from 'defs'
 import { MICROSERVICES } from '@app/pub/constants'
 
 @Injectable()

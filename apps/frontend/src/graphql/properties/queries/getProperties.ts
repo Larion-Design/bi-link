@@ -1,5 +1,5 @@
 import { gql, useLazyQuery } from '@apollo/client'
-import { PropertyListRecord } from '../../../types/property'
+import { PropertyListRecord } from 'defs'
 
 type Params = {
   propertiesIds: string[]

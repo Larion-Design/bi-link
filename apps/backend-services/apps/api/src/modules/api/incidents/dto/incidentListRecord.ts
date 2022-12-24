@@ -1,5 +1,5 @@
 import { Field, ObjectType } from '@nestjs/graphql'
-import { IncidentListRecord as IncidentListRecordType } from '@app/definitions/incident'
+import { IncidentListRecord as IncidentListRecordType } from 'defs'
 
 @ObjectType()
 export class IncidentListRecord implements IncidentListRecordType {

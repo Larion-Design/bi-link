@@ -7,12 +7,7 @@ import {
   SearchTotalHits,
 } from '@elastic/elasticsearch/lib/api/types'
 import { SearchHelperService } from './searchHelperService'
-import {
-  PropertiesSuggestions,
-  PropertyIndex,
-  PropertyListRecord,
-  PropertySearchIndex,
-} from '@app/definitions/property'
+import { PropertiesSuggestions, PropertyIndex, PropertyListRecord, PropertySearchIndex } from 'defs'
 
 @Injectable()
 export class SearchPropertiesService {

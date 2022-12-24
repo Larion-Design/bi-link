@@ -1,5 +1,5 @@
 import { gql, useLazyQuery } from '@apollo/client'
-import { CompanyListRecord } from '../../../types/company'
+import { CompanyListRecord } from 'defs'
 
 type Params = {
   companiesIds: string[]

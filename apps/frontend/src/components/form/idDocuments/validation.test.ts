@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { validateDocumentDates } from './validation'
-import { IdDocument, IdDocumentStatus } from '../../../types/idDocument'
+import { IdDocument, IdDocumentStatus } from 'defs'
 
 describe('validateDocumentDates', () => {
   it('should return error message', () => {

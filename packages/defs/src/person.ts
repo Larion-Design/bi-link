@@ -1,15 +1,11 @@
-import { IdDocument, IdDocumentIndex } from '@app/definitions/idDocument'
-import { EmbeddedFileIndex, File, FileAPIInput, FileAPIOutput } from '@app/definitions/file'
-import {
-  Relationship,
-  RelationshipAPIInput,
-  RelationshipAPIOutput,
-} from '@app/definitions/relationship'
-import { CustomField } from '@app/definitions/customField'
-import { EntityMetadata } from '@app/definitions/entitiesGraph'
+import { Relationship, RelationshipAPIInput, RelationshipAPIOutput } from './relationship'
+import { IdDocument, IdDocumentIndex } from './idDocument'
+import { CustomField } from './customField'
+import { EmbeddedFileIndex, File, FileAPIInput, FileAPIOutput } from './file'
+import { EntityMetadata } from './entitiesGraph'
 
 export interface Person {
-  _id?: string
+  _id: string
   birthdate: Date | string | null
   firstName: string
   lastName: string
@@ -41,7 +37,16 @@ export type PersonIndex = Pick<
 
 export type PersonSearchIndex = Pick<PersonIndex, 'firstName' | 'lastName' | 'cnp'>
 
-export interface PersonListRecord extends PersonSearchIndex, Pick<Person, '_id'> {}
+export interface PersonListRecord extends PersonSearchIndex, Required<Pick<Person, '_id'>> {}
+
+export interface PersonListRecordWithImage
+  extends PersonListRecord,
+    Required<Pick<PersonAPIOutput, 'image'>> {}
+
+export interface PersonsSuggestions<T> {
+  total: number
+  records: T[]
+}
 
 export interface PersonAPIOutput
   extends Readonly<Omit<Person, 'relationships' | 'files' | 'image'>> {

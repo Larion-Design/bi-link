@@ -7,7 +7,7 @@ import { FirebaseAuthGuard } from '../../../users/guards/FirebaseAuthGuard'
 import { UserActionsService } from '@app/pub/services/userActionsService'
 import { EntityEventsService } from '@app/pub/services/entityEventsService'
 import { CurrentUser } from '../../../users/decorators/currentUser'
-import { User, UserActions } from '@app/definitions/user'
+import { User, UserActions } from 'defs'
 import { getUnixTime } from 'date-fns'
 
 @ArgsType()

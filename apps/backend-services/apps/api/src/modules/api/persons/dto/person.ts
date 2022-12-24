@@ -3,7 +3,7 @@ import { File } from '../../files/dto/file'
 import { Relationship } from './relationship'
 import { CustomField } from '../../customFields/dto/customField'
 import { IdDocument } from './idDocument'
-import { PersonAPIOutput } from '@app/definitions/person'
+import { PersonAPIOutput } from 'defs'
 
 @ObjectType()
 export class Person implements PersonAPIOutput {

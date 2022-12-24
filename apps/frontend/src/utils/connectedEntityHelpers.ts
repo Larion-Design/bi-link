@@ -1,4 +1,4 @@
-import { ConnectedEntity } from '../types/connectedEntity'
+import { ConnectedEntity } from 'defs'
 
 export const getEntityId = ({ _id }: ConnectedEntity) => _id
 

@@ -1,6 +1,6 @@
 import { Field, ObjectType } from '@nestjs/graphql'
 import { ConnectedEntity } from '../../common/dto/connectedEntity'
-import { RelationshipAPIOutput } from '@app/definitions/relationship'
+import { RelationshipAPIOutput } from 'defs'
 
 @ObjectType()
 export class Relationship implements RelationshipAPIOutput {

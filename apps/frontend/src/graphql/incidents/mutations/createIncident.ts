@@ -1,5 +1,5 @@
 import { gql, useMutation } from '@apollo/client'
-import { IncidentAPIInput, IncidentAPIOutput } from '../../../types/incident'
+import { IncidentAPIInput, IncidentAPIOutput } from 'defs'
 
 type Params = {
   data: IncidentAPIInput
@@ -15,5 +15,4 @@ const request = gql`
   }
 `
 
-export const createIncidentRequest = () =>
-  useMutation<Response, Params>(request)
+export const createIncidentRequest = () => useMutation<Response, Params>(request)

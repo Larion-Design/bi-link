@@ -1,5 +1,5 @@
 import { gql, useQuery } from '@apollo/client'
-import { EntitiesGraph } from '../../../types/entitiesGraph'
+import { EntitiesGraph } from 'defs'
 
 type Response = {
   getEntitiesGraph: EntitiesGraph

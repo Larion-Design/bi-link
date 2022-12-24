@@ -1,4 +1,4 @@
-import { RelationshipMetadata } from '@app/definitions/entitiesGraph'
+import { RelationshipMetadata } from 'defs'
 
 export interface PersonalRelationshipGraph extends RelationshipMetadata {
   type: string

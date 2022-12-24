@@ -3,7 +3,7 @@ import { GraphService } from '@app/graph-module/graphService'
 import { CompaniesService } from '@app/entities/services/companiesService'
 import { CompanyDocument } from '@app/entities/models/companyModel'
 import { AssociateGraphRelationship, CompanyGraphNode } from '@app/graph-module/types'
-import { EntityLabel, RelationshipLabel } from '@app/definitions/entitiesGraph'
+import { EntityLabel, RelationshipLabel } from 'defs'
 
 @Injectable()
 export class CompanyGraphService {

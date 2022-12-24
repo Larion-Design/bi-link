@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react'
-import { UserAPI } from '../../types/user'
+import { UserAPI } from 'defs'
 import { generatePath, useNavigate } from 'react-router-dom'
 import { routes } from '../../router/routes'
 import Box from '@mui/material/Box'

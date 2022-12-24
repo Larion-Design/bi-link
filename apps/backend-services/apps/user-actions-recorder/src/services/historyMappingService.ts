@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common'
 import { MappingProperty } from '@elastic/elasticsearch/lib/api/types'
 import { MappingValidatorService } from '@app/search-mapping-tools/services/mapping/mappingValidatorService'
 import { INDEX_HISTORY } from '@app/definitions/constants'
-import { ActivityEventIndex } from '@app/definitions/activityEvent'
+import { ActivityEventIndex } from 'defs'
 import { MappingHelperService } from '@app/search-mapping-tools/services/mapping/mappingHelperService'
 import { MappingInterface } from '@app/search-mapping-tools'
 

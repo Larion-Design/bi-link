@@ -1,5 +1,5 @@
 import { Field, ObjectType } from '@nestjs/graphql'
-import { EntityLabel, GraphNode as GraphNodeType } from '@app/definitions/entitiesGraph'
+import { EntityLabel, GraphNode as GraphNodeType } from 'defs'
 
 @ObjectType()
 export class GraphNode implements GraphNodeType {

@@ -1,5 +1,5 @@
 import { Field, ObjectType } from '@nestjs/graphql'
-import { User as UserType } from '@app/definitions/user'
+import { User as UserType } from 'defs'
 
 @ObjectType()
 export class User implements UserType {

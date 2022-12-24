@@ -4,9 +4,8 @@ import Typography from '@mui/material/Typography'
 import Grid from '@mui/material/Grid'
 import { AutocompleteField } from '../../autocompleteField'
 import { DatePicker } from '../../datePicker'
-import { AssociateAPIInput } from '../../../../types/associate'
+import { AssociateAPIInput, CompanyListRecord } from 'defs'
 import { ASSOCIATE_ROLES } from '../../../../utils/constants'
-import { CompanyListRecord } from '../../../../types/company'
 import TextField from '@mui/material/TextField'
 
 type Props = {

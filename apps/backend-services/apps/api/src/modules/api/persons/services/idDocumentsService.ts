@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common'
 import { IdDocumentModel } from '@app/entities/models/idDocumentModel'
-import { IdDocument } from '@app/definitions/idDocument'
+import { IdDocument } from 'defs'
 
 @Injectable()
 export class IdDocumentsService {

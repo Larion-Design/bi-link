@@ -1,5 +1,5 @@
 import { Args, ArgsType, Field, Mutation, Resolver } from '@nestjs/graphql'
-import { User, UserActions } from '@app/definitions/user'
+import { User, UserActions } from 'defs'
 import { UserActionsService } from '@app/pub/services/userActionsService'
 import { EntityEventsService } from '@app/pub/services/entityEventsService'
 import { CurrentUser } from '../../../users/decorators/currentUser'

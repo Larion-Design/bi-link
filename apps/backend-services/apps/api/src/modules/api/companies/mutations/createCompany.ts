@@ -7,7 +7,7 @@ import { CompanyAPIService } from '../services/companyAPIService'
 import { FirebaseAuthGuard } from '../../../users/guards/FirebaseAuthGuard'
 import { CurrentUser } from '../../../users/decorators/currentUser'
 import { UserActionsService } from '@app/pub/services/userActionsService'
-import { User, UserActions } from '@app/definitions/user'
+import { User, UserActions } from 'defs'
 import { getUnixTime } from 'date-fns'
 
 @ArgsType()

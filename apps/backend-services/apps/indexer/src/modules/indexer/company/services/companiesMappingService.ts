@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common'
 import { MappingProperty } from '@elastic/elasticsearch/lib/api/types'
 import { MappingValidatorService } from '@app/search-mapping-tools/services/mapping/mappingValidatorService'
-import { CompanyIndex } from '@app/definitions/company'
+import { CompanyIndex } from 'defs'
 import { INDEX_COMPANIES } from '@app/definitions/constants'
 import { CompaniesIndexerService } from './companiesIndexerService'
 import { MappingHelperService } from '@app/search-mapping-tools/services/mapping/mappingHelperService'

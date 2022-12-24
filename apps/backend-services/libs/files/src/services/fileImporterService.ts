@@ -3,7 +3,7 @@ import { Model } from 'mongoose'
 import { createHash } from 'node:crypto'
 import { InjectModel } from '@nestjs/mongoose'
 import { FileDocument, FileModel } from '@app/entities/models/fileModel'
-import { FileSources } from '@app/definitions/file'
+import { FileSources } from 'defs'
 import { FileStorageService } from '@app/files/services/fileStorageService'
 
 @Injectable()

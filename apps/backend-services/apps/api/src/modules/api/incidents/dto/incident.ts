@@ -2,7 +2,7 @@ import { Field, ObjectType } from '@nestjs/graphql'
 import { CustomField } from '../../customFields/dto/customField'
 import { File } from '../../files/dto/file'
 import { Party } from './party'
-import { IncidentAPIOutput } from '@app/definitions/incident'
+import { IncidentAPIOutput } from 'defs'
 
 @ObjectType()
 export class Incident implements IncidentAPIOutput {

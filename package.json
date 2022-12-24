@@ -1,8 +1,8 @@
 {
   "name": "link",
-  "version": "0.0.4",
+  "version": "0.0.9",
   "private": true,
-  "description": "BI Link monorepo",
+  "description": "BI Link Monorepo",
   "scripts": {
     "build": "turbo run build",
     "test": "turbo run test",

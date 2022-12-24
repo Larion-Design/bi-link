@@ -4,10 +4,12 @@ import { CustomFieldModel, CustomFieldSchema } from './customFieldModel'
 import { FileModel } from './fileModel'
 import { IdDocumentModel, IdDocumentSchema } from './idDocumentModel'
 import { RelationshipModel, RelationshipSchema } from './relationshipModel'
-import { Person } from '@app/definitions/person'
+import { Person } from 'defs'
 
 @Schema({ timestamps: true })
 export class PersonModel implements Person {
+  _id
+
   @Prop({ isRequired: false, default: '' })
   firstName: string
 
@@ -45,5 +47,5 @@ export class PersonModel implements Person {
   customFields: CustomFieldModel[]
 }
 
-export type PersonDocument = PersonModel & Document
+export type PersonDocument = PersonModel & Document<string>
 export const PersonSchema = SchemaFactory.createForClass(PersonModel)

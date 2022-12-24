@@ -1,5 +1,5 @@
 import { gql, useMutation } from '@apollo/client'
-import { CompanyAPIInput } from '../../../types/company'
+import { CompanyAPIInput } from 'defs'
 
 type Params = {
   companyId: string
@@ -16,5 +16,4 @@ const mutation = gql`
   }
 `
 
-export const updateCompanyRequest = () =>
-  useMutation<Response, Params>(mutation)
+export const updateCompanyRequest = () => useMutation<Response, Params>(mutation)

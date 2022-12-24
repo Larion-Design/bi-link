@@ -1,5 +1,5 @@
 import { gql, useQuery } from '@apollo/client'
-import { UserAPI } from '../../../types/user'
+import { UserAPI } from 'defs'
 
 type Response = {
   getUsers: UserAPI[]

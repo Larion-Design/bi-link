@@ -6,9 +6,9 @@ import { NodesRelationship } from './entitiesGraph'
 
 export interface Associate {
   role: string
-  startDate?: Date
-  endDate?: Date
-  isActive?: boolean
+  startDate: Date | null
+  endDate: Date | null
+  isActive: boolean
   customFields: CustomField[]
   person?: Person
   company?: Company
@@ -17,8 +17,8 @@ export interface Associate {
 }
 
 interface AssociateAPI extends Omit<Associate, 'person' | 'company'> {
-  person?: ConnectedEntity | null
-  company?: ConnectedEntity | null
+  person?: ConnectedEntity
+  company?: ConnectedEntity
 }
 
 export interface PersonAssociateIndex extends ConnectedPersonIndex {}

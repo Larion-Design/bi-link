@@ -1,4 +1,4 @@
-import { PropertyListRecord as PropertyListRecordType } from '@app/definitions/property'
+import { PropertyListRecord as PropertyListRecordType } from 'defs'
 import { Field, ObjectType } from '@nestjs/graphql'
 
 @ObjectType()

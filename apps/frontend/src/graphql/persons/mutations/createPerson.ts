@@ -1,5 +1,5 @@
 import { gql, useMutation } from '@apollo/client'
-import { PersonAPIInput, PersonAPIOutput } from '../../../types/person'
+import { PersonAPIInput, PersonAPIOutput } from 'defs'
 
 type Params = {
   data: PersonAPIInput

@@ -1,6 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
-import { Document, SchemaTypes } from 'mongoose'
-import { IdDocument, IdDocumentStatus } from '@app/definitions/idDocument'
+import { SchemaTypes } from 'mongoose'
+import { IdDocument, IdDocumentStatus } from 'defs'
 
 @Schema({ _id: false })
 export class IdDocumentModel implements IdDocument {
@@ -29,5 +29,4 @@ export class IdDocumentModel implements IdDocument {
   status: IdDocumentStatus
 }
 
-export type IdDocumentDocument = IdDocumentModel & Document
 export const IdDocumentSchema = SchemaFactory.createForClass(IdDocumentModel)

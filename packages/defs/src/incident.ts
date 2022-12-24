@@ -1,6 +1,6 @@
 import { Party, PartyAPI, PartyIndex } from './party'
 import { CustomField, CustomFieldAPI } from './customField'
-import { EmbeddedFileIndex, FileAPIInput, FileAPIOutput } from './file'
+import { EmbeddedFileIndex, File, FileAPIInput, FileAPIOutput } from './file'
 import {
   ConnectedCompanyIndex,
   ConnectedPersonIndex,
@@ -8,9 +8,9 @@ import {
 } from './connectedEntity'
 
 export interface Incident {
-  _id?: string
+  _id: string
   type: string
-  date: Date
+  date: Date | null
   location: string
   description: string
   parties: Party[]

@@ -1,7 +1,7 @@
 import { Field, InputType } from '@nestjs/graphql'
 import { CustomFieldInput } from '../../customFields/dto/customFieldInput'
 import { ConnectedEntityInput } from '../../common/dto/connectedEntityInput'
-import { PartyAPI } from '@app/definitions/party'
+import { PartyAPI } from 'defs'
 
 @InputType()
 export class PartyInput implements PartyAPI {

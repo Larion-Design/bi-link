@@ -10,12 +10,11 @@ import TimelineDot from '@mui/lab/TimelineDot'
 import TimelineOppositeContent from '@mui/lab/TimelineOppositeContent'
 import Typography from '@mui/material/Typography'
 import Tooltip from '@mui/material/Tooltip'
-import { PersonListRecordWithImage } from '../../../types/person'
+import { PersonListRecordWithImage, PropertyOwnerAPI } from 'defs'
 import { getPersonFullName } from '../../../utils/person'
 import { PersonCardActions } from '../../card/personCardActions'
 import { PersonOwnerInformation } from './personOwnerInformation'
 import { LinkedEntityCustomFields } from '../linkedEntityCustomFields'
-import { PropertyOwnerAPI } from '../../../types/propertyOwner'
 
 type Props = {
   ownerInfo: PropertyOwnerAPI
@@ -72,11 +71,7 @@ export const PersonOwnerCard: React.FunctionComponent<Props> = ({
               </Grid>
             </Grid>
           </CardContent>
-          <PersonCardActions
-            name={fullName}
-            personId={_id}
-            onRemove={() => removeOwner(_id)}
-          />
+          <PersonCardActions name={fullName} personId={_id} onRemove={() => removeOwner(_id)} />
         </Card>
       </TimelineContent>
     </TimelineItem>

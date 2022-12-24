@@ -1,7 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
-import { VehicleInfo } from '@app/definitions/property'
+import { VehicleInfo } from 'defs'
 
-@Schema({ _id: false })
+@Schema({ _id: false, timestamps: false })
 export class VehicleInfoModel implements VehicleInfo {
   @Prop({ isRequired: false })
   vin: string
@@ -16,5 +16,4 @@ export class VehicleInfoModel implements VehicleInfo {
   model: string
 }
 
-export type VehicleInfoDocument = VehicleInfoModel & Document
 export const VehicleSchema = SchemaFactory.createForClass(VehicleInfoModel)

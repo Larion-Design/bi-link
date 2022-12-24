@@ -1,7 +1,9 @@
 import { Field, ObjectType } from '@nestjs/graphql'
 import { GraphNode } from './graphNode'
-import { CompanyAssociateRelationship as CompanyAssociateRelationshipType } from '@app/definitions/associate'
-import { RelationshipLabel } from '@app/definitions/entitiesGraph'
+import {
+  CompanyAssociateRelationship as CompanyAssociateRelationshipType,
+  RelationshipLabel,
+} from 'defs'
 
 @ObjectType()
 export class CompanyAssociateRelationship implements CompanyAssociateRelationshipType {

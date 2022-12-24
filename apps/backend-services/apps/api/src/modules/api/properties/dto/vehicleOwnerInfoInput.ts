@@ -1,4 +1,4 @@
-import { VehicleOwnerInfo } from '@app/definitions/propertyOwner'
+import { VehicleOwnerInfo } from 'defs'
 import { Field, InputType } from '@nestjs/graphql'
 
 @InputType()

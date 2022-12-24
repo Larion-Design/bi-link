@@ -5,8 +5,7 @@ import CardContent from '@mui/material/CardContent'
 import { PersonCardActions } from '../../../card/personCardActions'
 import { AssociateSwitchAction } from './associateSwitchAction'
 import { CompanyAssociateInformation } from './companyAssociateInformation'
-import { AssociateAPIInput } from '../../../../types/associate'
-import { CompanyListRecord } from '../../../../types/company'
+import { AssociateAPIInput, CompanyListRecord } from 'defs'
 import { LinkedEntityCustomFields } from '../../linkedEntityCustomFields'
 
 type Props = {
@@ -51,16 +50,10 @@ export const CompanyAssociateCard: React.FunctionComponent<Props> = ({
           </Grid>
         </Grid>
       </CardContent>
-      <PersonCardActions
-        personId={_id}
-        name={name}
-        onRemove={() => removeAssociate(_id)}
-      >
+      <PersonCardActions personId={_id} name={name} onRemove={() => removeAssociate(_id)}>
         <AssociateSwitchAction
           isActive={isActive}
-          onStateChange={(isActive) =>
-            updateAssociate(_id, { ...associateInfo, isActive })
-          }
+          onStateChange={(isActive) => updateAssociate(_id, { ...associateInfo, isActive })}
         />
       </PersonCardActions>
     </Card>

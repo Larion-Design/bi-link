@@ -1,4 +1,4 @@
-import { Title } from '@app/definitions/reports/title'
+import { Title } from 'defs'
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
 
 @Schema({ timestamps: false, _id: false })

@@ -1,4 +1,4 @@
-import { PropertyAPIOutput } from '@app/definitions/property'
+import { PropertyAPIOutput } from 'defs'
 import { Field, ObjectType } from '@nestjs/graphql'
 import { File } from '../../files/dto/file'
 import { CustomField } from '../../customFields/dto/customField'

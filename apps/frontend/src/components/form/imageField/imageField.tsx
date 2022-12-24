@@ -6,7 +6,7 @@ import CloudUploadOutlinedIcon from '@mui/icons-material/CloudUploadOutlined'
 import { FormikErrors } from 'formik'
 import { getDownloadUrlRequest } from '../../../graphql/shared/queries/getDownloadUrl'
 import { FileUploadBox } from '../fileField/FileUploadBox'
-import { FileAPIInput } from '../../../types/file'
+import { FileAPIInput } from 'defs'
 
 type Props = {
   fileInfo: FileAPIInput | null
@@ -36,13 +36,7 @@ export const ImageField: React.FunctionComponent<Props> = ({
     <Box sx={{ height: 250, width: 250 }}>
       <FileUploadBox
         addUploadedFile={updateImage}
-        acceptedFileTypes={[
-          'image/png',
-          'image/jpg',
-          'image/jpeg',
-          'image/gif',
-          'image/webp',
-        ]}
+        acceptedFileTypes={['image/png', 'image/jpg', 'image/jpeg', 'image/gif', 'image/webp']}
       >
         {data?.getDownloadUrl.url ? (
           <Avatar

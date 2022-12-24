@@ -7,7 +7,7 @@ import {
   useSignInWithEmailAndPassword,
   useUpdateProfile,
 } from 'react-firebase-hooks/auth'
-import { Role } from '../types/user'
+import { Role } from 'defs'
 import { useIntl } from 'react-intl'
 
 const firebaseApp = initializeApp({

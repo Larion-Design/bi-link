@@ -1,6 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
 import { Document, Types } from 'mongoose'
-import { Property } from '@app/definitions/property'
+import { Property } from 'defs'
 import { CustomFieldModel, CustomFieldSchema } from '@app/entities/models/customFieldModel'
 import { FileModel } from '@app/entities/models/fileModel'
 import { PropertyOwnerModel, PropertyOwnerSchema } from '@app/entities/models/propertyOwnerModel'
@@ -8,6 +8,8 @@ import { VehicleInfoModel, VehicleSchema } from '@app/entities/models/vehicleInf
 
 @Schema({ timestamps: true })
 export class PropertyModel implements Property {
+  _id: string
+
   @Prop()
   name: string
 
@@ -30,5 +32,5 @@ export class PropertyModel implements Property {
   vehicleInfo: VehicleInfoModel
 }
 
-export type PropertyDocument = PropertyModel & Document
+export type PropertyDocument = PropertyModel & Document<string>
 export const PropertySchema = SchemaFactory.createForClass(PropertyModel)

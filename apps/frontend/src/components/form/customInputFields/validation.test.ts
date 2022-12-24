@@ -2,7 +2,7 @@ import { faker } from '@faker-js/faker'
 import { describe, expect, it } from 'vitest'
 
 import { validateCustomFieldsFormat, validateDuplicateCustomFields } from './validation'
-import { CustomField } from '../../../types/customField'
+import { CustomField } from 'defs'
 
 describe('validateDuplicateCustomFields', () => {
   it('should return error message', () => {

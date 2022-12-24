@@ -1,4 +1,4 @@
-import { RelationshipMetadata } from '@app/definitions/entitiesGraph'
+import { RelationshipMetadata } from 'defs'
 
 export interface PropertyOwnerGraphRelationship extends RelationshipMetadata {
   startDate?: Date | string

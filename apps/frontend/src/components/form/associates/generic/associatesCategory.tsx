@@ -6,9 +6,7 @@ import AccordionDetails from '@mui/material/AccordionDetails'
 import Accordion from '@mui/material/Accordion'
 import Box from '@mui/material/Box'
 import Divider from '@mui/material/Divider'
-import { AssociateAPIInput } from '../../../../types/associate'
-import { PersonListRecordWithImage } from '../../../../types/person'
-import { CompanyListRecord } from '../../../../types/company'
+import { AssociateAPIInput, CompanyListRecord, PersonListRecordWithImage } from 'defs'
 import { PersonAssociateCard } from './personAssociateCard'
 import { CompanyAssociateCard } from './companyAssociateCard'
 import { countEntities } from '../helpers'
@@ -33,19 +31,12 @@ export const AssociatesCategory: React.FunctionComponent<Props> = ({
   allowRoleChange,
 }) => {
   const [expanded, setExpandedState] = useState(false)
-  const { persons, companies } = useMemo(
-    () => countEntities(associates),
-    [associates],
-  )
+  const { persons, companies } = useMemo(() => countEntities(associates), [associates])
   return (
     <Accordion
       variant={'outlined'}
       expanded={!!associates.length && expanded}
-      onChange={() =>
-        setExpandedState((expanded) =>
-          associates.length ? !expanded : expanded,
-        )
-      }
+      onChange={() => setExpandedState((expanded) => (associates.length ? !expanded : expanded))}
     >
       <AccordionSummary expandIcon={<ExpandMoreIcon />}>
         <Box
@@ -87,9 +78,7 @@ export const AssociatesCategory: React.FunctionComponent<Props> = ({
           const companyId = associate.company?._id
 
           if (companyId) {
-            const companyInfo = companiesInfo?.find(
-              ({ _id }) => _id === companyId,
-            )
+            const companyInfo = companiesInfo?.find(({ _id }) => _id === companyId)
             return companyInfo ? (
               <Box key={personId} sx={{ width: 1, mb: 1 }}>
                 <CompanyAssociateCard

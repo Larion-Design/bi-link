@@ -2,7 +2,7 @@ import React, { PropsWithChildren, useContext, useReducer } from 'react'
 import Modal from '@mui/material/Modal'
 import { PersonSelector } from './personSelector'
 import { CompanySelector } from './companySelector'
-import { FileAPIInput } from '../../types/file'
+import { FileAPIInput } from 'defs'
 import { ImageGallery } from './imageGallery'
 import { PropertySelector } from './propertySelector'
 
@@ -28,12 +28,7 @@ type ImageGalleryModal = BaseModalInfo<
 >
 
 type ModalInfo = {
-  modal:
-    | 'companySelector'
-    | 'personSelector'
-    | 'propertySelector'
-    | 'imageGallery'
-    | null
+  modal: 'companySelector' | 'personSelector' | 'propertySelector' | 'imageGallery' | null
   open: boolean
   entitiesSelected?: (entitiesIds: string[]) => void
   modalClosed?: () => void
@@ -67,8 +62,7 @@ type Action =
 const modalReducer = (state: ModalInfo, action: Action): ModalInfo => {
   switch (action.type) {
     case 'openModal': {
-      const { modal, entitiesSelected, entitiesExcluded, modalClosed, images } =
-        action.payload
+      const { modal, entitiesSelected, entitiesExcluded, modalClosed, images } = action.payload
       return {
         modal,
         entitiesExcluded,
@@ -88,9 +82,7 @@ const modalReducer = (state: ModalInfo, action: Action): ModalInfo => {
   }
 }
 
-export const ModalProvider: React.FunctionComponent<PropsWithChildren<any>> = ({
-  children,
-}) => {
+export const ModalProvider: React.FunctionComponent<PropsWithChildren<any>> = ({ children }) => {
   const [state, dispatch] = useReducer(modalReducer, initialState)
   const { open, modal, entitiesSelected, entitiesExcluded, images } = state
 
@@ -153,9 +145,7 @@ export const ModalProvider: React.FunctionComponent<PropsWithChildren<any>> = ({
       <Modal open={open && modal === 'personSelector'}>
         <>
           <PersonSelector
-            closeModal={() =>
-              dispatch({ type: 'closeModal', payload: 'personSelector' })
-            }
+            closeModal={() => dispatch({ type: 'closeModal', payload: 'personSelector' })}
             personsSelected={entitiesSelected}
             excludedPersonsIds={entitiesExcluded}
           />
@@ -164,9 +154,7 @@ export const ModalProvider: React.FunctionComponent<PropsWithChildren<any>> = ({
       <Modal open={open && modal === 'companySelector'}>
         <>
           <CompanySelector
-            closeModal={() =>
-              dispatch({ type: 'closeModal', payload: 'companySelector' })
-            }
+            closeModal={() => dispatch({ type: 'closeModal', payload: 'companySelector' })}
             companiesSelected={entitiesSelected}
             excludedCompaniesIds={entitiesExcluded}
           />
@@ -175,9 +163,7 @@ export const ModalProvider: React.FunctionComponent<PropsWithChildren<any>> = ({
       <Modal open={open && modal === 'propertySelector'}>
         <>
           <PropertySelector
-            closeModal={() =>
-              dispatch({ type: 'closeModal', payload: 'propertySelector' })
-            }
+            closeModal={() => dispatch({ type: 'closeModal', payload: 'propertySelector' })}
             propertiesSelected={entitiesSelected}
             excludedPropertiesIds={entitiesExcluded}
           />
@@ -186,9 +172,7 @@ export const ModalProvider: React.FunctionComponent<PropsWithChildren<any>> = ({
       <Modal open={open && modal === 'imageGallery'}>
         <>
           <ImageGallery
-            closeModal={() =>
-              dispatch({ type: 'closeModal', payload: 'imageGallery' })
-            }
+            closeModal={() => dispatch({ type: 'closeModal', payload: 'imageGallery' })}
             images={images ?? []}
           />
         </>

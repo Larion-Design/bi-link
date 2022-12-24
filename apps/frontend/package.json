@@ -5,7 +5,8 @@
   "author": "Alex Tudor",
   "scripts": {
     "dev": "vite --host",
-    "native:dev": "pnpm tauri dev",
+    "frontend": "vite",
+    "native-app": "pnpm tauri dev",
     "build": "tsc && vite build",
     "build:native": "pnpm tauri build",
     "build:staging": "tsc && vite build --mode development",
@@ -60,6 +61,7 @@
     "yup": "^0.32.11"
   },
   "devDependencies": {
+    "defs": "workspace:*",
     "@babel/core": "^7.20.5",
     "@babel/preset-env": "^7.20.2",
     "@cypress/code-coverage": "^3.10.0",

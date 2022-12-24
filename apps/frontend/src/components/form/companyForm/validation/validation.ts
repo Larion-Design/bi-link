@@ -8,11 +8,7 @@ import { validateCompanyName } from './name'
 import { validateCompanyCUI } from './cui'
 import { validateHeadquarters } from './headquarters'
 import { validateRegistrationNumber } from './registrationNumber'
-import { AssociateAPIInput } from '../../../../types/associate'
-import { CompanyAPIInput } from '../../../../types/company'
-import { CustomFieldAPI } from '../../../../types/customField'
-import { Location } from '../../../../types/location'
-import { FileAPIInput } from '../../../../types/file'
+import { AssociateAPIInput, CompanyAPIInput, CustomFieldAPI, FileAPIInput, Location } from 'defs'
 
 export const validateCompanyForm = async (values: CompanyAPIInput, companyId?: string) => {
   const errors: FormikErrors<CompanyAPIInput> = {

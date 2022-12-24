@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import { faker } from '@faker-js/faker'
 import { getPersonFullName } from './person'
-import { PersonListRecord } from '../types/person'
+import { PersonListRecord } from 'defs'
 
 describe('getPersonFullName', () => {
   it('should display full name correctly', () => {

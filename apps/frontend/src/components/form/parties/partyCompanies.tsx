@@ -1,8 +1,7 @@
 import React, { useCallback } from 'react'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
-import { ConnectedEntity } from '../../../types/connectedEntity'
-import { CompanyListRecord } from '../../../types/company'
+import { CompanyListRecord, ConnectedEntity } from 'defs'
 import { PartyEntity } from './partyEntity'
 import { generatePath, useNavigate } from 'react-router-dom'
 import { routes } from '../../../router/routes'
@@ -22,8 +21,7 @@ export const PartyCompanies: React.FunctionComponent<Props> = ({
 }) => {
   const navigate = useNavigate()
   const viewCompanyDetails = useCallback(
-    (companyId: string) =>
-      navigate(generatePath(routes.companyDetails, { companyId })),
+    (companyId: string) => navigate(generatePath(routes.companyDetails, { companyId })),
     [navigate],
   )
 
@@ -34,9 +32,7 @@ export const PartyCompanies: React.FunctionComponent<Props> = ({
       </Box>
       {!!companies.length ? (
         companies.map(({ _id }) => {
-          const companyInfo = companiesInfo?.find(
-            ({ _id: companyId }) => companyId === _id,
-          )
+          const companyInfo = companiesInfo?.find(({ _id: companyId }) => companyId === _id)
           if (companyInfo) {
             const { _id, name, cui } = companyInfo
             return (

@@ -1,5 +1,5 @@
 import { Field, ObjectType } from '@nestjs/graphql'
-import { PersonListRecord as PersonListRecordType } from '@app/definitions/person'
+import { PersonListRecord as PersonListRecordType } from 'defs'
 
 @ObjectType()
 export class PersonListRecord implements PersonListRecordType {

@@ -13,7 +13,7 @@ import { useModal } from '../../modal/modalProvider'
 import { PersonOwnerCard } from './personOwnerCard'
 import { CompanyOwnerCard } from './companyOwnerCard'
 import { useDebouncedMap } from '../../../utils/hooks/useMap'
-import { PropertyOwnerAPI } from '../../../types/propertyOwner'
+import { PropertyOwnerAPI } from 'defs'
 
 type Props = {
   isVehicle: boolean
@@ -73,10 +73,7 @@ export const PropertyOwners: React.FunctionComponent<Props> = ({
 
     modal?.openPersonSelector((personsIds: string[]) => {
       if (personsIds.length) {
-        addBulk(
-          createPersonsOwners(personsIds, isVehicle),
-          ({ person }) => person?._id,
-        )
+        addBulk(createPersonsOwners(personsIds, isVehicle), ({ person }) => person?._id)
       }
     }, personsIds)
   }, [uid, isVehicle])
@@ -92,18 +89,12 @@ export const PropertyOwners: React.FunctionComponent<Props> = ({
 
     modal?.openCompanySelector((companiesIds: string[]) => {
       if (companiesIds.length) {
-        addBulk(
-          createCompaniesOwners(companiesIds, isVehicle),
-          ({ company }) => company?._id,
-        )
+        addBulk(createCompaniesOwners(companiesIds, isVehicle), ({ company }) => company?._id)
       }
     }, companiesIds)
   }, [uid, isVehicle])
 
-  const closeMenu = useCallback(
-    () => setMenuOpenState(false),
-    [setMenuOpenState],
-  )
+  const closeMenu = useCallback(() => setMenuOpenState(false), [setMenuOpenState])
 
   return (
     <>
@@ -118,11 +109,7 @@ export const PropertyOwners: React.FunctionComponent<Props> = ({
           <MenuItem onClick={openCompaniesModal}>Companie</MenuItem>
         </Menu>
       )}
-      <Box
-        display={'flex'}
-        justifyContent={'space-between'}
-        alignItems={'baseline'}
-      >
+      <Box display={'flex'} justifyContent={'space-between'} alignItems={'baseline'}>
         <Box display={'flex'} justifyContent={'space-between'}>
           <Button
             variant={'contained'}
@@ -149,9 +136,7 @@ export const PropertyOwners: React.FunctionComponent<Props> = ({
               const personId = owner.person?._id
 
               if (personId) {
-                const personInfo = personsInfo?.getPersonsInfo?.find(
-                  ({ _id }) => _id === personId,
-                )
+                const personInfo = personsInfo?.getPersonsInfo?.find(({ _id }) => _id === personId)
 
                 if (personInfo) {
                   return (
@@ -198,19 +183,14 @@ export const PropertyOwners: React.FunctionComponent<Props> = ({
             alignItems: 'center',
           }}
         >
-          <Typography variant={'body2'}>
-            Nu ai adăugat niciun proprietar.
-          </Typography>
+          <Typography variant={'body2'}>Nu ai adăugat niciun proprietar.</Typography>
         </Box>
       )}
     </>
   )
 }
 
-const createPersonsOwners = (
-  personsIds: string[],
-  isVehicle: boolean,
-): PropertyOwnerAPI[] =>
+const createPersonsOwners = (personsIds: string[], isVehicle: boolean): PropertyOwnerAPI[] =>
   personsIds.map((_id) => ({
     person: {
       _id,
@@ -222,10 +202,7 @@ const createPersonsOwners = (
     vehicleOwnerInfo: isVehicle ? { registrationNumber: '' } : null,
   }))
 
-const createCompaniesOwners = (
-  companiesIds: string[],
-  isVehicle: boolean,
-): PropertyOwnerAPI[] =>
+const createCompaniesOwners = (companiesIds: string[], isVehicle: boolean): PropertyOwnerAPI[] =>
   companiesIds.map((_id) => ({
     company: {
       _id,
@@ -238,10 +215,7 @@ const createCompaniesOwners = (
     vehicleOwnerInfo: isVehicle ? { registrationNumber: '' } : null,
   }))
 
-const sortByOwnershipPeriod = (
-  ownerA: PropertyOwnerAPI,
-  ownerB: PropertyOwnerAPI,
-) => {
+const sortByOwnershipPeriod = (ownerA: PropertyOwnerAPI, ownerB: PropertyOwnerAPI) => {
   if (ownerA.startDate) {
     if (ownerB.startDate) {
       return ownerA.startDate <= ownerB.startDate ? -1 : 1

@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common'
 import { MappingInterface } from '@app/search-mapping-tools'
-import { PropertyIndex } from '@app/definitions/property'
+import { PropertyIndex } from 'defs'
 import { INDEX_PROPERTIES } from '@app/definitions/constants'
 import { MappingHelperService } from '@app/search-mapping-tools/services/mapping/mappingHelperService'
 import { MappingValidatorService } from '@app/search-mapping-tools/services/mapping/mappingValidatorService'

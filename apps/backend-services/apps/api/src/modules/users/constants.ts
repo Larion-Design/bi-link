@@ -1,4 +1,1 @@
-export const enum Role {
-  ADMIN = 'ADMIN',
-  OPERATOR = 'OPERATOR',
-}
+export { Role } from 'defs'

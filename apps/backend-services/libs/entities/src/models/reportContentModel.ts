@@ -1,7 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
-import { Document, Types } from 'mongoose'
+import { Types } from 'mongoose'
 import { FileModel } from '@app/entities/models/fileModel'
-import { ReportContent } from '@app/definitions/reports/reportContent'
+import { ReportContent } from 'defs'
 import { TitleModel, TitleSchema } from '@app/entities/models/reports/titleModel'
 import { TextModel, TextSchema } from '@app/entities/models/reports/textModel'
 import { LinkModel, LinkSchema } from '@app/entities/models/reports/linkModel'
@@ -31,5 +31,4 @@ export class ReportContentModel implements ReportContent {
   link?: LinkModel
 }
 
-export type ReportContentDocument = ReportContentModel & Document
 export const ReportContentSchema = SchemaFactory.createForClass(ReportContentModel)

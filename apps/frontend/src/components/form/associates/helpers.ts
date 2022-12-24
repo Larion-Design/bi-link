@@ -1,4 +1,4 @@
-import { AssociateAPIInput } from '../../../types/associate'
+import { AssociateAPIInput } from 'defs'
 
 export const countEntities = (associates: AssociateAPIInput[]) =>
   associates.reduce(

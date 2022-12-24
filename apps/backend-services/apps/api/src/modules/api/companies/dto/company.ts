@@ -1,9 +1,9 @@
 import { Field, ObjectType } from '@nestjs/graphql'
+import { CompanyAPIOutput } from 'defs'
 import { CustomField } from '../../customFields/dto/customField'
 import { File } from '../../files/dto/file'
 import { Associate } from './associate'
 import { Location } from './location'
-import { CompanyAPIOutput } from '@app/definitions/company'
 
 @ObjectType()
 export class Company implements CompanyAPIOutput {

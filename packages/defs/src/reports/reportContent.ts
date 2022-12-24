@@ -2,7 +2,7 @@ import { Title, TitleAPI } from './title'
 import { Table, TableAPI } from './table'
 import { Link, LinkAPI } from './link'
 import { Text, TextAPI } from './text'
-import { FileAPIInput, FileAPIOutput } from '../file'
+import { File, FileAPIInput, FileAPIOutput } from '../file'
 
 export interface ReportContent {
   order: number

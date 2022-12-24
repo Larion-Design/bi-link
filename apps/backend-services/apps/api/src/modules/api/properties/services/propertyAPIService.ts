@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common'
 import { PropertiesService } from '@app/entities/services/propertiesService'
-import { PropertyAPIInput } from '@app/definitions/property'
+import { PropertyAPIInput } from 'defs'
 import { PropertyModel } from '@app/entities/models/propertyModel'
 import { PropertyOwnerAPIService } from './propertyOwnerAPIService'
 import { CustomFieldsService } from '../../customFields/services/customFieldsService'

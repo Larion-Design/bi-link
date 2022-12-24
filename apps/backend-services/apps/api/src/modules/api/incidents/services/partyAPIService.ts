@@ -1,5 +1,5 @@
 import { Injectable, Logger } from '@nestjs/common'
-import { PartyAPI } from '@app/definitions/party'
+import { PartyAPI } from 'defs'
 import { InjectModel } from '@nestjs/mongoose'
 import { Model } from 'mongoose'
 import { PersonDocument, PersonModel } from '@app/entities/models/personModel'

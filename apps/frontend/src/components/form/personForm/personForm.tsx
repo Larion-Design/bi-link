@@ -19,8 +19,7 @@ import { DatePicker } from '../datePicker'
 import { InputField } from '../inputField'
 import { getPersonFrequentCustomFieldsRequest } from '../../../graphql/persons/queries/getPersonFrequentCustomFields'
 import { useDialog } from '../../dialog/dialogProvider'
-import { IdDocument } from '../../../types/idDocument'
-import { PersonAPIInput } from '../../../types/person'
+import { IdDocument, PersonAPIInput } from 'defs'
 import { CONTACT_METHODS, ID_DOCUMENT_TYPES } from '../../../utils/constants'
 
 type Props = {
@@ -65,8 +64,7 @@ const Form: React.FunctionComponent<Props & FormikProps<PersonAPIInput>> = ({
 
   const openDialog = () =>
     dialog.openDialog({
-      title:
-        'Esti sigur(a) ca vrei sa anulezi modificarile pe care le-ai facut?',
+      title: 'Esti sigur(a) ca vrei sa anulezi modificarile pe care le-ai facut?',
       description: 'Toate modificarile nesalvate vor fi pierdute.',
       onConfirm: navigateFromPersonFormPage,
     })
@@ -172,10 +170,7 @@ const Form: React.FunctionComponent<Props & FormikProps<PersonAPIInput>> = ({
                     value={values.cnp}
                     error={errors.cnp}
                     onChange={async (value) => {
-                      const error = await personFormValidation.cnp(
-                        value,
-                        personId,
-                      )
+                      const error = await personFormValidation.cnp(value, personId)
                       setFieldValue('cnp', value)
                       setFieldError('cnp', error)
                     }}
@@ -202,9 +197,7 @@ const Form: React.FunctionComponent<Props & FormikProps<PersonAPIInput>> = ({
                     multiline
                     rows={2}
                     onChange={async (value) => {
-                      const error = await personFormValidation.homeAddress(
-                        value,
-                      )
+                      const error = await personFormValidation.homeAddress(value)
                       setFieldValue('homeAddress', value)
                       setFieldError('homeAddress', error)
                     }}
@@ -219,9 +212,7 @@ const Form: React.FunctionComponent<Props & FormikProps<PersonAPIInput>> = ({
                 fields={values.customFields}
                 suggestions={frequentFields?.getPersonFrequentCustomFields}
                 setFieldValue={async (customFields) => {
-                  const error = await personFormValidation.customFields(
-                    customFields,
-                  )
+                  const error = await personFormValidation.customFields(customFields)
 
                   setFieldValue('customFields', customFields)
                   setFieldError('customFields', error)
@@ -236,9 +227,7 @@ const Form: React.FunctionComponent<Props & FormikProps<PersonAPIInput>> = ({
                 suggestions={CONTACT_METHODS}
                 fields={values.contactDetails}
                 setFieldValue={async (contactDetails) => {
-                  const error = await personFormValidation.contactDetails(
-                    contactDetails,
-                  )
+                  const error = await personFormValidation.contactDetails(contactDetails)
                   setFieldValue('contactDetails', contactDetails)
                   setFieldError('contactDetails', error)
                 }}
@@ -252,10 +241,7 @@ const Form: React.FunctionComponent<Props & FormikProps<PersonAPIInput>> = ({
                 suggestions={ID_DOCUMENT_TYPES}
                 documents={values.documents}
                 setFieldValue={async (documents: IdDocument[]) => {
-                  const error = await personFormValidation.documents(
-                    documents,
-                    personId,
-                  )
+                  const error = await personFormValidation.documents(documents, personId)
                   setFieldValue('documents', documents)
                   setFieldError('documents', error)
                 }}
@@ -267,9 +253,7 @@ const Form: React.FunctionComponent<Props & FormikProps<PersonAPIInput>> = ({
             <Grid container spacing={2}>
               <Relationships
                 updateRelationships={async (relationships) => {
-                  const error = await personFormValidation.relationships(
-                    relationships,
-                  )
+                  const error = await personFormValidation.relationships(relationships)
 
                   setFieldValue('relationships', relationships)
                   setFieldError('relationships', error)
@@ -337,8 +321,7 @@ const personInitialFields: PersonAPIInput = {
 
 export const PersonForm = withFormik<Props, PersonAPIInput>({
   mapPropsToValues: ({ personInfo }) => personInfo ?? personInitialFields,
-  validate: async (values, { personId }) =>
-    validatePersonForm(values, personId),
+  validate: async (values, { personId }) => validatePersonForm(values, personId),
   validateOnChange: false,
   validateOnMount: false,
   validateOnBlur: false,

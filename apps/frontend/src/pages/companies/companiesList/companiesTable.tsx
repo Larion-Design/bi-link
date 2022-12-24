@@ -12,7 +12,7 @@ import OpenInNewOutlinedIcon from '@mui/icons-material/OpenInNewOutlined'
 import { generatePath, useNavigate } from 'react-router-dom'
 import { routes } from '../../../router/routes'
 import { PaginationParams } from '../../../graphql/shared/types/paginationParams'
-import { CompaniesSuggestions, CompanyListRecord } from '../../../types/company'
+import { CompaniesSuggestions, CompanyListRecord } from 'defs'
 
 type Props = {
   paginationParams: PaginationParams

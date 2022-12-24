@@ -6,9 +6,8 @@ import Grid from '@mui/material/Grid'
 import { AutocompleteField } from '../../autocompleteField'
 import { DatePicker } from '../../datePicker'
 import { getPersonFullName } from '../../../../utils/person'
-import { AssociateAPIInput } from '../../../../types/associate'
+import { AssociateAPIInput, PersonListRecordWithImage } from 'defs'
 import { ASSOCIATE_ROLES } from '../../../../utils/constants'
-import { PersonListRecordWithImage } from '../../../../types/person'
 import TextField from '@mui/material/TextField'
 
 type Props = {

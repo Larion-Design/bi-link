@@ -1,5 +1,4 @@
-import { Associate } from '@app/definitions/associate'
-import { RelationshipMetadata } from '@app/definitions/entitiesGraph'
+import { Associate, RelationshipMetadata } from 'defs'
 
 export interface AssociateGraphRelationship
   extends RelationshipMetadata,

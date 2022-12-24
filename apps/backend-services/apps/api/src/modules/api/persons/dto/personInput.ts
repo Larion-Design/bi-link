@@ -4,7 +4,7 @@ import { IdDocumentInput } from './idDocumentInput'
 import { CustomFieldInput } from '../../customFields/dto/customFieldInput'
 import { RelationshipInput } from './relationshipInput'
 import { IsDateString, IsNumberString, IsOptional, Length } from 'class-validator'
-import { PersonAPIInput } from '@app/definitions/person'
+import { PersonAPIInput } from 'defs'
 
 @InputType()
 export class PersonInput implements PersonAPIInput {

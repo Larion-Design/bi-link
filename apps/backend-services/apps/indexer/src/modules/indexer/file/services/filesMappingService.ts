@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common'
 import { MappingProperty } from '@elastic/elasticsearch/lib/api/types'
 import { MappingValidatorService } from '@app/search-mapping-tools/services/mapping/mappingValidatorService'
-import { ProcessedFileIndex } from '@app/definitions/file'
+import { ProcessedFileIndex } from 'defs'
 import { INDEX_FILES } from '@app/definitions/constants'
 import { FilesIndexerService } from './filesIndexerService'
 import { MappingHelperService } from '@app/search-mapping-tools/services/mapping/mappingHelperService'

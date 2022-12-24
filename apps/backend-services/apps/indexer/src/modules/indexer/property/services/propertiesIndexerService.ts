@@ -5,9 +5,8 @@ import { ElasticsearchService } from '@nestjs/elasticsearch'
 import { ConnectedEntityIndexerService } from '../../shared/services/connectedEntityIndexerService'
 import { PropertiesService } from '@app/entities/services/propertiesService'
 import { PropertyEventDispatcherService } from '../../../producers/services/propertyEventDispatcherService'
-import { PropertyIndex } from '@app/definitions/property'
+import { ConnectedCompanyIndex, ConnectedPersonIndex, PropertyIndex } from 'defs'
 import { PropertyOwnerModel } from '@app/entities/models/propertyOwnerModel'
-import { ConnectedCompanyIndex, ConnectedPersonIndex } from '@app/definitions/connectedEntity'
 
 @Injectable()
 export class PropertiesIndexerService {

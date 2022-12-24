@@ -1,6 +1,6 @@
 import Box from '@mui/material/Box'
 import React, { useCallback, useEffect, useState } from 'react'
-import { CustomFieldAPI } from '../../../types/customField'
+import { CustomFieldAPI } from 'defs'
 import { GridSetItem, useGridSet } from '../../../utils/hooks/useGridSet'
 import {
   DataGrid,
@@ -41,10 +41,7 @@ export const CustomInputFields: React.FunctionComponent<Props> = ({
     [],
   )
 
-  const removeSelectedRows = useCallback(
-    () => removeBulk(selectedRows as string[]),
-    [selectedRows],
-  )
+  const removeSelectedRows = useCallback(() => removeBulk(selectedRows as string[]), [selectedRows])
 
   useEffect(() => {
     void setFieldValue(rawValues())
@@ -79,9 +76,7 @@ export const CustomInputFields: React.FunctionComponent<Props> = ({
               />
 
               {!!selectedRows.length && (
-                <RemoveRowsToolbarButton
-                  onRemovalConfirmed={removeSelectedRows}
-                />
+                <RemoveRowsToolbarButton onRemovalConfirmed={removeSelectedRows} />
               )}
             </GridToolbarContainer>
           ),

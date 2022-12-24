@@ -1,5 +1,5 @@
 import { gql, useLazyQuery } from '@apollo/client'
-import { PropertiesSuggestions } from '../../../types/property'
+import { PropertiesSuggestions } from 'defs'
 
 type Params = {
   searchTerm: string

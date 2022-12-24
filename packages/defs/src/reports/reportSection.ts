@@ -1,8 +1,4 @@
-import {
-  ReportContent,
-  ReportContentAPIInput,
-  ReportContentAPIOutput,
-} from '@app/definitions/reports/reportContent'
+import { ReportContent, ReportContentAPIInput, ReportContentAPIOutput } from './reportContent'
 
 export interface ReportSection {
   name: string

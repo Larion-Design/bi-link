@@ -4,7 +4,7 @@ import Box from '@mui/material/Box'
 import MenuItem from '@mui/material/MenuItem'
 import { InputFieldMenu } from '../menu/inputFieldMenu'
 import { Graph } from '../entityViews/graph'
-import { PropertyAPIInput } from '../../types/property'
+import { PropertyAPIInput } from 'defs'
 import { PropertyForm } from '../form/propertyForm'
 
 type Props = {

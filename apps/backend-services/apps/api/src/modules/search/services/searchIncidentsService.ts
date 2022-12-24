@@ -3,7 +3,7 @@ import { INDEX_INCIDENTS } from '@app/definitions/constants'
 import { ElasticsearchService } from '@nestjs/elasticsearch'
 import { SearchHelperService } from './searchHelperService'
 import { SearchRequest, SearchTotalHits } from '@elastic/elasticsearch/lib/api/types'
-import { IncidentIndex, IncidentListRecord, IncidentSearchIndex } from '@app/definitions/incident'
+import { IncidentIndex, IncidentListRecord, IncidentSearchIndex } from 'defs'
 import { IncidentsSuggestions } from '../../api/incidents/dto/incidentsSuggestions'
 
 @Injectable()

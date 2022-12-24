@@ -1,16 +1,17 @@
 import React, { PropsWithChildren, useEffect } from 'react'
 import Box from '@mui/material/Box'
 import { useDropzone } from 'react-dropzone'
-import { FileAPIInput } from '../../../types/file'
+import { FileAPIInput } from 'defs'
 
 type Props = {
   addUploadedFile: (fileInfo: FileAPIInput) => void | Promise<void>
   acceptedFileTypes?: string[]
 }
 
-export const FileUploadBox: React.FunctionComponent<
-  PropsWithChildren<Props>
-> = ({ addUploadedFile, children }) => {
+export const FileUploadBox: React.FunctionComponent<PropsWithChildren<Props>> = ({
+  addUploadedFile,
+  children,
+}) => {
   const { acceptedFiles, getRootProps, isDragActive } = useDropzone({
     multiple: false,
     noDragEventsBubbling: true,
@@ -49,9 +50,7 @@ export const FileUploadBox: React.FunctionComponent<
         borderWidth: 2,
         borderColor: theme.palette.grey[900],
         borderStyle: 'dashed',
-        backgroundColor: isDragActive
-          ? theme.palette.background.paper
-          : 'initial',
+        backgroundColor: isDragActive ? theme.palette.background.paper : 'initial',
         opacity: isDragActive ? 0.3 : 1,
         display: 'flex',
         alignItems: 'stretch',

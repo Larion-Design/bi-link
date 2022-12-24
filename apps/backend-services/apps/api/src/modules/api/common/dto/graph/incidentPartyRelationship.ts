@@ -1,7 +1,6 @@
 import { Field, ObjectType } from '@nestjs/graphql'
 import { GraphNode } from './graphNode'
-import { IncidentPartyRelationship as IncidentPartyRelationshipType } from '@app/definitions/party'
-import { RelationshipLabel } from '@app/definitions/entitiesGraph'
+import { IncidentPartyRelationship as IncidentPartyRelationshipType, RelationshipLabel } from 'defs'
 
 @ObjectType()
 export class IncidentPartyRelationship implements IncidentPartyRelationshipType {

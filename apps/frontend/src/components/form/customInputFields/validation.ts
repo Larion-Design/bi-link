@@ -1,5 +1,5 @@
 import * as yup from 'yup'
-import { CustomField } from '../../../types/customField'
+import { CustomField } from 'defs'
 
 export const validateCustomFields = async (customFields: CustomField[]) => {
   let error = await validateCustomFieldsFormat(customFields)
@@ -30,9 +30,7 @@ export const customFieldsValidationSchema = yup.array().of(
   }),
 )
 
-export const validateCustomFieldsFormat = async (
-  customFields: Array<unknown>,
-) => {
+export const validateCustomFieldsFormat = async (customFields: Array<unknown>) => {
   const isValid = await customFieldsValidationSchema.isValid(customFields)
 
   if (!isValid) {

@@ -12,7 +12,7 @@ import { GridActionsColDef } from '@mui/x-data-grid/models/colDef/gridColDef'
 import { PaginationParams } from '../../../graphql/shared/types/paginationParams'
 import { generatePath, useNavigate } from 'react-router-dom'
 import { routes } from '../../../router/routes'
-import { PropertiesSuggestions, PropertyListRecord } from '../../../types/property'
+import { PropertiesSuggestions, PropertyListRecord } from 'defs'
 
 type Props = {
   paginationParams: PaginationParams

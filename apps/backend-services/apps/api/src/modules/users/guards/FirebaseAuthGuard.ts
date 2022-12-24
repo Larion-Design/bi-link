@@ -4,6 +4,7 @@ import { GqlExecutionContext } from '@nestjs/graphql'
 
 @Injectable()
 export class FirebaseAuthGuard extends AuthGuard('firebase') {
+  // noinspection JSUnusedGlobalSymbols
   getRequest = (context: ExecutionContext) => {
     const ctx = GqlExecutionContext.create(context)
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-unsafe-member-access

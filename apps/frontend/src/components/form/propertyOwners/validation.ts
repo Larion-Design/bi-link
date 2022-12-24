@@ -3,7 +3,7 @@ import {
   customFieldsValidationSchema,
   validateDuplicateCustomFields,
 } from '../customInputFields/validation'
-import { PropertyOwnerAPI } from '../../../types/propertyOwner'
+import { PropertyOwnerAPI } from 'defs'
 
 const ownersSchemaValidation = yup
   .array()

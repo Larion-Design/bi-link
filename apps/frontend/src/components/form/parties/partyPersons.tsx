@@ -1,8 +1,7 @@
 import React, { useCallback } from 'react'
-import { ConnectedEntity } from '../../../types/connectedEntity'
+import { ConnectedEntity, PersonListRecordWithImage } from 'defs'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
-import { PersonListRecordWithImage } from '../../../types/person'
 import { PartyEntity } from './partyEntity'
 import { generatePath, useNavigate } from 'react-router-dom'
 import { routes } from '../../../router/routes'
@@ -23,8 +22,7 @@ export const PartyPersons: React.FunctionComponent<Props> = ({
 }) => {
   const navigate = useNavigate()
   const viewPersonDetails = useCallback(
-    (personId: string) =>
-      navigate(generatePath(routes.personDetails, { personId })),
+    (personId: string) => navigate(generatePath(routes.personDetails, { personId })),
     [navigate],
   )
   return (
@@ -34,9 +32,7 @@ export const PartyPersons: React.FunctionComponent<Props> = ({
       </Box>
       {!!persons.length ? (
         persons.map(({ _id }) => {
-          const personInfo = personsInfo?.find(
-            ({ _id: personId }) => personId === _id,
-          )
+          const personInfo = personsInfo?.find(({ _id: personId }) => personId === _id)
           if (personInfo) {
             const fullName = getPersonFullName(personInfo)
             const { _id, image, cnp } = personInfo
@@ -47,11 +43,7 @@ export const PartyPersons: React.FunctionComponent<Props> = ({
                 viewEntityDetails={viewPersonDetails}
                 removeEntity={removePerson}
               >
-                <PartyPersonInfo
-                  name={fullName}
-                  cnp={cnp}
-                  imageUrl={image?.url?.url ?? ''}
-                />
+                <PartyPersonInfo name={fullName} cnp={cnp} imageUrl={image?.url?.url ?? ''} />
               </PartyEntity>
             )
           }

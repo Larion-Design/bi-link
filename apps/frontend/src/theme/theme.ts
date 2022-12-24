@@ -1,4 +1,7 @@
+// noinspection ES6UnusedImports
+
 import { createTheme } from '@mui/material'
+import {} from '@mui/lab/themeAugmentation'
 
 export const theme = createTheme({
   palette: {

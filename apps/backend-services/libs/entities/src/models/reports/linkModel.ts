@@ -1,4 +1,4 @@
-import { Link } from '@app/definitions/reports/link'
+import { Link } from 'defs'
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
 
 @Schema({ timestamps: false, _id: false })

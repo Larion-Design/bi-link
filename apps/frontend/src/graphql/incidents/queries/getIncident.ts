@@ -1,5 +1,5 @@
 import { gql, useLazyQuery } from '@apollo/client'
-import { IncidentAPIInput } from '../../../types/incident'
+import { IncidentAPIInput } from 'defs'
 
 type Params = {
   incidentId: string

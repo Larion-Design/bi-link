@@ -4,8 +4,7 @@ import { CompanyModel } from '@app/entities/models/companyModel'
 import { LocationModel } from '@app/entities/models/locationModel'
 import { AssociateModel } from '@app/entities/models/associateModel'
 import { INDEX_COMPANIES } from '@app/definitions/constants'
-import { CompanyIndex } from '@app/definitions/company'
-import { CompanyAssociateIndex, PersonAssociateIndex } from '@app/definitions/associate'
+import { CompanyIndex, ConnectedCompanyIndex, ConnectedPersonIndex } from 'defs'
 import { CompanyEventDispatcherService } from '../../../producers/services/companyEventDispatcherService'
 import { CompaniesService } from '@app/entities/services/companiesService'
 import { ConnectedEntityIndexerService } from '../../shared/services/connectedEntityIndexerService'
@@ -55,20 +54,21 @@ export class CompaniesIndexerService {
     registrationNumber: company.registrationNumber,
     headquarters: company.headquarters,
     customFields: company.customFields,
+    contactDetails: company.contactDetails,
     locations: this.createLocationsIndexData(company.locations),
     associatedPersons: this.createAssociatedPersonsIndex(company.associates),
     associatedCompanies: this.createAssociatedCompaniesIndex(company.associates),
     files: [],
   })
 
-  private createAssociatedPersonsIndex = (associates: AssociateModel[]): PersonAssociateIndex[] =>
+  private createAssociatedPersonsIndex = (associates: AssociateModel[]): ConnectedPersonIndex[] =>
     associates
       .filter(({ person }) => !!person)
       .map(({ person }) => this.connectedEntityIndexerService.createConnectedPersonIndex(person))
 
   private createAssociatedCompaniesIndex = (
     associates: AssociateModel[],
-  ): CompanyAssociateIndex[] =>
+  ): ConnectedCompanyIndex[] =>
     associates
       .filter(({ company }) => !!company)
       .map(({ company }) => this.connectedEntityIndexerService.createConnectedCompanyIndex(company))

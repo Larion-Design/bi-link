@@ -1,6 +1,6 @@
 import { Field, InputType } from '@nestjs/graphql'
 import { IsDate, IsOptional } from 'class-validator'
-import { IdDocumentAPI, IdDocumentStatus } from '@app/definitions/idDocument'
+import { IdDocumentAPI, IdDocumentStatus } from 'defs'
 
 @InputType()
 export class IdDocumentInput implements IdDocumentAPI {

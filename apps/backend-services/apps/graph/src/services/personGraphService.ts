@@ -1,8 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common'
 import { GraphService } from '@app/graph-module/graphService'
 import { PersonsService } from '@app/entities/services/personsService'
-import { PersonGraphNode } from '@app/definitions/person'
-import { EntityLabel, RelationshipLabel } from '@app/graph-module/types'
+import { EntityLabel, PersonGraphNode, RelationshipLabel } from 'defs'
 import { PersonDocument } from '@app/entities/models/personModel'
 import { PersonalRelationshipGraph } from '@app/graph-module/types/relationship'
 

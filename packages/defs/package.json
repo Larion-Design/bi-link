@@ -1,12 +1,13 @@
 {
   "name": "defs",
   "version": "1.0.0",
+  "type": "commonjs",
   "private": true,
   "description": "BI Link types and definitions",
-  "main": "src/index.ts",
+  "main": "dist/index.js",
   "types": "src/index.ts",
   "scripts": {
-    "type-check": "tsc"
+    "build": "tsc"
   },
   "devDependencies": {
     "tslib": "^2.4.1",

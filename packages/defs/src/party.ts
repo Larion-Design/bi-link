@@ -1,9 +1,9 @@
-import { ConnectedEntity } from '@app/definitions/connectedEntity'
-import { CustomField } from '@app/definitions/customField'
-import { Person } from '@app/definitions/person'
-import { Company } from '@app/definitions/company'
-import { NodesRelationship } from '@app/definitions/entitiesGraph'
-import { Property } from '@app/definitions/property'
+import { Person } from './person'
+import { Company } from './company'
+import { Property } from './property'
+import { CustomField } from './customField'
+import { ConnectedEntity } from './connectedEntity'
+import { NodesRelationship } from './entitiesGraph'
 
 export interface Party {
   name: string

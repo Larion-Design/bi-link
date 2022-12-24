@@ -1,8 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
-import { Document } from 'mongoose'
-import { Location } from '@app/definitions/location'
+import { Location } from 'defs'
 
-@Schema({ _id: false })
+@Schema({ _id: false, timestamps: false })
 export class LocationModel implements Location {
   constructor(locationInfo?: Location) {
     if (locationInfo) {
@@ -18,5 +17,4 @@ export class LocationModel implements Location {
   isActive: boolean
 }
 
-export type LocationDocument = LocationModel & Document
 export const LocationSchema = SchemaFactory.createForClass(LocationModel)

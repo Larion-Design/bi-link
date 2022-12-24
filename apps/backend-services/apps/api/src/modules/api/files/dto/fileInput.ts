@@ -1,6 +1,6 @@
 import { Field, InputType } from '@nestjs/graphql'
 import { IsOptional, IsUUID } from 'class-validator'
-import { FileAPIInput } from '@app/definitions/file'
+import { FileAPIInput } from 'defs'
 
 @InputType()
 export class FileInput implements FileAPIInput {

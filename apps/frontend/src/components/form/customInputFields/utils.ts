@@ -1,4 +1,4 @@
-import { CustomField } from '../../../types/customField'
+import { CustomField } from 'defs'
 
 export const extractCustomFieldValue = (customFields: CustomField[], field: string) => {
   for (const { fieldName, fieldValue } of customFields) {
@@ -8,10 +8,7 @@ export const extractCustomFieldValue = (customFields: CustomField[], field: stri
   }
 }
 
-export const extractCustomFieldsValues = (
-  customFields: CustomField[],
-  fields: string[],
-) => {
+export const extractCustomFieldsValues = (customFields: CustomField[], fields: string[]) => {
   const extractedFields: Record<string, string> = {}
 
   customFields.forEach(({ fieldName, fieldValue }) => {

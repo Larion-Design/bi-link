@@ -1,7 +1,6 @@
 import { Field, ObjectType } from '@nestjs/graphql'
 import { GraphNode } from './graphNode'
-import { PropertyOwnerRelationship as PropertyOwnerRelationshipType } from '@app/definitions/propertyOwner'
-import { RelationshipLabel } from '@app/definitions/entitiesGraph'
+import { PropertyOwnerRelationship as PropertyOwnerRelationshipType, RelationshipLabel } from 'defs'
 
 @ObjectType()
 export class PropertyOwnerRelationship implements PropertyOwnerRelationshipType {

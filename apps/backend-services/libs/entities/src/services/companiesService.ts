@@ -36,14 +36,6 @@ export class CompaniesService {
     }
   }
 
-  getCompanyWithoutRelatedEntities = async (companyId: string) => {
-    try {
-      return this.companyModel.findById(companyId).exec()
-    } catch (error) {
-      this.logger.error(error)
-    }
-  }
-
   getCompanies = async (companiesIds: string[]) => {
     try {
       return this.companyModel

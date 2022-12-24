@@ -8,8 +8,7 @@ import { getPersonFullName } from '../../../utils/person'
 import { PersonCardActions } from '../../card/personCardActions'
 import { DropdownList } from '../dropdownList'
 import { proximityLevels, relationshipsTypes } from './utils'
-import { PersonListRecordWithImage } from '../../../types/person'
-import { RelationshipAPIInput } from '../../../types/relationship'
+import { PersonListRecordWithImage, RelationshipAPIInput } from 'defs'
 
 type Props = {
   personInfo: PersonListRecordWithImage
@@ -29,14 +28,8 @@ export const PersonCard: React.FunctionComponent<Props> = ({
 
   return (
     <Card sx={{ height: 400 }} variant={'outlined'}>
-      <CardContent
-        sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}
-      >
-        <Avatar
-          src={image?.url?.url ?? ''}
-          alt={fullName}
-          sx={{ width: 75, height: 75, mt: 2 }}
-        />
+      <CardContent sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+        <Avatar src={image?.url?.url ?? ''} alt={fullName} sx={{ width: 75, height: 75, mt: 2 }} />
         <Typography variant={'body1'} sx={{ mb: 3, mt: 2 }} gutterBottom>
           {fullName}
         </Typography>
@@ -45,9 +38,7 @@ export const PersonCard: React.FunctionComponent<Props> = ({
           <DropdownList
             label={'Tipul de relatie'}
             value={relationshipInfo.type}
-            onChange={(type) =>
-              updateRelationship(personId, { ...relationshipInfo, type })
-            }
+            onChange={(type) => updateRelationship(personId, { ...relationshipInfo, type })}
             options={relationshipsTypes}
           />
         </Box>

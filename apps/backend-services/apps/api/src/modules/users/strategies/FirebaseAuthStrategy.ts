@@ -5,7 +5,7 @@ import { AuthService } from '../services/AuthService'
 import { passportJwtSecret } from 'jwks-rsa'
 import { ConfigService } from '@nestjs/config'
 import { DecodedIdToken } from 'firebase-admin/lib/auth'
-import { User } from '@app/definitions/user'
+import { User } from 'defs'
 
 @Injectable()
 export class FirebaseAuthStrategy extends PassportStrategy(Strategy, 'firebase') {

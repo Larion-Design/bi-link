@@ -3,14 +3,14 @@ import { format } from 'date-fns'
 import { INDEX_INCIDENTS } from '@app/definitions/constants'
 import { ElasticsearchService } from '@nestjs/elasticsearch'
 import { IncidentModel } from '@app/entities/models/incidentModel'
-import { IncidentIndex } from '@app/definitions/incident'
-import { PartyModel } from '@app/entities/models/partyModel'
-import { PartyIndex } from '@app/definitions/party'
 import {
   ConnectedCompanyIndex,
   ConnectedPersonIndex,
   ConnectedPropertyIndex,
-} from '@app/definitions/connectedEntity'
+  IncidentIndex,
+  PartyIndex,
+} from 'defs'
+import { PartyModel } from '@app/entities/models/partyModel'
 import { IncidentEventDispatcherService } from '../../../producers/services/incidentEventDispatcherService'
 import { IncidentsService } from '@app/entities/services/incidentsService'
 import { ConnectedEntityIndexerService } from '../../shared/services/connectedEntityIndexerService'

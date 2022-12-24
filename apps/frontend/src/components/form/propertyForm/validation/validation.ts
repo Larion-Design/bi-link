@@ -1,11 +1,8 @@
-import { CustomFieldAPI } from '../../../../types/customField'
+import { CustomFieldAPI, FileAPIInput, PropertyAPIInput, PropertyOwnerAPI } from 'defs'
 import { validateCustomFields } from '../../customInputFields/validation'
 import { validateFilesFormat, validateSingleFileFormat } from '../../fileField/validation'
-import { FileAPIInput } from '../../../../types/file'
 import { FormikErrors } from 'formik'
 import { vinExists } from '../../../../graphql/properties/queries/vehicles/vinExists'
-import { PropertyAPIInput } from '../../../../types/property'
-import { PropertyOwnerAPI } from '../../../../types/propertyOwner'
 
 export const validatePropertyForm = async (propertyInfo: PropertyAPIInput, propertyId?: string) => {
   const errors: FormikErrors<PropertyAPIInput> = {

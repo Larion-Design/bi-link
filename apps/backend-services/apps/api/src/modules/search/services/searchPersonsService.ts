@@ -3,7 +3,7 @@ import { SearchRequest, SearchTotalHits } from '@elastic/elasticsearch/lib/api/t
 import { ElasticsearchService } from '@nestjs/elasticsearch'
 import { PersonsSuggestions } from '../../api/persons/dto/personsSuggestions'
 import { INDEX_PERSONS } from '@app/definitions/constants'
-import { PersonIndex, PersonSearchIndex } from '@app/definitions/person'
+import { PersonIndex, PersonSearchIndex } from 'defs'
 import { SearchHelperService } from './searchHelperService'
 
 @Injectable()

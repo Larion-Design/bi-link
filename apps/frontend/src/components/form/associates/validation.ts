@@ -1,5 +1,5 @@
 import * as yup from 'yup'
-import { AssociateAPIInput } from '../../../types/associate'
+import { AssociateAPIInput } from 'defs'
 import { isDatesOrderValid } from '../../../utils/date'
 import { connectedEntityValidationSchema } from '../validation/connectedEntityValidationSchema'
 import { getShareholdersTotalEquity } from './helpers'
@@ -33,9 +33,7 @@ export const validateAssociates = async (associates: AssociateAPIInput[]) => {
   return error
 }
 
-export const validateAssociatesStructure = async (
-  associates: AssociateAPIInput[],
-) => {
+export const validateAssociatesStructure = async (associates: AssociateAPIInput[]) => {
   const isValid = await associatesDataStructure.isValid(associates)
 
   if (!isValid) {
@@ -53,9 +51,7 @@ export const validateShareholdersEquity = (associates: AssociateAPIInput[]) => {
 
 export const validateAssociatesDates = (associates: AssociateAPIInput[]) => {
   const isValid = associates.every(({ startDate, endDate }) =>
-    startDate && endDate
-      ? isDatesOrderValid(new Date(startDate), new Date(endDate))
-      : true,
+    startDate && endDate ? isDatesOrderValid(new Date(startDate), new Date(endDate)) : true,
   )
 
   if (!isValid) {

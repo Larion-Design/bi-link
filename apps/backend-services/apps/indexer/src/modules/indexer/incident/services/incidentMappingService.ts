@@ -4,8 +4,7 @@ import { INDEX_INCIDENTS } from '@app/definitions/constants'
 import { IncidentsIndexerService } from './incidentsIndexerService'
 import { MappingHelperService } from '@app/search-mapping-tools/services/mapping/mappingHelperService'
 import { MappingValidatorService } from '@app/search-mapping-tools/services/mapping/mappingValidatorService'
-import { IncidentIndex } from '@app/definitions/incident'
-import { PartyIndex } from '@app/definitions/party'
+import { IncidentIndex, PartyIndex } from 'defs'
 import { MappingInterface } from '@app/search-mapping-tools'
 
 @Injectable()

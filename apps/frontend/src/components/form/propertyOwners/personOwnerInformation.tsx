@@ -5,10 +5,9 @@ import Avatar from '@mui/material/Avatar'
 import Typography from '@mui/material/Typography'
 import { DatePicker } from '../datePicker'
 import { getPersonFullName } from '../../../utils/person'
-import { PersonListRecordWithImage } from '../../../types/person'
+import { PersonListRecordWithImage, PropertyOwnerAPI } from 'defs'
 import { InputField } from '../inputField'
 import { useIntl } from 'react-intl'
-import { PropertyOwnerAPI } from '../../../types/propertyOwner'
 
 type Props = {
   personInfo: PersonListRecordWithImage

@@ -2,7 +2,7 @@ import { Field, InputType } from '@nestjs/graphql'
 import { CustomFieldInput } from '../../customFields/dto/customFieldInput'
 import { Length } from 'class-validator'
 import { ConnectedEntityInput } from '../../common/dto/connectedEntityInput'
-import { AssociateAPIInput } from '@app/definitions/associate'
+import { AssociateAPIInput } from 'defs'
 
 @InputType()
 export class AssociateInput implements AssociateAPIInput {
@@ -17,10 +17,10 @@ export class AssociateInput implements AssociateAPIInput {
   readonly company?: ConnectedEntityInput
 
   @Field({ nullable: true })
-  readonly startDate?: Date
+  readonly startDate: Date | null
 
   @Field({ nullable: true })
-  readonly endDate?: Date
+  readonly endDate: Date | null
 
   @Field({ nullable: true, defaultValue: false })
   readonly isActive: boolean

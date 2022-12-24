@@ -1,6 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
-import { Document } from 'mongoose'
-import { CustomField } from '@app/definitions/customField'
+import { CustomField } from 'defs'
 
 @Schema()
 export class CustomFieldModel implements CustomField {
@@ -11,5 +10,4 @@ export class CustomFieldModel implements CustomField {
   fieldValue: string
 }
 
-export type CustomFieldDocument = CustomFieldModel & Document
 export const CustomFieldSchema = SchemaFactory.createForClass(CustomFieldModel)

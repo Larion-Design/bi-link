@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react'
 import Box from '@mui/material/Box'
 import { PaginationParams } from '../../../graphql/shared/types/paginationParams'
-import { IncidentListRecord, IncidentsSuggestions } from '../../../types/incident'
+import { IncidentListRecord, IncidentsSuggestions } from 'defs'
 import { generatePath, useNavigate } from 'react-router-dom'
 import {
   DataGrid,

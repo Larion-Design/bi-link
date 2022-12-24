@@ -8,7 +8,7 @@ import CardActions from '@mui/material/CardActions'
 import { DataGrid, GridColDef, GridSelectionModel } from '@mui/x-data-grid'
 import { searchCompaniesRequest } from '../../../graphql/companies/queries/searchCompanies'
 import { useDebounce } from 'usehooks-ts'
-import { CompanyListRecord } from '../../../types/company'
+import { CompanyListRecord } from 'defs'
 import { CompanySelectorView } from './companySelector'
 import { ModalHeader } from '../modalHeader'
 
@@ -103,12 +103,7 @@ export const SearchCompanies: React.FunctionComponent<Props> = ({
             checkboxSelection
             onSelectionModelChange={(companiesIds: GridSelectionModel) =>
               selectCompanies((selectedCompanies) =>
-                Array.from(
-                  new Set([
-                    ...(companiesIds as string[]),
-                    ...selectedCompanies,
-                  ]),
-                ),
+                Array.from(new Set([...(companiesIds as string[]), ...selectedCompanies])),
               )
             }
             disableColumnSelector
@@ -120,12 +115,9 @@ export const SearchCompanies: React.FunctionComponent<Props> = ({
             disableVirtualization
             getRowId={({ _id }: CompanyListRecord) => _id}
             localeText={{
-              noRowsLabel:
-                'Nu au fost gasite companii. Incearca alt termen de cautare.',
+              noRowsLabel: 'Nu au fost gasite companii. Incearca alt termen de cautare.',
               footerRowSelected: (count) =>
-                count !== 1
-                  ? `${count} companii selectate`
-                  : '1 companie selectata',
+                count !== 1 ? `${count} companii selectate` : '1 companie selectata',
             }}
           />
         </Box>
@@ -141,12 +133,7 @@ export const SearchCompanies: React.FunctionComponent<Props> = ({
         </Button>
 
         <Box display={'flex'}>
-          <Button
-            variant={'outlined'}
-            color={'error'}
-            onClick={closeModal}
-            sx={{ mr: 2 }}
-          >
+          <Button variant={'outlined'} color={'error'} onClick={closeModal} sx={{ mr: 2 }}>
             Inchide
           </Button>
           <Button

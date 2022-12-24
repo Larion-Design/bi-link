@@ -1,6 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common'
 import { GraphService } from '@app/graph-module/graphService'
-import { EntityLabel, RelationshipLabel } from '@app/graph-module/types'
+import { EntityLabel, RelationshipLabel } from 'defs'
 import { PropertiesService } from '@app/entities/services/propertiesService'
 import { PropertyGraphNode } from '@app/graph-module/types/property'
 import { PropertyDocument } from '@app/entities/models/propertyModel'

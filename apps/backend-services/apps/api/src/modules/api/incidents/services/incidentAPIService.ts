@@ -1,5 +1,5 @@
 import { Injectable, Logger } from '@nestjs/common'
-import { IncidentAPIInput } from '@app/definitions/incident'
+import { IncidentAPIInput } from 'defs'
 import { FileAPIService } from '../../files/services/fileAPIService'
 import { CustomFieldsService } from '../../customFields/services/customFieldsService'
 import { IncidentModel } from '@app/entities/models/incidentModel'

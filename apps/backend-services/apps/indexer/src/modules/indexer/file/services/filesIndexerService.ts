@@ -9,7 +9,7 @@ import {
   INDEX_PERSONS,
   INDEX_PROPERTIES,
 } from '@app/definitions/constants'
-import { EmbeddedFileIndex, ProcessedFileIndex } from '@app/definitions/file'
+import { EmbeddedFileIndex, ProcessedFileIndex } from 'defs'
 import { FilesService } from '@app/entities/services/filesService'
 import { FileEventDispatcherService } from '../../../producers/services/fileEventDispatcherService'
 import { FileParserService } from '@app/pub/services/fileParserService'

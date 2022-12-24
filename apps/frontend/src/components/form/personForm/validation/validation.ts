@@ -6,11 +6,13 @@ import { validateCustomFields } from '../../customInputFields/validation'
 import { validateFilesFormat, validateSingleFileFormat } from '../../fileField/validation'
 import { validateIdDocuments } from '../../idDocuments/validation'
 import { validatePersonRelationships } from '../../relationships/validation/validation'
-import { IdDocument } from '../../../../types/idDocument'
-import { RelationshipAPIInput } from '../../../../types/relationship'
-import { CustomFieldAPI } from '../../../../types/customField'
-import { PersonAPIInput } from '../../../../types/person'
-import { FileAPIInput } from '../../../../types/file'
+import {
+  CustomFieldAPI,
+  FileAPIInput,
+  IdDocument,
+  PersonAPIInput,
+  RelationshipAPIInput,
+} from 'defs'
 
 export const validatePersonForm = async (values: PersonAPIInput, personId?: string) => {
   const errors: FormikErrors<PersonAPIInput> = {

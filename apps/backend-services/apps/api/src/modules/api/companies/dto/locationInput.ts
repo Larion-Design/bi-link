@@ -1,5 +1,5 @@
 import { Field, InputType } from '@nestjs/graphql'
-import { LocationAPIInput } from '@app/definitions/location'
+import { LocationAPIInput } from 'defs'
 
 @InputType()
 export class LocationInput implements LocationAPIInput {

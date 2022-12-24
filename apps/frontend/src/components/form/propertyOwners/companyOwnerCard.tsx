@@ -2,7 +2,7 @@ import React from 'react'
 import Grid from '@mui/material/Grid'
 import CardContent from '@mui/material/CardContent'
 import Card from '@mui/material/Card'
-import { CompanyListRecord } from '../../../types/company'
+import { CompanyListRecord, PropertyOwnerAPI } from 'defs'
 import { CompanyOwnerInformation } from './companyOwnerInformation'
 import TimelineItem from '@mui/lab/TimelineItem'
 import TimelineSeparator from '@mui/lab/TimelineSeparator'
@@ -14,7 +14,6 @@ import Tooltip from '@mui/material/Tooltip'
 import Typography from '@mui/material/Typography'
 import { CompanyCardActions } from '../../card/companyCardActions'
 import { LinkedEntityCustomFields } from '../linkedEntityCustomFields'
-import { PropertyOwnerAPI } from '../../../types/propertyOwner'
 
 type Props = {
   ownerInfo: PropertyOwnerAPI
@@ -70,11 +69,7 @@ export const CompanyOwnerCard: React.FunctionComponent<Props> = ({
               </Grid>
             </Grid>
           </CardContent>
-          <CompanyCardActions
-            name={name}
-            companyId={_id}
-            onRemove={() => removeOwner(_id)}
-          />
+          <CompanyCardActions name={name} companyId={_id} onRemove={() => removeOwner(_id)} />
         </Card>
       </TimelineContent>
     </TimelineItem>

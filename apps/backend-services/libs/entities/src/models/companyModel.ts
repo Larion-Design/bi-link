@@ -4,10 +4,12 @@ import { CustomFieldModel, CustomFieldSchema } from './customFieldModel'
 import { FileModel } from './fileModel'
 import { AssociateModel, AssociateSchema } from './associateModel'
 import { LocationModel, LocationSchema } from './locationModel'
-import { Company } from '@app/definitions/company'
+import { Company } from 'defs'
 
 @Schema({ timestamps: true })
 export class CompanyModel implements Company {
+  _id: string
+
   @Prop({ isRequired: true })
   cui: string
 
@@ -38,5 +40,5 @@ export class CompanyModel implements Company {
   customFields: CustomFieldModel[]
 }
 
-export type CompanyDocument = CompanyModel & Document
+export type CompanyDocument = CompanyModel & Document<string>
 export const CompanySchema = SchemaFactory.createForClass(CompanyModel)

@@ -6,7 +6,7 @@ import Button from '@mui/material/Button'
 import Box from '@mui/material/Box'
 import CardActions from '@mui/material/CardActions'
 import { useFormik } from 'formik'
-import { PersonAPIInput } from '../../../types/person'
+import { PersonAPIInput } from 'defs'
 import { InputField } from '../../form/inputField'
 import {
   personFormValidation,
@@ -28,14 +28,7 @@ export const FastCreatePerson: React.FunctionComponent<Props> = ({
   changeView,
 }) => {
   const [createPerson, { data }] = createPersonRequest()
-  const {
-    values,
-    errors,
-    setFieldError,
-    setFieldValue,
-    submitForm,
-    isSubmitting,
-  } = useFormik({
+  const { values, errors, setFieldError, setFieldValue, submitForm, isSubmitting } = useFormik({
     initialValues: personInitialFields,
     validateOnMount: false,
     validateOnBlur: false,
@@ -117,12 +110,7 @@ export const FastCreatePerson: React.FunctionComponent<Props> = ({
         </Button>
 
         <Box display={'flex'}>
-          <Button
-            variant={'outlined'}
-            color={'error'}
-            onClick={closeModal}
-            sx={{ mr: 2 }}
-          >
+          <Button variant={'outlined'} color={'error'} onClick={closeModal} sx={{ mr: 2 }}>
             Inchide
           </Button>
           <Button

@@ -6,7 +6,7 @@ import { updatePersonRequest } from '../../../graphql/persons/mutations/updatePe
 import { getPersonInfoRequest } from '../../../graphql/persons/queries/getPersonInfo'
 import { routes } from '../../../router/routes'
 import { Loader } from '../../../components/loader/loader'
-import { PersonAPIInput } from '../../../types/person'
+import { PersonAPIInput } from 'defs'
 import { PersonDetails } from '../../../components/page/personDetails'
 
 export const EditPerson: React.FunctionComponent = () => {

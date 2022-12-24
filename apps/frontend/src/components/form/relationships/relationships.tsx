@@ -4,7 +4,7 @@ import { getPersonsBasicInfoRequest } from '../../../graphql/persons/queries/get
 import { AddItemCard } from '../addItemCard'
 import { PersonCard } from './personCard'
 import { useModal } from '../../modal/modalProvider'
-import { RelationshipAPIInput } from '../../../types/relationship'
+import { RelationshipAPIInput } from 'defs'
 import { useDebouncedMap } from '../../../utils/hooks/useMap'
 
 type Props = {
@@ -21,8 +21,11 @@ export const Relationships: React.FunctionComponent<Props> = ({
 }) => {
   const modal = useModal()
   const [fetchPersonsInfo, { data }] = getPersonsBasicInfoRequest()
-  const { entries, values, addBulk, update, remove, keys, uid } =
-    useDebouncedMap(1000, relationships, ({ person: { _id } }) => _id)
+  const { entries, values, addBulk, update, remove, keys, uid } = useDebouncedMap(
+    1000,
+    relationships,
+    ({ person: { _id } }) => _id,
+  )
 
   useEffect(() => {
     const personsIds = keys()
@@ -41,10 +44,7 @@ export const Relationships: React.FunctionComponent<Props> = ({
 
     modal?.openPersonSelector(
       (personsIds: string[]) =>
-        addBulk(
-          personsIds.map(createRelationship),
-          ({ person: { _id } }) => _id,
-        ),
+        addBulk(personsIds.map(createRelationship), ({ person: { _id } }) => _id),
       personsIds,
     )
   }, [uid])
@@ -54,9 +54,7 @@ export const Relationships: React.FunctionComponent<Props> = ({
       <Grid container spacing={6}>
         {!!data?.getPersonsInfo?.length &&
           entries().map(([personId, relationship]) => {
-            const personInfo = data.getPersonsInfo.find(
-              ({ _id }) => _id === personId,
-            )
+            const personInfo = data.getPersonsInfo.find(({ _id }) => _id === personId)
             return personInfo ? (
               <Grid key={personId} item xs={4}>
                 <PersonCard
@@ -70,10 +68,7 @@ export const Relationships: React.FunctionComponent<Props> = ({
           })}
 
         <Grid item xs={3}>
-          <AddItemCard
-            data-cy={'openPersonsModalButton'}
-            onClick={openPersonSelector}
-          />
+          <AddItemCard data-cy={'openPersonsModalButton'} onClick={openPersonSelector} />
         </Grid>
       </Grid>
     </>

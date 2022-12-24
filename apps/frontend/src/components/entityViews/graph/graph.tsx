@@ -6,7 +6,7 @@ import { EntityGraph } from './entityGraph'
 import { getEntitiesGraphRequest } from '../../../graphql/shared/queries/getEntitiesGraph'
 import { Loader } from '../../loader/loader'
 import { getEntitiesInfoRequest } from '../../../graphql/shared/queries/getEntitiesInfo'
-import { EntityLabel, RelationshipLabel } from '../../../types/entitiesGraph'
+import { EntityLabel, RelationshipLabel } from 'defs'
 import { relationshipsTypes } from '../../form/relationships/utils'
 
 type Props = {
@@ -15,8 +15,7 @@ type Props = {
 
 export const Graph: React.FunctionComponent<Props> = ({ entityId }) => {
   const { data, loading: loadingGraph } = getEntitiesGraphRequest(entityId)
-  const [fetchEntities, { data: entitiesInfo, loading: loadingEntities }] =
-    getEntitiesInfoRequest()
+  const [fetchEntities, { data: entitiesInfo, loading: loadingEntities }] = getEntitiesInfoRequest()
 
   const [nodes, setNodes] = useState<Node<unknown>[] | null>(null)
   const [edges, setEdges] = useState<Edge<unknown>[] | null>(null)
@@ -30,12 +29,9 @@ export const Graph: React.FunctionComponent<Props> = ({ entityId }) => {
 
       const entityHandlerMap = {
         [EntityLabel.PERSON]: (personId: string) => personsIds.add(personId),
-        [EntityLabel.COMPANY]: (companyId: string) =>
-          companiesIds.add(companyId),
-        [EntityLabel.PROPERTY]: (propertyId: string) =>
-          propertiesIds.add(propertyId),
-        [EntityLabel.INCIDENT]: (incidentId: string) =>
-          incidentsIds.add(incidentId),
+        [EntityLabel.COMPANY]: (companyId: string) => companiesIds.add(companyId),
+        [EntityLabel.PROPERTY]: (propertyId: string) => propertiesIds.add(propertyId),
+        [EntityLabel.INCIDENT]: (incidentId: string) => incidentsIds.add(incidentId),
       }
 
       data?.getEntitiesGraph.companiesAssociates.forEach(
@@ -78,12 +74,7 @@ export const Graph: React.FunctionComponent<Props> = ({ entityId }) => {
         },
       )
 
-      if (
-        companiesIds.size ||
-        personsIds.size ||
-        propertiesIds.size ||
-        incidentsIds.size
-      ) {
+      if (companiesIds.size || personsIds.size || propertiesIds.size || incidentsIds.size) {
         void fetchEntities({
           variables: {
             companiesIds: Array.from(companiesIds.values()),
@@ -122,9 +113,7 @@ export const Graph: React.FunctionComponent<Props> = ({ entityId }) => {
             label,
             animated: _confirmed,
             labelShowBg: false,
-            type: _confirmed
-              ? ConnectionLineType.SimpleBezier
-              : ConnectionLineType.Step,
+            type: _confirmed ? ConnectionLineType.SimpleBezier : ConnectionLineType.Step,
           })
 
           dagreGraph.setEdge(startNodeId, endNodeId)
@@ -137,9 +126,7 @@ export const Graph: React.FunctionComponent<Props> = ({ entityId }) => {
 
           dagreGraph.setNode(personId, { width: 200, height: 150 })
 
-          const personInfo = entitiesInfo?.getPersonsInfo.find(
-            ({ _id }) => personId === _id,
-          )
+          const personInfo = entitiesInfo?.getPersonsInfo.find(({ _id }) => personId === _id)
 
           if (personInfo) {
             nodesMap.set(personId, {
@@ -163,9 +150,7 @@ export const Graph: React.FunctionComponent<Props> = ({ entityId }) => {
 
           dagreGraph.setNode(companyId, { width: 200, height: 150 })
 
-          const companyInfo = entitiesInfo?.getCompanies.find(
-            ({ _id }) => companyId === _id,
-          )
+          const companyInfo = entitiesInfo?.getCompanies.find(({ _id }) => companyId === _id)
 
           if (companyInfo) {
             nodesMap.set(companyId, {
@@ -189,9 +174,7 @@ export const Graph: React.FunctionComponent<Props> = ({ entityId }) => {
 
           dagreGraph.setNode(propertyId, { width: 200, height: 150 })
 
-          const propertyInfo = entitiesInfo?.getProperties.find(
-            ({ _id }) => propertyId === _id,
-          )
+          const propertyInfo = entitiesInfo?.getProperties.find(({ _id }) => propertyId === _id)
 
           if (propertyInfo) {
             nodesMap.set(propertyId, {
@@ -215,9 +198,7 @@ export const Graph: React.FunctionComponent<Props> = ({ entityId }) => {
 
           dagreGraph.setNode(incidentId, { width: 200, height: 150 })
 
-          const incidentInfo = entitiesInfo?.getIncidents.find(
-            ({ _id }) => incidentId === _id,
-          )
+          const incidentInfo = entitiesInfo?.getIncidents.find(({ _id }) => incidentId === _id)
 
           if (incidentInfo) {
             nodesMap.set(incidentId, {
@@ -269,12 +250,7 @@ export const Graph: React.FunctionComponent<Props> = ({ entityId }) => {
           entityHandler[startNode._type](startNode._id)
           entityHandler[endNode._type](endNode._id)
 
-          createEdge(
-            startNode._id,
-            endNode._id,
-            getRelationshipLabelFromType(_type),
-            _confirmed,
-          )
+          createEdge(startNode._id, endNode._id, getRelationshipLabelFromType(_type), _confirmed)
         },
       )
       data.getEntitiesGraph.incidentsParties.forEach(

@@ -1,6 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
 import { Document, Types } from 'mongoose'
-import { Party } from '@app/definitions/party'
+import { Party } from 'defs'
 import { PersonDocument, PersonModel } from '@app/entities/models/personModel'
 import { CompanyDocument, CompanyModel } from '@app/entities/models/companyModel'
 import { CustomFieldModel, CustomFieldSchema } from './customFieldModel'

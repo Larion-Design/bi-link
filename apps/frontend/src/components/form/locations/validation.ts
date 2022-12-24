@@ -1,5 +1,5 @@
 import * as yup from 'yup'
-import { Location } from '../../../types/location'
+import { Location } from 'defs'
 
 const locationsFormat = yup.array().of(
   yup.object().shape({

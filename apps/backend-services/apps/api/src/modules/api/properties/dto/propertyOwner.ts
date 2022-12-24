@@ -1,4 +1,4 @@
-import { PropertyOwnerAPI } from '@app/definitions/propertyOwner'
+import { PropertyOwnerAPI } from 'defs'
 import { Field, ObjectType } from '@nestjs/graphql'
 import { ConnectedEntity } from '../../common/dto/connectedEntity'
 import { CustomField } from '../../customFields/dto/customField'

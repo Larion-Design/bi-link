@@ -13,7 +13,7 @@ import {
   propertyFormValidation,
   validatePropertyForm,
 } from '../../form/propertyForm/validation/validation'
-import { PropertyAPIInput, VehicleInfo } from '../../../types/property'
+import { PropertyAPIInput, VehicleInfo } from 'defs'
 import { Images } from '../../form/images'
 import { AutocompleteField } from '../../form/autocompleteField'
 import { ColorPicker } from '../../form/colorPicker'
@@ -31,14 +31,7 @@ export const FastCreateProperty: React.FunctionComponent<Props> = ({
   changeView,
 }) => {
   const [createProperty, { data }] = createPropertyRequest()
-  const {
-    values,
-    errors,
-    setFieldError,
-    setFieldValue,
-    submitForm,
-    isSubmitting,
-  } = useFormik({
+  const { values, errors, setFieldError, setFieldValue, submitForm, isSubmitting } = useFormik({
     initialValues: propertyInitialValues,
     validateOnMount: false,
     validateOnBlur: false,
@@ -56,10 +49,7 @@ export const FastCreateProperty: React.FunctionComponent<Props> = ({
 
   return (
     <>
-      <ModalHeader
-        title={'Creaza o proprietate rapid'}
-        closeModal={closeModal}
-      />
+      <ModalHeader title={'Creaza o proprietate rapid'} closeModal={closeModal} />
       <CardContent sx={{ height: 0.8, mb: 2 }}>
         <Grid container spacing={2}>
           <Grid item xs={3}>
@@ -175,12 +165,7 @@ export const FastCreateProperty: React.FunctionComponent<Props> = ({
         </Button>
 
         <Box display={'flex'}>
-          <Button
-            variant={'outlined'}
-            color={'error'}
-            onClick={closeModal}
-            sx={{ mr: 2 }}
-          >
+          <Button variant={'outlined'} color={'error'} onClick={closeModal} sx={{ mr: 2 }}>
             Inchide
           </Button>
           <Button

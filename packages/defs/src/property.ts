@@ -1,10 +1,10 @@
 import { CustomField, CustomFieldAPI } from './customField'
 import { PropertyOwner, PropertyOwnerAPI } from './propertyOwner'
-import { EmbeddedFileIndex, FileAPIInput, FileAPIOutput } from './file'
+import { EmbeddedFileIndex, File, FileAPIInput, FileAPIOutput } from './file'
 import { ConnectedCompanyIndex, ConnectedPersonIndex } from './connectedEntity'
 
 export interface Property {
-  _id?: string
+  _id: string
   name: string
   type: string
   customFields: CustomField[]

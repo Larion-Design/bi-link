@@ -1,8 +1,7 @@
 import React, { useCallback } from 'react'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
-import { ConnectedEntity } from '../../../types/connectedEntity'
-import { PropertyListRecord } from '../../../types/property'
+import { ConnectedEntity, PropertyListRecord } from 'defs'
 import { generatePath, useNavigate } from 'react-router-dom'
 import { routes } from '../../../router/routes'
 import { PartyEntity } from './partyEntity'
@@ -22,8 +21,7 @@ export const PartyProperties: React.FunctionComponent<Props> = ({
 }) => {
   const navigate = useNavigate()
   const viewPropertyDetails = useCallback(
-    (propertyId: string) =>
-      navigate(generatePath(routes.propertyDetails, { propertyId })),
+    (propertyId: string) => navigate(generatePath(routes.propertyDetails, { propertyId })),
     [navigate],
   )
   return (
@@ -33,9 +31,7 @@ export const PartyProperties: React.FunctionComponent<Props> = ({
       </Box>
       {!!properties.length ? (
         properties.map(({ _id }) => {
-          const propertyInfo = propertiesInfo?.find(
-            ({ _id: propertyId }) => propertyId === _id,
-          )
+          const propertyInfo = propertiesInfo?.find(({ _id: propertyId }) => propertyId === _id)
           if (propertyInfo) {
             const { _id, name, type } = propertyInfo
             return (

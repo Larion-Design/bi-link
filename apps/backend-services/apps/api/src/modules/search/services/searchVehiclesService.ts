@@ -1,17 +1,9 @@
 import { Injectable, Logger } from '@nestjs/common'
 import { ElasticsearchService } from '@nestjs/elasticsearch'
 import { INDEX_PROPERTIES } from '@app/definitions/constants'
-import {
-  QueryDslQueryContainer,
-  SearchRequest,
-  SearchTotalHits,
-} from '@elastic/elasticsearch/lib/api/types'
+import { QueryDslQueryContainer } from '@elastic/elasticsearch/lib/api/types'
 import { SearchHelperService } from './searchHelperService'
-import {
-  PropertiesSuggestions,
-  PropertyListRecord,
-  PropertySearchIndex,
-} from '@app/definitions/property'
+import { PropertyListRecord, PropertySearchIndex } from 'defs'
 
 @Injectable()
 export class SearchVehiclesService {
@@ -22,63 +14,6 @@ export class SearchVehiclesService {
     private readonly elasticsearchService: ElasticsearchService,
     private readonly searchHelperService: SearchHelperService,
   ) {}
-
-  searchBasicSuggestions = async (
-    searchTerm: string,
-    skip: number,
-    limit: number,
-  ): Promise<PropertiesSuggestions> => {
-    try {
-      const request: SearchRequest = {
-        index: this.index,
-        from: skip,
-        size: limit,
-        fields: ['vehicleInfo.vin', 'vehicleInfo.maker', 'vehicleInfo.model'],
-        sort: ['_score'],
-        track_total_hits: true,
-      }
-
-      if (searchTerm.length) {
-        request.query = {
-          bool: {
-            should: [
-              ...this.searchHelperService.getTermQueries(searchTerm, ['_id']),
-              ...this.searchHelperService.getTermQueries(
-                searchTerm,
-                [
-                  'vehicleInfo.vin',
-                  'vehicleInfo.maker',
-                  'vehicleInfo.model',
-                  'vehicleInfo.plateNumbers',
-                ],
-                true,
-              ),
-              this.searchHelperService.getFuzzySearchQuery('vehicleInfo.color', searchTerm),
-              this.searchHelperService.getCustomFieldsSearchQuery(searchTerm),
-              this.searchHelperService.getFilesSearchQuery(searchTerm),
-              this.searchHelperService.getConnectedCompaniesQuery(searchTerm, 'companyOwners'),
-              this.searchHelperService.getConnectedPersonsQuery(searchTerm, 'personOwners'),
-            ],
-          },
-        }
-      } else {
-        request.query = {
-          match_all: {},
-        }
-      }
-
-      const {
-        hits: { total, hits },
-      } = await this.elasticsearchService.search<PropertySearchIndex>(request)
-
-      return {
-        records: hits.map(({ _id, _source }) => this.transformRecord(_id, _source)) ?? [],
-        total: (total as SearchTotalHits).value,
-      }
-    } catch (error) {
-      this.logger.error(error)
-    }
-  }
 
   vinExists = async (vin: string, propertyId?: string) => {
     try {

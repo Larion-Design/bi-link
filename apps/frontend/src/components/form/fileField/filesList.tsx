@@ -12,7 +12,7 @@ import {
 } from '@mui/x-data-grid'
 import { GridActionsColDef } from '@mui/x-data-grid/models/colDef/gridColDef'
 import { Textarea } from '../../dataGrid/textArea'
-import { FileAPIInput } from '../../../types/file'
+import { FileAPIInput } from 'defs'
 import { getDownloadUrlRequest } from '../../../graphql/shared/queries/getDownloadUrl'
 import { RemoveRowsToolbarButton } from '../../dataGrid/removeRowsToolbarButton'
 
@@ -23,11 +23,7 @@ type Props = {
   removeFiles: (ids: string[]) => void
 }
 
-export const FilesList: React.FunctionComponent<Props> = ({
-  files,
-  updateFile,
-  removeFiles,
-}) => {
+export const FilesList: React.FunctionComponent<Props> = ({ files, updateFile, removeFiles }) => {
   const [selectedRows, setSelectedRows] = useState<GridSelectionModel>([])
   const [requestDownloadUrl, { data }] = getDownloadUrlRequest()
 
@@ -93,13 +89,10 @@ export const FilesList: React.FunctionComponent<Props> = ({
     [],
   )
 
-  const processRowUpdate = useCallback(
-    async (newRow: GridRowModel<FileAPIInput>) => {
-      updateFile(newRow.fileId, newRow)
-      return Promise.resolve(newRow)
-    },
-    [],
-  )
+  const processRowUpdate = useCallback(async (newRow: GridRowModel<FileAPIInput>) => {
+    updateFile(newRow.fileId, newRow)
+    return Promise.resolve(newRow)
+  }, [])
 
   const removeSelectedRows = useCallback(
     () => removeFiles(selectedRows as string[]),
@@ -131,9 +124,7 @@ export const FilesList: React.FunctionComponent<Props> = ({
         Toolbar: () => (
           <GridToolbarContainer sx={{ p: 2 }}>
             {!!selectedRows.length && (
-              <RemoveRowsToolbarButton
-                onRemovalConfirmed={removeSelectedRows}
-              />
+              <RemoveRowsToolbarButton onRemovalConfirmed={removeSelectedRows} />
             )}
           </GridToolbarContainer>
         ),

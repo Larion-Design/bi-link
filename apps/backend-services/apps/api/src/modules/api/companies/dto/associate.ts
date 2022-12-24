@@ -1,7 +1,7 @@
 import { Field, ObjectType } from '@nestjs/graphql'
 import { CustomField } from '../../customFields/dto/customField'
 import { ConnectedEntity } from '../../common/dto/connectedEntity'
-import { AssociateAPIOutput } from '@app/definitions/associate'
+import { AssociateAPIOutput } from 'defs'
 
 @ObjectType()
 export class Associate implements AssociateAPIOutput {
@@ -15,10 +15,10 @@ export class Associate implements AssociateAPIOutput {
   company?: ConnectedEntity
 
   @Field({ nullable: true })
-  startDate?: Date
+  startDate: Date | null
 
   @Field({ nullable: true })
-  endDate?: Date
+  endDate: Date | null
 
   @Field()
   equity: number

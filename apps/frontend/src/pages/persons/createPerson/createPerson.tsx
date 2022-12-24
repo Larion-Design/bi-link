@@ -4,7 +4,7 @@ import { useSnackbar } from 'notistack'
 import { DashboardPage } from '../../../components/page/DashboardPage'
 import { createPersonRequest } from '../../../graphql/persons/mutations/createPerson'
 import { routes } from '../../../router/routes'
-import { PersonAPIInput } from '../../../types/person'
+import { PersonAPIInput } from 'defs'
 import { PersonDetails } from '../../../components/page/personDetails'
 
 export const CreatePerson: React.FunctionComponent = () => {

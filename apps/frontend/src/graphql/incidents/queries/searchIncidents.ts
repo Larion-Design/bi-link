@@ -1,5 +1,5 @@
 import { gql, useLazyQuery } from '@apollo/client'
-import { IncidentsSuggestions } from '../../../types/incident'
+import { IncidentsSuggestions } from 'defs'
 
 type Params = {
   searchTerm: string

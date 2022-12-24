@@ -1,4 +1,4 @@
-import { VehicleInfo as VehicleInfoType } from '@app/definitions/property'
+import { VehicleInfo as VehicleInfoType } from 'defs'
 import { Field, ObjectType } from '@nestjs/graphql'
 
 @ObjectType()

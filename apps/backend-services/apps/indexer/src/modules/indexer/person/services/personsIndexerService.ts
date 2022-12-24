@@ -3,9 +3,8 @@ import { ElasticsearchService } from '@nestjs/elasticsearch'
 import { format } from 'date-fns'
 import { PersonDocument, PersonModel } from '@app/entities/models/personModel'
 import { PersonEventDispatcherService } from '../../../producers/services/personEventDispatcherService'
-import { IdDocument, IdDocumentStatus } from '@app/definitions/idDocument'
+import { IdDocument, IdDocumentStatus, PersonIndex } from 'defs'
 import { INDEX_PERSONS } from '@app/definitions/constants'
-import { PersonIndex } from '@app/definitions/person'
 import { PersonsService } from '@app/entities/services/personsService'
 
 @Injectable()

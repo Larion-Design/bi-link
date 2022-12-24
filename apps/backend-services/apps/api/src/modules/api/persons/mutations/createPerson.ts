@@ -1,6 +1,6 @@
 import { Args, ArgsType, Field, Mutation, Resolver } from '@nestjs/graphql'
 import { UseGuards } from '@nestjs/common'
-import { User, UserActions } from '@app/definitions/user'
+import { User, UserActions } from 'defs'
 import { Person } from '../dto/person'
 import { PersonInput } from '../dto/personInput'
 import { PersonAPIService } from '../services/personAPIService'

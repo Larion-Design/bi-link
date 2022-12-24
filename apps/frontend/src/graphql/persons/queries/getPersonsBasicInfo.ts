@@ -1,6 +1,6 @@
 import { gql, useLazyQuery } from '@apollo/client'
 
-import { PersonListRecordWithImage } from '../../../types/person'
+import { PersonListRecordWithImage } from 'defs'
 
 type Response = {
   getPersonsInfo: PersonListRecordWithImage[]

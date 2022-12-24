@@ -2,7 +2,7 @@ import { Field, InputType } from '@nestjs/graphql'
 import { CustomFieldInput } from '../../customFields/dto/customFieldInput'
 import { FileInput } from '../../files/dto/fileInput'
 import { PartyInput } from './partyInput'
-import { IncidentAPIInput } from '@app/definitions/incident'
+import { IncidentAPIInput } from 'defs'
 
 @InputType()
 export class IncidentInput implements IncidentAPIInput {

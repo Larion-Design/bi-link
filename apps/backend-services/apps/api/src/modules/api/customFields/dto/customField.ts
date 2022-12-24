@@ -1,5 +1,5 @@
 import { Field, ObjectType } from '@nestjs/graphql'
-import { CustomFieldAPI } from '@app/definitions/customField'
+import { CustomFieldAPI } from 'defs'
 
 @ObjectType()
 export class CustomField implements CustomFieldAPI {

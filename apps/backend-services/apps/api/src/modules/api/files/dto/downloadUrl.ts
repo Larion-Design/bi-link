@@ -1,5 +1,5 @@
 import { Field, ObjectType } from '@nestjs/graphql'
-import { DownloadUrl as DownloadUrlType } from '@app/definitions/file'
+import { DownloadUrl as DownloadUrlType } from 'defs'
 
 @ObjectType()
 export class DownloadUrl implements DownloadUrlType {

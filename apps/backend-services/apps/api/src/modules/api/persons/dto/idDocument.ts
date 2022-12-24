@@ -1,5 +1,5 @@
 import { Field, ObjectType } from '@nestjs/graphql'
-import { IdDocumentAPI, IdDocumentStatus } from '@app/definitions/idDocument'
+import { IdDocumentAPI, IdDocumentStatus } from 'defs'
 
 @ObjectType()
 export class IdDocument implements IdDocumentAPI {

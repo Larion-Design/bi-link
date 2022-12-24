@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import Typography from '@mui/material/Typography'
 import Box from '@mui/material/Box'
 import MenuItem from '@mui/material/MenuItem'
-import { CompanyAPIInput } from '../../types/company'
+import { CompanyAPIInput } from 'defs'
 import { InputFieldMenu } from '../menu/inputFieldMenu'
 import { CompanyForm } from '../form/companyForm'
 import { Graph } from '../entityViews/graph'
@@ -42,10 +42,7 @@ export const CompanyDetails: React.FunctionComponent<Props> = ({
         {!!companyId && (
           <InputFieldMenu label={'Optiuni'}>
             <MenuItem onClick={() => setMainTabIndex(0)}>Informatii</MenuItem>
-            <MenuItem
-              disabled={!canChangeView}
-              onClick={() => setMainTabIndex(1)}
-            >
+            <MenuItem disabled={!canChangeView} onClick={() => setMainTabIndex(1)}>
               Grafic relational
             </MenuItem>
             <MenuItem disabled onClick={() => setMainTabIndex(2)}>

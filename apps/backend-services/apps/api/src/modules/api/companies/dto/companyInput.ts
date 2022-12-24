@@ -4,7 +4,7 @@ import { FileInput } from '../../files/dto/fileInput'
 import { AssociateInput } from './associateInput'
 import { Length } from 'class-validator'
 import { LocationInput } from './locationInput'
-import { CompanyAPIInput } from '@app/definitions/company'
+import { CompanyAPIInput } from 'defs'
 
 @InputType()
 export class CompanyInput implements CompanyAPIInput {
@@ -22,18 +22,18 @@ export class CompanyInput implements CompanyAPIInput {
   @Field()
   readonly registrationNumber: string
 
-  @Field(() => [LocationInput], { nullable: true })
+  @Field(() => [LocationInput])
   readonly locations: LocationInput[]
 
-  @Field(() => [AssociateInput], { nullable: true })
+  @Field(() => [AssociateInput])
   readonly associates: AssociateInput[]
 
-  @Field(() => [CustomFieldInput], { nullable: true })
+  @Field(() => [CustomFieldInput])
   readonly contactDetails: CustomFieldInput[]
 
-  @Field(() => [CustomFieldInput], { nullable: true })
+  @Field(() => [CustomFieldInput])
   readonly customFields: CustomFieldInput[]
 
-  @Field(() => [FileInput], { nullable: true })
+  @Field(() => [FileInput])
   readonly files: FileInput[]
 }

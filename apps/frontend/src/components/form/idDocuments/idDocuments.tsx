@@ -8,12 +8,7 @@ import {
   GridToolbarContainer,
 } from '@mui/x-data-grid'
 import Box from '@mui/material/Box'
-import {
-  DocumentStatusSelectOptions,
-  IdDocument,
-  IdDocumentAPI,
-  IdDocumentStatus,
-} from '../../../types/idDocument'
+import { IdDocumentAPI, IdDocumentStatus } from 'defs'
 import { GridSetItem, useGridSet } from '../../../utils/hooks/useGridSet'
 import { AddSuggestionsToolbarButton } from '../../dataGrid/addSuggestionsToolbarButton'
 import { RemoveRowsToolbarButton } from '../../dataGrid/removeRowsToolbarButton'
@@ -21,7 +16,7 @@ import { RemoveRowsToolbarButton } from '../../dataGrid/removeRowsToolbarButton'
 type Props = {
   documents: IdDocumentAPI[]
   suggestions: string[]
-  setFieldValue: (documents: IdDocument[]) => Promise<void>
+  setFieldValue: (documents: IdDocumentAPI[]) => Promise<void>
   readonly?: boolean
   error?: string
 }
@@ -31,22 +26,15 @@ export const IdDocuments: React.FunctionComponent<Props> = ({
   suggestions,
   setFieldValue,
 }) => {
-  const { values, rawValues, create, update, removeBulk, uid } =
-    useGridSet(documents)
+  const { values, rawValues, create, update, removeBulk, uid } = useGridSet(documents)
   const [selectedRows, setSelectedRows] = useState<GridSelectionModel>([])
 
-  const processRowUpdate = useCallback(
-    async (newRow: GridRowModel<GridSetItem<IdDocumentAPI>>) => {
-      update(newRow)
-      return Promise.resolve(newRow)
-    },
-    [],
-  )
+  const processRowUpdate = useCallback(async (newRow: GridRowModel<GridSetItem<IdDocumentAPI>>) => {
+    update(newRow)
+    return Promise.resolve(newRow)
+  }, [])
 
-  const removeSelectedRows = useCallback(
-    () => removeBulk(selectedRows as string[]),
-    [selectedRows],
-  )
+  const removeSelectedRows = useCallback(() => removeBulk(selectedRows as string[]), [selectedRows])
 
   useEffect(() => {
     void setFieldValue(rawValues())
@@ -148,9 +136,7 @@ export const IdDocuments: React.FunctionComponent<Props> = ({
               />
 
               {!!selectedRows.length && (
-                <RemoveRowsToolbarButton
-                  onRemovalConfirmed={removeSelectedRows}
-                />
+                <RemoveRowsToolbarButton onRemovalConfirmed={removeSelectedRows} />
               )}
             </GridToolbarContainer>
           ),
@@ -162,4 +148,10 @@ export const IdDocuments: React.FunctionComponent<Props> = ({
       />
     </Box>
   )
+}
+
+export const DocumentStatusSelectOptions: Record<IdDocumentStatus, string> = {
+  [IdDocumentStatus.VALID]: 'Valid',
+  [IdDocumentStatus.EXPIRED]: 'Expirat',
+  [IdDocumentStatus.LOST_OR_STOLEN]: 'Pierdut sau furat',
 }

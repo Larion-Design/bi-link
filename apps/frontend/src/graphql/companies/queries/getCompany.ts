@@ -1,5 +1,5 @@
 import { gql, useLazyQuery } from '@apollo/client'
-import { CompanyAPIInput } from '../../../types/company'
+import { CompanyAPIInput } from 'defs'
 
 type Params = {
   id: string

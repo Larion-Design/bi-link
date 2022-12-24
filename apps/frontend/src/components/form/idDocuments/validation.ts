@@ -1,7 +1,7 @@
 import * as yup from 'yup'
 import { personIdDocumentRequest } from '../../../graphql/persons/queries/personIdDocumentExists'
 import { isDatesOrderValid } from '../../../utils/date'
-import { IdDocument } from '../../../types/idDocument'
+import { IdDocument } from 'defs'
 
 export const validateIdDocuments = async (documents: IdDocument[], personId?: string) => {
   let error = validateIdDocumentsFormat(documents)
@@ -30,15 +30,10 @@ export const validateDocumentDates = (documents: IdDocument[]) => {
   }
 }
 
-export const validateExistingDocuments = async (
-  documents: IdDocument[],
-  personId?: string,
-) => {
+export const validateExistingDocuments = async (documents: IdDocument[], personId?: string) => {
   try {
     const results = await Promise.all(
-      documents.map(({ documentNumber }) =>
-        personIdDocumentRequest(documentNumber, personId),
-      ),
+      documents.map(({ documentNumber }) => personIdDocumentRequest(documentNumber, personId)),
     )
 
     const areDocumentsValid = results.every(

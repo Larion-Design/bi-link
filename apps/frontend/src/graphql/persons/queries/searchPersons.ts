@@ -1,5 +1,5 @@
 import { gql, useLazyQuery } from '@apollo/client'
-import { PersonListRecord, PersonsSuggestions } from '../../../types/person'
+import { PersonListRecord, PersonsSuggestions } from 'defs'
 
 type Response = {
   searchPersons: PersonsSuggestions<PersonListRecord>

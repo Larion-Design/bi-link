@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import Box from '@mui/material/Box'
-import { FileAPIInput } from '../../../types/file'
+import { FileAPIInput } from 'defs'
 import { FilesList } from './filesList'
 import { FileUploadBox } from './FileUploadBox'
 import { useDebouncedMap } from '../../../utils/hooks/useMap'
@@ -33,9 +33,7 @@ export const FilesManager: React.FunctionComponent<Props> = ({
         minHeight: '50vh',
       }}
     >
-      <FileUploadBox
-        addUploadedFile={(fileInfo) => add(fileInfo, ({ fileId }) => fileId)}
-      >
+      <FileUploadBox addUploadedFile={(fileInfo) => add(fileInfo, ({ fileId }) => fileId)}>
         <FilesList
           files={files}
           keepDeletedFiles={keepDeletedFiles}

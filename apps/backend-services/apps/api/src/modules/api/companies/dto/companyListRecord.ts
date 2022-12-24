@@ -1,4 +1,4 @@
-import { CompanyListRecord as CompanyListRecordType } from '@app/definitions/company'
+import { CompanyListRecord as CompanyListRecordType } from 'defs'
 import { Field, ObjectType } from '@nestjs/graphql'
 
 @ObjectType()

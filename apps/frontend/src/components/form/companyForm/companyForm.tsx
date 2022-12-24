@@ -18,7 +18,7 @@ import { personFormValidation } from '../personForm/validation/validation'
 import { InputField } from '../inputField'
 import { getCompanyFrequentCustomFieldsRequest } from '../../../graphql/companies/queries/getCompanyFrequentCustomFields'
 import { useDialog } from '../../dialog/dialogProvider'
-import { CompanyAPIInput } from '../../../types/company'
+import { CompanyAPIInput } from 'defs'
 import { CONTACT_METHODS } from '../../../utils/constants'
 
 type Props = {
@@ -116,10 +116,7 @@ const Form: React.FunctionComponent<Props & FormikProps<CompanyAPIInput>> = ({
                 value={values.cui}
                 error={errors.cui}
                 onChange={async (value) => {
-                  const error = await companyFormValidation.cui(
-                    value,
-                    companyId,
-                  )
+                  const error = await companyFormValidation.cui(value, companyId)
                   setFieldValue('cui', value)
                   setFieldError('cui', error)
                 }}
@@ -133,10 +130,7 @@ const Form: React.FunctionComponent<Props & FormikProps<CompanyAPIInput>> = ({
                 value={values.registrationNumber}
                 error={errors.registrationNumber}
                 onChange={async (value) => {
-                  const error = await companyFormValidation.registrationNumber(
-                    value,
-                    companyId,
-                  )
+                  const error = await companyFormValidation.registrationNumber(value, companyId)
                   setFieldValue('registrationNumber', value)
                   setFieldError('registrationNumber', error)
                 }}
@@ -166,9 +160,7 @@ const Form: React.FunctionComponent<Props & FormikProps<CompanyAPIInput>> = ({
               fields={values.customFields}
               suggestions={frequentFields?.getCompanyFrequentCustomFields}
               setFieldValue={async (customFields) => {
-                const error = await personFormValidation.customFields(
-                  customFields,
-                )
+                const error = await personFormValidation.customFields(customFields)
 
                 setFieldValue('customFields', customFields)
                 setFieldError('customFields', error)
@@ -183,9 +175,7 @@ const Form: React.FunctionComponent<Props & FormikProps<CompanyAPIInput>> = ({
               fields={values.contactDetails}
               suggestions={CONTACT_METHODS}
               setFieldValue={async (contactDetails) => {
-                const error = await personFormValidation.contactDetails(
-                  contactDetails,
-                )
+                const error = await personFormValidation.contactDetails(contactDetails)
 
                 setFieldValue('contactDetails', contactDetails)
                 setFieldError('contactDetails', error)
@@ -241,11 +231,7 @@ const Form: React.FunctionComponent<Props & FormikProps<CompanyAPIInput>> = ({
             color={'error'}
             disabled={isSubmitting || isValidating}
             variant={'text'}
-            onClick={
-              readonly
-                ? navigateFromCompanyFormPage
-                : () => displayFormCancelDialog()
-            }
+            onClick={readonly ? navigateFromCompanyFormPage : () => displayFormCancelDialog()}
             sx={{ mr: 4 }}
           >
             Anulează
@@ -278,8 +264,7 @@ const companyInitialValues: CompanyAPIInput = {
 
 export const CompanyForm = withFormik<Props, CompanyAPIInput>({
   mapPropsToValues: ({ companyInfo }) => companyInfo ?? companyInitialValues,
-  validate: async (values, { companyId }) =>
-    validateCompanyForm(values, companyId),
+  validate: async (values, { companyId }) => validateCompanyForm(values, companyId),
   validateOnChange: false,
   validateOnMount: false,
   validateOnBlur: false,

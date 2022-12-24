@@ -1,10 +1,6 @@
 import { Injectable } from '@nestjs/common'
 import { MappingProperty } from '@elastic/elasticsearch/lib/api/types'
-import {
-  ConnectedCompanyIndex,
-  ConnectedPersonIndex,
-  ConnectedPropertyIndex,
-} from '@app/definitions/connectedEntity'
+import { ConnectedCompanyIndex, ConnectedPersonIndex, ConnectedPropertyIndex } from 'defs'
 
 @Injectable()
 export class MappingHelperService {

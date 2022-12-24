@@ -1,9 +1,5 @@
 import { Injectable } from '@nestjs/common'
-import {
-  ConnectedCompanyIndex,
-  ConnectedPersonIndex,
-  ConnectedPropertyIndex,
-} from '@app/definitions/connectedEntity'
+import { ConnectedCompanyIndex, ConnectedPersonIndex, ConnectedPropertyIndex } from 'defs'
 import { PersonDocument } from '@app/entities/models/personModel'
 import { CompanyDocument } from '@app/entities/models/companyModel'
 import { PropertyDocument } from '@app/entities/models/propertyModel'

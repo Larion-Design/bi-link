@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { CompanySelectorView } from './companySelector'
 import { useFormik } from 'formik'
-import { CompanyAPIInput } from '../../../types/company'
+import { CompanyAPIInput } from 'defs'
 import { createCompanyRequest } from '../../../graphql/companies/mutations/createCompany'
 import {
   companyFormValidation,
@@ -28,14 +28,7 @@ export const FastCreateCompany: React.FunctionComponent<Props> = ({
   changeView,
 }) => {
   const [createCompany, { data }] = createCompanyRequest()
-  const {
-    values,
-    errors,
-    setFieldError,
-    setFieldValue,
-    submitForm,
-    isSubmitting,
-  } = useFormik({
+  const { values, errors, setFieldError, setFieldValue, submitForm, isSubmitting } = useFormik({
     initialValues: companyInitialValues,
     validateOnMount: false,
     validateOnBlur: false,
@@ -86,9 +79,7 @@ export const FastCreateCompany: React.FunctionComponent<Props> = ({
               error={errors.registrationNumber}
               value={values.registrationNumber}
               onChange={async (value) => {
-                const error = await companyFormValidation.registrationNumber(
-                  value,
-                )
+                const error = await companyFormValidation.registrationNumber(value)
                 setFieldError('registrationNumber', error)
                 await setFieldValue('registrationNumber', value)
               }}
@@ -107,12 +98,7 @@ export const FastCreateCompany: React.FunctionComponent<Props> = ({
         </Button>
 
         <Box display={'flex'}>
-          <Button
-            variant={'outlined'}
-            color={'error'}
-            onClick={closeModal}
-            sx={{ mr: 2 }}
-          >
+          <Button variant={'outlined'} color={'error'} onClick={closeModal} sx={{ mr: 2 }}>
             Inchide
           </Button>
           <Button

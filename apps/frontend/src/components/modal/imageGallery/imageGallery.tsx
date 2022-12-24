@@ -6,7 +6,7 @@ import CardContent from '@mui/material/CardContent'
 import ImageList from '@mui/material/ImageList'
 import ImageListItem from '@mui/material/ImageListItem'
 import Image from 'mui-image'
-import { FileAPIInput } from '../../../types/file'
+import { FileAPIInput } from 'defs'
 import { getDownloadUrlsRequest } from '../../../graphql/shared/queries/getDownloadUrls'
 import { ModalHeader } from '../modalHeader'
 
@@ -15,10 +15,7 @@ type Props = {
   closeModal: () => void
 }
 
-export const ImageGallery: React.FunctionComponent<Props> = ({
-  images,
-  closeModal,
-}) => {
+export const ImageGallery: React.FunctionComponent<Props> = ({ images, closeModal }) => {
   const [fetchImages, { data }] = getDownloadUrlsRequest()
 
   useEffect(() => {
@@ -46,12 +43,7 @@ export const ImageGallery: React.FunctionComponent<Props> = ({
         ) : null}
       </CardContent>
       <CardActions sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-        <Button
-          variant={'outlined'}
-          color={'error'}
-          onClick={closeModal}
-          sx={{ mr: 2 }}
-        >
+        <Button variant={'outlined'} color={'error'} onClick={closeModal} sx={{ mr: 2 }}>
           Inchide
         </Button>
       </CardActions>

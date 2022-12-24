@@ -13,7 +13,7 @@ import { FilesManager } from '../fileField'
 import { CustomInputFields } from '../customInputFields'
 import { InputField } from '../inputField'
 import { useDialog } from '../../dialog/dialogProvider'
-import { IncidentAPIInput } from '../../../types/incident'
+import { IncidentAPIInput } from 'defs'
 import { DateTimeSelector } from '../dateTimeSelector'
 import { Parties } from '../parties'
 import { getIncidentFrequentCustomFieldsRequest } from '../../../graphql/incidents/queries/getIncidentFrequentCustomFields'
@@ -134,9 +134,7 @@ const Form: React.FunctionComponent<Props & FormikProps<IncidentAPIInput>> = ({
                 fields={values.customFields}
                 suggestions={frequentFields?.getIncidentFrequentCustomFields}
                 setFieldValue={async (customFields) => {
-                  const error = await personFormValidation.customFields(
-                    customFields,
-                  )
+                  const error = await personFormValidation.customFields(customFields)
 
                   setFieldValue('customFields', customFields)
                   setFieldError('customFields', error)

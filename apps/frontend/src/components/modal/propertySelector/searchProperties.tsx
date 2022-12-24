@@ -9,7 +9,7 @@ import AddOutlinedIcon from '@mui/icons-material/AddOutlined'
 import { DataGrid, GridColDef, GridSelectionModel } from '@mui/x-data-grid'
 import { PropertySelectorView } from './propertySelector'
 import { searchPropertiesRequest } from '../../../graphql/properties/queries/searchProperties'
-import { PropertyListRecord } from '../../../types/property'
+import { PropertyListRecord } from 'defs'
 import { ModalHeader } from '../modalHeader'
 
 type Props = {
@@ -60,8 +60,7 @@ export const SearchProperties: React.FunctionComponent<Props> = ({
           <TextField
             fullWidth
             helperText={
-              error?.message ??
-              'Criteriile de cautare includ nume sau tipul de proprietate.'
+              error?.message ?? 'Criteriile de cautare includ nume sau tipul de proprietate.'
             }
             onChange={({ target: { value } }) => setSearchTerm(value)}
             error={!!error}
@@ -81,12 +80,7 @@ export const SearchProperties: React.FunctionComponent<Props> = ({
             checkboxSelection
             onSelectionModelChange={(propertiesIds: GridSelectionModel) =>
               selectProperties((selectedProperties) =>
-                Array.from(
-                  new Set([
-                    ...(propertiesIds as string[]),
-                    ...selectedProperties,
-                  ]),
-                ),
+                Array.from(new Set([...(propertiesIds as string[]), ...selectedProperties])),
               )
             }
             disableColumnSelector
@@ -98,12 +92,9 @@ export const SearchProperties: React.FunctionComponent<Props> = ({
             disableVirtualization
             getRowId={({ _id }: PropertyListRecord) => _id}
             localeText={{
-              noRowsLabel:
-                'Nu au fost gasite proprietati. Incearca alt termen de cautare.',
+              noRowsLabel: 'Nu au fost gasite proprietati. Incearca alt termen de cautare.',
               footerRowSelected: (count) =>
-                count !== 1
-                  ? `${count} proprietati selectate`
-                  : '1 proprietate selectata',
+                count !== 1 ? `${count} proprietati selectate` : '1 proprietate selectata',
             }}
           />
         </Box>
@@ -119,12 +110,7 @@ export const SearchProperties: React.FunctionComponent<Props> = ({
         </Button>
 
         <Box display={'flex'}>
-          <Button
-            variant={'outlined'}
-            color={'error'}
-            onClick={closeModal}
-            sx={{ mr: 2 }}
-          >
+          <Button variant={'outlined'} color={'error'} onClick={closeModal} sx={{ mr: 2 }}>
             Inchide
           </Button>
           <Button

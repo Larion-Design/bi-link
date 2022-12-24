@@ -1,6 +1,6 @@
 import { Field, ObjectType } from '@nestjs/graphql'
 import { DownloadUrl } from './downloadUrl'
-import { FileAPIOutput } from '@app/definitions/file'
+import { FileAPIOutput } from 'defs'
 
 @ObjectType()
 export class File implements FileAPIOutput {

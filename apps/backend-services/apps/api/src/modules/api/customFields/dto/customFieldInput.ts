@@ -1,6 +1,6 @@
 import { Field, InputType } from '@nestjs/graphql'
 import { Length } from 'class-validator'
-import { CustomFieldAPI } from '@app/definitions/customField'
+import { CustomFieldAPI } from 'defs'
 
 @InputType()
 export class CustomFieldInput implements CustomFieldAPI {

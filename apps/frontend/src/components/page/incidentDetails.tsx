@@ -3,7 +3,7 @@ import Typography from '@mui/material/Typography'
 import Box from '@mui/material/Box'
 import MenuItem from '@mui/material/MenuItem'
 import { InputFieldMenu } from '../menu/inputFieldMenu'
-import { IncidentAPIInput } from '../../types/incident'
+import { IncidentAPIInput } from 'defs'
 import { IncidentForm } from '../form/incidentForm'
 import { Graph } from '../entityViews/graph'
 
@@ -34,9 +34,7 @@ export const IncidentDetails: React.FunctionComponent<Props> = ({
         }}
       >
         <Typography variant={'h5'} data-cy={'pageTitle'} gutterBottom>
-          {!!incidentId && !!incidentInfo
-            ? 'Detalii despre incident'
-            : 'Creaza un incident'}
+          {!!incidentId && !!incidentInfo ? 'Detalii despre incident' : 'Creaza un incident'}
         </Typography>
         {!!incidentId && (
           <InputFieldMenu label={'Optiuni'}>

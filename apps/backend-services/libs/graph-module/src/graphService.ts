@@ -1,13 +1,13 @@
 import { Injectable, Logger } from '@nestjs/common'
 import { Neo4jService } from 'nest-neo4j/dist'
+import { Path } from 'neo4j-driver'
 import {
+  EntitiesGraph,
   EntityLabel,
   EntityMetadata,
   RelationshipLabel,
   RelationshipMetadata,
-} from '@app/graph-module/types'
-import { Path } from 'neo4j-driver'
-import { EntitiesGraph } from '@app/definitions/entitiesGraph'
+} from 'defs'
 
 @Injectable()
 export class GraphService {

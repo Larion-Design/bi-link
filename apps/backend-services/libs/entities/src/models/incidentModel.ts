@@ -3,10 +3,12 @@ import { Document, Types } from 'mongoose'
 import { CustomFieldModel, CustomFieldSchema } from './customFieldModel'
 import { FileModel } from './fileModel'
 import { PartyModel, PartySchema } from './partyModel'
-import { Incident } from '@app/definitions/incident'
+import { Incident } from 'defs'
 
 @Schema({ timestamps: true })
 export class IncidentModel implements Incident {
+  _id: string
+
   @Prop({ isRequired: false, default: '' })
   description: string
 
@@ -29,5 +31,5 @@ export class IncidentModel implements Incident {
   customFields: CustomFieldModel[]
 }
 
-export type IncidentDocument = IncidentModel & Document
+export type IncidentDocument = IncidentModel & Document<string>
 export const IncidentSchema = SchemaFactory.createForClass(IncidentModel)

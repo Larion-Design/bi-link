@@ -1,5 +1,5 @@
 import { Field, ObjectType } from '@nestjs/graphql'
-import { LocationAPIOutput } from '@app/definitions/location'
+import { LocationAPIOutput } from 'defs'
 
 @ObjectType()
 export class Location implements LocationAPIOutput {

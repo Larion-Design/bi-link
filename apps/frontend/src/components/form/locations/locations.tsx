@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react'
 import MapOutlinedIcon from '@mui/icons-material/MapOutlined'
 import Box from '@mui/material/Box'
 import { GridActionsColDef } from '@mui/x-data-grid/models/colDef/gridColDef'
-import { Location, LocationAPIInput } from '../../../types/location'
+import { Location, LocationAPIInput } from 'defs'
 import {
   DataGrid,
   GridActionsCellItem,
@@ -23,12 +23,8 @@ type Props = {
   updateLocations: (locations: Location[]) => void | Promise<void>
 }
 
-export const Locations: React.FunctionComponent<Props> = ({
-  locations,
-  updateLocations,
-}) => {
-  const { uid, values, update, removeBulk, create, rawValues } =
-    useGridSet(locations)
+export const Locations: React.FunctionComponent<Props> = ({ locations, updateLocations }) => {
+  const { uid, values, update, removeBulk, create, rawValues } = useGridSet(locations)
 
   useEffect(() => {
     updateLocations(rawValues())
@@ -44,10 +40,7 @@ export const Locations: React.FunctionComponent<Props> = ({
     [],
   )
 
-  const removeSelectedRows = useCallback(
-    () => removeBulk(selectedRows as string[]),
-    [selectedRows],
-  )
+  const removeSelectedRows = useCallback(() => removeBulk(selectedRows as string[]), [selectedRows])
 
   return (
     <Box sx={{ minHeight: '50vh', maxHeight: '100vh', width: 1 }}>
@@ -76,9 +69,7 @@ export const Locations: React.FunctionComponent<Props> = ({
               />
 
               {!!selectedRows.length && (
-                <RemoveRowsToolbarButton
-                  onRemovalConfirmed={removeSelectedRows}
-                />
+                <RemoveRowsToolbarButton onRemovalConfirmed={removeSelectedRows} />
               )}
             </GridToolbarContainer>
           ),

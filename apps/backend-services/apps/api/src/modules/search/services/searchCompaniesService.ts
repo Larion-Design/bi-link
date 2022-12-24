@@ -3,7 +3,7 @@ import { ElasticsearchService } from '@nestjs/elasticsearch'
 import { SearchRequest, SearchTotalHits } from '@elastic/elasticsearch/lib/api/types'
 import { CompaniesSuggestions } from '../../api/companies/dto/companiesSuggestions'
 import { INDEX_COMPANIES } from '@app/definitions/constants'
-import { CompanySearchIndex } from '@app/definitions/company'
+import { CompanySearchIndex } from 'defs'
 import { SearchHelperService } from './searchHelperService'
 
 @Injectable()
