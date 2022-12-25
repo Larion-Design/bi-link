@@ -2,7 +2,7 @@ name: Validate Reports Service
 
 on:
   pull_request:
-    branches: [ main ]
+    branches: [ main, staging ]
     types: [opened, synchronize]
 
 jobs:
@@ -26,7 +26,7 @@ jobs:
           run_install: false
 
       - name: Install dependencies
-        run: pnpm i --frozen-lockfile --strict-peer-dependencies --no-optional
+        run: pnpm i --frozen-lockfile --no-optional
 
       - name: Build project
         run: pnpm build

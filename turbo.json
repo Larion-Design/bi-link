@@ -2,7 +2,7 @@
   "$schema": "https://turbo.build/schema.json",
   "pipeline": {
     "start": {
-      "dependsOn": ["api", "graph", "indexer", "files-parser", "user-actions-recorder", "cli","frontend"],
+      "dependsOn": ["api", "graph", "indexer", "files-parser", "user-actions-recorder", "frontend"],
       "outputs": ["dist/**"]
     },
     "lint": {
