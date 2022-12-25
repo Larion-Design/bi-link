@@ -114,7 +114,7 @@ jobs:
 
   publish_release:
     runs-on: self-hosted
-    needs: [ create_release, build_tauri ]
+    needs: [ create_release, build_app ]
     steps:
       - name: Publish release
         id: publish-release
