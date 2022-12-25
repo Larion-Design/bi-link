@@ -1,8 +1,7 @@
 FROM node:18-alpine AS setup
 WORKDIR /usr/src/app
-RUN npm install -g pnpm
 COPY .npmrc package.json pnpm-lock.yaml ./
-RUN pnpm i --frozen-lockfile --no-optional
+RUN npm install -g pnpm && pnpm i --frozen-lockfile --no-optional
 COPY . .
 RUN pnpm build api  \
     && pnpm build indexer \
