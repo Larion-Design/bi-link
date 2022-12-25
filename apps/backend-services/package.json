@@ -1,6 +1,6 @@
 {
   "name": "backend-services",
-  "version": "0.0.4",
+  "version": "0.0.9",
   "description": "BI Link backend services",
   "author": "alextudor@duck.com",
   "private": true,

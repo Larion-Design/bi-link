@@ -1,20 +1,24 @@
-name: Build API Prod Image
+name: Build Prod Image
 
 on:
   push:
     branches: [ main ]
+    paths:
+      - 'apps/backend-services/**'
+      - 'packages/**'
+
 env:
   REGISTRY: "registry.digitalocean.com/bi-link"
   IMAGE_NAME: "link-backend"
 jobs:
-  run_build_docker_image_api:
+  build_image:
     runs-on: self-hosted
     steps:
       - name: Checkout the repo
         uses: actions/checkout@v3
 
       - name: Build image
-        run: docker build -t $(echo $REGISTRY)/$(echo $IMAGE_NAME) .
+        run: docker build -t $(echo $REGISTRY)/$(echo $IMAGE_NAME) ./apps/backend-services
 
       - name: Install doctl
         uses: digitalocean/action-doctl@v2

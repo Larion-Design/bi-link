@@ -8,7 +8,7 @@ import { Person } from 'defs'
 
 @Schema({ timestamps: true })
 export class PersonModel implements Person {
-  _id
+  _id: string
 
   @Prop({ isRequired: false, default: '' })
   firstName: string

@@ -1,0 +1,129 @@
+name: Build Prod Image
+
+on:
+  push:
+    branches: [ staging ]
+
+env:
+  REGISTRY: "registry.digitalocean.com/bi-link"
+  IMAGE_NAME: "frontend"
+jobs:
+  build_image:
+    runs-on: self-hosted
+    steps:
+      - name: Install doctl
+        uses: digitalocean/action-doctl@v2
+        with:
+          token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+
+      - name: Log in to DigitalOcean Container Registry with short-lived credentials
+        run: doctl registry login --expiry-seconds 600
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v2
+
+      - name: Checkout the repo
+        uses: actions/checkout@v2
+
+      - name: Build Docker image
+        run: docker build -t $(echo $REGISTRY)/$(echo $IMAGE_NAME):staging --target staging ./apps/frontend
+
+      - name: Push image to DigitalOcean Container Registry
+        run: docker push $(echo $REGISTRY)/$(echo $IMAGE_NAME):staging
+
+  create_release:
+    runs-on: self-hosted
+    outputs:
+      release_id: ${{ steps.create-release.outputs.result }}
+    steps:
+      - name: Checkout the repo
+        uses: actions/checkout@v2
+
+      - name: Install Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2.2.2
+        id: pnpm-install
+        with:
+          version: 7
+          run_install: false
+
+      - name: Get app version
+        run: echo "PACKAGE_VERSION=$(node -p "require('./apps/frontend/package.json').version")" >> $GITHUB_ENV
+
+      - name: Create release
+        id: create-release
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const { data } = await github.rest.repos.createRelease({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              tag_name: `app-v${process.env.PACKAGE_VERSION}`,
+              name: `BI Link v${process.env.PACKAGE_VERSION}`,
+              body: 'Check the assets in order to download and install this app.',
+              draft: true,
+              prerelease: false
+            })
+            return data.id
+
+  build_app:
+    needs: create_release
+    runs-on: self-hosted
+    steps:
+      - name: Checkout the repo
+        uses: actions/checkout@v2
+
+      - name: Install Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - uses: pnpm/action-setup@v2.2.2
+        name: Install pnpm
+        id: pnpm-install
+        with:
+          version: 7
+          run_install: false
+
+      - name: Install Rust
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+
+      - name: Install dependencies (Ubuntu only)
+        if: matrix.platform == 'ubuntu-20.04'
+        run: |
+          sudo apt update
+          sudo apt install -y libgtk-3-dev webkit2gtk-4.0 libappindicator3-dev librsvg2-dev patchelf
+
+      - name: Install dependencies
+        run: pnpm i --frozen-lockfile --strict-peer-dependencies --prefer-offline
+
+      - uses: tauri-apps/tauri-action@v0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          releaseId: ${{ needs.create-release.outputs.release_id }}
+
+  publish_release:
+    runs-on: self-hosted
+    needs: [ create_release, build_tauri ]
+    steps:
+      - name: Publish release
+        id: publish-release
+        uses: actions/github-script@v6
+        env:
+          release_id: ${{ needs.create-release.outputs.release_id }}
+        with:
+          script: |
+            github.rest.repos.updateRelease({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              release_id: process.env.release_id,
+              draft: false,
+              prerelease: false
+            })
