@@ -16,7 +16,7 @@ export const useLocalPersonFormCopy = () => {
 
   useEffect(() => {
     if (localPersonForm) {
-      validatePersonForm(localPersonForm.personInfo).then((errors) => {
+      void validatePersonForm(localPersonForm.personInfo).then((errors) => {
         if (errors) {
           setPersonForm(null)
         }

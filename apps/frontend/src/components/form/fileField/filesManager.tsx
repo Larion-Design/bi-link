@@ -23,7 +23,7 @@ export const FilesManager: React.FunctionComponent<Props> = ({
   )
 
   useEffect(() => {
-    updateFiles(values())
+    void updateFiles(values())
   }, [uid])
 
   return (

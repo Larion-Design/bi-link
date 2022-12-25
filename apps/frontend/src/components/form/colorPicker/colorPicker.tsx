@@ -6,7 +6,7 @@ type Props = {
   value: string
   label: string
   disabled?: boolean
-  onChange: (value: string) => void | Promise<void>
+  onChange: (value: string) => Promise<void>
   error?: string
 }
 
@@ -27,6 +27,6 @@ export const ColorPicker: React.FunctionComponent<Props> = ({
     disabled={disabled}
     error={!!error}
     helperText={error}
-    onChange={(value) => onChange(value)}
+    onChange={onChange}
   />
 )

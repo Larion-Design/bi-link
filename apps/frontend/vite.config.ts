@@ -1,6 +1,7 @@
 // noinspection JSUnusedGlobalSymbols
-import react from "@vitejs/plugin-react";
-import { defineConfig, splitVendorChunkPlugin } from "vite";
+import react from '@vitejs/plugin-react'
+import basicSSL from '@vitejs/plugin-basic-ssl'
+import { defineConfig, splitVendorChunkPlugin } from 'vite'
 
 /**
  * @see https://vitejs.dev/config/
@@ -13,6 +14,7 @@ export default defineConfig({
       },
     }),
     splitVendorChunkPlugin(),
+    basicSSL(),
   ],
   preview: {
     port: 3000,

@@ -11,7 +11,7 @@ type Props = {
   companyId?: string
   companyInfo?: CompanyAPIInput
   readonly: boolean
-  onSubmit: (data: CompanyAPIInput) => void | Promise<void>
+  onSubmit: (data: CompanyAPIInput) => Promise<void>
 }
 
 export const CompanyDetails: React.FunctionComponent<Props> = ({

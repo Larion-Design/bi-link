@@ -49,9 +49,9 @@ export const FilesList: React.FunctionComponent<Props> = ({ files, updateFile, r
         editable: true,
         type: 'string',
         renderEditCell: Textarea,
-        preProcessEditCellProps: (params: GridPreProcessEditCellProps) => {
+        preProcessEditCellProps: (params: GridPreProcessEditCellProps<string>) => {
           if (params.hasChanged) {
-            const hasError = !params.props.value.length
+            const hasError = !params.props.value?.length
             return { ...params.props, error: hasError }
           }
           return params
@@ -90,7 +90,7 @@ export const FilesList: React.FunctionComponent<Props> = ({ files, updateFile, r
   )
 
   const processRowUpdate = useCallback(async (newRow: GridRowModel<FileAPIInput>) => {
-    updateFile(newRow.fileId, newRow)
+    await updateFile(newRow.fileId, newRow)
     return Promise.resolve(newRow)
   }, [])
 

@@ -36,7 +36,7 @@ export const useAuth = () => {
     [],
   )
   const signup = useCallback(
-    (email: string, password: string) => void createUserWithEmailAndPassword(email, password),
+    async (email: string, password: string) => createUserWithEmailAndPassword(email, password),
     [],
   )
 
@@ -68,8 +68,8 @@ export const getUserRole = () => {
   const isAdmin = useMemo(() => role === Role.ADMIN, [role])
 
   useEffect(() => {
-    user?.getIdTokenResult().then(({ claims }) => {
-      setRole(claims?.role ?? null)
+    void user?.getIdTokenResult().then(({ claims }) => {
+      setRole((claims?.role as Role) ?? null)
     })
   }, [user])
 

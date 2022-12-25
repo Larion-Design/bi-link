@@ -1,6 +1,13 @@
 {
   "$schema": "https://turbo.build/schema.json",
   "pipeline": {
+    "start": {
+      "dependsOn": ["api", "graph", "indexer", "files-parser", "user-actions-recorder", "cli","frontend"],
+      "outputs": ["dist/**"]
+    },
+    "lint": {
+      "outputs": []
+    },
     "build": {
       "dependsOn": ["^build"],
       "outputs": ["dist/**"]
@@ -40,6 +47,11 @@
       "outputs": ["dist/**"]
     },
     "user-actions-recorder": {
+      "cache": false,
+      "dependsOn": ["^build"],
+      "outputs": ["dist/**"]
+    },
+    "cli": {
       "cache": false,
       "dependsOn": ["^build"],
       "outputs": ["dist/**"]

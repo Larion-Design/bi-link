@@ -48,9 +48,9 @@ export const IdDocuments: React.FunctionComponent<Props> = ({
         editable: true,
         type: 'string',
         flex: 1,
-        preProcessEditCellProps: (params: GridPreProcessEditCellProps) => {
+        preProcessEditCellProps: (params: GridPreProcessEditCellProps<string>) => {
           if (params.hasChanged) {
-            const hasError = !params.props.value.length
+            const hasError = !params.props.value?.length
             return { ...params.props, error: hasError }
           }
           return params
@@ -62,8 +62,8 @@ export const IdDocuments: React.FunctionComponent<Props> = ({
         flex: 1,
         editable: true,
         type: 'string',
-        preProcessEditCellProps: (params: GridPreProcessEditCellProps) => {
-          const hasError = !params.props.value.length
+        preProcessEditCellProps: (params: GridPreProcessEditCellProps<string>) => {
+          const hasError = !params.props.value?.length
           return { ...params.props, error: hasError }
         },
       },

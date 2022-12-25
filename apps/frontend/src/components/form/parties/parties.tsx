@@ -18,7 +18,7 @@ export const Parties: React.FunctionComponent<Props> = ({ parties, updateParties
   const { uid, entries, values, add, remove, update } = useMap(parties)
 
   useEffect(() => {
-    updateParties(values())
+    void updateParties(values())
   }, [uid])
 
   const createIncident = useCallback(() => add(createIncidentParty()), [])
@@ -33,7 +33,7 @@ export const Parties: React.FunctionComponent<Props> = ({ parties, updateParties
         </Tooltip>
       </Box>
       <Grid container spacing={2}>
-        {!!parties.length ? (
+        {parties.length ? (
           entries().map(([partyId, partyInfo]) => (
             <Grid key={partyId} item xs={12}>
               <PartyCard

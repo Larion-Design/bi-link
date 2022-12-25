@@ -11,7 +11,7 @@ type Props = {
   incidentId?: string
   incidentInfo?: IncidentAPIInput
   readonly: boolean
-  onSubmit: (data: IncidentAPIInput) => void | Promise<void>
+  onSubmit: (data: IncidentAPIInput) => Promise<void>
 }
 
 export const IncidentDetails: React.FunctionComponent<Props> = ({

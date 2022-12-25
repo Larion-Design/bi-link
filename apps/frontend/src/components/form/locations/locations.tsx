@@ -27,7 +27,7 @@ export const Locations: React.FunctionComponent<Props> = ({ locations, updateLoc
   const { uid, values, update, removeBulk, create, rawValues } = useGridSet(locations)
 
   useEffect(() => {
-    updateLocations(rawValues())
+    void updateLocations(rawValues())
   }, [uid])
 
   const [selectedRows, setSelectedRows] = useState<GridSelectionModel>([])
@@ -91,9 +91,9 @@ const columns: Array<GridColDef | GridActionsColDef> = [
     type: 'string',
     flex: 1,
     renderEditCell: Textarea,
-    preProcessEditCellProps: (params: GridPreProcessEditCellProps) => {
+    preProcessEditCellProps: (params: GridPreProcessEditCellProps<string>) => {
       if (params.hasChanged) {
-        const hasError = !params.props.value.length
+        const hasError = !params.props.value?.length
         return { ...params.props, error: hasError }
       }
       return params

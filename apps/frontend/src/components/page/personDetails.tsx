@@ -12,7 +12,7 @@ type Props = {
   personId?: string
   personInfo?: PersonAPIInput
   readonly: boolean
-  onSubmit: (data: PersonAPIInput) => void | Promise<void>
+  onSubmit: (data: PersonAPIInput) => Promise<void>
 }
 
 export const PersonDetails: React.FunctionComponent<Props> = ({

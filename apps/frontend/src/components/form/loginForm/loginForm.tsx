@@ -69,11 +69,7 @@ export const Login: React.FunctionComponent<Props & FormikProps<LoginInfo>> = ({
           />
         </Box>
 
-        <Box
-          display={'flex'}
-          justifyContent={'space-between'}
-          alignItems={'baseline'}
-        >
+        <Box display={'flex'} justifyContent={'space-between'} alignItems={'baseline'}>
           <Typography variant={'body1'}>
             <Link to={routes.resetPassword}>Ai uitat parola?</Link>
           </Typography>
@@ -101,5 +97,5 @@ export const LoginForm = withFormik<Props, LoginInfo>({
   validateOnChange: false,
   validateOnMount: false,
   validateOnBlur: false,
-  handleSubmit: (values, { props: { onSubmit } }) => onSubmit(values),
+  handleSubmit: (values, { props: { onSubmit } }) => void onSubmit(values),
 })(Login)

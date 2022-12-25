@@ -24,7 +24,7 @@ type Props = {
   incidentId?: string
   incidentInfo?: IncidentAPIInput
   readonly: boolean
-  onSubmit: (formData: IncidentAPIInput) => void
+  onSubmit: (formData: IncidentAPIInput) => Promise<void>
   error?: ApolloError
 }
 
@@ -205,7 +205,7 @@ const incidentInitialValues: IncidentAPIInput = {
 
 export const IncidentForm = withFormik<Props, IncidentAPIInput>({
   mapPropsToValues: ({ incidentInfo }) => incidentInfo ?? incidentInitialValues,
-  validate: async (values, { incidentId }) => ({}),
+  validate: (values, { incidentId }) => void {},
   validateOnChange: false,
   validateOnMount: false,
   validateOnBlur: false,

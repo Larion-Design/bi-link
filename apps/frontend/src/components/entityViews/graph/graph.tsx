@@ -27,7 +27,10 @@ export const Graph: React.FunctionComponent<Props> = ({ entityId }) => {
       const propertiesIds = new Set<string>()
       const incidentsIds = new Set<string>()
 
-      const entityHandlerMap = {
+      const entityHandlerMap: Record<
+        EntityLabel.PERSON | EntityLabel.COMPANY | EntityLabel.PROPERTY | EntityLabel.INCIDENT,
+        (entityId: string) => void
+      > = {
         [EntityLabel.PERSON]: (personId: string) => personsIds.add(personId),
         [EntityLabel.COMPANY]: (companyId: string) => companiesIds.add(companyId),
         [EntityLabel.PROPERTY]: (propertyId: string) => propertiesIds.add(propertyId),
@@ -292,8 +295,14 @@ export const Graph: React.FunctionComponent<Props> = ({ entityId }) => {
   ) : null
 }
 
-const getRelationshipLabelFromType = (relationshipType: string) => {
-  const labels = {
+const getRelationshipLabelFromType = (relationshipType: string | RelationshipLabel) => {
+  const labels: Record<
+    | RelationshipLabel.RELATED
+    | RelationshipLabel.ASSOCIATE
+    | RelationshipLabel.PARTY_INVOLVED
+    | RelationshipLabel.OWNER,
+    string
+  > = {
     [RelationshipLabel.RELATED]: 'Cunoaște',
     [RelationshipLabel.ASSOCIATE]: 'Asociat',
     [RelationshipLabel.PARTY_INVOLVED]: 'Implicat in incident',

@@ -13,6 +13,8 @@
   "rules": {
     "@typescript-eslint/no-namespace": "off",
     "simple-import-sort/imports": "off",
-    "simple-import-sort/exports": "off"
+    "simple-import-sort/exports": "off",
+    "@typescript-eslint/no-unsafe-assignment": "off",
+    "@typescript-eslint/no-unsafe-call": "off"
   }
 }

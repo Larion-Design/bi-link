@@ -19,7 +19,7 @@ const TextareaEditor: React.FunctionComponent<GridRenderEditCellParams<string>> 
     (event) => {
       const newValue = event.target.value
       setValueState(newValue)
-      apiRef.current.setEditCellValue({ id, field, value: newValue, debounceMs: 400 }, event)
+      void apiRef.current.setEditCellValue({ id, field, value: newValue, debounceMs: 400 }, event)
     },
     [apiRef, field, id],
   )
@@ -68,6 +68,4 @@ const TextareaEditor: React.FunctionComponent<GridRenderEditCellParams<string>> 
   )
 }
 
-export const Textarea: GridColDef['renderEditCell'] = (params) => (
-  <TextareaEditor {...params} />
-)
+export const Textarea: GridColDef['renderEditCell'] = (params) => <TextareaEditor {...params} />

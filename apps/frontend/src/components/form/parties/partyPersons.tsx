@@ -30,7 +30,7 @@ export const PartyPersons: React.FunctionComponent<Props> = ({
       <Box sx={{ width: 1, mb: 2 }}>
         <Typography variant={'h6'}>Persoane</Typography>
       </Box>
-      {!!persons.length ? (
+      {persons.length > 0 ? (
         persons.map(({ _id }) => {
           const personInfo = personsInfo?.find(({ _id: personId }) => personId === _id)
           if (personInfo) {

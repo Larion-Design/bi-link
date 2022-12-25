@@ -25,7 +25,7 @@ type Props = {
   companyId?: string
   companyInfo?: CompanyAPIInput
   readonly: boolean
-  onSubmit: (formData: CompanyAPIInput) => void
+  onSubmit: (formData: CompanyAPIInput) => void | Promise<void>
   error?: ApolloError
 }
 

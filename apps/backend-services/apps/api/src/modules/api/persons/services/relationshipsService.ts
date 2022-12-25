@@ -79,7 +79,7 @@ export class RelationshipsService {
     ]
 
     await this.personModel.updateOne(
-      { _id: relatedPerson._id as string },
+      { _id: relatedPerson._id },
       { $set: { relationships } },
       { session },
     )

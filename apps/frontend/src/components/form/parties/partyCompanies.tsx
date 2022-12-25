@@ -30,7 +30,7 @@ export const PartyCompanies: React.FunctionComponent<Props> = ({
       <Box sx={{ width: 1, mb: 2 }}>
         <Typography variant={'h6'}>Companii</Typography>
       </Box>
-      {!!companies.length ? (
+      {companies.length > 0 ? (
         companies.map(({ _id }) => {
           const companyInfo = companiesInfo?.find(({ _id: companyId }) => companyId === _id)
           if (companyInfo) {

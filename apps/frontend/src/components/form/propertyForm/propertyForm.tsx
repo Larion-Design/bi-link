@@ -25,7 +25,7 @@ type Props = {
   propertyId?: string
   propertyInfo?: PropertyAPIInput
   readonly: boolean
-  onSubmit: (formData: PropertyAPIInput) => void
+  onSubmit: (formData: PropertyAPIInput) => Promise<void> | void
   error?: ApolloError
 }
 
@@ -110,7 +110,7 @@ const Form: React.FunctionComponent<Props & FormikProps<PropertyAPIInput>> = ({
                     value={values.name}
                     error={errors.name}
                     onChange={async (value) => {
-                      setFieldValue('name', value)
+                      void setFieldValue('name', value)
                     }}
                   />
                 </Grid>

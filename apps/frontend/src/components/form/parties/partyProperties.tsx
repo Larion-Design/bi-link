@@ -29,7 +29,7 @@ export const PartyProperties: React.FunctionComponent<Props> = ({
       <Box sx={{ width: 1, mb: 2 }}>
         <Typography variant={'h6'}>Proprietati</Typography>
       </Box>
-      {!!properties.length ? (
+      {properties.length > 0 ? (
         properties.map(({ _id }) => {
           const propertyInfo = propertiesInfo?.find(({ _id: propertyId }) => propertyId === _id)
           if (propertyInfo) {
