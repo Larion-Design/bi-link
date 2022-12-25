@@ -33,7 +33,7 @@ export default defineConfig({
     minify: !process.env.TAURI_DEBUG || process.env.NODE_ENV === 'production' ? 'esbuild' : false,
     sourcemap: !!process.env.TAURI_DEBUG,
     commonjsOptions: {
-      include: [/defs/],
+      include: [/defs/, /node_modules/],
       transformMixedEsModules: true,
     },
   },
