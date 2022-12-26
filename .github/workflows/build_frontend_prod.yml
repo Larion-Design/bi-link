@@ -38,6 +38,7 @@ jobs:
         run: docker push $(echo $REGISTRY)/$(echo $IMAGE_NAME)
 
   create_release:
+    if: ${{ false }}
     runs-on: self-hosted
     outputs:
       release_id: ${{ steps.create-release.outputs.result }}
