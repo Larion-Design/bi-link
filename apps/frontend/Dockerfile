@@ -1,6 +1,6 @@
 FROM node:18-alpine AS setup
 WORKDIR /usr/src/app
-COPY ../../.npmrc package.json pnpm-lock.yaml ./
+COPY .npmrc package.json pnpm-lock.yaml ./
 RUN npm install -g pnpm && pnpm i --frozen-lockfile --no-optional
 COPY . .
 
