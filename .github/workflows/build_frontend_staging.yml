@@ -34,6 +34,3 @@ jobs:
 
       - name: Push image to DigitalOcean Container Registry
         run: docker push $(echo $REGISTRY)/$(echo $IMAGE_NAME):staging
-
-      - uses: colpal/actions-clean@v1
-        if: ${{ always() }}
