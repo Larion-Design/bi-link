@@ -30,4 +30,4 @@ jobs:
         if: ${{ always() }}
 
 #      - name: Cleanup
-#        run: docker image prune # docker rmi -f $(docker images -aq)
+#        run: docker image prune # docker rmi -f $(docker images -aq) || true
