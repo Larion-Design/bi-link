@@ -150,8 +150,5 @@
     "@firebase/app-types": "^0.8.0",
     "@sentry/hub": "^7.6.0",
     "@types/inquirer": "^9.0.3"
-  },
-  "optionalDependencies": {
-    "@compodoc/compodoc": "^1.1.19"
   }
 }
