@@ -30,7 +30,7 @@ export const IdDocuments: React.FunctionComponent<Props> = ({
   const { values, rawValues, create, update, removeBulk, uid } = useGridSet(documents)
   const [selectedRows, setSelectedRows] = useState<GridSelectionModel>([])
 
-  const processRowUpdate = useCallback(async (newRow: GridRowModel<GridSetItem<IdDocumentAPI>>) => {
+  const processRowUpdate = useCallback(async (newRow: GridSetItem<IdDocumentAPI>) => {
     update(newRow)
     return Promise.resolve(newRow)
   }, [])
