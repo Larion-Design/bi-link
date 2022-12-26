@@ -18,14 +18,22 @@ jobs:
   build_image:
     runs-on: self-hosted
     steps:
-#      - name: Set up QEMU
-#        uses: docker/setup-qemu-action@v2
-
       - name: Checkout the repo
         uses: actions/checkout@v2
 
       - name: Build container image
         run: DOCKER_BUILDKIT=1 docker build -t $(echo $REGISTRY)/$(echo $IMAGE_NAME) --target production -f ./apps/frontend/Dockerfile .
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v2
+
+      - name: Install doctl
+        uses: digitalocean/action-doctl@v2
+        with:
+          token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+
+      - name: Log in to DigitalOcean Container Registry with short-lived credentials
+        run: doctl registry login --expiry-seconds 600
 
       - name: Push image to DigitalOcean Container Registry
         run: docker push $(echo $REGISTRY)/$(echo $IMAGE_NAME)

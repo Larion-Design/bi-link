@@ -32,6 +32,9 @@ jobs:
       - name: Build Docker image
         run: DOCKER_BUILDKIT=1 docker build -t $(echo $REGISTRY)/$(echo $IMAGE_NAME):staging --target staging -f ./apps/frontend/Dockerfile .
 
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v2
+
       - name: Install doctl
         uses: digitalocean/action-doctl@v2
         with:
