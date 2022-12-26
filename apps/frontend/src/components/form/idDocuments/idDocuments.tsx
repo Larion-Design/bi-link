@@ -12,6 +12,7 @@ import { IdDocumentAPI, IdDocumentStatus } from 'defs'
 import { GridSetItem, useGridSet } from '../../../utils/hooks/useGridSet'
 import { AddSuggestionsToolbarButton } from '../../dataGrid/addSuggestionsToolbarButton'
 import { RemoveRowsToolbarButton } from '../../dataGrid/removeRowsToolbarButton'
+import {GridActionsColDef} from "@mui/x-data-grid/models/colDef/gridColDef";
 
 type Props = {
   documents: IdDocumentAPI[]
@@ -40,7 +41,7 @@ export const IdDocuments: React.FunctionComponent<Props> = ({
     void setFieldValue(rawValues())
   }, [uid])
 
-  const columns: GridColDef[] = useMemo(
+  const columns: Array<GridColDef | GridActionsColDef> = useMemo(
     () => [
       {
         field: 'documentType' as keyof IdDocumentAPI,
@@ -117,7 +118,7 @@ export const IdDocuments: React.FunctionComponent<Props> = ({
         rows={values()}
         columns={columns}
         experimentalFeatures={{ newEditingApi: true }}
-        getRowId={({ _id }) => _id}
+        getRowId={({ _id }) => String(_id)}
         processRowUpdate={processRowUpdate}
         onSelectionModelChange={(selectedRows) => setSelectedRows(selectedRows)}
         components={{
