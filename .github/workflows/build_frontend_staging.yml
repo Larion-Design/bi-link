@@ -22,17 +22,17 @@ jobs:
         with:
           token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
 
-      - name: Log in to DigitalOcean Container Registry with short-lived credentials
-        run: doctl registry login --expiry-seconds 600
-
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v2
+#      - name: Set up QEMU
+#        uses: docker/setup-qemu-action@v2
 
       - name: Checkout the repo
         uses: actions/checkout@v2
 
       - name: Build Docker image
         run: docker build -t $(echo $REGISTRY)/$(echo $IMAGE_NAME):staging --target staging -f ./apps/frontend/Dockerfile .
+
+      - name: Log in to DigitalOcean Container Registry with short-lived credentials
+        run: doctl registry login --expiry-seconds 600
 
       - name: Push image to DigitalOcean Container Registry
         run: docker push $(echo $REGISTRY)/$(echo $IMAGE_NAME):staging
