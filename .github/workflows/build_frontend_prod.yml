@@ -11,7 +11,7 @@ on:
       - 'packages/defs/**'
 
 env:
-  REGISTRY: "oath.blue:44153/bi-link"
+  REGISTRY: "registry.digitalocean.com/bi-link"
   IMAGE_NAME: "link-frontend"
 
 jobs:
