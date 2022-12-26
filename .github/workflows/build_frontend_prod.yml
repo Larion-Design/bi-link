@@ -4,6 +4,7 @@ on:
   push:
     branches: [ main ]
     paths:
+      - '.github/**'
       - 'package.json'
       - 'pnpm-lock.yaml'
       - 'apps/frontend/**'
