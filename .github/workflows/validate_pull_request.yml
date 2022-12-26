@@ -1,4 +1,4 @@
-name: Validate Reports Service
+name: Validate PR Changes
 
 on:
   pull_request:
