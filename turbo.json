@@ -10,7 +10,7 @@
       "outputs": ["dist/**"]
     },
     "build:frontend": {
-      "dependsOn": ["^build:frontend"],
+      "dependsOn": ["^build", "^build:frontend"],
       "outputs": ["dist/**"]
     },
     "build:frontend:staging": {

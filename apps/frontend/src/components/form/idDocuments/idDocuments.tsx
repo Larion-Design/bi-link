@@ -41,7 +41,7 @@ export const IdDocuments: React.FunctionComponent<Props> = ({
     void setFieldValue(rawValues())
   }, [uid])
 
-  const columns: Array<GridColDef | GridActionsColDef> = useMemo(
+  const columns: Array<GridColDef> = useMemo(
     () => [
       {
         field: 'documentType' as keyof IdDocumentAPI,
