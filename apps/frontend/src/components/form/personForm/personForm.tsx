@@ -26,7 +26,7 @@ type Props = {
   personId?: string
   personInfo?: PersonAPIInput
   readonly: boolean
-  onSubmit: (formData: PersonAPIInput) => Promise<void>
+  onSubmit: (formData: PersonAPIInput) => void | Promise<void>
 }
 
 const Form: React.FunctionComponent<Props & FormikProps<PersonAPIInput>> = ({
