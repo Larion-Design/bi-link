@@ -29,7 +29,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Build container image
-        run: docker build -t $(echo $REGISTRY)/$(echo $IMAGE_NAME) --target production -f ./apps/frontend/Dockerfile .
+        run: DOCKER_BUILDKIT=1 docker build -t $(echo $REGISTRY)/$(echo $IMAGE_NAME) --target production -f ./apps/frontend/Dockerfile .
 
       - name: Log in to DigitalOcean Container Registry with short-lived credentials
         run: doctl registry login --expiry-seconds 600
