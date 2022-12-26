@@ -11,7 +11,7 @@ on:
       - 'packages/defs/**'
 
 env:
-  REGISTRY: "192.168.1.128:49153/bi-link"
+  REGISTRY: "oath.blue:44153/bi-link"
   IMAGE_NAME: "link-backend"
 jobs:
   build_image:
