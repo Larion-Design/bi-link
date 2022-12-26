@@ -11,8 +11,9 @@ on:
       - 'packages/defs/**'
 
 env:
-  REGISTRY: "registry.digitalocean.com/bi-link"
+  REGISTRY: "192.168.1.128:5000/bi-link"
   IMAGE_NAME: "link-frontend"
+
 jobs:
   build_image:
     runs-on: self-hosted
