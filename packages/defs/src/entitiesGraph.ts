@@ -15,7 +15,7 @@ export interface EntitiesGraph {
   propertiesRelationships: PropertyOwnerRelationship[]
 }
 
-export const enum RelationshipLabel {
+export enum RelationshipLabel {
   RELATED = 'RELATED',
   ASSOCIATE = 'ASSOCIATE',
   OWNER = 'OWNER',
@@ -23,7 +23,7 @@ export const enum RelationshipLabel {
   HAS_ATTACHMENT = 'HAS_ATTACHMENT',
 }
 
-export const enum EntityLabel {
+export enum EntityLabel {
   PERSON = 'PERSON',
   COMPANY = 'COMPANY',
   INCIDENT = 'INCIDENT',

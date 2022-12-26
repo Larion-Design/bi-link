@@ -4,7 +4,7 @@
   "private": true,
   "description": "BI Link types and definitions",
   "main": "dist/index.js",
-  "types": "src/index.ts",
+  "types": "dist/index.d.ts",
   "files": ["dist"],
   "exports": {
     ".": "./dist/index.js",

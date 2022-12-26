@@ -1,17 +1,11 @@
 FROM node:18-alpine AS setup
-WORKDIR /usr/src/app
-COPY .npmrc package.json pnpm-lock.yaml ./
-RUN npm install -g pnpm && pnpm i --frozen-lockfile --no-optional
+WORKDIR /usr/src/link
+COPY .npmrc package.json pnpm-lock.yaml packages apps ./
+RUN apk add libc6-compat chromium && npm install -g pnpm
 COPY . .
-RUN pnpm build api  \
-    && pnpm build indexer \
-    && pnpm build files-parser \
-    && pnpm build user-actions-recorder \
-    && pnpm build graph \
-    && pnpm build cli \
-    && pnpm prune --prod --no-optional
+RUN pnpm install --frozen-lockfile && pnpm turbo build:backend && pnpm prune --prod --no-optional
 
 FROM node:18-alpine AS bundle
 USER node
-COPY --chown=node:node --from=setup /usr/src/app/node_modules ./node_modules
-COPY --chown=node:node --from=setup /usr/src/app/dist ./dist
+COPY --chown=node:node --from=setup /usr/src/link/apps/backend-services/node_modules ./node_modules
+COPY --chown=node:node --from=setup /usr/src/link/apps/backend-services/dist ./dist

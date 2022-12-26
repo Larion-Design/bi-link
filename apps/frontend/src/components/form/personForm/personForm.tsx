@@ -115,9 +115,9 @@ const Form: React.FunctionComponent<Props & FormikProps<PersonAPIInput>> = ({
                   updateImage={async (fileInfo) => {
                     const error = await personFormValidation.image(fileInfo)
                     setFieldValue('image', fileInfo)
-                    setFieldError('image', error)
+                    setFieldError('image', error as string)
                   }}
-                  error={errors.image}
+                  error={errors.image as string}
                 />
               </Grid>
               <Grid container item xs={9} spacing={3}>

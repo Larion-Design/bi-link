@@ -135,7 +135,7 @@ const Form: React.FunctionComponent<Props & FormikProps<PropertyAPIInput>> = ({
                   <VehicleInfo
                     vehicleInfo={values.vehicleInfo ?? createVehicleInfo()}
                     updateVehicleInfo={(vehicleInfo) => setFieldValue('vehicleInfo', vehicleInfo)}
-                    error={errors.vehicleInfo}
+                    error={errors.vehicleInfo as string}
                   />
                 )}
               </Grid>

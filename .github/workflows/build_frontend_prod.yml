@@ -12,7 +12,7 @@ on:
 
 env:
   REGISTRY: "registry.digitalocean.com/bi-link"
-  IMAGE_NAME: "frontend"
+  IMAGE_NAME: "link-frontend"
 jobs:
   build_image:
     runs-on: self-hosted
@@ -25,14 +25,14 @@ jobs:
       - name: Log in to DigitalOcean Container Registry with short-lived credentials
         run: doctl registry login --expiry-seconds 600
 
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v2
+#      - name: Set up QEMU
+#        uses: docker/setup-qemu-action@v2
 
       - name: Checkout the repo
         uses: actions/checkout@v2
 
       - name: Build container image
-        run: docker build -t $(echo $REGISTRY)/$(echo $IMAGE_NAME) --target production ./apps/frontend
+        run: docker build -t $(echo $REGISTRY)/$(echo $IMAGE_NAME) --target production -f ./apps/frontend/Dockerfile .
 
       - name: Push image to DigitalOcean Container Registry
         run: docker push $(echo $REGISTRY)/$(echo $IMAGE_NAME)

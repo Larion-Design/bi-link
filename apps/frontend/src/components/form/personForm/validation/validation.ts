@@ -66,7 +66,7 @@ export const personFormValidation = {
       return Promise.resolve('Data nasterii este invalida.')
     }
   },
-  image: async (image: FileAPIInput | null) => {
+  image: async (image: FileAPIInput | null): Promise<unknown | string> => {
     if (image) {
       return validateSingleFileFormat(image)
     }

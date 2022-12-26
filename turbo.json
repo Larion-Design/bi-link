@@ -5,16 +5,24 @@
       "dependsOn": ["api", "graph", "indexer", "files-parser", "user-actions-recorder", "frontend"],
       "outputs": ["dist/**"]
     },
-    "lint": {
-      "cache": true,
-      "outputs": []
+    "build:backend": {
+      "dependsOn": ["build:api", "build:graph", "build:indexer", "build:files-parser", "build:user-actions-recorder", "build:cli"],
+      "outputs": ["dist/**"]
+    },
+    "build:frontend": {
+      "dependsOn": ["^build:frontend"],
+      "outputs": ["dist/**"]
+    },
+    "build:frontend:staging": {
+      "dependsOn": ["^build:frontend:staging"],
+      "outputs": ["dist/**"]
     },
     "build": {
-      "dependsOn": ["^build"],
+      "dependsOn": ["build:frontend", "build:backend"],
       "outputs": ["dist/**"]
     },
     "build:native": {
-      "dependsOn": ["^build"],
+      "dependsOn": ["^build:native"],
       "outputs": ["dist/**"]
     },
     "frontend": {
@@ -32,8 +40,16 @@
       "dependsOn": ["^build"],
       "outputs": ["dist/**"]
     },
+    "build:api": {
+      "dependsOn": ["^build"],
+      "outputs": ["dist/**"]
+    },
     "indexer": {
       "cache": false,
+      "dependsOn": ["^build"],
+      "outputs": ["dist/**"]
+    },
+    "build:indexer": {
       "dependsOn": ["^build"],
       "outputs": ["dist/**"]
     },
@@ -42,8 +58,16 @@
       "dependsOn": ["^build"],
       "outputs": ["dist/**"]
     },
+    "build:files-parser": {
+      "dependsOn": ["^build"],
+      "outputs": ["dist/**"]
+    },
     "graph": {
       "cache": false,
+      "dependsOn": ["^build"],
+      "outputs": ["dist/**"]
+    },
+    "build:graph": {
       "dependsOn": ["^build"],
       "outputs": ["dist/**"]
     },
@@ -52,10 +76,22 @@
       "dependsOn": ["^build"],
       "outputs": ["dist/**"]
     },
+    "build:user-actions-recorder": {
+      "dependsOn": ["^build"],
+      "outputs": ["dist/**"]
+    },
     "cli": {
       "cache": false,
       "dependsOn": ["^build"],
       "outputs": ["dist/**"]
+    },
+    "build:cli": {
+      "dependsOn": ["^build"],
+      "outputs": ["dist/**"]
+    },
+    "lint": {
+      "cache": true,
+      "outputs": []
     }
   },
   "globalEnv": ["GITHUB_TOKEN"]

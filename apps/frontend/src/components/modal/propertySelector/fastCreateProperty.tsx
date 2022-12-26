@@ -61,7 +61,7 @@ export const FastCreateProperty: React.FunctionComponent<Props> = ({
                 setFieldError('images', error)
                 void setFieldValue('images', images)
               }}
-              error={errors.images}
+              error={errors.images as string}
             />
           </Grid>
           <Grid container item xs={9} spacing={3}>
@@ -71,7 +71,7 @@ export const FastCreateProperty: React.FunctionComponent<Props> = ({
                 label={'Nume'}
                 readonly={false}
                 value={values.name}
-                error={errors.name}
+                error={errors.name as string}
                 onChange={async (value) => {
                   void setFieldValue('name', value)
                 }}
@@ -102,7 +102,7 @@ export const FastCreateProperty: React.FunctionComponent<Props> = ({
                     label={'VIN'}
                     readonly={false}
                     value={values.vehicleInfo?.vin}
-                    error={errors.vehicleInfo}
+                    error={errors.vehicleInfo as string}
                     onChange={async (value) => {
                       const error = await propertyFormValidation.vin(value)
                       setFieldError('vin', error)
@@ -115,7 +115,7 @@ export const FastCreateProperty: React.FunctionComponent<Props> = ({
                     readonly={false}
                     label={'Marca'}
                     value={values.vehicleInfo.maker}
-                    error={errors.vehicleInfo}
+                    error={errors.vehicleInfo as string}
                     onValueChange={async (value) => {
                       const error = await propertyFormValidation.maker(value)
                       setFieldError('maker', error)
@@ -128,7 +128,7 @@ export const FastCreateProperty: React.FunctionComponent<Props> = ({
                     label={'Model'}
                     readonly={false}
                     value={values.vehicleInfo.model}
-                    error={errors.vehicleInfo}
+                    error={errors.vehicleInfo as string}
                     onValueChange={async (value) => {
                       const error = await propertyFormValidation.model(value)
                       setFieldError('model', error)
@@ -141,7 +141,7 @@ export const FastCreateProperty: React.FunctionComponent<Props> = ({
                     name={'color'}
                     value={values.vehicleInfo?.color}
                     label={'Culoare'}
-                    error={errors.vehicleInfo}
+                    error={errors.vehicleInfo as string}
                     onChange={async (value) => {
                       const error = await propertyFormValidation.color(value)
                       setFieldError('color', error)
