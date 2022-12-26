@@ -11,18 +11,13 @@ on:
       - 'packages/defs/**'
 
 env:
-  REGISTRY: "192.168.1.128:5000/bi-link"
+  REGISTRY: "http://192.168.1.128:5000/bi-link"
   IMAGE_NAME: "link-frontend"
 
 jobs:
   build_image:
     runs-on: self-hosted
     steps:
-      - name: Install doctl
-        uses: digitalocean/action-doctl@v2
-        with:
-          token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
-
 #      - name: Set up QEMU
 #        uses: docker/setup-qemu-action@v2
 
@@ -31,9 +26,6 @@ jobs:
 
       - name: Build Docker image
         run: DOCKER_BUILDKIT=1 docker build -t $(echo $REGISTRY)/$(echo $IMAGE_NAME):staging --target staging -f ./apps/frontend/Dockerfile .
-
-      - name: Log in to DigitalOcean Container Registry with short-lived credentials
-        run: doctl registry login --expiry-seconds 600
 
       - name: Push image to DigitalOcean Container Registry
         run: docker push $(echo $REGISTRY)/$(echo $IMAGE_NAME):staging
