@@ -16,5 +16,5 @@ COPY --from=build-prod /usr/src/link/apps/frontend/dist /var/www
 COPY --from=build-prod /usr/src/link/apps/frontend/nginx/nginx.conf /etc/nginx/conf.d/default.conf
 
 FROM nginx:1.23-alpine AS staging
-COPY --from=build-staging /usr/src/app/dist /var/www
-COPY --from=build-staging /usr/src/app/nginx/nginx.conf /etc/nginx/conf.d/default.conf
+COPY --from=build-staging /usr/src/link/apps/frontend/dist /var/www
+COPY --from=build-staging /usr/src/link/apps/frontend/nginx/nginx.conf /etc/nginx/conf.d/default.conf
