@@ -3,4 +3,4 @@
 schema.graphql
 node_modules
 dist
-apps/.DS_Store
+.DS_Store
