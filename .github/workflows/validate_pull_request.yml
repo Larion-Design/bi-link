@@ -30,3 +30,6 @@ jobs:
 
       - name: Build project
         run: pnpm build
+
+      - uses: colpal/actions-clean@v1
+        if: ${{ always() }}

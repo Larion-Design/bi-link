@@ -21,6 +21,11 @@ jobs:
 #      - name: Set up QEMU
 #        uses: docker/setup-qemu-action@v2
 
+      - name: 'Cleanup build folder'
+        run: |
+          rm -rf ./* || true
+          rm -rf ./.??* || true
+
       - name: Checkout the repo
         uses: actions/checkout@v2
 
@@ -29,3 +34,6 @@ jobs:
 
       - name: Push image to DigitalOcean Container Registry
         run: docker push $(echo $REGISTRY)/$(echo $IMAGE_NAME):staging
+
+      - uses: colpal/actions-clean@v1
+        if: ${{ always() }}

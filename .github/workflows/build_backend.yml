@@ -26,5 +26,8 @@ jobs:
       - name: Push image to DigitalOcean Container Registry
         run: docker push $(echo $REGISTRY)/$(echo $IMAGE_NAME)
 
+      - uses: colpal/actions-clean@v1
+        if: ${{ always() }}
+
 #      - name: Cleanup
 #        run: docker image prune # docker rmi -f $(docker images -aq)
