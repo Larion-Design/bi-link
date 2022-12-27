@@ -3,6 +3,7 @@ dist
 node_modules
 .turbo
 build
+out
 
 # Logs
 
@@ -34,4 +35,3 @@ build
 .prettierignore
 .eslintrc
 .github
-.gitignore

@@ -4,3 +4,4 @@ schema.graphql
 node_modules
 dist
 .DS_Store
+out

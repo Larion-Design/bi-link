@@ -6,6 +6,7 @@
       "outputs": ["dist/**"]
     },
     "build:backend": {
+      "cache": false,
       "dependsOn": ["build:api", "build:graph", "build:indexer", "build:files-parser", "build:user-actions-recorder", "build:cli"],
       "outputs": ["dist/**"]
     },
