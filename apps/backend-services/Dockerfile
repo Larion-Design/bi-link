@@ -12,6 +12,7 @@ RUN --mount=type=cache,id=pnpm-store,target=/root/.local/share/pnpm/store/v3 pnp
     pnpm --filter backend-services run build:graph && \
     pnpm --filter backend-services run build:files-parser && \
     pnpm --filter backend-services run build:user-actions-recorder && \
+    pnpm --filter backend-services run build:cli && \
     pnpm prune --prod --no-optional
 
 FROM setup AS prod
