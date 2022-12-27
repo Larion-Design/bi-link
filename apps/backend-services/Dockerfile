@@ -5,8 +5,7 @@ RUN apk add libc6-compat chromium && npm install -g pnpm
 
 FROM setup AS build
 COPY . .
-RUN --mount=type=cache,id=pnpm-store,target=/root/.local/share/pnpm/store/v3 \
-        pnpm install --frozen-lockfile && pnpm turbo build:backend
+RUN pnpm install --frozen-lockfile && pnpm turbo build:backend
 
 FROM setup AS bundle
 USER node
