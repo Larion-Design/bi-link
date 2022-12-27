@@ -141,6 +141,7 @@ dependencies:
   rxjs: 7.8.0
   supertokens-node: 12.1.4
   tesseract.js: 3.0.3_eslint@8.30.0
+  tslib: 2.4.1
   uuid: 8.3.2
   word-extractor: 1.0.4
   xlsx: 0.18.5
@@ -180,7 +181,6 @@ devDependencies:
   ts-loader: 9.4.2_3fkjkrd3audxnith3e7fo4fnxi
   ts-node: 10.9.1_qacynw5b4krdzzrloasmebsynu
   tsconfig-paths: 4.0.0
-  tslib: 2.4.1
   typescript: 4.9.4
   webpack: 5.75.0
 
