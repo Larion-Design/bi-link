@@ -17,11 +17,12 @@
     "build:graph": "nest build graph",
     "user-actions-recorder": "nest start user-actions-recorder --watch",
     "build:user-actions-recorder": "nest build user-actions-recorder",
+    "cli": "nest start cli --watch",
+    "build:cli": "nest build cli",
     "format": "prettier --write \"apps/**/*.ts\" \"libs/**/*.ts\"",
     "lint": "eslint --ext=.ts --quiet ./",
     "test": "jest --passWithNoTests",
-    "test:e2e": "jest --config apps/api/test/jest-e2e.json --passWithNoTests",
-    "generate:docs": "pnpx @compodoc/compodoc -p tsconfig.json -s"
+    "test:e2e": "jest --config apps/api/test/jest-e2e.json --passWithNoTests"
   },
   "dependencies": {
     "@elastic/elasticsearch": "^8.5.0",
