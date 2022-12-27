@@ -1,11 +1,11 @@
 FROM node:18-alpine AS setup
 WORKDIR /usr/src/link
-COPY .npmrc package.json pnpm-lock.yaml packages apps ./
 RUN apk add libc6-compat chromium && npm install -g pnpm
 
 FROM setup AS build
+WORKDIR /usr/src/link
 COPY . .
-RUN pnpm install --frozen-lockfile && pnpm turbo build:backend
+RUN pnpm install --frozen-lockfile && pnpm turbo build:backend && pnpm --filter backend-services prune --prod --no-optional
 
 FROM setup AS bundle
 USER node
