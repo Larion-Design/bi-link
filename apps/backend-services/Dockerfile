@@ -6,7 +6,7 @@ FROM setup AS build
 WORKDIR /app
 RUN npm install -g pnpm
 COPY . .
-RUN --mount=type=cache,id=pnpm-store,target=/root/.local/share/pnpm/store/v3 pnpm install --frozen-lockfile --no-optional &&  \
+RUN --mount=type=cache,id=pnpm-store,target=/root/.local/share/pnpm/store/v3 pnpm install --no-optional &&  \
     pnpm --filter backend-services run build:api && \
     pnpm --filter backend-services run build:indexer && \
     pnpm --filter backend-services run build:graph && \
@@ -15,7 +15,7 @@ RUN --mount=type=cache,id=pnpm-store,target=/root/.local/share/pnpm/store/v3 pnp
     pnpm --filter backend-services run build:cli && \
     pnpm prune --prod --no-optional
 
-FROM setup AS prod
+FROM setup
 WORKDIR /app
 USER node
 COPY --chown=node:node --from=build /app/apps/backend-services/tsconfig.json ./tsconfig.json
