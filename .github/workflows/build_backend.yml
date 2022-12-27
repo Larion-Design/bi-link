@@ -18,6 +18,11 @@ jobs:
   build_image:
     runs-on: self-hosted
     steps:
+      - name: 'Cleanup build folder'
+        run: |
+          rm -rf ./* || true
+          rm -rf ./.??* || true
+
       - name: Checkout the repo
         uses: actions/checkout@v3
 

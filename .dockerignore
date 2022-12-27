@@ -20,8 +20,6 @@ build
 .c9/
 *.launch
 .settings/
-
-# IDE - VSCode
 .vscode/*
 !.vscode/settings.json
 !.vscode/tasks.json
@@ -36,3 +34,5 @@ build
 .prettierignore
 .eslintrc
 .github
+.git
+.gitignore
