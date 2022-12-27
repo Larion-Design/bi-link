@@ -18,13 +18,10 @@ jobs:
   build_image:
     runs-on: self-hosted
     steps:
-#      - name: Set up QEMU
-#        uses: docker/setup-qemu-action@v2
-
-      - name: 'Cleanup build folder'
-        run: |
-          rm -rf ./* || true
-          rm -rf ./.??* || true
+#      - name: 'Cleanup build folder'
+#        run: |
+#          rm -rf ./* || true
+#          rm -rf ./.??* || true
 
       - name: Checkout the repo
         uses: actions/checkout@v2
