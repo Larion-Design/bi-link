@@ -1,32 +1,22 @@
 FROM node:18-alpine AS setup
 WORKDIR /app
-RUN apk add libc6-compat chromium && npm install -g pnpm turbo
+RUN apk add libc6-compat chromium
 
-FROM setup AS build_1
+FROM setup AS build
 WORKDIR /app
+RUN npm install -g pnpm
 COPY . .
-RUN turbo prune --scope=backend-services --docker
-
-FROM setup AS build_2
-WORKDIR /app
-COPY --from=build_1 /app/out/json/ .
-COPY --from=build_1 /app/out/pnpm-lock.yaml ./pnpm-lock.yaml
-RUN --mount=type=cache,id=pnpm-store,target=/root/.local/share/pnpm/store/v3 pnpm install --frozen-lockfile
-COPY --from=build_1 /app/out/full .
-COPY turbo.json turbo.json
-RUN pnpm turbo run build:backend
-
-FROM setup as build_3
-WORKDIR /app
-COPY --from=build_1 /app/out/json/ .
-COPY --from=build_1 /app/out/pnpm-lock.yaml ./pnpm-lock.yaml
-RUN --mount=type=cache,id=pnpm-store,target=/root/.local/share/pnpm/store/v3 pnpm install --frozen-lockfile
+RUN --mount=type=cache,id=pnpm-store,target=/root/.local/share/pnpm/store/v3 pnpm install --frozen-lockfile --no-optional &&  \
+    pnpm --filter backend-services run build:api && \
+    pnpm --filter backend-services run build:indexer && \
+    pnpm --filter backend-services run build:graph && \
+    pnpm --filter backend-services run build:files-parser && \
+    pnpm --filter backend-services run build:user-actions-recorder && \
+    pnpm prune --prod --no-optional
 
 FROM setup AS prod
+WORKDIR /app
 USER node
-COPY --chown=node:node --from=build_2 /app/ /app
-
-FROM setup as staging
-USER node
-COPY --chown=node:node --from=build_3 /app/ /app
-CMD ["pnpm", "start:api --filter backend-services "]
+COPY --chown=node:node --from=build /app/apps/backend-services/tsconfig.json ./tsconfig.json
+COPY --chown=node:node --from=build /app/apps/backend-services/dist ./dist
+COPY --chown=node:node --from=build /app/apps/backend-services/node_modules ./node_modules
