@@ -4,9 +4,8 @@
   "private": true,
   "description": "BI Link Monorepo",
   "scripts": {
-    "build": "turbo run build",
-    "test": "turbo run test",
-    "lint": "turbo run lint"
+    "test": "turbo run test --parallel --concurency=4",
+    "lint": "turbo run lint --parallel --concurency=4"
   },
   "keywords": [],
   "author": "alextudor@duck.com",
@@ -21,5 +20,8 @@
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-simple-import-sort": "^7.0.0",
     "prettier": "^2.8.1"
+  },
+  "optionalDependencies": {
+    "turbo": "^1.6.3"
   }
 }

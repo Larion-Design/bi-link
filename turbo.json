@@ -1,0 +1,59 @@
+{
+  "$schema": "https://turbo.build/schema.json",
+  "pipeline": {
+    "start": {
+      "dependsOn": ["api", "graph", "indexer", "files-parser", "user-actions-recorder", "frontend"],
+      "outputs": ["dist/**"]
+    },
+    "frontend": {
+      "cache": false,
+      "dependsOn": ["^build"],
+      "outputs": ["dist/**"]
+    },
+    "native-app": {
+      "cache": false,
+      "dependsOn": ["^build"],
+      "outputs": ["dist/**"]
+    },
+    "api": {
+      "cache": false,
+      "dependsOn": ["^build"],
+      "outputs": ["dist/**"]
+    },
+    "indexer": {
+      "cache": false,
+      "dependsOn": ["^build"],
+      "outputs": ["dist/**"]
+    },
+    "files-parser": {
+      "cache": false,
+      "dependsOn": ["^build"],
+      "outputs": ["dist/**"]
+    },
+    "graph": {
+      "cache": false,
+      "dependsOn": ["^build"],
+      "outputs": ["dist/**"]
+    },
+    "user-actions-recorder": {
+      "cache": false,
+      "dependsOn": ["^build"],
+      "outputs": ["dist/**"]
+    },
+    "cli": {
+      "cache": false,
+      "dependsOn": ["^build"],
+      "outputs": ["dist/**"]
+    },
+    "lint": {
+      "cache": true,
+      "dependsOn": ["^lint"],
+      "outputs": []
+    },
+    "test": {
+      "cache": true,
+      "dependsOn": ["^test"],
+      "outputs": []
+    }
+  }
+}
