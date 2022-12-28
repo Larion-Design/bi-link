@@ -6,7 +6,7 @@ FROM setup AS build
 WORKDIR /app
 RUN npm install -g pnpm
 COPY . .
-RUN --mount=type=cache,id=pnpm-store,target=/root/.local/share/pnpm/store/v3 pnpm install --no-optional &&  \
+RUN --mount=type=cache,id=pnpm-store,target=/root/.local/share/pnpm/store/v3 pnpm --filter backend-services... install --no-optional &&  \
     pnpm --filter backend-services run build:api && \
     pnpm --filter backend-services run build:indexer && \
     pnpm --filter backend-services run build:graph && \
