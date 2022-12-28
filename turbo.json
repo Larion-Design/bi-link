@@ -7,42 +7,42 @@
     },
     "frontend": {
       "cache": false,
-      "dependsOn": ["^build"],
+      "dependsOn": ["^dev"],
       "outputs": ["dist/**"]
     },
     "native-app": {
       "cache": false,
-      "dependsOn": ["^build"],
+      "dependsOn": ["^native:dev"],
       "outputs": ["dist/**"]
     },
     "api": {
       "cache": false,
-      "dependsOn": ["^build"],
+      "dependsOn": ["^api"],
       "outputs": ["dist/**"]
     },
     "indexer": {
       "cache": false,
-      "dependsOn": ["^build"],
+      "dependsOn": ["^indexer"],
       "outputs": ["dist/**"]
     },
     "files-parser": {
       "cache": false,
-      "dependsOn": ["^build"],
+      "dependsOn": ["^files-parser"],
       "outputs": ["dist/**"]
     },
     "graph": {
       "cache": false,
-      "dependsOn": ["^build"],
+      "dependsOn": ["^graph"],
       "outputs": ["dist/**"]
     },
     "user-actions-recorder": {
       "cache": false,
-      "dependsOn": ["^build"],
+      "dependsOn": ["^user-actions-recorder"],
       "outputs": ["dist/**"]
     },
     "cli": {
       "cache": false,
-      "dependsOn": ["^build"],
+      "dependsOn": ["^cli"],
       "outputs": ["dist/**"]
     },
     "lint": {

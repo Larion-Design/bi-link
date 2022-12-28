@@ -4,7 +4,7 @@ import { User } from '../dto/user'
 import { FirebaseAuthGuard } from '../../../users/guards/FirebaseAuthGuard'
 import { CurrentUser } from '../../../users/decorators/currentUser'
 import { UserService } from '../../../users/services/UserService'
-import { Role } from '../../../users/constants'
+import { Role } from 'defs'
 
 @Resolver(() => User)
 export class UserRegistered {
