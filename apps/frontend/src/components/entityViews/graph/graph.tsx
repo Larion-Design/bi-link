@@ -308,5 +308,5 @@ const getRelationshipLabelFromType = (relationshipType: string | RelationshipLab
     [RelationshipLabel.PARTY_INVOLVED]: 'Implicat in incident',
     [RelationshipLabel.OWNER]: 'Proprietar',
   }
-  return labels[relationshipType] ?? relationshipType
+  return labels[relationshipType] ?? (relationshipType as string)
 }

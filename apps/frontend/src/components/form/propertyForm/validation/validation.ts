@@ -61,6 +61,7 @@ export const propertyFormValidation = {
   },
   owners: async (owners: PropertyOwnerAPI[]) => {
     if (owners.length) {
+      return Promise.resolve()
     }
   },
 }

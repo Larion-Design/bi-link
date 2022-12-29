@@ -6,7 +6,7 @@ type Props = {
   value: string
   label: string
   disabled?: boolean
-  onChange: (value: string) => Promise<void>
+  onChange: (value: string) => void | Promise<void>
   error?: string
 }
 

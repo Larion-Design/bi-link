@@ -6,10 +6,10 @@ export const getBirthdateFromCnp = (cnp: string) => {
   ).exec(cnp)
 
   if (matches?.length === 6) {
-    const year = matches[1] as string
-    const month = matches[2] as string
-    const day = matches[3] as string
-    const s = cnp.charAt(0) 
+    const year = matches[1]
+    const month = matches[2]
+    const day = matches[3]
+    const s = cnp.charAt(0)
 
     const intervals: Record<string, number> = {
       1: 1900,

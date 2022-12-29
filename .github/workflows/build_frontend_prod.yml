@@ -39,6 +39,9 @@ jobs:
       - name: Push image to DigitalOcean Container Registry
         run: docker push $(echo $REGISTRY)/$(echo $IMAGE_NAME)
 
+      - name: Cleanup
+        run: docker image rm $(echo $REGISTRY)/$(echo $IMAGE_NAME) -f
+
   create_release:
     if: ${{ false }}
     runs-on: self-hosted

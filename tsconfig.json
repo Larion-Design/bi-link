@@ -1,0 +1,23 @@
+{
+  "compilerOptions": {
+    "module": "CommonJS",
+    "declaration": false,
+    "removeComments": true,
+    "moduleResolution": "Node",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "allowSyntheticDefaultImports": true,
+    "target": "ESNext",
+    "incremental": true,
+    "skipLibCheck": true,
+    "strictNullChecks": false,
+    "noImplicitAny": false,
+    "noUncheckedIndexedAccess": true,
+    "strictBindCallApply": false,
+    "forceConsistentCasingInFileNames": true,
+    "noFallthroughCasesInSwitch": true,
+    "importHelpers": true
+  },
+  "include": ["apps", "packages"],
+  "exclude": ["node_modules", "dist", "build", ".turbo", "out"]
+}

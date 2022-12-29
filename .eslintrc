@@ -1,0 +1,25 @@
+{
+  "root": true,
+  "parserOptions": {
+    "project": ["./tsconfig.json"]
+  },
+  "parser": "@typescript-eslint/parser",
+  "plugins": ["@typescript-eslint", "simple-import-sort", "mui-unused-classes", "prettier"],
+  "extends": [
+    "eslint:recommended",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:@typescript-eslint/recommended-requiring-type-checking",
+    "prettier"
+  ],
+  "rules": {
+    "@typescript-eslint/no-namespace": "off",
+    "simple-import-sort/imports": "off",
+    "simple-import-sort/exports": "off",
+    "@typescript-eslint/no-unsafe-assignment": "off",
+    "@typescript-eslint/no-unsafe-call": "off",
+    "@typescript-eslint/no-empty-interface": "off",
+    "prettier/prettier": "off",
+    "arrow-body-style": "off",
+    "prefer-arrow-callback": "off"
+  }
+}

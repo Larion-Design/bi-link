@@ -4,8 +4,10 @@
   "private": true,
   "description": "BI Link Monorepo",
   "scripts": {
-    "test": "turbo run test --parallel --concurency=4",
-    "lint": "turbo run lint --parallel --concurency=4"
+    "start": "pnpm turbo run dev",
+    "build": "pnpm --filter {./apps/**} build",
+    "test": "turbo run test --parallel --stream --concurency=4",
+    "lint": "eslint --ext=.tsx,.ts --quiet ."
   },
   "keywords": [],
   "author": "alextudor@duck.com",
@@ -13,13 +15,16 @@
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^5.47.1",
     "@typescript-eslint/parser": "^5.47.1",
+    "babel-loader": "^8.3.0",
+    "babel-plugin-formatjs": "^10.3.35",
     "eslint": "^8.30.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-mui-unused-classes": "^1.0.3",
     "eslint-plugin-prettier": "^4.2.1",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-simple-import-sort": "^7.0.0",
-    "prettier": "^2.8.1"
+    "prettier": "^2.8.1",
+    "typescript": "^4.9.4"
   },
   "optionalDependencies": {
     "turbo": "^1.6.3"

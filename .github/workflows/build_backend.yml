@@ -39,5 +39,8 @@ jobs:
       - name: Push image to DigitalOcean Container Registry
         run: docker push $(echo $REGISTRY)/$(echo $IMAGE_NAME)
 
+      - name: Cleanup
+        run: docker image rm $(echo $REGISTRY)/$(echo $IMAGE_NAME) -f
+
 #      - name: Cleanup
 #        run: docker image prune # docker rmi -f $(docker images -aq) || true

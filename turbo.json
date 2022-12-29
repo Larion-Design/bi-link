@@ -1,7 +1,8 @@
 {
   "$schema": "https://turbo.build/schema.json",
   "pipeline": {
-    "start": {
+    "dev": {
+      "cache": false,
       "dependsOn": ["api", "graph", "indexer", "files-parser", "user-actions-recorder", "frontend"],
       "outputs": ["dist/**"]
     },

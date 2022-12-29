@@ -1,20 +1,9 @@
 {
-  "parserOptions": {
-    "project": ["./tsconfig.json"]
+  "env": {
+    "es6": true
   },
-  "parser": "@typescript-eslint/parser",
-  "plugins": ["@typescript-eslint", "simple-import-sort", "mui-unused-classes"],
-  "extends": [
-    "eslint:recommended",
-    "plugin:@typescript-eslint/recommended",
-    "plugin:@typescript-eslint/recommended-requiring-type-checking"
-    // "plugin:react-hooks/recommended"
-  ],
-  "rules": {
-    "@typescript-eslint/no-namespace": "off",
-    "simple-import-sort/imports": "off",
-    "simple-import-sort/exports": "off",
-    "@typescript-eslint/no-unsafe-assignment": "off",
-    "@typescript-eslint/no-unsafe-call": "off"
-  }
+  "parserOptions": {
+    "project": ["./apps/frontend/tsconfig.eslint.json"]
+  },
+  "plugins": ["mui-unused-classes"]
 }
