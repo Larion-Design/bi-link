@@ -6,7 +6,7 @@ COPY . .
 RUN pnpm install --filter frontend... --frozen-lockfile --no-optional
 
 FROM setup AS build-prod
-RUN pnpm --filter frontend run build:frontend
+RUN pnpm --filter frontend build
 
 FROM setup AS build-staging
 RUN pnpm --filter frontend build:frontend:staging
