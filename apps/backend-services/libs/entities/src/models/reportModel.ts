@@ -1,16 +1,19 @@
-import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
-import { Report } from 'defs'
-import { Document, Types } from 'mongoose'
-import { PersonDocument, PersonModel } from '@app/entities/models/personModel'
-import { CompanyDocument, CompanyModel } from '@app/entities/models/companyModel'
-import { ReportSectionModel, ReportSectionSchema } from '@app/entities/models/reportSectionModel'
-import { PropertyDocument, PropertyModel } from '@app/entities/models/propertyModel'
-import { IncidentDocument, IncidentModel } from '@app/entities/models/incidentModel'
+import {CompanyDocument, CompanyModel} from '@app/entities/models/companyModel'
+import {IncidentDocument, IncidentModel} from '@app/entities/models/incidentModel'
+import {PersonDocument, PersonModel} from '@app/entities/models/personModel'
+import {PropertyDocument, PropertyModel} from '@app/entities/models/propertyModel'
+import {ReportSectionModel, ReportSectionSchema} from '@app/entities/models/reportSectionModel'
+import {Prop, Schema, SchemaFactory} from '@nestjs/mongoose'
+import {Report} from 'defs'
+import {Document, Types} from 'mongoose'
 
-@Schema()
+@Schema({ _id: true, timestamps: true })
 export class ReportModel implements Report {
   @Prop()
   name: string
+
+  @Prop()
+  isTemplate: boolean
 
   @Prop({ type: Types.ObjectId, ref: PersonModel.name, isRequired: false })
   person?: PersonDocument

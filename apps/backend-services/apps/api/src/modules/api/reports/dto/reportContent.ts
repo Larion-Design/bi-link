@@ -1,4 +1,4 @@
-import {Field, ObjectType} from '@nestjs/graphql'
+import {Field, Int, ObjectType} from '@nestjs/graphql'
 import {ReportContent as ReportContentType} from 'defs'
 import {File} from '../../files/dto/file'
 import {Link} from './link'
@@ -8,7 +8,7 @@ import {Title} from './title'
 
 @ObjectType()
 export class ReportContent implements ReportContentType {
-  @Field()
+  @Field(() => Int)
   order: number
 
   @Field(() => [File], { nullable: true })

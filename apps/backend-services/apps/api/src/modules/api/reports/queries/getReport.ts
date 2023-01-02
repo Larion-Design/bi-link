@@ -1,9 +1,9 @@
-import {PersonsService} from '@app/entities/services/personsService'
+import {ReportsService} from '@app/entities/services/reportsService'
 import {UseGuards} from '@nestjs/common'
 import {Args, ArgsType, Field, Query, Resolver} from '@nestjs/graphql'
 import {IsMongoId} from 'class-validator'
 import {FirebaseAuthGuard} from '../../../users/guards/FirebaseAuthGuard'
-import {Person} from '../dto/person'
+import {Report} from '../dto/report'
 
 @ArgsType()
 class Params {
@@ -12,13 +12,13 @@ class Params {
   id: string
 }
 
-@Resolver(() => Person)
-export class GetPerson {
-  constructor(private readonly personsService: PersonsService) {}
+@Resolver(() => Report)
+export class GetReport {
+  constructor(private readonly reportsService: ReportsService) {}
 
-  @Query(() => Person)
+  @Query(() => Report)
   @UseGuards(FirebaseAuthGuard)
-  async getPersonInfo(@Args() { id }: Params) {
-    return this.personsService.find(id)
+  async getReport(@Args() { id }: Params) {
+    return this.reportsService.getReport(id)
   }
 }

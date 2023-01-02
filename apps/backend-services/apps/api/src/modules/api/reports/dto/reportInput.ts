@@ -8,6 +8,9 @@ export class ReportInput implements ReportAPIInput {
   @Field()
   readonly name: string
 
+  @Field()
+  readonly isTemplate: boolean
+
   @Field(() => [ReportSectionInput])
   readonly sections: ReportSectionInput[]
 

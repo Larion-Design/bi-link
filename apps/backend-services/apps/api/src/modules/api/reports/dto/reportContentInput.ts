@@ -1,14 +1,14 @@
-import {Field, ObjectType} from '@nestjs/graphql'
-import {ReportContent as ReportContentType} from 'defs'
+import {Field, InputType, Int} from '@nestjs/graphql'
+import {ReportContentAPIInput} from 'defs'
 import {FileInput} from '../../files/dto/fileInput'
 import {LinkInput} from './linkInput'
 import {TableInput} from './tableInput'
 import {TextInput} from './textInput'
 import {TitleInput} from './titleInput'
 
-@ObjectType()
-export class ReportContentInput implements ReportContentType {
-  @Field()
+@InputType()
+export class ReportContentInput implements ReportContentAPIInput {
+  @Field(() => Int)
   order: number
 
   @Field(() => [FileInput], { nullable: true })
