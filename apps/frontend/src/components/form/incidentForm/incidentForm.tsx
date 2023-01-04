@@ -1,24 +1,26 @@
-import React, { useCallback, useState } from 'react'
-import Grid from '@mui/material/Grid'
+import {ApolloError} from '@apollo/client'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
-import Stepper from '@mui/material/Stepper'
+import Grid from '@mui/material/Grid'
 import Step from '@mui/material/Step'
 import StepButton from '@mui/material/StepButton'
-import { ApolloError } from '@apollo/client'
-import { useNavigate } from 'react-router-dom'
-import { FormikProps, withFormik } from 'formik'
-import { routes } from '../../../router/routes'
-import { FilesManager } from '../fileField'
-import { CustomInputFields } from '../customInputFields'
-import { InputField } from '../inputField'
-import { useDialog } from '../../dialog/dialogProvider'
-import { IncidentAPIInput } from 'defs'
-import { DateTimeSelector } from '../dateTimeSelector'
-import { Parties } from '../parties'
-import { getIncidentFrequentCustomFieldsRequest } from '../../../graphql/incidents/queries/getIncidentFrequentCustomFields'
-import { AutocompleteField } from '../autocompleteField'
-import { personFormValidation } from '../personForm/validation/validation'
+import Stepper from '@mui/material/Stepper'
+import {IncidentAPIInput} from 'defs'
+import {FormikProps, withFormik} from 'formik'
+import React, {useCallback, useState} from 'react'
+import {useNavigate} from 'react-router-dom'
+import {
+  getIncidentFrequentCustomFieldsRequest
+} from '../../../graphql/incidents/queries/getIncidentFrequentCustomFields'
+import {routes} from '../../../router/routes'
+import {useDialog} from '../../dialog/dialogProvider'
+import {AutocompleteField} from '../autocompleteField'
+import {CustomInputFields} from '../customInputFields'
+import {DateTimeSelector} from '../dateTimeSelector'
+import {FilesManager} from '../fileField'
+import {InputField} from '../inputField'
+import {Parties} from '../parties'
+import {personFormValidation} from '../personForm/validation/validation'
 
 type Props = {
   incidentId?: string
@@ -179,7 +181,7 @@ const Form: React.FunctionComponent<Props & FormikProps<IncidentAPIInput>> = ({
               Anulează
             </Button>
             <Button
-              disabled={isSubmitting || isValidating || readonly}
+              disabled={isSubmitting || isValidating}
               variant={'contained'}
               onClick={() => void submitForm()}
               data-cy={'submitForm'}

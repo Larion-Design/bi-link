@@ -1,26 +1,26 @@
-import React, { useEffect, useState } from 'react'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import Grid from '@mui/material/Grid'
 import Step from '@mui/material/Step'
 import StepButton from '@mui/material/StepButton'
 import Stepper from '@mui/material/Stepper'
-import { FormikProps, withFormik } from 'formik'
-import { useNavigate } from 'react-router-dom'
-import { routes } from '../../../router/routes'
-import { CustomInputFields } from '../customInputFields'
-import { FilesManager } from '../fileField'
-import { IdDocuments } from '../idDocuments'
-import { ImageField } from '../imageField'
-import { Relationships } from '../relationships'
-import { getBirthdateFromCnp } from './utils'
-import { personFormValidation, validatePersonForm } from './validation/validation'
-import { DatePicker } from '../datePicker'
-import { InputField } from '../inputField'
-import { getPersonFrequentCustomFieldsRequest } from '../../../graphql/persons/queries/getPersonFrequentCustomFields'
-import { useDialog } from '../../dialog/dialogProvider'
-import { IdDocument, PersonAPIInput } from 'defs'
-import { CONTACT_METHODS, ID_DOCUMENT_TYPES } from '../../../utils/constants'
+import {IdDocument, PersonAPIInput} from 'defs'
+import {FormikProps, withFormik} from 'formik'
+import React, {useEffect, useState} from 'react'
+import {useNavigate} from 'react-router-dom'
+import {getPersonFrequentCustomFieldsRequest} from '../../../graphql/persons/queries/getPersonFrequentCustomFields'
+import {routes} from '../../../router/routes'
+import {CONTACT_METHODS, ID_DOCUMENT_TYPES} from '../../../utils/constants'
+import {useDialog} from '../../dialog/dialogProvider'
+import {CustomInputFields} from '../customInputFields'
+import {DatePicker} from '../datePicker'
+import {FilesManager} from '../fileField'
+import {IdDocuments} from '../idDocuments'
+import {ImageField} from '../imageField'
+import {InputField} from '../inputField'
+import {Relationships} from '../relationships'
+import {getBirthdateFromCnp} from './utils'
+import {personFormValidation, validatePersonForm} from './validation/validation'
 
 type Props = {
   personId?: string
@@ -37,6 +37,7 @@ const Form: React.FunctionComponent<Props & FormikProps<PersonAPIInput>> = ({
   values,
   errors,
   isSubmitting,
+  isValidating,
   submitForm,
 }) => {
   const dialog = useDialog()
@@ -291,7 +292,7 @@ const Form: React.FunctionComponent<Props & FormikProps<PersonAPIInput>> = ({
             Anulează
           </Button>
           <Button
-            disabled={isSubmitting || readonly}
+            disabled={isSubmitting || isValidating}
             variant={'contained'}
             onClick={() => void submitForm()}
             data-cy={'submitForm'}
