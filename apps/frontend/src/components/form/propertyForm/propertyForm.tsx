@@ -1,25 +1,25 @@
-import React, { useCallback, useState } from 'react'
-import Grid from '@mui/material/Grid'
+import {ApolloError} from '@apollo/client'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
-import Stepper from '@mui/material/Stepper'
+import Grid from '@mui/material/Grid'
 import Step from '@mui/material/Step'
 import StepButton from '@mui/material/StepButton'
-import { ApolloError } from '@apollo/client'
-import { useNavigate } from 'react-router-dom'
-import { FormikProps, withFormik } from 'formik'
-import { routes } from '../../../router/routes'
-import { FilesManager } from '../fileField'
-import { CustomInputFields } from '../customInputFields'
-import { InputField } from '../inputField'
-import { useDialog } from '../../dialog/dialogProvider'
-import { propertyFormValidation, validatePropertyForm } from './validation/validation'
-import { AutocompleteField } from '../autocompleteField'
-import { FormattedMessage, useIntl } from 'react-intl'
-import { Images } from '../images'
-import { PropertyAPIInput, VehicleInfo as VehicleInfoType } from 'defs'
-import { PropertyOwners } from '../propertyOwners'
-import { VehicleInfo } from '../vehicleInfo'
+import Stepper from '@mui/material/Stepper'
+import {PropertyAPIInput, VehicleInfo as VehicleInfoType} from 'defs'
+import {FormikProps, withFormik} from 'formik'
+import React, {useCallback, useState} from 'react'
+import {FormattedMessage, useIntl} from 'react-intl'
+import {useNavigate} from 'react-router-dom'
+import {routes} from '../../../router/routes'
+import {useDialog} from '../../dialog/dialogProvider'
+import {AutocompleteField} from '../autocompleteField'
+import {CustomInputFields} from '../customInputFields'
+import {FilesManager} from '../fileField'
+import {Images} from '../images'
+import {InputField} from '../inputField'
+import {PropertyOwners} from '../propertyOwners'
+import {VehicleInfo} from '../vehicleInfo'
+import {propertyFormValidation, validatePropertyForm} from './validation/validation'
 
 type Props = {
   propertyId?: string
@@ -199,7 +199,7 @@ const Form: React.FunctionComponent<Props & FormikProps<PropertyAPIInput>> = ({
                 Anulează
               </Button>
               <Button
-                disabled={isSubmitting || isValidating || readonly}
+                disabled={isSubmitting || isValidating}
                 variant={'contained'}
                 onClick={() => void submitForm()}
                 data-cy={'submitForm'}

@@ -1,25 +1,25 @@
-import React, { useState } from 'react'
-import { ApolloError } from '@apollo/client'
-import { useNavigate } from 'react-router-dom'
-import { FormikProps, withFormik } from 'formik'
-import Grid from '@mui/material/Grid'
+import {ApolloError} from '@apollo/client'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
+import Grid from '@mui/material/Grid'
 import Step from '@mui/material/Step'
 import StepButton from '@mui/material/StepButton'
 import Stepper from '@mui/material/Stepper'
-import { companyFormValidation, validateCompanyForm } from './validation/validation'
-import { routes } from '../../../router/routes'
-import { FilesManager } from '../fileField'
-import { CustomInputFields } from '../customInputFields'
-import { Locations } from '../locations'
-import { Associates } from '../associates'
-import { personFormValidation } from '../personForm/validation/validation'
-import { InputField } from '../inputField'
-import { getCompanyFrequentCustomFieldsRequest } from '../../../graphql/companies/queries/getCompanyFrequentCustomFields'
-import { useDialog } from '../../dialog/dialogProvider'
-import { CompanyAPIInput } from 'defs'
-import { CONTACT_METHODS } from '../../../utils/constants'
+import {CompanyAPIInput} from 'defs'
+import {FormikProps, withFormik} from 'formik'
+import React, {useState} from 'react'
+import {useNavigate} from 'react-router-dom'
+import {getCompanyFrequentCustomFieldsRequest} from '../../../graphql/companies/queries/getCompanyFrequentCustomFields'
+import {routes} from '../../../router/routes'
+import {CONTACT_METHODS} from '../../../utils/constants'
+import {useDialog} from '../../dialog/dialogProvider'
+import {Associates} from '../associates'
+import {CustomInputFields} from '../customInputFields'
+import {FilesManager} from '../fileField'
+import {InputField} from '../inputField'
+import {Locations} from '../locations'
+import {personFormValidation} from '../personForm/validation/validation'
+import {companyFormValidation, validateCompanyForm} from './validation/validation'
 
 type Props = {
   companyId?: string
@@ -237,7 +237,7 @@ const Form: React.FunctionComponent<Props & FormikProps<CompanyAPIInput>> = ({
             Anulează
           </Button>
           <Button
-            disabled={isSubmitting || isValidating || readonly}
+            disabled={isSubmitting || isValidating}
             variant={'contained'}
             onClick={() => void submitForm()}
             data-cy={'submitForm'}
