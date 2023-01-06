@@ -3,7 +3,7 @@ import * as yup from 'yup'
 import { validateCNP } from './cnp'
 import { validateContactDetails } from '../../contactDetails/validation'
 import { validateCustomFields } from '../../customInputFields/validation'
-import { validateFilesFormat, validateSingleFileFormat } from '../../fileField/validation'
+import { validateFilesFormat } from '../../fileField/validation'
 import { validateIdDocuments } from '../../idDocuments/validation'
 import { validatePersonRelationships } from '../../relationships/validation/validation'
 import {
@@ -22,7 +22,7 @@ export const validatePersonForm = async (values: PersonAPIInput, personId?: stri
     homeAddress: await personFormValidation.homeAddress(values.homeAddress),
     cnp: await personFormValidation.cnp(values.cnp, personId),
     birthdate: await personFormValidation.birthdate(values.birthdate),
-    image: await personFormValidation.image(values.image),
+    images: await personFormValidation.files(values.images),
     files: await personFormValidation.files(values.files),
     relationships: await personFormValidation.relationships(values.relationships),
     contactDetails: await personFormValidation.contactDetails(values.contactDetails),
@@ -64,11 +64,6 @@ export const personFormValidation = {
 
     if (!isValid) {
       return Promise.resolve('Data nasterii este invalida.')
-    }
-  },
-  image: async (image: FileAPIInput | null): Promise<unknown | string> => {
-    if (image) {
-      return validateSingleFileFormat(image)
     }
   },
   files: async (files: FileAPIInput[]) => {
