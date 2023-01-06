@@ -1,12 +1,12 @@
+import React, { useState } from 'react'
 import Box from '@mui/material/Box'
 import MenuItem from '@mui/material/MenuItem'
 import Typography from '@mui/material/Typography'
-import {PersonAPIInput} from 'defs'
-import React, {useState} from 'react'
-import {getPersonFullName} from '../../utils/person'
-import {Graph} from '../entityViews/graph'
-import {PersonForm} from '../form/personForm'
-import {InputFieldMenu} from '../menu/inputFieldMenu'
+import { PersonAPIInput } from 'defs'
+import { getPersonFullName } from '../../utils/person'
+import { Graph } from '../entityViews/graph'
+import { PersonForm } from '../form/personForm'
+import { InputFieldMenu } from '../menu/inputFieldMenu'
 
 type Props = {
   personId?: string

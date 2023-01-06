@@ -1,8 +1,8 @@
-import { Relationship, RelationshipAPIInput, RelationshipAPIOutput } from './relationship'
-import { IdDocument, IdDocumentIndex } from './idDocument'
 import { CustomField } from './customField'
-import { EmbeddedFileIndex, File, FileAPIInput, FileAPIOutput } from './file'
 import { EntityMetadata } from './entitiesGraph'
+import { EmbeddedFileIndex, File, FileAPIInput, FileAPIOutput } from './file'
+import { IdDocument, IdDocumentIndex } from './idDocument'
+import { Relationship, RelationshipAPIInput, RelationshipAPIOutput } from './relationship'
 
 export interface Person {
   _id: string
@@ -12,7 +12,7 @@ export interface Person {
   oldName: string
   cnp: string
   homeAddress: string
-  image: File | null
+  images: File[]
   documents: IdDocument[]
   relationships: Relationship[]
   files: File[]
@@ -41,7 +41,7 @@ export interface PersonListRecord extends PersonSearchIndex, Required<Pick<Perso
 
 export interface PersonListRecordWithImage
   extends PersonListRecord,
-    Required<Pick<PersonAPIOutput, 'image'>> {}
+    Required<Pick<PersonAPIOutput, 'images'>> {}
 
 export interface PersonsSuggestions<T> {
   total: number
@@ -49,16 +49,16 @@ export interface PersonsSuggestions<T> {
 }
 
 export interface PersonAPIOutput
-  extends Readonly<Omit<Person, 'relationships' | 'files' | 'image'>> {
+  extends Readonly<Omit<Person, 'relationships' | 'files' | 'images'>> {
   relationships: RelationshipAPIOutput[]
   files: FileAPIOutput[]
-  image: FileAPIOutput | null
+  images: FileAPIOutput[]
 }
 
 export interface PersonAPIInput
-  extends Readonly<Omit<Person, '_id' | 'relationships' | 'files' | 'image'>> {
+  extends Readonly<Omit<Person, '_id' | 'relationships' | 'files' | 'images'>> {
   files: FileAPIInput[]
-  image: FileAPIInput | null
+  images: FileAPIInput[]
   relationships: RelationshipAPIInput[]
 }
 

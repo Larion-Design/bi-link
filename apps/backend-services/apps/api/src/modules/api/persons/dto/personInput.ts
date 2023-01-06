@@ -1,10 +1,10 @@
 import { Field, InputType } from '@nestjs/graphql'
-import { FileInput } from '../../files/dto/fileInput'
-import { IdDocumentInput } from './idDocumentInput'
-import { CustomFieldInput } from '../../customFields/dto/customFieldInput'
-import { RelationshipInput } from './relationshipInput'
 import { IsDateString, IsNumberString, IsOptional, Length } from 'class-validator'
 import { PersonAPIInput } from 'defs'
+import { CustomFieldInput } from '../../customFields/dto/customFieldInput'
+import { FileInput } from '../../files/dto/fileInput'
+import { IdDocumentInput } from './idDocumentInput'
+import { RelationshipInput } from './relationshipInput'
 
 @InputType()
 export class PersonInput implements PersonAPIInput {
@@ -39,21 +39,21 @@ export class PersonInput implements PersonAPIInput {
   @Field({ nullable: true })
   readonly homeAddress: string
 
-  @Field(() => [CustomFieldInput], { nullable: true })
+  @Field(() => [CustomFieldInput])
   readonly contactDetails: CustomFieldInput[]
 
-  @Field(() => FileInput, { nullable: true })
-  readonly image: FileInput
+  @Field(() => [FileInput])
+  readonly images: FileInput[]
 
-  @Field(() => [IdDocumentInput], { nullable: true })
+  @Field(() => [IdDocumentInput])
   readonly documents: IdDocumentInput[]
 
-  @Field(() => [CustomFieldInput], { nullable: true })
+  @Field(() => [CustomFieldInput])
   readonly customFields: CustomFieldInput[]
 
-  @Field(() => [RelationshipInput], { nullable: true })
+  @Field(() => [RelationshipInput])
   readonly relationships: RelationshipInput[]
 
-  @Field(() => [FileInput], { nullable: true })
+  @Field(() => [FileInput])
   readonly files: FileInput[]
 }

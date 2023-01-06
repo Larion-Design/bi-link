@@ -4,23 +4,23 @@ import Grid from '@mui/material/Grid'
 import Step from '@mui/material/Step'
 import StepButton from '@mui/material/StepButton'
 import Stepper from '@mui/material/Stepper'
-import {IdDocument, PersonAPIInput} from 'defs'
-import {FormikProps, withFormik} from 'formik'
-import React, {useEffect, useState} from 'react'
-import {useNavigate} from 'react-router-dom'
-import {getPersonFrequentCustomFieldsRequest} from '../../../graphql/persons/queries/getPersonFrequentCustomFields'
-import {routes} from '../../../router/routes'
-import {CONTACT_METHODS, ID_DOCUMENT_TYPES} from '../../../utils/constants'
-import {useDialog} from '../../dialog/dialogProvider'
-import {CustomInputFields} from '../customInputFields'
-import {DatePicker} from '../datePicker'
-import {FilesManager} from '../fileField'
-import {IdDocuments} from '../idDocuments'
-import {ImageField} from '../imageField'
-import {InputField} from '../inputField'
-import {Relationships} from '../relationships'
-import {getBirthdateFromCnp} from './utils'
-import {personFormValidation, validatePersonForm} from './validation/validation'
+import { IdDocument, PersonAPIInput } from 'defs'
+import { FormikProps, withFormik } from 'formik'
+import React, { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { getPersonFrequentCustomFieldsRequest } from '../../../graphql/persons/queries/getPersonFrequentCustomFields'
+import { routes } from '../../../router/routes'
+import { CONTACT_METHODS, ID_DOCUMENT_TYPES } from '../../../utils/constants'
+import { useDialog } from '../../dialog/dialogProvider'
+import { CustomInputFields } from '../customInputFields'
+import { DatePicker } from '../datePicker'
+import { FilesManager } from '../fileField'
+import { IdDocuments } from '../idDocuments'
+import { Images } from '../images'
+import { InputField } from '../inputField'
+import { Relationships } from '../relationships'
+import { getBirthdateFromCnp } from './utils'
+import { personFormValidation, validatePersonForm } from './validation/validation'
 
 type Props = {
   personId?: string
@@ -111,14 +111,14 @@ const Form: React.FunctionComponent<Props & FormikProps<PersonAPIInput>> = ({
           {step === 0 && (
             <Grid container spacing={2}>
               <Grid item xs={3}>
-                <ImageField
-                  fileInfo={values.image}
-                  updateImage={async (fileInfo) => {
-                    const error = await personFormValidation.image(fileInfo)
-                    setFieldValue('image', fileInfo)
-                    setFieldError('image', error as string)
+                <Images
+                  images={values.images}
+                  updateImages={async (images) => {
+                    const error = await personFormValidation.files(images)
+                    setFieldError('images', error)
+                    setFieldValue('images', images)
                   }}
-                  error={errors.image as string}
+                  error={errors.images}
                 />
               </Grid>
               <Grid container item xs={9} spacing={3}>
@@ -314,7 +314,7 @@ const personInitialFields: PersonAPIInput = {
   homeAddress: '',
   customFields: [],
   contactDetails: [],
-  image: null,
+  images: [],
   documents: [],
   files: [],
   relationships: [],

@@ -23,13 +23,17 @@ export const PersonCard: React.FunctionComponent<Props> = ({
   updateRelationship,
   removeRelationship,
 }) => {
-  const { _id: personId, image } = personInfo
+  const { _id: personId, images } = personInfo
   const fullName = getPersonFullName(personInfo)
 
   return (
     <Card sx={{ height: 400 }} variant={'outlined'}>
       <CardContent sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-        <Avatar src={image?.url?.url ?? ''} alt={fullName} sx={{ width: 75, height: 75, mt: 2 }} />
+        <Avatar
+          src={images[0]?.url?.url ?? ''}
+          alt={fullName}
+          sx={{ width: 75, height: 75, mt: 2 }}
+        />
         <Typography variant={'body1'} sx={{ mb: 3, mt: 2 }} gutterBottom>
           {fullName}
         </Typography>
