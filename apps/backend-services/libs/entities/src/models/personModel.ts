@@ -1,10 +1,10 @@
-import {Prop, Schema, SchemaFactory} from '@nestjs/mongoose'
-import {Person} from 'defs'
-import {Document, SchemaTypes, Types} from 'mongoose'
-import {CustomFieldModel, CustomFieldSchema} from './customFieldModel'
-import {FileModel} from './fileModel'
-import {IdDocumentModel, IdDocumentSchema} from './idDocumentModel'
-import {RelationshipModel, RelationshipSchema} from './relationshipModel'
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
+import { Person } from 'defs'
+import { Document, SchemaTypes, Types } from 'mongoose'
+import { CustomFieldModel, CustomFieldSchema } from './customFieldModel'
+import { FileModel } from './fileModel'
+import { IdDocumentModel, IdDocumentSchema } from './idDocumentModel'
+import { RelationshipModel, RelationshipSchema } from './relationshipModel'
 
 @Schema({ timestamps: true })
 export class PersonModel implements Person {

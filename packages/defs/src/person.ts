@@ -1,8 +1,8 @@
-import {CustomField} from './customField'
-import {EntityMetadata} from './entitiesGraph'
-import {EmbeddedFileIndex, File, FileAPIInput, FileAPIOutput} from './file'
-import {IdDocument, IdDocumentIndex} from './idDocument'
-import {Relationship, RelationshipAPIInput, RelationshipAPIOutput} from './relationship'
+import { CustomField } from './customField'
+import { EntityMetadata } from './entitiesGraph'
+import { EmbeddedFileIndex, File, FileAPIInput, FileAPIOutput } from './file'
+import { IdDocument, IdDocumentIndex } from './idDocument'
+import { Relationship, RelationshipAPIInput, RelationshipAPIOutput } from './relationship'
 
 export interface Person {
   _id: string

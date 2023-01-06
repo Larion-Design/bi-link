@@ -1,11 +1,11 @@
-import {PersonModel} from '@app/entities/models/personModel'
-import {PersonsService} from '@app/entities/services/personsService'
-import {Injectable, Logger} from '@nestjs/common'
-import {CustomFieldsService} from '../../customFields/services/customFieldsService'
-import {FileAPIService} from '../../files/services/fileAPIService'
-import {PersonInput} from '../dto/personInput'
-import {IdDocumentsService} from './idDocumentsService'
-import {RelationshipsService} from './relationshipsService'
+import { PersonModel } from '@app/entities/models/personModel'
+import { PersonsService } from '@app/entities/services/personsService'
+import { Injectable, Logger } from '@nestjs/common'
+import { CustomFieldsService } from '../../customFields/services/customFieldsService'
+import { FileAPIService } from '../../files/services/fileAPIService'
+import { PersonInput } from '../dto/personInput'
+import { IdDocumentsService } from './idDocumentsService'
+import { RelationshipsService } from './relationshipsService'
 
 @Injectable()
 export class PersonAPIService {

@@ -1,9 +1,9 @@
-import {Field, ObjectType} from '@nestjs/graphql'
-import {PersonAPIOutput} from 'defs'
-import {CustomField} from '../../customFields/dto/customField'
-import {File} from '../../files/dto/file'
-import {IdDocument} from './idDocument'
-import {Relationship} from './relationship'
+import { Field, ObjectType } from '@nestjs/graphql'
+import { PersonAPIOutput } from 'defs'
+import { CustomField } from '../../customFields/dto/customField'
+import { File } from '../../files/dto/file'
+import { IdDocument } from './idDocument'
+import { Relationship } from './relationship'
 
 @ObjectType()
 export class Person implements PersonAPIOutput {

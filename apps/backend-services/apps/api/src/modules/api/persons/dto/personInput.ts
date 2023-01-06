@@ -1,10 +1,10 @@
-import {Field, InputType} from '@nestjs/graphql'
-import {IsDateString, IsNumberString, IsOptional, Length} from 'class-validator'
-import {PersonAPIInput} from 'defs'
-import {CustomFieldInput} from '../../customFields/dto/customFieldInput'
-import {FileInput} from '../../files/dto/fileInput'
-import {IdDocumentInput} from './idDocumentInput'
-import {RelationshipInput} from './relationshipInput'
+import { Field, InputType } from '@nestjs/graphql'
+import { IsDateString, IsNumberString, IsOptional, Length } from 'class-validator'
+import { PersonAPIInput } from 'defs'
+import { CustomFieldInput } from '../../customFields/dto/customFieldInput'
+import { FileInput } from '../../files/dto/fileInput'
+import { IdDocumentInput } from './idDocumentInput'
+import { RelationshipInput } from './relationshipInput'
 
 @InputType()
 export class PersonInput implements PersonAPIInput {
