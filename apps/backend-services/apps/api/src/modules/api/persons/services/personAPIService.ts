@@ -1,11 +1,11 @@
-import { Injectable, Logger } from '@nestjs/common'
-import { PersonModel } from '@app/entities/models/personModel'
-import { FileAPIService } from '../../files/services/fileAPIService'
-import { CustomFieldsService } from '../../customFields/services/customFieldsService'
-import { RelationshipsService } from './relationshipsService'
-import { IdDocumentsService } from './idDocumentsService'
-import { PersonsService } from '@app/entities/services/personsService'
-import { PersonInput } from '../dto/personInput'
+import {PersonModel} from '@app/entities/models/personModel'
+import {PersonsService} from '@app/entities/services/personsService'
+import {Injectable, Logger} from '@nestjs/common'
+import {CustomFieldsService} from '../../customFields/services/customFieldsService'
+import {FileAPIService} from '../../files/services/fileAPIService'
+import {PersonInput} from '../dto/personInput'
+import {IdDocumentsService} from './idDocumentsService'
+import {RelationshipsService} from './relationshipsService'
 
 @Injectable()
 export class PersonAPIService {
@@ -62,38 +62,32 @@ export class PersonAPIService {
     personModel.oldName = personInfo.oldName
     personModel.homeAddress = personInfo.homeAddress
 
-    if (personInfo.contactDetails?.length) {
-      personModel.contactDetails = this.customFieldsService.getCustomFieldsDocumentsForInputData(
-        personInfo.contactDetails,
-      )
-    }
+    personModel.contactDetails = personInfo.contactDetails.length
+      ? this.customFieldsService.getCustomFieldsDocumentsForInputData(personInfo.contactDetails)
+      : []
 
-    if (personInfo.customFields?.length) {
-      personModel.customFields = this.customFieldsService.getCustomFieldsDocumentsForInputData(
-        personInfo.customFields,
-      )
-    }
+    personModel.customFields = personInfo.customFields.length
+      ? this.customFieldsService.getCustomFieldsDocumentsForInputData(personInfo.customFields)
+      : []
 
-    if (personInfo.documents?.length) {
-      personModel.documents = this.idDocumentsService.getDocumentsModelsFromInputData(
-        personInfo.documents,
-      )
-    }
+    personModel.documents = personInfo.documents.length
+      ? this.idDocumentsService.getDocumentsModelsFromInputData(personInfo.documents)
+      : []
 
-    if (personInfo.files?.length) {
-      personModel.files = await this.fileService.getUploadedFilesModels(personInfo.files)
-    }
+    personModel.files = personInfo.files.length
+      ? await this.fileService.getUploadedFilesModels(personInfo.files)
+      : []
 
-    if (personInfo.relationships?.length) {
-      personModel.relationships =
-        await this.relationshipsService.getRelationshipsModelsFromInputData(
+    personModel.relationships = personInfo.relationships.length
+      ? await this.relationshipsService.getRelationshipsModelsFromInputData(
           personInfo.relationships,
         )
-    }
+      : []
 
-    if (personInfo.image) {
-      personModel.image = await this.fileService.getUploadedFileModel(personInfo.image)
-    }
+    personModel.images = personInfo.images.length
+      ? await this.fileService.getUploadedFilesModels(personInfo.images)
+      : []
+
     return personModel
   }
 }

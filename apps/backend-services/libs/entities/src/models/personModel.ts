@@ -1,10 +1,10 @@
-import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
-import { Document, SchemaTypes, Types } from 'mongoose'
-import { CustomFieldModel, CustomFieldSchema } from './customFieldModel'
-import { FileModel } from './fileModel'
-import { IdDocumentModel, IdDocumentSchema } from './idDocumentModel'
-import { RelationshipModel, RelationshipSchema } from './relationshipModel'
-import { Person } from 'defs'
+import {Prop, Schema, SchemaFactory} from '@nestjs/mongoose'
+import {Person} from 'defs'
+import {Document, SchemaTypes, Types} from 'mongoose'
+import {CustomFieldModel, CustomFieldSchema} from './customFieldModel'
+import {FileModel} from './fileModel'
+import {IdDocumentModel, IdDocumentSchema} from './idDocumentModel'
+import {RelationshipModel, RelationshipSchema} from './relationshipModel'
 
 @Schema({ timestamps: true })
 export class PersonModel implements Person {
@@ -28,8 +28,8 @@ export class PersonModel implements Person {
   @Prop({ isRequired: false, default: '' })
   homeAddress: string
 
-  @Prop({ type: Types.ObjectId, ref: FileModel.name, isRequired: false })
-  image: FileModel
+  @Prop({ type: [{ type: Types.ObjectId, ref: FileModel.name }] })
+  images: FileModel[]
 
   @Prop({ type: [IdDocumentSchema], isRequired: false })
   documents: IdDocumentModel[]

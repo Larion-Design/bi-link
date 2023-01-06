@@ -16,7 +16,7 @@ import {CustomInputFields} from '../customInputFields'
 import {DatePicker} from '../datePicker'
 import {FilesManager} from '../fileField'
 import {IdDocuments} from '../idDocuments'
-import {ImageField} from '../imageField'
+import {Images} from '../images'
 import {InputField} from '../inputField'
 import {Relationships} from '../relationships'
 import {getBirthdateFromCnp} from './utils'
@@ -111,14 +111,14 @@ const Form: React.FunctionComponent<Props & FormikProps<PersonAPIInput>> = ({
           {step === 0 && (
             <Grid container spacing={2}>
               <Grid item xs={3}>
-                <ImageField
-                  fileInfo={values.image}
-                  updateImage={async (fileInfo) => {
-                    const error = await personFormValidation.image(fileInfo)
-                    setFieldValue('image', fileInfo)
-                    setFieldError('image', error as string)
+                <Images
+                  images={values.images}
+                  updateImages={async (images) => {
+                    const error = await personFormValidation.files(images)
+                    setFieldError('images', error)
+                    setFieldValue('images', images)
                   }}
-                  error={errors.image as string}
+                  error={errors.images}
                 />
               </Grid>
               <Grid container item xs={9} spacing={3}>
@@ -314,7 +314,7 @@ const personInitialFields: PersonAPIInput = {
   homeAddress: '',
   customFields: [],
   contactDetails: [],
-  image: null,
+  images: [],
   documents: [],
   files: [],
   relationships: [],
