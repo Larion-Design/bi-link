@@ -30,7 +30,7 @@ export class PersonsService {
       return this.personModel
         .findById(personId)
         .populate({ path: 'files', model: this.fileModel })
-        .populate({ path: 'image', model: this.fileModel })
+        .populate({ path: 'images', model: this.fileModel })
         .populate({ path: 'relationships.person', model: this.personModel })
         .exec()
     } catch (error) {
@@ -50,10 +50,10 @@ export class PersonsService {
             firstName: 1,
             lastName: 1,
             cnp: 1,
-            image: 1,
+            images: 1,
           },
         )
-        .populate({ path: 'image', model: this.fileModel })
+        .populate({ path: 'images', model: this.fileModel })
         .exec()
     } catch (error) {
       this.logger.error(error)
