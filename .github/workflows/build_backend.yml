@@ -4,7 +4,7 @@ on:
   push:
     branches: [ main ]
     paths:
-      - '.github/**'
+      - '.github/workflows/build_backend.yml'
       - 'package.json'
       - 'pnpm-lock.yaml'
       - 'apps/backend-services/**'

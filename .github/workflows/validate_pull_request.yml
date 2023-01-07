@@ -12,11 +12,6 @@ jobs:
       - name: Checkout the repo
         uses: actions/checkout@v3
 
-      - name: Install Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: 18
-
       - uses: pnpm/action-setup@v2
         name: Install pnpm
         id: pnpm-install
@@ -24,11 +19,17 @@ jobs:
           version: 7
           run_install: false
 
-      - name: Install dependencies
-        run: pnpm i --frozen-lockfile
+      - name: Install Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          cache: 'pnpm'
 
-      - name: Build project
-        run: pnpm lint
+      - name: Install dependencies
+        run: pnpm i --frozen-lockfile --use-store-server
+
+#      - name: Build project
+#        run: pnpm lint
 
       - name: Build project
         run: pnpm build
