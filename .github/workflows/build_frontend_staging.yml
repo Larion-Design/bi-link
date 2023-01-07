@@ -4,7 +4,7 @@ on:
   push:
     branches: [ staging ]
     paths:
-      - '.github/**'
+      - '.github/workflows/build_frontend_staging.yml'
       - 'package.json'
       - 'pnpm-lock.yaml'
       - 'apps/frontend/**'
