@@ -7,6 +7,9 @@ export class File implements FileAPIOutput {
   @Field()
   fileId: string
 
+  @Field()
+  mimeType: string
+
   @Field(() => DownloadUrl)
   url?: DownloadUrl
 

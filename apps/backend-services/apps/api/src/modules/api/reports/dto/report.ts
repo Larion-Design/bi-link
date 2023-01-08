@@ -1,7 +1,7 @@
-import {Field, ObjectType} from '@nestjs/graphql'
-import {ReportAPIOutput} from 'defs'
-import {ConnectedEntity} from '../../common/dto/connectedEntity'
-import {ReportSection} from './reportSection'
+import { Field, ObjectType } from '@nestjs/graphql'
+import { ReportAPIOutput } from 'defs'
+import { ConnectedEntity } from '../../common/dto/connectedEntity'
+import { ReportSection } from './reportSection'
 
 @ObjectType()
 export class Report implements ReportAPIOutput {
@@ -10,6 +10,9 @@ export class Report implements ReportAPIOutput {
 
   @Field()
   name: string
+
+  @Field()
+  type: string
 
   @Field(() => [ConnectedEntity], { nullable: true })
   person?: ConnectedEntity

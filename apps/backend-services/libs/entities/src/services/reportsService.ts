@@ -1,8 +1,8 @@
-import {EntityType} from '@app/definitions/constants'
-import {ReportDocument, ReportModel} from '@app/entities/models/reportModel'
-import {Injectable, Logger} from '@nestjs/common'
-import {InjectModel} from '@nestjs/mongoose'
-import {Model, ProjectionType} from 'mongoose'
+import { EntityType } from '@app/definitions/constants'
+import { ReportDocument, ReportModel } from '@app/entities/models/reportModel'
+import { Injectable, Logger } from '@nestjs/common'
+import { InjectModel } from '@nestjs/mongoose'
+import { Model, ProjectionType } from 'mongoose'
 
 @Injectable()
 export class ReportsService {

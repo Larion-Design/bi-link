@@ -1,14 +1,14 @@
-import {ReportModel} from '@app/entities/models/reportModel'
-import {ReportSectionModel} from '@app/entities/models/reportSectionModel'
-import {CompaniesService} from '@app/entities/services/companiesService'
-import {IncidentsService} from '@app/entities/services/incidentsService'
-import {PersonsService} from '@app/entities/services/personsService'
-import {PropertiesService} from '@app/entities/services/propertiesService'
-import {ReportsService} from '@app/entities/services/reportsService'
-import {Injectable} from '@nestjs/common'
-import {ReportInput} from '../dto/reportInput'
-import {ReportSectionInput} from '../dto/reportSectionInput'
-import {ReportContentAPIService} from './reportContentAPIService'
+import { ReportModel } from '@app/entities/models/reportModel'
+import { ReportSectionModel } from '@app/entities/models/reportSectionModel'
+import { CompaniesService } from '@app/entities/services/companiesService'
+import { IncidentsService } from '@app/entities/services/incidentsService'
+import { PersonsService } from '@app/entities/services/personsService'
+import { PropertiesService } from '@app/entities/services/propertiesService'
+import { ReportsService } from '@app/entities/services/reportsService'
+import { Injectable } from '@nestjs/common'
+import { ReportInput } from '../dto/reportInput'
+import { ReportSectionInput } from '../dto/reportSectionInput'
+import { ReportContentAPIService } from './reportContentAPIService'
 
 @Injectable()
 export class ReportAPIService {
@@ -36,18 +36,22 @@ export class ReportAPIService {
   private createReportDocument = async (reportInput: ReportInput) => {
     const reportModel = new ReportModel()
     reportModel.name = reportInput.name
+    reportModel.type = reportInput.type
+    reportModel.isTemplate = reportInput.isTemplate
 
-    if (reportInput.company?._id) {
-      reportModel.company = await this.companiesService.getCompany(reportInput.company._id)
-    }
-    if (reportInput.person?._id) {
-      reportModel.person = await this.personsService.find(reportInput.person._id)
-    }
-    if (reportInput.incident?._id) {
-      reportModel.incident = await this.incidentsService.getIncident(reportInput.incident._id)
-    }
-    if (reportInput.property?._id) {
-      reportModel.property = await this.propertiesService.getProperty(reportInput.property._id)
+    if (!reportInput.isTemplate) {
+      if (reportInput.company?._id) {
+        reportModel.company = await this.companiesService.getCompany(reportInput.company._id)
+      }
+      if (reportInput.person?._id) {
+        reportModel.person = await this.personsService.find(reportInput.person._id)
+      }
+      if (reportInput.incident?._id) {
+        reportModel.incident = await this.incidentsService.getIncident(reportInput.incident._id)
+      }
+      if (reportInput.property?._id) {
+        reportModel.property = await this.propertiesService.getProperty(reportInput.property._id)
+      }
     }
 
     reportModel.sections = await Promise.all(reportInput.sections.map(this.createReportSections))

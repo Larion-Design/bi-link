@@ -1,5 +1,5 @@
-import {Field, InputType} from '@nestjs/graphql'
-import {Link as ReportLink} from 'defs'
+import { Field, InputType } from '@nestjs/graphql'
+import { Link as ReportLink } from 'defs'
 
 @InputType()
 export class LinkInput implements ReportLink {

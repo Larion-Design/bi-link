@@ -20,7 +20,9 @@ export type EmbeddedFileIndex = Pick<File, 'name' | 'description'> & {
   content: string
 }
 
-export interface FileAPIOutput extends File {}
+export interface FileAPIOutput extends File {
+  mimeType: string
+}
 export interface FileAPIInput extends Readonly<Omit<File, 'url'>> {}
 
 export const FileSources = {

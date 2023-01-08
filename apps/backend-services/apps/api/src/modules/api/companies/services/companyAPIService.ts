@@ -1,11 +1,11 @@
-import {CompanyModel} from '@app/entities/models/companyModel'
-import {CompaniesService} from '@app/entities/services/companiesService'
-import {Injectable, Logger} from '@nestjs/common'
-import {CustomFieldsService} from '../../customFields/services/customFieldsService'
-import {FileAPIService} from '../../files/services/fileAPIService'
-import {CompanyInput} from '../dto/companyInput'
-import {AssociatesService} from './associatesService'
-import {LocationService} from './locationService'
+import { Injectable, Logger } from '@nestjs/common'
+import { CompanyModel } from '@app/entities/models/companyModel'
+import { FileAPIService } from '../../files/services/fileAPIService'
+import { CustomFieldsService } from '../../customFields/services/customFieldsService'
+import { LocationService } from './locationService'
+import { CompanyInput } from '../dto/companyInput'
+import { CompaniesService } from '@app/entities/services/companiesService'
+import { AssociatesService } from './associatesService'
 
 @Injectable()
 export class CompanyAPIService {

@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import Typography from '@mui/material/Typography'
 import Box from '@mui/material/Box'
 import MenuItem from '@mui/material/MenuItem'
+import { Reports } from '../entityViews/reports'
 import { InputFieldMenu } from '../menu/inputFieldMenu'
 import { Graph } from '../entityViews/graph'
 import { PropertyAPIInput } from 'defs'
@@ -44,11 +45,9 @@ export const PropertyDetails: React.FunctionComponent<Props> = ({
             <MenuItem disabled={!propertyId} onClick={() => setMainTabIndex(1)}>
               Grafic relational
             </MenuItem>
+            <MenuItem onClick={() => setMainTabIndex(3)}>Rapoarte</MenuItem>
             <MenuItem disabled onClick={() => setMainTabIndex(2)}>
               Evenimente
-            </MenuItem>
-            <MenuItem disabled onClick={() => setMainTabIndex(3)}>
-              Rapoarte
             </MenuItem>
             <MenuItem disabled onClick={() => setMainTabIndex(4)}>
               Conflicte
@@ -66,6 +65,9 @@ export const PropertyDetails: React.FunctionComponent<Props> = ({
           />
         )}
         {mainTabIndex === 1 && !!propertyId && <Graph entityId={propertyId} />}
+        {mainTabIndex === 3 && !!propertyId && (
+          <Reports entityId={propertyId} entityType={'PROPERTY'} />
+        )}
       </Box>
     </Box>
   )

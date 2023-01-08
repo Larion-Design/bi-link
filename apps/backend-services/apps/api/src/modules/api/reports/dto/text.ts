@@ -1,5 +1,5 @@
-import {Field, ObjectType} from '@nestjs/graphql'
-import {Text as ReportText} from 'defs'
+import { Field, ObjectType } from '@nestjs/graphql'
+import { Text as ReportText } from 'defs'
 
 @ObjectType()
 export class Text implements ReportText {

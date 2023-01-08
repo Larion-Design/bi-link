@@ -7,7 +7,7 @@ import ImageList from '@mui/material/ImageList'
 import ImageListItem from '@mui/material/ImageListItem'
 import Image from 'mui-image'
 import { FileAPIInput } from 'defs'
-import { getDownloadUrlsRequest } from '../../../graphql/shared/queries/getDownloadUrls'
+import { getFilesInfoRequest } from '../../../graphql/files/getFilesInfo'
 import { ModalHeader } from '../modalHeader'
 
 type Props = {
@@ -16,13 +16,15 @@ type Props = {
 }
 
 export const ImageGallery: React.FunctionComponent<Props> = ({ images, closeModal }) => {
-  const [fetchImages, { data }] = getDownloadUrlsRequest()
+  const [fetchImages, { data }] = getFilesInfoRequest()
 
   useEffect(() => {
-    if (images.length) {
+    const imagesIds = images.filter(({ isHidden }) => !isHidden).map(({ fileId }) => fileId)
+
+    if (imagesIds.length) {
       void fetchImages({
         variables: {
-          filesIds: images.map(({ fileId }) => fileId),
+          filesIds: imagesIds,
         },
       })
     }
@@ -32,11 +34,11 @@ export const ImageGallery: React.FunctionComponent<Props> = ({ images, closeModa
     <Card sx={{ p: 2, width: '80vw', height: '90vh' }} variant={'elevation'}>
       <ModalHeader title={'Imagini'} closeModal={closeModal} />
       <CardContent sx={{ height: '85%', overflow: 'auto' }}>
-        {data ? (
+        {data?.getFilesInfo ? (
           <ImageList variant={'standard'} cols={3} gap={8}>
-            {data.getDownloadUrls.map((imageUrl) => (
-              <ImageListItem key={imageUrl}>
-                <Image src={imageUrl} />
+            {data.getFilesInfo.map(({ fileId, name, url: { url } }) => (
+              <ImageListItem key={fileId}>
+                <Image alt={name} src={url} />
               </ImageListItem>
             ))}
           </ImageList>

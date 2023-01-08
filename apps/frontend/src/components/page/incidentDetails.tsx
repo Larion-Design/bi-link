@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import Typography from '@mui/material/Typography'
 import Box from '@mui/material/Box'
 import MenuItem from '@mui/material/MenuItem'
+import { Reports } from '../entityViews/reports'
 import { InputFieldMenu } from '../menu/inputFieldMenu'
 import { IncidentAPIInput } from 'defs'
 import { IncidentForm } from '../form/incidentForm'
@@ -42,11 +43,9 @@ export const IncidentDetails: React.FunctionComponent<Props> = ({
             <MenuItem disabled={!incidentId} onClick={() => setMainTabIndex(1)}>
               Grafic relational
             </MenuItem>
+            <MenuItem onClick={() => setMainTabIndex(3)}>Rapoarte</MenuItem>
             <MenuItem disabled onClick={() => setMainTabIndex(2)}>
               Evenimente
-            </MenuItem>
-            <MenuItem disabled onClick={() => setMainTabIndex(3)}>
-              Rapoarte
             </MenuItem>
             <MenuItem disabled onClick={() => setMainTabIndex(4)}>
               Conflicte
@@ -64,6 +63,9 @@ export const IncidentDetails: React.FunctionComponent<Props> = ({
           />
         )}
         {mainTabIndex === 1 && !!incidentId && <Graph entityId={incidentId} />}
+        {mainTabIndex === 3 && !!incidentId && (
+          <Reports entityId={incidentId} entityType={'INCIDENT'} />
+        )}
       </Box>
     </Box>
   )

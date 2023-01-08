@@ -17,6 +17,14 @@ export class FilesService {
     }
   }
 
+  getFiles = async (filesIds: string[]) => {
+    try {
+      return this.fileModel.find({ fileId: filesIds }).exec()
+    } catch (e) {
+      this.logger.error(e)
+    }
+  }
+
   async *getAllFiles(fields: ProjectionFields<FileDocument> = { _id: 1 }) {
     for await (const fileDocument of this.fileModel.find({}, fields)) {
       yield fileDocument

@@ -1,9 +1,9 @@
-import {PersonsService} from '@app/entities/services/personsService'
-import {UseGuards} from '@nestjs/common'
-import {Args, ArgsType, Field, Query, Resolver} from '@nestjs/graphql'
-import {IsMongoId} from 'class-validator'
-import {FirebaseAuthGuard} from '../../../users/guards/FirebaseAuthGuard'
-import {Person} from '../dto/person'
+import { PersonsService } from '@app/entities/services/personsService'
+import { UseGuards } from '@nestjs/common'
+import { Args, ArgsType, Field, Query, Resolver } from '@nestjs/graphql'
+import { IsMongoId } from 'class-validator'
+import { FirebaseAuthGuard } from '../../../users/guards/FirebaseAuthGuard'
+import { Person } from '../dto/person'
 
 @ArgsType()
 class Params {

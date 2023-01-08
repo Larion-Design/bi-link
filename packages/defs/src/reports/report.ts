@@ -8,6 +8,8 @@ import { ConnectedEntity } from '../connectedEntity'
 export interface Report {
   _id?: string
   name: string
+  type: string
+  isTemplate: boolean
   company?: Company
   person?: Person
   incident?: Incident

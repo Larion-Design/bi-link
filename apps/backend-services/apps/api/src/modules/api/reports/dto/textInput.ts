@@ -1,5 +1,5 @@
-import {Field, InputType} from '@nestjs/graphql'
-import {Text as ReportText} from 'defs'
+import { Field, InputType } from '@nestjs/graphql'
+import { Text as ReportText } from 'defs'
 
 @InputType()
 export class TextInput implements ReportText {

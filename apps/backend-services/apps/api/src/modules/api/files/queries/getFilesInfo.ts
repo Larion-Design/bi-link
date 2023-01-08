@@ -1,7 +1,7 @@
+import { FilesService } from '@app/entities/services/filesService'
 import { Args, ArgsType, Field, Query, Resolver } from '@nestjs/graphql'
 import { UseGuards } from '@nestjs/common'
 import { FirebaseAuthGuard } from '../../../users/guards/FirebaseAuthGuard'
-import { FileStorageService } from '@app/files/services/fileStorageService'
 import { File } from '../dto/file'
 
 @ArgsType()
@@ -11,12 +11,12 @@ class Params {
 }
 
 @Resolver(() => File)
-export class GetDownloadUrls {
-  constructor(protected fileStorageService: FileStorageService) {}
+export class GetFilesInfo {
+  constructor(protected filesService: FilesService) {}
 
-  @Query(() => [String])
+  @Query(() => [File])
   @UseGuards(FirebaseAuthGuard)
-  async getDownloadUrls(@Args() { filesIds }: Params) {
-    return this.fileStorageService.getDownloadUrls(filesIds)
+  async getFilesInfo(@Args() { filesIds }: Params) {
+    return this.filesService.getFiles(filesIds)
   }
 }

@@ -1,13 +1,13 @@
-import {UserActionsService} from '@app/pub/services/userActionsService'
-import {UseGuards} from '@nestjs/common'
-import {Args, ArgsType, Field, Mutation, Resolver} from '@nestjs/graphql'
-import {getUnixTime} from 'date-fns'
-import {User, UserActions} from 'defs'
-import {CurrentUser} from '../../../users/decorators/currentUser'
-import {FirebaseAuthGuard} from '../../../users/guards/FirebaseAuthGuard'
-import {Report} from '../dto/report'
-import {ReportInput} from '../dto/reportInput'
-import {ReportAPIService} from '../services/reportAPIService'
+import { UserActionsService } from '@app/pub/services/userActionsService'
+import { UseGuards } from '@nestjs/common'
+import { Args, ArgsType, Field, Mutation, Resolver } from '@nestjs/graphql'
+import { getUnixTime } from 'date-fns'
+import { User, UserActions } from 'defs'
+import { CurrentUser } from '../../../users/decorators/currentUser'
+import { FirebaseAuthGuard } from '../../../users/guards/FirebaseAuthGuard'
+import { Report } from '../dto/report'
+import { ReportInput } from '../dto/reportInput'
+import { ReportAPIService } from '../services/reportAPIService'
 
 @ArgsType()
 class Params {

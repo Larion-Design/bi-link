@@ -1,12 +1,15 @@
-import {Field, InputType} from '@nestjs/graphql'
-import {ReportAPIInput} from 'defs'
-import {ConnectedEntityInput} from '../../common/dto/connectedEntityInput'
-import {ReportSectionInput} from './reportSectionInput'
+import { Field, InputType } from '@nestjs/graphql'
+import { ReportAPIInput } from 'defs'
+import { ConnectedEntityInput } from '../../common/dto/connectedEntityInput'
+import { ReportSectionInput } from './reportSectionInput'
 
 @InputType()
 export class ReportInput implements ReportAPIInput {
   @Field()
   readonly name: string
+
+  @Field()
+  readonly type: string
 
   @Field()
   readonly isTemplate: boolean

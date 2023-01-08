@@ -6,9 +6,9 @@ import CloudUploadOutlinedIcon from '@mui/icons-material/CloudUploadOutlined'
 import CollectionsOutlinedIcon from '@mui/icons-material/CollectionsOutlined'
 import IconButton from '@mui/material/IconButton'
 import { FormikErrors } from 'formik'
+import { getFileInfoRequest } from '../../../graphql/files/getFileInfo'
 import { FileUploadBox } from '../fileField/FileUploadBox'
 import { FileAPIInput } from 'defs'
-import { getDownloadUrlRequest } from '../../../graphql/shared/queries/getDownloadUrl'
 import { useModal } from '../../modal/modalProvider'
 import Tooltip from '@mui/material/Tooltip'
 
@@ -20,16 +20,16 @@ type Props = {
 }
 
 export const Images: React.FunctionComponent<Props> = ({ images, updateImages }) => {
-  const [fetchImageUrl, { data }] = getDownloadUrlRequest()
+  const [fetchFileInfo, { data }] = getFileInfoRequest()
   const modal = useModal()
 
   useEffect(() => {
     const firstImageId = images[0]?.fileId
 
     if (firstImageId) {
-      void fetchImageUrl({
+      void fetchFileInfo({
         variables: {
-          objectId: firstImageId,
+          fileId: firstImageId,
         },
       })
     }
@@ -56,10 +56,10 @@ export const Images: React.FunctionComponent<Props> = ({ images, updateImages })
         addUploadedFile={(image) => updateImages([...images, image])}
         acceptedFileTypes={['image/png', 'image/jpg', 'image/jpeg', 'image/gif', 'image/webp']}
       >
-        {data?.getDownloadUrl.url ? (
+        {data?.getFileInfo.url.url ? (
           <Avatar
             variant={'square'}
-            src={data.getDownloadUrl.url}
+            src={data.getFileInfo.url.url}
             sx={{ height: 245, width: 245 }}
           />
         ) : (

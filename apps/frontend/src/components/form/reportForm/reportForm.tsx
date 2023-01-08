@@ -1,0 +1,97 @@
+import Box from '@mui/material/Box'
+import Grid from '@mui/material/Grid'
+import { ConnectedEntity, EntityType, ReportAPIInput } from 'defs'
+import { FormikProps, withFormik } from 'formik'
+import React from 'react'
+import { AutocompleteField } from '../autocompleteField'
+import { InputField } from '../inputField'
+
+type Props = {
+  entityId: string
+  entityType: EntityType
+  reportId: string
+  reportInfo: ReportAPIInput
+  createReport: (data: ReportAPIInput) => Promise<void> | void
+  updateReport: (reportId: string, data: ReportAPIInput) => Promise<void> | void
+}
+
+const Form: React.FunctionComponent<Props & FormikProps<ReportAPIInput>> = ({
+  entityId,
+  entityType,
+  setFieldError,
+  setFieldValue,
+  values,
+  errors,
+  isSubmitting,
+  isValidating,
+  submitForm,
+}) => {
+  return (
+    <Box>
+      <form data-cy={'reportForm'}>
+        <Grid container>
+          <Grid item xs={6}>
+            <InputField
+              label={'Nume'}
+              value={values.name}
+              onChange={(value) => setFieldValue('name', value)}
+            />
+          </Grid>
+          <Grid item xs={6}>
+            <AutocompleteField
+              label={'Tip de raport'}
+              value={values.type}
+              onValueChange={(value) => setFieldValue('type', value)}
+              suggestions={['Raport de informare']}
+            />
+          </Grid>
+          <Grid item xs={12}></Grid>
+        </Grid>
+      </form>
+    </Box>
+  )
+}
+
+export const ReportForm = withFormik<Props, ReportAPIInput>({
+  mapPropsToValues: ({ entityId, entityType, reportInfo }) =>
+    reportInfo ?? createReportInitialValues(entityId, entityType),
+  validate: async (values, { reportId }) => Promise.resolve(),
+  validateOnChange: false,
+  validateOnMount: false,
+  validateOnBlur: false,
+  handleSubmit: (values, { props: { reportId, createReport, updateReport } }) =>
+    reportId ? updateReport(reportId, values) : createReport(values),
+})(Form)
+
+const createReportInitialValues = (entityId: string, entityType: EntityType): ReportAPIInput => {
+  const reportInfo: ReportAPIInput = {
+    name: '',
+    type: '',
+    isTemplate: false,
+    sections: [],
+  }
+
+  const connectedEntity: ConnectedEntity = {
+    _id: entityId,
+  }
+
+  switch (entityType) {
+    case 'COMPANY': {
+      reportInfo.company = connectedEntity
+      break
+    }
+    case 'PERSON': {
+      reportInfo.person = connectedEntity
+      break
+    }
+    case 'PROPERTY': {
+      reportInfo.property = connectedEntity
+      break
+    }
+    case 'INCIDENT': {
+      reportInfo.incident = connectedEntity
+      break
+    }
+  }
+  return reportInfo
+}

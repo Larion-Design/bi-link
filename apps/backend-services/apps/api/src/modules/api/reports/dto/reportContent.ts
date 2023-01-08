@@ -1,10 +1,10 @@
-import {Field, Int, ObjectType} from '@nestjs/graphql'
-import {ReportContent as ReportContentType} from 'defs'
-import {File} from '../../files/dto/file'
-import {Link} from './link'
-import {Table} from './table'
-import {Text} from './text'
-import {Title} from './title'
+import { Field, Int, ObjectType } from '@nestjs/graphql'
+import { ReportContent as ReportContentType } from 'defs'
+import { File } from '../../files/dto/file'
+import { Link } from './link'
+import { Table } from './table'
+import { Text } from './text'
+import { Title } from './title'
 
 @ObjectType()
 export class ReportContent implements ReportContentType {
