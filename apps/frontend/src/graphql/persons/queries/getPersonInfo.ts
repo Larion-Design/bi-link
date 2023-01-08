@@ -18,8 +18,11 @@ const getPersonInfo = gql`
       cnp
       homeAddress
       birthdate
-      image {
+      images {
         fileId
+        name
+        description
+        isHidden
       }
       contactDetails {
         fieldName

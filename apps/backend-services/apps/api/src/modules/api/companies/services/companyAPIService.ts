@@ -1,11 +1,11 @@
-import { Injectable, Logger } from '@nestjs/common'
-import { CompanyModel } from '@app/entities/models/companyModel'
-import { FileAPIService } from '../../files/services/fileAPIService'
-import { CustomFieldsService } from '../../customFields/services/customFieldsService'
-import { LocationService } from './locationService'
-import { CompanyInput } from '../dto/companyInput'
-import { CompaniesService } from '@app/entities/services/companiesService'
-import { AssociatesService } from './associatesService'
+import {CompanyModel} from '@app/entities/models/companyModel'
+import {CompaniesService} from '@app/entities/services/companiesService'
+import {Injectable, Logger} from '@nestjs/common'
+import {CustomFieldsService} from '../../customFields/services/customFieldsService'
+import {FileAPIService} from '../../files/services/fileAPIService'
+import {CompanyInput} from '../dto/companyInput'
+import {AssociatesService} from './associatesService'
+import {LocationService} from './locationService'
 
 @Injectable()
 export class CompanyAPIService {
@@ -47,33 +47,26 @@ export class CompanyAPIService {
       companyModel.headquarters = companyInfo.headquarters
       companyModel.registrationNumber = companyInfo.registrationNumber
 
-      if (companyInfo.locations?.length) {
-        companyModel.locations = this.locationService.getLocationsDocumentsForInputData(
-          companyInfo.locations,
-        )
-      }
+      companyModel.locations = companyInfo.locations.length
+        ? this.locationService.getLocationsDocumentsForInputData(companyInfo.locations)
+        : []
 
-      if (companyInfo.contactDetails?.length) {
-        companyModel.contactDetails = this.customFieldsService.getCustomFieldsDocumentsForInputData(
-          companyInfo.contactDetails,
-        )
-      }
+      companyModel.contactDetails = companyInfo.contactDetails.length
+        ? this.customFieldsService.getCustomFieldsDocumentsForInputData(companyInfo.contactDetails)
+        : []
 
-      if (companyInfo.customFields?.length) {
-        companyModel.customFields = this.customFieldsService.getCustomFieldsDocumentsForInputData(
-          companyInfo.customFields,
-        )
-      }
+      companyModel.customFields = companyInfo.customFields.length
+        ? this.customFieldsService.getCustomFieldsDocumentsForInputData(companyInfo.customFields)
+        : []
 
-      if (companyInfo.files?.length) {
-        companyModel.files = await this.fileService.getUploadedFilesModels(companyInfo.files)
-      }
+      companyModel.files = companyInfo.files.length
+        ? await this.fileService.getUploadedFilesModels(companyInfo.files)
+        : []
 
-      if (companyInfo.associates.length) {
-        companyModel.associates = await this.associatesService.getAssociatesDocumentsForInputData(
-          companyInfo.associates,
-        )
-      }
+      companyModel.associates = companyInfo.associates.length
+        ? await this.associatesService.getAssociatesDocumentsForInputData(companyInfo.associates)
+        : []
+
       return companyModel
     } catch (e) {
       this.logger.error(e)

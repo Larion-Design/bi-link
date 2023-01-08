@@ -35,7 +35,7 @@ export const PartyPersons: React.FunctionComponent<Props> = ({
           const personInfo = personsInfo?.find(({ _id: personId }) => personId === _id)
           if (personInfo) {
             const fullName = getPersonFullName(personInfo)
-            const { _id, image, cnp } = personInfo
+            const { _id, images, cnp } = personInfo
             return (
               <PartyEntity
                 key={_id}
@@ -43,7 +43,7 @@ export const PartyPersons: React.FunctionComponent<Props> = ({
                 viewEntityDetails={viewPersonDetails}
                 removeEntity={removePerson}
               >
-                <PartyPersonInfo name={fullName} cnp={cnp} imageUrl={image?.url?.url ?? ''} />
+                <PartyPersonInfo name={fullName} cnp={cnp} imageUrl={images[0]?.url?.url ?? ''} />
               </PartyEntity>
             )
           }

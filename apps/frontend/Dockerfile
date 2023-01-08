@@ -3,7 +3,7 @@ WORKDIR /app
 COPY .npmrc package.json pnpm-lock.yaml packages apps ./
 RUN apk add libc6-compat chromium && npm install -g pnpm
 COPY . .
-RUN pnpm install --filter frontend... --frozen-lockfile --no-optional
+RUN pnpm install --filter frontend... --frozen-lockfile
 
 FROM setup AS build-prod
 RUN pnpm --filter frontend build

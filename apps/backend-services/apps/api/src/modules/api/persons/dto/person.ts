@@ -1,9 +1,9 @@
 import { Field, ObjectType } from '@nestjs/graphql'
-import { File } from '../../files/dto/file'
-import { Relationship } from './relationship'
-import { CustomField } from '../../customFields/dto/customField'
-import { IdDocument } from './idDocument'
 import { PersonAPIOutput } from 'defs'
+import { CustomField } from '../../customFields/dto/customField'
+import { File } from '../../files/dto/file'
+import { IdDocument } from './idDocument'
+import { Relationship } from './relationship'
 
 @ObjectType()
 export class Person implements PersonAPIOutput {
@@ -28,8 +28,8 @@ export class Person implements PersonAPIOutput {
   @Field({ nullable: true })
   homeAddress: string
 
-  @Field(() => File, { nullable: true })
-  image: File
+  @Field(() => [File])
+  images: File[]
 
   @Field(() => [IdDocument], { nullable: true })
   documents: IdDocument[]

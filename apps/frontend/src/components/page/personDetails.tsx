@@ -1,12 +1,12 @@
 import React, { useState } from 'react'
-import Typography from '@mui/material/Typography'
 import Box from '@mui/material/Box'
 import MenuItem from '@mui/material/MenuItem'
-import { getPersonFullName } from '../../utils/person'
+import Typography from '@mui/material/Typography'
 import { PersonAPIInput } from 'defs'
+import { getPersonFullName } from '../../utils/person'
+import { Graph } from '../entityViews/graph'
 import { PersonForm } from '../form/personForm'
 import { InputFieldMenu } from '../menu/inputFieldMenu'
-import { Graph } from '../entityViews/graph'
 
 type Props = {
   personId?: string
@@ -19,7 +19,6 @@ export const PersonDetails: React.FunctionComponent<Props> = ({
   personId,
   personInfo,
   onSubmit,
-  readonly,
 }) => {
   const [mainTabIndex, setMainTabIndex] = useState(0)
   const canSwitchViews = !!personId
@@ -46,13 +45,13 @@ export const PersonDetails: React.FunctionComponent<Props> = ({
             <MenuItem disabled={!canSwitchViews} onClick={() => setMainTabIndex(1)}>
               Grafic relational
             </MenuItem>
-            <MenuItem disabled={true} onClick={() => setMainTabIndex(2)}>
+            <MenuItem disabled onClick={() => setMainTabIndex(2)}>
               Evenimente
             </MenuItem>
-            <MenuItem disabled={true} onClick={() => setMainTabIndex(3)}>
+            <MenuItem disabled onClick={() => setMainTabIndex(3)}>
               Rapoarte
             </MenuItem>
-            <MenuItem disabled={true} onClick={() => setMainTabIndex(4)}>
+            <MenuItem disabled onClick={() => setMainTabIndex(4)}>
               Conflicte
             </MenuItem>
           </InputFieldMenu>
@@ -65,7 +64,7 @@ export const PersonDetails: React.FunctionComponent<Props> = ({
             personId={personId}
             personInfo={personInfo}
             onSubmit={onSubmit}
-            readonly={readonly}
+            readonly={false}
           />
         )}
         {mainTabIndex === 1 && !!personId && <Graph entityId={personId} />}
