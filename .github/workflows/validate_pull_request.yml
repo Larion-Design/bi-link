@@ -12,6 +12,17 @@ jobs:
       - name: Checkout the repo
         uses: actions/checkout@v3
 
+      - uses: dorny/paths-filter@v2
+        id: changes
+        with:
+          list-files: 'json'
+          filters: |
+            frontend:
+              - 'apps/frontend/**'
+            backend:
+              - 'apps/backend-services/**'
+
+
       - uses: pnpm/action-setup@v2
         name: Install pnpm
         id: pnpm-install
@@ -25,11 +36,21 @@ jobs:
           node-version: 18
           cache: 'pnpm'
 
-      - name: Install dependencies
-        run: pnpm i --frozen-lockfile --use-store-server
+      - name: Install dependencies for backend
+        if: steps.changes.outputs.backend == 'true'
+        run: pnpm i --frozen-lockfile --use-store-server --filter backend-services...
+
+      - name: Install dependencies for frontend
+        if: steps.changes.outputs.frontend == 'true'
+        run: pnpm i --frozen-lockfile --use-store-server --filter frontend...
 
 #      - name: Build project
 #        run: pnpm lint
 
-      - name: Build project
-        run: pnpm build
+      - name: Build frontend project
+        if: steps.changes.outputs.frontend == 'true'
+        run: pnpm build --filter frontend
+
+      - name: Build frontend project
+        if: steps.changes.outputs.frontend == 'true'
+        run: pnpm build --filter backend-services
