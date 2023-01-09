@@ -3,11 +3,8 @@ import { User, UserActions } from 'defs'
 import { UserActionsService } from '@app/pub/services/userActionsService'
 import { EntityEventsService } from '@app/pub/services/entityEventsService'
 import { CurrentUser } from '../../../users/decorators/currentUser'
-import { Roles } from '../../../users/decorators/roles'
-import { Role } from '../../../users/constants'
 import { UseGuards } from '@nestjs/common'
 import { FirebaseAuthGuard } from '../../../users/guards/FirebaseAuthGuard'
-import { RolesGuard } from '../../../users/guards/RolesGuard'
 import { PropertyInput } from '../dto/propertyInput'
 import { Property } from '../dto/property'
 import { PropertyAPIService } from '../services/propertyAPIService'
@@ -31,8 +28,7 @@ export class UpdateProperty {
   ) {}
 
   @Mutation(() => Boolean)
-  @Roles(Role.ADMIN)
-  @UseGuards(FirebaseAuthGuard, RolesGuard)
+  @UseGuards(FirebaseAuthGuard)
   async updateProperty(@CurrentUser() { _id }: User, @Args() { propertyId, data }: Params) {
     const propertyUpdated = await this.propertyAPIService.updateProperty(propertyId, data)
 

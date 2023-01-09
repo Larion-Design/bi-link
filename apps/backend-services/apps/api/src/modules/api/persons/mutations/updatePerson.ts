@@ -8,9 +8,6 @@ import { UserActionsService } from '@app/pub/services/userActionsService'
 import { EntityEventsService } from '@app/pub/services/entityEventsService'
 import { CurrentUser } from '../../../users/decorators/currentUser'
 import { User, UserActions } from 'defs'
-import { RolesGuard } from '../../../users/guards/RolesGuard'
-import { Roles } from '../../../users/decorators/roles'
-import { Role } from '../../../users/constants'
 import { getUnixTime } from 'date-fns'
 
 @ArgsType()
@@ -31,8 +28,7 @@ export class UpdatePerson {
   ) {}
 
   @Mutation(() => Boolean)
-  @Roles(Role.ADMIN)
-  @UseGuards(FirebaseAuthGuard, RolesGuard)
+  @UseGuards(FirebaseAuthGuard)
   async updatePerson(@CurrentUser() { _id }: User, @Args() { personId, personInfo }: Params) {
     const updated = await this.personsService.update(personId, personInfo)
 
