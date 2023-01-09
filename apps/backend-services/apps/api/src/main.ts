@@ -1,6 +1,7 @@
 import 'tsconfig-paths/register'
 import { NestFactory } from '@nestjs/core'
 import helmet from 'helmet'
+import supertokens from 'supertokens-node'
 import { AppModule } from './appModule'
 import { SentryService } from '@ntegral/nestjs-sentry'
 import { Logger } from '@nestjs/common'
@@ -24,6 +25,12 @@ async function bootstrap() {
       contentSecurityPolicy: false,
     }),
   )
+
+  app.enableCors({
+    origin: ['*'],
+    allowedHeaders: ['content-type', ...supertokens.getAllCORSHeaders()],
+    credentials: true,
+  })
 
   const logger = SentryService.SentryServiceInstance()
   logger.setContext('API')

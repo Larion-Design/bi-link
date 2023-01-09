@@ -16,6 +16,9 @@ import { BrowserTracing } from '@sentry/tracing'
 import { SnackbarProvider } from 'notistack'
 import { ModalProvider } from './components/modal/modalProvider'
 import { DialogProvider } from './components/dialog/dialogProvider'
+import SuperTokens, { SuperTokensWrapper } from 'supertokens-auth-react'
+import EmailPassword from 'supertokens-auth-react/recipe/emailpassword'
+import Session from 'supertokens-auth-react/recipe/session'
 
 if (import.meta.env.PROD) {
   Sentry.init({
@@ -24,6 +27,17 @@ if (import.meta.env.PROD) {
     tracesSampleRate: 0.1,
   })
 }
+
+SuperTokens.init({
+  appInfo: {
+    // learn more about this on https://supertokens.com/docs/emailpassword/appinfo
+    appName: 'BI Link',
+    apiDomain: import.meta.env.VITE_AUTH_BACKEND_API,
+    websiteDomain: import.meta.env.VITE_AUTH_BACKEND_API,
+    apiBasePath: '/auth',
+  },
+  recipeList: [EmailPassword.init(), Session.init()],
+})
 
 // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 ReactDOM.createRoot(document.getElementById('root')!).render(
@@ -38,20 +52,22 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
         }}
       >
         <IntlProvider messages={localeRo} locale={'ro'} defaultLocale={'ro'}>
-          <ApolloProvider client={apolloClient}>
-            <SnackbarProvider
-              maxSnack={5}
-              autoHideDuration={3000}
-              preventDuplicate
-              anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
-            >
-              <ModalProvider>
-                <DialogProvider>
-                  <Router />
-                </DialogProvider>
-              </ModalProvider>
-            </SnackbarProvider>
-          </ApolloProvider>
+          <SuperTokensWrapper>
+            <ApolloProvider client={apolloClient}>
+              <SnackbarProvider
+                maxSnack={5}
+                autoHideDuration={3000}
+                preventDuplicate
+                anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+              >
+                <ModalProvider>
+                  <DialogProvider>
+                    <Router />
+                  </DialogProvider>
+                </ModalProvider>
+              </SnackbarProvider>
+            </ApolloProvider>
+          </SuperTokensWrapper>
         </IntlProvider>
       </LocalizationProvider>
     </ThemeProvider>

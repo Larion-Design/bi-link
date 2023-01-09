@@ -1,5 +1,7 @@
 import React, { ReactNode } from 'react'
+import * as reactRouterDom from 'react-router-dom'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import { getSuperTokensRoutesForReactRouterDom } from 'supertokens-auth-react'
 import { routes } from './routes'
 import { InvalidPage } from '../pages/invalidPage'
 import { Page } from '../components/page/Page'
@@ -39,7 +41,7 @@ const privateRoutes: Record<string, ReactNode> = {
 }
 
 const publicRoutes: Record<string, ReactNode> = {
-  [routes.login]: <LoginPage />,
+  // [routes.login]: <LoginPage />,
   [routes.signup]: <SignupPage />,
   [routes.resetPassword]: <Page>Pagina nu este disponibila momentan.</Page>,
 }
@@ -55,6 +57,7 @@ export const Router: React.FunctionComponent = () => (
         <Route key={route} path={route} element={component} />
       ))}
 
+      {getSuperTokensRoutesForReactRouterDom(reactRouterDom)}
       <Route path={'*'} element={<InvalidPage />} />
     </Routes>
   </BrowserRouter>
