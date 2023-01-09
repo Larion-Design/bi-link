@@ -54,7 +54,7 @@ export const EditCompany: React.FunctionComponent = () => {
         <CompanyDetails
           companyId={companyId}
           companyInfo={fetchData?.getCompany}
-          readonly={true}
+          readonly={false}
           onSubmit={(companyInfo) => {
             if (!updateLoading && companyId) {
               void updateCompany({

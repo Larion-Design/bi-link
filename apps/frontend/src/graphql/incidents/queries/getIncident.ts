@@ -12,7 +12,6 @@ type Response = {
 const request = gql`
   query GetIncident($incidentId: String!) {
     getIncident(incidentId: $incidentId) {
-      _id
       date
       type
       location

@@ -63,7 +63,7 @@ export const EditPerson: React.FunctionComponent = () => {
         <PersonDetails
           personId={personId}
           personInfo={fetchData?.getPersonInfo}
-          readonly={true}
+          readonly={false}
           onSubmit={(personInfo: PersonAPIInput) => {
             if (personId) {
               void updatePerson({
