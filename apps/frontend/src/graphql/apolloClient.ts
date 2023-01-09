@@ -38,5 +38,5 @@ export const apolloClient = new ApolloClient({
   link: persistedQueriesLink.concat(
     authLink.concat(timeoutLink.concat(retryLink.concat(httpLink))),
   ),
-  cache: new InMemoryCache(),
+  cache: new InMemoryCache({ addTypename: false }),
 })
