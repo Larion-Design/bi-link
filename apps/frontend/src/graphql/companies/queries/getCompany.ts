@@ -12,7 +12,6 @@ type Response = {
 const getCompany = gql`
   query GetCompany($id: String!) {
     getCompany(id: $id) {
-      _id
       name
       cui
       registrationNumber
