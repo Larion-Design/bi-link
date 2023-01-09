@@ -10,13 +10,14 @@ type Params = {
   personsIds: string[]
 }
 
-const getPersonsBasicInfo = gql`
+const request = gql`
   query PersonBasicInfo($personsIds: [String!]!) {
     getPersonsInfo(personsIds: $personsIds) {
       _id
       firstName
       lastName
-      image {
+      images {
+        fileId
         url {
           url
         }
@@ -25,4 +26,4 @@ const getPersonsBasicInfo = gql`
   }
 `
 
-export const getPersonsBasicInfoRequest = () => useLazyQuery<Response, Params>(getPersonsBasicInfo)
+export const getPersonsBasicInfoRequest = () => useLazyQuery<Response, Params>(request)

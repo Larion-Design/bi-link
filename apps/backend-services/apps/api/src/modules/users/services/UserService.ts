@@ -18,9 +18,7 @@ export class UserService {
   }
 
   setUserActiveState = async (uid: string, disabled: boolean) =>
-    this.firebaseService.admin().auth().updateUser(uid, {
-      disabled,
-    })
+    this.firebaseService.admin().auth().updateUser(uid, { disabled })
 
   setUserRole = async (uid: string, role: Role) =>
     this.firebaseService.admin().auth().setCustomUserClaims(uid, { role })
@@ -31,7 +29,5 @@ export class UserService {
     this.firebaseService.admin().auth().revokeRefreshTokens(userId)
 
   disableUser = async (userId: string) =>
-    this.firebaseService.admin().auth().updateUser(userId, {
-      disabled: true,
-    })
+    this.firebaseService.admin().auth().updateUser(userId, { disabled: true })
 }

@@ -26,13 +26,13 @@ export const PersonAssociateInformation: React.FunctionComponent<Props> = ({
 }) => {
   const fullName = getPersonFullName(personInfo)
   const { role, startDate, endDate, isActive, equity } = associateInfo
-  const { _id, image } = personInfo
+  const { _id, images } = personInfo
 
   return (
     <>
       <Box display={'flex'} alignItems={'center'} mt={2} mb={4}>
         <Avatar
-          src={image?.url?.url ?? ''}
+          src={images[0]?.url?.url ?? ''}
           alt={`${fullName}`}
           sx={{ width: 30, height: 30, mr: 1 }}
         />

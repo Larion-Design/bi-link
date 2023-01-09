@@ -136,7 +136,7 @@ const personInitialFields: PersonAPIInput = {
   homeAddress: '',
   customFields: [],
   contactDetails: [],
-  image: null,
+  images: [],
   documents: [],
   files: [],
   relationships: [],

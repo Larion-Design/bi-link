@@ -60,6 +60,8 @@ export const getUserRole = () => {
   const { user } = useAuth()
   const [role, setRole] = useState<Role | null>(null)
 
+  console.debug(user)
+
   const hasPrivilegedAccess = useMemo(
     () => !!role && [Role.CI, Role.DEV, Role.ADMIN].includes(role),
     [role],
@@ -68,9 +70,7 @@ export const getUserRole = () => {
   const isAdmin = useMemo(() => role === Role.ADMIN, [role])
 
   useEffect(() => {
-    void user?.getIdTokenResult().then(({ claims }) => {
-      setRole((claims?.role as Role) ?? null)
-    })
+    void user?.getIdTokenResult().then(({ claims }) => setRole((claims?.role as Role) ?? null))
   }, [user])
 
   return { role, hasPrivilegedAccess, isAdmin }
