@@ -60,8 +60,6 @@ export const getUserRole = () => {
   const { user } = useAuth()
   const [role, setRole] = useState<Role | null>(null)
 
-  console.debug(user)
-
   const hasPrivilegedAccess = useMemo(
     () => !!role && [Role.CI, Role.DEV, Role.ADMIN].includes(role),
     [role],
