@@ -18,19 +18,15 @@ type Props = {
   closeModal: () => void
 }
 
-export const ImageGallery: React.FunctionComponent<Props> = ({ images, closeModal }) => {
+export const ImageGallery: React.FunctionComponent<Props> = ({ images, setImages, closeModal }) => {
   const [fetchImages, { data }] = getFilesInfoRequest()
   const [uploadedImages, setUploadedImages] = useState(images)
 
   useEffect(() => {
-    const visibleImages = uploadedImages.filter(({ isHidden }) => !isHidden).map(({ fileId }) => fileId)
+    const filesIds = uploadedImages.filter(({ isHidden }) => !isHidden).map(({ fileId }) => fileId)
 
-    if (visibleImages.length) {
-      void fetchImages({
-        variables: {
-          filesIds: visibleImages.map(({ fileId }) => fileId),
-        },
-      })
+    if (filesIds.length) {
+      void fetchImages({ variables: { filesIds } })
     }
   }, [uploadedImages])
 
@@ -48,9 +44,9 @@ export const ImageGallery: React.FunctionComponent<Props> = ({ images, closeModa
         >
           {data ? (
             <ImageList variant={'masonry'} cols={3} gap={8}>
-              {data.getDownloadUrls.map((imageUrl) => (
-                <ImageListItem key={imageUrl}>
-                  <Image src={imageUrl} />
+              {data.getFilesInfo.map(({ fileId, url: { url } }) => (
+                <ImageListItem key={fileId}>
+                  <Image src={url} />
                 </ImageListItem>
               ))}
             </ImageList>
