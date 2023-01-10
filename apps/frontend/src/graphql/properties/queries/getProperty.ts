@@ -12,7 +12,6 @@ type Response = {
 const request = gql`
   query GetProperty($propertyId: String!) {
     getProperty(propertyId: $propertyId) {
-      _id
       name
       type
       images {

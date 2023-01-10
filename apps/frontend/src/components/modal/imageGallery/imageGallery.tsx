@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import Card from '@mui/material/Card'
 import CardActions from '@mui/material/CardActions'
 import Button from '@mui/material/Button'
@@ -8,32 +8,54 @@ import ImageListItem from '@mui/material/ImageListItem'
 import Image from 'mui-image'
 import { FileAPIInput } from 'defs'
 import { getFilesInfoRequest } from '../../../graphql/files/getFilesInfo'
+import { imageTypeRegex } from '../../../utils/mimeTypes'
+import { FileUploadBox } from '../../form/fileField/FileUploadBox'
 import { ModalHeader } from '../modalHeader'
 
 type Props = {
   images: FileAPIInput[]
+  setImages: (images: FileAPIInput[]) => void
   closeModal: () => void
 }
 
 export const ImageGallery: React.FunctionComponent<Props> = ({ images, closeModal }) => {
   const [fetchImages, { data }] = getFilesInfoRequest()
+  const [uploadedImages, setUploadedImages] = useState(images)
 
   useEffect(() => {
-    const imagesIds = images.filter(({ isHidden }) => !isHidden).map(({ fileId }) => fileId)
+    const visibleImages = uploadedImages.filter(({ isHidden }) => !isHidden).map(({ fileId }) => fileId)
 
-    if (imagesIds.length) {
+    if (visibleImages.length) {
       void fetchImages({
         variables: {
-          filesIds: imagesIds,
+          filesIds: visibleImages.map(({ fileId }) => fileId),
         },
       })
     }
-  }, [images])
+  }, [uploadedImages])
 
   return (
     <Card sx={{ p: 2, width: '80vw', height: '90vh' }} variant={'elevation'}>
       <ModalHeader title={'Imagini'} closeModal={closeModal} />
       <CardContent sx={{ height: '85%', overflow: 'auto' }}>
+        <FileUploadBox
+          addUploadedFile={(image) => {
+            const uploadedImages = [...images, image]
+            setImages(uploadedImages)
+            setUploadedImages(uploadedImages)
+          }}
+          acceptedFileTypes={imageTypeRegex}
+        >
+          {data ? (
+            <ImageList variant={'masonry'} cols={3} gap={8}>
+              {data.getDownloadUrls.map((imageUrl) => (
+                <ImageListItem key={imageUrl}>
+                  <Image src={imageUrl} />
+                </ImageListItem>
+              ))}
+            </ImageList>
+          ) : null}
+        </FileUploadBox>
         {data?.getFilesInfo ? (
           <ImageList variant={'standard'} cols={3} gap={8}>
             {data.getFilesInfo.map(({ fileId, name, url: { url } }) => (

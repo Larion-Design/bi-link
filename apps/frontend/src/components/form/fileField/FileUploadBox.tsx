@@ -5,11 +5,12 @@ import { FileAPIInput } from 'defs'
 
 type Props = {
   addUploadedFile: (fileInfo: FileAPIInput) => void | Promise<void>
-  acceptedFileTypes?: string[]
+  acceptedFileTypes?: RegExp
 }
 
 export const FileUploadBox: React.FunctionComponent<PropsWithChildren<Props>> = ({
   addUploadedFile,
+  acceptedFileTypes,
   children,
 }) => {
   const { acceptedFiles, getRootProps, isDragActive } = useDropzone({
@@ -24,7 +25,7 @@ export const FileUploadBox: React.FunctionComponent<PropsWithChildren<Props>> = 
 
     const [file] = acceptedFiles
 
-    if (file) {
+    if (file && (!acceptedFileTypes || acceptedFileTypes.test(file.type))) {
       const formData = new FormData()
       formData.set('file', file)
 

@@ -36,7 +36,7 @@ export const UsersTable: React.FunctionComponent<Props> = ({ users }) => {
       {
         field: 'email',
         headerName: 'Email',
-        flex: 1,
+        flex: 1.5,
         type: 'string',
       },
       {

@@ -68,9 +68,7 @@ export const getUserRole = () => {
   const isAdmin = useMemo(() => role === Role.ADMIN, [role])
 
   useEffect(() => {
-    void user?.getIdTokenResult().then(({ claims }) => {
-      setRole((claims?.role as Role) ?? null)
-    })
+    void user?.getIdTokenResult().then(({ claims }) => setRole((claims?.role as Role) ?? null))
   }, [user])
 
   return { role, hasPrivilegedAccess, isAdmin }

@@ -7,6 +7,7 @@ import CollectionsOutlinedIcon from '@mui/icons-material/CollectionsOutlined'
 import IconButton from '@mui/material/IconButton'
 import { FormikErrors } from 'formik'
 import { getFileInfoRequest } from '../../../graphql/files/getFileInfo'
+import { imageTypeRegex } from '../../../utils/mimeTypes'
 import { FileUploadBox } from '../fileField/FileUploadBox'
 import { FileAPIInput } from 'defs'
 import { useModal } from '../../modal/modalProvider'
@@ -35,7 +36,10 @@ export const Images: React.FunctionComponent<Props> = ({ images, updateImages })
     }
   }, [images[0]?.fileId])
 
-  const openImageGallery = useCallback(() => modal?.openImageGallery(images), [images])
+  const openImageGallery = useCallback(
+    () => modal?.openImageGallery(images, updateImages),
+    [images, updateImages],
+  )
 
   return (
     <Box sx={{ height: 250, width: 250, position: 'relative' }}>
@@ -54,7 +58,7 @@ export const Images: React.FunctionComponent<Props> = ({ images, updateImages })
       )}
       <FileUploadBox
         addUploadedFile={(image) => updateImages([...images, image])}
-        acceptedFileTypes={['image/png', 'image/jpg', 'image/jpeg', 'image/gif', 'image/webp']}
+        acceptedFileTypes={imageTypeRegex}
       >
         {data?.getFileInfo.url.url ? (
           <Avatar

@@ -10,10 +10,10 @@ type Response = {
   updatePerson: boolean
 }
 
-const updatePerson = gql`
-  mutation CreatePerson($personId: String!, $personInfo: PersonInput!) {
+const request = gql`
+  mutation UpdatePerson($personId: String!, $personInfo: PersonInput!) {
     updatePerson(personId: $personId, personInfo: $personInfo)
   }
 `
 
-export const updatePersonRequest = () => useMutation<Response, Params>(updatePerson)
+export const updatePersonRequest = () => useMutation<Response, Params>(request)
