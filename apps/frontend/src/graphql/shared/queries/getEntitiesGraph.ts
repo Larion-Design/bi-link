@@ -1,4 +1,4 @@
-import { gql, useQuery } from '@apollo/client'
+import { gql, useLazyQuery } from '@apollo/client'
 import { EntitiesGraph } from 'defs'
 
 type Response = {
@@ -72,8 +72,7 @@ const request = gql`
   }
 `
 
-export const getEntitiesGraphRequest = (entityId: string, depth = 2) =>
-  useQuery<Response, Params>(request, {
-    variables: { id: entityId, depth },
+export const getEntitiesGraphRequest = () =>
+  useLazyQuery<Response, Params>(request, {
     fetchPolicy: 'cache-and-network',
   })

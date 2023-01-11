@@ -6,7 +6,8 @@ type SelectedImagesHandler = (images: FileAPIInput[]) => void
 export interface ImageSelectorPayload {
   modal: ImageSelectorModal
   images?: FileAPIInput[]
-  selectedImages: SelectedImagesHandler
+  selectImages: SelectedImagesHandler
+  selectedImages: FileAPIInput[]
   modalClosed?: () => void
 }
 
@@ -23,7 +24,8 @@ export type ImageSelectorModalActions =
 export type ImageSelectorModalContext = {
   openImageSelector: (
     images: FileAPIInput[],
-    selectedImages: SelectedImagesHandler,
+    selectImages: SelectedImagesHandler,
+    selectedImages: FileAPIInput[],
     modalClosed?: () => void,
   ) => void
 }

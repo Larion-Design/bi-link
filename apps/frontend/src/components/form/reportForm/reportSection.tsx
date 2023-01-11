@@ -1,21 +1,17 @@
 import React, { useCallback, useEffect } from 'react'
 import Box from '@mui/material/Box'
-import { EntityType, ReportSectionAPIInput } from 'defs'
+import { ReportSectionAPIInput } from 'defs'
 import { useMap } from '../../../utils/hooks/useMap'
 import { ToolbarMenu } from '../../menu/toolbarMenu'
 import { InputField } from '../inputField'
 import { ReportContentElement } from './reportContentElement'
 
 type Props = {
-  entityId: string
-  entityType: EntityType
   sectionInfo: ReportSectionAPIInput
   updateSectionInfo: (sectionInfo: ReportSectionAPIInput) => void
 }
 
 export const ReportSection: React.FunctionComponent<Props> = ({
-  entityId,
-  entityType,
   sectionInfo,
   updateSectionInfo,
 }) => {
@@ -62,8 +58,7 @@ export const ReportSection: React.FunctionComponent<Props> = ({
         {entries().map(([uid, content]) => (
           <ReportContentElement
             key={uid}
-            entityId={entityId}
-            entityType={entityType}
+            images={[]}
             contentInfo={content}
             updateContentInfo={(contentInfo) => update(uid, contentInfo)}
           />

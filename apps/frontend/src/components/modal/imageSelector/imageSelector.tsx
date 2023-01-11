@@ -15,17 +15,19 @@ import { ModalHeader } from '../modalHeader'
 type Props = {
   closeModal: () => void
   images: FileAPIInput[]
-  imagesSelected: (images: FileAPIInput[]) => void
+  selectImages: (images: FileAPIInput[]) => void
+  selectedImages: FileAPIInput[]
 }
 
 export const ImageSelector: React.FunctionComponent<Props> = ({
   images,
   closeModal,
-  imagesSelected,
+  selectImages,
+  selectedImages,
 }) => {
   const [fetchFilesInfo, { data }] = getFilesInfoRequest()
   const { map: allImages } = useMap(images, ({ fileId }) => fileId)
-  const { uid, values, add, remove, map } = useMap<FileAPIInput>([])
+  const { uid, values, add, remove, map } = useMap(selectedImages, ({ fileId }) => fileId)
 
   useEffect(() => {
     if (images.length) {
@@ -36,10 +38,10 @@ export const ImageSelector: React.FunctionComponent<Props> = ({
   const submitSelectedImages = useCallback(() => {
     const selectedImages = values()
     if (selectedImages.length) {
-      imagesSelected(selectedImages)
+      selectImages(selectedImages)
     }
     closeModal?.()
-  }, [closeModal, imagesSelected, uid])
+  }, [closeModal, selectImages, uid])
 
   return (
     <Card sx={{ p: 2, width: '80vw', height: '90vh' }} variant={'elevation'}>

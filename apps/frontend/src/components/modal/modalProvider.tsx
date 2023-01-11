@@ -66,12 +66,13 @@ const modalReducer = (state: ModalInfo, action: Action): ModalInfo => {
           }
         }
         case 'imageSelector': {
-          const { images, selectedImages, modalClosed } = action.payload
+          const { images, selectedImages, selectImages, modalClosed } = action.payload
           return {
             modal,
             modalClosed,
             open: true,
             images,
+            selectImages,
             selectedImages,
           }
         }
@@ -135,13 +136,14 @@ export const ModalProvider: React.FunctionComponent<PropsWithChildren<any>> = ({
               setImages,
             },
           }),
-        openImageSelector: (images, selectedImages, modalClosed) =>
+        openImageSelector: (images, selectImages, selectedImages, modalClosed) =>
           dispatch({
             type: 'openModal',
             payload: {
               modal: 'imageSelector',
               modalClosed,
               images,
+              selectImages,
               selectedImages,
             },
           }),
@@ -199,7 +201,8 @@ export const ModalProvider: React.FunctionComponent<PropsWithChildren<any>> = ({
                 <ImageSelector
                   closeModal={() => dispatch({ type: 'closeModal', payload: 'imageSelector' })}
                   images={state.images ?? []}
-                  imagesSelected={state.selectedImages}
+                  selectImages={state.selectImages}
+                  selectedImages={state.selectedImages}
                 />
               </>
             </Modal>

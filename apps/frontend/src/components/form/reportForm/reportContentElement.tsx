@@ -5,22 +5,20 @@ import Accordion from '@mui/material/Accordion'
 import AccordionDetails from '@mui/material/AccordionDetails'
 import AccordionSummary from '@mui/material/AccordionSummary'
 import AccordionActions from '@mui/material/AccordionActions'
-import { EntityType, ReportContentAPIInput } from 'defs'
+import { FileAPIInput, ReportContentAPIInput } from 'defs'
 import { useModal } from '../../modal/modalProvider'
 import { ReportContentLink } from './reportContent/reportContentLink'
 import { ReportContentText } from './reportContent/reportContentText'
 import { ReportContentTitle } from './reportContent/reportContentTitle'
 
 type Props = {
-  entityId: string
-  entityType: EntityType
+  images: FileAPIInput[]
   contentInfo: ReportContentAPIInput
   updateContentInfo: (contentInfo: ReportContentAPIInput) => void
 }
 
 export const ReportContentElement: React.FunctionComponent<Props> = ({
-  entityId,
-  entityType,
+  images,
   contentInfo,
   updateContentInfo,
 }) => {
@@ -73,7 +71,13 @@ export const ReportContentElement: React.FunctionComponent<Props> = ({
           <AccordionActions>
             <Button
               variant={'contained'}
-              onClick={() => modal.openImageGallery(contentInfo.images)}
+              onClick={() =>
+                modal.openImageSelector(
+                  images,
+                  (images) => updateContentInfo({ ...contentInfo, images }),
+                  contentInfo.images,
+                )
+              }
             >
               Adaugă imagini
             </Button>
