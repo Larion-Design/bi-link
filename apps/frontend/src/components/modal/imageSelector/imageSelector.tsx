@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useEffect } from 'react'
 import Button from '@mui/material/Button'
 import Card from '@mui/material/Card'
 import CardActions from '@mui/material/CardActions'
@@ -7,34 +7,39 @@ import ImageList from '@mui/material/ImageList'
 import ImageListItem from '@mui/material/ImageListItem'
 import Image from 'mui-image'
 import BookmarkAddedIcon from '@mui/icons-material/BookmarkAdded'
-import { EntityType } from 'defs'
-import { getEntityImages } from '../../../graphql/shared/queries/getEntityImages'
+import { FileAPIInput } from 'defs'
+import { getFilesInfoRequest } from '../../../graphql/files/getFilesInfo'
+import { useMap } from '../../../utils/hooks/useMap'
 import { ModalHeader } from '../modalHeader'
 
 type Props = {
-  entityId: string
-  entityType: EntityType
   closeModal: () => void
-  imagesSelected: (filesIds: string[]) => void
+  images: FileAPIInput[]
+  imagesSelected: (images: FileAPIInput[]) => void
 }
 
 export const ImageSelector: React.FunctionComponent<Props> = ({
-  entityId,
-  entityType,
+  images,
   closeModal,
   imagesSelected,
 }) => {
-  const { data } = getEntityImages(entityId, entityType)
-  const [selectedImages, setSelectedImages] = useState<string[]>([])
+  const [fetchFilesInfo, { data }] = getFilesInfoRequest()
+  const { map: allImages } = useMap(images, ({ fileId }) => fileId)
+  const { uid, values, add, remove, map } = useMap<FileAPIInput>([])
 
-  useEffect(() => setSelectedImages([]), [entityId, entityType])
+  useEffect(() => {
+    if (images.length) {
+      void fetchFilesInfo({ variables: { filesIds: images.map(({ fileId }) => fileId) } })
+    }
+  }, [images])
 
-  const submitSelectedImages = () => {
+  const submitSelectedImages = useCallback(() => {
+    const selectedImages = values()
     if (selectedImages.length) {
       imagesSelected(selectedImages)
     }
     closeModal?.()
-  }
+  }, [closeModal, imagesSelected, uid])
 
   return (
     <Card sx={{ p: 2, width: '80vw', height: '90vh' }} variant={'elevation'}>
@@ -42,23 +47,17 @@ export const ImageSelector: React.FunctionComponent<Props> = ({
       <CardContent sx={{ height: '85%', overflow: 'auto' }}>
         {data ? (
           <ImageList variant={'standard'} cols={3} gap={8}>
-            {data.getEntityImages.map(({ fileId, url: { url } }) => (
+            {data.getFilesInfo.map(({ fileId, url: { url } }) => (
               <ImageListItem
                 key={fileId}
                 sx={{ position: 'relative' }}
-                onClick={() =>
-                  setSelectedImages((selectedImages) => {
-                    const set = new Set(selectedImages)
-
-                    if (set.has(fileId)) {
-                      set.delete(fileId)
-                    } else set.add(fileId)
-
-                    return Array.from(set)
-                  })
-                }
+                onClick={() => {
+                  if (allImages.has(fileId)) {
+                    remove(fileId)
+                  } else add(allImages.get(fileId), ({ fileId }) => fileId)
+                }}
               >
-                {selectedImages.includes(fileId) && (
+                {map.has(fileId) && (
                   <BookmarkAddedIcon
                     color={'success'}
                     sx={{ position: 'absolute', top: 2, right: 2 }}
@@ -74,7 +73,7 @@ export const ImageSelector: React.FunctionComponent<Props> = ({
         <Button
           variant={'contained'}
           color={'primary'}
-          disabled={!selectedImages.length}
+          disabled={!map.size}
           onClick={submitSelectedImages}
         >
           Selectează

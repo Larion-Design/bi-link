@@ -1,10 +1,18 @@
+import Avatar from '@mui/material/Avatar'
 import React from 'react'
 import { Handle, NodeProps, Position } from 'reactflow'
 import Typography from '@mui/material/Typography'
-import PersonOutlinedIcon from '@mui/icons-material/PersonOutlined'
 import Paper from '@mui/material/Paper'
 
-export const PersonNode: React.FunctionComponent<NodeProps> = ({ data: { label, isRootNode } }) => {
+type Props = {
+  label: string
+  isRootNode: boolean
+  image?: string
+}
+
+export const PersonNode: React.FunctionComponent<NodeProps<Props>> = ({
+  data: { label, isRootNode, image },
+}) => {
   return (
     <>
       <Handle type={'target'} position={Position.Top} />
@@ -17,7 +25,7 @@ export const PersonNode: React.FunctionComponent<NodeProps> = ({ data: { label, 
           background: isRootNode ? background.default : 'primary',
         })}
       >
-        <PersonOutlinedIcon fontSize={'small'} />
+        <Avatar src={image} />
         <Typography sx={{ ml: 1 }} variant={'body2'}>
           {label}
         </Typography>

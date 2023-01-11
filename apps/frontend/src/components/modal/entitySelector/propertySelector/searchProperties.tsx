@@ -1,62 +1,66 @@
 import React, { useCallback, useEffect, useState } from 'react'
+import { useDebounce } from 'usehooks-ts'
 import CardContent from '@mui/material/CardContent'
 import Box from '@mui/material/Box'
 import TextField from '@mui/material/TextField'
 import CardActions from '@mui/material/CardActions'
 import Button from '@mui/material/Button'
-import PersonAddOutlinedIcon from '@mui/icons-material/PersonAddOutlined'
+import AddOutlinedIcon from '@mui/icons-material/AddOutlined'
 import { DataGrid, GridColDef, GridSelectionModel } from '@mui/x-data-grid'
-import { searchPersonsRequest } from '../../../graphql/persons/queries/searchPersons'
-import { useDebounce } from 'usehooks-ts'
-import { PersonListRecord } from 'defs'
-import { PersonSelectorView } from './personSelector'
-import { ModalHeader } from '../modalHeader'
+import { PropertySelectorView } from './propertySelector'
+import { searchPropertiesRequest } from '../../../../graphql/properties/queries/searchProperties'
+import { PropertyListRecord } from 'defs'
+import { ModalHeader } from '../../modalHeader'
 
 type Props = {
   closeModal: () => void
-  personsSelected?: (personsIds: string[]) => void
-  excludedPersonsIds?: string[]
-  changeView: (view: PersonSelectorView) => void
+  propertiesSelected?: (propertiesIds: string[]) => void
+  excludedPropertiesIds?: string[]
+  changeView: (view: PropertySelectorView) => void
 }
 
-export const SearchPersons: React.FunctionComponent<Props> = ({
+export const SearchProperties: React.FunctionComponent<Props> = ({
   closeModal,
-  personsSelected,
-  excludedPersonsIds,
+  propertiesSelected,
+  excludedPropertiesIds,
   changeView,
 }) => {
-  const [searchPersons, { loading, error, data }] = searchPersonsRequest()
+  const [properties, selectProperties] = useState<string[]>([])
+  const [searchProperties, { loading, error, data }] = searchPropertiesRequest()
   const [searchTerm, setSearchTerm] = useState<string>('')
-  const [selectedPersons, selectPersons] = useState<string[]>([])
   const debouncedSearchTerm = useDebounce(searchTerm, 500)
 
   useEffect(() => {
-    void searchPersons({
+    void searchProperties({
       variables: {
         searchTerm: debouncedSearchTerm,
         skip: 0,
-        limit: 10,
+        limit: 5,
       },
     })
   }, [debouncedSearchTerm])
 
-  const submitSelectedPersons = useCallback(() => {
-    if (selectedPersons.length) {
-      personsSelected?.(selectedPersons)
+  const submitSelectedProperties = useCallback(() => {
+    if (properties.length) {
+      propertiesSelected?.(properties)
     }
     closeModal()
-  }, [selectedPersons])
+  }, [properties])
 
   return (
     <>
-      <ModalHeader title={'Cauta persoane'} closeModal={closeModal} />
-      <CardContent sx={{ height: 0.8, mb: 2 }}>
+      <ModalHeader title={'Cauta proprietati'} closeModal={closeModal} />
+      <CardContent
+        sx={{
+          height: 0.8,
+          mb: 2,
+        }}
+      >
         <Box>
           <TextField
             fullWidth
             helperText={
-              error?.message ??
-              'Criteriile de cautare includ nume, prenume, CNP, date de contact, documente de identitate.'
+              error?.message ?? 'Criteriile de cautare includ nume sau tipul de proprietate.'
             }
             onChange={({ target: { value } }) => setSearchTerm(value)}
             error={!!error}
@@ -67,17 +71,16 @@ export const SearchPersons: React.FunctionComponent<Props> = ({
           <DataGrid
             sx={{ width: 1 }}
             rows={
-              data?.searchPersons?.records?.filter(
-                ({ _id }) => !excludedPersonsIds?.includes(_id),
+              data?.searchProperties?.records?.filter(
+                ({ _id }) => !excludedPropertiesIds?.includes(_id),
               ) ?? []
             }
             columns={columns}
             pageSize={5}
             checkboxSelection
-            keepNonExistentRowsSelected
-            onSelectionModelChange={(personsIds: GridSelectionModel) =>
-              selectPersons((selectedPersons) =>
-                Array.from(new Set([...(personsIds as string[]), ...selectedPersons])),
+            onSelectionModelChange={(propertiesIds: GridSelectionModel) =>
+              selectProperties((selectedProperties) =>
+                Array.from(new Set([...(propertiesIds as string[]), ...selectedProperties])),
               )
             }
             disableColumnSelector
@@ -87,11 +90,11 @@ export const SearchPersons: React.FunctionComponent<Props> = ({
             hideFooterPagination
             loading={loading}
             disableVirtualization
-            getRowId={({ _id }: PersonListRecord) => _id}
+            getRowId={({ _id }: PropertyListRecord) => _id}
             localeText={{
-              noRowsLabel: 'Nu au fost gasite persoane. Incearca alt termen de cautare.',
+              noRowsLabel: 'Nu au fost gasite proprietati. Incearca alt termen de cautare.',
               footerRowSelected: (count) =>
-                count !== 1 ? `${count} persoane selectate` : '1 persoana selectata',
+                count !== 1 ? `${count} proprietati selectate` : '1 proprietate selectata',
             }}
           />
         </Box>
@@ -100,10 +103,10 @@ export const SearchPersons: React.FunctionComponent<Props> = ({
         <Button
           variant={'contained'}
           color={'primary'}
-          startIcon={<PersonAddOutlinedIcon />}
-          onClick={() => changeView('createPerson')}
+          startIcon={<AddOutlinedIcon />}
+          onClick={() => changeView('createProperty')}
         >
-          Creaza persoana
+          Creaza proprietate
         </Button>
 
         <Box display={'flex'}>
@@ -113,8 +116,8 @@ export const SearchPersons: React.FunctionComponent<Props> = ({
           <Button
             variant={'contained'}
             color={'primary'}
-            disabled={!selectedPersons.length}
-            onClick={submitSelectedPersons}
+            disabled={!properties.length}
+            onClick={submitSelectedProperties}
           >
             Selectează
           </Button>
@@ -129,23 +132,17 @@ const columns: GridColDef[] = [
     field: '_id',
     headerName: 'ID',
     sortable: false,
-    flex: 1.5,
+    flex: 1,
   },
   {
-    field: 'lastName',
+    field: 'type',
+    headerName: 'Tip de proprietate',
+    sortable: false,
+    flex: 1,
+  },
+  {
+    field: 'name',
     headerName: 'Nume',
-    sortable: false,
-    flex: 1,
-  },
-  {
-    field: 'firstName',
-    headerName: 'Prenume',
-    sortable: false,
-    flex: 1,
-  },
-  {
-    field: 'cnp',
-    headerName: 'CNP',
     sortable: false,
     flex: 1,
   },

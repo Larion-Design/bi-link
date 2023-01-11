@@ -2,19 +2,19 @@ import React, { useEffect } from 'react'
 import { CompanySelectorView } from './companySelector'
 import { useFormik } from 'formik'
 import { CompanyAPIInput } from 'defs'
-import { createCompanyRequest } from '../../../graphql/companies/mutations/createCompany'
+import { createCompanyRequest } from '../../../../graphql/companies/mutations/createCompany'
 import {
   companyFormValidation,
   validateCompanyForm,
-} from '../../form/companyForm/validation/validation'
+} from '../../../form/companyForm/validation/validation'
 import CardContent from '@mui/material/CardContent'
 import Grid from '@mui/material/Grid'
-import { InputField } from '../../form/inputField'
+import { InputField } from '../../../form/inputField'
 import CardActions from '@mui/material/CardActions'
 import Button from '@mui/material/Button'
 import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined'
 import Box from '@mui/material/Box'
-import { ModalHeader } from '../modalHeader'
+import { ModalHeader } from '../../modalHeader'
 
 type Props = {
   closeModal: () => void

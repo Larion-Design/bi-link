@@ -8,18 +8,17 @@ import TextField from '@mui/material/TextField'
 import Button from '@mui/material/Button'
 import Tooltip from '@mui/material/Tooltip'
 import AddOutlinedIcon from '@mui/icons-material/AddOutlined'
-
 import { routes } from '../../../router/routes'
+import { useNotification } from '../../../utils/hooks/useNotification'
 import { CompaniesTable } from './companiesTable'
 import { DashboardPage } from '../../../components/page/DashboardPage'
 import { PaginationParams } from '../../../graphql/shared/types/paginationParams'
 import { searchCompaniesRequest } from '../../../graphql/companies/queries/searchCompanies'
-import { useSnackbar } from 'notistack'
 
 export const CompaniesList: React.FunctionComponent = () => {
   const navigate = useNavigate()
   const [fetchCompanies, { data, loading, error }] = searchCompaniesRequest()
-  const { enqueueSnackbar } = useSnackbar()
+  const showNotification = useNotification()
   const [paginationParams, setPaginationParams] = useState<PaginationParams>({
     currentPage: 0,
     itemsPerPage: 20,
@@ -51,9 +50,7 @@ export const CompaniesList: React.FunctionComponent = () => {
 
   useEffect(() => {
     if (error?.message) {
-      enqueueSnackbar('O eroare a intervenit in timpul comunicarii cu serverul.', {
-        variant: 'error',
-      })
+      showNotification('O eroare a intervenit in timpul comunicarii cu serverul.', 'error')
     }
   }, [error?.message])
 

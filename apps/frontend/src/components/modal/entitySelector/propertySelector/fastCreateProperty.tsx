@@ -7,17 +7,17 @@ import CardActions from '@mui/material/CardActions'
 import Button from '@mui/material/Button'
 import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined'
 import Box from '@mui/material/Box'
-import { InputField } from '../../form/inputField'
-import { createPropertyRequest } from '../../../graphql/properties/mutations/createProperty'
+import { InputField } from '../../../form/inputField'
+import { createPropertyRequest } from '../../../../graphql/properties/mutations/createProperty'
 import {
   propertyFormValidation,
   validatePropertyForm,
-} from '../../form/propertyForm/validation/validation'
+} from '../../../form/propertyForm/validation/validation'
 import { PropertyAPIInput, VehicleInfo } from 'defs'
-import { Images } from '../../form/images'
-import { AutocompleteField } from '../../form/autocompleteField'
-import { ColorPicker } from '../../form/colorPicker'
-import { ModalHeader } from '../modalHeader'
+import { Images } from '../../../form/images'
+import { AutocompleteField } from '../../../form/autocompleteField'
+import { ColorPicker } from '../../../form/colorPicker'
+import { ModalHeader } from '../../modalHeader'
 
 type Props = {
   closeModal: () => void

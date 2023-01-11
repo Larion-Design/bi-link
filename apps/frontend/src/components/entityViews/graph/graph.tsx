@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import Box from '@mui/material/Box'
 import dagre from 'dagre'
 import { ConnectionLineType, Edge, Node, Position, ReactFlowProvider } from 'reactflow'
+import { useNotification } from '../../../utils/hooks/useNotification'
 import { EntityGraph } from './entityGraph'
 import { getEntitiesGraphRequest } from '../../../graphql/shared/queries/getEntitiesGraph'
 import { Loader } from '../../loader/loader'
@@ -14,11 +15,18 @@ type Props = {
 }
 
 export const Graph: React.FunctionComponent<Props> = ({ entityId }) => {
-  const { data, loading: loadingGraph } = getEntitiesGraphRequest(entityId)
+  const showNotification = useNotification()
+  const { data, loading: loadingGraph, error } = getEntitiesGraphRequest(entityId)
   const [fetchEntities, { data: entitiesInfo, loading: loadingEntities }] = getEntitiesInfoRequest()
 
   const [nodes, setNodes] = useState<Node<unknown>[] | null>(null)
   const [edges, setEdges] = useState<Edge<unknown>[] | null>(null)
+
+  useEffect(() => {
+    if (error?.message) {
+      showNotification('O eroare a intervenit in timpul comunicarii cu serverul.', 'error')
+    }
+  }, [error?.message])
 
   useEffect(() => {
     if (data?.getEntitiesGraph) {
@@ -143,6 +151,7 @@ export const Graph: React.FunctionComponent<Props> = ({ entityId }) => {
               type: 'personNode',
               data: {
                 label: `${personInfo.lastName} ${personInfo.firstName}`,
+                image: personInfo.images?.[0]?.url.url,
                 isRootNode: personId === entityId,
               },
             })

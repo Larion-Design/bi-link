@@ -6,11 +6,11 @@ import Button from '@mui/material/Button'
 import AddOutlinedIcon from '@mui/icons-material/AddOutlined'
 import CardActions from '@mui/material/CardActions'
 import { DataGrid, GridColDef, GridSelectionModel } from '@mui/x-data-grid'
-import { searchCompaniesRequest } from '../../../graphql/companies/queries/searchCompanies'
+import { searchCompaniesRequest } from '../../../../graphql/companies/queries/searchCompanies'
 import { useDebounce } from 'usehooks-ts'
 import { CompanyListRecord } from 'defs'
 import { CompanySelectorView } from './companySelector'
-import { ModalHeader } from '../modalHeader'
+import { ModalHeader } from '../../modalHeader'
 
 type Props = {
   closeModal: () => void

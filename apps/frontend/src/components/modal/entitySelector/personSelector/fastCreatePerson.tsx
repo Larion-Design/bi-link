@@ -7,14 +7,14 @@ import Box from '@mui/material/Box'
 import CardActions from '@mui/material/CardActions'
 import { useFormik } from 'formik'
 import { PersonAPIInput } from 'defs'
-import { InputField } from '../../form/inputField'
+import { InputField } from '../../../form/inputField'
 import {
   personFormValidation,
   validatePersonForm,
-} from '../../form/personForm/validation/validation'
+} from '../../../form/personForm/validation/validation'
 import { PersonSelectorView } from './personSelector'
-import { createPersonRequest } from '../../../graphql/persons/mutations/createPerson'
-import { ModalHeader } from '../modalHeader'
+import { createPersonRequest } from '../../../../graphql/persons/mutations/createPerson'
+import { ModalHeader } from '../../modalHeader'
 
 type Props = {
   closeModal: () => void

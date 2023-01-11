@@ -43,24 +43,15 @@ export const ImageGallery: React.FunctionComponent<Props> = ({ images, setImages
           acceptedFileTypes={imageTypeRegex}
         >
           {data ? (
-            <ImageList variant={'masonry'} cols={3} gap={8}>
+            <ImageList variant={'masonry'}>
               {data.getFilesInfo.map(({ fileId, url: { url } }) => (
                 <ImageListItem key={fileId}>
-                  <Image src={url} />
+                  <Image src={url} fit={'cover'} />
                 </ImageListItem>
               ))}
             </ImageList>
           ) : null}
         </FileUploadBox>
-        {data?.getFilesInfo ? (
-          <ImageList variant={'standard'} cols={3} gap={8}>
-            {data.getFilesInfo.map(({ fileId, name, url: { url } }) => (
-              <ImageListItem key={fileId}>
-                <Image alt={name} src={url} />
-              </ImageListItem>
-            ))}
-          </ImageList>
-        ) : null}
       </CardContent>
       <CardActions sx={{ display: 'flex', justifyContent: 'flex-end' }}>
         <Button variant={'outlined'} color={'error'} onClick={closeModal} sx={{ mr: 2 }}>
