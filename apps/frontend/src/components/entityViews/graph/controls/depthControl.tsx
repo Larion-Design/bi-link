@@ -1,11 +1,13 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react'
+import React, { useState } from 'react'
+import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined'
+import Card from '@mui/material/Card'
+import CardContent from '@mui/material/CardContent'
+import CardHeader from '@mui/material/CardHeader'
+import IconButton from '@mui/material/IconButton'
 import ExpandIcon from '@mui/icons-material/Expand'
 import Slider from '@mui/material/Slider'
 import Popover from '@mui/material/Popover'
-import Box from '@mui/material/Box'
-import Typography from '@mui/material/Typography'
 import { ControlButton } from 'reactflow'
-import { useDebounce } from 'usehooks-ts'
 
 type Props = {
   depth: number
@@ -13,38 +15,40 @@ type Props = {
 }
 
 export const DepthControl: React.FunctionComponent<Props> = ({ depth, updateDepth }) => {
-  const [graphDepth, setDepth] = useState(depth)
-  const debouncedDepthValue = useDebounce(graphDepth, 3000)
-  const iconRef = useRef<Element | null>(null)
-  const [open, setOpenState] = useState(false)
-
-  useEffect(() => updateDepth(debouncedDepthValue), [debouncedDepthValue])
-
-  const closePopover = useCallback(() => setOpenState(false), [setOpenState])
+  const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null)
+  const closePopover = () => setAnchorEl(null)
 
   return (
-    <ControlButton onClick={() => null}>
-      <ExpandIcon fontSize={'small'} ref={(ref) => (iconRef.current = ref)} />
+    <ControlButton onClick={(event) => setAnchorEl(event.currentTarget)}>
+      <ExpandIcon fontSize={'small'} />
       <Popover
-        open={open}
-        anchorEl={iconRef.current}
-        onClose={closePopover}
+        open={!!anchorEl}
+        anchorEl={anchorEl}
         anchorOrigin={{
           vertical: 'center',
           horizontal: 'right',
         }}
+        sx={{ zIndex: 1000 }}
       >
-        <Box>
-          <Typography gutterBottom>Nivel de complexitate</Typography>
-          <Slider
-            step={depth}
-            marks
-            min={1}
-            max={10}
-            valueLabelDisplay={'on'}
-            onChange={(event, value) => setDepth(+value)}
+        <Card variant={'outlined'} sx={{ width: 320, p: 2 }}>
+          <CardHeader
+            title={'Nivel de complexitate'}
+            action={
+              <IconButton title={'Inchide'} onClick={closePopover}>
+                <CloseOutlinedIcon color={'error'} fontSize={'small'} />
+              </IconButton>
+            }
           />
-        </Box>
+          <CardContent>
+            <Slider
+              step={depth}
+              min={1}
+              max={5}
+              valueLabelDisplay={'auto'}
+              onChangeCommitted={(event, value) => updateDepth(+value)}
+            />
+          </CardContent>
+        </Card>
       </Popover>
     </ControlButton>
   )

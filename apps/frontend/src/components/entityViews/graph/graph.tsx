@@ -30,8 +30,8 @@ export const Graph: React.FunctionComponent<Props> = ({ entityId, depth }) => {
   const [visibleEntities, setVisibleEntities] = useState(new Set<string>())
   const [visibleRelationships, setVisibleRelationships] = useState(new Set<string>())
 
-  const [nodes, setNodes] = useState<Node<unknown>[] | null>(null)
-  const [edges, setEdges] = useState<Edge<unknown>[] | null>(null)
+  const [nodes, setNodes] = useState<Node<unknown>[]>([])
+  const [edges, setEdges] = useState<Edge<unknown>[]>([])
 
   useEffect(() => {
     void fetchGraph({ variables: { id: entityId, depth: graphDepth } })

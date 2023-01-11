@@ -69,6 +69,8 @@ export const EntityGraph: React.FunctionComponent<Props> = ({
     <ReactFlow
       nodes={nodes}
       edges={edges}
+      defaultNodes={nodes}
+      defaultEdges={edges}
       onNodeClick={onNodeClick}
       onEdgeClick={onEdgeClick}
       fitView
@@ -78,8 +80,8 @@ export const EntityGraph: React.FunctionComponent<Props> = ({
       nodeTypes={nodeTypes}
     >
       <Panel position={'top-left'}>
-        <Paper variant={'outlined'} sx={{ p: 1 }}>
-          Graf relational
+        <Paper variant={'outlined'} sx={{ p: 2 }}>
+          Grafic relational
         </Paper>
       </Panel>
       <Background color={theme.palette.grey[200]} variant={BackgroundVariant.Lines} />

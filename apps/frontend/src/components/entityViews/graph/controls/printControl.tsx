@@ -2,6 +2,7 @@ import React, { useCallback } from 'react'
 import PrintIcon from '@mui/icons-material/Print'
 import { ControlButton } from 'reactflow'
 import { toPng } from 'html-to-image'
+import { openResource } from '../../../../utils/resourceUrl'
 
 export const PrintControl: React.FunctionComponent = () => {
   const convertToImage = useCallback(
@@ -14,16 +15,12 @@ export const PrintControl: React.FunctionComponent = () => {
             node?.classList?.contains('react-flow__controls')
           )
         },
-      }).then((dataUrl) => {
-        const link = document.createElement('a')
-        link.href = dataUrl
-        link.click()
-      }),
+      }).then(openResource),
     [],
   )
 
   return (
-    <ControlButton disabled onClick={convertToImage}>
+    <ControlButton onClick={convertToImage}>
       <PrintIcon fontSize={'small'} />
     </ControlButton>
   )
