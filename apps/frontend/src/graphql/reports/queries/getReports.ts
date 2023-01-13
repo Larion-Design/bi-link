@@ -1,7 +1,5 @@
 import { gql, useQuery } from '@apollo/client'
-import { ReportAPIOutput } from 'defs'
-
-type EntityType = 'PERSON' | 'COMPANY' | 'PROPERTY' | 'INCIDENT'
+import { EntityType, ReportAPIOutput } from 'defs'
 
 type Params = {
   entityId: string
@@ -17,13 +15,14 @@ const request = gql`
     getReports(entityId: $entityId, entityType: $entityType) {
       _id
       name
+      type
     }
   }
 `
 
 export const getReportsRequest = (entityId: string, entityType: EntityType) =>
   useQuery<Response, Params>(request, {
-    fetchPolicy: 'cache-first',
+    fetchPolicy: 'cache-and-network',
     variables: {
       entityId,
       entityType,

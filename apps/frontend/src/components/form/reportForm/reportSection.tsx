@@ -1,21 +1,33 @@
 import React, { useCallback, useEffect } from 'react'
+import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined'
+import IconButton from '@mui/material/IconButton'
 import Box from '@mui/material/Box'
-import { ReportSectionAPIInput } from 'defs'
+import AddOutlinedIcon from '@mui/icons-material/AddOutlined'
+
+import { EntityType, ReportSectionAPIInput } from 'defs'
 import { useMap } from '../../../utils/hooks/useMap'
+import { useDialog } from '../../dialog/dialogProvider'
 import { ToolbarMenu } from '../../menu/toolbarMenu'
 import { InputField } from '../inputField'
 import { ReportContentElement } from './reportContentElement'
 
 type Props = {
+  entityId?: string
+  entityType?: EntityType
   sectionInfo: ReportSectionAPIInput
   updateSectionInfo: (sectionInfo: ReportSectionAPIInput) => void
+  removeSection: () => void
 }
 
 export const ReportSection: React.FunctionComponent<Props> = ({
+  entityId,
+  entityType,
   sectionInfo,
   updateSectionInfo,
+  removeSection,
 }) => {
-  const { values, entries, uid, add, update, keys } = useMap(sectionInfo.content)
+  const dialog = useDialog()
+  const { values, entries, uid, add, update, keys, remove } = useMap(sectionInfo.content)
   const deps = [uid]
   const addTitle = useCallback(() => add({ order: keys().length, title: { content: '' } }), deps)
   const addText = useCallback(() => add({ order: keys().length, text: { content: '' } }), deps)
@@ -23,6 +35,10 @@ export const ReportSection: React.FunctionComponent<Props> = ({
     () => add({ order: keys().length, link: { label: '', url: '' } }),
     deps,
   )
+  const addTable = useCallback(() => add({ order: keys().length, table: { id: '' } }), deps)
+  const addGraph = useCallback(() => add({ order: keys().length, graph: { label: '' } }), deps)
+  const addImages = useCallback(() => add({ order: keys().length, images: [] }), deps)
+  const addFile = useCallback(() => add({ order: keys().length, file: null }), deps)
 
   useEffect(() => updateSectionInfo({ ...sectionInfo, content: values() }), deps)
 
@@ -45,22 +61,41 @@ export const ReportSection: React.FunctionComponent<Props> = ({
         </Box>
         <Box sx={{ display: 'flex' }}>
           <ToolbarMenu
-            buttonLabel={'Adaugă'}
+            icon={<AddOutlinedIcon />}
             menuOptions={[
               { label: 'Titlu', onClick: addTitle },
               { label: 'Paragraf', onClick: addText },
               { label: 'Link', onClick: addLink },
+              { label: 'Images', onClick: addImages },
+              { label: 'Fisier', onClick: addFile },
+              { label: 'Grafic', onClick: addGraph },
+              { label: 'Tabel', onClick: addTable },
             ]}
           />
+
+          <IconButton
+            onClick={() =>
+              dialog.openDialog({
+                title: 'Esti sigur ca vrei sa stergi sectiunea?',
+                description: 'Tot continutul din sectiune nu mai poate fi recuperat.',
+                onConfirm: removeSection,
+              })
+            }
+            size={'small'}
+          >
+            <DeleteOutlinedIcon color={'error'} />
+          </IconButton>
         </Box>
       </Box>
       <Box sx={{ width: 1 }}>
         {entries().map(([uid, content]) => (
           <ReportContentElement
             key={uid}
-            images={[]}
+            entityId={entityId}
+            entityType={entityType}
             contentInfo={content}
             updateContentInfo={(contentInfo) => update(uid, contentInfo)}
+            removeContent={() => remove(uid)}
           />
         ))}
       </Box>

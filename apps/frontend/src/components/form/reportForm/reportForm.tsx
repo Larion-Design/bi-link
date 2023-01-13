@@ -1,18 +1,19 @@
+import React from 'react'
 import Box from '@mui/material/Box'
 import Grid from '@mui/material/Grid'
 import { ConnectedEntity, EntityType, ReportAPIInput } from 'defs'
 import { FormikProps, withFormik } from 'formik'
-import React from 'react'
 import { AutocompleteField } from '../autocompleteField'
 import { InputField } from '../inputField'
+import { ReportSections } from './reportSections'
 
 type Props = {
-  entityId: string
-  entityType: EntityType
-  reportId: string
-  reportInfo: ReportAPIInput
-  createReport: (data: ReportAPIInput) => Promise<void> | void
-  updateReport: (reportId: string, data: ReportAPIInput) => Promise<void> | void
+  entityId?: string
+  entityType?: EntityType
+  reportId?: string
+  reportInfo?: ReportAPIInput
+  reportType: string
+  onSubmit: (reportInfo: ReportAPIInput) => void | Promise<void>
 }
 
 const Form: React.FunctionComponent<Props & FormikProps<ReportAPIInput>> = ({
@@ -45,7 +46,16 @@ const Form: React.FunctionComponent<Props & FormikProps<ReportAPIInput>> = ({
               suggestions={['Raport de informare']}
             />
           </Grid>
-          <Grid item xs={12}></Grid>
+          <Grid item xs={12}>
+            <ReportSections
+              entityId={entityId}
+              entityType={entityType}
+              sections={values.sections}
+              updateSections={(sections) => {
+                setFieldValue('sections', sections)
+              }}
+            />
+          </Grid>
         </Grid>
       </form>
     </Box>
@@ -53,20 +63,23 @@ const Form: React.FunctionComponent<Props & FormikProps<ReportAPIInput>> = ({
 }
 
 export const ReportForm = withFormik<Props, ReportAPIInput>({
-  mapPropsToValues: ({ entityId, entityType, reportInfo }) =>
-    reportInfo ?? createReportInitialValues(entityId, entityType),
+  mapPropsToValues: ({ entityId, entityType, reportInfo, reportType }) =>
+    reportInfo ?? createReportInitialValues(reportType, entityId, entityType),
   validate: async (values, { reportId }) => Promise.resolve(),
   validateOnChange: false,
   validateOnMount: false,
   validateOnBlur: false,
-  handleSubmit: (values, { props: { reportId, createReport, updateReport } }) =>
-    reportId ? updateReport(reportId, values) : createReport(values),
+  handleSubmit: (values, { props: { onSubmit } }) => onSubmit(values),
 })(Form)
 
-const createReportInitialValues = (entityId: string, entityType: EntityType): ReportAPIInput => {
+const createReportInitialValues = (
+  type: string,
+  entityId: string,
+  entityType: EntityType,
+): ReportAPIInput => {
   const reportInfo: ReportAPIInput = {
     name: '',
-    type: '',
+    type,
     isTemplate: false,
     sections: [],
   }

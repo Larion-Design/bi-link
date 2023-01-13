@@ -1,6 +1,6 @@
 {
   "name": "defs",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "private": true,
   "description": "BI Link types and definitions",
   "main": "dist/index.js",

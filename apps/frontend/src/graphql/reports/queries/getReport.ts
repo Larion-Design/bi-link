@@ -1,7 +1,5 @@
-import { gql, useLazyQuery, useQuery } from '@apollo/client'
+import { gql, useLazyQuery } from '@apollo/client'
 import { ReportAPIOutput } from 'defs'
-
-type EntityType = 'PERSON' | 'COMPANY' | 'PROPERTY' | 'INCIDENT'
 
 type Params = {
   id: string
@@ -53,6 +51,11 @@ const request = gql`
           file {
             fileId
             isHidden
+            name
+            description
+          }
+          graph {
+            label
           }
         }
       }

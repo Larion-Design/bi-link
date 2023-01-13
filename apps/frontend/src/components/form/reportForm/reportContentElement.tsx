@@ -1,106 +1,102 @@
 import React, { useMemo, useState } from 'react'
-import Button from '@mui/material/Button'
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import Accordion from '@mui/material/Accordion'
-import AccordionDetails from '@mui/material/AccordionDetails'
-import AccordionSummary from '@mui/material/AccordionSummary'
-import AccordionActions from '@mui/material/AccordionActions'
-import { FileAPIInput, ReportContentAPIInput } from 'defs'
-import { useModal } from '../../modal/modalProvider'
+import { EntityType, ReportContentAPIInput } from 'defs'
+import { ReportContentFile } from './reportContent/reportContentFile'
+import { ContentElementContainer } from './reportContent/reportContentContainer'
+import { ReportContentGraph } from './reportContent/reportContentGraph'
+import { ReportContentImages } from './reportContent/reportContentImages'
 import { ReportContentLink } from './reportContent/reportContentLink'
+import { ReportContentTable } from './reportContent/reportContentTable'
 import { ReportContentText } from './reportContent/reportContentText'
 import { ReportContentTitle } from './reportContent/reportContentTitle'
 
 type Props = {
-  images: FileAPIInput[]
+  entityId?: string
+  entityType?: EntityType
   contentInfo: ReportContentAPIInput
   updateContentInfo: (contentInfo: ReportContentAPIInput) => void
+  removeContent: () => void
 }
 
 export const ReportContentElement: React.FunctionComponent<Props> = ({
-  images,
+  entityId,
+  entityType,
   contentInfo,
   updateContentInfo,
+  removeContent,
 }) => {
   const [expanded, setExpandedState] = useState(false)
-  const modal = useModal()
 
   const contentElement = useMemo(() => {
     if (contentInfo.link) {
       return (
-        <>
-          <AccordionSummary expandIcon={<ExpandMoreIcon />}>Link</AccordionSummary>
-          <AccordionDetails>
-            <ReportContentLink
-              linkInfo={contentInfo.link}
-              updateLink={(linkInfo) => updateContentInfo({ ...contentInfo, link: linkInfo })}
-            />
-          </AccordionDetails>
-        </>
+        <ContentElementContainer title={'Link'} removeContent={removeContent}>
+          <ReportContentLink
+            linkInfo={contentInfo.link}
+            updateLink={(linkInfo) => updateContentInfo({ ...contentInfo, link: linkInfo })}
+          />
+        </ContentElementContainer>
       )
     }
     if (contentInfo.text) {
       return (
-        <>
-          <AccordionSummary expandIcon={<ExpandMoreIcon />}>Paragraf</AccordionSummary>
-          <AccordionDetails>
-            <ReportContentText
-              textInfo={contentInfo.text}
-              updateText={(textInfo) => updateContentInfo({ ...contentInfo, text: textInfo })}
-            />
-          </AccordionDetails>
-        </>
+        <ContentElementContainer title={'Text'} removeContent={removeContent}>
+          <ReportContentText
+            textInfo={contentInfo.text}
+            updateText={(textInfo) => updateContentInfo({ ...contentInfo, text: textInfo })}
+          />
+        </ContentElementContainer>
       )
     }
     if (contentInfo.title) {
       return (
-        <>
-          <AccordionSummary expandIcon={<ExpandMoreIcon />}>Titlu</AccordionSummary>
-          <AccordionDetails>
-            <ReportContentTitle
-              titleInfo={contentInfo.title}
-              updateTitle={(titleInfo) => updateContentInfo({ ...contentInfo, title: titleInfo })}
-            />
-          </AccordionDetails>
-        </>
+        <ContentElementContainer title={'Text'} removeContent={removeContent}>
+          <ReportContentTitle
+            titleInfo={contentInfo.title}
+            updateTitle={(titleInfo) => updateContentInfo({ ...contentInfo, title: titleInfo })}
+          />
+        </ContentElementContainer>
       )
     }
     if (contentInfo.images) {
       return (
-        <>
-          <AccordionActions>
-            <Button
-              variant={'contained'}
-              onClick={() =>
-                modal.openImageSelector(
-                  images,
-                  (images) => updateContentInfo({ ...contentInfo, images }),
-                  contentInfo.images,
-                )
-              }
-            >
-              Adaugă imagini
-            </Button>
-          </AccordionActions>
-          <AccordionSummary expandIcon={<ExpandMoreIcon />}>Imagini</AccordionSummary>
-          <AccordionDetails></AccordionDetails>
-        </>
+        <ContentElementContainer title={'Imagini'} removeContent={removeContent}>
+          <ReportContentImages
+            images={[]}
+            selectedImages={contentInfo.images}
+            updateImages={(images) => updateContentInfo({ ...contentInfo, images })}
+          />
+        </ContentElementContainer>
       )
     }
     if (contentInfo.file) {
       return (
-        <>
-          <AccordionSummary expandIcon={<ExpandMoreIcon />}>Fisier</AccordionSummary>
-          <AccordionDetails></AccordionDetails>
-        </>
+        <ContentElementContainer title={'Imagini'} removeContent={removeContent}>
+          <ReportContentFile fileInfo={contentInfo.file} />
+        </ContentElementContainer>
       )
     }
     if (contentInfo.table) {
       return (
-        <>
-          <AccordionSummary expandIcon={<ExpandMoreIcon />}>Tabel</AccordionSummary>
-          <AccordionDetails></AccordionDetails>
-        </>
+        <ContentElementContainer title={'Tabel'} removeContent={removeContent}>
+          <ReportContentTable
+            entityId={entityId}
+            entityType={entityType}
+            tableInfo={contentInfo.table}
+            updateTable={(table) => updateContentInfo({ ...contentInfo, table })}
+          />
+        </ContentElementContainer>
+      )
+    }
+    if (contentInfo.graph) {
+      return (
+        <ContentElementContainer title={'Grafic relational'} removeContent={removeContent}>
+          <ReportContentGraph
+            entityId={entityId}
+            graphInfo={contentInfo.graph}
+            updateGraph={(graph) => updateContentInfo({ ...contentInfo, graph })}
+          ></ReportContentGraph>
+        </ContentElementContainer>
       )
     }
     return null

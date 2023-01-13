@@ -8,6 +8,7 @@ import { routes } from '../../../router/routes'
 import { Loader } from '../../../components/loader/loader'
 import { PersonAPIInput } from 'defs'
 import { PersonDetails } from '../../../components/page/personDetails'
+import { getPersonFullName } from '../../../utils/person'
 
 export const EditPerson: React.FunctionComponent = () => {
   const { personId } = useParams()
@@ -22,11 +23,7 @@ export const EditPerson: React.FunctionComponent = () => {
 
   useEffect(() => {
     if (personId) {
-      void requestPersonInfo({
-        variables: {
-          personId,
-        },
-      })
+      void requestPersonInfo({ variables: { personId } })
     }
   }, [personId])
 
@@ -50,13 +47,7 @@ export const EditPerson: React.FunctionComponent = () => {
 
   return (
     <DashboardPage
-      title={
-        fetchLoading
-          ? 'Actualizează persoana'
-          : `${fetchData?.getPersonInfo?.firstName ?? ''} ${
-              fetchData?.getPersonInfo?.lastName ?? ''
-            }`
-      }
+      title={fetchLoading ? 'Actualizează persoana' : getPersonFullName(fetchData?.getPersonInfo)}
     >
       <Loader visible={fetchLoading} message={'Se incarca datele persoanei...'} />
       {!!fetchData?.getPersonInfo && (
@@ -66,12 +57,7 @@ export const EditPerson: React.FunctionComponent = () => {
           readonly={false}
           onSubmit={(personInfo: PersonAPIInput) => {
             if (personId) {
-              void updatePerson({
-                variables: {
-                  personId,
-                  personInfo,
-                },
-              })
+              void updatePerson({ variables: { personId, personInfo } })
             }
           }}
         />

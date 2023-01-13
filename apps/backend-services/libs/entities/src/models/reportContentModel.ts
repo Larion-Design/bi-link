@@ -1,3 +1,4 @@
+import { GraphModel, GraphSchema } from '@app/entities/models/reports/graphModel'
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
 import { Types } from 'mongoose'
 import { FileModel } from '@app/entities/models/fileModel'
@@ -29,6 +30,9 @@ export class ReportContentModel implements ReportContent {
 
   @Prop({ type: [LinkSchema], isRequired: false })
   link?: LinkModel
+
+  @Prop({ type: [GraphSchema], isRequired: false })
+  graph?: GraphModel
 }
 
 export const ReportContentSchema = SchemaFactory.createForClass(ReportContentModel)

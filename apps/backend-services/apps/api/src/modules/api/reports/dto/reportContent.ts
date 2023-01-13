@@ -1,6 +1,7 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql'
 import { ReportContent as ReportContentType } from 'defs'
 import { File } from '../../files/dto/file'
+import { Graph } from './graph'
 import { Link } from './link'
 import { Table } from './table'
 import { Text } from './text'
@@ -28,4 +29,7 @@ export class ReportContent implements ReportContentType {
 
   @Field(() => Table, { nullable: true })
   table?: Table
+
+  @Field(() => Graph, { nullable: true })
+  graph?: Graph
 }

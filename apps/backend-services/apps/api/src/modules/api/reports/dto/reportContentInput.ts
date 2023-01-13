@@ -1,6 +1,7 @@
 import { Field, InputType, Int } from '@nestjs/graphql'
 import { ReportContentAPIInput } from 'defs'
 import { FileInput } from '../../files/dto/fileInput'
+import { GraphInput } from './graphInput'
 import { LinkInput } from './linkInput'
 import { TableInput } from './tableInput'
 import { TextInput } from './textInput'
@@ -28,4 +29,7 @@ export class ReportContentInput implements ReportContentAPIInput {
 
   @Field(() => TableInput, { nullable: true })
   table?: TableInput
+
+  @Field(() => GraphInput, { nullable: true })
+  graph?: GraphInput
 }

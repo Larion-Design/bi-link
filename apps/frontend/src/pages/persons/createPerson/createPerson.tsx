@@ -31,11 +31,7 @@ export const CreatePerson: React.FunctionComponent = () => {
         readonly={false}
         onSubmit={(data: PersonAPIInput) => {
           if (!loading) {
-            void createPerson({
-              variables: {
-                data,
-              },
-            })
+            void createPerson({ variables: { data } })
           }
         }}
       />

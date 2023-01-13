@@ -57,6 +57,7 @@ import { CreateReport } from './reports/mutations/createReport'
 import { UpdateReport } from './reports/mutations/updateReport'
 import { GetReport } from './reports/queries/getReport'
 import { GetReports } from './reports/queries/getReports'
+import { GetReportTemplates } from './reports/queries/getReportTemplates'
 import { ReportAPIService } from './reports/services/reportAPIService'
 import { ReportContentAPIService } from './reports/services/reportContentAPIService'
 import { ChangeUserRole } from './users/mutations/changeUserRole'
@@ -134,6 +135,7 @@ import { GetUsers } from './users/queries/getUsers'
     DisableUser,
     GetReport,
     GetReports,
+    GetReportTemplates,
     CreateReport,
     UpdateReport,
     GetFileInfo,

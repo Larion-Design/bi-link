@@ -59,4 +59,18 @@ export class ReportsService {
       this.logger.error(e)
     }
   }
+
+  getReportTemplates = async () => {
+    try {
+      return this.reportModel.find(
+        { isTemplate: true },
+        {
+          _id: 1,
+          name: 1,
+        },
+      )
+    } catch (e) {
+      this.logger.error(e)
+    }
+  }
 }

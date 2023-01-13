@@ -1,7 +1,5 @@
-import AddOutlinedIcon from '@mui/icons-material/AddOutlined'
-import Button from '@mui/material/Button'
-import Divider from '@mui/material/Divider'
-import React, { useRef, useState } from 'react'
+import React, { ReactNode, useRef, useState } from 'react'
+import IconButton from '@mui/material/IconButton'
 import MuiMenu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 
@@ -11,11 +9,11 @@ type MenuOption = {
 }
 
 type Props = {
-  buttonLabel: string
+  icon: ReactNode
   menuOptions: MenuOption[]
 }
 
-export const ToolbarMenu: React.FunctionComponent<Props> = ({ buttonLabel, menuOptions }) => {
+export const ToolbarMenu: React.FunctionComponent<Props> = ({ icon, menuOptions }) => {
   const menuButtonRef = useRef<Element | null>(null)
   const [isMenuOpen, setMenuState] = useState(false)
 
@@ -35,15 +33,13 @@ export const ToolbarMenu: React.FunctionComponent<Props> = ({ buttonLabel, menuO
           ))}
         </MuiMenu>
       )}
-      <Button
+      <IconButton
         size={'small'}
-        variant={'contained'}
-        startIcon={<AddOutlinedIcon />}
         onClick={() => setMenuState(true)}
         ref={(ref) => (menuButtonRef.current = ref)}
       >
-        {buttonLabel}
-      </Button>
+        {icon}
+      </IconButton>
     </>
   )
 }

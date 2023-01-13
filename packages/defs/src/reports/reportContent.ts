@@ -1,3 +1,4 @@
+import { Graph, GraphAPI } from './graph'
 import { Title, TitleAPI } from './title'
 import { Table, TableAPI } from './table'
 import { Link, LinkAPI } from './link'
@@ -12,10 +13,11 @@ export interface ReportContent {
   file?: File
   table?: Table
   link?: Link
+  graph?: Graph
 }
 
 interface ReportContentAPI
-  extends Omit<ReportContent, 'images' | 'title' | 'text' | 'file' | 'table' | 'link'> {}
+  extends Omit<ReportContent, 'images' | 'title' | 'text' | 'file' | 'table' | 'link' | 'graph'> {}
 
 export interface ReportContentAPIInput extends ReportContentAPI {
   title?: TitleAPI
@@ -24,6 +26,7 @@ export interface ReportContentAPIInput extends ReportContentAPI {
   file?: FileAPIInput
   table?: TableAPI
   link?: LinkAPI
+  graph?: GraphAPI
 }
 
 export interface ReportContentAPIOutput extends ReportContentAPI {
@@ -33,4 +36,5 @@ export interface ReportContentAPIOutput extends ReportContentAPI {
   file?: FileAPIOutput
   table?: TableAPI
   link?: LinkAPI
+  graph?: GraphAPI
 }

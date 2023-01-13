@@ -1,4 +1,7 @@
-import React, { useCallback } from 'react'
+import Box from '@mui/material/Box'
+import Slider from '@mui/material/Slider'
+import Typography from '@mui/material/Typography'
+import React, { useCallback, useMemo } from 'react'
 import 'reactflow/dist/style.css'
 import ReactFlow, {
   Background,
@@ -14,8 +17,7 @@ import ReactFlow, {
 import { useTheme } from '@mui/material'
 import Paper from '@mui/material/Paper'
 import { EntityType } from 'defs'
-import { DepthControl } from './controls/depthControl'
-import { FilterControl } from './controls/filterControl'
+import { MultiSelect } from '../../form/multiSelect'
 import { PrintControl } from './controls/printControl'
 import { PersonNode } from './nodes/personNode'
 import { CompanyNode } from './nodes/companyNode'
@@ -65,6 +67,27 @@ export const EntityGraph: React.FunctionComponent<Props> = ({
     [onRelationshipSelected],
   )
 
+  const nodeTypes = useMemo(
+    () => ({
+      personNode: PersonNode,
+      companyNode: CompanyNode,
+      propertyNode: PropertyNode,
+      incidentNode: IncidentNode,
+    }),
+    [],
+  )
+
+  const marks = useMemo(
+    () => [
+      { value: 1, label: 1 },
+      { value: 2, label: 2 },
+      { value: 3, label: 3 },
+      { value: 4, label: 4 },
+      { value: 5, label: 5 },
+    ],
+    [],
+  )
+
   return (
     <ReactFlow
       nodes={nodes}
@@ -84,29 +107,52 @@ export const EntityGraph: React.FunctionComponent<Props> = ({
           Grafic relational
         </Paper>
       </Panel>
+      <Panel position={'top-right'}>
+        <Paper variant={'outlined'} sx={{ p: 2, width: 250 }}>
+          <Box sx={{ width: 1, mb: 2 }}>
+            <Typography gutterBottom>Nivel de complexitate</Typography>
+            <Slider
+              aria-label={'Nivel de complexitate'}
+              size={'small'}
+              value={depth}
+              min={1}
+              max={5}
+              marks={marks}
+              onChangeCommitted={(event, value) => updateDepth(+value)}
+            />
+          </Box>
+          <Box sx={{ width: 1, mb: 3 }}>
+            <MultiSelect
+              label={'Tipuri de entitati'}
+              options={allEntities.map((entityType) => ({
+                value: entityType,
+                label: entityTypeLocale[entityType],
+                selected: visibleEntities.includes(entityType),
+              }))}
+              onSelectedOptionsChange={setVisibleEntities}
+            />
+          </Box>
+
+          <Box sx={{ width: 1 }}>
+            <MultiSelect
+              label={'Tipuri de relatii'}
+              options={allRelationships.map((relationshipType) => ({
+                value: relationshipType,
+                label: relationshipType,
+                selected: visibleRelationships.includes(relationshipType),
+              }))}
+              onSelectedOptionsChange={setVisibleRelationships}
+            />
+          </Box>
+        </Paper>
+      </Panel>
       <Background color={theme.palette.grey[200]} variant={BackgroundVariant.Lines} />
       <Controls>
         <PrintControl />
-        <DepthControl depth={depth} updateDepth={updateDepth} />
-        <FilterControl
-          allEntities={allEntities}
-          visibleEntities={visibleEntities}
-          updateVisibleEntities={setVisibleEntities}
-          allRelationships={allRelationships}
-          visibleRelationships={visibleRelationships}
-          updateVisibleRelationships={setVisibleRelationships}
-        />
       </Controls>
       <MiniMap nodeStrokeWidth={3} zoomable pannable />
     </ReactFlow>
   )
-}
-
-const nodeTypes = {
-  personNode: PersonNode,
-  companyNode: CompanyNode,
-  propertyNode: PropertyNode,
-  incidentNode: IncidentNode,
 }
 
 const nodeTypeToEntityType: Record<NodeTypes, EntityType> = {
@@ -114,4 +160,11 @@ const nodeTypeToEntityType: Record<NodeTypes, EntityType> = {
   companyNode: 'COMPANY',
   propertyNode: 'PROPERTY',
   incidentNode: 'INCIDENT',
+}
+
+const entityTypeLocale: Record<EntityType, string> = {
+  PERSON: 'Persoane',
+  COMPANY: 'Companii',
+  PROPERTY: 'Proprietati',
+  INCIDENT: 'Incidente',
 }
