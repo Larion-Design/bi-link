@@ -41,64 +41,66 @@ export const ReportSection: React.FunctionComponent<Props> = ({
 
   useEffect(() => updateSectionInfo({ ...sectionInfo, content: values() }), deps)
 
-  return (
-    <>
-      <Box sx={{ width: 1 }}>
-        <Box
-          sx={{
-            width: 1,
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-          }}
-        >
-          <Box sx={{ width: 0.5 }}>
-            <InputField
-              label={'Nume sectiune'}
-              value={sectionInfo.name}
-              onChange={(value) => updateSectionInfo({ ...sectionInfo, name: value })}
-            />
-          </Box>
-          <Box sx={{ display: 'flex' }}>
-            <ToolbarMenu
-              icon={<AddOutlinedIcon />}
-              menuOptions={[
-                { label: 'Titlu', onClick: addTitle },
-                { label: 'Paragraf', onClick: addText },
-                { label: 'Link', onClick: addLink },
-                { label: 'Images', onClick: addImages },
-                { label: 'Fisier', onClick: addFile },
-                { label: 'Grafic', onClick: addGraph },
-                { label: 'Tabel', onClick: addTable },
-              ]}
-            />
+  const openDialogToRemoveSection = useCallback(
+    () =>
+      dialog.openDialog({
+        title: 'Esti sigur ca vrei sa stergi sectiunea?',
+        description: 'Tot continutul din sectiune nu mai poate fi recuperat.',
+        onConfirm: removeSection,
+      }),
+    [dialog, uid],
+  )
 
-            <ActionButton
-              label={'Sterge sectiunea de raport'}
-              icon={<DeleteOutlinedIcon color={'error'} fontSize={'small'} />}
-              onClick={() =>
-                dialog.openDialog({
-                  title: 'Esti sigur ca vrei sa stergi sectiunea?',
-                  description: 'Tot continutul din sectiune nu mai poate fi recuperat.',
-                  onConfirm: removeSection,
-                })
-              }
-            />
-          </Box>
+  return (
+    <Box sx={{ width: 1 }}>
+      <Box
+        sx={{
+          width: 1,
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+        }}
+      >
+        <Box sx={{ width: 0.5 }}>
+          <InputField
+            label={'Nume sectiune'}
+            value={sectionInfo.name}
+            onChange={(value) => updateSectionInfo({ ...sectionInfo, name: value })}
+          />
         </Box>
-        <Box sx={{ width: 1 }}>
-          {entries().map(([uid, content]) => (
-            <ReportContentElement
-              key={uid}
-              entityId={entityId}
-              entityType={entityType}
-              contentInfo={content}
-              updateContentInfo={(contentInfo) => update(uid, contentInfo)}
-              removeContent={() => remove(uid)}
-            />
-          ))}
+        <Box sx={{ display: 'flex' }}>
+          <ToolbarMenu
+            icon={<AddOutlinedIcon />}
+            menuOptions={[
+              { label: 'Titlu', onClick: addTitle },
+              { label: 'Paragraf', onClick: addText },
+              { label: 'Link', onClick: addLink },
+              { label: 'Images', onClick: addImages },
+              { label: 'Fisier', onClick: addFile },
+              { label: 'Grafic', onClick: addGraph },
+              { label: 'Tabel', onClick: addTable },
+            ]}
+          />
+
+          <ActionButton
+            label={'Sterge sectiunea de raport'}
+            icon={<DeleteOutlinedIcon color={'error'} fontSize={'small'} />}
+            onClick={openDialogToRemoveSection}
+          />
         </Box>
       </Box>
-    </>
+      <Box sx={{ width: 1 }}>
+        {entries().map(([uid, content]) => (
+          <ReportContentElement
+            key={uid}
+            entityId={entityId}
+            entityType={entityType}
+            contentInfo={content}
+            updateContentInfo={(contentInfo) => update(uid, contentInfo)}
+            removeContent={() => remove(uid)}
+          />
+        ))}
+      </Box>
+    </Box>
   )
 }

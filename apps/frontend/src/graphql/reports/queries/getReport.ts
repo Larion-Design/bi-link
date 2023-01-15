@@ -1,12 +1,12 @@
 import { gql, useLazyQuery } from '@apollo/client'
-import { ReportAPIOutput } from 'defs'
+import { ReportAPIInput, ReportAPIOutput } from 'defs'
 
 type Params = {
   id: string
 }
 
 type Response = {
-  getReports: ReportAPIOutput[]
+  getReport: ReportAPIInput
 }
 
 const request = gql`

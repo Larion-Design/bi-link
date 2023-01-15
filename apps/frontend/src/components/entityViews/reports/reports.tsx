@@ -26,6 +26,8 @@ export const Reports: React.FunctionComponent<Props> = ({ entityId, entityType }
     setReportId(null)
   }, deps)
 
+  const viewReportsList = useCallback(() => setView('list'), [setView])
+
   return (
     <Box sx={{ width: 1, p: 4, mt: 2 }}>
       {view === 'list' && (
@@ -37,7 +39,12 @@ export const Reports: React.FunctionComponent<Props> = ({ entityId, entityType }
         />
       )}
       {['create', 'edit'].includes(view) && (
-        <ReportDetails reportId={reportId} entityId={entityId} entityType={entityType} />
+        <ReportDetails
+          reportId={reportId}
+          entityId={entityId}
+          entityType={entityType}
+          navigateToReportsList={viewReportsList}
+        />
       )}
     </Box>
   )
