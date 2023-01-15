@@ -1,3 +1,5 @@
+import { EntityType } from 'defs'
+
 export const MICROSERVICES = {
   FILES_PARSER: {
     id: 'FILES_PARSER',
@@ -21,5 +23,5 @@ export const MICROSERVICES = {
 
 export type EntityInfo = {
   entityId: string
-  entityType: 'PERSON' | 'COMPANY' | 'INCIDENT' | 'FILE' | 'PROPERTY'
+  entityType: EntityType | 'FILE' | 'REPORT'
 }

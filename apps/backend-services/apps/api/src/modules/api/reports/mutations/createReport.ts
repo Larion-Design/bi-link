@@ -1,3 +1,4 @@
+import { EntityEventsService } from '@app/pub/services/entityEventsService'
 import { UserActionsService } from '@app/pub/services/userActionsService'
 import { UseGuards } from '@nestjs/common'
 import { Args, ArgsType, Field, Mutation, Resolver } from '@nestjs/graphql'
@@ -20,12 +21,18 @@ export class CreateReport {
   constructor(
     private readonly reportAPIService: ReportAPIService,
     private readonly userActionsService: UserActionsService,
+    private readonly entityEventsService: EntityEventsService,
   ) {}
 
   @Mutation(() => String)
   @UseGuards(FirebaseAuthGuard)
   async createReport(@CurrentUser() { _id }: User, @Args() { data }: Params) {
     const reportId = await this.reportAPIService.createReport(data)
+
+    this.entityEventsService.emitEntityCreated({
+      entityId: reportId,
+      entityType: 'REPORT',
+    })
 
     this.userActionsService.recordAction({
       eventType: UserActions.ENTITY_CREATED,
