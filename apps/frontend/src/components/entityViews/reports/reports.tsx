@@ -41,6 +41,7 @@ export const Reports: React.FunctionComponent<Props> = ({ entityId, entityType }
       {['create', 'edit'].includes(view) && (
         <ReportDetails
           reportId={reportId}
+          reportType={''}
           entityId={entityId}
           entityType={entityType}
           navigateToReportsList={viewReportsList}

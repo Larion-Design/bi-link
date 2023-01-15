@@ -16,6 +16,7 @@ const request = gql`
       _id
       name
       type
+      updatedAt
     }
   }
 `

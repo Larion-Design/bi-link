@@ -39,6 +39,12 @@ export const ReportsList: React.FunctionComponent<Props> = ({
         type: 'string',
       },
       {
+        field: 'type',
+        headerName: 'Tip de raport',
+        flex: 1.5,
+        type: 'string',
+      },
+      {
         field: 'actions',
         headerName: 'Actiuni',
         flex: 1,
