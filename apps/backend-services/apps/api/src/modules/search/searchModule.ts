@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common'
 import { ElasticsearchModule } from '@nestjs/elasticsearch'
 import { ConfigModule, ConfigService } from '@nestjs/config'
+import { SearchFilesService } from './services/searchFilesService'
 import { SearchPersonsService } from './services/searchPersonsService'
 import { SearchHistoryService } from './services/searchHistoryService'
 import { SearchCompaniesService } from './services/searchCompaniesService'
@@ -32,6 +33,7 @@ import { SearchPropertiesService } from './services/searchPropertiesService'
     SearchPropertiesService,
     FrequentCustomFieldsService,
     SimilarEntitiesService,
+    SearchFilesService,
   ],
   exports: [
     SearchPersonsService,
@@ -42,6 +44,7 @@ import { SearchPropertiesService } from './services/searchPropertiesService'
     SearchPropertiesService,
     FrequentCustomFieldsService,
     SimilarEntitiesService,
+    SearchFilesService,
   ],
 })
 export class SearchModule {}

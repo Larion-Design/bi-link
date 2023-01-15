@@ -1,6 +1,6 @@
 import { Args, ArgsType, Field, Query, Resolver } from '@nestjs/graphql'
 import { UseGuards } from '@nestjs/common'
-import { FilesService } from '@app/entities/services/filesService'
+import { SearchFilesService } from '../../../search/services/searchFilesService'
 import { FirebaseAuthGuard } from '../../../users/guards/FirebaseAuthGuard'
 import { File } from '../dto/file'
 
@@ -11,12 +11,13 @@ class Params {
 }
 
 @Resolver(() => File)
-export class GetFileInfo {
-  constructor(private readonly filesService: FilesService) {}
+export class GetFileContent {
+  constructor(private readonly searchFilesService: SearchFilesService) {}
 
-  @Query(() => File)
+  @Query(() => String, { nullable: true })
   @UseGuards(FirebaseAuthGuard)
   async getFileInfo(@Args() { fileId }: Params) {
-    return this.filesService.getFile(fileId)
+    const fileContent = await this.searchFilesService.getFileContent(fileId)
+    return fileContent?.length > 0 ? fileContent : null
   }
 }

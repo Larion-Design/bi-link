@@ -12,7 +12,7 @@ class Params {
 
 @Resolver(() => File)
 export class GetFilesInfo {
-  constructor(protected filesService: FilesService) {}
+  constructor(private readonly filesService: FilesService) {}
 
   @Query(() => [File])
   @UseGuards(FirebaseAuthGuard)

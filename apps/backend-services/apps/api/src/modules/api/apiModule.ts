@@ -21,6 +21,7 @@ import { LocationService } from './companies/services/locationService'
 import { CustomFieldsService } from './customFields/services/customFieldsService'
 import { FileUploadController } from './files/controllers/fileUploadController'
 import { FileUrl } from './files/fieldResolvers'
+import { GetFileContent } from './files/queries/getFileContent'
 import { GetFileInfo } from './files/queries/getFileInfo'
 import { GetFilesInfo } from './files/queries/getFilesInfo'
 import { FileAPIService } from './files/services/fileAPIService'
@@ -140,6 +141,7 @@ import { GetUsers } from './users/queries/getUsers'
     UpdateReport,
     GetFileInfo,
     GetFilesInfo,
+    GetFileContent,
   ],
   controllers: [FileUploadController],
 })
