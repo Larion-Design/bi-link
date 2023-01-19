@@ -1,5 +1,5 @@
-import { ReportModel } from '@app/entities/models/reportModel'
-import { ReportSectionModel } from '@app/entities/models/reportSectionModel'
+import { ReportModel } from '@app/entities/models/reports/reportModel'
+import { ReportSectionModel } from '@app/entities/models/reports/reportSectionModel'
 import { CompaniesService } from '@app/entities/services/companiesService'
 import { IncidentsService } from '@app/entities/services/incidentsService'
 import { PersonsService } from '@app/entities/services/personsService'
@@ -9,6 +9,7 @@ import { Injectable } from '@nestjs/common'
 import { ReportInput } from '../dto/reportInput'
 import { ReportSectionInput } from '../dto/reportSectionInput'
 import { ReportContentAPIService } from './reportContentAPIService'
+import { ReportRefsAPIService } from './reportRefsAPIService'
 
 @Injectable()
 export class ReportAPIService {
@@ -19,6 +20,7 @@ export class ReportAPIService {
     private readonly propertiesService: PropertiesService,
     private readonly reportsService: ReportsService,
     private readonly reportContentAPIService: ReportContentAPIService,
+    private readonly reportRefsAPIService: ReportRefsAPIService,
   ) {}
 
   createReport = async (reportInput: ReportInput) => {
@@ -54,6 +56,7 @@ export class ReportAPIService {
       }
     }
 
+    reportModel.refs = await this.reportRefsAPIService.createRefsModels(reportInput.refs)
     reportModel.sections = await Promise.all(reportInput.sections.map(this.createReportSections))
     return reportModel
   }

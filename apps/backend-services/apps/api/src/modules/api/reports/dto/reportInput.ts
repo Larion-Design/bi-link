@@ -1,6 +1,7 @@
 import { Field, InputType } from '@nestjs/graphql'
 import { ReportAPIInput } from 'defs'
 import { ConnectedEntityInput } from '../../common/dto/connectedEntityInput'
+import { DataRefInput } from './refs/dataRefInput'
 import { ReportSectionInput } from './reportSectionInput'
 
 @InputType()
@@ -28,4 +29,7 @@ export class ReportInput implements ReportAPIInput {
 
   @Field(() => ConnectedEntityInput, { nullable: true })
   readonly incident?: ConnectedEntityInput
+
+  @Field(() => [DataRefInput])
+  readonly refs: DataRefInput[]
 }

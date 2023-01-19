@@ -1,7 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common'
 import { InjectModel } from '@nestjs/mongoose'
 import { Model, ProjectionType } from 'mongoose'
-import { ReportDocument, ReportModel } from '@app/entities/models/reportModel'
+import { ReportDocument, ReportModel } from '@app/entities/models/reports/reportModel'
 import { EntityInfo } from '@app/pub/constants'
 
 @Injectable()

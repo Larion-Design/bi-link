@@ -1,5 +1,5 @@
 import { Field, ObjectType } from '@nestjs/graphql'
-import { ActivityEvent as ActivityEventType } from 'defs'
+import { ActivityEvent as ActivityEventType, EntityType } from 'defs'
 
 @ObjectType()
 export class ActivityEvent implements ActivityEventType {
@@ -18,6 +18,6 @@ export class ActivityEvent implements ActivityEventType {
   @Field()
   target: string
 
-  @Field()
-  targetType: string
+  @Field(() => String)
+  targetType: EntityType
 }
