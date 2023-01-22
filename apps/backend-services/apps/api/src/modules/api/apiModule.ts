@@ -61,6 +61,7 @@ import { GetReports } from './reports/queries/getReports'
 import { GetReportTemplates } from './reports/queries/getReportTemplates'
 import { ReportAPIService } from './reports/services/reportAPIService'
 import { ReportContentAPIService } from './reports/services/reportContentAPIService'
+import { ReportRefsAPIService } from './reports/services/reportRefsAPIService'
 import { ChangeUserRole } from './users/mutations/changeUserRole'
 import { DisableUser } from './users/mutations/disableUser'
 import { UserRegistered } from './users/mutations/userRegistered'
@@ -96,6 +97,7 @@ import { GetUsers } from './users/queries/getUsers'
     PropertyOwnerAPIService,
     ReportAPIService,
     ReportContentAPIService,
+    ReportRefsAPIService,
 
     /* Resolvers */
     GetEntitiesGraph,

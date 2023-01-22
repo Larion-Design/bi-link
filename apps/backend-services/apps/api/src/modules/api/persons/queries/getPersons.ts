@@ -17,6 +17,6 @@ export class GetPersons {
   @Query(() => [Person])
   @UseGuards(FirebaseAuthGuard)
   async getPersonsInfo(@Args() { personsIds }: Params) {
-    return personsIds.length ? this.personsService.findMultiplePersonsWithImage(personsIds) : []
+    return personsIds.length ? this.personsService.findMultiplePersons(personsIds) : []
   }
 }

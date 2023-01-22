@@ -39,31 +39,20 @@ export class CompaniesService {
   getCompanies = async (companiesIds: string[]) => {
     try {
       return this.companyModel
-        .find(
-          { _id: companiesIds },
-          {
-            _id: 1,
-            name: 1,
-            cui: 1,
-            registrationNumber: 1,
-          },
-        )
+        .find({ _id: companiesIds })
+        .populate({ path: 'files', model: this.fileModel })
+        .populate({ path: 'associates', model: this.associateModel })
+        .populate({ path: 'associates.person', model: this.personModel })
+        .populate({ path: 'associates.company', model: this.companyModel })
         .exec()
     } catch (error) {
       this.logger.error(error)
     }
   }
 
-  getCompaniesBasicInfo = async (companyId: string) => {
+  getCompaniesDocuments = async (companiesIds: string[]) => {
     try {
-      return this.companyModel
-        .findById(companyId, {
-          _id: 1,
-          name: 1,
-          cui: 1,
-          registrationNumber: 1,
-        })
-        .exec()
+      return this.companyModel.find({ _id: companiesIds }).exec()
     } catch (error) {
       this.logger.error(error)
     }

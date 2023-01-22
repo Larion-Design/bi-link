@@ -1,8 +1,6 @@
 import { Field, InputType } from '@nestjs/graphql'
 import { DataRefAPI } from 'defs'
 import { ConnectedEntityInput } from '../../../common/dto/connectedEntityInput'
-import { EntityInfoFieldInput } from './entityInfoFieldInput'
-import { RelationshipInfoFieldInput } from './relationshipInfoFieldInput'
 
 @InputType()
 export class DataRefInput implements DataRefAPI {
@@ -21,9 +19,12 @@ export class DataRefInput implements DataRefAPI {
   @Field(() => ConnectedEntityInput, { nullable: true })
   incident?: ConnectedEntityInput
 
-  @Field(() => EntityInfoFieldInput, { nullable: true })
-  entityInfo?: EntityInfoFieldInput
+  @Field({ nullable: true })
+  targetId?: string
 
-  @Field(() => RelationshipInfoFieldInput, { nullable: true })
-  relationshipInfo?: RelationshipInfoFieldInput
+  @Field({ nullable: true })
+  path?: string
+
+  @Field()
+  field: string
 }

@@ -13,14 +13,6 @@ import { PropertyOwnerModel, PropertyOwnerSchema } from '@app/entities/models/pr
 import { RelationshipModel, RelationshipSchema } from '@app/entities/models/relationshipModel'
 import { DataRefModel, DataRefSchema } from '@app/entities/models/reports/refs/dataRefModel'
 import {
-  EntityInfoFieldModel,
-  EntityInfoFieldSchema,
-} from '@app/entities/models/reports/refs/entityInfoFieldModel'
-import {
-  RelationshipInfoFieldModel,
-  RelationshipInfoFieldSchema,
-} from '@app/entities/models/reports/refs/relationshipInfoFieldModel'
-import {
   ReportContentModel,
   ReportContentSchema,
 } from '@app/entities/models/reports/reportContentModel'
@@ -63,8 +55,6 @@ import { ReportsService } from '@app/entities/services/reportsService'
       { name: TextModel.name, schema: TextSchema },
       { name: TitleModel.name, schema: TitleSchema },
       { name: DataRefModel.name, schema: DataRefSchema },
-      { name: EntityInfoFieldModel.name, schema: EntityInfoFieldSchema },
-      { name: RelationshipInfoFieldModel.name, schema: RelationshipInfoFieldSchema },
     ]),
   ],
   providers: [

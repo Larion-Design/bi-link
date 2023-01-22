@@ -4,14 +4,6 @@ import { CompanyDocument, CompanyModel } from '@app/entities/models/companyModel
 import { IncidentDocument, IncidentModel } from '@app/entities/models/incidentModel'
 import { PersonDocument, PersonModel } from '@app/entities/models/personModel'
 import { PropertyDocument, PropertyModel } from '@app/entities/models/propertyModel'
-import {
-  EntityInfoFieldModel,
-  EntityInfoFieldSchema,
-} from '@app/entities/models/reports/refs/entityInfoFieldModel'
-import {
-  RelationshipInfoFieldModel,
-  RelationshipInfoFieldSchema,
-} from '@app/entities/models/reports/refs/relationshipInfoFieldModel'
 import { DataRef } from 'defs'
 
 @Schema({ timestamps: false })
@@ -31,11 +23,14 @@ export class DataRefModel implements DataRef {
   @Prop({ type: Types.ObjectId, ref: IncidentModel.name, isRequired: false })
   incident?: IncidentDocument
 
-  @Prop({ type: [EntityInfoFieldSchema] })
-  entityInfo?: EntityInfoFieldModel
+  @Prop()
+  field: string
 
-  @Prop({ type: [RelationshipInfoFieldSchema] })
-  relationshipInfo?: RelationshipInfoFieldModel
+  @Prop({ isRequired: false })
+  path?: string
+
+  @Prop({ isRequired: false })
+  targetId: string
 }
 
 export type DataRefDocument = DataRefModel & Document

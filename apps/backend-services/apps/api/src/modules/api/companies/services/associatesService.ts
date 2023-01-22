@@ -17,24 +17,15 @@ export class AssociatesService {
     const personsAssociates = associates.filter(({ person }) => !!person?._id)
 
     if (personsAssociates.length) {
-      const personsModels = await this.personService.findPersonsModelsByIds(
+      const personsModels = await this.personService.getPersonsDocuments(
         personsAssociates.map(({ person: { _id } }) => _id),
       )
       return personsModels.map((personModel) => {
         const associateInfo = personsAssociates.find(
           ({ person: { _id } }) => _id === String(personModel._id),
         )
-        const associate = new AssociateModel()
-        associate.role = associateInfo.role
-        associate.startDate = associateInfo.startDate
-        associate.endDate = associateInfo.endDate
-        associate.isActive = associateInfo.isActive
-        associate.equity = associateInfo.equity
+        const associate = this.createAssociateModel(associateInfo)
         associate.person = personModel
-        associate.customFields = this.customFieldsService.getCustomFieldsDocumentsForInputData(
-          associateInfo.customFields,
-        )
-        associate._confirmed = associateInfo._confirmed
         return associate
       })
     }
@@ -45,24 +36,16 @@ export class AssociatesService {
     const companiesAssociates = associates.filter(({ company }) => !!company?._id)
 
     if (companiesAssociates.length) {
-      const companiesModels = await this.companiesService.getCompanies(
-        companiesAssociates.map(({ person: { _id } }) => _id),
+      const companiesModels = await this.companiesService.getCompaniesDocuments(
+        companiesAssociates.map(({ company: { _id } }) => _id),
       )
       return companiesModels.map((companyModel) => {
         const associateInfo = companiesAssociates.find(
-          ({ person: { _id } }) => _id === String(companyModel._id),
+          ({ company: { _id } }) => _id === String(companyModel._id),
         )
 
-        const associate = new AssociateModel()
-        associate.role = associateInfo.role
-        associate.startDate = associateInfo.startDate
-        associate.endDate = associateInfo.endDate
-        associate.isActive = associateInfo.isActive
+        const associate = this.createAssociateModel(associateInfo)
         associate.company = companyModel
-        associate.customFields = this.customFieldsService.getCustomFieldsDocumentsForInputData(
-          associateInfo.customFields,
-        )
-        associate._confirmed = associateInfo._confirmed
         return associate
       })
     }
@@ -74,5 +57,19 @@ export class AssociatesService {
       ...(await this.createPersonsAssociates(associates)),
       ...(await this.createCompaniesAssociates(associates)),
     ]
+  }
+
+  private createAssociateModel = (associateInfo: AssociateInput) => {
+    const associate = new AssociateModel()
+    associate.role = associateInfo.role
+    associate.startDate = associateInfo.startDate
+    associate.endDate = associateInfo.endDate
+    associate.equity = associateInfo.equity
+    associate.isActive = associateInfo.isActive
+    associate.customFields = this.customFieldsService.getCustomFieldsDocumentsForInputData(
+      associateInfo.customFields,
+    )
+    associate._confirmed = associateInfo._confirmed
+    return associate
   }
 }

@@ -1,8 +1,6 @@
 import { Field, ObjectType } from '@nestjs/graphql'
 import { DataRefAPI } from 'defs'
 import { ConnectedEntity } from '../../../common/dto/connectedEntity'
-import { EntityInfoField } from './entityInfoField'
-import { RelationshipInfoField } from './relationshipInfoField'
 
 @ObjectType()
 export class DataRef implements DataRefAPI {
@@ -21,9 +19,12 @@ export class DataRef implements DataRefAPI {
   @Field(() => ConnectedEntity, { nullable: true })
   incident?: ConnectedEntity
 
-  @Field(() => EntityInfoField, { nullable: true })
-  entityInfo?: EntityInfoField
+  @Field({ nullable: true })
+  targetId?: string
 
-  @Field(() => RelationshipInfoField, { nullable: true })
-  relationshipInfo?: RelationshipInfoField
+  @Field({ nullable: true })
+  path?: string
+
+  @Field()
+  field: string
 }

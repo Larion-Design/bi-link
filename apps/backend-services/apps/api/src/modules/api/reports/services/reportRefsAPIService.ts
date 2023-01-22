@@ -4,8 +4,6 @@ import { CompanyDocument, CompanyModel } from '@app/entities/models/companyModel
 import { IncidentDocument, IncidentModel } from '@app/entities/models/incidentModel'
 import { PersonDocument, PersonModel } from '@app/entities/models/personModel'
 import { PropertyDocument, PropertyModel } from '@app/entities/models/propertyModel'
-import { EntityInfoFieldModel } from '@app/entities/models/reports/refs/entityInfoFieldModel'
-import { RelationshipInfoFieldModel } from '@app/entities/models/reports/refs/relationshipInfoFieldModel'
 import { Injectable } from '@nestjs/common'
 import { DataRefModel } from '@app/entities/models/reports/refs/dataRefModel'
 import { DataRefInput } from '../dto/refs/dataRefInput'
@@ -113,22 +111,9 @@ export class ReportRefsAPIService {
   private createRefModel = (dataRef: DataRefInput) => {
     const ref = new DataRefModel()
     ref._id = dataRef._id
-
-    if (dataRef.entityInfo) {
-      const { path, field } = dataRef.entityInfo
-      const entityInfoModel = new EntityInfoFieldModel()
-      entityInfoModel.path = path
-      entityInfoModel.field = field
-      ref.entityInfo = entityInfoModel
-    }
-    if (dataRef.relationshipInfo) {
-      const { path, field, targetId } = dataRef.relationshipInfo
-      const relationshipInfoModel = new RelationshipInfoFieldModel()
-      relationshipInfoModel.field = field
-      relationshipInfoModel.path = path
-      relationshipInfoModel.targetId = targetId
-      ref.relationshipInfo = relationshipInfoModel
-    }
+    ref.field = dataRef.field
+    ref.targetId = dataRef.targetId
+    ref.path = dataRef.path
     return ref
   }
 }

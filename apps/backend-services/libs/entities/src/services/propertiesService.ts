@@ -52,7 +52,13 @@ export class PropertiesService {
 
   getProperties = async (propertiesIds: string[]) => {
     try {
-      return this.propertyModel.find({ _id: propertiesIds }).exec()
+      return this.propertyModel
+        .find({ _id: propertiesIds })
+        .populate({ path: 'files', model: this.fileModel })
+        .populate({ path: 'images', model: this.fileModel })
+        .populate({ path: 'owners.person', model: this.personModel })
+        .populate({ path: 'owners.company', model: this.companyModel })
+        .exec()
     } catch (e) {
       this.logger.error(e)
     }
