@@ -4,7 +4,7 @@ import { EntityType, ReportContentAPIInput } from 'defs'
 import { ReportContentFile } from './reportContent/reportContentFile'
 import { ContentElementContainer } from './reportContent/reportContentContainer'
 import { ReportContentGraph } from './reportContent/reportContentGraph'
-import { ReportContentImages } from './reportContent/reportContentImages'
+import { ReportContentImages } from './reportContent/images/reportContentImages'
 import { ReportContentLink } from './reportContent/reportContentLink'
 import { ReportContentTable } from './reportContent/reportContentTable'
 import { ReportContentText } from './reportContent/reportContentText'
@@ -62,7 +62,6 @@ export const ReportContentElement: React.FunctionComponent<Props> = ({
       return (
         <ContentElementContainer title={'Imagini'} removeContent={removeContent}>
           <ReportContentImages
-            images={[]}
             selectedImages={contentInfo.images}
             updateImages={(images) => updateContentInfo({ ...contentInfo, images })}
           />

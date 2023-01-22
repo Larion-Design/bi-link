@@ -1,26 +1,16 @@
-import AddOutlinedIcon from '@mui/icons-material/AddOutlined'
 import React, { useEffect, useMemo } from 'react'
 import ImageList from '@mui/material/ImageList'
 import ImageListItem from '@mui/material/ImageListItem'
 import Image from 'mui-image'
-import { EntityType, FileAPIInput, FileAPIOutput } from 'defs'
-import { getFilesInfoRequest } from '../../../../graphql/files/getFilesInfo'
-import { useModal } from '../../../modal/modalProvider'
+import { FileAPIInput, FileAPIOutput } from 'defs'
+import { getFilesInfoRequest } from '../../../../../graphql/files/getFilesInfo'
 
 type Props = {
-  entityId?: string
-  entityType?: EntityType
   images: FileAPIInput[]
-  selectedImages: FileAPIInput[]
-  updateImages: (images: FileAPIInput[]) => void
+  setImages: (images: FileAPIInput[]) => void
 }
 
-export const ReportContentImages: React.FunctionComponent<Props> = ({
-  images,
-  selectedImages,
-  updateImages,
-}) => {
-  const modal = useModal()
+export const ReportImagesList: React.FunctionComponent<Props> = ({ images }) => {
   const [fetchFiles, { data }] = getFilesInfoRequest()
 
   useEffect(() => {
@@ -50,22 +40,6 @@ export const ReportContentImages: React.FunctionComponent<Props> = ({
           <Image alt={name} src={url} />
         </ImageListItem>
       ))}
-
-      <ImageListItem
-        sx={{
-          cursor: 'pointer',
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          alignContent: 'center',
-        }}
-      >
-        <AddOutlinedIcon
-          color={'primary'}
-          sx={{ fontSize: 50 }}
-          onClick={() => modal.openImageSelector(images, updateImages, selectedImages)}
-        />
-      </ImageListItem>
     </ImageList>
   )
 }

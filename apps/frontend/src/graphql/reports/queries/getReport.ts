@@ -1,5 +1,5 @@
 import { gql, useLazyQuery } from '@apollo/client'
-import { ReportAPIInput, ReportAPIOutput } from 'defs'
+import { ReportAPIInput } from 'defs'
 
 type Params = {
   id: string
@@ -57,6 +57,29 @@ const request = gql`
           graph {
             label
           }
+        }
+      }
+      refs {
+        person {
+          _id
+        }
+        company {
+          _id
+        }
+        property {
+          _id
+        }
+        incident {
+          _id
+        }
+        entityInfo {
+          field
+          path
+        }
+        relationshipInfo {
+          field
+          path
+          targetId
         }
       }
     }

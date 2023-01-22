@@ -13,16 +13,21 @@ import { getRelationshipLabelFromType } from './utils'
 type Props = {
   entityId: string
   depth?: number
-  onEntitySelected?: () => void
+  onEntitySelected?: (entityId: string, entityType: EntityType) => void
   onRelationshipSelected?: () => void
 }
 
 const nodeConfig: Label = { width: 200, height: 150 }
 
-export const Graph: React.FunctionComponent<Props> = ({ entityId, depth }) => {
+export const Graph: React.FunctionComponent<Props> = ({
+  entityId,
+  depth,
+  onEntitySelected,
+  onRelationshipSelected,
+}) => {
   const showNotification = useNotification()
-  const [fetchGraph, { data, loading: loadingGraph, error }] = getEntitiesGraphRequest()
-  const [fetchEntities, { data: entitiesInfo, loading: loadingEntities }] = getEntitiesInfoRequest()
+  const [fetchGraph, { data, error: graphError }] = getEntitiesGraphRequest()
+  const [fetchEntities, { data: entitiesInfo, error: entitiesInfoError }] = getEntitiesInfoRequest()
 
   const [graphDepth, updateDepth] = useState(depth ?? 2)
   const [allEntities, setAllEntities] = useState(new Set<string>())
@@ -39,10 +44,10 @@ export const Graph: React.FunctionComponent<Props> = ({ entityId, depth }) => {
   }, [graphDepth, entityId])
 
   useEffect(() => {
-    if (error?.message) {
+    if (graphError?.message || entitiesInfoError?.message) {
       showNotification('O eroare a intervenit in timpul comunicarii cu serverul.', 'error')
     }
-  }, [error?.message])
+  }, [graphError?.message, entitiesInfoError?.message])
 
   useEffect(() => {
     if (data?.getEntitiesGraph) {
@@ -356,10 +361,8 @@ export const Graph: React.FunctionComponent<Props> = ({ entityId, depth }) => {
           depth={graphDepth}
           updateDepth={updateDepth}
           data={{ nodes, edges }}
-          onEntitySelected={(entityId, entityType) => console.debug(entityId, entityType)}
-          onRelationshipSelected={(sourceEntityId, targetEntityId) =>
-            console.debug(sourceEntityId, targetEntityId)
-          }
+          onEntitySelected={onEntitySelected}
+          onRelationshipSelected={onRelationshipSelected}
           allEntities={Array.from(allEntities)}
           visibleEntities={Array.from(visibleEntities)}
           setVisibleEntities={(entitiesTypes) => setVisibleEntities(new Set(entitiesTypes))}

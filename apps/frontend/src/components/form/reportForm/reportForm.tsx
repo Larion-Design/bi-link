@@ -1,9 +1,11 @@
+import React, { useEffect } from 'react'
 import Button from '@mui/material/Button'
-import React from 'react'
 import Box from '@mui/material/Box'
 import Grid from '@mui/material/Grid'
 import { ConnectedEntity, EntityType, ReportAPIInput } from 'defs'
 import { FormikProps, withFormik } from 'formik'
+import { useMap } from '../../../utils/hooks/useMap'
+import { ReportDrawer } from '../../entityViews/reports/reportDetails/reportDrawer'
 import { AutocompleteField } from '../autocompleteField'
 import { InputField } from '../inputField'
 import { ToggleButton } from '../toggleButton'
@@ -30,8 +32,21 @@ const Form: React.FunctionComponent<Props & FormikProps<ReportAPIInput>> = ({
   isValidating,
   submitForm,
   onCancel,
-}) => (
-  <Box>
+}) => {
+  const {
+    map: refMap,
+    add: addRef,
+    update: updateRef,
+    remove: removeRef,
+    uid,
+    values: refs,
+  } = useMap(values.refs, ({ _id }) => _id)
+
+  useEffect(() => {
+    setFieldValue('refs', refs())
+  }, [uid, setFieldValue])
+
+  return (
     <form data-cy={'reportForm'}>
       <Grid container>
         <Grid item xs={6}>
@@ -53,9 +68,7 @@ const Form: React.FunctionComponent<Props & FormikProps<ReportAPIInput>> = ({
           <ToggleButton
             label={'Acest raport va fi folosit ca model'}
             checked={values.isTemplate}
-            onChange={(checked) => {
-              setFieldValue('isTemplate', checked)
-            }}
+            onChange={(checked) => setFieldValue('isTemplate', checked)}
           />
         </Grid>
         <Grid item xs={12}>
@@ -63,9 +76,7 @@ const Form: React.FunctionComponent<Props & FormikProps<ReportAPIInput>> = ({
             entityId={entityId}
             entityType={entityType}
             sections={values.sections}
-            updateSections={(sections) => {
-              setFieldValue('sections', sections)
-            }}
+            updateSections={(sections) => setFieldValue('sections', sections)}
           />
         </Grid>
 
@@ -92,19 +103,39 @@ const Form: React.FunctionComponent<Props & FormikProps<ReportAPIInput>> = ({
           </Box>
         </Grid>
       </Grid>
+      <ReportDrawer entityId={entityId} entityType={entityType} />
     </form>
-  </Box>
-)
+  )
+}
 
 export const ReportForm = withFormik<Props, ReportAPIInput>({
   mapPropsToValues: ({ entityId, entityType, reportInfo, reportType }) =>
-    reportInfo ?? createReportInitialValues(reportType, entityId, entityType),
+    reportInfo
+      ? addExistingReport(entityId, entityType, reportInfo)
+      : createReportInitialValues(reportType, entityId, entityType),
   validate: async (values, { reportId }) => Promise.resolve(),
   validateOnChange: false,
   validateOnMount: false,
   validateOnBlur: false,
   handleSubmit: (values, { props: { onSubmit } }) => onSubmit(values),
 })(Form)
+
+const addExistingReport = (
+  entityId: string,
+  entityType: EntityType,
+  reportInfo: ReportAPIInput,
+): ReportAPIInput => {
+  switch (entityType) {
+    case 'PERSON':
+      return { ...reportInfo, person: { _id: entityId } }
+    case 'COMPANY':
+      return { ...reportInfo, company: { _id: entityId } }
+    case 'PROPERTY':
+      return { ...reportInfo, property: { _id: entityId } }
+    case 'INCIDENT':
+      return { ...reportInfo, incident: { _id: entityId } }
+  }
+}
 
 const createReportInitialValues = (
   type: string,
@@ -116,6 +147,7 @@ const createReportInitialValues = (
     type,
     isTemplate: false,
     sections: [],
+    refs: [],
   }
 
   const connectedEntity: ConnectedEntity = {
