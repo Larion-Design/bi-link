@@ -15,6 +15,7 @@ type Props = {
   entityType?: EntityType
   sections: ReportSectionAPIInput[]
   updateSections: (sections: ReportSectionAPIInput[]) => void | Promise<void>
+  generateTextPreview: (text: string) => string
 }
 
 export const ReportSections: React.FunctionComponent<Props> = ({
@@ -22,6 +23,7 @@ export const ReportSections: React.FunctionComponent<Props> = ({
   entityType,
   sections,
   updateSections,
+  generateTextPreview,
 }) => {
   const { uid, entries, values, keys, add, remove, update } = useDebouncedMap(1000, sections)
   const addSection = useCallback(() => add({ name: '', content: [] }), [uid])
@@ -63,6 +65,7 @@ export const ReportSections: React.FunctionComponent<Props> = ({
               sectionInfo={sectionInfo}
               updateSectionInfo={(sectionInfo) => update(uid, sectionInfo)}
               removeSection={() => remove(uid)}
+              generateTextPreview={generateTextPreview}
             />
           </TabPanel>
         ))}

@@ -4,7 +4,7 @@ import Box from '@mui/material/Box'
 import Grid from '@mui/material/Grid'
 import { ConnectedEntity, EntityType, ReportAPIInput } from 'defs'
 import { FormikProps, withFormik } from 'formik'
-import { useMap } from '../../../utils/hooks/useMap'
+import { useDataRefs } from '../../../utils/hooks/useDataRefProcessor'
 import { ReportDrawer } from '../../entityViews/reports/reportDetails/reportDrawer'
 import { AutocompleteField } from '../autocompleteField'
 import { InputField } from '../inputField'
@@ -33,18 +33,29 @@ const Form: React.FunctionComponent<Props & FormikProps<ReportAPIInput>> = ({
   submitForm,
   onCancel,
 }) => {
-  const {
-    map: refMap,
-    add: addRef,
-    update: updateRef,
-    remove: removeRef,
-    uid,
-    values: refs,
-  } = useMap(values.refs, ({ _id }) => _id)
+  const { transform, removeAllRefsExcept, extractRefsIds, createDataRef, getRefs, uid } =
+    useDataRefs(values.refs)
 
   useEffect(() => {
-    setFieldValue('refs', refs())
+    setFieldValue('refs', getRefs())
   }, [uid, setFieldValue])
+
+  useEffect(() => {
+    const refsIds = new Set<string>()
+    const addRef = (refId) => refsIds.add(refId)
+    values.sections.forEach(({ content }) => {
+      content.forEach(({ text, title, link }) => {
+        if (text?.content?.length) {
+          extractRefsIds(text.content).forEach(addRef)
+        } else if (title?.content?.length) {
+          extractRefsIds(title.content).forEach(addRef)
+        } else if (link?.label?.length) {
+          extractRefsIds(link.label).forEach(addRef)
+        }
+      })
+    })
+    removeAllRefsExcept(Array.from(refsIds))
+  }, [values.sections])
 
   return (
     <form data-cy={'reportForm'}>
@@ -77,6 +88,7 @@ const Form: React.FunctionComponent<Props & FormikProps<ReportAPIInput>> = ({
             entityType={entityType}
             sections={values.sections}
             updateSections={(sections) => setFieldValue('sections', sections)}
+            generateTextPreview={transform}
           />
         </Grid>
 
@@ -103,7 +115,7 @@ const Form: React.FunctionComponent<Props & FormikProps<ReportAPIInput>> = ({
           </Box>
         </Grid>
       </Grid>
-      <ReportDrawer entityId={entityId} entityType={entityType} />
+      <ReportDrawer entityId={entityId} entityType={entityType} createDataRef={createDataRef} />
     </form>
   )
 }

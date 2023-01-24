@@ -15,6 +15,7 @@ type Props = {
   depth?: number
   onEntitySelected?: (entityId: string, entityType: EntityType) => void
   onRelationshipSelected?: () => void
+  disableFilters?: boolean
 }
 
 const nodeConfig: Label = { width: 200, height: 150 }
@@ -24,6 +25,7 @@ export const Graph: React.FunctionComponent<Props> = ({
   depth,
   onEntitySelected,
   onRelationshipSelected,
+  disableFilters,
 }) => {
   const showNotification = useNotification()
   const [fetchGraph, { data, error: graphError }] = getEntitiesGraphRequest()
@@ -159,6 +161,8 @@ export const Graph: React.FunctionComponent<Props> = ({
         COMPANY: !visibleEntities.has('COMPANY'),
         PROPERTY: !visibleEntities.has('PROPERTY'),
         INCIDENT: !visibleEntities.has('INCIDENT'),
+        REPORT: true,
+        FILE: true,
       }
 
       const createEdge = (
@@ -371,6 +375,7 @@ export const Graph: React.FunctionComponent<Props> = ({
           setVisibleRelationships={(relationshipsTypes) =>
             setVisibleRelationships(new Set(relationshipsTypes))
           }
+          disableFilters={disableFilters}
         />
       </ReactFlowProvider>
     </Box>

@@ -1,7 +1,9 @@
+import React, { useCallback, useMemo } from 'react'
 import Box from '@mui/material/Box'
 import Slider from '@mui/material/Slider'
 import Typography from '@mui/material/Typography'
-import React, { useCallback, useMemo } from 'react'
+import { useTheme } from '@mui/material'
+import Paper from '@mui/material/Paper'
 import 'reactflow/dist/style.css'
 import ReactFlow, {
   Background,
@@ -14,8 +16,6 @@ import ReactFlow, {
   NodeMouseHandler,
   Panel,
 } from 'reactflow'
-import { useTheme } from '@mui/material'
-import Paper from '@mui/material/Paper'
 import { EntityType } from 'defs'
 import { MultiSelect } from '../../form/multiSelect'
 import { PrintControl } from './controls/printControl'
@@ -40,6 +40,7 @@ type Props = {
   }
   onEntitySelected: (entityId: string, entityType: EntityType) => void
   onRelationshipSelected: (sourceEntityId: string, targetEntityId: string) => void
+  disableFilters?: boolean
 }
 
 export const EntityGraph: React.FunctionComponent<Props> = ({
@@ -54,6 +55,7 @@ export const EntityGraph: React.FunctionComponent<Props> = ({
   data: { nodes, edges },
   onEntitySelected,
   onRelationshipSelected,
+  disableFilters,
 }) => {
   const theme = useTheme()
 
@@ -107,45 +109,47 @@ export const EntityGraph: React.FunctionComponent<Props> = ({
           Grafic relational
         </Paper>
       </Panel>
-      <Panel position={'top-right'}>
-        <Paper variant={'outlined'} sx={{ p: 2, width: 250 }}>
-          <Box sx={{ width: 1, mb: 2 }}>
-            <Typography gutterBottom>Nivel de complexitate</Typography>
-            <Slider
-              aria-label={'Nivel de complexitate'}
-              size={'small'}
-              value={depth}
-              min={1}
-              max={5}
-              marks={marks}
-              onChangeCommitted={(event, value) => updateDepth(+value)}
-            />
-          </Box>
-          <Box sx={{ width: 1, mb: 3 }}>
-            <MultiSelect
-              label={'Tipuri de entitati'}
-              options={allEntities.map((entityType) => ({
-                value: entityType,
-                label: entityTypeLocale[entityType],
-                selected: visibleEntities.includes(entityType),
-              }))}
-              onSelectedOptionsChange={setVisibleEntities}
-            />
-          </Box>
+      {!disableFilters && (
+        <Panel position={'top-right'}>
+          <Paper variant={'outlined'} sx={{ p: 2, width: 250 }}>
+            <Box sx={{ width: 1, mb: 2 }}>
+              <Typography gutterBottom>Nivel de complexitate</Typography>
+              <Slider
+                aria-label={'Nivel de complexitate'}
+                size={'small'}
+                value={depth}
+                min={1}
+                max={5}
+                marks={marks}
+                onChangeCommitted={(event, value) => updateDepth(+value)}
+              />
+            </Box>
+            <Box sx={{ width: 1, mb: 3 }}>
+              <MultiSelect
+                label={'Tipuri de entitati'}
+                options={allEntities.map((entityType) => ({
+                  value: entityType,
+                  label: entityTypeLocale[entityType],
+                  selected: visibleEntities.includes(entityType),
+                }))}
+                onSelectedOptionsChange={setVisibleEntities}
+              />
+            </Box>
 
-          <Box sx={{ width: 1 }}>
-            <MultiSelect
-              label={'Tipuri de relatii'}
-              options={allRelationships.map((relationshipType) => ({
-                value: relationshipType,
-                label: relationshipType,
-                selected: visibleRelationships.includes(relationshipType),
-              }))}
-              onSelectedOptionsChange={setVisibleRelationships}
-            />
-          </Box>
-        </Paper>
-      </Panel>
+            <Box sx={{ width: 1 }}>
+              <MultiSelect
+                label={'Tipuri de relatii'}
+                options={allRelationships.map((relationshipType) => ({
+                  value: relationshipType,
+                  label: relationshipType,
+                  selected: visibleRelationships.includes(relationshipType),
+                }))}
+                onSelectedOptionsChange={setVisibleRelationships}
+              />
+            </Box>
+          </Paper>
+        </Panel>
+      )}
       <Background color={theme.palette.grey[200]} variant={BackgroundVariant.Lines} />
       <Controls>
         <PrintControl />
@@ -167,4 +171,6 @@ const entityTypeLocale: Record<EntityType, string> = {
   COMPANY: 'Companii',
   PROPERTY: 'Proprietati',
   INCIDENT: 'Incidente',
+  REPORT: 'Rapoarte',
+  FILE: 'Fisiere',
 }

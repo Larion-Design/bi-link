@@ -1,23 +1,19 @@
-import Box from '@mui/material/Box'
-import { EntityInfo, FileAPIInput } from 'defs'
 import React, { useCallback, useEffect, useState } from 'react'
-import { getCompanyInfoRequest } from '../../../../../graphql/companies/queries/getCompany'
-import { getIncidentRequest } from '../../../../../graphql/incidents/queries/getIncident'
+import Box from '@mui/material/Box'
+import { EntityInfo, EntityType, FileAPIInput } from 'defs'
 import { getPersonInfoRequest } from '../../../../../graphql/persons/queries/getPersonInfo'
 import { getPropertyRequest } from '../../../../../graphql/properties/queries/getProperty'
 import { Graph } from '../../../../entityViews/graph'
 import { useModal } from '../../../../modal/modalProvider'
 
 type Props = {
-  entityId
-  entityType
+  entityId: string
   selectedImages: FileAPIInput[]
   updateImages: (images: FileAPIInput[]) => void
 }
 
 export const ImagesTargetEntitySelector: React.FunctionComponent<Props> = ({
   entityId,
-  entityType,
   selectedImages,
   updateImages,
 }) => {
@@ -61,13 +57,14 @@ export const ImagesTargetEntitySelector: React.FunctionComponent<Props> = ({
     }
   }, [selectedEntity])
 
+  const entitySelectedHandler = useCallback(
+    (entityId: string, entityType: EntityType) => selectEntity({ entityId, entityType }),
+    [selectEntity],
+  )
+
   return (
     <Box sx={{ width: 1 }}>
-      <Graph
-        entityId={entityId}
-        depth={1}
-        onEntitySelected={(entityId, entityType) => selectEntity({ entityId, entityType })}
-      />
+      <Graph entityId={entityId} depth={1} onEntitySelected={entitySelectedHandler} />
     </Box>
   )
 }

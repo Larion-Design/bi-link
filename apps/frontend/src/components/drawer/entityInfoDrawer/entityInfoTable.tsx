@@ -13,6 +13,7 @@ import { FormattedMessage } from 'react-intl'
 type Props = {
   label: string
   data: Record<string, string>
+  createDataRef: (key: string) => void
 }
 
 export const EntityInfoTable: React.FunctionComponent<Props> = ({ label, data }) => {

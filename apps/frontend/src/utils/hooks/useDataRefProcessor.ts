@@ -16,6 +16,15 @@ import { getPersonsInfoRequest } from '../../graphql/persons/queries/getPersonsI
 import { getPropertiesInfoRequest } from '../../graphql/properties/queries/getPropertiesInfo'
 import { useMap } from './useMap'
 
+export type CreateDataRefHandler = (
+  entityInfo: EntityInfo,
+  field: string,
+  path?: string,
+  targetId?: string,
+) => string
+
+export type GeneratePreviewHandler = (text: string) => string
+
 export const useDataRefs = (refs: DataRefAPI[]) => {
   const { add, uid, map, values, removeBulk, keys } = useMap(refs, ({ _id }) => _id)
   const [dataRefsMap, setDataRefsMap] = useState(new Map<string, string>())
@@ -103,8 +112,8 @@ export const useDataRefs = (refs: DataRefAPI[]) => {
     incidentsInfo?.getIncidents,
   ])
 
-  const transform = useCallback(
-    (text: string) => {
+  const transform: GeneratePreviewHandler = useCallback(
+    (text) => {
       if (text.length) {
         let missingRef = false
         const transformedText = text.replaceAll(/[^{]+(?=}})/gm, (ref) => {
@@ -118,12 +127,13 @@ export const useDataRefs = (refs: DataRefAPI[]) => {
 
         return missingRef ? text : transformedText.replace(/{{|}}/gm, '')
       }
+      return ''
     },
     [dataRefsMap],
   )
 
-  const createDataRef = useCallback(
-    ({ entityType, entityId }: EntityInfo, field: string, path?: string, targetId?: string) => {
+  const createDataRef: CreateDataRefHandler = useCallback(
+    ({ entityType, entityId }, field, path, targetId) => {
       const refId = md5(
         `${entityType}-${entityId}-${field}-${path ?? ''}-${targetId ?? ''}`,
       ).toString()
@@ -194,7 +204,7 @@ export const useDataRefs = (refs: DataRefAPI[]) => {
     },
     [uid],
   )
-  return { transform, createDataRef, extractRefsIds, removeAllRefsExcept }
+  return { transform, createDataRef, extractRefsIds, removeAllRefsExcept, uid, getRefs: values }
 }
 
 type EntityInfoHandler<T> = (

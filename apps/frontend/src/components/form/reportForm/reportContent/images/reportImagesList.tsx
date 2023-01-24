@@ -17,11 +17,7 @@ export const ReportImagesList: React.FunctionComponent<Props> = ({ images }) => 
     const imagesIds = images.filter(({ isHidden }) => !isHidden).map(({ fileId }) => fileId)
 
     if (imagesIds.length) {
-      void fetchFiles({
-        variables: {
-          filesIds: imagesIds,
-        },
-      })
+      void fetchFiles({ variables: { filesIds: imagesIds } })
     }
   }, [images])
 

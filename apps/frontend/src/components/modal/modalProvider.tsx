@@ -1,32 +1,40 @@
 import React, { PropsWithChildren, useContext, useReducer } from 'react'
 import Modal from '@mui/material/Modal'
-import { PersonSelector } from './entitySelector/personSelector'
-import { CompanySelector } from './entitySelector/companySelector'
+import { PersonSelector } from './entitySelector'
+import { CompanySelector } from './entitySelector'
 import {
   EntitySelectorModal,
   EntitySelectorModalActions,
   EntitySelectorModalContext,
   EntitySelectorPayload,
-} from './entitySelector/types'
+} from './entitySelector'
+import {
+  FileSelectorModal,
+  FileSelectorModalActions,
+  FileSelectorModalContext,
+  FileSelectorPayload,
+} from './fileSelector'
 import { ImageGallery } from './imageGallery'
-import { PropertySelector } from './entitySelector/propertySelector'
+import { PropertySelector } from './entitySelector'
 import {
   ImageGalleryModal,
   ImageGalleryModalActions,
   ImageGalleryModalContext,
   ImageGalleryPayload,
-} from './imageGallery/types'
-import { ImageSelector } from './imageSelector/imageSelector'
+} from './imageGallery'
+import { ImageSelector } from './imageSelector'
 import {
   ImageSelectorModal,
   ImageSelectorModalActions,
   ImageSelectorModalContext,
   ImageSelectorPayload,
-} from './imageSelector/types'
+} from './imageSelector'
 
-type ModalInfo<T = EntitySelectorPayload | ImageSelectorPayload | ImageGalleryPayload> = {
+type ModalInfo<
+  T = EntitySelectorPayload | ImageSelectorPayload | ImageGalleryPayload | FileSelectorPayload,
+> = {
   open: boolean
-  modal: EntitySelectorModal | ImageGalleryModal | ImageSelectorModal | null
+  modal: EntitySelectorModal | ImageGalleryModal | ImageSelectorModal | FileSelectorModal | null
   modalClosed?: () => void
 } & T
 
@@ -35,7 +43,11 @@ const initialState: ModalInfo = {
   open: false,
 }
 
-type Action = EntitySelectorModalActions | ImageGalleryModalActions | ImageSelectorModalActions
+type Action =
+  | EntitySelectorModalActions
+  | ImageGalleryModalActions
+  | ImageSelectorModalActions
+  | FileSelectorModalActions
 
 const modalReducer = (state: ModalInfo, action: Action): ModalInfo => {
   switch (action.type) {
@@ -75,6 +87,10 @@ const modalReducer = (state: ModalInfo, action: Action): ModalInfo => {
             selectImages,
             selectedImages,
           }
+        }
+        case 'fileSelector': {
+          const { files, selectFile, selectedFile, modalClosed } = action.payload
+          return { modal, open: true, files, selectFile, selectedFile, modalClosed }
         }
       }
       break
@@ -147,6 +163,17 @@ export const ModalProvider: React.FunctionComponent<PropsWithChildren<any>> = ({
               selectedImages,
             },
           }),
+        openFileSelector: (files, selectFile, selectedFile, modalClosed) =>
+          dispatch({
+            type: 'openModal',
+            payload: {
+              modal: 'fileSelector',
+              modalClosed,
+              files,
+              selectFile,
+              selectedFile,
+            },
+          }),
       }}
     >
       {open ? (
@@ -214,6 +241,9 @@ export const ModalProvider: React.FunctionComponent<PropsWithChildren<any>> = ({
   )
 }
 
-type Context = EntitySelectorModalContext & ImageGalleryModalContext & ImageSelectorModalContext
+type Context = EntitySelectorModalContext &
+  ImageGalleryModalContext &
+  ImageSelectorModalContext &
+  FileSelectorModalContext
 const ModalContext = React.createContext<Context | null>(null)
 export const useModal = () => useContext(ModalContext)

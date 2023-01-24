@@ -5,6 +5,7 @@ import { getCompanyInfoRequest } from '../../../../graphql/companies/queries/get
 import { getIncidentRequest } from '../../../../graphql/incidents/queries/getIncident'
 import { getPersonInfoRequest } from '../../../../graphql/persons/queries/getPersonInfo'
 import { getPropertyRequest } from '../../../../graphql/properties/queries/getProperty'
+import { CreateDataRefHandler } from '../../../../utils/hooks/useDataRefProcessor'
 import { BasicDrawer } from '../../../drawer/basicDrawer'
 import { CompanyInfoDrawer } from '../../../drawer/entityInfoDrawer/companyInfoDrawer'
 import { IncidentInfoDrawer } from '../../../drawer/entityInfoDrawer/incidentInfoDrawer'
@@ -15,9 +16,14 @@ import { Graph } from '../../graph'
 type Props = {
   entityId: string
   entityType: EntityType
+  createDataRef: CreateDataRefHandler
 }
 
-export const ReportDrawer: React.FunctionComponent<Props> = ({ entityId, entityType }) => {
+export const ReportDrawer: React.FunctionComponent<Props> = ({
+  entityId,
+  entityType,
+  createDataRef,
+}) => {
   const [selectedEntity, setEntitySelected] = useState<EntityInfo>({ entityId, entityType })
   const [fetchPerson, { data: personData }] = getPersonInfoRequest()
   const [fetchCompany, { data: companyData }] = getCompanyInfoRequest()
@@ -58,24 +64,28 @@ export const ReportDrawer: React.FunctionComponent<Props> = ({ entityId, entityT
         <PersonInfoDrawer
           personId={selectedEntity.entityId}
           personInfo={personData.getPersonInfo}
+          createDataRef={createDataRef}
         />
       )}
       {entityType === 'COMPANY' && (
         <CompanyInfoDrawer
           companyId={selectedEntity.entityId}
           companyInfo={companyData.getCompany}
+          createDataRef={createDataRef}
         />
       )}
       {entityType === 'PROPERTY' && (
         <PropertyInfoDrawer
           propertyId={selectedEntity.entityId}
           propertyInfo={propertyData.getProperty}
+          createDataRef={createDataRef}
         />
       )}
       {entityType === 'INCIDENT' && (
         <IncidentInfoDrawer
           incidentId={selectedEntity.entityId}
           incidentInfo={incidentData.getIncident}
+          createDataRef={createDataRef}
         />
       )}
     </BasicDrawer>

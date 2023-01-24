@@ -1,5 +1,5 @@
-import Box from '@mui/material/Box'
 import React from 'react'
+import Box from '@mui/material/Box'
 import { GraphAPI } from 'defs'
 import { Graph } from '../../../entityViews/graph'
 import { InputField } from '../../inputField'

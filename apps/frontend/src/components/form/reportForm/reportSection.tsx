@@ -2,7 +2,7 @@ import React, { useCallback, useEffect } from 'react'
 import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined'
 import Box from '@mui/material/Box'
 import AddOutlinedIcon from '@mui/icons-material/AddOutlined'
-import { EntityType, ReportSectionAPIInput } from 'defs'
+import { EntityInfo, EntityType, ReportSectionAPIInput } from 'defs'
 import { useMap } from '../../../utils/hooks/useMap'
 import { ActionButton } from '../../button/actionButton'
 import { useDialog } from '../../dialog/dialogProvider'
@@ -16,6 +16,7 @@ type Props = {
   sectionInfo: ReportSectionAPIInput
   updateSectionInfo: (sectionInfo: ReportSectionAPIInput) => void
   removeSection: () => void
+  generateTextPreview: (text: string) => string
 }
 
 export const ReportSection: React.FunctionComponent<Props> = ({
@@ -24,6 +25,7 @@ export const ReportSection: React.FunctionComponent<Props> = ({
   sectionInfo,
   updateSectionInfo,
   removeSection,
+  generateTextPreview,
 }) => {
   const dialog = useDialog()
   const { values, entries, uid, add, update, keys, remove } = useMap(sectionInfo.content)
@@ -98,6 +100,7 @@ export const ReportSection: React.FunctionComponent<Props> = ({
             contentInfo={content}
             updateContentInfo={(contentInfo) => update(uid, contentInfo)}
             removeContent={() => remove(uid)}
+            generateTextPreview={generateTextPreview}
           />
         ))}
       </Box>

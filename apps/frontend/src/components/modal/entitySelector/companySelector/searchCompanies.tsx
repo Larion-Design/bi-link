@@ -99,7 +99,7 @@ export const SearchCompanies: React.FunctionComponent<Props> = ({
               ) ?? []
             }
             columns={columns}
-            pageSize={5}
+            pageSize={10}
             checkboxSelection
             onSelectionModelChange={(companiesIds: GridSelectionModel) =>
               selectCompanies((selectedCompanies) =>
