@@ -33,26 +33,34 @@ export const FileTargetEntitySelector: React.FunctionComponent<Props> = ({
   )
 
   useEffect(() => {
-    if (personInfo?.getPersonInfo?.files?.length) {
-      openFileSelector(personInfo.getPersonInfo.files, selectedFile)
+    const files = personInfo?.getPersonInfo?.files.filter(({ isHidden }) => !isHidden)
+
+    if (files.length) {
+      openFileSelector(files, selectedFile)
     }
   }, [personInfo?.getPersonInfo?.files])
 
   useEffect(() => {
-    if (propertyInfo?.getProperty?.files?.length) {
-      openFileSelector(propertyInfo.getProperty.files, selectedFile)
+    const files = propertyInfo?.getProperty?.files.filter(({ isHidden }) => !isHidden)
+
+    if (files.length) {
+      openFileSelector(files, selectedFile)
     }
   }, [propertyInfo?.getProperty?.files])
 
   useEffect(() => {
-    if (companyInfo?.getCompany?.files?.length) {
-      openFileSelector(companyInfo.getCompany.files, selectedFile)
+    const files = companyInfo?.getCompany?.files.filter(({ isHidden }) => !isHidden)
+
+    if (files.length) {
+      openFileSelector(files, selectedFile)
     }
   }, [companyInfo?.getCompany?.files])
 
   useEffect(() => {
-    if (incidentInfo?.getIncident?.files?.length) {
-      openFileSelector(incidentInfo.getIncident.files, selectedFile)
+    const files = incidentInfo?.getIncident?.files.filter(({ isHidden }) => !isHidden)
+
+    if (files.length) {
+      openFileSelector(files, selectedFile)
     }
   }, [incidentInfo?.getIncident?.files])
 

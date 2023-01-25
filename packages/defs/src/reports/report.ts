@@ -35,10 +35,7 @@ export interface ReportAPIInput
 }
 
 export interface ReportAPIOutput
-  extends Omit<
-    Required<Report>,
-    '_id' | 'sections' | 'person' | 'company' | 'property' | 'incident' | 'refs'
-  > {
+  extends Omit<Report, 'sections' | 'person' | 'company' | 'property' | 'incident' | 'refs'> {
   person?: ConnectedEntity
   company?: ConnectedEntity
   property?: ConnectedEntity
