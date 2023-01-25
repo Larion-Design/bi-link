@@ -1,8 +1,10 @@
+import React, { useMemo } from 'react'
 import Box from '@mui/material/Box'
-import React, { useEffect, useMemo } from 'react'
 import { EntityType, TableAPI } from 'defs'
-import { getCompanyInfoRequest } from '../../../../graphql/companies/queries/getCompany'
 import { getPersonInfoRequest } from '../../../../graphql/persons/queries/getPersonInfo'
+import { AssociatesTable } from '../../../reports/tables/associatesTable'
+import { PropertiesTable } from '../../../reports/tables/propertiesTable'
+import { RelationshipsTable } from '../../../reports/tables/relationshipsTable'
 import { DropdownList } from '../../dropdownList'
 
 type Props = {
@@ -12,6 +14,8 @@ type Props = {
   updateTable: (tableInfo: TableAPI) => void
 }
 
+type PredefinedTables = 'properties' | 'associates' | 'relationships'
+
 export const ReportContentTable: React.FunctionComponent<Props> = ({
   entityId,
   entityType,
@@ -19,7 +23,6 @@ export const ReportContentTable: React.FunctionComponent<Props> = ({
   updateTable,
 }) => {
   const [fetchPerson, { data: personData }] = getPersonInfoRequest()
-  const [fetchCompany, { data: companyData }] = getCompanyInfoRequest()
 
   const options = useMemo(() => {
     switch (entityType) {
@@ -33,35 +36,25 @@ export const ReportContentTable: React.FunctionComponent<Props> = ({
     }
   }, [entityType])
 
-  useEffect(() => {
-    if (entityId) {
-      if (entityType === 'PERSON') {
-        void fetchPerson({ variables: { personId: entityId } })
-      } else if (entityType === 'COMPANY') {
-        void fetchCompany({ variables: { id: entityId } })
-      }
-    }
-  }, [entityId])
-
   const renderPersonTable = () => {
-    switch (id) {
+    switch (id as PredefinedTables) {
       case 'properties': {
-        break
+        return <PropertiesTable entityId={entityId} entityType={'PERSON'} />
       }
       case 'relationships': {
-        break
+        return <RelationshipsTable personId={entityId} />
       }
     }
     return null
   }
 
   const renderCompanyTable = () => {
-    switch (id) {
+    switch (id as PredefinedTables) {
       case 'properties': {
-        break
+        return <PropertiesTable entityId={entityId} entityType={'COMPANY'} />
       }
       case 'associates': {
-        break
+        return <AssociatesTable companyId={entityId} />
       }
     }
     return null

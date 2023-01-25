@@ -47,6 +47,8 @@ import { RelationshipsService } from './persons/services/relationshipsService'
 import { CreateProperty } from './properties/mutations/createProperty'
 import { UpdateProperty } from './properties/mutations/updateProperty'
 import { GetProperties } from './properties/queries/getProperties'
+import { GetPropertiesByCompany } from './properties/queries/getPropertiesByCompany'
+import { GetPropertiesByPerson } from './properties/queries/getPropertiesByPerson'
 import { GetProperty } from './properties/queries/getProperty'
 import { SearchProperties } from './properties/queries/searchProperties'
 import { GetMakers } from './properties/queries/vehicles/getMakers'
@@ -126,6 +128,8 @@ import { GetUsers } from './users/queries/getUsers'
     GetProperty,
     CreateProperty,
     UpdateProperty,
+    GetPropertiesByPerson,
+    GetPropertiesByCompany,
     UserRegistered,
     GetIncident,
     SearchIncidents,
