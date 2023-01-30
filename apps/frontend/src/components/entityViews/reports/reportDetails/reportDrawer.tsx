@@ -1,3 +1,4 @@
+import Box from '@mui/material/Box'
 import React, { useCallback, useEffect, useState } from 'react'
 import Divider from '@mui/material/Divider'
 import { EntityInfo, EntityType } from 'defs'
@@ -17,12 +18,14 @@ type Props = {
   entityId: string
   entityType: EntityType
   createDataRef: CreateDataRefHandler
+  closeDrawer: () => void
 }
 
 export const ReportDrawer: React.FunctionComponent<Props> = ({
   entityId,
   entityType,
   createDataRef,
+  closeDrawer,
 }) => {
   const [selectedEntity, setEntitySelected] = useState<EntityInfo>({ entityId, entityType })
   const [fetchPerson, { data: personData }] = getPersonInfoRequest()
@@ -57,37 +60,48 @@ export const ReportDrawer: React.FunctionComponent<Props> = ({
   }, [entityId, entityType])
 
   return (
-    <BasicDrawer>
-      <Graph depth={1} entityId={selectedEntity.entityId} onEntitySelected={selectEntity} />
+    <BasicDrawer open={true} closeDrawer={closeDrawer}>
+      <Box sx={{ height: 0.4 }}>
+        <Graph
+          depth={1}
+          entityId={selectedEntity.entityId}
+          onEntitySelected={selectEntity}
+          disableMap={true}
+          disableControls={true}
+          disableTitle={true}
+        />
+      </Box>
       <Divider />
-      {entityType === 'PERSON' && (
-        <PersonInfoDrawer
-          personId={selectedEntity.entityId}
-          personInfo={personData.getPersonInfo}
-          createDataRef={createDataRef}
-        />
-      )}
-      {entityType === 'COMPANY' && (
-        <CompanyInfoDrawer
-          companyId={selectedEntity.entityId}
-          companyInfo={companyData.getCompany}
-          createDataRef={createDataRef}
-        />
-      )}
-      {entityType === 'PROPERTY' && (
-        <PropertyInfoDrawer
-          propertyId={selectedEntity.entityId}
-          propertyInfo={propertyData.getProperty}
-          createDataRef={createDataRef}
-        />
-      )}
-      {entityType === 'INCIDENT' && (
-        <IncidentInfoDrawer
-          incidentId={selectedEntity.entityId}
-          incidentInfo={incidentData.getIncident}
-          createDataRef={createDataRef}
-        />
-      )}
+      <Box sx={{ height: 0.6 }}>
+        {entityType === 'PERSON' && !!personData?.getPersonInfo && (
+          <PersonInfoDrawer
+            personId={selectedEntity.entityId}
+            personInfo={personData?.getPersonInfo}
+            createDataRef={createDataRef}
+          />
+        )}
+        {entityType === 'COMPANY' && !!companyData?.getCompany && (
+          <CompanyInfoDrawer
+            companyId={selectedEntity.entityId}
+            companyInfo={companyData?.getCompany}
+            createDataRef={createDataRef}
+          />
+        )}
+        {entityType === 'PROPERTY' && !!propertyData?.getProperty && (
+          <PropertyInfoDrawer
+            propertyId={selectedEntity.entityId}
+            propertyInfo={propertyData?.getProperty}
+            createDataRef={createDataRef}
+          />
+        )}
+        {entityType === 'INCIDENT' && !!incidentData?.getIncident && (
+          <IncidentInfoDrawer
+            incidentId={selectedEntity.entityId}
+            incidentInfo={incidentData?.getIncident}
+            createDataRef={createDataRef}
+          />
+        )}
+      </Box>
     </BasicDrawer>
   )
 }

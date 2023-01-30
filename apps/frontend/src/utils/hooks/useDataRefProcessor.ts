@@ -6,6 +6,7 @@ import {
   ConnectedEntity,
   DataRefAPI,
   EntityInfo,
+  IdDocumentAPI,
   IncidentAPIOutput,
   PersonAPIOutput,
   PropertyAPIOutput,
@@ -14,6 +15,8 @@ import { getCompaniesRequest } from '../../graphql/companies/queries/getCompanie
 import { getIncidentsInfoRequest } from '../../graphql/incidents/queries/getIncidentsInfo'
 import { getPersonsInfoRequest } from '../../graphql/persons/queries/getPersonsInfo'
 import { getPropertiesInfoRequest } from '../../graphql/properties/queries/getPropertiesInfo'
+import { formatDate } from '../date'
+import { getPersonAge, getPersonFullName } from '../person'
 import { useMap } from './useMap'
 
 export type CreateDataRefHandler = (
@@ -177,7 +180,7 @@ export const useDataRefs = (refs: DataRefAPI[]) => {
   const extractRefsIds = useCallback(
     (text: string) => {
       const set = new Set<string>()
-      text.match(/[^{]+(?=}})/gm).forEach((refId) => set.add(refId))
+      text.match(/[^{]+(?=}})/gm)?.forEach((refId) => set.add(refId))
       return Array.from(set)
     },
     [uid],
@@ -225,7 +228,20 @@ const getPersonInfoValue: EntityInfoHandler<PersonAPIOutput> = (
       switch (path) {
         case 'documents': {
           const idDocument = personInfo.documents.find(({ documentNumber }) => targetId)
-          return String(idDocument?.[field]) ?? ''
+
+          switch (field as keyof IdDocumentAPI) {
+            case 'documentNumber':
+            case 'documentType':
+            case 'status': {
+              return String(idDocument?.[field]) ?? ''
+            }
+            case 'expirationDate':
+            case 'issueDate': {
+              const date = idDocument?.[field]
+              return date ? formatDate(date) : ''
+            }
+          }
+          break
         }
         case 'customFields': {
           const customField = personInfo.customFields.find(
@@ -258,7 +274,13 @@ const getPersonInfoValue: EntityInfoHandler<PersonAPIOutput> = (
       }
       case 'birthdate': {
         const { birthdate } = personInfo
-        return birthdate ? format(new Date(birthdate), 'YYYY-mm-DD') : ''
+        return birthdate ? formatDate(birthdate) : ''
+      }
+      case 'age': {
+        return getPersonAge(personInfo).toString()
+      }
+      case 'fullName': {
+        return getPersonFullName(personInfo)
       }
     }
   }
@@ -376,7 +398,7 @@ const getIncidentInfoValue: EntityInfoHandler<IncidentAPIOutput> = (
       }
       case 'date': {
         const { date } = incidentInfo
-        return date ? format(new Date(date), 'YYYY-mm-DD') : ''
+        return date ? formatDate(date) : ''
       }
     }
   }

@@ -61,11 +61,13 @@ export const IncidentInfoDrawer: React.FunctionComponent<Props> = ({
         label={'Informatii generale'}
         data={generalInfo}
         createDataRef={copyGeneralInfo}
+        missingDataMessage={'Nu exista informatii.'}
       />
       <EntityInfoTable
         label={'Informatii suplimentare'}
         data={extraInfo}
         createDataRef={copyCustomField}
+        missingDataMessage={'Nu exista informatii.'}
       />
     </Box>
   )

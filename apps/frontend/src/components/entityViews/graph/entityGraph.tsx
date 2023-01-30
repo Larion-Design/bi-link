@@ -41,6 +41,9 @@ type Props = {
   onEntitySelected: (entityId: string, entityType: EntityType) => void
   onRelationshipSelected: (sourceEntityId: string, targetEntityId: string) => void
   disableFilters?: boolean
+  disableMap?: boolean
+  disableControls?: boolean
+  disableTitle?: boolean
 }
 
 export const EntityGraph: React.FunctionComponent<Props> = ({
@@ -56,6 +59,9 @@ export const EntityGraph: React.FunctionComponent<Props> = ({
   onEntitySelected,
   onRelationshipSelected,
   disableFilters,
+  disableTitle,
+  disableControls,
+  disableMap,
 }) => {
   const theme = useTheme()
 
@@ -104,13 +110,15 @@ export const EntityGraph: React.FunctionComponent<Props> = ({
       proOptions={{ hideAttribution: true }}
       nodeTypes={nodeTypes}
     >
-      <Panel position={'top-left'}>
-        <Paper variant={'outlined'} sx={{ p: 2 }}>
-          Grafic relational
-        </Paper>
-      </Panel>
+      {!disableTitle && (
+        <Panel position={'top-left'} className={'react-flow__title'}>
+          <Paper variant={'outlined'} sx={{ p: 2 }}>
+            Grafic relational
+          </Paper>
+        </Panel>
+      )}
       {!disableFilters && (
-        <Panel position={'top-right'}>
+        <Panel position={'top-right'} className={'react-flow__filters'}>
           <Paper variant={'outlined'} sx={{ p: 2, width: 250 }}>
             <Box sx={{ width: 1, mb: 2 }}>
               <Typography gutterBottom>Nivel de complexitate</Typography>
@@ -151,10 +159,13 @@ export const EntityGraph: React.FunctionComponent<Props> = ({
         </Panel>
       )}
       <Background color={theme.palette.grey[200]} variant={BackgroundVariant.Lines} />
-      <Controls>
-        <PrintControl />
-      </Controls>
-      <MiniMap nodeStrokeWidth={3} zoomable pannable />
+      {!disableControls && (
+        <Controls>
+          <PrintControl />
+        </Controls>
+      )}
+
+      {!disableMap && <MiniMap nodeStrokeWidth={3} zoomable pannable />}
     </ReactFlow>
   )
 }

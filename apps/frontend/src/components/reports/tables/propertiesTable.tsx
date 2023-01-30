@@ -1,6 +1,6 @@
-import Typography from '@mui/material/Typography'
 import React, { useEffect, useMemo } from 'react'
 import { EntityType } from 'defs'
+import Typography from '@mui/material/Typography'
 import Table from '@mui/material/Table'
 import TableBody from '@mui/material/TableBody'
 import TableCell from '@mui/material/TableCell'
@@ -63,6 +63,8 @@ export const PropertiesTable: React.FunctionComponent<Props> = ({ entityId, enti
       </Table>
     </TableContainer>
   ) : (
-    <Typography gutterBottom>Nu au fost gasite proprietati.</Typography>
+    <Typography gutterBottom variant={'body2'}>
+      Nu au fost gasite proprietati.
+    </Typography>
   )
 }

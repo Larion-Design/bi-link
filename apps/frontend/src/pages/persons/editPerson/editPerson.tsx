@@ -47,13 +47,13 @@ export const EditPerson: React.FunctionComponent = () => {
 
   return (
     <DashboardPage
-      title={fetchLoading ? 'Actualizează persoana' : getPersonFullName(fetchData?.getPersonInfo)}
+      title={fetchData?.getPersonInfo ? getPersonFullName(fetchData.getPersonInfo) : ''}
     >
       <Loader visible={fetchLoading} message={'Se incarca datele persoanei...'} />
       {!!fetchData?.getPersonInfo && (
         <PersonDetails
           personId={personId}
-          personInfo={fetchData?.getPersonInfo}
+          personInfo={fetchData.getPersonInfo}
           readonly={false}
           onSubmit={(personInfo: PersonAPIInput) => {
             if (personId) {

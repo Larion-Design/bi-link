@@ -9,12 +9,8 @@ export const PrintControl: React.FunctionComponent = () => {
     () =>
       toPng(document.querySelector<HTMLElement>('.react-flow'), {
         cacheBust: true,
-        filter: (node) => {
-          return !(
-            node?.classList?.contains('react-flow__minimap') ||
-            node?.classList?.contains('react-flow__controls')
-          )
-        },
+        filter: (node) =>
+          !/react-flow__(minimap|controls|filters|title)/.test(node?.className ?? ''),
       }).then(openResource),
     [],
   )

@@ -16,7 +16,7 @@ export class GetFileContent {
 
   @Query(() => String, { nullable: true })
   @UseGuards(FirebaseAuthGuard)
-  async getFileInfo(@Args() { fileId }: Params) {
+  async getFileContent(@Args() { fileId }: Params) {
     const fileContent = await this.searchFilesService.getFileContent(fileId)
     return fileContent?.length > 0 ? fileContent : null
   }

@@ -12,5 +12,11 @@
   "Are you sure you want to cancel the changes you've made?": "Esti sigur(a) ca vrei sa anulezi modificările?",
   "All unsaved changes will be lost": "Toate modificările nesalvate vor fi pierdute.",
   "General Information": "Informatii generale",
-  "Additional Information": "Informatii suplimentare"
+  "Additional Information": "Informatii suplimentare",
+  "firstName": "Prenume",
+  "lastName": "Nume",
+  "oldName": "Nume vechi",
+  "birthdate": "Data nasterii",
+  "cnp": "CNP",
+  "homeAddress": "Domiciliu"
 }

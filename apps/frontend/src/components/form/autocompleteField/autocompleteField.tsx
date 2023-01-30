@@ -27,12 +27,9 @@ export const AutocompleteField: React.FunctionComponent<Props> = ({
       freeSolo
       fullWidth
       disablePortal
-      readOnly={readonly}
       value={[value]}
-      options={suggestions.map((option) => ({
-        label: option,
-        id: option,
-      }))}
+      readOnly={readonly}
+      options={suggestions}
       renderInput={(params) => (
         <TextField
           {...params}

@@ -36,10 +36,7 @@ export const ImageSelector: React.FunctionComponent<Props> = ({
   }, [images])
 
   const submitSelectedImages = useCallback(() => {
-    const selectedImages = values()
-    if (selectedImages.length) {
-      selectImages(selectedImages)
-    }
+    selectImages(values())
     closeModal?.()
   }, [closeModal, selectImages, uid])
 
@@ -52,17 +49,21 @@ export const ImageSelector: React.FunctionComponent<Props> = ({
             {data.getFilesInfo.map(({ fileId, url: { url } }) => (
               <ImageListItem
                 key={fileId}
-                sx={{ position: 'relative' }}
+                sx={(theme) => ({
+                  borderColor: map.has(fileId) ? theme.palette.grey[200] : 'none',
+                  borderWidth: 1,
+                })}
                 onClick={() => {
-                  if (allImages.has(fileId)) {
+                  if (map.has(fileId)) {
                     remove(fileId)
                   } else add(allImages.get(fileId), ({ fileId }) => fileId)
                 }}
               >
                 {map.has(fileId) && (
                   <BookmarkAddedIcon
-                    color={'success'}
-                    sx={{ position: 'absolute', top: 2, right: 2 }}
+                    color={'inherit'}
+                    fontSize={'large'}
+                    sx={{ position: 'absolute', top: 2, right: 2, zIndex: 100 }}
                   />
                 )}
                 <Image src={url} />

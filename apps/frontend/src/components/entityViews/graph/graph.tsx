@@ -16,6 +16,9 @@ type Props = {
   onEntitySelected?: (entityId: string, entityType: EntityType) => void
   onRelationshipSelected?: () => void
   disableFilters?: boolean
+  disableMap?: boolean
+  disableControls?: boolean
+  disableTitle?: boolean
 }
 
 const nodeConfig: Label = { width: 200, height: 150 }
@@ -26,6 +29,9 @@ export const Graph: React.FunctionComponent<Props> = ({
   onEntitySelected,
   onRelationshipSelected,
   disableFilters,
+  disableTitle,
+  disableMap,
+  disableControls,
 }) => {
   const showNotification = useNotification()
   const [fetchGraph, { data, error: graphError }] = getEntitiesGraphRequest()
@@ -359,7 +365,7 @@ export const Graph: React.FunctionComponent<Props> = ({
   }, [data?.getEntitiesGraph, entitiesInfo, visibleEntities, visibleRelationships])
 
   return (
-    <Box sx={{ width: 1, height: '75vh' }}>
+    <Box sx={{ width: 1, height: 1 }}>
       <ReactFlowProvider>
         <EntityGraph
           depth={graphDepth}
@@ -376,6 +382,9 @@ export const Graph: React.FunctionComponent<Props> = ({
             setVisibleRelationships(new Set(relationshipsTypes))
           }
           disableFilters={disableFilters}
+          disableTitle={disableTitle}
+          disableMap={disableMap}
+          disableControls={disableControls}
         />
       </ReactFlowProvider>
     </Box>

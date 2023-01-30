@@ -29,13 +29,13 @@ export const FileTargetEntitySelector: React.FunctionComponent<Props> = ({
   const openFileSelector = useCallback(
     (files: FileAPIInput[], selectedFile: FileAPIInput | null) =>
       modal.openFileSelector(files, updateFile, selectedFile, () => selectEntity(null)),
-    [selectEntity, updateFile],
+    [selectEntity, updateFile, selectedFile],
   )
 
   useEffect(() => {
     const files = personInfo?.getPersonInfo?.files.filter(({ isHidden }) => !isHidden)
 
-    if (files.length) {
+    if (files?.length) {
       openFileSelector(files, selectedFile)
     }
   }, [personInfo?.getPersonInfo?.files])
@@ -43,7 +43,7 @@ export const FileTargetEntitySelector: React.FunctionComponent<Props> = ({
   useEffect(() => {
     const files = propertyInfo?.getProperty?.files.filter(({ isHidden }) => !isHidden)
 
-    if (files.length) {
+    if (files?.length) {
       openFileSelector(files, selectedFile)
     }
   }, [propertyInfo?.getProperty?.files])
@@ -51,7 +51,7 @@ export const FileTargetEntitySelector: React.FunctionComponent<Props> = ({
   useEffect(() => {
     const files = companyInfo?.getCompany?.files.filter(({ isHidden }) => !isHidden)
 
-    if (files.length) {
+    if (files?.length) {
       openFileSelector(files, selectedFile)
     }
   }, [companyInfo?.getCompany?.files])
@@ -59,7 +59,7 @@ export const FileTargetEntitySelector: React.FunctionComponent<Props> = ({
   useEffect(() => {
     const files = incidentInfo?.getIncident?.files.filter(({ isHidden }) => !isHidden)
 
-    if (files.length) {
+    if (files?.length) {
       openFileSelector(files, selectedFile)
     }
   }, [incidentInfo?.getIncident?.files])
@@ -95,8 +95,14 @@ export const FileTargetEntitySelector: React.FunctionComponent<Props> = ({
   )
 
   return (
-    <Box sx={{ width: 1 }}>
-      <Graph entityId={entityId} depth={1} onEntitySelected={entitySelectedHandler} />
+    <Box sx={{ height: '50vh' }}>
+      <Graph
+        entityId={entityId}
+        depth={1}
+        onEntitySelected={entitySelectedHandler}
+        disableTitle={true}
+        disableMap={true}
+      />
     </Box>
   )
 }

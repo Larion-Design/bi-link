@@ -53,7 +53,7 @@ export const ReportDetails: React.FunctionComponent<Props> = ({
       reportType={reportType}
       entityId={entityId}
       entityType={entityType}
-      reportInfo={fetchReportData.getReport}
+      reportInfo={fetchReportData?.getReport}
       onSubmit={submitFormHandler}
       onCancel={navigateToReportsList}
     />

@@ -79,6 +79,8 @@ export const RelationshipsTable: React.FunctionComponent<Props> = ({ personId })
       </Table>
     </TableContainer>
   ) : (
-    <Typography gutterBottom> Nu exista relatii cu alte persoane</Typography>
+    <Typography gutterBottom variant={'body2'}>
+      Nu exista relatii cu alte persoane
+    </Typography>
   )
 }

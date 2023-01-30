@@ -227,7 +227,7 @@ export const ModalProvider: React.FunctionComponent<PropsWithChildren<any>> = ({
               <>
                 <ImageSelector
                   closeModal={() => dispatch({ type: 'closeModal', payload: 'imageSelector' })}
-                  images={state.images ?? []}
+                  images={state.images}
                   selectImages={state.selectImages}
                   selectedImages={state.selectedImages}
                 />

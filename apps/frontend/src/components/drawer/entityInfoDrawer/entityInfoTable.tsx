@@ -1,3 +1,4 @@
+import Typography from '@mui/material/Typography'
 import React, { useCallback, useState } from 'react'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import Accordion from '@mui/material/Accordion'
@@ -12,32 +13,45 @@ import { FormattedMessage } from 'react-intl'
 
 type Props = {
   label: string
-  data: Record<string, string>
+  data: Record<string, string | number>
   createDataRef: (key: string) => void
+  missingDataMessage?: string
 }
 
-export const EntityInfoTable: React.FunctionComponent<Props> = ({ label, data }) => {
-  const [open, setOpen] = useState(true)
+export const EntityInfoTable: React.FunctionComponent<Props> = ({
+  label,
+  data,
+  createDataRef,
+  missingDataMessage,
+}) => {
+  const [open, setOpen] = useState(false)
   const toggle = useCallback(() => setOpen((open) => !open), [setOpen])
+  const dataEntries = Object.entries(data)
 
   return (
-    <Accordion expanded={open} onChange={toggle}>
+    <Accordion expanded={open} onChange={toggle} variant={'outlined'}>
       <AccordionSummary expandIcon={<ExpandMoreIcon />}>{label}</AccordionSummary>
       <AccordionDetails>
-        <TableContainer>
-          <Table>
-            <TableBody>
-              {Object.entries(data).map(([key, value]) => (
-                <TableRow key={key}>
-                  <TableCell>
-                    <FormattedMessage id={key} />
-                  </TableCell>
-                  <TableCell>{value}</TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
+        {dataEntries.length > 0 ? (
+          <TableContainer>
+            <Table>
+              <TableBody>
+                {dataEntries.map(([key, value]) => (
+                  <TableRow key={key}>
+                    <TableCell>
+                      <FormattedMessage id={key} defaultMessage={key} />
+                    </TableCell>
+                    <TableCell onClick={() => createDataRef(key)} sx={{ cursor: 'pointer' }}>
+                      {value}
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        ) : (
+          <Typography variant={'body2'}>{missingDataMessage}</Typography>
+        )}
       </AccordionDetails>
     </Accordion>
   )

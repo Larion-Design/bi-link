@@ -31,6 +31,7 @@ async function bootstrap() {
     process.env.NODE_ENV === 'production' ? ['warn', 'error'] : ['warn', 'error', 'debug'],
   )
   app.useLogger(logger)
+  app.enableCors()
 
   await app.startAllMicroservices()
   await app.listen(process.env.SERVICE_API_PORT, '0.0.0.0')

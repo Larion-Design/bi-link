@@ -7,7 +7,8 @@ import { Graph } from '../../../../entityViews/graph'
 import { useModal } from '../../../../modal/modalProvider'
 
 type Props = {
-  entityId: string
+  entityId?: string
+  entityType?: EntityType
   selectedImages: FileAPIInput[]
   updateImages: (images: FileAPIInput[]) => void
 }
@@ -63,8 +64,15 @@ export const ImagesTargetEntitySelector: React.FunctionComponent<Props> = ({
   )
 
   return (
-    <Box sx={{ width: 1 }}>
-      <Graph entityId={entityId} depth={1} onEntitySelected={entitySelectedHandler} />
+    <Box sx={{ height: '30vh' }}>
+      <Graph
+        entityId={entityId}
+        depth={1}
+        onEntitySelected={entitySelectedHandler}
+        disableControls={true}
+        disableMap={true}
+        disableTitle={true}
+      />
     </Box>
   )
 }

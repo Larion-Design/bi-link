@@ -71,7 +71,7 @@ export class SearchPropertiesService {
         fields: ['name', 'type'] as Array<keyof PropertyIndex>,
         query: {
           nested: {
-            path: 'associatedPersons',
+            path: 'companiesOwners' as keyof PropertyIndex,
             query: {
               term: {
                 'companyOwners._id': companyId,
@@ -95,7 +95,7 @@ export class SearchPropertiesService {
         fields: ['name', 'type'] as Array<keyof PropertyIndex>,
         query: {
           nested: {
-            path: 'personOwners',
+            path: 'personsOwners' as keyof PropertyIndex,
             query: {
               term: {
                 'personOwners._id': personId,

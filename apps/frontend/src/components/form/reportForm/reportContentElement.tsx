@@ -37,78 +37,87 @@ export const ReportContentElement: React.FunctionComponent<Props> = ({
   const getContentElement = () => {
     if (contentInfo.link) {
       return (
-        <ContentElementContainer title={'Link'} removeContent={removeContent}>
+        <ContentElementContainer title={'Link'} open={expanded}>
           <ReportContentLink
             linkInfo={contentInfo.link}
             updateLink={(linkInfo) => updateContentInfo({ ...contentInfo, link: linkInfo })}
             generateTextPreview={generateTextPreview}
+            removeContent={removeContent}
           />
         </ContentElementContainer>
       )
     }
     if (contentInfo.text) {
       return (
-        <ContentElementContainer title={'Text'} removeContent={removeContent}>
+        <ContentElementContainer title={'Text'} open={expanded}>
           <ReportContentText
             textInfo={contentInfo.text}
             updateText={(textInfo) => updateContentInfo({ ...contentInfo, text: textInfo })}
             generateTextPreview={generateTextPreview}
+            removeContent={removeContent}
           />
         </ContentElementContainer>
       )
     }
     if (contentInfo.title) {
       return (
-        <ContentElementContainer title={'Text'} removeContent={removeContent}>
+        <ContentElementContainer title={'Titlu'} open={expanded}>
           <ReportContentTitle
             titleInfo={contentInfo.title}
             updateTitle={(titleInfo) => updateContentInfo({ ...contentInfo, title: titleInfo })}
             generateTextPreview={generateTextPreview}
+            removeContent={removeContent}
           />
         </ContentElementContainer>
       )
     }
     if (contentInfo.images) {
       return (
-        <ContentElementContainer title={'Imagini'} removeContent={removeContent}>
+        <ContentElementContainer title={'Imagini'} open={expanded}>
           <ReportContentImages
             entityId={entityId}
+            entityType={entityType}
             selectedImages={contentInfo.images}
             updateImages={(images) => updateContentInfo({ ...contentInfo, images })}
+            removeContent={removeContent}
           />
         </ContentElementContainer>
       )
     }
-    if (contentInfo.file) {
+    if ('file' in contentInfo) {
       return (
-        <ContentElementContainer title={'Fisier'} removeContent={removeContent}>
+        <ContentElementContainer title={'Fisier'} open={expanded}>
           <ReportContentFile
             entityId={entityId}
+            entityType={entityType}
             fileInfo={contentInfo.file}
             updateFile={(file) => updateContentInfo({ ...contentInfo, file })}
+            removeContent={removeContent}
           />
         </ContentElementContainer>
       )
     }
     if (contentInfo.table) {
       return (
-        <ContentElementContainer title={'Tabel'} removeContent={removeContent}>
+        <ContentElementContainer title={'Tabel'} open={expanded}>
           <ReportContentTable
             entityId={entityId}
             entityType={entityType}
             tableInfo={contentInfo.table}
             updateTable={(table) => updateContentInfo({ ...contentInfo, table })}
+            removeContent={removeContent}
           />
         </ContentElementContainer>
       )
     }
     if (contentInfo.graph) {
       return (
-        <ContentElementContainer title={'Grafic relational'} removeContent={removeContent}>
+        <ContentElementContainer title={'Grafic relational'} open={expanded}>
           <ReportContentGraph
             entityId={entityId}
             graphInfo={contentInfo.graph}
             updateGraph={(graph) => updateContentInfo({ ...contentInfo, graph })}
+            removeContent={removeContent}
           />
         </ContentElementContainer>
       )

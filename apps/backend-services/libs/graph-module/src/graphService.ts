@@ -1,6 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common'
-import { Neo4jService } from 'nest-neo4j/dist'
 import { Path } from 'neo4j-driver'
+import { Neo4jService } from 'nest-neo4j/dist'
 import {
   EntitiesGraph,
   EntityLabel,
@@ -116,7 +116,6 @@ export class GraphService {
       )
       return transaction.commit()
     } catch (e) {
-      console.debug('ReplaceRelationships:', e)
       this.logger.error(e)
       return transaction.rollback()
     }

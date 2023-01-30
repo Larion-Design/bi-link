@@ -1,7 +1,10 @@
 import React, { useMemo } from 'react'
-import Box from '@mui/material/Box'
+import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined'
+import AccordionActions from '@mui/material/AccordionActions'
+import AccordionDetails from '@mui/material/AccordionDetails'
+import Grid from '@mui/material/Grid'
 import { EntityType, TableAPI } from 'defs'
-import { getPersonInfoRequest } from '../../../../graphql/persons/queries/getPersonInfo'
+import { ActionButton } from '../../../button/actionButton'
 import { AssociatesTable } from '../../../reports/tables/associatesTable'
 import { PropertiesTable } from '../../../reports/tables/propertiesTable'
 import { RelationshipsTable } from '../../../reports/tables/relationshipsTable'
@@ -12,6 +15,7 @@ type Props = {
   entityType?: EntityType
   tableInfo: TableAPI
   updateTable: (tableInfo: TableAPI) => void
+  removeContent: () => void
 }
 
 type PredefinedTables = 'properties' | 'associates' | 'relationships'
@@ -21,9 +25,8 @@ export const ReportContentTable: React.FunctionComponent<Props> = ({
   entityType,
   tableInfo: { id },
   updateTable,
+  removeContent,
 }) => {
-  const [fetchPerson, { data: personData }] = getPersonInfoRequest()
-
   const options = useMemo(() => {
     switch (entityType) {
       case 'PERSON': {
@@ -36,38 +39,41 @@ export const ReportContentTable: React.FunctionComponent<Props> = ({
     }
   }, [entityType])
 
-  const renderPersonTable = () => {
+  const table = useMemo(() => {
     switch (id as PredefinedTables) {
       case 'properties': {
-        return <PropertiesTable entityId={entityId} entityType={'PERSON'} />
+        return <PropertiesTable entityId={entityId} entityType={entityType} />
       }
       case 'relationships': {
         return <RelationshipsTable personId={entityId} />
-      }
-    }
-    return null
-  }
-
-  const renderCompanyTable = () => {
-    switch (id as PredefinedTables) {
-      case 'properties': {
-        return <PropertiesTable entityId={entityId} entityType={'COMPANY'} />
       }
       case 'associates': {
         return <AssociatesTable companyId={entityId} />
       }
     }
     return null
-  }
+  }, [id, entityType, entityId])
 
   return (
-    <Box>
-      <DropdownList value={id} options={options} onChange={(id) => updateTable({ id })} />
+    <>
+      <AccordionDetails>
+        <Grid container spacing={2}>
+          <Grid item xs={6}>
+            <DropdownList value={id} options={options} onChange={(id) => updateTable({ id })} />
+          </Grid>
 
-      <Box>
-        {entityType === 'PERSON' && renderPersonTable()}
-        {entityType === 'COMPANY' && renderCompanyTable()}
-      </Box>
-    </Box>
+          <Grid item xs={12}>
+            {table}
+          </Grid>
+        </Grid>
+      </AccordionDetails>
+      <AccordionActions>
+        <ActionButton
+          icon={<DeleteOutlinedIcon color={'error'} />}
+          onClick={removeContent}
+          label={'Sterge element'}
+        />
+      </AccordionActions>
+    </>
   )
 }

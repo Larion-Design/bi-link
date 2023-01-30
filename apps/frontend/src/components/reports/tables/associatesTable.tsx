@@ -107,6 +107,8 @@ export const AssociatesTable: React.FunctionComponent<Props> = ({ companyId }) =
       </Table>
     </TableContainer>
   ) : (
-    <Typography gutterBottom> Nu exista asociati </Typography>
+    <Typography gutterBottom variant={'body2'}>
+      Nu exista asociati.
+    </Typography>
   )
 }

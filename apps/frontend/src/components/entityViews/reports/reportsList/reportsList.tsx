@@ -1,12 +1,10 @@
 import React, { useMemo } from 'react'
 import AddOutlinedIcon from '@mui/icons-material/AddOutlined'
 import Box from '@mui/material/Box'
-import IconButton from '@mui/material/IconButton'
 import Tooltip from '@mui/material/Tooltip'
 import Typography from '@mui/material/Typography'
 import OpenInNewOutlinedIcon from '@mui/icons-material/OpenInNewOutlined'
 import DownloadForOfflineOutlinedIcon from '@mui/icons-material/DownloadForOfflineOutlined'
-import CopyAllOutlinedIcon from '@mui/icons-material/CopyAllOutlined'
 import { DataGrid, GridActionsCellItem, GridColDef, GridRowParams } from '@mui/x-data-grid'
 import { GridActionsColDef } from '@mui/x-data-grid/models/colDef/gridColDef'
 import { EntityType, ReportAPIOutput } from 'defs'
@@ -68,27 +66,30 @@ export const ReportsList: React.FunctionComponent<Props> = ({
     [reports?.getReports],
   )
 
+  const reportTemplates = useMemo(
+    () => [
+      { label: 'Raport nou', onClick: createReport },
+      ...(templates?.getReports?.map(({ _id, name }) => ({
+        label: name,
+        onClick: () => viewReportDetails(_id),
+      })) ?? []),
+    ],
+    [templates, createReport, viewReportDetails],
+  )
+
   return (
     <Box sx={{ width: 1 }}>
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
         <Typography variant={'h5'}>Rapoarte</Typography>
-        <IconButton onClick={createReport} data-cy={'createReport'}>
-          <Tooltip title={'Raport nou'}>
-            <AddOutlinedIcon />
-          </Tooltip>
-        </IconButton>
-
-        {templates?.getReports?.length > 0 && (
-          <Tooltip title={'Raport nou dupa model'}>
+        <Tooltip title={'Creaza raport'}>
+          <>
             <ToolbarMenu
-              icon={<CopyAllOutlinedIcon />}
-              menuOptions={templates?.getReports.map(({ _id, name }) => ({
-                label: name,
-                onClick: () => viewReportDetails(_id),
-              }))}
+              icon={<AddOutlinedIcon />}
+              menuOptions={reportTemplates}
+              data-cy={'createReport'}
             />
-          </Tooltip>
-        )}
+          </>
+        </Tooltip>
       </Box>
 
       <DataGrid
@@ -105,7 +106,7 @@ export const ReportsList: React.FunctionComponent<Props> = ({
         disableColumnFilter
         disableIgnoreModificationsIfProcessingProps
         columns={columns}
-        rows={reports.getReports ?? []}
+        rows={reports?.getReports ?? []}
         getRowId={({ _id }) => _id}
         localeText={{ noRowsLabel: 'Nu exista rapoarte.' }}
       />
