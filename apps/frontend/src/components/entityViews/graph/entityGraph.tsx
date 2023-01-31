@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from 'react'
+import React, { useCallback, useId, useMemo } from 'react'
 import Box from '@mui/material/Box'
 import Slider from '@mui/material/Slider'
 import Typography from '@mui/material/Typography'
@@ -26,6 +26,8 @@ import { IncidentNode } from './nodes/incidentNode'
 import { NodeTypes } from './nodes/type'
 
 type Props = {
+  id?: string
+  title?: string
   depth: number
   updateDepth: (depth: number) => void
   allEntities: string[]
@@ -47,6 +49,8 @@ type Props = {
 }
 
 export const EntityGraph: React.FunctionComponent<Props> = ({
+  id,
+  title,
   depth,
   updateDepth,
   allEntities,
@@ -64,6 +68,7 @@ export const EntityGraph: React.FunctionComponent<Props> = ({
   disableMap,
 }) => {
   const theme = useTheme()
+  const graphId = id ?? useId()
 
   const onNodeClick: NodeMouseHandler = useCallback(
     (event, node) => onEntitySelected(node.id, nodeTypeToEntityType[node.type]),
@@ -98,6 +103,7 @@ export const EntityGraph: React.FunctionComponent<Props> = ({
 
   return (
     <ReactFlow
+      id={graphId}
       nodes={nodes}
       edges={edges}
       defaultNodes={nodes}
@@ -113,7 +119,7 @@ export const EntityGraph: React.FunctionComponent<Props> = ({
       {!disableTitle && (
         <Panel position={'top-left'} className={'react-flow__title'}>
           <Paper variant={'outlined'} sx={{ p: 2 }}>
-            Grafic relational
+            {title ?? 'Grafic relational'}
           </Paper>
         </Panel>
       )}
@@ -161,7 +167,7 @@ export const EntityGraph: React.FunctionComponent<Props> = ({
       <Background color={theme.palette.grey[200]} variant={BackgroundVariant.Lines} />
       {!disableControls && (
         <Controls>
-          <PrintControl />
+          <PrintControl graphId={graphId} />
         </Controls>
       )}
 

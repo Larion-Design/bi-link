@@ -1,4 +1,5 @@
 import React, { useMemo } from 'react'
+import ReactDOM from 'react-dom'
 import AddOutlinedIcon from '@mui/icons-material/AddOutlined'
 import Box from '@mui/material/Box'
 import Tooltip from '@mui/material/Tooltip'
@@ -78,7 +79,7 @@ export const ReportsList: React.FunctionComponent<Props> = ({
   )
 
   return (
-    <Box sx={{ width: 1 }}>
+    <Box>
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
         <Typography variant={'h5'}>Rapoarte</Typography>
         <Tooltip title={'Creaza raport'}>

@@ -1,10 +1,13 @@
+import { usePDF } from '@react-pdf/renderer'
 import React, { useEffect } from 'react'
 import Button from '@mui/material/Button'
 import Box from '@mui/material/Box'
 import Grid from '@mui/material/Grid'
+// import ApprovalOutlinedIcon from '@mui/icons-material/ApprovalOutlined';
 import { ConnectedEntity, EntityType, ReportAPIInput } from 'defs'
 import { FormikProps, withFormik } from 'formik'
 import { useDataRefs } from '../../../utils/hooks/useDataRefProcessor'
+import { ReportDocument } from '../../reports/reportDocument'
 import { AutocompleteField } from '../autocompleteField'
 import { InputField } from '../inputField'
 import { ToggleButton } from '../toggleButton'
@@ -34,6 +37,11 @@ const Form: React.FunctionComponent<Props & FormikProps<ReportAPIInput>> = ({
 }) => {
   const { transform, removeAllRefsExcept, extractRefsIds, createDataRef, getRefs, uid } =
     useDataRefs(values.refs)
+  /* const [{ loading }, update] = usePDF({
+    document: <ReportDocument reportInfo={values} transform={transform} />,
+  })
+
+  useEffect(update, [values, update, transform])*/
 
   useEffect(() => {
     setFieldValue('refs', getRefs())
@@ -61,6 +69,8 @@ const Form: React.FunctionComponent<Props & FormikProps<ReportAPIInput>> = ({
     })
     removeAllRefsExcept(Array.from(refsIds))
   }, [values.sections])
+
+  const actionDisabled = isSubmitting || isValidating // || loading
 
   return (
     <form data-cy={'reportForm'}>
@@ -97,13 +107,12 @@ const Form: React.FunctionComponent<Props & FormikProps<ReportAPIInput>> = ({
             createDataRef={createDataRef}
           />
         </Grid>
-
         <Grid item xs={12} justifyContent={'flex-end'} mt={4}>
           <Box display={'flex'} justifyContent={'flex-end'}>
             <Button
               data-cy={'cancelForm'}
               color={'error'}
-              disabled={isSubmitting}
+              disabled={actionDisabled}
               variant={'text'}
               onClick={onCancel}
               sx={{ mr: 4 }}
@@ -111,7 +120,16 @@ const Form: React.FunctionComponent<Props & FormikProps<ReportAPIInput>> = ({
               Anulează
             </Button>
             <Button
-              disabled={isSubmitting || isValidating}
+              data-cy={'generateDocument'}
+              disabled={true || actionDisabled}
+              variant={'contained'}
+              onClick={onCancel}
+              sx={{ mr: 4 }}
+            >
+              Generează document
+            </Button>
+            <Button
+              disabled={actionDisabled}
               variant={'contained'}
               onClick={() => void submitForm()}
               data-cy={'submitForm'}

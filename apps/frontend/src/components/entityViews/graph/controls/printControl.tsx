@@ -4,10 +4,14 @@ import { ControlButton } from 'reactflow'
 import { toPng } from 'html-to-image'
 import { openResource } from '../../../../utils/resourceUrl'
 
-export const PrintControl: React.FunctionComponent = () => {
+type Props = {
+  graphId: string
+}
+
+export const PrintControl: React.FunctionComponent<Props> = ({ graphId }) => {
   const convertToImage = useCallback(
     () =>
-      toPng(document.querySelector<HTMLElement>('.react-flow'), {
+      toPng(document.querySelector<HTMLElement>(`#${graphId}`), {
         cacheBust: true,
         filter: (node) =>
           !/react-flow__(minimap|controls|filters|title)/.test(node?.className ?? ''),

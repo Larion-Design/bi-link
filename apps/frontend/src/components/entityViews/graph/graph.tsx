@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { PropsWithRef, useEffect, useState } from 'react'
 import Box from '@mui/material/Box'
 import dagre, { Label } from 'dagre'
 import { ConnectionLineType, Edge, Node, Position, ReactFlowProvider } from 'reactflow'
@@ -11,6 +11,8 @@ import { relationshipsTypes } from '../../form/relationships/utils'
 import { getRelationshipLabelFromType } from './utils'
 
 type Props = {
+  id?: string
+  title?: string
   entityId: string
   depth?: number
   onEntitySelected?: (entityId: string, entityType: EntityType) => void
@@ -23,7 +25,9 @@ type Props = {
 
 const nodeConfig: Label = { width: 200, height: 150 }
 
-export const Graph: React.FunctionComponent<Props> = ({
+export const Graph: React.FunctionComponent<PropsWithRef<Props>> = ({
+  id,
+  title,
   entityId,
   depth,
   onEntitySelected,
@@ -368,6 +372,8 @@ export const Graph: React.FunctionComponent<Props> = ({
     <Box sx={{ width: 1, height: 1 }}>
       <ReactFlowProvider>
         <EntityGraph
+          id={id}
+          title={title}
           depth={graphDepth}
           updateDepth={updateDepth}
           data={{ nodes, edges }}
