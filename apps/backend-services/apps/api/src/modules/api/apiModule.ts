@@ -1,62 +1,73 @@
+import { FilesModule } from '@app/files'
+import { GraphModule } from '@app/graph-module'
+import { PubModule } from '@app/pub'
 import { Module } from '@nestjs/common'
 import { MulterModule } from '@nestjs/platform-express'
 import { memoryStorage } from 'multer'
-import { PubModule } from '@app/pub'
 import { SearchModule } from '../search/searchModule'
 import { UsersModule } from '../users/UsersModule'
-import { GetCompany } from './companies/queries/getCompany'
+import { GetEntitiesGraph } from './common/queries/getEntitiesGraph'
 import { CreateCompany } from './companies/mutations/createCompany'
 import { UpdateCompany } from './companies/mutations/updateCompany'
-import { SearchCompanies } from './companies/queries/searchCompanies'
 import { CompanyCUIExists } from './companies/queries/companyCUIExists'
 import { CompanyRegistrationNumberExists } from './companies/queries/companyRegistrationNumberExists'
+import { GetCompanies } from './companies/queries/getCompanies'
+import { GetCompany } from './companies/queries/getCompany'
 import { GetCompanyFrequentCustomFields } from './companies/queries/getCompanyFrequentCustomFields'
-import { GetPerson } from './persons/queries/getPerson'
-import { GetPersons } from './persons/queries/getPersons'
-import { SearchPersons } from './persons/queries/searchPersons'
-import { CreatePerson } from './persons/mutations/createPerson'
-import { UpdatePerson } from './persons/mutations/updatePerson'
-import { PersonCNPExists } from './persons/queries/personCNPExists'
-import { PersonIdDocumentExists } from './persons/queries/personIdDocumentExists'
-import { FileUrl } from './files/fieldResolvers'
-import { GetDownloadUrl } from './files/queries/getDownloadUrl'
-import { GetPersonFrequentCustomFields } from './persons/queries/getPersonFrequentCustomFields'
-import { CustomFieldsService } from './customFields/services/customFieldsService'
-import { PersonAPIService } from './persons/services/personAPIService'
-import { RelationshipsService } from './persons/services/relationshipsService'
-import { IdDocumentsService } from './persons/services/idDocumentsService'
-import { FileAPIService } from './files/services/fileAPIService'
+import { SearchCompanies } from './companies/queries/searchCompanies'
+import { AssociatesService } from './companies/services/associatesService'
 import { CompanyAPIService } from './companies/services/companyAPIService'
 import { LocationService } from './companies/services/locationService'
-import { AssociatesService } from './companies/services/associatesService'
-import { VinExists } from './properties/queries/vehicles/vinExists'
-import { GetCompanies } from './companies/queries/getCompanies'
-import { UserRegistered } from './users/mutations/userRegistered'
-import { GetMakers } from './properties/queries/vehicles/getMakers'
-import { GetModels } from './properties/queries/vehicles/getModels'
-import { GetIncident } from './incidents/queries/getIncident'
-import { SearchIncidents } from './incidents/queries/searchIncidents'
+import { CustomFieldsService } from './customFields/services/customFieldsService'
+import { FileUploadController } from './files/controllers/fileUploadController'
+import { FileUrl } from './files/fieldResolvers'
+import { GetFileContent } from './files/queries/getFileContent'
+import { GetFileInfo } from './files/queries/getFileInfo'
+import { GetFilesInfo } from './files/queries/getFilesInfo'
+import { FileAPIService } from './files/services/fileAPIService'
 import { CreateIncident } from './incidents/mutations/createIncident'
 import { UpdateIncident } from './incidents/mutations/updateIncident'
-import { PartyAPIService } from './incidents/services/partyAPIService'
-import { IncidentAPIService } from './incidents/services/incidentAPIService'
+import { GetIncident } from './incidents/queries/getIncident'
 import { GetIncidentFrequentCustomFields } from './incidents/queries/getIncidentFrequentCustomFields'
-import { FilesModule } from '@app/files'
-import { FileUploadController } from './files/controllers/fileUploadController'
-import { GraphModule } from '@app/graph-module'
-import { GetEntitiesGraph } from './common/queries/getEntitiesGraph'
 import { GetIncidents } from './incidents/queries/getIncidents'
-import { GetUsers } from './users/queries/getUsers'
-import { ChangeUserRole } from './users/mutations/changeUserRole'
-import { DisableUser } from './users/mutations/disableUser'
-import { GetProperty } from './properties/queries/getProperty'
+import { SearchIncidents } from './incidents/queries/searchIncidents'
+import { IncidentAPIService } from './incidents/services/incidentAPIService'
+import { PartyAPIService } from './incidents/services/partyAPIService'
+import { CreatePerson } from './persons/mutations/createPerson'
+import { UpdatePerson } from './persons/mutations/updatePerson'
+import { GetPerson } from './persons/queries/getPerson'
+import { GetPersonFrequentCustomFields } from './persons/queries/getPersonFrequentCustomFields'
+import { GetPersons } from './persons/queries/getPersons'
+import { PersonCNPExists } from './persons/queries/personCNPExists'
+import { PersonIdDocumentExists } from './persons/queries/personIdDocumentExists'
+import { SearchPersons } from './persons/queries/searchPersons'
+import { IdDocumentsService } from './persons/services/idDocumentsService'
+import { PersonAPIService } from './persons/services/personAPIService'
+import { RelationshipsService } from './persons/services/relationshipsService'
 import { CreateProperty } from './properties/mutations/createProperty'
-import { PropertyAPIService } from './properties/services/propertyAPIService'
-import { PropertyOwnerAPIService } from './properties/services/propertyOwnerAPIService'
-import { GetDownloadUrls } from './files/queries/getDownloadUrls'
-import { SearchProperties } from './properties/queries/searchProperties'
 import { UpdateProperty } from './properties/mutations/updateProperty'
 import { GetProperties } from './properties/queries/getProperties'
+import { GetPropertiesByCompany } from './properties/queries/getPropertiesByCompany'
+import { GetPropertiesByPerson } from './properties/queries/getPropertiesByPerson'
+import { GetProperty } from './properties/queries/getProperty'
+import { SearchProperties } from './properties/queries/searchProperties'
+import { GetMakers } from './properties/queries/vehicles/getMakers'
+import { GetModels } from './properties/queries/vehicles/getModels'
+import { VinExists } from './properties/queries/vehicles/vinExists'
+import { PropertyAPIService } from './properties/services/propertyAPIService'
+import { PropertyOwnerAPIService } from './properties/services/propertyOwnerAPIService'
+import { CreateReport } from './reports/mutations/createReport'
+import { UpdateReport } from './reports/mutations/updateReport'
+import { GetReport } from './reports/queries/getReport'
+import { GetReports } from './reports/queries/getReports'
+import { GetReportTemplates } from './reports/queries/getReportTemplates'
+import { ReportAPIService } from './reports/services/reportAPIService'
+import { ReportContentAPIService } from './reports/services/reportContentAPIService'
+import { ReportRefsAPIService } from './reports/services/reportRefsAPIService'
+import { ChangeUserRole } from './users/mutations/changeUserRole'
+import { DisableUser } from './users/mutations/disableUser'
+import { UserRegistered } from './users/mutations/userRegistered'
+import { GetUsers } from './users/queries/getUsers'
 
 @Module({
   imports: [
@@ -73,6 +84,7 @@ import { GetProperties } from './properties/queries/getProperties'
     }),
   ],
   providers: [
+    /* Service classes */
     CustomFieldsService,
     PersonAPIService,
     RelationshipsService,
@@ -85,6 +97,11 @@ import { GetProperties } from './properties/queries/getProperties'
     PartyAPIService,
     PropertyAPIService,
     PropertyOwnerAPIService,
+    ReportAPIService,
+    ReportContentAPIService,
+    ReportRefsAPIService,
+
+    /* Resolvers */
     GetEntitiesGraph,
     GetCompany,
     GetCompanies,
@@ -103,8 +120,6 @@ import { GetProperties } from './properties/queries/getProperties'
     PersonIdDocumentExists,
     GetPersonFrequentCustomFields,
     FileUrl,
-    GetDownloadUrl,
-    GetDownloadUrls,
     GetMakers,
     GetModels,
     VinExists,
@@ -113,6 +128,8 @@ import { GetProperties } from './properties/queries/getProperties'
     GetProperty,
     CreateProperty,
     UpdateProperty,
+    GetPropertiesByPerson,
+    GetPropertiesByCompany,
     UserRegistered,
     GetIncident,
     SearchIncidents,
@@ -123,6 +140,14 @@ import { GetProperties } from './properties/queries/getProperties'
     GetUsers,
     ChangeUserRole,
     DisableUser,
+    GetReport,
+    GetReports,
+    GetReportTemplates,
+    CreateReport,
+    UpdateReport,
+    GetFileInfo,
+    GetFilesInfo,
+    GetFileContent,
   ],
   controllers: [FileUploadController],
 })

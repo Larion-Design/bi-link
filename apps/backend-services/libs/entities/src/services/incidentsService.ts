@@ -48,7 +48,14 @@ export class IncidentsService {
 
   getIncidents = async (incidentsIds: string[]) => {
     try {
-      return this.incidentModel.find({ _id: incidentsIds }, { _id: 1, location: 1, date: 1 }).exec()
+      return this.incidentModel
+        .find({ _id: incidentsIds })
+        .populate({ path: 'files', model: this.fileModel })
+        .populate({ path: 'parties', model: this.partyModel })
+        .populate({ path: 'parties.persons', model: this.personModel })
+        .populate({ path: 'parties.properties', model: this.propertyModel })
+        .populate({ path: 'parties.companies', model: this.companyModel })
+        .exec()
     } catch (e) {
       this.logger.error(e)
     }

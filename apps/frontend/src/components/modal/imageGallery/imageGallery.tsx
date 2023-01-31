@@ -7,7 +7,7 @@ import ImageList from '@mui/material/ImageList'
 import ImageListItem from '@mui/material/ImageListItem'
 import Image from 'mui-image'
 import { FileAPIInput } from 'defs'
-import { getDownloadUrlsRequest } from '../../../graphql/shared/queries/getDownloadUrls'
+import { getFilesInfoRequest } from '../../../graphql/files/getFilesInfo'
 import { imageTypeRegex } from '../../../utils/mimeTypes'
 import { FileUploadBox } from '../../form/fileField/FileUploadBox'
 import { ModalHeader } from '../modalHeader'
@@ -19,16 +19,14 @@ type Props = {
 }
 
 export const ImageGallery: React.FunctionComponent<Props> = ({ images, setImages, closeModal }) => {
+  const [fetchImages, { data }] = getFilesInfoRequest()
   const [uploadedImages, setUploadedImages] = useState(images)
-  const [fetchImages, { data }] = getDownloadUrlsRequest()
 
   useEffect(() => {
-    if (uploadedImages.length) {
-      void fetchImages({
-        variables: {
-          filesIds: uploadedImages.map(({ fileId }) => fileId),
-        },
-      })
+    const filesIds = uploadedImages.filter(({ isHidden }) => !isHidden).map(({ fileId }) => fileId)
+
+    if (filesIds.length) {
+      void fetchImages({ variables: { filesIds } })
     }
   }, [uploadedImages])
 
@@ -45,10 +43,10 @@ export const ImageGallery: React.FunctionComponent<Props> = ({ images, setImages
           acceptedFileTypes={imageTypeRegex}
         >
           {data ? (
-            <ImageList variant={'masonry'} cols={3} gap={8}>
-              {data.getDownloadUrls.map((imageUrl) => (
-                <ImageListItem key={imageUrl}>
-                  <Image src={imageUrl} />
+            <ImageList variant={'masonry'}>
+              {data.getFilesInfo.map(({ fileId, url: { url } }) => (
+                <ImageListItem key={fileId}>
+                  <Image src={url} fit={'cover'} />
                 </ImageListItem>
               ))}
             </ImageList>

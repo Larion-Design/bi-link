@@ -13,8 +13,10 @@ import {
   QUEUE_INCIDENTS,
   QUEUE_PERSONS,
   QUEUE_PROPERTIES,
+  QUEUE_REPORTS,
 } from './constants'
 import { PropertyEventDispatcherService } from './services/propertyEventDispatcherService'
+import { ReportEventDispatcherService } from './services/reportEventDispatcherService'
 
 @Module({
   imports: [
@@ -24,6 +26,7 @@ import { PropertyEventDispatcherService } from './services/propertyEventDispatch
       { name: QUEUE_FILES },
       { name: QUEUE_INCIDENTS },
       { name: QUEUE_PROPERTIES },
+      { name: QUEUE_REPORTS },
     ),
     ElasticsearchModule.registerAsync({
       imports: [ConfigModule],
@@ -41,6 +44,7 @@ import { PropertyEventDispatcherService } from './services/propertyEventDispatch
     FileEventDispatcherService,
     IncidentEventDispatcherService,
     RelatedEntitiesSearchService,
+    ReportEventDispatcherService,
   ],
   exports: [
     PropertyEventDispatcherService,
@@ -48,6 +52,7 @@ import { PropertyEventDispatcherService } from './services/propertyEventDispatch
     CompanyEventDispatcherService,
     FileEventDispatcherService,
     IncidentEventDispatcherService,
+    ReportEventDispatcherService,
     RelatedEntitiesSearchService,
   ],
 })

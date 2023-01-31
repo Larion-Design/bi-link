@@ -16,3 +16,10 @@ export * from './property'
 export * from './relationship'
 export * from './user'
 export * from './reports'
+
+export type EntityType = 'PERSON' | 'COMPANY' | 'PROPERTY' | 'INCIDENT' | 'REPORT' | 'FILE'
+
+export type EntityInfo = {
+  entityId: string
+  entityType: EntityType
+}

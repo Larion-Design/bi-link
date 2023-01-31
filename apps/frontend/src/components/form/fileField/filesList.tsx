@@ -11,8 +11,8 @@ import {
   GridToolbarContainer,
 } from '@mui/x-data-grid'
 import { GridActionsColDef } from '@mui/x-data-grid/models/colDef/gridColDef'
+import { getFileInfoRequest } from '../../../graphql/files/getFileInfo'
 import { Textarea } from '../../dataGrid/textArea'
-import { getDownloadUrlRequest } from '../../../graphql/shared/queries/getDownloadUrl'
 import { RemoveRowsToolbarButton } from '../../dataGrid/removeRowsToolbarButton'
 import { FileAPIInput } from 'defs'
 
@@ -25,13 +25,13 @@ type Props = {
 
 export const FilesList: React.FunctionComponent<Props> = ({ files, updateFile, removeFiles }) => {
   const [selectedRows, setSelectedRows] = useState<GridSelectionModel>([])
-  const [requestDownloadUrl, { data }] = getDownloadUrlRequest()
+  const [getFileInfo, { data }] = getFileInfoRequest()
 
   useEffect(() => {
-    if (data?.getDownloadUrl?.url) {
-      window.open(data.getDownloadUrl.url, '_blank')
+    if (data?.getFileInfo?.url.url) {
+      window.open(data.getFileInfo.url.url, '_blank')
     }
-  }, [data?.getDownloadUrl?.url])
+  }, [data?.getFileInfo?.url?.url])
 
   const columns: Array<GridColDef | GridActionsColDef> = useMemo(
     () => [
@@ -68,20 +68,14 @@ export const FilesList: React.FunctionComponent<Props> = ({ files, updateFile, r
         field: 'actions',
         headerName: 'Actiuni',
         flex: 1,
-        editable: true,
+        editable: false,
         type: 'actions',
         getActions: ({ row: { fileId } }: GridRowParams<FileAPIInput>) => [
           <GridActionsCellItem
             showInMenu={false}
             icon={<CloudDownloadOutlinedIcon />}
             label={'Descarca'}
-            onClick={() =>
-              void requestDownloadUrl({
-                variables: {
-                  objectId: fileId,
-                },
-              })
-            }
+            onClick={() => void getFileInfo({ variables: { fileId } })}
           />,
         ],
       },

@@ -22,8 +22,13 @@ export class PersonsService {
     }
   }
 
-  update = async (personId: string, personModel: PersonModel) =>
-    this.personModel.findByIdAndUpdate(personId, personModel)
+  update = async (personId: string, personModel: PersonModel) => {
+    try {
+      return this.personModel.findByIdAndUpdate(personId, personModel)
+    } catch (e) {
+      this.logger.error(e)
+    }
+  }
 
   find = async (personId: string): Promise<PersonDocument> => {
     try {
@@ -38,41 +43,22 @@ export class PersonsService {
     }
   }
 
-  findMultiplePersonsWithImage = async (
-    personsIds: Array<Person['_id']>,
-  ): Promise<PersonDocument[]> => {
+  findMultiplePersons = async (personsIds: string[]): Promise<PersonDocument[]> => {
     try {
       return await this.personModel
-        .find(
-          { _id: personsIds },
-          {
-            _id: 1,
-            firstName: 1,
-            lastName: 1,
-            cnp: 1,
-            images: 1,
-          },
-        )
+        .find({ _id: personsIds })
+        .populate({ path: 'files', model: this.fileModel })
         .populate({ path: 'images', model: this.fileModel })
+        .populate({ path: 'relationships.person', model: this.personModel })
         .exec()
     } catch (error) {
       this.logger.error(error)
     }
   }
 
-  findPersonsModelsByIds = async (personsIds: Array<Person['_id']>): Promise<PersonDocument[]> => {
+  getPersonsDocuments = async (personsIds: Array<Person['_id']>): Promise<PersonDocument[]> => {
     try {
-      return this.personModel
-        .find(
-          { _id: personsIds },
-          {
-            _id: 1,
-            firstName: 1,
-            lastName: 1,
-            cnp: 1,
-          },
-        )
-        .exec()
+      return this.personModel.find({ _id: personsIds }).exec()
     } catch (error) {
       this.logger.error(error)
     }

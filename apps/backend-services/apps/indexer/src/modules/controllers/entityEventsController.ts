@@ -7,6 +7,7 @@ import { IncidentEventDispatcherService } from '../producers/services/incidentEv
 import { RelatedEntitiesSearchService } from '../producers/services/relatedEntitiesSearchService'
 import { FileEventDispatcherService } from '../producers/services/fileEventDispatcherService'
 import { PropertyEventDispatcherService } from '../producers/services/propertyEventDispatcherService'
+import { ReportEventDispatcherService } from '../producers/services/reportEventDispatcherService'
 
 @Controller()
 export class EntityEventsController {
@@ -16,6 +17,7 @@ export class EntityEventsController {
     private readonly propertyEventDispatcherService: PropertyEventDispatcherService,
     private readonly incidentEventDispatcherService: IncidentEventDispatcherService,
     private readonly fileEventDispatcherService: FileEventDispatcherService,
+    private readonly reportEventDispatcherService: ReportEventDispatcherService,
     private readonly relatedEntitiesSearchService: RelatedEntitiesSearchService,
   ) {}
 
@@ -53,13 +55,17 @@ export class EntityEventsController {
         relatedIncidentsIds = await this.relatedEntitiesSearchService.getIncidentsRelatedToProperty(
           entityId,
         )
-        return this.propertyEventDispatcherService.dispatchPropertyUpdated(entityId)
+        await this.propertyEventDispatcherService.dispatchPropertyUpdated(entityId)
+        break
       }
       case 'INCIDENT': {
         return this.incidentEventDispatcherService.dispatchIncidentUpdated(entityId)
       }
       case 'FILE': {
         return this.fileEventDispatcherService.dispatchFileCreated({ fileId: entityId })
+      }
+      case 'REPORT': {
+        return this.reportEventDispatcherService.dispatchReportUpdated({ reportId: entityId })
       }
     }
 
@@ -103,6 +109,9 @@ export class EntityEventsController {
       }
       case 'FILE': {
         return this.fileEventDispatcherService.dispatchFileCreated({ fileId: entityId })
+      }
+      case 'REPORT': {
+        return this.reportEventDispatcherService.dispatchReportCreated({ reportId: entityId })
       }
     }
   }

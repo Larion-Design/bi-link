@@ -5,6 +5,7 @@ import Typography from '@mui/material/Typography'
 import { PersonAPIInput } from 'defs'
 import { getPersonFullName } from '../../utils/person'
 import { Graph } from '../entityViews/graph'
+import { Reports } from '../entityViews/reports'
 import { PersonForm } from '../form/personForm'
 import { InputFieldMenu } from '../menu/inputFieldMenu'
 
@@ -45,11 +46,9 @@ export const PersonDetails: React.FunctionComponent<Props> = ({
             <MenuItem disabled={!canSwitchViews} onClick={() => setMainTabIndex(1)}>
               Grafic relational
             </MenuItem>
+            <MenuItem onClick={() => setMainTabIndex(3)}>Rapoarte</MenuItem>
             <MenuItem disabled onClick={() => setMainTabIndex(2)}>
               Evenimente
-            </MenuItem>
-            <MenuItem disabled onClick={() => setMainTabIndex(3)}>
-              Rapoarte
             </MenuItem>
             <MenuItem disabled onClick={() => setMainTabIndex(4)}>
               Conflicte
@@ -68,6 +67,7 @@ export const PersonDetails: React.FunctionComponent<Props> = ({
           />
         )}
         {mainTabIndex === 1 && !!personId && <Graph entityId={personId} />}
+        {mainTabIndex === 3 && !!personId && <Reports entityId={personId} entityType={'PERSON'} />}
       </Box>
     </Box>
   )

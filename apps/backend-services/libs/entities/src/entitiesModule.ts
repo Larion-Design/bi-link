@@ -1,28 +1,36 @@
 import { Global, Module } from '@nestjs/common'
 import { MongooseModule } from '@nestjs/mongoose'
+import { AssociateModel, AssociateSchema } from '@app/entities/models/associateModel'
+import { CompanyModel, CompanySchema } from '@app/entities/models/companyModel'
+import { CustomFieldModel, CustomFieldSchema } from '@app/entities/models/customFieldModel'
 import { FileModel, FileSchema } from '@app/entities/models/fileModel'
 import { IdDocumentModel, IdDocumentSchema } from '@app/entities/models/idDocumentModel'
-import { PersonModel, PersonSchema } from '@app/entities/models/personModel'
-import { CustomFieldModel, CustomFieldSchema } from '@app/entities/models/customFieldModel'
-import { RelationshipModel, RelationshipSchema } from '@app/entities/models/relationshipModel'
-import { CompanyModel, CompanySchema } from '@app/entities/models/companyModel'
-import { AssociateModel, AssociateSchema } from '@app/entities/models/associateModel'
 import { IncidentModel, IncidentSchema } from '@app/entities/models/incidentModel'
 import { PartyModel, PartySchema } from '@app/entities/models/partyModel'
-import { PersonsService } from '@app/entities/services/personsService'
+import { PersonModel, PersonSchema } from '@app/entities/models/personModel'
+import { PropertyModel, PropertySchema } from '@app/entities/models/propertyModel'
+import { PropertyOwnerModel, PropertyOwnerSchema } from '@app/entities/models/propertyOwnerModel'
+import { RelationshipModel, RelationshipSchema } from '@app/entities/models/relationshipModel'
+import { DataRefModel, DataRefSchema } from '@app/entities/models/reports/refs/dataRefModel'
+import {
+  ReportContentModel,
+  ReportContentSchema,
+} from '@app/entities/models/reports/reportContentModel'
+import { ReportModel, ReportSchema } from '@app/entities/models/reports/reportModel'
+import { LinkModel, LinkSchema } from '@app/entities/models/reports/content/linkModel'
+import { TableModel, TableSchema } from '@app/entities/models/reports/content/tableModel'
+import { TextModel, TextSchema } from '@app/entities/models/reports/content/textModel'
+import { TitleModel, TitleSchema } from '@app/entities/models/reports/content/titleModel'
+import {
+  ReportSectionModel,
+  ReportSectionSchema,
+} from '@app/entities/models/reports/reportSectionModel'
 import { CompaniesService } from '@app/entities/services/companiesService'
 import { FilesService } from '@app/entities/services/filesService'
 import { IncidentsService } from '@app/entities/services/incidentsService'
-import { PropertyModel, PropertySchema } from '@app/entities/models/propertyModel'
-import { PropertyOwnerModel, PropertyOwnerSchema } from '@app/entities/models/propertyOwnerModel'
-import { ReportModel, ReportSchema } from '@app/entities/models/reportModel'
-import { ReportSectionModel, ReportSectionSchema } from '@app/entities/models/reportSectionModel'
-import { ReportContentModel, ReportContentSchema } from '@app/entities/models/reportContentModel'
+import { PersonsService } from '@app/entities/services/personsService'
 import { PropertiesService } from '@app/entities/services/propertiesService'
-import { LinkModel, LinkSchema } from '@app/entities/models/reports/linkModel'
-import { TableModel, TableSchema } from '@app/entities/models/reports/tableModel'
-import { TextModel, TextSchema } from '@app/entities/models/reports/textModel'
-import { TitleModel, TitleSchema } from '@app/entities/models/reports/titleModel'
+import { ReportsService } from '@app/entities/services/reportsService'
 
 @Global()
 @Module({
@@ -46,9 +54,17 @@ import { TitleModel, TitleSchema } from '@app/entities/models/reports/titleModel
       { name: TableModel.name, schema: TableSchema },
       { name: TextModel.name, schema: TextSchema },
       { name: TitleModel.name, schema: TitleSchema },
+      { name: DataRefModel.name, schema: DataRefSchema },
     ]),
   ],
-  providers: [PersonsService, CompaniesService, FilesService, IncidentsService, PropertiesService],
+  providers: [
+    PersonsService,
+    CompaniesService,
+    FilesService,
+    IncidentsService,
+    PropertiesService,
+    ReportsService,
+  ],
   exports: [
     MongooseModule,
     PersonsService,
@@ -56,6 +72,7 @@ import { TitleModel, TitleSchema } from '@app/entities/models/reports/titleModel
     FilesService,
     IncidentsService,
     PropertiesService,
+    ReportsService,
   ],
 })
 export class EntitiesModule {}

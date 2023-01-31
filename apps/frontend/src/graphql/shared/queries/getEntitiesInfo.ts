@@ -32,6 +32,11 @@ const request = gql`
       _id
       firstName
       lastName
+      images {
+        url {
+          url
+        }
+      }
     }
     getCompanies(companiesIds: $companiesIds) {
       _id

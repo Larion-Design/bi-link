@@ -3,7 +3,6 @@ import { UseGuards } from '@nestjs/common'
 import { FirebaseAuthGuard } from '../../../users/guards/FirebaseAuthGuard'
 import { Property } from '../dto/property'
 import { PropertiesService } from '@app/entities/services/propertiesService'
-import { PropertyListRecord } from '../dto/propertyListRecord'
 
 @ArgsType()
 class Params {
@@ -15,7 +14,7 @@ class Params {
 export class GetProperties {
   constructor(private readonly propertiesService: PropertiesService) {}
 
-  @Query(() => [PropertyListRecord])
+  @Query(() => [Property])
   @UseGuards(FirebaseAuthGuard)
   async getProperties(@Args() { propertiesIds }: Params) {
     return propertiesIds.length ? this.propertiesService.getProperties(propertiesIds) : []

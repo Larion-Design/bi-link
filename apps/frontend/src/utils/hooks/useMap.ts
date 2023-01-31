@@ -8,6 +8,8 @@ export function useMap<Item>(
   items: Array<Item>,
   idExtractFunc?: (item: Item) => string | undefined,
 ) {
+  type ExtractIDFunction = (item: Item) => string | undefined
+
   const [map, setMap] = useState<Map<string, Item>>(() => {
     const itemsMap = new Map<string, Item>()
     items.forEach((item) => itemsMap.set(idExtractFunc?.(item) ?? v4(), item))
@@ -53,13 +55,13 @@ export function useMap<Item>(
   const entries = useCallback(() => Array.from(map.entries()), deps)
 
   const add = useCallback(
-    (item: Item, idExtractFunc?: (item: Item) => string | undefined) =>
+    (item: Item, idExtractFunc?: ExtractIDFunction) =>
       setMap((map) => new Map(map.set(idExtractFunc?.(item) ?? v4(), item))),
     noDeps,
   )
 
   const addBulk = useCallback(
-    (items: Array<Item>, idExtractFunc?: (item: Item) => string | undefined) =>
+    (items: Array<Item>, idExtractFunc?: ExtractIDFunction) =>
       setMap((map) => {
         items.forEach((item) => map.set(idExtractFunc?.(item) ?? v4(), item))
         return new Map(map)
@@ -101,9 +103,5 @@ export function useDebouncedMap<Item>(
 ) {
   const { map, ...rest } = useMap(items, idExtractFunc)
   const debouncedMap = useDebounce(map, debounceDelay)
-
-  return {
-    map: debouncedMap,
-    ...rest,
-  }
+  return { map: debouncedMap, ...rest }
 }

@@ -3,6 +3,7 @@ import Typography from '@mui/material/Typography'
 import Box from '@mui/material/Box'
 import MenuItem from '@mui/material/MenuItem'
 import { CompanyAPIInput } from 'defs'
+import { Reports } from '../entityViews/reports'
 import { InputFieldMenu } from '../menu/inputFieldMenu'
 import { CompanyForm } from '../form/companyForm'
 import { Graph } from '../entityViews/graph'
@@ -45,11 +46,9 @@ export const CompanyDetails: React.FunctionComponent<Props> = ({
             <MenuItem disabled={!canChangeView} onClick={() => setMainTabIndex(1)}>
               Grafic relational
             </MenuItem>
+            <MenuItem onClick={() => setMainTabIndex(3)}>Rapoarte</MenuItem>
             <MenuItem disabled onClick={() => setMainTabIndex(2)}>
               Evenimente
-            </MenuItem>
-            <MenuItem disabled onClick={() => setMainTabIndex(3)}>
-              Rapoarte
             </MenuItem>
             <MenuItem disabled onClick={() => setMainTabIndex(4)}>
               Conflicte
@@ -67,6 +66,9 @@ export const CompanyDetails: React.FunctionComponent<Props> = ({
           />
         )}
         {mainTabIndex === 1 && !!companyId && <Graph entityId={companyId} />}
+        {mainTabIndex === 3 && !!companyId && (
+          <Reports entityId={companyId} entityType={'COMPANY'} />
+        )}
       </Box>
     </Box>
   )

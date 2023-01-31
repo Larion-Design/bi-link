@@ -1,86 +1,99 @@
 import React, { PropsWithChildren, useContext, useReducer } from 'react'
 import Modal from '@mui/material/Modal'
-import { PersonSelector } from './personSelector'
-import { CompanySelector } from './companySelector'
-import { FileAPIInput } from 'defs'
+import { PersonSelector } from './entitySelector'
+import { CompanySelector } from './entitySelector'
+import {
+  EntitySelectorModal,
+  EntitySelectorModalActions,
+  EntitySelectorModalContext,
+  EntitySelectorPayload,
+} from './entitySelector'
+import {
+  FileSelectorModal,
+  FileSelectorModalActions,
+  FileSelectorModalContext,
+  FileSelectorPayload,
+} from './fileSelector'
 import { ImageGallery } from './imageGallery'
-import { PropertySelector } from './propertySelector'
+import { PropertySelector } from './entitySelector'
+import {
+  ImageGalleryModal,
+  ImageGalleryModalActions,
+  ImageGalleryModalContext,
+  ImageGalleryPayload,
+} from './imageGallery'
+import { ImageSelector } from './imageSelector'
+import {
+  ImageSelectorModal,
+  ImageSelectorModalActions,
+  ImageSelectorModalContext,
+  ImageSelectorPayload,
+} from './imageSelector'
 
-type BaseModalInfo<T extends string, K extends object> = {
-  modal: T | null
+type ModalInfo<
+  T = EntitySelectorPayload | ImageSelectorPayload | ImageGalleryPayload | FileSelectorPayload,
+> = {
   open: boolean
-  params: K
-}
-
-type EntitySelectorModal = BaseModalInfo<
-  'companySelector' | 'personSelector' | 'propertySelector',
-  {
-    entitiesSelected?: EntitySelectorHandler
-    entitiesExcluded?: string[]
-  }
->
-
-type ImageGalleryModal = BaseModalInfo<
-  'imageGallery',
-  {
-    images: FileAPIInput[]
-  }
->
-
-type ModalInfo = {
-  modal:
-    | 'companySelector'
-    | 'personSelector'
-    | 'propertySelector'
-    | 'imageGallery'
-    | 'imageSelector'
-    | null
-  open: boolean
-  entitiesSelected?: (entitiesIds: string[]) => void
+  modal: EntitySelectorModal | ImageGalleryModal | ImageSelectorModal | FileSelectorModal | null
   modalClosed?: () => void
-  entitiesExcluded?: string[]
-  images?: FileAPIInput[]
-  setImages?: (images: FileAPIInput[]) => void
-}
+} & T
 
 const initialState: ModalInfo = {
   modal: null,
   open: false,
 }
 
-type EntitySelectorHandler = (entitiesIds: string[]) => void
-
 type Action =
-  | {
-      type: 'openModal'
-      payload: {
-        modal: ModalInfo['modal']
-        entitiesSelected?: EntitySelectorHandler
-        entitiesExcluded?: string[]
-        modalClosed?: () => void
-        images?: FileAPIInput[]
-        setImages?: (images: FileAPIInput[]) => void
-      }
-    }
-  | {
-      type: 'closeModal'
-      payload: NonNullable<ModalInfo['modal']>
-    }
+  | EntitySelectorModalActions
+  | ImageGalleryModalActions
+  | ImageSelectorModalActions
+  | FileSelectorModalActions
 
 const modalReducer = (state: ModalInfo, action: Action): ModalInfo => {
   switch (action.type) {
     case 'openModal': {
-      const { modal, entitiesSelected, entitiesExcluded, modalClosed, images, setImages } =
-        action.payload
-      return {
-        modal,
-        entitiesExcluded,
-        entitiesSelected,
-        modalClosed,
-        open: true,
-        images,
-        setImages,
+      const { modal } = action.payload
+
+      switch (modal) {
+        case 'companySelector':
+        case 'propertySelector':
+        case 'personSelector': {
+          const { entitiesSelected, entitiesExcluded, modalClosed } = action.payload
+          return {
+            modal,
+            entitiesExcluded,
+            entitiesSelected,
+            modalClosed,
+            open: true,
+          }
+        }
+        case 'imageGallery': {
+          const { images, setImages, modalClosed } = action.payload
+          return {
+            modal,
+            modalClosed,
+            open: true,
+            images,
+            setImages,
+          }
+        }
+        case 'imageSelector': {
+          const { images, selectedImages, selectImages, modalClosed } = action.payload
+          return {
+            modal,
+            modalClosed,
+            open: true,
+            images,
+            selectImages,
+            selectedImages,
+          }
+        }
+        case 'fileSelector': {
+          const { files, selectFile, selectedFile, modalClosed } = action.payload
+          return { modal, open: true, files, selectFile, selectedFile, modalClosed }
+        }
       }
+      break
     }
     case 'closeModal': {
       state.modalClosed?.()
@@ -94,16 +107,12 @@ const modalReducer = (state: ModalInfo, action: Action): ModalInfo => {
 
 export const ModalProvider: React.FunctionComponent<PropsWithChildren<any>> = ({ children }) => {
   const [state, dispatch] = useReducer(modalReducer, initialState)
-  const { open, modal, entitiesSelected, entitiesExcluded, images, setImages } = state
+  const { open, modal } = state
 
   return (
     <ModalContext.Provider
       value={{
-        openPersonSelector: (
-          entitiesSelected: EntitySelectorHandler,
-          entitiesExcluded?: string[],
-          modalClosed?: () => void,
-        ) =>
+        openPersonSelector: (entitiesSelected, entitiesExcluded, modalClosed) =>
           dispatch({
             type: 'openModal',
             payload: {
@@ -113,11 +122,7 @@ export const ModalProvider: React.FunctionComponent<PropsWithChildren<any>> = ({
               modalClosed,
             },
           }),
-        openCompanySelector: (
-          entitiesSelected: EntitySelectorHandler,
-          entitiesExcluded?: string[],
-          modalClosed?: () => void,
-        ) =>
+        openCompanySelector: (entitiesSelected, entitiesExcluded, modalClosed) =>
           dispatch({
             type: 'openModal',
             payload: {
@@ -127,11 +132,7 @@ export const ModalProvider: React.FunctionComponent<PropsWithChildren<any>> = ({
               modalClosed,
             },
           }),
-        openPropertySelector: (
-          entitiesSelected: EntitySelectorHandler,
-          entitiesExcluded?: string[],
-          modalClosed?: () => void,
-        ) =>
+        openPropertySelector: (entitiesSelected, entitiesExcluded, modalClosed) =>
           dispatch({
             type: 'openModal',
             payload: {
@@ -141,11 +142,7 @@ export const ModalProvider: React.FunctionComponent<PropsWithChildren<any>> = ({
               modalClosed,
             },
           }),
-        openImageGallery: (
-          images: FileAPIInput[],
-          setImages: (images: FileAPIInput[]) => void,
-          modalClosed?: () => void,
-        ) =>
+        openImageGallery: (images, setImages, modalClosed) =>
           dispatch({
             type: 'openModal',
             payload: {
@@ -155,66 +152,98 @@ export const ModalProvider: React.FunctionComponent<PropsWithChildren<any>> = ({
               setImages,
             },
           }),
+        openImageSelector: (images, selectImages, selectedImages, modalClosed) =>
+          dispatch({
+            type: 'openModal',
+            payload: {
+              modal: 'imageSelector',
+              modalClosed,
+              images,
+              selectImages,
+              selectedImages,
+            },
+          }),
+        openFileSelector: (files, selectFile, selectedFile, modalClosed) =>
+          dispatch({
+            type: 'openModal',
+            payload: {
+              modal: 'fileSelector',
+              modalClosed,
+              files,
+              selectFile,
+              selectedFile,
+            },
+          }),
       }}
     >
-      <Modal open={open && modal === 'personSelector'}>
+      {open ? (
         <>
-          <PersonSelector
-            closeModal={() => dispatch({ type: 'closeModal', payload: 'personSelector' })}
-            personsSelected={entitiesSelected}
-            excludedPersonsIds={entitiesExcluded}
-          />
+          {modal === 'personSelector' && (
+            <Modal open={true}>
+              <>
+                <PersonSelector
+                  closeModal={() => dispatch({ type: 'closeModal', payload: 'personSelector' })}
+                  personsSelected={state.entitiesSelected}
+                  excludedPersonsIds={state.entitiesExcluded}
+                />
+              </>
+            </Modal>
+          )}
+          {modal === 'companySelector' && (
+            <Modal open={true}>
+              <>
+                <CompanySelector
+                  closeModal={() => dispatch({ type: 'closeModal', payload: 'companySelector' })}
+                  companiesSelected={state.entitiesSelected}
+                  excludedCompaniesIds={state.entitiesExcluded}
+                />
+              </>
+            </Modal>
+          )}
+          {modal === 'propertySelector' && (
+            <Modal open={true}>
+              <>
+                <PropertySelector
+                  closeModal={() => dispatch({ type: 'closeModal', payload: 'propertySelector' })}
+                  propertiesSelected={state.entitiesSelected}
+                  excludedPropertiesIds={state.entitiesExcluded}
+                />
+              </>
+            </Modal>
+          )}
+          {modal === 'imageGallery' && (
+            <Modal open={true}>
+              <>
+                <ImageGallery
+                  closeModal={() => dispatch({ type: 'closeModal', payload: 'imageGallery' })}
+                  images={state.images ?? []}
+                  setImages={state.setImages}
+                />
+              </>
+            </Modal>
+          )}
+          {modal === 'imageSelector' && (
+            <Modal open={true}>
+              <>
+                <ImageSelector
+                  closeModal={() => dispatch({ type: 'closeModal', payload: 'imageSelector' })}
+                  images={state.images}
+                  selectImages={state.selectImages}
+                  selectedImages={state.selectedImages}
+                />
+              </>
+            </Modal>
+          )}
         </>
-      </Modal>
-      <Modal open={open && modal === 'companySelector'}>
-        <>
-          <CompanySelector
-            closeModal={() => dispatch({ type: 'closeModal', payload: 'companySelector' })}
-            companiesSelected={entitiesSelected}
-            excludedCompaniesIds={entitiesExcluded}
-          />
-        </>
-      </Modal>
-      <Modal open={open && modal === 'propertySelector'}>
-        <>
-          <PropertySelector
-            closeModal={() => dispatch({ type: 'closeModal', payload: 'propertySelector' })}
-            propertiesSelected={entitiesSelected}
-            excludedPropertiesIds={entitiesExcluded}
-          />
-        </>
-      </Modal>
-      <Modal open={open && modal === 'imageGallery'}>
-        <>
-          <ImageGallery
-            closeModal={() => dispatch({ type: 'closeModal', payload: 'imageGallery' })}
-            images={images ?? []}
-            setImages={setImages}
-          />
-        </>
-      </Modal>
+      ) : null}
       {children}
     </ModalContext.Provider>
   )
 }
 
-type EntitySelector = (
-  entitiesSelected: EntitySelectorHandler,
-  entitiesExcluded?: string[],
-  modalClosed?: () => void,
-) => void
-
-type Context = {
-  openPersonSelector: EntitySelector
-  openCompanySelector: EntitySelector
-  openPropertySelector: EntitySelector
-  openImageGallery: (
-    images: FileAPIInput[],
-    setImages: (images: FileAPIInput[]) => void,
-    modalClosed?: () => void,
-  ) => void
-}
-
+type Context = EntitySelectorModalContext &
+  ImageGalleryModalContext &
+  ImageSelectorModalContext &
+  FileSelectorModalContext
 const ModalContext = React.createContext<Context | null>(null)
-
 export const useModal = () => useContext(ModalContext)
