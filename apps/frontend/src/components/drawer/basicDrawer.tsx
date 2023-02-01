@@ -23,7 +23,7 @@ export const BasicDrawer: React.FunctionComponent<PropsWithChildren<Props>> = ({
       zIndex: 1000,
       mt: 150,
     }}
-    variant={'persistent'}
+    variant={'temporary'}
     anchor={'right'}
     open={open}
   >

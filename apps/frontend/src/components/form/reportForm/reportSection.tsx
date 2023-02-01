@@ -18,6 +18,8 @@ type Props = {
   updateSectionInfo: (sectionInfo: ReportSectionAPIInput) => void
   removeSection: () => void
   generateTextPreview: (text: string) => string
+  graphCreated: (graphId: string) => void
+  graphRemoved: (graphId: string) => void
 }
 
 export const ReportSection: React.FunctionComponent<Props> = ({
@@ -27,6 +29,8 @@ export const ReportSection: React.FunctionComponent<Props> = ({
   updateSectionInfo,
   removeSection,
   generateTextPreview,
+  graphCreated,
+  graphRemoved,
 }) => {
   const dialog = useDialog()
   const { values, entries, uid, add, update, keys, remove } = useMap(sectionInfo.content)
@@ -114,6 +118,8 @@ export const ReportSection: React.FunctionComponent<Props> = ({
               updateContentInfo={(contentInfo) => update(uid, contentInfo)}
               removeContent={() => removeElement(uid)}
               generateTextPreview={generateTextPreview}
+              graphRemoved={graphRemoved}
+              graphCreated={graphCreated}
             />
           </Grid>
         ))}

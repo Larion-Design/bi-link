@@ -15,6 +15,7 @@ type Props = {
   updateGraph: (graphInfo: GraphAPI) => void
   removeContent: () => void
   graphCreated: (graphId: string) => void
+  graphRemoved: (graphId: string) => void
 }
 
 export const ReportContentGraph: React.FunctionComponent<Props> = ({
@@ -23,11 +24,13 @@ export const ReportContentGraph: React.FunctionComponent<Props> = ({
   updateGraph,
   removeContent,
   graphCreated,
+  graphRemoved,
 }) => {
   const graphId = useId()
 
   useEffect(() => {
     graphCreated(graphId)
+    return () => graphRemoved(graphId)
   }, [graphId])
 
   return (
