@@ -65,7 +65,11 @@ export const CompanyDetails: React.FunctionComponent<Props> = ({
             onSubmit={onSubmit}
           />
         )}
-        {mainTabIndex === 1 && !!companyId && <Graph entityId={companyId} />}
+        {mainTabIndex === 1 && !!companyId && (
+          <Box sx={{ height: '70vh' }}>
+            <Graph entityId={companyId} />
+          </Box>
+        )}
         {mainTabIndex === 3 && !!companyId && (
           <Reports entityId={companyId} entityType={'COMPANY'} />
         )}

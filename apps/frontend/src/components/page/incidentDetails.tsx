@@ -62,7 +62,11 @@ export const IncidentDetails: React.FunctionComponent<Props> = ({
             onSubmit={onSubmit}
           />
         )}
-        {mainTabIndex === 1 && !!incidentId && <Graph entityId={incidentId} />}
+        {mainTabIndex === 1 && !!incidentId && (
+          <Box sx={{ height: '70vh' }}>
+            <Graph entityId={incidentId} />
+          </Box>
+        )}
         {mainTabIndex === 3 && !!incidentId && (
           <Reports entityId={incidentId} entityType={'INCIDENT'} />
         )}
