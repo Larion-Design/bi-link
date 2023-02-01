@@ -20,6 +20,8 @@ type Props = {
   updateSections: (sections: ReportSectionAPIInput[]) => void | Promise<void>
   generateTextPreview: (text: string) => string
   createDataRef: CreateDataRefHandler
+  graphCreated: (graphId: string) => void
+  graphRemoved: (graphId: string) => void
 }
 
 export const ReportSections: React.FunctionComponent<Props> = ({
@@ -29,6 +31,8 @@ export const ReportSections: React.FunctionComponent<Props> = ({
   updateSections,
   generateTextPreview,
   createDataRef,
+  graphCreated,
+  graphRemoved,
 }) => {
   const { uid, entries, values, add, remove, update, map, keys } = useDebouncedMap(1000, sections)
   const [activeSection, setActiveSection] = useState<string | null>(null)
@@ -99,6 +103,8 @@ export const ReportSections: React.FunctionComponent<Props> = ({
                 updateSectionInfo={(sectionInfo) => update(activeSection, sectionInfo)}
                 removeSection={() => remove(activeSection)}
                 generateTextPreview={generateTextPreview}
+                graphCreated={graphCreated}
+                graphRemoved={graphRemoved}
               />
             )}
           </Grid>

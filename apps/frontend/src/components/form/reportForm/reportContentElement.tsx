@@ -18,6 +18,8 @@ type Props = {
   updateContentInfo: (contentInfo: ReportContentAPIInput) => void
   removeContent: () => void
   generateTextPreview: GeneratePreviewHandler
+  graphCreated: (graphId: string) => void
+  graphRemoved: (graphId: string) => void
 }
 
 export const ReportContentElement: React.FunctionComponent<Props> = ({
@@ -27,6 +29,8 @@ export const ReportContentElement: React.FunctionComponent<Props> = ({
   updateContentInfo,
   removeContent,
   generateTextPreview,
+  graphCreated,
+  graphRemoved,
 }) => {
   const [expanded, setExpandedState] = useState(false)
   const toggleAccordion = useCallback(
@@ -118,6 +122,8 @@ export const ReportContentElement: React.FunctionComponent<Props> = ({
             graphInfo={contentInfo.graph}
             updateGraph={(graph) => updateContentInfo({ ...contentInfo, graph })}
             removeContent={removeContent}
+            graphCreated={graphCreated}
+            graphRemoved={graphRemoved}
           />
         </ContentElementContainer>
       )

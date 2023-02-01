@@ -1,5 +1,5 @@
-import { usePDF } from '@react-pdf/renderer'
-import React, { useEffect } from 'react'
+// import { usePDF } from '@react-pdf/renderer'
+import React, { useCallback, useEffect, useState } from 'react'
 import Button from '@mui/material/Button'
 import Box from '@mui/material/Box'
 import Grid from '@mui/material/Grid'
@@ -7,7 +7,7 @@ import Grid from '@mui/material/Grid'
 import { ConnectedEntity, EntityType, ReportAPIInput } from 'defs'
 import { FormikProps, withFormik } from 'formik'
 import { useDataRefs } from '../../../utils/hooks/useDataRefProcessor'
-import { ReportDocument } from '../../reports/reportDocument'
+// import { ReportDocument } from '../../reports/reportDocument'
 import { AutocompleteField } from '../autocompleteField'
 import { InputField } from '../inputField'
 import { ToggleButton } from '../toggleButton'
@@ -43,15 +43,29 @@ const Form: React.FunctionComponent<Props & FormikProps<ReportAPIInput>> = ({
 
   useEffect(update, [values, update, transform])*/
 
+  const [graphsIds, setGraphsIds] = useState(new Set<string>())
+
   useEffect(() => {
     setFieldValue('refs', getRefs())
   }, [uid, setFieldValue])
 
-  useEffect(() => {
-    if (values.isTemplate) {
-      setFieldValue('refs', [])
-    }
-  }, [values.isTemplate])
+  const registerGraphId = useCallback(
+    (graphId) =>
+      setGraphsIds((graphsIds) => {
+        graphsIds.add(graphId)
+        return new Set(graphsIds)
+      }),
+    [setGraphsIds],
+  )
+
+  const removeGraphId = useCallback(
+    (graphId) =>
+      setGraphsIds((graphsIds) => {
+        graphsIds.delete(graphId)
+        return new Set(graphsIds)
+      }),
+    [setGraphsIds],
+  )
 
   useEffect(() => {
     const refsIds = new Set<string>()
@@ -94,7 +108,38 @@ const Form: React.FunctionComponent<Props & FormikProps<ReportAPIInput>> = ({
           <ToggleButton
             label={'Acest raport va fi folosit ca model'}
             checked={values.isTemplate}
-            onChange={(checked) => setFieldValue('isTemplate', checked)}
+            onChange={(checked) => {
+              setFieldValue('isTemplate', checked)
+
+              if (checked) {
+                setFieldValue('refs', [])
+                setFieldValue('person', null)
+                setFieldValue('company', null)
+                setFieldValue('property', null)
+                setFieldValue('incident', null)
+              } else if (entityId && entityType) {
+                const entity: ConnectedEntity = { _id: entityId }
+
+                switch (entityType) {
+                  case 'PERSON': {
+                    setFieldValue('person', entity)
+                    break
+                  }
+                  case 'COMPANY': {
+                    setFieldValue('company', entity)
+                    break
+                  }
+                  case 'PROPERTY': {
+                    setFieldValue('property', entity)
+                    break
+                  }
+                  case 'INCIDENT': {
+                    setFieldValue('incident', entity)
+                    break
+                  }
+                }
+              }
+            }}
           />
         </Grid>
         <Grid item xs={12}>
@@ -105,6 +150,8 @@ const Form: React.FunctionComponent<Props & FormikProps<ReportAPIInput>> = ({
             updateSections={(sections) => setFieldValue('sections', sections)}
             generateTextPreview={transform}
             createDataRef={createDataRef}
+            graphCreated={registerGraphId}
+            graphRemoved={removeGraphId}
           />
         </Grid>
         <Grid item xs={12} justifyContent={'flex-end'} mt={4}>
@@ -121,7 +168,7 @@ const Form: React.FunctionComponent<Props & FormikProps<ReportAPIInput>> = ({
             </Button>
             <Button
               data-cy={'generateDocument'}
-              disabled={true || actionDisabled}
+              disabled={true}
               variant={'contained'}
               onClick={onCancel}
               sx={{ mr: 4 }}
