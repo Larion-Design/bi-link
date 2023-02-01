@@ -66,7 +66,11 @@ export const PersonDetails: React.FunctionComponent<Props> = ({
             readonly={false}
           />
         )}
-        {mainTabIndex === 1 && !!personId && <Graph entityId={personId} />}
+        {mainTabIndex === 1 && !!personId && (
+          <Box sx={{ height: '70vh' }}>
+            <Graph entityId={personId} />
+          </Box>
+        )}
         {mainTabIndex === 3 && !!personId && <Reports entityId={personId} entityType={'PERSON'} />}
       </Box>
     </Box>

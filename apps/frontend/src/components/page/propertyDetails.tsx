@@ -64,7 +64,11 @@ export const PropertyDetails: React.FunctionComponent<Props> = ({
             onSubmit={onSubmit}
           />
         )}
-        {mainTabIndex === 1 && !!propertyId && <Graph entityId={propertyId} />}
+        {mainTabIndex === 1 && !!propertyId && (
+          <Box sx={{ height: '70vh' }}>
+            <Graph entityId={propertyId} />
+          </Box>
+        )}
         {mainTabIndex === 3 && !!propertyId && (
           <Reports entityId={propertyId} entityType={'PROPERTY'} />
         )}
