@@ -1,9 +1,8 @@
+import React, { useEffect, useId } from 'react'
 import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined'
 import AccordionActions from '@mui/material/AccordionActions'
 import AccordionDetails from '@mui/material/AccordionDetails'
 import Grid from '@mui/material/Grid'
-import React, { useEffect, useId } from 'react'
-import Box from '@mui/material/Box'
 import { GraphAPI } from 'defs'
 import { ActionButton } from '../../../button/actionButton'
 import { Graph } from '../../../entityViews/graph'
@@ -46,7 +45,14 @@ export const ReportContentGraph: React.FunctionComponent<Props> = ({
           </Grid>
           {!!entityId && (
             <Grid item xs={12} sx={{ height: '50vh' }}>
-              <Graph entityId={entityId} disableMap={true} title={label} id={graphId} />
+              <Graph
+                entityId={entityId}
+                disableMap={true}
+                disableControls={true}
+                disableTitle={!label.length}
+                title={label}
+                id={graphId}
+              />
             </Grid>
           )}
         </Grid>

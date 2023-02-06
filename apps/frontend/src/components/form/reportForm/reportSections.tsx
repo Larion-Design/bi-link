@@ -1,5 +1,5 @@
-import Grid from '@mui/material/Grid'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import Grid from '@mui/material/Grid'
 import Tab from '@mui/material/Tab'
 import Tabs from '@mui/material/Tabs'
 import AddOutlinedIcon from '@mui/icons-material/AddOutlined'
@@ -73,6 +73,7 @@ export const ReportSections: React.FunctionComponent<Props> = ({
             onClick={addSection}
           />
           <ActionButton
+            disabled={!entityId && !entityType}
             label={'Cauta informatii'}
             icon={<CallToActionIcon />}
             onClick={openDrawer}

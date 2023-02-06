@@ -1,13 +1,13 @@
-import React, { PropsWithRef, useEffect, useState } from 'react'
 import Box from '@mui/material/Box'
 import dagre, { Label } from 'dagre'
-import { ConnectionLineType, Edge, Node, Position, ReactFlowProvider } from 'reactflow'
 import { EntityLabel, EntityType } from 'defs'
-import { useNotification } from '../../../utils/hooks/useNotification'
-import { EntityGraph } from './entityGraph'
+import React, { PropsWithRef, useEffect, useState } from 'react'
+import { ConnectionLineType, Edge, Node, Position, ReactFlowProvider } from 'reactflow'
 import { getEntitiesGraphRequest } from '../../../graphql/shared/queries/getEntitiesGraph'
 import { getEntitiesInfoRequest } from '../../../graphql/shared/queries/getEntitiesInfo'
+import { useNotification } from '../../../utils/hooks/useNotification'
 import { relationshipsTypes } from '../../form/relationships/utils'
+import { EntityGraph } from './entityGraph'
 import { getRelationshipLabelFromType } from './utils'
 
 type Props = {
@@ -53,6 +53,8 @@ export const Graph: React.FunctionComponent<PropsWithRef<Props>> = ({
 
   useEffect(() => {
     void fetchGraph({ variables: { id: entityId, depth: graphDepth } })
+    setNodes([])
+    setEdges([])
   }, [graphDepth, entityId])
 
   useEffect(() => {
@@ -62,98 +64,109 @@ export const Graph: React.FunctionComponent<PropsWithRef<Props>> = ({
   }, [graphError?.message, entitiesInfoError?.message])
 
   useEffect(() => {
-    if (data?.getEntitiesGraph) {
-      const companiesIds = new Set<string>()
-      const personsIds = new Set<string>()
-      const propertiesIds = new Set<string>()
-      const incidentsIds = new Set<string>()
+    if (!data?.getEntitiesGraph) return
 
-      const entityHandlerMap: Record<
-        EntityLabel.PERSON | EntityLabel.COMPANY | EntityLabel.PROPERTY | EntityLabel.INCIDENT,
-        (entityId: string) => void
-      > = {
-        [EntityLabel.PERSON]: (personId: string) => personsIds.add(personId),
-        [EntityLabel.COMPANY]: (companyId: string) => companiesIds.add(companyId),
-        [EntityLabel.PROPERTY]: (propertyId: string) => propertiesIds.add(propertyId),
-        [EntityLabel.INCIDENT]: (incidentId: string) => incidentsIds.add(incidentId),
+    const companiesIds = new Set<string>()
+    const personsIds = new Set<string>()
+    const propertiesIds = new Set<string>()
+    const incidentsIds = new Set<string>()
+
+    const registerNode = (entityId: string, entityType: EntityLabel) => {
+      switch (entityType) {
+        case EntityLabel.PERSON: {
+          personsIds.add(entityId)
+          break
+        }
+        case EntityLabel.COMPANY: {
+          companiesIds.add(entityId)
+          break
+        }
+        case EntityLabel.PROPERTY: {
+          propertiesIds.add(entityId)
+          break
+        }
+        case EntityLabel.INCIDENT: {
+          incidentsIds.add(entityId)
+          break
+        }
       }
+    }
 
-      data.getEntitiesGraph.companiesAssociates.forEach(
-        ({
-          startNode: { _id: startNodeId, _type: startNodeType },
-          endNode: { _id: endNodeId, _type: endNodeType },
-          _type,
-        }) => {
-          allRelationships.add(_type)
-          allEntities.add(startNodeType)
-          allEntities.add(endNodeType)
+    data.getEntitiesGraph.companiesAssociates.forEach(
+      ({
+        startNode: { _id: startNodeId, _type: startNodeType },
+        endNode: { _id: endNodeId, _type: endNodeType },
+        _type,
+      }) => {
+        allRelationships.add(_type)
+        allEntities.add(startNodeType)
+        allEntities.add(endNodeType)
 
-          entityHandlerMap[startNodeType](startNodeId)
-          entityHandlerMap[endNodeType](endNodeId)
+        registerNode(startNodeId, startNodeType)
+        registerNode(endNodeId, endNodeType)
+      },
+    )
+
+    data.getEntitiesGraph.personalRelationships.forEach(
+      ({
+        startNode: { _id: startNodeId, _type: startNodeType },
+        endNode: { _id: endNodeId, _type: endNodeType },
+        _type,
+        type,
+      }) => {
+        allRelationships.add(relationshipsTypes[type] ?? _type)
+        allEntities.add(startNodeType)
+        allEntities.add(endNodeType)
+
+        registerNode(startNodeId, startNodeType)
+        registerNode(endNodeId, endNodeType)
+      },
+    )
+
+    data.getEntitiesGraph.incidentsParties.forEach(
+      ({
+        startNode: { _id: startNodeId, _type: startNodeType },
+        endNode: { _id: endNodeId, _type: endNodeType },
+        _type,
+      }) => {
+        allRelationships.add(_type)
+        allEntities.add(startNodeType)
+        allEntities.add(endNodeType)
+
+        registerNode(startNodeId, startNodeType)
+        registerNode(endNodeId, endNodeType)
+      },
+    )
+
+    data.getEntitiesGraph.propertiesRelationships.forEach(
+      ({
+        startNode: { _id: startNodeId, _type: startNodeType },
+        endNode: { _id: endNodeId, _type: endNodeType },
+        _type,
+      }) => {
+        allRelationships.add(_type)
+        allEntities.add(startNodeType)
+        allEntities.add(endNodeType)
+
+        registerNode(startNodeId, startNodeType)
+        registerNode(endNodeId, endNodeType)
+      },
+    )
+
+    setAllEntities(new Set(allEntities))
+    setVisibleEntities(new Set(allEntities))
+    setAllRelationships(new Set(allRelationships))
+    setVisibleRelationships(new Set(allRelationships))
+
+    if (companiesIds.size || personsIds.size || propertiesIds.size || incidentsIds.size) {
+      void fetchEntities({
+        variables: {
+          companiesIds: Array.from(companiesIds),
+          personsIds: Array.from(personsIds),
+          propertiesIds: Array.from(propertiesIds),
+          incidentsIds: Array.from(incidentsIds),
         },
-      )
-
-      data.getEntitiesGraph.personalRelationships.forEach(
-        ({
-          startNode: { _id: startNodeId, _type: startNodeType },
-          endNode: { _id: endNodeId, _type: endNodeType },
-          _type,
-          type,
-        }) => {
-          allRelationships.add(relationshipsTypes[type] ?? _type)
-          allEntities.add(startNodeType)
-          allEntities.add(endNodeType)
-
-          entityHandlerMap[startNodeType](startNodeId)
-          entityHandlerMap[endNodeType](endNodeId)
-        },
-      )
-
-      data.getEntitiesGraph.incidentsParties.forEach(
-        ({
-          startNode: { _id: startNodeId, _type: startNodeType },
-          endNode: { _id: endNodeId, _type: endNodeType },
-          _type,
-        }) => {
-          allRelationships.add(_type)
-          allEntities.add(startNodeType)
-          allEntities.add(endNodeType)
-
-          entityHandlerMap[startNodeType](startNodeId)
-          entityHandlerMap[endNodeType](endNodeId)
-        },
-      )
-
-      data.getEntitiesGraph.propertiesRelationships.forEach(
-        ({
-          startNode: { _id: startNodeId, _type: startNodeType },
-          endNode: { _id: endNodeId, _type: endNodeType },
-          _type,
-        }) => {
-          allRelationships.add(_type)
-          allEntities.add(startNodeType)
-          allEntities.add(endNodeType)
-
-          entityHandlerMap[startNodeType](startNodeId)
-          entityHandlerMap[endNodeType](endNodeId)
-        },
-      )
-
-      setAllEntities(new Set(allEntities))
-      setVisibleEntities(new Set(allEntities))
-      setAllRelationships(new Set(allRelationships))
-      setVisibleRelationships(new Set(allRelationships))
-
-      if (companiesIds.size || personsIds.size || propertiesIds.size || incidentsIds.size) {
-        void fetchEntities({
-          variables: {
-            companiesIds: Array.from(companiesIds.values()),
-            personsIds: Array.from(personsIds.values()),
-            propertiesIds: Array.from(propertiesIds.values()),
-            incidentsIds: Array.from(incidentsIds.values()),
-          },
-        })
-      }
+      })
     }
   }, [data?.getEntitiesGraph])
 
@@ -185,12 +198,11 @@ export const Graph: React.FunctionComponent<PropsWithRef<Props>> = ({
         const id = `${startNodeId}-${label}-${endNodeId}`
         const invertedId = `${endNodeId}-${label}-${startNodeId}`
 
-        if (!edgesMap.has(id) && !edgesMap.has(invertedId)) {
+        if (!edgesMap.has(id) && !edgesMap.has(invertedId) && visibleRelationships.has(type)) {
           edgesMap.set(id, {
             id,
             source: startNodeId,
             target: endNodeId,
-            hidden: !visibleRelationships.has(type),
             label,
             animated: !_confirmed,
             labelShowBg: false,
@@ -203,7 +215,7 @@ export const Graph: React.FunctionComponent<PropsWithRef<Props>> = ({
 
       const entityHandler = {
         [EntityLabel.PERSON]: (personId: string) => {
-          if (nodesMap.has(personId)) return
+          if (nodesMap.has(personId) || hiddenEntities['PERSON']) return
 
           dagreGraph.setNode(personId, nodeConfig)
 
@@ -229,7 +241,7 @@ export const Graph: React.FunctionComponent<PropsWithRef<Props>> = ({
           }
         },
         [EntityLabel.COMPANY]: (companyId: string) => {
-          if (nodesMap.has(companyId)) return
+          if (nodesMap.has(companyId) || hiddenEntities['COMPANY']) return
 
           dagreGraph.setNode(companyId, nodeConfig)
 
@@ -254,7 +266,7 @@ export const Graph: React.FunctionComponent<PropsWithRef<Props>> = ({
           }
         },
         [EntityLabel.PROPERTY]: (propertyId: string) => {
-          if (nodesMap.has(propertyId)) return
+          if (nodesMap.has(propertyId) || hiddenEntities['PROPERTY']) return
 
           dagreGraph.setNode(propertyId, nodeConfig)
 
@@ -279,7 +291,7 @@ export const Graph: React.FunctionComponent<PropsWithRef<Props>> = ({
           }
         },
         [EntityLabel.INCIDENT]: (incidentId: string) => {
-          if (nodesMap.has(incidentId)) return
+          if (nodesMap.has(incidentId) || hiddenEntities['INCIDENT']) return
 
           dagreGraph.setNode(incidentId, nodeConfig)
 
@@ -306,13 +318,19 @@ export const Graph: React.FunctionComponent<PropsWithRef<Props>> = ({
       }
 
       data.getEntitiesGraph.personalRelationships.forEach(
-        ({ startNode, endNode, type, _confirmed, _type }) => {
-          entityHandler[startNode._type](startNode._id)
-          entityHandler[endNode._type](endNode._id)
+        ({
+          startNode: { _id: startNodeId, _type: startNodeType },
+          endNode: { _id: endNodeId, _type: endNodeType },
+          type,
+          _confirmed,
+          _type,
+        }) => {
+          entityHandler[startNodeType](startNodeId)
+          entityHandler[endNodeType](endNodeId)
 
           createEdge(
-            startNode._id,
-            endNode._id,
+            startNodeId,
+            endNodeId,
             relationshipsTypes[type],
             _confirmed,
             relationshipsTypes[type] ?? type,
@@ -320,38 +338,50 @@ export const Graph: React.FunctionComponent<PropsWithRef<Props>> = ({
         },
       )
       data.getEntitiesGraph.companiesAssociates.forEach(
-        ({ startNode, endNode, role, _confirmed, equity, _type }) => {
-          entityHandler[startNode._type](startNode._id)
-          entityHandler[endNode._type](endNode._id)
+        ({
+          startNode: { _id: startNodeId, _type: startNodeType },
+          endNode: { _id: endNodeId, _type: endNodeType },
+          role,
+          _confirmed,
+          equity,
+          _type,
+        }) => {
+          entityHandler[startNodeType](startNodeId)
+          entityHandler[endNodeType](endNodeId)
 
           createEdge(
-            startNode._id,
-            endNode._id,
+            startNodeId,
+            endNodeId,
             equity > 0 ? `${role} (${equity}%)` : role,
             _confirmed,
-            _type,
+            role.length ? role : _type,
           )
         },
       )
       data.getEntitiesGraph.propertiesRelationships.forEach(
-        ({ startNode, endNode, _confirmed, _type }) => {
-          entityHandler[startNode._type](startNode._id)
-          entityHandler[endNode._type](endNode._id)
+        ({
+          startNode: { _id: startNodeId, _type: startNodeType },
+          endNode: { _id: endNodeId, _type: endNodeType },
+          _confirmed,
+          _type,
+        }) => {
+          entityHandler[startNodeType](startNodeId)
+          entityHandler[endNodeType](endNodeId)
 
-          createEdge(
-            startNode._id,
-            endNode._id,
-            getRelationshipLabelFromType(_type),
-            _confirmed,
-            _type,
-          )
+          createEdge(startNodeId, endNodeId, getRelationshipLabelFromType(_type), _confirmed, _type)
         },
       )
       data.getEntitiesGraph.incidentsParties.forEach(
-        ({ startNode, endNode, name, _confirmed, _type }) => {
-          entityHandler[startNode._type](startNode._id)
-          entityHandler[endNode._type](endNode._id)
-          createEdge(startNode._id, endNode._id, name, _confirmed, _type)
+        ({
+          startNode: { _id: startNodeId, _type: startNodeType },
+          endNode: { _id: endNodeId, _type: endNodeType },
+          name,
+          _confirmed,
+          _type,
+        }) => {
+          entityHandler[startNodeType](startNodeId)
+          entityHandler[endNodeType](endNodeId)
+          createEdge(startNodeId, endNodeId, name, _confirmed, _type)
         },
       )
 
