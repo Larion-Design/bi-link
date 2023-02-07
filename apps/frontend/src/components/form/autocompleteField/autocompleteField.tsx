@@ -1,6 +1,6 @@
-import { Autocomplete } from '@mui/material'
-import TextField from '@mui/material/TextField'
 import React from 'react'
+import TextField from '@mui/material/TextField'
+import Autocomplete from '@mui/material/Autocomplete'
 import { InputField } from '../inputField'
 
 type Props = {
@@ -27,7 +27,7 @@ export const AutocompleteField: React.FunctionComponent<Props> = ({
       freeSolo
       fullWidth
       disablePortal
-      value={[value]}
+      value={value}
       readOnly={readonly}
       options={suggestions}
       renderInput={(params) => (
