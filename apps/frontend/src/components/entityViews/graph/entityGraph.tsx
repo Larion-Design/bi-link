@@ -1,7 +1,4 @@
 import React, { useCallback, useId, useMemo } from 'react'
-import Box from '@mui/material/Box'
-import Slider from '@mui/material/Slider'
-import Typography from '@mui/material/Typography'
 import { useTheme } from '@mui/material'
 import Paper from '@mui/material/Paper'
 import 'reactflow/dist/style.css'
@@ -17,8 +14,8 @@ import ReactFlow, {
   Panel,
 } from 'reactflow'
 import { EntityType } from 'defs'
-import { MultiSelect } from '../../form/multiSelect'
 import { PrintControl } from './controls/printControl'
+import { FilterPanel } from './filters/filterPanel'
 import { PersonNode } from './nodes/personNode'
 import { CompanyNode } from './nodes/companyNode'
 import { PropertyNode } from './nodes/propertyNode'
@@ -90,17 +87,6 @@ export const EntityGraph: React.FunctionComponent<Props> = ({
     [],
   )
 
-  const marks = useMemo(
-    () => [
-      { value: 1, label: 1 },
-      { value: 2, label: 2 },
-      { value: 3, label: 3 },
-      { value: 4, label: 4 },
-      { value: 5, label: 5 },
-    ],
-    [],
-  )
-
   return (
     <ReactFlow
       id={graphId}
@@ -119,50 +105,21 @@ export const EntityGraph: React.FunctionComponent<Props> = ({
       {!disableTitle && (
         <Panel position={'top-left'} className={'react-flow__title'}>
           <Paper variant={'outlined'} sx={{ p: 2 }}>
-            {title ?? 'Grafic relational'}
+            {title?.length ? title : 'Grafic relational'}
           </Paper>
         </Panel>
       )}
       {!disableFilters && (
-        <Panel position={'top-right'} className={'react-flow__filters'}>
-          <Paper variant={'outlined'} sx={{ p: 2, width: 250 }}>
-            <Box sx={{ width: 1, mb: 2 }}>
-              <Typography gutterBottom>Nivel de complexitate</Typography>
-              <Slider
-                aria-label={'Nivel de complexitate'}
-                size={'small'}
-                value={depth}
-                min={1}
-                max={5}
-                marks={marks}
-                onChangeCommitted={(event, value) => updateDepth(+value)}
-              />
-            </Box>
-            <Box sx={{ width: 1, mb: 3 }}>
-              <MultiSelect
-                label={'Tipuri de entitati'}
-                options={allEntities.map((entityType) => ({
-                  value: entityType,
-                  label: entityTypeLocale[entityType],
-                  selected: visibleEntities.includes(entityType),
-                }))}
-                onSelectedOptionsChange={setVisibleEntities}
-              />
-            </Box>
-
-            <Box sx={{ width: 1 }}>
-              <MultiSelect
-                label={'Tipuri de relatii'}
-                options={allRelationships.map((relationshipType) => ({
-                  value: relationshipType,
-                  label: relationshipType,
-                  selected: visibleRelationships.includes(relationshipType),
-                }))}
-                onSelectedOptionsChange={setVisibleRelationships}
-              />
-            </Box>
-          </Paper>
-        </Panel>
+        <FilterPanel
+          depth={depth}
+          updateDepth={updateDepth}
+          allEntities={allEntities}
+          visibleEntities={visibleEntities}
+          setVisibleEntities={setVisibleEntities}
+          allRelationships={allRelationships}
+          visibleRelationships={visibleRelationships}
+          setVisibleRelationships={setVisibleRelationships}
+        />
       )}
       <Background color={theme.palette.grey[200]} variant={BackgroundVariant.Lines} />
       {!disableControls && (
@@ -181,13 +138,4 @@ const nodeTypeToEntityType: Record<NodeTypes, EntityType> = {
   companyNode: 'COMPANY',
   propertyNode: 'PROPERTY',
   incidentNode: 'INCIDENT',
-}
-
-const entityTypeLocale: Record<EntityType, string> = {
-  PERSON: 'Persoane',
-  COMPANY: 'Companii',
-  PROPERTY: 'Proprietati',
-  INCIDENT: 'Incidente',
-  REPORT: 'Rapoarte',
-  FILE: 'Fisiere',
 }
