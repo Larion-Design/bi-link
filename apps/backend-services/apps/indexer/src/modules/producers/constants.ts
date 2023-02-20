@@ -1,7 +1,7 @@
 export const QUEUE_PERSONS = 'persons'
 export const QUEUE_COMPANIES = 'companies'
 export const QUEUE_FILES = 'files'
-export const QUEUE_INCIDENTS = 'incidents'
+export const QUEUE_EVENTS = 'events'
 export const QUEUE_PROPERTIES = 'properties'
 export const QUEUE_REPORTS = 'reports'
 

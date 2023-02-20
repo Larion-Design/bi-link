@@ -1,20 +1,45 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
+import { Document } from 'mongoose'
 import { Location } from 'defs'
+import { CoordinatesModel, CoordinatesSchema } from '@app/entities/models/coordinatesModel'
 
-@Schema({ _id: false, timestamps: false })
+@Schema({ timestamps: false })
 export class LocationModel implements Location {
-  constructor(locationInfo?: Location) {
-    if (locationInfo) {
-      this.address = locationInfo.address
-      this.isActive = locationInfo.isActive
-    }
-  }
+  _id: string
 
   @Prop()
-  address: string
+  building: string
 
   @Prop()
-  isActive: boolean
+  country: string
+
+  @Prop()
+  county: string
+
+  @Prop()
+  door: string
+
+  @Prop()
+  locality: string
+
+  @Prop()
+  locationId: string
+
+  @Prop()
+  number: string
+
+  @Prop()
+  street: string
+
+  @Prop()
+  zipCode: string
+
+  @Prop()
+  otherInfo: string
+
+  @Prop({ type: [CoordinatesSchema], isRequired: false })
+  coordinates: CoordinatesModel
 }
 
+export type LocationDocument = LocationModel & Document<string>
 export const LocationSchema = SchemaFactory.createForClass(LocationModel)

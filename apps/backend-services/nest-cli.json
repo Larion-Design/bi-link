@@ -80,13 +80,13 @@
         "tsConfigPath": "apps/user-actions-recorder/tsconfig.app.json"
       }
     },
-    "search-mapping-tools": {
+    "search-tools-module": {
       "type": "library",
-      "root": "libs/search-mapping-tools",
+      "root": "libs/search-tools-module",
       "entryFile": "index",
-      "sourceRoot": "libs/search-mapping-tools/src",
+      "sourceRoot": "libs/search-tools-module/src",
       "compilerOptions": {
-        "tsConfigPath": "libs/search-mapping-tools/tsconfig.lib.json"
+        "tsConfigPath": "libs/search-tools-module/tsconfig.lib.json"
       }
     },
     "files": {

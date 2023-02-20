@@ -1,7 +1,7 @@
 export enum FileParentEntity {
   PERSON = 'PERSON',
   COMPANY = 'COMPANY',
-  INCIDENT = 'INCIDENT',
+  EVENT = 'EVENT',
   PROPERTY = 'PROPERTY',
 }
 

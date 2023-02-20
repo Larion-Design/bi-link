@@ -1,9 +1,9 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
 import { Document, Types } from 'mongoose'
-import { CompanyDocument, CompanyModel } from '@app/entities/models/companyModel'
-import { IncidentDocument, IncidentModel } from '@app/entities/models/incidentModel'
-import { PersonDocument, PersonModel } from '@app/entities/models/personModel'
-import { PropertyDocument, PropertyModel } from '@app/entities/models/propertyModel'
+import { CompanyDocument, CompanyModel } from '@app/entities/models/company/companyModel'
+import { EventDocument, EventModel } from '@app/entities/models/event/eventModel'
+import { PersonDocument, PersonModel } from '@app/entities/models/person/personModel'
+import { PropertyDocument, PropertyModel } from '@app/entities/models/property/propertyModel'
 import { DataRef } from 'defs'
 
 @Schema({ timestamps: false })
@@ -20,8 +20,8 @@ export class DataRefModel implements DataRef {
   @Prop({ type: Types.ObjectId, ref: PropertyModel.name, isRequired: false })
   property?: PropertyDocument
 
-  @Prop({ type: Types.ObjectId, ref: IncidentModel.name, isRequired: false })
-  incident?: IncidentDocument
+  @Prop({ type: Types.ObjectId, ref: EventModel.name, isRequired: false })
+  incident?: EventDocument
 
   @Prop()
   field: string

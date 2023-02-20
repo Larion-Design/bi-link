@@ -1,9 +1,9 @@
 import { InjectModel } from '@nestjs/mongoose'
 import { Model } from 'mongoose'
-import { CompanyDocument, CompanyModel } from '@app/entities/models/companyModel'
-import { IncidentDocument, IncidentModel } from '@app/entities/models/incidentModel'
-import { PersonDocument, PersonModel } from '@app/entities/models/personModel'
-import { PropertyDocument, PropertyModel } from '@app/entities/models/propertyModel'
+import { CompanyDocument, CompanyModel } from '@app/entities/models/company/companyModel'
+import { EventDocument, EventModel } from '@app/entities/models/event/eventModel'
+import { PersonDocument, PersonModel } from '@app/entities/models/person/personModel'
+import { PropertyDocument, PropertyModel } from '@app/entities/models/property/propertyModel'
 import { Injectable } from '@nestjs/common'
 import { DataRefModel } from '@app/entities/models/reports/refs/dataRefModel'
 import { DataRefInput } from '../dto/refs/dataRefInput'
@@ -14,7 +14,7 @@ export class ReportRefsAPIService {
     @InjectModel(CompanyModel.name) private readonly companyModel: Model<CompanyDocument>,
     @InjectModel(PersonModel.name) private readonly personModel: Model<PersonDocument>,
     @InjectModel(PropertyModel.name) private readonly propertyModel: Model<PropertyDocument>,
-    @InjectModel(IncidentModel.name) private readonly incidentModel: Model<IncidentDocument>,
+    @InjectModel(EventModel.name) private readonly incidentModel: Model<EventDocument>,
   ) {}
 
   createRefsModels = async (dataRefs: DataRefInput[]): Promise<DataRefModel[]> => [

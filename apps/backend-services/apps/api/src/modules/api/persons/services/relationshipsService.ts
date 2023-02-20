@@ -1,8 +1,11 @@
 import { Injectable, Logger } from '@nestjs/common'
 import { ClientSession, Model } from 'mongoose'
 import { InjectModel } from '@nestjs/mongoose'
-import { RelationshipDocument, RelationshipModel } from '@app/entities/models/relationshipModel'
-import { PersonDocument, PersonModel } from '@app/entities/models/personModel'
+import {
+  RelationshipDocument,
+  RelationshipModel,
+} from '@app/entities/models/person/relationshipModel'
+import { PersonDocument, PersonModel } from '@app/entities/models/person/personModel'
 import { RelationshipInput } from '../dto/relationshipInput'
 
 @Injectable()

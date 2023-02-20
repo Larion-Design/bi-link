@@ -2,7 +2,6 @@ import { ConfigModule, ConfigService } from '@nestjs/config'
 import { MongooseModule } from '@nestjs/mongoose'
 import { BullModule } from '@nestjs/bull'
 import { Module } from '@nestjs/common'
-import { IndexerModule } from './modules/indexer/indexerModule'
 import { ConsumersModule } from './modules/consumers/consumersModule'
 import { SentryModule } from '@ntegral/nestjs-sentry'
 import { EntitiesModule } from '@app/entities/entitiesModule'
@@ -14,7 +13,6 @@ import { EntityEventsController } from './modules/controllers/entityEventsContro
 @Module({
   imports: [
     EntitiesModule,
-    IndexerModule,
     ConsumersModule,
     ProducersModule,
     ServiceHealthModule,

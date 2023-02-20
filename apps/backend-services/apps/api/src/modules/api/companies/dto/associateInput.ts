@@ -6,7 +6,7 @@ import { AssociateAPIInput } from 'defs'
 
 @InputType()
 export class AssociateInput implements AssociateAPIInput {
-  @Length(1, 30)
+  @Length(1, 50)
   @Field()
   readonly role: string
 
@@ -22,13 +22,13 @@ export class AssociateInput implements AssociateAPIInput {
   @Field({ nullable: true })
   readonly endDate: Date | null
 
-  @Field({ nullable: true, defaultValue: false })
+  @Field()
   readonly isActive: boolean
 
   @Field()
   readonly equity: number
 
-  @Field(() => [CustomFieldInput], { nullable: true })
+  @Field(() => [CustomFieldInput])
   readonly customFields: CustomFieldInput[]
 
   @Field({ nullable: true, defaultValue: true })

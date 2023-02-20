@@ -85,7 +85,7 @@ export const Graph: React.FunctionComponent<PropsWithRef<Props>> = ({
           propertiesIds.add(entityId)
           break
         }
-        case EntityLabel.INCIDENT: {
+        case EntityLabel.EVENT: {
           incidentsIds.add(entityId)
           break
         }
@@ -290,7 +290,7 @@ export const Graph: React.FunctionComponent<PropsWithRef<Props>> = ({
             })
           }
         },
-        [EntityLabel.INCIDENT]: (incidentId: string) => {
+        [EntityLabel.EVENT]: (incidentId: string) => {
           if (nodesMap.has(incidentId) || hiddenEntities['INCIDENT']) return
 
           dagreGraph.setNode(incidentId, nodeConfig)

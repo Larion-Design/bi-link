@@ -17,6 +17,6 @@ export class GetProperty {
   @Query(() => Property)
   @UseGuards(FirebaseAuthGuard)
   async getProperty(@Args() { propertyId }: Params) {
-    return this.propertiesService.getProperty(propertyId)
+    return this.propertiesService.getProperty(propertyId, true)
   }
 }

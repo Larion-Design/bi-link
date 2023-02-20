@@ -5,7 +5,7 @@ import { FileEventDispatcherService } from '../../producers/services/fileEventDi
 import { Job } from 'bull'
 import { FileParentEntity } from '@app/pub/types/file'
 import { PropertiesService } from '@app/entities/services/propertiesService'
-import { PropertiesIndexerService } from '../../indexer/property/services/propertiesIndexerService'
+import { PropertiesIndexerService } from '@app/search-tools-module/indexer/propertiesIndexerService'
 import { PropertyEventInfo } from '@app/pub/types/property'
 
 @Processor(QUEUE_PROPERTIES)
@@ -51,7 +51,7 @@ export class PropertyIndexEventsConsumer {
   }
 
   private indexPropertyInfo = async (propertyId: string) => {
-    const property = await this.propertiesService.getProperty(propertyId)
+    const property = await this.propertiesService.getProperty(propertyId, true)
     const indexingSuccessful = await this.propertiesIndexerService.indexProperty(
       propertyId,
       property,

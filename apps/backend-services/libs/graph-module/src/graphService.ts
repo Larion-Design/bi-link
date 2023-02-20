@@ -158,6 +158,17 @@ export class GraphService {
     }
   }
 
+  deleteRelationshipType = async (entityId: string, relationship: RelationshipLabel) => {
+    try {
+      await this.neo4jService.write(
+        `OPTIONAL MATCH (n {_id: $entityId})-[r:${relationship}]->(s) DELETE r`,
+        { entityId },
+      )
+    } catch (e) {
+      this.logger.error(e)
+    }
+  }
+
   getEntitiesGraph = async (entityId: string, depth = 1, relationshipType?: RelationshipLabel) => {
     const result = await this.neo4jService.read(
       `OPTIONAL MATCH p=(n {_id: $entityId})-[${

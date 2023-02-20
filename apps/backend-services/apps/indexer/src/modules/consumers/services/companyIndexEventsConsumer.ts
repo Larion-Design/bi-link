@@ -4,7 +4,7 @@ import { Logger } from '@nestjs/common'
 import { EVENT_CREATED, EVENT_UPDATED, QUEUE_COMPANIES } from '../../producers/constants'
 import { FileEventDispatcherService } from '../../producers/services/fileEventDispatcherService'
 import { CompanyEventInfo } from '@app/pub/types/company'
-import { CompaniesIndexerService } from '../../indexer/company/services/companiesIndexerService'
+import { CompaniesIndexerService } from '@app/search-tools-module/indexer/companiesIndexerService'
 import { CompaniesService } from '@app/entities/services/companiesService'
 import { FileParentEntity } from '@app/pub/types/file'
 
@@ -53,7 +53,7 @@ export class CompanyIndexEventsConsumer {
   }
 
   private indexCompanyInfo = async (companyId: string) => {
-    const company = await this.companiesService.getCompany(companyId)
+    const company = await this.companiesService.getCompany(companyId, false)
     const indexingSuccessful = await this.companiesIndexerService.indexCompany(companyId, company)
 
     if (indexingSuccessful) {

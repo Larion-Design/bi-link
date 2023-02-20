@@ -1,11 +1,15 @@
 import { Injectable, Logger } from '@nestjs/common'
 import { InjectModel } from '@nestjs/mongoose'
-import { CompanyDocument, CompanyModel } from '@app/entities/models/companyModel'
-import { Model, ProjectionFields } from 'mongoose'
+import { Model, ProjectionFields, Query } from 'mongoose'
+import { LocationDocument, LocationModel } from '@app/entities/models/locationModel'
+import { CompanyDocument, CompanyModel } from '@app/entities/models/company/companyModel'
 import { FileDocument, FileModel } from '@app/entities/models/fileModel'
-import { PersonDocument, PersonModel } from '@app/entities/models/personModel'
-import { PropertyOwnerDocument, PropertyOwnerModel } from '@app/entities/models/propertyOwnerModel'
-import { PropertyDocument, PropertyModel } from '@app/entities/models/propertyModel'
+import { PersonDocument, PersonModel } from '@app/entities/models/person/personModel'
+import {
+  PropertyOwnerDocument,
+  PropertyOwnerModel,
+} from '@app/entities/models/property/propertyOwnerModel'
+import { PropertyDocument, PropertyModel } from '@app/entities/models/property/propertyModel'
 
 @Injectable()
 export class PropertiesService {
@@ -16,8 +20,8 @@ export class PropertiesService {
     @InjectModel(CompanyModel.name) private readonly companyModel: Model<CompanyDocument>,
     @InjectModel(FileModel.name) private readonly fileModel: Model<FileDocument>,
     @InjectModel(PersonModel.name) private readonly personModel: Model<PersonDocument>,
-    @InjectModel(PropertyOwnerModel.name)
-    private readonly propertyOwnerModel: Model<PropertyOwnerDocument>,
+    @InjectModel(LocationModel.name) private readonly locationModel: Model<LocationDocument>,
+    @InjectModel(PropertyOwnerModel.name) private readonly ownerModel: Model<PropertyOwnerDocument>,
   ) {}
 
   create = async (propertyModel: PropertyModel) => {
@@ -36,29 +40,19 @@ export class PropertiesService {
     }
   }
 
-  getProperty = async (propertyId: string) => {
+  getProperty = async (propertyId: string, fetchLinkedEntities: boolean) => {
     try {
-      return this.propertyModel
-        .findById(propertyId)
-        .populate({ path: 'files', model: this.fileModel })
-        .populate({ path: 'images', model: this.fileModel })
-        .populate({ path: 'owners.person', model: this.personModel })
-        .populate({ path: 'owners.company', model: this.companyModel })
-        .exec()
+      const query = this.propertyModel.findById(propertyId)
+      return (fetchLinkedEntities ? this.getLinkedEntities(query) : query).exec()
     } catch (e) {
       this.logger.error(e)
     }
   }
 
-  getProperties = async (propertiesIds: string[]) => {
+  getProperties = async (propertiesIds: string[], fetchLinkedEntities: boolean) => {
     try {
-      return this.propertyModel
-        .find({ _id: propertiesIds })
-        .populate({ path: 'files', model: this.fileModel })
-        .populate({ path: 'images', model: this.fileModel })
-        .populate({ path: 'owners.person', model: this.personModel })
-        .populate({ path: 'owners.company', model: this.companyModel })
-        .exec()
+      const query = this.propertyModel.find({ _id: propertiesIds })
+      return (fetchLinkedEntities ? this.getLinkedEntities(query) : query).exec()
     } catch (e) {
       this.logger.error(e)
     }
@@ -69,4 +63,12 @@ export class PropertiesService {
       yield propertyModel
     }
   }
+
+  private getLinkedEntities = (query: Query<any, PropertyDocument>) =>
+    query
+      .populate({ path: 'files', model: this.fileModel })
+      .populate({ path: 'images', model: this.fileModel })
+      .populate({ path: 'owners.person', model: this.personModel })
+      .populate({ path: 'owners.company', model: this.companyModel })
+      .populate({ path: 'realEstateInfo.location', model: this.locationModel })
 }

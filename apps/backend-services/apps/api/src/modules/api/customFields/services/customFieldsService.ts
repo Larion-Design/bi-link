@@ -4,7 +4,7 @@ import { CustomField } from '../dto/customField'
 
 @Injectable()
 export class CustomFieldsService {
-  getCustomFieldsDocumentsForInputData = (customFields: CustomField[]) =>
+  createCustomFieldsModels = (customFields: CustomField[]) =>
     customFields.map((customFieldInfo) => {
       const customFieldModel = new CustomFieldModel()
       customFieldModel.fieldName = customFieldInfo.fieldName

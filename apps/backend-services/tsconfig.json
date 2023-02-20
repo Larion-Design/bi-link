@@ -45,11 +45,11 @@
       "@app/definitions/*": [
         "libs/definitions/src/*"
       ],
-      "@app/search-mapping-tools": [
-        "libs/search-mapping-tools/src"
+      "@app/search-tools-module": [
+        "libs/search-tools-module/src"
       ],
-      "@app/search-mapping-tools/*": [
-        "libs/search-mapping-tools/src/*"
+      "@app/search-tools-module/*": [
+        "libs/search-tools-module/src/*"
       ],
       "@app/graph": [
         "libs/graph/src"

@@ -1,7 +1,7 @@
 import { Process, Processor } from '@nestjs/bull'
 import { Job } from 'bull'
 import { Logger } from '@nestjs/common'
-import { PersonsIndexerService } from '../../indexer/person/services/personsIndexerService'
+import { PersonsIndexerService } from '@app/search-tools-module/indexer/personsIndexerService'
 import { EVENT_CREATED, EVENT_UPDATED, QUEUE_PERSONS } from '../../producers/constants'
 import { PersonEventInfo } from '@app/pub/types/person'
 import { FileEventDispatcherService } from '../../producers/services/fileEventDispatcherService'
@@ -51,7 +51,7 @@ export class PersonIndexEventsConsumer {
   }
 
   private indexPersonInfo = async (personId: string) => {
-    const person = await this.personsService.find(personId)
+    const person = await this.personsService.find(personId, true)
     const indexingSuccessful = await this.personsIndexerService.indexPerson(personId, person)
 
     if (indexingSuccessful) {

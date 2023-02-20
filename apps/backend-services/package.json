@@ -138,7 +138,7 @@
       "^@app/pub(|/.*)$": "<rootDir>/libs/pub/src/$1",
       "^@app/service-health(|/.*)$": "<rootDir>/libs/service-health/src/$1",
       "^@app/definitions(|/.*)$": "<rootDir>/libs/definitions/src/$1",
-      "^@app/search-mapping-tools(|/.*)$": "<rootDir>/libs/search-mapping-tools/src/$1",
+      "^@app/search-tools-module(|/.*)$": "<rootDir>/libs/search-tools-module/src/$1",
       "^@app/files(|/.*)$": "<rootDir>/libs/files/src/$1",
       "^@app/graph-module(|/.*)$": "<rootDir>/libs/graph-module/src/$1"
     }

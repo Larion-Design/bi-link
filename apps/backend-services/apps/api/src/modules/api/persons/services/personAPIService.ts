@@ -1,10 +1,16 @@
-import { PersonModel } from '@app/entities/models/personModel'
+import { EducationModel } from '@app/entities/models/person/educationModel'
+import { IdDocumentModel } from '@app/entities/models/person/idDocumentModel'
+import { OldNameModel } from '@app/entities/models/person/oldNameModel'
+import { PersonModel } from '@app/entities/models/person/personModel'
 import { PersonsService } from '@app/entities/services/personsService'
 import { Injectable, Logger } from '@nestjs/common'
+import { IdDocument } from 'defs'
+import { LocationAPIService } from '../../common/services/locationAPIService'
 import { CustomFieldsService } from '../../customFields/services/customFieldsService'
 import { FileAPIService } from '../../files/services/fileAPIService'
+import { EducationInput } from '../dto/educationInput'
+import { OldNameInput } from '../dto/oldNameInput'
 import { PersonInput } from '../dto/personInput'
-import { IdDocumentsService } from './idDocumentsService'
 import { RelationshipsService } from './relationshipsService'
 
 @Injectable()
@@ -16,7 +22,7 @@ export class PersonAPIService {
     private readonly fileService: FileAPIService,
     private readonly customFieldsService: CustomFieldsService,
     private readonly relationshipsService: RelationshipsService,
-    private readonly idDocumentsService: IdDocumentsService,
+    private readonly locationAPIService: LocationAPIService,
   ) {}
 
   create = async (personInfo: PersonInput) => {
@@ -59,20 +65,20 @@ export class PersonAPIService {
     personModel.lastName = personInfo.lastName
     personModel.cnp = personInfo.cnp
     personModel.birthdate = personInfo.birthdate
-    personModel.oldName = personInfo.oldName
-    personModel.homeAddress = personInfo.homeAddress
+    personModel.oldNames = this.createOldNamesModels(personInfo.oldNames)
+    personModel.homeAddress = await this.locationAPIService.getLocationModel(personInfo.homeAddress)
+    personModel.birthPlace = await this.locationAPIService.getLocationModel(personInfo.birthPlace)
+    personModel.education = this.createEducationModels(personInfo.education)
 
     personModel.contactDetails = personInfo.contactDetails.length
-      ? this.customFieldsService.getCustomFieldsDocumentsForInputData(personInfo.contactDetails)
+      ? this.customFieldsService.createCustomFieldsModels(personInfo.contactDetails)
       : []
 
     personModel.customFields = personInfo.customFields.length
-      ? this.customFieldsService.getCustomFieldsDocumentsForInputData(personInfo.customFields)
+      ? this.customFieldsService.createCustomFieldsModels(personInfo.customFields)
       : []
 
-    personModel.documents = personInfo.documents.length
-      ? this.idDocumentsService.getDocumentsModelsFromInputData(personInfo.documents)
-      : []
+    personModel.documents = this.createIdDocumentsModels(personInfo.documents)
 
     personModel.files = personInfo.files.length
       ? await this.fileService.getUploadedFilesModels(personInfo.files)
@@ -90,4 +96,27 @@ export class PersonAPIService {
 
     return personModel
   }
+
+  private createOldNamesModels = (oldNames: OldNameInput[]) =>
+    oldNames.map(({ name, changeReason }) => {
+      const oldNameModel = new OldNameModel()
+      oldNameModel.name = name
+      oldNameModel.changeReason = changeReason
+      return oldNameModel
+    })
+
+  private createEducationModels = (educationsInfo: EducationInput[]) =>
+    educationsInfo.map(({ startDate, endDate, type, specialization, school, customFields }) => {
+      const educationModel = new EducationModel()
+      educationModel.startDate = startDate
+      educationModel.endDate = endDate
+      educationModel.type = type
+      educationModel.specialization = specialization
+      educationModel.school = school
+      educationModel.customFields = this.customFieldsService.createCustomFieldsModels(customFields)
+      return educationModel
+    })
+
+  private createIdDocumentsModels = (idDocuments: IdDocument[]) =>
+    idDocuments.map((idDocument) => new IdDocumentModel(idDocument))
 }

@@ -3,7 +3,7 @@ import { CustomFieldInput } from '../../customFields/dto/customFieldInput'
 import { FileInput } from '../../files/dto/fileInput'
 import { AssociateInput } from './associateInput'
 import { Length } from 'class-validator'
-import { LocationInput } from './locationInput'
+import { LocationInput } from '../../common/dto/geolocation/locationInput'
 import { CompanyAPIInput } from 'defs'
 
 @InputType()
@@ -15,9 +15,8 @@ export class CompanyInput implements CompanyAPIInput {
   @Field()
   readonly name: string
 
-  @Length(2, 100)
-  @Field()
-  readonly headquarters: string
+  @Field(() => LocationInput, { nullable: true })
+  readonly headquarters: LocationInput
 
   @Field()
   readonly registrationNumber: string

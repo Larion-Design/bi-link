@@ -7,6 +7,7 @@ import { memoryStorage } from 'multer'
 import { SearchModule } from '../search/searchModule'
 import { UsersModule } from '../users/UsersModule'
 import { GetEntitiesGraph } from './common/queries/getEntitiesGraph'
+import { LocationAPIService } from './common/services/locationAPIService'
 import { CreateCompany } from './companies/mutations/createCompany'
 import { UpdateCompany } from './companies/mutations/updateCompany'
 import { CompanyCUIExists } from './companies/queries/companyCUIExists'
@@ -17,7 +18,6 @@ import { GetCompanyFrequentCustomFields } from './companies/queries/getCompanyFr
 import { SearchCompanies } from './companies/queries/searchCompanies'
 import { AssociatesService } from './companies/services/associatesService'
 import { CompanyAPIService } from './companies/services/companyAPIService'
-import { LocationService } from './companies/services/locationService'
 import { CustomFieldsService } from './customFields/services/customFieldsService'
 import { FileUploadController } from './files/controllers/fileUploadController'
 import { FileUrl } from './files/fieldResolvers'
@@ -25,14 +25,14 @@ import { GetFileContent } from './files/queries/getFileContent'
 import { GetFileInfo } from './files/queries/getFileInfo'
 import { GetFilesInfo } from './files/queries/getFilesInfo'
 import { FileAPIService } from './files/services/fileAPIService'
-import { CreateIncident } from './incidents/mutations/createIncident'
-import { UpdateIncident } from './incidents/mutations/updateIncident'
-import { GetIncident } from './incidents/queries/getIncident'
-import { GetIncidentFrequentCustomFields } from './incidents/queries/getIncidentFrequentCustomFields'
-import { GetIncidents } from './incidents/queries/getIncidents'
-import { SearchIncidents } from './incidents/queries/searchIncidents'
-import { IncidentAPIService } from './incidents/services/incidentAPIService'
-import { PartyAPIService } from './incidents/services/partyAPIService'
+import { CreateIncident } from './events/mutations/createIncident'
+import { UpdateIncident } from './events/mutations/updateIncident'
+import { GetEvent } from './events/queries/getEvent'
+import { GetEventFrequentCustomFields } from './events/queries/getEventFrequentCustomFields'
+import { GetEvents } from './events/queries/getEvents'
+import { SearchEvents } from './events/queries/searchEvents'
+import { IncidentAPIService } from './events/services/incidentAPIService'
+import { PartyAPIService } from './events/services/partyAPIService'
 import { CreatePerson } from './persons/mutations/createPerson'
 import { UpdatePerson } from './persons/mutations/updatePerson'
 import { GetPerson } from './persons/queries/getPerson'
@@ -41,7 +41,6 @@ import { GetPersons } from './persons/queries/getPersons'
 import { PersonCNPExists } from './persons/queries/personCNPExists'
 import { PersonIdDocumentExists } from './persons/queries/personIdDocumentExists'
 import { SearchPersons } from './persons/queries/searchPersons'
-import { IdDocumentsService } from './persons/services/idDocumentsService'
 import { PersonAPIService } from './persons/services/personAPIService'
 import { RelationshipsService } from './persons/services/relationshipsService'
 import { CreateProperty } from './properties/mutations/createProperty'
@@ -88,10 +87,9 @@ import { GetUsers } from './users/queries/getUsers'
     CustomFieldsService,
     PersonAPIService,
     RelationshipsService,
-    IdDocumentsService,
     FileAPIService,
     CompanyAPIService,
-    LocationService,
+    LocationAPIService,
     AssociatesService,
     IncidentAPIService,
     PartyAPIService,
@@ -131,12 +129,12 @@ import { GetUsers } from './users/queries/getUsers'
     GetPropertiesByPerson,
     GetPropertiesByCompany,
     UserRegistered,
-    GetIncident,
-    SearchIncidents,
+    GetEvent,
+    SearchEvents,
     CreateIncident,
     UpdateIncident,
-    GetIncidentFrequentCustomFields,
-    GetIncidents,
+    GetEventFrequentCustomFields,
+    GetEvents,
     GetUsers,
     ChangeUserRole,
     DisableUser,

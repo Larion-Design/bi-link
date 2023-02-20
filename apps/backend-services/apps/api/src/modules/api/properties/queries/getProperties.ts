@@ -17,6 +17,6 @@ export class GetProperties {
   @Query(() => [Property])
   @UseGuards(FirebaseAuthGuard)
   async getProperties(@Args() { propertiesIds }: Params) {
-    return propertiesIds.length ? this.propertiesService.getProperties(propertiesIds) : []
+    return propertiesIds.length ? this.propertiesService.getProperties(propertiesIds, true) : []
   }
 }

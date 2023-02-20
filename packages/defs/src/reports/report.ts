@@ -1,7 +1,7 @@
-import { Company } from '../company'
-import { Person } from '../person'
-import { Incident } from '../incident'
-import { Property } from '../property'
+import { Company } from '../company/company'
+import { Person } from '../person/person'
+import { Event } from '../event/event'
+import { Property } from '../property/property'
 import { DataRef, DataRefAPI } from './dataRef'
 import { ReportSection, ReportSectionAPIInput, ReportSectionAPIOutput } from './reportSection'
 import { ConnectedEntity } from '../connectedEntity'
@@ -13,7 +13,7 @@ export interface Report {
   isTemplate: boolean
   company?: Company
   person?: Person
-  incident?: Incident
+  incident?: Event
   property?: Property
   sections: ReportSection[]
   createdAt?: Date

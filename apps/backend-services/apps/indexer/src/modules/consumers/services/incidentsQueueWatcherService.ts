@@ -1,9 +1,9 @@
 import { Logger } from '@nestjs/common'
 import { OnQueueActive, OnQueueCompleted, OnQueueFailed, Processor } from '@nestjs/bull'
-import { QUEUE_INCIDENTS } from '@app/pub'
+import { QUEUE_EVENTS } from '@app/pub'
 import { Job } from 'bull'
 
-@Processor(QUEUE_INCIDENTS)
+@Processor(QUEUE_EVENTS)
 export class IncidentsQueueWatcherService {
   private readonly logger = new Logger(IncidentsQueueWatcherService.name)
 

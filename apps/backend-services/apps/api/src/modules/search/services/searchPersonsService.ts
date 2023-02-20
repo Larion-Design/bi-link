@@ -1,9 +1,9 @@
+import { PersonIndex, PersonSearchIndex } from '@app/definitions/search/person'
 import { Injectable, Logger } from '@nestjs/common'
 import { SearchRequest, SearchTotalHits } from '@elastic/elasticsearch/lib/api/types'
 import { ElasticsearchService } from '@nestjs/elasticsearch'
 import { PersonsSuggestions } from '../../api/persons/dto/personsSuggestions'
 import { INDEX_PERSONS } from '@app/definitions/constants'
-import { PersonIndex, PersonSearchIndex } from 'defs'
 import { SearchHelperService } from './searchHelperService'
 
 @Injectable()
@@ -39,8 +39,11 @@ export class SearchPersonsService {
               this.searchHelperService.getMultisearchQuery<PersonIndex>(searchTerm, [
                 'firstName',
                 'lastName',
-                'oldName',
                 'homeAddress',
+              ]),
+              this.searchHelperService.getMultisearchQuery(searchTerm, [
+                'oldNames.name',
+                'oldNames.changeReason',
               ]),
               this.searchHelperService.getCustomFieldsSearchQuery(searchTerm),
               this.searchHelperService.getCustomFieldsSearchQuery(searchTerm, 'contactDetails'),

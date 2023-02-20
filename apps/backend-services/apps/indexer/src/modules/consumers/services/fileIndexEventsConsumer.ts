@@ -3,7 +3,7 @@ import { Job } from 'bull'
 import { Logger } from '@nestjs/common'
 import { EVENT_CREATED, EVENT_UPDATED, QUEUE_FILES } from '../../producers/constants'
 import { FileEventInfo } from '@app/pub/types/file'
-import { FilesIndexerService } from '../../indexer/file/services/filesIndexerService'
+import { FilesIndexerService } from '@app/search-tools-module/indexer/filesIndexerService'
 
 @Processor(QUEUE_FILES)
 export class FileIndexEventsConsumer {

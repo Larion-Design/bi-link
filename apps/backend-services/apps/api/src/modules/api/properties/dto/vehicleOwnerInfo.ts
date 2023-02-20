@@ -3,6 +3,6 @@ import { Field, ObjectType } from '@nestjs/graphql'
 
 @ObjectType()
 export class VehicleOwnerInfo implements VehicleOwnerInfoType {
-  @Field()
-  registrationNumber: string
+  @Field(() => [String])
+  plateNumbers: string[]
 }

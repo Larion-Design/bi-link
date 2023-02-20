@@ -3,7 +3,7 @@ import { EventPattern, Payload } from '@nestjs/microservices'
 import { EntityInfo, MICROSERVICES } from '@app/pub/constants'
 import { PersonGraphService } from '../services/personGraphService'
 import { CompanyGraphService } from '../services/companyGraphService'
-import { IncidentGraphService } from '../services/incidentGraphService'
+import { EventGraphService } from '../services/eventGraphService'
 import { PropertyGraphService } from '../services/propertyGraphService'
 
 @Controller()
@@ -13,7 +13,7 @@ export class EntityDocumentEventsController {
   constructor(
     private readonly personGraphService: PersonGraphService,
     private readonly companyGraphService: CompanyGraphService,
-    private readonly incidentGraphService: IncidentGraphService,
+    private readonly incidentGraphService: EventGraphService,
     private readonly propertyGraphService: PropertyGraphService,
   ) {}
 
@@ -38,7 +38,7 @@ export class EntityDocumentEventsController {
         return this.companyGraphService.upsertCompanyNode(entityId)
       }
       case 'INCIDENT': {
-        return this.incidentGraphService.upsertIncidentNode(entityId)
+        return this.incidentGraphService.upsertEventNode(entityId)
       }
       case 'PROPERTY': {
         return this.propertyGraphService.upsertPropertyNode(entityId)

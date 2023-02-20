@@ -19,6 +19,6 @@ export class GetPerson {
   @Query(() => Person)
   @UseGuards(FirebaseAuthGuard)
   async getPersonInfo(@Args() { id }: Params) {
-    return this.personsService.find(id)
+    return this.personsService.find(id, true)
   }
 }

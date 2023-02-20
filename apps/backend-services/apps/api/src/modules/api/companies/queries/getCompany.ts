@@ -19,6 +19,6 @@ export class GetCompany {
   @Query(() => Company)
   @UseGuards(FirebaseAuthGuard)
   async getCompany(@Args() { id }: Params) {
-    return this.companiesService.getCompany(id)
+    return this.companiesService.getCompany(id, true)
   }
 }

@@ -17,6 +17,6 @@ export class GetCompanies {
   @Query(() => [Company])
   @UseGuards(FirebaseAuthGuard)
   async getCompanies(@Args() { companiesIds }: Params) {
-    return companiesIds.length ? this.companiesService.getCompanies(companiesIds) : []
+    return companiesIds.length ? this.companiesService.getCompanies(companiesIds, true) : []
   }
 }

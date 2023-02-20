@@ -2,7 +2,7 @@ import { Injectable, Logger } from '@nestjs/common'
 import { ElasticsearchService } from '@nestjs/elasticsearch'
 import {
   INDEX_COMPANIES,
-  INDEX_INCIDENTS,
+  INDEX_EVENTS,
   INDEX_PERSONS,
   INDEX_PROPERTIES,
 } from '@app/definitions/constants'
@@ -20,7 +20,7 @@ export class SimilarEntitiesService {
   getSimilarProperties = async (propertyId: string) =>
     this.getSimilarDocuments(propertyId, INDEX_PROPERTIES)
   getSimilarIncidents = async (incidentId: string) =>
-    this.getSimilarDocuments(incidentId, INDEX_INCIDENTS)
+    this.getSimilarDocuments(incidentId, INDEX_EVENTS)
 
   private getSimilarDocuments = async (_id: string, _index: string) => {
     try {

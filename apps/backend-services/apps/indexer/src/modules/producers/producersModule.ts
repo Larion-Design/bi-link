@@ -10,7 +10,7 @@ import { RelatedEntitiesSearchService } from './services/relatedEntitiesSearchSe
 import {
   QUEUE_COMPANIES,
   QUEUE_FILES,
-  QUEUE_INCIDENTS,
+  QUEUE_EVENTS,
   QUEUE_PERSONS,
   QUEUE_PROPERTIES,
   QUEUE_REPORTS,
@@ -24,7 +24,7 @@ import { ReportEventDispatcherService } from './services/reportEventDispatcherSe
       { name: QUEUE_PERSONS },
       { name: QUEUE_COMPANIES },
       { name: QUEUE_FILES },
-      { name: QUEUE_INCIDENTS },
+      { name: QUEUE_EVENTS },
       { name: QUEUE_PROPERTIES },
       { name: QUEUE_REPORTS },
     ),

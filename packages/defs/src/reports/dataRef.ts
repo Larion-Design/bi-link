@@ -1,11 +1,11 @@
-import { Company, ConnectedEntity, Incident, Person, Property } from '../index'
+import { Company, ConnectedEntity, Event, Person, Property } from '../index'
 
 export interface DataRef {
   _id: string
   person?: Person
   company?: Company
   property?: Property
-  incident?: Incident
+  incident?: Event
   path?: string
   targetId?: string
   field: string

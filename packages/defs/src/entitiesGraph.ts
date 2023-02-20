@@ -1,7 +1,7 @@
-import { CompanyAssociateRelationship } from './associate'
-import { IncidentPartyRelationship } from './party'
-import { PersonalRelationship } from './relationship'
-import { PropertyOwnerRelationship } from './propertyOwner'
+import { CompanyAssociateRelationship } from './company'
+import { IncidentPartyRelationship } from './event'
+import { PersonalRelationship } from './person'
+import { PropertyOwnerRelationship } from './property'
 
 export interface GraphNode {
   _id: string
@@ -17,18 +17,25 @@ export interface EntitiesGraph {
 
 export enum RelationshipLabel {
   RELATED = 'RELATED',
+  BORN_IN = 'BORN_IN',
+  LIVES_AT = 'LIVES_AT',
   ASSOCIATE = 'ASSOCIATE',
   OWNER = 'OWNER',
   PARTY_INVOLVED = 'PARTY_INVOLVED',
   HAS_ATTACHMENT = 'HAS_ATTACHMENT',
+  HQ_AT = 'HQ_AT',
+  BRANCH_AT = 'BRANCH_AT',
+  OCCURED_AT = 'OCCURED_AT',
+  LOCATED_AT = 'LOCATED_AT',
 }
 
 export enum EntityLabel {
   PERSON = 'PERSON',
   COMPANY = 'COMPANY',
-  INCIDENT = 'INCIDENT',
+  EVENT = 'EVENT',
   FILE = 'FILE',
   PROPERTY = 'PROPERTY',
+  LOCATION = 'LOCATION',
 }
 
 export type RelationshipMetadata = {

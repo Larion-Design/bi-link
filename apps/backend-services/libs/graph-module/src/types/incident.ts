@@ -1,5 +1,5 @@
-import { EntityMetadata, Incident } from 'defs'
+import { EntityMetadata } from 'defs'
 
-export interface IncidentGraphNode extends EntityMetadata, Pick<Incident, 'location'> {
+export interface EventGraphNode extends EntityMetadata {
   date: string
 }

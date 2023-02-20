@@ -1,17 +1,8 @@
-import { Field, ObjectType } from '@nestjs/graphql'
+import { ObjectType, PickType } from '@nestjs/graphql'
 import { PersonListRecord as PersonListRecordType } from 'defs'
+import { Person } from './person'
 
 @ObjectType()
-export class PersonListRecord implements PersonListRecordType {
-  @Field()
-  _id: string
-
-  @Field()
-  firstName: string
-
-  @Field()
-  lastName: string
-
-  @Field()
-  cnp: string
-}
+export class PersonListRecord
+  extends PickType(Person, ['_id', 'firstName', 'lastName', 'cnp'] as const)
+  implements PersonListRecordType {}

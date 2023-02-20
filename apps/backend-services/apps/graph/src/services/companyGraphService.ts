@@ -1,9 +1,10 @@
-import { Injectable, Logger } from '@nestjs/common'
-import { GraphService } from '@app/graph-module/graphService'
+import { CompanyDocument } from '@app/entities/models/company/companyModel'
 import { CompaniesService } from '@app/entities/services/companiesService'
-import { CompanyDocument } from '@app/entities/models/companyModel'
+import { GraphService } from '@app/graph-module/graphService'
 import { AssociateGraphRelationship, CompanyGraphNode } from '@app/graph-module/types'
+import { Injectable, Logger } from '@nestjs/common'
 import { EntityLabel, RelationshipLabel } from 'defs'
+import { LocationGraphService } from './locationGraphService'
 
 @Injectable()
 export class CompanyGraphService {
@@ -12,11 +13,12 @@ export class CompanyGraphService {
   constructor(
     private readonly companiesService: CompaniesService,
     private readonly graphService: GraphService,
+    private readonly locationGraphservice: LocationGraphService,
   ) {}
 
   upsertCompanyNode = async (companyId: string) => {
     try {
-      const companyDocument = await this.companiesService.getCompany(companyId)
+      const companyDocument = await this.companiesService.getCompany(companyId, true)
 
       await this.graphService.upsertEntity<CompanyGraphNode>(
         {
@@ -29,6 +31,7 @@ export class CompanyGraphService {
       )
 
       await this.upsertCompanyAssociates(companyDocument)
+      await this.upsertCompanyLocations(companyDocument)
     } catch (e) {
       this.logger.error(e)
     }
@@ -62,6 +65,36 @@ export class CompanyGraphService {
         map,
         RelationshipLabel.ASSOCIATE,
       )
+    }
+  }
+
+  private upsertCompanyLocations = async (companyDocument: CompanyDocument) => {
+    const locations = new Set(companyDocument.locations)
+
+    if (companyDocument.headquarters) {
+      locations.add(companyDocument.headquarters)
+    }
+
+    if (locations.size) {
+      await this.locationGraphservice.upsertLocationNodes(Array.from(locations))
+
+      const companyId = String(companyDocument._id)
+
+      if (companyDocument.headquarters) {
+        await this.locationGraphservice.upsertLocationRelationship(
+          companyDocument.headquarters.locationId,
+          companyId,
+          RelationshipLabel.HQ_AT,
+        )
+      }
+
+      if (companyDocument.locations.length) {
+        await this.locationGraphservice.upsertLocationsRelationships(
+          companyId,
+          companyDocument.locations.map(({ locationId }) => locationId),
+          RelationshipLabel.BRANCH_AT,
+        )
+      }
     }
   }
 }

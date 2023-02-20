@@ -3,10 +3,10 @@ import { Model } from 'mongoose'
 import { InjectModel } from '@nestjs/mongoose'
 import { CustomFieldsService } from '../../customFields/services/customFieldsService'
 import { PropertyOwnerAPI } from 'defs'
-import { CompanyDocument, CompanyModel } from '@app/entities/models/companyModel'
-import { PersonDocument, PersonModel } from '@app/entities/models/personModel'
-import { PropertyOwnerModel } from '@app/entities/models/propertyOwnerModel'
-import { VehicleOwnerInfoModel } from '@app/entities/models/vehicleOwnerInfoModel'
+import { CompanyDocument, CompanyModel } from '@app/entities/models/company/companyModel'
+import { PersonDocument, PersonModel } from '@app/entities/models/person/personModel'
+import { PropertyOwnerModel } from '@app/entities/models/property/propertyOwnerModel'
+import { VehicleOwnerInfoModel } from '@app/entities/models/property/vehicleOwnerInfoModel'
 
 @Injectable()
 export class PropertyOwnerAPIService {
@@ -78,15 +78,15 @@ export class PropertyOwnerAPIService {
     const ownerModel = new PropertyOwnerModel()
     ownerModel.startDate = ownerInfo.startDate
     ownerModel.endDate = ownerInfo.endDate
-    ownerModel.customFields = this.customFieldsService.getCustomFieldsDocumentsForInputData(
+    ownerModel.customFields = this.customFieldsService.createCustomFieldsModels(
       ownerInfo.customFields,
     )
     ownerModel._confirmed = ownerInfo._confirmed
 
     if (ownerInfo.vehicleOwnerInfo) {
-      const { registrationNumber } = ownerInfo.vehicleOwnerInfo
+      const { plateNumbers } = ownerInfo.vehicleOwnerInfo
       const vehicleOwnerInfoModel = new VehicleOwnerInfoModel()
-      vehicleOwnerInfoModel.registrationNumber = registrationNumber
+      vehicleOwnerInfoModel.plateNumbers = plateNumbers
       ownerModel.vehicleOwnerInfo = vehicleOwnerInfoModel
     }
     return ownerModel

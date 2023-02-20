@@ -1,14 +1,8 @@
 import { PropertyListRecord as PropertyListRecordType } from 'defs'
-import { Field, ObjectType } from '@nestjs/graphql'
+import { ObjectType, PickType } from '@nestjs/graphql'
+import { Property } from './property'
 
 @ObjectType()
-export class PropertyListRecord implements PropertyListRecordType {
-  @Field()
-  _id: string
-
-  @Field()
-  name: string
-
-  @Field()
-  type: string
-}
+export class PropertyListRecord
+  extends PickType(Property, ['_id', 'name', 'type'] as const)
+  implements PropertyListRecordType {}

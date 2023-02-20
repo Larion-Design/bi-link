@@ -1,4 +1,4 @@
-export type IncidentEventInfo = {
-  incidentId: string
+export type EventEventInfo = {
+  eventId: string
   authorId?: string
 }

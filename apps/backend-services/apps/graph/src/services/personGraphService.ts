@@ -1,9 +1,12 @@
-import { Injectable, Logger } from '@nestjs/common'
-import { GraphService } from '@app/graph-module/graphService'
+import { LocationDocument } from '@app/entities/models/locationModel'
+import { PersonDocument } from '@app/entities/models/person/personModel'
 import { PersonsService } from '@app/entities/services/personsService'
-import { EntityLabel, PersonGraphNode, RelationshipLabel } from 'defs'
-import { PersonDocument } from '@app/entities/models/personModel'
+import { PersonGraphNode } from '@app/graph-module'
+import { GraphService } from '@app/graph-module/graphService'
 import { PersonalRelationshipGraph } from '@app/graph-module/types/relationship'
+import { Injectable, Logger } from '@nestjs/common'
+import { EntityLabel, RelationshipLabel } from 'defs'
+import { LocationGraphService } from './locationGraphService'
 
 @Injectable()
 export class PersonGraphService {
@@ -12,11 +15,12 @@ export class PersonGraphService {
   constructor(
     private readonly personsService: PersonsService,
     private readonly graphService: GraphService,
+    private readonly locationGraphservice: LocationGraphService,
   ) {}
 
   upsertPersonNode = async (personId: string) => {
     try {
-      const personDocument = await this.personsService.find(personId)
+      const personDocument = await this.personsService.find(personId, true)
 
       await this.graphService.upsertEntity<PersonGraphNode>(
         {
@@ -30,6 +34,7 @@ export class PersonGraphService {
       )
 
       await this.upsertPersonRelationships(personDocument)
+      await this.upsertPersonLocations(personDocument)
     } catch (e) {
       this.logger.error(e)
     }
@@ -53,6 +58,43 @@ export class PersonGraphService {
           map,
           RelationshipLabel.RELATED,
         )
+      }
+    } catch (e) {
+      this.logger.error(e)
+    }
+  }
+
+  private upsertPersonLocations = async (personDocument: PersonDocument) => {
+    try {
+      const locations: LocationDocument[] = []
+
+      if (personDocument.homeAddress) {
+        locations.push(personDocument.homeAddress)
+      }
+      if (personDocument.birthPlace) {
+        locations.push(personDocument.birthPlace)
+      }
+
+      if (locations.length) {
+        await this.locationGraphservice.upsertLocationNodes(locations)
+
+        const personId = String(personDocument._id)
+
+        if (personDocument.homeAddress) {
+          await this.locationGraphservice.upsertLocationRelationship(
+            personDocument.homeAddress.locationId,
+            personId,
+            RelationshipLabel.LIVES_AT,
+          )
+        }
+
+        if (personDocument.birthPlace) {
+          await this.locationGraphservice.upsertLocationRelationship(
+            personDocument.birthPlace.locationId,
+            personId,
+            RelationshipLabel.BORN_IN,
+          )
+        }
       }
     } catch (e) {
       this.logger.error(e)

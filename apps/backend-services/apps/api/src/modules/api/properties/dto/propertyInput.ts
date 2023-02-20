@@ -3,6 +3,7 @@ import { Field, InputType } from '@nestjs/graphql'
 import { FileInput } from '../../files/dto/fileInput'
 import { CustomFieldInput } from '../../customFields/dto/customFieldInput'
 import { PropertyOwnerInput } from './propertyOwnerInput'
+import { RealEstateInfoInput } from './realEstateInfoInput'
 import { VehicleInfoInput } from './vehicleInfoInput'
 
 @InputType()
@@ -27,4 +28,7 @@ export class PropertyInput implements PropertyAPIInput {
 
   @Field(() => VehicleInfoInput, { nullable: true })
   vehicleInfo: VehicleInfoInput
+
+  @Field(() => RealEstateInfoInput, { nullable: true })
+  realEstateInfo: RealEstateInfoInput
 }

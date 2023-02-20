@@ -3,6 +3,7 @@ import { Field, ObjectType } from '@nestjs/graphql'
 import { File } from '../../files/dto/file'
 import { CustomField } from '../../customFields/dto/customField'
 import { PropertyOwner } from './propertyOwner'
+import { RealEstateInfo } from './realEstateInfo'
 import { VehicleInfo } from './vehicleInfo'
 
 @ObjectType()
@@ -30,4 +31,7 @@ export class Property implements PropertyAPIOutput {
 
   @Field(() => VehicleInfo, { nullable: true })
   vehicleInfo: VehicleInfo
+
+  @Field(() => RealEstateInfo, { nullable: true })
+  realEstateInfo: RealEstateInfo
 }

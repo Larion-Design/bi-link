@@ -1,19 +1,19 @@
 import { Module } from '@nestjs/common'
-import { IndexerModule } from '../indexer/indexerModule'
+import { SearchToolsModule } from '@app/search-tools-module'
 import { PersonIndexEventsConsumer } from './services/personIndexEventsConsumer'
 import { CompanyIndexEventsConsumer } from './services/companyIndexEventsConsumer'
 import { FileIndexEventsConsumer } from './services/fileIndexEventsConsumer'
 import { PersonsQueueWatcherService } from './services/personsQueueWatcherService'
 import { FilesQueueWatcherService } from './services/filesQueueWatcherService'
 import { CompaniesQueueWatcherService } from './services/companiesQueueWatcherService'
-import { IncidentIndexEventsConsumer } from './services/incidentIndexEventsConsumer'
+import { EventIndexEventsConsumer } from './services/eventIndexEventsConsumer'
 import { IncidentsQueueWatcherService } from './services/incidentsQueueWatcherService'
 import { ProducersModule } from '../producers/producersModule'
 import { PropertiesQueueWatcherService } from './services/propertiesQueueWatcherService'
 import { PropertyIndexEventsConsumer } from './services/propertyIndexEventsConsumer'
 
 @Module({
-  imports: [IndexerModule, ProducersModule],
+  imports: [SearchToolsModule, ProducersModule],
   providers: [
     PersonIndexEventsConsumer,
     PersonsQueueWatcherService,
@@ -21,7 +21,7 @@ import { PropertyIndexEventsConsumer } from './services/propertyIndexEventsConsu
     CompaniesQueueWatcherService,
     FileIndexEventsConsumer,
     FilesQueueWatcherService,
-    IncidentIndexEventsConsumer,
+    EventIndexEventsConsumer,
     IncidentsQueueWatcherService,
     PropertiesQueueWatcherService,
     PropertyIndexEventsConsumer,

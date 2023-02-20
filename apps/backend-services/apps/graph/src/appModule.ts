@@ -9,7 +9,7 @@ import { SentryModule } from '@ntegral/nestjs-sentry'
 import { MongooseModule } from '@nestjs/mongoose'
 import { Neo4jModule } from 'nest-neo4j/dist'
 import { CompanyGraphService } from './services/companyGraphService'
-import { IncidentGraphService } from './services/incidentGraphService'
+import { EventGraphService } from './services/eventGraphService'
 import { PropertyGraphService } from './services/propertyGraphService'
 import { ServiceHealthModule } from '@app/service-health'
 
@@ -58,7 +58,7 @@ import { ServiceHealthModule } from '@app/service-health'
         }),
     }),
   ],
-  providers: [PersonGraphService, CompanyGraphService, IncidentGraphService, PropertyGraphService],
+  providers: [PersonGraphService, CompanyGraphService, EventGraphService, PropertyGraphService],
   controllers: [EntityDocumentEventsController],
 })
 export class AppModule {}

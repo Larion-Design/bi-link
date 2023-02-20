@@ -1,11 +1,12 @@
-import { Injectable, Logger } from '@nestjs/common'
-import { GraphService } from '@app/graph-module/graphService'
-import { EntityLabel, RelationshipLabel } from 'defs'
+import { PropertyDocument } from '@app/entities/models/property/propertyModel'
 import { PropertiesService } from '@app/entities/services/propertiesService'
+import { GraphService } from '@app/graph-module/graphService'
 import { PropertyGraphNode } from '@app/graph-module/types/property'
-import { PropertyDocument } from '@app/entities/models/propertyModel'
 import { PropertyOwnerGraphRelationship } from '@app/graph-module/types/propertyOwner'
+import { Injectable, Logger } from '@nestjs/common'
 import { format } from 'date-fns'
+import { EntityLabel, RelationshipLabel } from 'defs'
+import { LocationGraphService } from './locationGraphService'
 
 @Injectable()
 export class PropertyGraphService {
@@ -14,11 +15,12 @@ export class PropertyGraphService {
   constructor(
     private readonly propertiesService: PropertiesService,
     private readonly graphService: GraphService,
+    private readonly locationGraphservice: LocationGraphService,
   ) {}
 
   upsertPropertyNode = async (propertyId: string) => {
     try {
-      const propertyDocument = await this.propertiesService.getProperty(propertyId)
+      const propertyDocument = await this.propertiesService.getProperty(propertyId, true)
 
       const propertyNode: PropertyGraphNode = {
         _id: propertyId,
@@ -28,13 +30,20 @@ export class PropertyGraphService {
 
       if (propertyDocument.vehicleInfo) {
         propertyNode.vin = propertyDocument.vehicleInfo.vin
-        propertyNode.plateNumbers = propertyDocument.owners.map(
-          ({ vehicleOwnerInfo: { registrationNumber } }) => registrationNumber,
+        propertyNode.plateNumbers = Array.from(
+          new Set<string>(
+            [].concat(
+              ...propertyDocument.owners.map(
+                ({ vehicleOwnerInfo: { plateNumbers } }) => plateNumbers,
+              ),
+            ),
+          ),
         )
       }
 
       await this.graphService.upsertEntity<PropertyGraphNode>(propertyNode, EntityLabel.PROPERTY)
       await this.upsertPropertyOwners(propertyDocument)
+      await this.upsertPropertyLocation(propertyDocument)
     } catch (e) {
       this.logger.error(e)
     }
@@ -56,7 +65,7 @@ export class PropertyGraphService {
               owner.endDate = format(new Date(endDate), 'yyyy-MM-dd')
             }
             if (vehicleOwnerInfo) {
-              owner.plateNumber = vehicleOwnerInfo.registrationNumber
+              owner.plateNumbers = vehicleOwnerInfo.plateNumbers
             }
             map.set(String(person?._id ?? company?._id), owner)
           },
@@ -66,6 +75,23 @@ export class PropertyGraphService {
           String(propertyDocument._id),
           map,
           RelationshipLabel.OWNER,
+        )
+      }
+    } catch (e) {
+      this.logger.error(e)
+    }
+  }
+
+  private upsertPropertyLocation = async ({ _id, realEstateInfo }: PropertyDocument) => {
+    try {
+      const locationDocument = realEstateInfo?.location
+
+      if (locationDocument) {
+        await this.locationGraphservice.upsertLocationNode(locationDocument)
+        await this.locationGraphservice.upsertLocationRelationship(
+          locationDocument.locationId,
+          String(_id),
+          RelationshipLabel.LOCATED_AT,
         )
       }
     } catch (e) {
