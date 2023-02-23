@@ -23,10 +23,10 @@ export class RelatedEntitiesSearchService {
   getPropertiesRelatedToCompany = async (companyId: string) =>
     this.getRelatedEntities(INDEX_PROPERTIES, 'companyOwners' as keyof PropertyIndex, companyId)
 
-  getIncidentsRelatedToProperty = async (propertyId: string) =>
+  getEventsRelatedToProperty = async (propertyId: string) =>
     this.getRelatedEntities(INDEX_EVENTS, 'properties' as keyof EventIndex, propertyId)
 
-  getIncidentsRelatedToPerson = async (personId: string) =>
+  getEventsRelatedToPerson = async (personId: string) =>
     this.getRelatedEntities(INDEX_EVENTS, 'persons' as keyof EventIndex, personId)
 
   private getRelatedEntities = async (index: string, path: string, entityId: string) => {

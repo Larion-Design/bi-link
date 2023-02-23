@@ -1,16 +1,36 @@
 import { Field, ObjectType } from '@nestjs/graphql'
+import { EntitiesGraph as EntitiesGraphType } from 'defs'
 import { CompanyAssociateRelationship } from './companyAssociateRelationship'
-import { IncidentPartyRelationship } from './incidentPartyRelationship'
+import { EntityLocationRelationship } from './entityLocationRelationship'
+import { EventPartyRelationship } from './eventPartyRelationship'
 import { PersonalRelationship } from './personalRelationship'
 import { PropertyOwnerRelationship } from './propertyOwnerRelationship'
 
 @ObjectType()
-export class EntitiesGraph {
+export class EntitiesGraph implements EntitiesGraphType {
+  @Field(() => [EventPartyRelationship])
+  eventsParties: EventPartyRelationship[]
+
+  @Field(() => [EntityLocationRelationship])
+  propertiesLocation: EntityLocationRelationship[]
+
+  @Field(() => [EntityLocationRelationship])
+  companiesHeadquarters: EntityLocationRelationship[]
+
+  @Field(() => [EntityLocationRelationship])
+  companiesBranches: EntityLocationRelationship[]
+
+  @Field(() => [EntityLocationRelationship])
+  personsBirthPlace: EntityLocationRelationship[]
+
+  @Field(() => [EntityLocationRelationship])
+  personsHomeAddress: EntityLocationRelationship[]
+
+  @Field(() => [EntityLocationRelationship])
+  eventsOccurencePlace: EntityLocationRelationship[]
+
   @Field(() => [CompanyAssociateRelationship])
   companiesAssociates: CompanyAssociateRelationship[]
-
-  @Field(() => [IncidentPartyRelationship])
-  incidentsParties: IncidentPartyRelationship[]
 
   @Field(() => [PropertyOwnerRelationship])
   propertiesRelationships: PropertyOwnerRelationship[]

@@ -1,2 +1,2 @@
 export * from './graphModule'
-export * from './types'
+export * from './graphService'

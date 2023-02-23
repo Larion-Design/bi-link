@@ -4,8 +4,8 @@ import { QUEUE_EVENTS } from '@app/pub'
 import { Job } from 'bull'
 
 @Processor(QUEUE_EVENTS)
-export class IncidentsQueueWatcherService {
-  private readonly logger = new Logger(IncidentsQueueWatcherService.name)
+export class EventsQueueWatcherService {
+  private readonly logger = new Logger(EventsQueueWatcherService.name)
 
   @OnQueueActive()
   onQueueActive({ id, name }: Job) {

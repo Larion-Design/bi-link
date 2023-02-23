@@ -4,7 +4,7 @@ import { Command, CommandRunner } from 'nest-commander'
   name: 'search-index',
   arguments: '<entity>',
   description:
-    'Regenerates index for the specified entity type (persons | companies | properties | events)..',
+    'Regenerates index for the specified entity type (persons | companies | properties | events)',
 })
 export class ElasticsearchIndexEntityCommand extends CommandRunner {
   async run(inputs: string[], options: Record<string, never>) {

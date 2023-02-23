@@ -1,4 +1,6 @@
+import { EntitiesModule } from '@app/entities'
 import { PubModule } from '@app/pub'
+import { HistoryIndexerService } from '@app/search-tools-module/indexer'
 import { Module } from '@nestjs/common'
 import { CompaniesIndexerService } from '@app/search-tools-module/indexer/companiesIndexerService'
 import { ConnectedEntityIndexerService } from '@app/search-tools-module/indexer/connectedEntityIndexerService'
@@ -9,17 +11,18 @@ import { PersonsIndexerService } from '@app/search-tools-module/indexer/personsI
 import { PropertiesIndexerService } from '@app/search-tools-module/indexer/propertiesIndexerService'
 import { CompaniesMappingService } from '@app/search-tools-module/mapping/companiesMappingService'
 import { FilesMappingService } from '@app/search-tools-module/mapping/filesMappingService'
-import { EventMappingService } from '@app/search-tools-module/mapping/eventMappingService'
+import { EventsMappingService } from '@app/search-tools-module/mapping/eventsMappingService'
 import { PersonsMappingService } from '@app/search-tools-module/mapping/personsMappingService'
 import { PropertiesMappingService } from '@app/search-tools-module/mapping/propertiesMappingService'
 import { ElasticsearchModule } from '@nestjs/elasticsearch'
 import { ConfigModule, ConfigService } from '@nestjs/config'
 import { MappingHelperService } from './mapping/mappingHelperService'
-import { MappingValidatorService } from '@app/search-tools-module/mapping'
+import { HistoryMappingService, MappingValidatorService } from '@app/search-tools-module/mapping'
 
 @Module({
   imports: [
     PubModule,
+    EntitiesModule,
     ElasticsearchModule.registerAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
@@ -40,10 +43,12 @@ import { MappingValidatorService } from '@app/search-tools-module/mapping'
     CompaniesMappingService,
     FilesMappingService,
     FilesIndexerService,
-    EventMappingService,
+    EventsMappingService,
     EventsIndexerService,
     PropertiesMappingService,
     PropertiesIndexerService,
+    HistoryMappingService,
+    HistoryIndexerService,
   ],
   exports: [
     ConnectedEntityIndexerService,
@@ -56,10 +61,12 @@ import { MappingValidatorService } from '@app/search-tools-module/mapping'
     CompaniesMappingService,
     FilesMappingService,
     FilesIndexerService,
-    EventMappingService,
+    EventsMappingService,
     EventsIndexerService,
     PropertiesMappingService,
     PropertiesIndexerService,
+    HistoryMappingService,
+    HistoryIndexerService,
   ],
 })
 export class SearchToolsModule {}

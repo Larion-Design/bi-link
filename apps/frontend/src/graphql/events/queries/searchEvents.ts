@@ -1,5 +1,5 @@
 import { gql, useLazyQuery } from '@apollo/client'
-import { IncidentsSuggestions } from 'defs'
+import { EventsSuggestions } from 'defs'
 
 type Params = {
   searchTerm: string
@@ -8,12 +8,12 @@ type Params = {
 }
 
 type Response = {
-  searchIncidents: IncidentsSuggestions
+  searchEvents: EventsSuggestions
 }
 
 const request = gql`
-  query SearchIncidents($searchTerm: String!, $limit: Int! = 20, $skip: Int! = 0) {
-    searchIncidents(searchTerm: $searchTerm, skip: $skip, limit: $limit) {
+  query SearchEvents($searchTerm: String!, $limit: Int! = 20, $skip: Int! = 0) {
+    searchEvents(searchTerm: $searchTerm, skip: $skip, limit: $limit) {
       total
       records {
         _id
@@ -25,5 +25,5 @@ const request = gql`
   }
 `
 
-export const searchIncidentsRequest = () =>
+export const searchEventsRequest = () =>
   useLazyQuery<Response, Params>(request, { fetchPolicy: 'cache-and-network' })

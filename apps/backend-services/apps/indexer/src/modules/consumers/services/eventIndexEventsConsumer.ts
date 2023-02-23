@@ -52,7 +52,7 @@ export class EventIndexEventsConsumer {
 
   private indexEventInfo = async (eventId: string) => {
     const event = await this.eventsService.getEvent(eventId, true)
-    const indexingSuccessful = await this.eventsIndexerService.indexIncident(eventId, event)
+    const indexingSuccessful = await this.eventsIndexerService.indexEvent(eventId, event)
 
     if (indexingSuccessful) {
       const filesIds = event.files.map(({ fileId }) => fileId)

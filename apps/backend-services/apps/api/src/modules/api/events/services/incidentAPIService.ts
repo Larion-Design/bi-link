@@ -8,8 +8,8 @@ import { EventsService } from '@app/entities/services/eventsService'
 import { PartyAPIService } from './partyAPIService'
 
 @Injectable()
-export class IncidentAPIService {
-  private readonly logger = new Logger(IncidentAPIService.name)
+export class EventAPIService {
+  private readonly logger = new Logger(EventAPIService.name)
 
   constructor(
     private readonly eventsService: EventsService,

@@ -1,58 +1,57 @@
 import Box from '@mui/material/Box'
 import { format } from 'date-fns'
 import React, { useCallback, useMemo } from 'react'
-import { IncidentAPIInput } from 'defs'
+import { EventAPIInput } from 'defs'
 import { useCopyToClipboard } from 'usehooks-ts'
 import { formatDate } from '../../../utils/date'
 import { CreateDataRefHandler } from '../../../utils/hooks/useDataRefProcessor'
 import { EntityInfoTable } from './entityInfoTable'
 
 type Props = {
-  incidentId: string
-  incidentInfo: IncidentAPIInput
+  eventId: string
+  eventInfo: EventAPIInput
   createDataRef: CreateDataRefHandler
 }
 
-export const IncidentInfoDrawer: React.FunctionComponent<Props> = ({
-  incidentId,
-  incidentInfo,
+export const EventInfoDrawer: React.FunctionComponent<Props> = ({
+  eventId,
+  eventInfo,
   createDataRef,
 }) => {
   const [_, copy] = useCopyToClipboard()
 
   const generalInfo = useMemo(
     () => ({
-      type: incidentInfo.type,
-      location: incidentInfo.location,
-      date: incidentInfo.date ? formatDate(incidentInfo.date) : '',
-      description: incidentInfo.description,
+      type: eventInfo.type,
+      location: eventInfo.location,
+      date: eventInfo.date ? formatDate(eventInfo.date) : '',
+      description: eventInfo.description,
     }),
-    [incidentInfo],
+    [eventInfo],
   )
 
   const extraInfo = useMemo(() => {
     const map = new Map<string, string>()
-    incidentInfo.customFields.forEach(({ fieldName, fieldValue }) => map.set(fieldName, fieldValue))
+    eventInfo.customFields.forEach(({ fieldName, fieldValue }) => map.set(fieldName, fieldValue))
     return Object.fromEntries(map)
-  }, [incidentInfo.customFields])
+  }, [eventInfo.customFields])
 
   const copyGeneralInfo = useCallback(
-    (key: string) =>
-      void copy(createDataRef({ entityType: 'INCIDENT', entityId: incidentId }, key)),
-    [incidentId],
+    (key: string) => void copy(createDataRef({ entityType: 'INCIDENT', entityId: eventId }, key)),
+    [eventId],
   )
 
   const copyCustomField = useCallback(
     (key: string) =>
       void copy(
         createDataRef(
-          { entityType: 'INCIDENT', entityId: incidentId },
+          { entityType: 'INCIDENT', entityId: eventId },
           'fieldName',
           'customFields',
           key,
         ),
       ),
-    [incidentId],
+    [eventId],
   )
 
   return (

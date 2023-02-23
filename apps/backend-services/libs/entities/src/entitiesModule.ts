@@ -1,3 +1,4 @@
+import { LocationsService } from '@app/entities/services/locationsService'
 import { Global, Module } from '@nestjs/common'
 import { MongooseModule } from '@nestjs/mongoose'
 import { CoordinatesModel, CoordinatesSchema } from '@app/entities/models/coordinatesModel'
@@ -78,6 +79,7 @@ import { ReportsService } from '@app/entities/services/reportsService'
     EventsService,
     PropertiesService,
     ReportsService,
+    LocationsService,
   ],
   exports: [
     MongooseModule,
@@ -87,6 +89,7 @@ import { ReportsService } from '@app/entities/services/reportsService'
     EventsService,
     PropertiesService,
     ReportsService,
+    LocationsService,
   ],
 })
 export class EntitiesModule {}

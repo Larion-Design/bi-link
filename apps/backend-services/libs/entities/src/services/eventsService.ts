@@ -27,7 +27,7 @@ export class EventsService {
   update = async (eventId: string, incidentModel: EventModel) =>
     this.eventModel.findByIdAndUpdate(eventId, incidentModel)
 
-  async *getAllIncidents(fields: ProjectionFields<EventDocument> = { _id: 1 }) {
+  async *getAllEvents(fields: ProjectionFields<EventDocument> = { _id: 1 }) {
     for await (const incidentDocument of this.eventModel.find({}, fields)) {
       yield incidentDocument
     }

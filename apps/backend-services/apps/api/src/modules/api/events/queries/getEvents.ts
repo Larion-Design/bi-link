@@ -16,7 +16,7 @@ export class GetEvents {
 
   @Query(() => [Event])
   @UseGuards(FirebaseAuthGuard)
-  async getIncidents(@Args() { eventsIds }: Params) {
+  async getEvents(@Args() { eventsIds }: Params) {
     return eventsIds.length ? this.eventsService.getEvents(eventsIds, true) : []
   }
 }

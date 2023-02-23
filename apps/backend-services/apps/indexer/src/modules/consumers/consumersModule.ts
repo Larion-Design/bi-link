@@ -7,7 +7,7 @@ import { PersonsQueueWatcherService } from './services/personsQueueWatcherServic
 import { FilesQueueWatcherService } from './services/filesQueueWatcherService'
 import { CompaniesQueueWatcherService } from './services/companiesQueueWatcherService'
 import { EventIndexEventsConsumer } from './services/eventIndexEventsConsumer'
-import { IncidentsQueueWatcherService } from './services/incidentsQueueWatcherService'
+import { EventsQueueWatcherService } from './services/incidentsQueueWatcherService'
 import { ProducersModule } from '../producers/producersModule'
 import { PropertiesQueueWatcherService } from './services/propertiesQueueWatcherService'
 import { PropertyIndexEventsConsumer } from './services/propertyIndexEventsConsumer'
@@ -22,7 +22,7 @@ import { PropertyIndexEventsConsumer } from './services/propertyIndexEventsConsu
     FileIndexEventsConsumer,
     FilesQueueWatcherService,
     EventIndexEventsConsumer,
-    IncidentsQueueWatcherService,
+    EventsQueueWatcherService,
     PropertiesQueueWatcherService,
     PropertyIndexEventsConsumer,
   ],

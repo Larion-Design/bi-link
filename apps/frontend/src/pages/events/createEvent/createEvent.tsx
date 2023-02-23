@@ -3,23 +3,23 @@ import { useNavigate } from 'react-router-dom'
 import { useSnackbar } from 'notistack'
 import { DashboardPage } from '../../../components/page/DashboardPage'
 import { routes } from '../../../router/routes'
-import { createIncidentRequest } from '../../../graphql/incidents/mutations/createIncident'
-import { IncidentDetails } from '../../../components/page/incidentDetails'
+import { createEventRequest } from '../../../graphql/events/mutations/createEvent'
+import { EventDetails } from '../../../components/page/eventDetails'
 
-export const CreateIncident: React.FunctionComponent = () => {
+export const CreateEvent: React.FunctionComponent = () => {
   const navigate = useNavigate()
-  const [createIncident, { data, loading, error }] = createIncidentRequest()
+  const [createEvent, { data, loading, error }] = createEventRequest()
   const { enqueueSnackbar } = useSnackbar()
 
   useEffect(() => {
-    if (data?.createIncident) {
-      enqueueSnackbar('Incidentul a fost creat cu succes.', {
+    if (data?.createEvent) {
+      enqueueSnackbar('Eventul a fost creat cu succes.', {
         variant: 'success',
         preventDuplicate: true,
       })
-      navigate(routes.incidents)
+      navigate(routes.events)
     }
-  }, [data?.createIncident])
+  }, [data?.createEvent])
 
   useEffect(() => {
     if (error?.message) {
@@ -30,14 +30,14 @@ export const CreateIncident: React.FunctionComponent = () => {
   }, [error?.message])
 
   return (
-    <DashboardPage title={'Creaza un incident'}>
-      <IncidentDetails
+    <DashboardPage title={'Creaza un event'}>
+      <EventDetails
         readonly={false}
-        onSubmit={(incidentInfo) => {
+        onSubmit={(eventInfo) => {
           if (!loading) {
-            void createIncident({
+            void createEvent({
               variables: {
-                data: incidentInfo,
+                data: eventInfo,
               },
             })
           }

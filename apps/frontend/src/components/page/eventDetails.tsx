@@ -4,20 +4,20 @@ import Box from '@mui/material/Box'
 import MenuItem from '@mui/material/MenuItem'
 import { Reports } from '../entityViews/reports'
 import { InputFieldMenu } from '../menu/inputFieldMenu'
-import { IncidentAPIInput } from 'defs'
-import { IncidentForm } from '../form/incidentForm'
+import { EventAPIInput } from 'defs'
+import { EventForm } from '../form/eventForm'
 import { Graph } from '../entityViews/graph'
 
 type Props = {
-  incidentId?: string
-  incidentInfo?: IncidentAPIInput
+  eventId?: string
+  eventInfo?: EventAPIInput
   readonly: boolean
-  onSubmit: (data: IncidentAPIInput) => void | Promise<void>
+  onSubmit: (data: EventAPIInput) => void | Promise<void>
 }
 
-export const IncidentDetails: React.FunctionComponent<Props> = ({
-  incidentId,
-  incidentInfo,
+export const EventDetails: React.FunctionComponent<Props> = ({
+  eventId,
+  eventInfo,
   readonly,
   onSubmit,
 }) => {
@@ -35,12 +35,12 @@ export const IncidentDetails: React.FunctionComponent<Props> = ({
         }}
       >
         <Typography variant={'h5'} data-cy={'pageTitle'} gutterBottom>
-          {!!incidentId && !!incidentInfo ? 'Detalii despre incident' : 'Creaza un incident'}
+          {!!eventId && !!eventInfo ? 'Detalii despre event' : 'Creaza un event'}
         </Typography>
-        {!!incidentId && (
+        {!!eventId && (
           <InputFieldMenu label={'Optiuni'}>
             <MenuItem onClick={() => setMainTabIndex(0)}>Informatii</MenuItem>
-            <MenuItem disabled={!incidentId} onClick={() => setMainTabIndex(1)}>
+            <MenuItem disabled={!eventId} onClick={() => setMainTabIndex(1)}>
               Grafic relational
             </MenuItem>
             <MenuItem onClick={() => setMainTabIndex(3)}>Rapoarte</MenuItem>
@@ -55,21 +55,19 @@ export const IncidentDetails: React.FunctionComponent<Props> = ({
       </Box>
       <Box sx={{ width: 1 }}>
         {mainTabIndex === 0 && (
-          <IncidentForm
-            incidentId={incidentId}
-            incidentInfo={incidentInfo}
+          <EventForm
+            eventId={eventId}
+            eventInfo={eventInfo}
             readonly={readonly}
             onSubmit={onSubmit}
           />
         )}
-        {mainTabIndex === 1 && !!incidentId && (
+        {mainTabIndex === 1 && !!eventId && (
           <Box sx={{ height: '70vh' }}>
-            <Graph entityId={incidentId} />
+            <Graph entityId={eventId} />
           </Box>
         )}
-        {mainTabIndex === 3 && !!incidentId && (
-          <Reports entityId={incidentId} entityType={'INCIDENT'} />
-        )}
+        {mainTabIndex === 3 && !!eventId && <Reports entityId={eventId} entityType={'INCIDENT'} />}
       </Box>
     </Box>
   )

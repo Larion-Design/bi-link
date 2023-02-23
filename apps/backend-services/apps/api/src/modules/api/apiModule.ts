@@ -25,13 +25,13 @@ import { GetFileContent } from './files/queries/getFileContent'
 import { GetFileInfo } from './files/queries/getFileInfo'
 import { GetFilesInfo } from './files/queries/getFilesInfo'
 import { FileAPIService } from './files/services/fileAPIService'
-import { CreateIncident } from './events/mutations/createIncident'
-import { UpdateIncident } from './events/mutations/updateIncident'
+import { CreateEvent } from './events/mutations/createEvent'
+import { UpdateEvent } from './events/mutations/updateEvent'
 import { GetEvent } from './events/queries/getEvent'
 import { GetEventFrequentCustomFields } from './events/queries/getEventFrequentCustomFields'
 import { GetEvents } from './events/queries/getEvents'
 import { SearchEvents } from './events/queries/searchEvents'
-import { IncidentAPIService } from './events/services/incidentAPIService'
+import { EventAPIService } from './events/services/incidentAPIService'
 import { PartyAPIService } from './events/services/partyAPIService'
 import { CreatePerson } from './persons/mutations/createPerson'
 import { UpdatePerson } from './persons/mutations/updatePerson'
@@ -91,7 +91,7 @@ import { GetUsers } from './users/queries/getUsers'
     CompanyAPIService,
     LocationAPIService,
     AssociatesService,
-    IncidentAPIService,
+    EventAPIService,
     PartyAPIService,
     PropertyAPIService,
     PropertyOwnerAPIService,
@@ -131,8 +131,8 @@ import { GetUsers } from './users/queries/getUsers'
     UserRegistered,
     GetEvent,
     SearchEvents,
-    CreateIncident,
-    UpdateIncident,
+    CreateEvent,
+    UpdateEvent,
     GetEventFrequentCustomFields,
     GetEvents,
     GetUsers,

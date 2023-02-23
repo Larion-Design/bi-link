@@ -1,7 +1,7 @@
 import { LocationDocument } from '@app/entities/models/locationModel'
 import { LocationsService } from '@app/entities/services/locationsService'
 import { GraphService } from '@app/graph-module/graphService'
-import { LocationGraphNode } from '@app/graph-module/types/location'
+import { LocationGraphNode } from '@app/definitions/graph/location'
 import { Injectable, Logger } from '@nestjs/common'
 import { EntityLabel, RelationshipLabel, RelationshipMetadata } from 'defs'
 

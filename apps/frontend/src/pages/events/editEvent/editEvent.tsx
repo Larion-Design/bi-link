@@ -1,41 +1,41 @@
 import React, { useEffect } from 'react'
-import { getIncidentRequest } from '../../../graphql/incidents/queries/getIncident'
+import { getEventRequest } from '../../../graphql/events/queries/getEvent'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useSnackbar } from 'notistack'
 import { DashboardPage } from '../../../components/page/DashboardPage'
 import { routes } from '../../../router/routes'
 import { Loader } from '../../../components/loader/loader'
-import { updateIncidentRequest } from '../../../graphql/incidents/mutations/updateIncident'
-import { IncidentDetails } from '../../../components/page/incidentDetails'
+import { updateEventRequest } from '../../../graphql/events/mutations/updateEvent'
+import { EventDetails } from '../../../components/page/eventDetails'
 
-export const EditIncident: React.FunctionComponent = () => {
-  const { incidentId } = useParams()
+export const EditEvent: React.FunctionComponent = () => {
+  const { eventId } = useParams()
   const navigate = useNavigate()
-  const [fetchIncident, { data: fetchData, loading: fetchLoading, error: fetchError }] =
-    getIncidentRequest()
-  const [updateIncident, { data: updateData, loading: updateLoading, error: updateError }] =
-    updateIncidentRequest()
+  const [fetchEvent, { data: fetchData, loading: fetchLoading, error: fetchError }] =
+    getEventRequest()
+  const [updateEvent, { data: updateData, loading: updateLoading, error: updateError }] =
+    updateEventRequest()
   const { enqueueSnackbar } = useSnackbar()
 
   useEffect(() => {
-    if (updateData?.updateIncident) {
-      enqueueSnackbar('Incidentul a fost actualizat.', {
+    if (updateData?.updateEvent) {
+      enqueueSnackbar('Eventul a fost actualizat.', {
         variant: 'success',
         preventDuplicate: true,
       })
-      navigate(routes.incidents)
+      navigate(routes.events)
     }
-  }, [updateData?.updateIncident])
+  }, [updateData?.updateEvent])
 
   useEffect(() => {
-    if (incidentId) {
-      void fetchIncident({
+    if (eventId) {
+      void fetchEvent({
         variables: {
-          incidentId,
+          eventId,
         },
       })
     }
-  }, [incidentId])
+  }, [eventId])
 
   useEffect(() => {
     if (fetchError?.message || updateError?.message) {
@@ -49,15 +49,15 @@ export const EditIncident: React.FunctionComponent = () => {
     <Loader visible={true} message={'Informatiile sunt incarcate...'} />
   ) : (
     <DashboardPage title={'Creaza un vehicul'}>
-      <IncidentDetails
-        incidentId={incidentId}
-        incidentInfo={fetchData?.getIncident}
+      <EventDetails
+        eventId={eventId}
+        eventInfo={fetchData?.getEvent}
         readonly={true}
-        onSubmit={(incidentInfo) => {
+        onSubmit={(eventInfo) => {
           if (!updateLoading) {
-            void updateIncident({
+            void updateEvent({
               variables: {
-                data: incidentInfo,
+                data: eventInfo,
               },
             })
           }

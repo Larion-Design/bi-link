@@ -12,13 +12,13 @@ import { DashboardPage } from '../../../components/page/DashboardPage'
 import { routes } from '../../../router/routes'
 import { PaginationParams } from '../../../graphql/shared/types/paginationParams'
 import { useSnackbar } from 'notistack'
-import { IncidentsTable } from './incidentsTable'
-import { searchIncidentsRequest } from '../../../graphql/incidents/queries/searchIncidents'
+import { EventsTable } from './eventsTable'
+import { searchEventsRequest } from '../../../graphql/events/queries/searchEvents'
 
-export const IncidentsList: React.FunctionComponent = () => {
+export const EventsList: React.FunctionComponent = () => {
   const navigate = useNavigate()
   const { enqueueSnackbar } = useSnackbar()
-  const [fetchIncidents, { data, error, loading }] = searchIncidentsRequest()
+  const [fetchEvents, { data, error, loading }] = searchEventsRequest()
 
   const [paginationParams, setPaginationParams] = useState<PaginationParams>({
     currentPage: 0,
@@ -27,9 +27,9 @@ export const IncidentsList: React.FunctionComponent = () => {
   const [searchTerm, setSearchTerm] = useState('')
   const debouncedSearchTerm = useDebounce(searchTerm, 500)
 
-  const searchIncidents = () => {
+  const searchEvents = () => {
     if (!loading) {
-      void fetchIncidents({
+      void fetchEvents({
         variables: {
           limit: paginationParams.itemsPerPage,
           skip: paginationParams.itemsPerPage * paginationParams.currentPage,
@@ -50,11 +50,11 @@ export const IncidentsList: React.FunctionComponent = () => {
       return paginationParams
     })
 
-    searchIncidents()
+    searchEvents()
   }, [debouncedSearchTerm])
 
   useEffect(() => {
-    searchIncidents()
+    searchEvents()
   }, [paginationParams])
 
   useEffect(() => {
@@ -66,7 +66,7 @@ export const IncidentsList: React.FunctionComponent = () => {
   }, [error?.message])
 
   return (
-    <DashboardPage title={'Incidente'}>
+    <DashboardPage title={'Evente'}>
       <Grid container spacing={2} sx={{ width: 1, p: 4 }}>
         <Grid item xs={12} mb={4}>
           <Box
@@ -76,23 +76,23 @@ export const IncidentsList: React.FunctionComponent = () => {
             alignItems={'center'}
           >
             <Typography variant={'h5'} data-cy={'pageTitle'}>
-              Incidente
+              Evente
             </Typography>
             <Box display={'flex'} sx={{ width: 0.7 }}>
               <TextField
                 value={searchTerm}
-                label={'Cauta incidente'}
+                label={'Cauta evente'}
                 sx={{ flex: 12, mr: 2 }}
                 onChange={({ target: { value } }) => setSearchTerm(value)}
-                data-cy={'searchIncidentsInput'}
+                data-cy={'searchEventsInput'}
               />
               <Button
                 variant={'contained'}
                 sx={{ flex: 1 }}
-                onClick={() => navigate(routes.newIncident)}
-                data-cy={'createIncident'}
+                onClick={() => navigate(routes.newEvent)}
+                data-cy={'createEvent'}
               >
-                <Tooltip title={'Creaza un incident'}>
+                <Tooltip title={'Creaza un event'}>
                   <AddOutlinedIcon />
                 </Tooltip>
               </Button>
@@ -100,10 +100,10 @@ export const IncidentsList: React.FunctionComponent = () => {
           </Box>
         </Grid>
         <Grid item xs={12}>
-          <IncidentsTable
+          <EventsTable
             paginationParams={paginationParams}
             setPaginationParams={setPaginationParams}
-            incidents={data?.searchIncidents ?? { records: [], total: 0 }}
+            events={data?.searchEvents ?? { records: [], total: 0 }}
           />
         </Grid>
       </Grid>

@@ -1,21 +1,35 @@
 import { gql, useLazyQuery } from '@apollo/client'
-import { IncidentAPIOutput } from 'defs'
+import { EventAPIInput } from 'defs'
 
 type Params = {
-  incidentsIds: string[]
+  eventId: string
 }
 
 type Response = {
-  getIncidents: IncidentAPIOutput[]
+  getEvent: EventAPIInput
 }
 
 const request = gql`
-  query GetIncidentsInfo($incidentsIds: [String!]!) {
-    getIncidents(incidentsIds: $incidentsIds) {
-      _id
+  query GetEvent($eventId: String!) {
+    getEvent(eventId: $eventId) {
       date
       type
-      location
+      location {
+        locationId
+        street
+        number
+        building
+        door
+        locality
+        county
+        country
+        zipCode
+        otherInfo
+        coordinates {
+          lat
+          long
+        }
+      }
       description
       customFields {
         fieldName
@@ -49,5 +63,7 @@ const request = gql`
   }
 `
 
-export const getIncidentsInfoRequest = () =>
-  useLazyQuery<Response, Params>(request, { fetchPolicy: 'cache-and-network' })
+export const getEventRequest = () =>
+  useLazyQuery<Response, Params>(request, {
+    fetchPolicy: 'cache-and-network',
+  })

@@ -1,6 +1,4 @@
 import { Injectable, Logger } from '@nestjs/common'
-import { Path } from 'neo4j-driver'
-import { Neo4jService } from 'nest-neo4j/dist'
 import {
   EntitiesGraph,
   EntityLabel,
@@ -8,6 +6,8 @@ import {
   RelationshipLabel,
   RelationshipMetadata,
 } from 'defs'
+import { Path } from 'neo4j-driver'
+import { Neo4jService } from 'nest-neo4j/dist'
 
 @Injectable()
 export class GraphService {
@@ -180,10 +180,16 @@ export class GraphService {
     )
 
     const relationships: EntitiesGraph = {
+      companiesBranches: [],
+      companiesHeadquarters: [],
+      eventsOccurencePlace: [],
+      personsBirthPlace: [],
+      personsHomeAddress: [],
       companiesAssociates: [],
-      incidentsParties: [],
+      eventsParties: [],
       propertiesRelationships: [],
       personalRelationships: [],
+      propertiesLocation: [],
     }
 
     result.records.forEach((record) => {
@@ -237,12 +243,57 @@ export class GraphService {
             break
           }
           case RelationshipLabel.PARTY_INVOLVED: {
-            relationships.incidentsParties.push({
+            relationships.eventsParties.push({
               startNode,
               endNode,
               _type: type as RelationshipLabel,
               _confirmed: Boolean(properties._confirmed),
               name: String(properties.name),
+            })
+            break
+          }
+          case RelationshipLabel.LOCATED_AT: {
+            relationships.propertiesLocation.push({
+              startNode,
+              endNode,
+              _type: type as RelationshipLabel,
+              _confirmed: Boolean(properties._confirmed),
+            })
+            break
+          }
+          case RelationshipLabel.BORN_IN: {
+            relationships.personsBirthPlace.push({
+              startNode,
+              endNode,
+              _type: type as RelationshipLabel,
+              _confirmed: Boolean(properties._confirmed),
+            })
+            break
+          }
+          case RelationshipLabel.HQ_AT: {
+            relationships.companiesHeadquarters.push({
+              startNode,
+              endNode,
+              _type: type as RelationshipLabel,
+              _confirmed: Boolean(properties._confirmed),
+            })
+            break
+          }
+          case RelationshipLabel.BRANCH_AT: {
+            relationships.companiesBranches.push({
+              startNode,
+              endNode,
+              _type: type as RelationshipLabel,
+              _confirmed: Boolean(properties._confirmed),
+            })
+            break
+          }
+          case RelationshipLabel.LIVES_AT: {
+            relationships.personsHomeAddress.push({
+              startNode,
+              endNode,
+              _type: type as RelationshipLabel,
+              _confirmed: Boolean(properties._confirmed),
             })
             break
           }

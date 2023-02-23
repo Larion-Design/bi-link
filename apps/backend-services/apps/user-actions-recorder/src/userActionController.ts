@@ -1,6 +1,6 @@
 import { Controller } from '@nestjs/common'
 import { EventPattern, Payload } from '@nestjs/microservices'
-import { HistoryIndexerService } from '../services/historyIndexerService'
+import { HistoryIndexerService } from '@app/search-tools-module/indexer/historyIndexerService'
 import { ActivityEventIndex } from 'defs'
 import { MICROSERVICES } from '@app/pub/constants'
 

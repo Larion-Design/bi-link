@@ -3,7 +3,7 @@ import { EventPattern, Payload } from '@nestjs/microservices'
 import { EntityInfo, MICROSERVICES } from '@app/pub/constants'
 import { CompanyEventDispatcherService } from '../producers/services/companyEventDispatcherService'
 import { PersonEventDispatcherService } from '../producers/services/personEventDispatcherService'
-import { IncidentEventDispatcherService } from '../producers/services/incidentEventDispatcherService'
+import { EventDispatcherService } from '../producers/services/eventDispatcherService'
 import { RelatedEntitiesSearchService } from '../producers/services/relatedEntitiesSearchService'
 import { FileEventDispatcherService } from '../producers/services/fileEventDispatcherService'
 import { PropertyEventDispatcherService } from '../producers/services/propertyEventDispatcherService'
@@ -15,7 +15,7 @@ export class EntityEventsController {
     private readonly companyEventDispatcherService: CompanyEventDispatcherService,
     private readonly personEventDispatcherService: PersonEventDispatcherService,
     private readonly propertyEventDispatcherService: PropertyEventDispatcherService,
-    private readonly incidentEventDispatcherService: IncidentEventDispatcherService,
+    private readonly eventEventDispatcherService: EventDispatcherService,
     private readonly fileEventDispatcherService: FileEventDispatcherService,
     private readonly reportEventDispatcherService: ReportEventDispatcherService,
     private readonly relatedEntitiesSearchService: RelatedEntitiesSearchService,
@@ -24,7 +24,7 @@ export class EntityEventsController {
   @EventPattern(MICROSERVICES.ENTITY_EVENTS.entityModified)
   async entityModified(@Payload() { entityId, entityType }: EntityInfo) {
     let relatedCompaniesIds: string[]
-    let relatedIncidentsIds: string[]
+    let relatedEventsIds: string[]
     let relatedPropertiesIds: string[]
 
     switch (entityType) {
@@ -35,7 +35,7 @@ export class EntityEventsController {
         relatedPropertiesIds = await this.relatedEntitiesSearchService.getPropertiesRelatedToPerson(
           entityId,
         )
-        relatedIncidentsIds = await this.relatedEntitiesSearchService.getIncidentsRelatedToPerson(
+        relatedEventsIds = await this.relatedEntitiesSearchService.getEventsRelatedToPerson(
           entityId,
         )
 
@@ -52,14 +52,14 @@ export class EntityEventsController {
         break
       }
       case 'PROPERTY': {
-        relatedIncidentsIds = await this.relatedEntitiesSearchService.getIncidentsRelatedToProperty(
+        relatedEventsIds = await this.relatedEntitiesSearchService.getEventsRelatedToProperty(
           entityId,
         )
         await this.propertyEventDispatcherService.dispatchPropertyUpdated(entityId)
         break
       }
       case 'INCIDENT': {
-        return this.incidentEventDispatcherService.dispatchIncidentUpdated(entityId)
+        return this.eventEventDispatcherService.dispatchEventUpdated(entityId)
       }
       case 'FILE': {
         return this.fileEventDispatcherService.dispatchFileCreated({ fileId: entityId })
@@ -76,9 +76,9 @@ export class EntityEventsController {
         this.companyEventDispatcherService.dispatchCompaniesUpdated(relatedCompaniesIds),
       )
     }
-    if (relatedIncidentsIds?.length) {
+    if (relatedEventsIds?.length) {
       dispatchedEvents.push(
-        this.incidentEventDispatcherService.dispatchIncidentsUpdated(relatedIncidentsIds),
+        this.eventEventDispatcherService.dispatchEventsUpdated(relatedEventsIds),
       )
     }
     if (relatedPropertiesIds.length) {
@@ -105,7 +105,7 @@ export class EntityEventsController {
         return this.propertyEventDispatcherService.dispatchPropertyCreated(entityId)
       }
       case 'INCIDENT': {
-        return this.incidentEventDispatcherService.dispatchIncidentCreated(entityId)
+        return this.eventEventDispatcherService.dispatchEventCreated(entityId)
       }
       case 'FILE': {
         return this.fileEventDispatcherService.dispatchFileCreated({ fileId: entityId })

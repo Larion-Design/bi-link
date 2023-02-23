@@ -5,20 +5,20 @@ import { Queue } from 'bull'
 import { EventEventInfo } from '@app/pub/types/incident'
 
 @Injectable()
-export class IncidentEventDispatcherService {
+export class EventDispatcherService {
   constructor(@InjectQueue(QUEUE_EVENTS) private readonly queue: Queue<EventEventInfo>) {}
 
-  dispatchIncidentCreated = async (incidentId: string) =>
+  dispatchEventCreated = async (incidentId: string) =>
     this.publishJob(EVENT_CREATED, {
       eventId: incidentId,
     })
 
-  dispatchIncidentUpdated = async (incidentId: string) =>
+  dispatchEventUpdated = async (incidentId: string) =>
     this.publishJob(EVENT_UPDATED, {
       eventId: incidentId,
     })
 
-  dispatchIncidentsUpdated = async (incidentsIds: string[]) =>
+  dispatchEventsUpdated = async (incidentsIds: string[]) =>
     this.queue.addBulk(
       incidentsIds.map((incidentId) => ({
         name: EVENT_UPDATED,

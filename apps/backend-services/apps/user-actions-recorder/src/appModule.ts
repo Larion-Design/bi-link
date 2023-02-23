@@ -3,14 +3,21 @@ import { ElasticsearchModule } from '@nestjs/elasticsearch'
 import { ConfigModule, ConfigService } from '@nestjs/config'
 import { ServiceHealthModule } from '@app/service-health'
 import { SearchToolsModule } from '@app/search-tools-module'
-import { UserActionController } from './controllers/userActionController'
-import { HistoryIndexerService } from './services/historyIndexerService'
-import { HistoryMappingService } from './services/historyMappingService'
+import { MongooseModule } from '@nestjs/mongoose'
+import { UserActionController } from './userActionController'
 
 @Module({
   imports: [
     SearchToolsModule,
     ServiceHealthModule,
+    MongooseModule.forRootAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: async (configService: ConfigService) =>
+        Promise.resolve({
+          uri: configService.get<string>('MONGODB_URI'),
+        }),
+    }),
     ConfigModule.forRoot({
       isGlobal: true,
       ignoreEnvVars: true,
@@ -26,6 +33,5 @@ import { HistoryMappingService } from './services/historyMappingService'
     }),
   ],
   controllers: [UserActionController],
-  providers: [HistoryIndexerService, HistoryMappingService],
 })
 export class AppModule {}

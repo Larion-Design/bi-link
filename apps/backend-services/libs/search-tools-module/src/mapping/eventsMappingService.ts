@@ -5,7 +5,7 @@ import { Injectable } from '@nestjs/common'
 import { MappingProperty } from '@elastic/elasticsearch/lib/api/types'
 
 @Injectable()
-export class EventMappingService implements MappingInterface<EventIndex> {
+export class EventsMappingService implements MappingInterface<EventIndex> {
   constructor(private readonly mappingHelperService: MappingHelperService) {}
 
   getMapping = (): Record<string | keyof EventIndex, MappingProperty> => ({

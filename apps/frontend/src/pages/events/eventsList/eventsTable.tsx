@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react'
 import Box from '@mui/material/Box'
 import { PaginationParams } from '../../../graphql/shared/types/paginationParams'
-import { IncidentListRecord, IncidentsSuggestions } from 'defs'
+import { EventListRecord, EventsSuggestions } from 'defs'
 import { generatePath, useNavigate } from 'react-router-dom'
 import {
   DataGrid,
@@ -17,12 +17,10 @@ import { routes } from '../../../router/routes'
 type Props = {
   paginationParams: PaginationParams
   setPaginationParams: (paginationParams: PaginationParams) => void
-  incidents: IncidentsSuggestions
+  events: EventsSuggestions
 }
 
-export const IncidentsTable: React.FunctionComponent<Props> = ({
-  incidents: { records, total },
-}) => {
+export const EventsTable: React.FunctionComponent<Props> = ({ events: { records, total } }) => {
   const navigate = useNavigate()
   const columns: Array<GridColDef | GridActionsColDef> = useMemo(
     () => [
@@ -34,7 +32,7 @@ export const IncidentsTable: React.FunctionComponent<Props> = ({
       },
       {
         field: 'type',
-        headerName: 'Tipul de incident',
+        headerName: 'Tipul de event',
         type: 'string',
         flex: 1,
       },
@@ -56,15 +54,15 @@ export const IncidentsTable: React.FunctionComponent<Props> = ({
         flex: 1,
         editable: true,
         type: 'actions',
-        getActions: ({ row: { _id } }: GridRowParams<IncidentListRecord>) => [
+        getActions: ({ row: { _id } }: GridRowParams<EventListRecord>) => [
           <GridActionsCellItem
             showInMenu={false}
             icon={<OpenInNewOutlinedIcon />}
-            label={'Vezi detalii despre incident'}
+            label={'Vezi detalii despre event'}
             onClick={() =>
               navigate(
-                generatePath(routes.incidentDetails, {
-                  incidentId: _id,
+                generatePath(routes.eventDetails, {
+                  eventId: _id,
                 }),
               )
             }
@@ -88,9 +86,9 @@ export const IncidentsTable: React.FunctionComponent<Props> = ({
         disableIgnoreModificationsIfProcessingProps
         rows={records}
         columns={columns}
-        getRowId={({ _id }: GridRowModel<IncidentListRecord>) => _id}
+        getRowId={({ _id }: GridRowModel<EventListRecord>) => _id}
         localeText={{
-          noRowsLabel: 'Nu exista incidente.',
+          noRowsLabel: 'Nu exista evente.',
           footerRowSelected: () => '',
         }}
       />

@@ -4,7 +4,7 @@ import Typography from '@mui/material/Typography'
 import Paper from '@mui/material/Paper'
 import WheelchairPickupOutlinedIcon from '@mui/icons-material/WheelchairPickupOutlined'
 
-export const IncidentNode: React.FunctionComponent<NodeProps> = ({ data: { label } }) => {
+export const EventNode: React.FunctionComponent<NodeProps> = ({ data: { label } }) => {
   return (
     <>
       <Handle type={'target'} position={Position.Top} />

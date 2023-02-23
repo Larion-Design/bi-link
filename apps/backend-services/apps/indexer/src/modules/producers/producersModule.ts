@@ -5,7 +5,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config'
 import { PersonEventDispatcherService } from './services/personEventDispatcherService'
 import { CompanyEventDispatcherService } from './services/companyEventDispatcherService'
 import { FileEventDispatcherService } from './services/fileEventDispatcherService'
-import { IncidentEventDispatcherService } from './services/incidentEventDispatcherService'
+import { EventDispatcherService } from './services/eventDispatcherService'
 import { RelatedEntitiesSearchService } from './services/relatedEntitiesSearchService'
 import {
   QUEUE_COMPANIES,
@@ -42,7 +42,7 @@ import { ReportEventDispatcherService } from './services/reportEventDispatcherSe
     PersonEventDispatcherService,
     CompanyEventDispatcherService,
     FileEventDispatcherService,
-    IncidentEventDispatcherService,
+    EventDispatcherService,
     RelatedEntitiesSearchService,
     ReportEventDispatcherService,
   ],
@@ -51,7 +51,7 @@ import { ReportEventDispatcherService } from './services/reportEventDispatcherSe
     PersonEventDispatcherService,
     CompanyEventDispatcherService,
     FileEventDispatcherService,
-    IncidentEventDispatcherService,
+    EventDispatcherService,
     ReportEventDispatcherService,
     RelatedEntitiesSearchService,
   ],

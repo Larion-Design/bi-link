@@ -21,7 +21,7 @@ export class ReportRefsAPIService {
     ...(await this.createRefsForPersons(dataRefs)),
     ...(await this.createRefsForCompanies(dataRefs)),
     ...(await this.createRefsForProperties(dataRefs)),
-    ...(await this.createRefsForIncidents(dataRefs)),
+    ...(await this.createRefsForEvents(dataRefs)),
   ]
 
   private createRefsForPersons = async (dataRefs: DataRefInput[]): Promise<DataRefModel[]> => {
@@ -87,7 +87,7 @@ export class ReportRefsAPIService {
     }
   }
 
-  private createRefsForIncidents = async (dataRefs: DataRefInput[]): Promise<DataRefModel[]> => {
+  private createRefsForEvents = async (dataRefs: DataRefInput[]): Promise<DataRefModel[]> => {
     const incidentsDataRefs = dataRefs.filter(({ incident }) => !!incident?._id)
     const incidentsIds = incidentsDataRefs.map(({ incident: { _id } }) => _id)
 

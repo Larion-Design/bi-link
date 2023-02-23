@@ -1,15 +1,16 @@
+import React, { useCallback, useState } from 'react'
 import { ApolloError } from '@apollo/client'
+import { FormikProps, withFormik } from 'formik'
+import { FormattedMessage } from 'react-intl'
+import { useNavigate } from 'react-router-dom'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import Grid from '@mui/material/Grid'
 import Step from '@mui/material/Step'
 import StepButton from '@mui/material/StepButton'
 import Stepper from '@mui/material/Stepper'
-import { IncidentAPIInput } from 'defs'
-import { FormikProps, withFormik } from 'formik'
-import React, { useCallback, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { getIncidentFrequentCustomFieldsRequest } from '../../../graphql/incidents/queries/getIncidentFrequentCustomFields'
+import { EventAPIInput } from 'defs'
+import { getEventFrequentCustomFieldsRequest } from '@frontend/entities/events/queries/getEventFrequentCustomFields'
 import { routes } from '../../../router/routes'
 import { useDialog } from '../../dialog/dialogProvider'
 import { AutocompleteField } from '../autocompleteField'
@@ -17,20 +18,19 @@ import { CustomInputFields } from '../customInputFields'
 import { DateTimeSelector } from '../dateTimeSelector'
 import { FilesManager } from '../fileField'
 import { InputField } from '../inputField'
+import { defaultLocation, Location } from '../location'
 import { Parties } from '../parties'
 import { personFormValidation } from '../personForm/validation/validation'
 
 type Props = {
-  incidentId?: string
-  incidentInfo?: IncidentAPIInput
-  readonly: boolean
-  onSubmit: (formData: IncidentAPIInput) => void | Promise<void>
+  eventId?: string
+  eventInfo?: EventAPIInput
+  onSubmit: (formData: EventAPIInput) => void | Promise<void>
   error?: ApolloError
 }
 
-const Form: React.FunctionComponent<Props & FormikProps<IncidentAPIInput>> = ({
-  incidentId,
-  readonly,
+const Form: React.FunctionComponent<Props & FormikProps<EventAPIInput>> = ({
+  eventId,
   setFieldError,
   setFieldValue,
   values,
@@ -40,7 +40,7 @@ const Form: React.FunctionComponent<Props & FormikProps<IncidentAPIInput>> = ({
   submitForm,
 }) => {
   const navigate = useNavigate()
-  const { data: frequentFields } = getIncidentFrequentCustomFieldsRequest()
+  const { data: frequentFields } = getEventFrequentCustomFieldsRequest()
   const dialog = useDialog()
   const [step, setStep] = useState(0)
 
@@ -49,24 +49,19 @@ const Form: React.FunctionComponent<Props & FormikProps<IncidentAPIInput>> = ({
       dialog.openDialog({
         title: 'Esti sigur(a) ca vrei sa anulezi modificarile?',
         description: 'Toate modificarile nesalvate vor fi pierdute.',
-        onConfirm: () => navigate(routes.incidents),
+        onConfirm: () => navigate(routes.events),
       }),
     [],
   )
 
   return (
-    <form data-cy={'incidentForm'}>
+    <form data-cy={'eventForm'}>
       <Grid container spacing={10}>
         <Grid item xs={12}>
           <Stepper nonLinear alternativeLabel activeStep={step}>
             <Step completed={false}>
               <StepButton color={'inherit'} onClick={() => setStep(0)}>
-                Informatii generale
-              </StepButton>
-            </Step>
-            <Step completed={false}>
-              <StepButton color={'inherit'} onClick={() => setStep(1)}>
-                Informatii suplimentare
+                <FormattedMessage id={'General Information'} />
               </StepButton>
             </Step>
             <Step completed={false}>
@@ -76,7 +71,12 @@ const Form: React.FunctionComponent<Props & FormikProps<IncidentAPIInput>> = ({
             </Step>
             <Step completed={false}>
               <StepButton color={'inherit'} onClick={() => setStep(3)}>
-                Fisiere
+                <FormattedMessage id={'Files'} />
+              </StepButton>
+            </Step>
+            <Step completed={false}>
+              <StepButton color={'inherit'} onClick={() => setStep(1)}>
+                <FormattedMessage id={'Additional Information'} />
               </StepButton>
             </Step>
           </Stepper>
@@ -87,7 +87,7 @@ const Form: React.FunctionComponent<Props & FormikProps<IncidentAPIInput>> = ({
               <Grid item xs={6}>
                 <AutocompleteField
                   name={'type'}
-                  label={'Tipul incidentului'}
+                  label={'Tipul eventului'}
                   value={values.type}
                   error={errors.type}
                   onValueChange={(value) => setFieldValue('type', value)}
@@ -106,12 +106,12 @@ const Form: React.FunctionComponent<Props & FormikProps<IncidentAPIInput>> = ({
               </Grid>
 
               <Grid item xs={12}>
-                <InputField
-                  name={'location'}
+                <Location
                   label={'Locatie'}
-                  value={values.location}
-                  error={errors.location}
-                  onChange={(value) => setFieldValue('location', value)}
+                  location={values.location}
+                  updateLocation={(location) => {
+                    setFieldValue('location', location)
+                  }}
                 />
               </Grid>
 
@@ -132,10 +132,9 @@ const Form: React.FunctionComponent<Props & FormikProps<IncidentAPIInput>> = ({
             <Grid container spacing={2}>
               <CustomInputFields
                 fields={values.customFields}
-                suggestions={frequentFields?.getIncidentFrequentCustomFields}
+                suggestions={frequentFields?.getEventFrequentCustomFields}
                 setFieldValue={async (customFields) => {
                   const error = await personFormValidation.customFields(customFields)
-
                   setFieldValue('customFields', customFields)
                   setFieldError('customFields', error)
                 }}
@@ -155,7 +154,7 @@ const Form: React.FunctionComponent<Props & FormikProps<IncidentAPIInput>> = ({
             <Grid container spacing={2}>
               <FilesManager
                 files={values.files}
-                keepDeletedFiles={!!incidentId}
+                keepDeletedFiles={!!eventId}
                 updateFiles={async (uploadedFiles) => {
                   const error = await personFormValidation.files(uploadedFiles)
                   setFieldValue('files', uploadedFiles)
@@ -193,19 +192,19 @@ const Form: React.FunctionComponent<Props & FormikProps<IncidentAPIInput>> = ({
   )
 }
 
-const incidentInitialValues: IncidentAPIInput = {
+const eventInitialValues: EventAPIInput = {
   description: '',
   type: '',
   date: null,
-  location: '',
+  location: defaultLocation,
   parties: [],
   files: [],
   customFields: [],
 }
 
-export const IncidentForm = withFormik<Props, IncidentAPIInput>({
-  mapPropsToValues: ({ incidentInfo }) => incidentInfo ?? incidentInitialValues,
-  validate: (values, { incidentId }) => void {},
+export const EventForm = withFormik<Props, EventAPIInput>({
+  mapPropsToValues: ({ eventInfo }) => eventInfo ?? eventInitialValues,
+  validate: (values, { eventId }) => void {},
   validateOnChange: false,
   validateOnMount: false,
   validateOnBlur: false,

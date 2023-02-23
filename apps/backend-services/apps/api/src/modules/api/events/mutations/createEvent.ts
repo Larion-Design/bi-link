@@ -1,7 +1,7 @@
 import { Args, ArgsType, Field, Mutation, Resolver } from '@nestjs/graphql'
 import { EventInput } from '../dto/eventInput'
 import { Event } from '../dto/event'
-import { IncidentAPIService } from '../services/incidentAPIService'
+import { EventAPIService } from '../services/incidentAPIService'
 import { UseGuards } from '@nestjs/common'
 import { FirebaseAuthGuard } from '../../../users/guards/FirebaseAuthGuard'
 import { UserActionsService } from '@app/pub/services/userActionsService'
@@ -11,22 +11,22 @@ import { User, UserActions } from 'defs'
 import { getUnixTime } from 'date-fns'
 
 @ArgsType()
-class CreateIncidentArgs {
+class CreateEventArgs {
   @Field(() => EventInput)
   data: EventInput
 }
 
 @Resolver(() => Event)
-export class CreateIncident {
+export class CreateEvent {
   constructor(
-    private readonly incidentAPIService: IncidentAPIService,
+    private readonly incidentAPIService: EventAPIService,
     private readonly userActionsService: UserActionsService,
     private readonly entityEventsService: EntityEventsService,
   ) {}
 
   @Mutation(() => String)
   @UseGuards(FirebaseAuthGuard)
-  async createIncident(@CurrentUser() { _id }: User, @Args() { data }: CreateIncidentArgs) {
+  async createEvent(@CurrentUser() { _id }: User, @Args() { data }: CreateEventArgs) {
     const incidentId = await this.incidentAPIService.create(data)
 
     this.entityEventsService.emitEntityCreated({

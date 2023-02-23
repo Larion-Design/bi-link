@@ -7,12 +7,12 @@ import {
   DataRefAPI,
   EntityInfo,
   IdDocumentAPI,
-  IncidentAPIOutput,
+  EventAPIOutput,
   PersonAPIOutput,
   PropertyAPIOutput,
 } from 'defs'
 import { getCompaniesRequest } from '../../graphql/companies/queries/getCompaniesInfo'
-import { getIncidentsInfoRequest } from '../../graphql/incidents/queries/getIncidentsInfo'
+import { getEventsInfoRequest } from '../../graphql/events/queries/getEventsInfo'
 import { getPersonsInfoRequest } from '../../graphql/persons/queries/getPersonsInfo'
 import { getPropertiesInfoRequest } from '../../graphql/properties/queries/getPropertiesInfo'
 import { formatDate } from '../date'
@@ -35,23 +35,23 @@ export const useDataRefs = (refs: DataRefAPI[]) => {
   const [fetchPersons, { data: personsInfo }] = getPersonsInfoRequest()
   const [fetchCompanies, { data: companiesInfo }] = getCompaniesRequest()
   const [fetchProperties, { data: propertiesInfo }] = getPropertiesInfoRequest()
-  const [fetchIncidents, { data: incidentsInfo }] = getIncidentsInfoRequest()
+  const [fetchEvents, { data: eventsInfo }] = getEventsInfoRequest()
 
   useEffect(() => {
     const personsIds = new Set<string>()
     const companiesIds = new Set<string>()
     const propertiesIds = new Set<string>()
-    const incidentsIds = new Set<string>()
+    const eventsIds = new Set<string>()
 
-    values().forEach(({ person, company, property, incident }) => {
+    values().forEach(({ person, company, property, event }) => {
       if (person?._id) {
         personsIds.add(person._id)
       } else if (company?._id) {
         companiesIds.add(company._id)
       } else if (property?._id) {
         propertiesIds.add(property._id)
-      } else if (incident?._id) {
-        incidentsIds.add(incident._id)
+      } else if (event?._id) {
+        eventsIds.add(event._id)
       }
     })
 
@@ -64,8 +64,8 @@ export const useDataRefs = (refs: DataRefAPI[]) => {
     if (propertiesIds.size) {
       void fetchProperties({ variables: { propertiesIds: Array.from(propertiesIds) } })
     }
-    if (incidentsIds.size) {
-      void fetchIncidents({ variables: { incidentsIds: Array.from(incidentsIds) } })
+    if (eventsIds.size) {
+      void fetchEvents({ variables: { eventsIds: Array.from(eventsIds) } })
     }
   }, [uid])
 
@@ -73,7 +73,7 @@ export const useDataRefs = (refs: DataRefAPI[]) => {
     if (personsInfo?.getPersonsInfo) {
       setDataRefsMap((dataRefsMap) => {
         values().forEach(
-          ({ _id: refId, person, company, property, incident, field, path, targetId }) => {
+          ({ _id: refId, person, company, property, event, field, path, targetId }) => {
             if (dataRefsMap.has(refId)) return
 
             if (person) {
@@ -94,12 +94,10 @@ export const useDataRefs = (refs: DataRefAPI[]) => {
                 ({ _id: propertyId }) => propertyId === _id,
               )
               dataRefsMap.set(refId, getPropertyInfoValue(propertyInfo, field, path, targetId))
-            } else if (incident) {
-              const { _id } = incident
-              const incidentInfo = incidentsInfo.getIncidents.find(
-                ({ _id: incidentId }) => incidentId === _id,
-              )
-              dataRefsMap.set(refId, getIncidentInfoValue(incidentInfo, field, path, targetId))
+            } else if (event) {
+              const { _id } = event
+              const eventInfo = eventsInfo.getEvents.find(({ _id: eventId }) => eventId === _id)
+              dataRefsMap.set(refId, getEventInfoValue(eventInfo, field, path, targetId))
             }
           },
         )
@@ -112,7 +110,7 @@ export const useDataRefs = (refs: DataRefAPI[]) => {
     personsInfo?.getPersonsInfo,
     companiesInfo?.getCompanies,
     propertiesInfo?.getProperties,
-    incidentsInfo?.getIncidents,
+    eventsInfo?.getEvents,
   ])
 
   const transform: GeneratePreviewHandler = useCallback(
@@ -166,7 +164,7 @@ export const useDataRefs = (refs: DataRefAPI[]) => {
           break
         }
         case 'INCIDENT': {
-          dataRef.incident = entity
+          dataRef.event = entity
           break
         }
       }
@@ -373,19 +371,12 @@ const getPropertyInfoValue: EntityInfoHandler<PropertyAPIOutput> = (
   return ''
 }
 
-const getIncidentInfoValue: EntityInfoHandler<IncidentAPIOutput> = (
-  incidentInfo,
-  field,
-  path,
-  targetId,
-) => {
+const getEventInfoValue: EntityInfoHandler<EventAPIOutput> = (eventInfo, field, path, targetId) => {
   if (path?.length) {
     if (targetId?.length) {
       switch (path) {
         case 'customFields': {
-          const customField = incidentInfo.customFields.find(
-            ({ fieldName }) => fieldName === targetId,
-          )
+          const customField = eventInfo.customFields.find(({ fieldName }) => fieldName === targetId)
           return customField?.[field] ?? ''
         }
       }
@@ -394,10 +385,10 @@ const getIncidentInfoValue: EntityInfoHandler<IncidentAPIOutput> = (
     switch (field) {
       case 'description':
       case 'location': {
-        return incidentInfo[field] ?? ''
+        return eventInfo[field] ?? ''
       }
       case 'date': {
-        const { date } = incidentInfo
+        const { date } = eventInfo
         return date ? formatDate(date) : ''
       }
     }

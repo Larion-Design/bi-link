@@ -11,7 +11,6 @@ import { INDEX_EVENTS } from '@app/definitions/constants'
 import { ElasticsearchService } from '@nestjs/elasticsearch'
 import { EventModel } from '@app/entities/models/event/eventModel'
 import { PartyModel } from '@app/entities/models/event/partyModel'
-import { IncidentEventDispatcherService } from '../../../../apps/indexer/src/modules/producers/services/incidentEventDispatcherService'
 import { EventsService } from '@app/entities/services/eventsService'
 import { ConnectedEntityIndexerService } from './connectedEntityIndexerService'
 
@@ -23,12 +22,11 @@ export class EventsIndexerService {
   constructor(
     private readonly elasticsearchService: ElasticsearchService,
     private readonly incidentsService: EventsService,
-    private readonly incidentEventDispatcherService: IncidentEventDispatcherService,
     private readonly connectedEntityIndexerService: ConnectedEntityIndexerService,
     private readonly locationIndexerService: LocationIndexerService,
   ) {}
 
-  indexIncident = async (incidentId: string, incidentModel: EventModel) => {
+  indexEvent = async (incidentId: string, incidentModel: EventModel) => {
     try {
       const { _id } = await this.elasticsearchService.index<EventIndex>({
         index: this.index,
