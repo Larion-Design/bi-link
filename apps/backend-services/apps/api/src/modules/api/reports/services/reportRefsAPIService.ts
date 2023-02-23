@@ -14,7 +14,7 @@ export class ReportRefsAPIService {
     @InjectModel(CompanyModel.name) private readonly companyModel: Model<CompanyDocument>,
     @InjectModel(PersonModel.name) private readonly personModel: Model<PersonDocument>,
     @InjectModel(PropertyModel.name) private readonly propertyModel: Model<PropertyDocument>,
-    @InjectModel(EventModel.name) private readonly incidentModel: Model<EventDocument>,
+    @InjectModel(EventModel.name) private readonly eventModel: Model<EventDocument>,
   ) {}
 
   createRefsModels = async (dataRefs: DataRefInput[]): Promise<DataRefModel[]> => [
@@ -88,19 +88,19 @@ export class ReportRefsAPIService {
   }
 
   private createRefsForEvents = async (dataRefs: DataRefInput[]): Promise<DataRefModel[]> => {
-    const incidentsDataRefs = dataRefs.filter(({ incident }) => !!incident?._id)
-    const incidentsIds = incidentsDataRefs.map(({ incident: { _id } }) => _id)
+    const eventsDataRefs = dataRefs.filter(({ event }) => !!event?._id)
+    const eventsIds = eventsDataRefs.map(({ event: { _id } }) => _id)
 
-    if (incidentsIds.length) {
-      const incidentsDocuments = await this.incidentModel.find({ _id: incidentsIds })
-      return incidentsDocuments.map((incidentDocument) => {
-        const incidentDataRef = incidentsDataRefs.find(
-          ({ company: { _id } }) => _id === String(incidentDocument._id),
+    if (eventsIds.length) {
+      const eventsDocuments = await this.eventModel.find({ _id: eventsIds })
+      return eventsDocuments.map((eventDocument) => {
+        const eventDataRef = eventsDataRefs.find(
+          ({ company: { _id } }) => _id === String(eventDocument._id),
         )
 
-        if (incidentDataRef) {
-          const ref = this.createRefModel(incidentDataRef)
-          ref.incident = incidentDocument
+        if (eventDataRef) {
+          const ref = this.createRefModel(eventDataRef)
+          ref.event = eventDocument
           return ref
         }
         return null

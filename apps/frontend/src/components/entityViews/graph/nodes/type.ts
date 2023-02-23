@@ -1,1 +1,1 @@
-export type NodeTypes = 'personNode' | 'companyNode' | 'propertyNode' | 'incidentNode'
+export type NodeTypes = 'personNode' | 'companyNode' | 'propertyNode' | 'eventNode'

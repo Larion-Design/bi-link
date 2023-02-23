@@ -13,7 +13,7 @@ export interface Report {
   isTemplate: boolean
   company?: Company
   person?: Person
-  incident?: Event
+  event?: Event
   property?: Property
   sections: ReportSection[]
   createdAt?: Date
@@ -22,24 +22,21 @@ export interface Report {
 }
 
 export interface ReportAPIInput
-  extends Omit<
-    Report,
-    '_id' | 'sections' | 'person' | 'company' | 'property' | 'incident' | 'refs'
-  > {
+  extends Omit<Report, '_id' | 'sections' | 'person' | 'company' | 'property' | 'event' | 'refs'> {
   person?: ConnectedEntity
   company?: ConnectedEntity
   property?: ConnectedEntity
-  incident?: ConnectedEntity
+  event?: ConnectedEntity
   sections: ReportSectionAPIInput[]
   refs: DataRefAPI[]
 }
 
 export interface ReportAPIOutput
-  extends Omit<Report, 'sections' | 'person' | 'company' | 'property' | 'incident' | 'refs'> {
+  extends Omit<Report, 'sections' | 'person' | 'company' | 'property' | 'event' | 'refs'> {
   person?: ConnectedEntity
   company?: ConnectedEntity
   property?: ConnectedEntity
-  incident?: ConnectedEntity
+  event?: ConnectedEntity
   sections: ReportSectionAPIOutput[]
   refs: DataRefAPI[]
 }

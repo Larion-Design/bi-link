@@ -3,13 +3,13 @@ import React, { useCallback, useEffect, useState } from 'react'
 import Divider from '@mui/material/Divider'
 import { EntityInfo, EntityType } from 'defs'
 import { getCompanyInfoRequest } from '../../../../graphql/companies/queries/getCompany'
-import { getIncidentRequest } from '../../../../graphql/incidents/queries/getIncident'
+import { getEventRequest } from '../../../../graphql/events/queries/getEvent'
 import { getPersonInfoRequest } from '../../../../graphql/persons/queries/getPersonInfo'
 import { getPropertyRequest } from '../../../../graphql/properties/queries/getProperty'
 import { CreateDataRefHandler } from '../../../../utils/hooks/useDataRefProcessor'
 import { BasicDrawer } from '../../../drawer/basicDrawer'
 import { CompanyInfoDrawer } from '../../../drawer/entityInfoDrawer/companyInfoDrawer'
-import { IncidentInfoDrawer } from '../../../drawer/entityInfoDrawer/incidentInfoDrawer'
+import { EventInfoDrawer } from '../../../drawer/entityInfoDrawer/eventInfoDrawer'
 import { PersonInfoDrawer } from '../../../drawer/entityInfoDrawer/personInfoDrawer'
 import { PropertyInfoDrawer } from '../../../drawer/entityInfoDrawer/propertyInfoDrawer'
 import { Graph } from '../../graph'
@@ -31,7 +31,7 @@ export const ReportDrawer: React.FunctionComponent<Props> = ({
   const [fetchPerson, { data: personData }] = getPersonInfoRequest()
   const [fetchCompany, { data: companyData }] = getCompanyInfoRequest()
   const [fetchProperty, { data: propertyData }] = getPropertyRequest()
-  const [fetchIncident, { data: incidentData }] = getIncidentRequest()
+  const [fetchEvent, { data: eventData }] = getEventRequest()
 
   const selectEntity = useCallback(
     (entityId: string, entityType: EntityType) => setEntitySelected({ entityId, entityType }),
@@ -52,8 +52,8 @@ export const ReportDrawer: React.FunctionComponent<Props> = ({
         void fetchProperty({ variables: { propertyId: entityId } })
         break
       }
-      case 'INCIDENT': {
-        void fetchIncident({ variables: { incidentId: entityId } })
+      case 'EVENT': {
+        void fetchEvent({ variables: { eventId: entityId } })
         break
       }
     }
@@ -94,10 +94,10 @@ export const ReportDrawer: React.FunctionComponent<Props> = ({
             createDataRef={createDataRef}
           />
         )}
-        {entityType === 'INCIDENT' && !!incidentData?.getIncident && (
-          <IncidentInfoDrawer
-            incidentId={selectedEntity.entityId}
-            incidentInfo={incidentData?.getIncident}
+        {entityType === 'EVENT' && !!eventData?.getEvent && (
+          <EventInfoDrawer
+            eventId={selectedEntity.entityId}
+            eventInfo={eventData?.getEvent}
             createDataRef={createDataRef}
           />
         )}

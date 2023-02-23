@@ -28,7 +28,7 @@ export class Report implements ReportAPIOutput {
   property?: ConnectedEntity
 
   @Field(() => [ConnectedEntity], { nullable: true })
-  incident?: ConnectedEntity
+  event?: ConnectedEntity
 
   @Field(() => [ReportSection])
   sections: ReportSection[]

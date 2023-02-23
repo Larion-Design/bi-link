@@ -21,38 +21,38 @@ export class EventsIndexerService {
 
   constructor(
     private readonly elasticsearchService: ElasticsearchService,
-    private readonly incidentsService: EventsService,
+    private readonly eventsService: EventsService,
     private readonly connectedEntityIndexerService: ConnectedEntityIndexerService,
     private readonly locationIndexerService: LocationIndexerService,
   ) {}
 
-  indexEvent = async (incidentId: string, incidentModel: EventModel) => {
+  indexEvent = async (eventId: string, eventModel: EventModel) => {
     try {
       const { _id } = await this.elasticsearchService.index<EventIndex>({
         index: this.index,
-        id: incidentId,
-        document: this.createIndexData(incidentModel),
+        id: eventId,
+        document: this.createIndexData(eventModel),
         refresh: true,
       })
 
-      this.logger.debug(`Added ${incidentId} to index ${this.index}`)
-      return _id === incidentId
+      this.logger.debug(`Added ${eventId} to index ${this.index}`)
+      return _id === eventId
     } catch (error) {
       this.logger.error(error)
     }
   }
 
-  private createIndexData = (incident: EventModel): EventIndex => ({
-    type: incident.type,
-    date: format(incident.date, 'yyyy-MM-dd HH:mm:ss'),
-    location: this.locationIndexerService.createLocationIndexData(incident.location),
-    description: incident.description,
-    parties: this.createPartiesIndex(incident.parties),
-    customFields: incident.customFields,
+  private createIndexData = (event: EventModel): EventIndex => ({
+    type: event.type,
+    date: format(event.date, 'yyyy-MM-dd HH:mm:ss'),
+    location: this.locationIndexerService.createLocationIndexData(event.location),
+    description: event.description,
+    parties: this.createPartiesIndex(event.parties),
+    customFields: event.customFields,
     files: [],
-    persons: this.createPartyPersonsIndex(incident.parties),
-    companies: this.createPartyCompaniesIndex(incident.parties),
-    properties: this.createPartyPropertiesIndex(incident.parties),
+    persons: this.createPartyPersonsIndex(event.parties),
+    companies: this.createPartyCompaniesIndex(event.parties),
+    properties: this.createPartyPropertiesIndex(event.parties),
   })
 
   private createPartiesIndex = (parties: PartyModel[]): PartyIndex[] =>

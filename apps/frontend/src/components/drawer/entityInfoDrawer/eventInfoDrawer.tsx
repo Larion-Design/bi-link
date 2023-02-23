@@ -2,8 +2,8 @@ import Box from '@mui/material/Box'
 import { format } from 'date-fns'
 import React, { useCallback, useMemo } from 'react'
 import { EventAPIInput } from 'defs'
+import { formatDate } from 'tools'
 import { useCopyToClipboard } from 'usehooks-ts'
-import { formatDate } from '../../../utils/date'
 import { CreateDataRefHandler } from '../../../utils/hooks/useDataRefProcessor'
 import { EntityInfoTable } from './entityInfoTable'
 
@@ -23,12 +23,15 @@ export const EventInfoDrawer: React.FunctionComponent<Props> = ({
   const generalInfo = useMemo(
     () => ({
       type: eventInfo.type,
-      location: eventInfo.location,
       date: eventInfo.date ? formatDate(eventInfo.date) : '',
       description: eventInfo.description,
     }),
     [eventInfo],
   )
+
+  const locationInfo = useMemo(() => {
+    return eventInfo.location
+  }, [eventInfo])
 
   const extraInfo = useMemo(() => {
     const map = new Map<string, string>()
@@ -37,19 +40,14 @@ export const EventInfoDrawer: React.FunctionComponent<Props> = ({
   }, [eventInfo.customFields])
 
   const copyGeneralInfo = useCallback(
-    (key: string) => void copy(createDataRef({ entityType: 'INCIDENT', entityId: eventId }, key)),
+    (key: string) => void copy(createDataRef({ entityType: 'EVENT', entityId: eventId }, key)),
     [eventId],
   )
 
   const copyCustomField = useCallback(
     (key: string) =>
       void copy(
-        createDataRef(
-          { entityType: 'INCIDENT', entityId: eventId },
-          'fieldName',
-          'customFields',
-          key,
-        ),
+        createDataRef({ entityType: 'EVENT', entityId: eventId }, 'fieldName', 'customFields', key),
       ),
     [eventId],
   )

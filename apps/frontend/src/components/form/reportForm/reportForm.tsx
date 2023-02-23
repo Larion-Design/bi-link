@@ -214,8 +214,8 @@ const addExistingReport = (
       return { ...reportInfo, company: { _id: entityId } }
     case 'PROPERTY':
       return { ...reportInfo, property: { _id: entityId } }
-    case 'INCIDENT':
-      return { ...reportInfo, incident: { _id: entityId } }
+    case 'EVENT':
+      return { ...reportInfo, event: { _id: entityId } }
   }
 }
 
@@ -249,8 +249,8 @@ const createReportInitialValues = (
       reportInfo.property = connectedEntity
       break
     }
-    case 'INCIDENT': {
-      reportInfo.incident = connectedEntity
+    case 'EVENT': {
+      reportInfo.event = connectedEntity
       break
     }
   }

@@ -19,7 +19,7 @@ import { FilterPanel } from './filters/filterPanel'
 import { PersonNode } from './nodes/personNode'
 import { CompanyNode } from './nodes/companyNode'
 import { PropertyNode } from './nodes/propertyNode'
-import { IncidentNode } from './nodes/incidentNode'
+import { EventNode } from './nodes/eventNode'
 import { NodeTypes } from './nodes/type'
 
 type Props = {
@@ -82,7 +82,7 @@ export const EntityGraph: React.FunctionComponent<Props> = ({
       personNode: PersonNode,
       companyNode: CompanyNode,
       propertyNode: PropertyNode,
-      incidentNode: IncidentNode,
+      eventNode: EventNode,
     }),
     [],
   )
@@ -137,5 +137,5 @@ const nodeTypeToEntityType: Record<NodeTypes, EntityType> = {
   personNode: 'PERSON',
   companyNode: 'COMPANY',
   propertyNode: 'PROPERTY',
-  incidentNode: 'INCIDENT',
+  eventNode: 'EVENT',
 }
