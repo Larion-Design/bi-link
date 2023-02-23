@@ -1,0 +1,22 @@
+{
+  "name": "tools",
+  "version": "0.0.1",
+  "private": true,
+  "description": "BI Link tools",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": ["dist/index.js"],
+  "exports": {
+    ".": "./dist/index.js",
+    "./package.json": "./package.json"
+  },
+  "scripts": {
+    "build": "tsc",
+    "postinstall": "pnpm build"
+  },
+  "devDependencies": {
+    "typescript": "^4.9.4",
+    "tslib": "^2.4.1",
+    "date-fns": "^2.29.3"
+  }
+}
