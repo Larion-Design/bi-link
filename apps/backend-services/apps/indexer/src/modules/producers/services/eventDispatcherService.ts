@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common'
 import { InjectQueue } from '@nestjs/bull'
-import { EVENT_CREATED, EVENT_UPDATED, QUEUE_EVENTS } from '@app/pub'
 import { Queue } from 'bull'
 import { EventEventInfo } from '@app/pub/types/incident'
+import { EVENT_CREATED, EVENT_UPDATED, QUEUE_EVENTS } from '../constants'
 
 @Injectable()
 export class EventDispatcherService {

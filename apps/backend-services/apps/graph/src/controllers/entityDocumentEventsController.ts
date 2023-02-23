@@ -37,7 +37,7 @@ export class EntityDocumentEventsController {
       case 'COMPANY': {
         return this.companyGraphService.upsertCompanyNode(entityId)
       }
-      case 'INCIDENT': {
+      case 'EVENT': {
         return this.incidentGraphService.upsertEventNode(entityId)
       }
       case 'PROPERTY': {

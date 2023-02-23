@@ -70,7 +70,6 @@
     "pdf-parse": "^1.1.1",
     "puppeteer": "^19.4.1",
     "reflect-metadata": "^0.1.13",
-    "rimraf": "^3.0.2",
     "rxjs": "^7.8.0",
     "supertokens-node": "^12.1.4",
     "tesseract.js": "^3.0.3",

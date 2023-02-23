@@ -1,6 +1,6 @@
 import { Process, Processor } from '@nestjs/bull'
-import { EVENT_CREATED, EVENT_UPDATED, QUEUE_PROPERTIES } from '@app/pub'
 import { Logger } from '@nestjs/common'
+import { EVENT_CREATED, EVENT_UPDATED, QUEUE_PROPERTIES } from '../../producers/constants'
 import { FileEventDispatcherService } from '../../producers/services/fileEventDispatcherService'
 import { Job } from 'bull'
 import { FileParentEntity } from '@app/pub/types/file'

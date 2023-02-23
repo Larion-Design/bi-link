@@ -1,7 +1,7 @@
 import { Logger } from '@nestjs/common'
 import { OnQueueActive, OnQueueCompleted, OnQueueFailed, Processor } from '@nestjs/bull'
-import { QUEUE_EVENTS } from '@app/pub'
 import { Job } from 'bull'
+import { QUEUE_EVENTS } from '../../producers/constants'
 
 @Processor(QUEUE_EVENTS)
 export class EventsQueueWatcherService {

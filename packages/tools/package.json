@@ -17,9 +17,10 @@
     "postinstall": "pnpm build",
     "prebuild": "rimraf dist"
   },
+  "dependencies": {
+    "date-fns": "^2.29.3"
+  },
   "devDependencies": {
-    "date-fns": "^2.29.3",
-    "rimraf": "^3.0.2",
     "tslib": "^2.4.1",
     "typescript": "^4.9.4"
   }

@@ -1,7 +1,7 @@
+import { PersonGraphNode } from '@app/definitions/graph'
 import { LocationDocument } from '@app/entities/models/locationModel'
 import { PersonDocument } from '@app/entities/models/person/personModel'
 import { PersonsService } from '@app/entities/services/personsService'
-import { PersonGraphNode } from '@app/graph-module'
 import { GraphService } from '@app/graph-module/graphService'
 import { PersonalRelationshipGraph } from '@app/definitions/graph/relationship'
 import { Injectable, Logger } from '@nestjs/common'

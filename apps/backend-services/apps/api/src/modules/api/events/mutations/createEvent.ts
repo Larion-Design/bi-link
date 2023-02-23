@@ -31,7 +31,7 @@ export class CreateEvent {
 
     this.entityEventsService.emitEntityCreated({
       entityId: incidentId,
-      entityType: 'INCIDENT',
+      entityType: 'EVENT',
     })
 
     this.userActionsService.recordAction({
@@ -39,7 +39,7 @@ export class CreateEvent {
       author: _id,
       timestamp: getUnixTime(new Date()),
       target: incidentId,
-      targetType: 'INCIDENT',
+      targetType: 'EVENT',
     })
 
     return incidentId
