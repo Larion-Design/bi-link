@@ -3,8 +3,8 @@ import Grid from '@mui/material/Grid'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import { DatePicker } from '../datePicker'
-import { InputField } from '../inputField'
 import { CompanyListRecord, PropertyOwnerAPI } from 'defs'
+import { ItemListInput } from '../itemListInput'
 
 type Props = {
   companyInfo: CompanyListRecord
@@ -29,10 +29,10 @@ export const CompanyOwnerInformation: React.FunctionComponent<Props> = ({
       <Grid container spacing={2}>
         {!!vehicleOwnerInfo && (
           <Grid item xs={12}>
-            <InputField
-              label={'Numar de înmatriculare'}
-              value={vehicleOwnerInfo.plateNumbers}
-              onChange={(registrationNumber) =>
+            <ItemListInput
+              label={'Numere de înmatriculare'}
+              items={vehicleOwnerInfo.plateNumbers}
+              onChange={(plateNumbers) =>
                 updateOwner(_id, {
                   ...ownerInfo,
                   vehicleOwnerInfo: { ...vehicleOwnerInfo, plateNumbers },

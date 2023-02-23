@@ -1,5 +1,5 @@
-// import { usePDF } from '@react-pdf/renderer'
 import React, { useCallback, useEffect, useState } from 'react'
+// import { usePDF } from '@react-pdf/renderer'
 import Button from '@mui/material/Button'
 import Box from '@mui/material/Box'
 import Grid from '@mui/material/Grid'
@@ -133,8 +133,8 @@ const Form: React.FunctionComponent<Props & FormikProps<ReportAPIInput>> = ({
                     setFieldValue('property', entity)
                     break
                   }
-                  case 'INCIDENT': {
-                    setFieldValue('incident', entity)
+                  case 'EVENT': {
+                    setFieldValue('event', entity)
                     break
                   }
                 }
@@ -207,15 +207,16 @@ const addExistingReport = (
   entityType: EntityType,
   reportInfo: ReportAPIInput,
 ): ReportAPIInput => {
+  const connectedEntity: ConnectedEntity = { _id: entityId }
   switch (entityType) {
     case 'PERSON':
-      return { ...reportInfo, person: { _id: entityId } }
+      return { ...reportInfo, person: connectedEntity }
     case 'COMPANY':
-      return { ...reportInfo, company: { _id: entityId } }
+      return { ...reportInfo, company: connectedEntity }
     case 'PROPERTY':
-      return { ...reportInfo, property: { _id: entityId } }
+      return { ...reportInfo, property: connectedEntity }
     case 'EVENT':
-      return { ...reportInfo, event: { _id: entityId } }
+      return { ...reportInfo, event: connectedEntity }
   }
 }
 

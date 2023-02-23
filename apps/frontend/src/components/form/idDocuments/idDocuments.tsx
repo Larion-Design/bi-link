@@ -3,7 +3,6 @@ import {
   DataGrid,
   GridColDef,
   GridPreProcessEditCellProps,
-  GridRowModel,
   GridSelectionModel,
   GridToolbarContainer,
 } from '@mui/x-data-grid'
@@ -12,7 +11,6 @@ import { IdDocumentAPI, IdDocumentStatus } from 'defs'
 import { GridSetItem, useGridSet } from '../../../utils/hooks/useGridSet'
 import { AddSuggestionsToolbarButton } from '../../dataGrid/addSuggestionsToolbarButton'
 import { RemoveRowsToolbarButton } from '../../dataGrid/removeRowsToolbarButton'
-import {GridActionsColDef} from "@mui/x-data-grid/models/colDef/gridColDef";
 
 type Props = {
   documents: IdDocumentAPI[]
@@ -41,10 +39,10 @@ export const IdDocuments: React.FunctionComponent<Props> = ({
     void setFieldValue(rawValues())
   }, [uid])
 
-  const columns: Array<GridColDef> = useMemo(
+  const columns: GridColDef[] = useMemo(
     () => [
       {
-        field: 'documentType' as keyof IdDocumentAPI,
+        field: 'documentType',
         headerName: 'Tip document',
         editable: true,
         type: 'string',
@@ -58,7 +56,7 @@ export const IdDocuments: React.FunctionComponent<Props> = ({
         },
       },
       {
-        field: 'documentNumber' as keyof IdDocumentAPI,
+        field: 'documentNumber',
         headerName: 'Numar document',
         flex: 1,
         editable: true,
@@ -69,21 +67,21 @@ export const IdDocuments: React.FunctionComponent<Props> = ({
         },
       },
       {
-        field: 'issueDate' as keyof IdDocumentAPI,
+        field: 'issueDate',
         headerName: 'Data emiterii',
         flex: 1,
         editable: true,
         type: 'date',
       },
       {
-        field: 'expirationDate' as keyof IdDocumentAPI,
+        field: 'expirationDate',
         headerName: 'Data expirarii',
         flex: 1,
         editable: true,
         type: 'date',
       },
       {
-        field: 'status' as keyof IdDocumentAPI,
+        field: 'status',
         headerName: 'Stare',
         flex: 1,
         editable: true,

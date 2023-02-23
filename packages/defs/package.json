@@ -14,8 +14,8 @@
   },
   "scripts": {
     "build": "tsc",
-    "postinstall": "pnpm build",
-    "prebuild": "rimraf dist"
+    "prebuild": "rimraf dist",
+    "postinstall": "pnpm build"
   },
   "devDependencies": {
     "tslib": "^2.4.1",

@@ -106,15 +106,11 @@ export const Home: React.FunctionComponent = () => {
               <Button
                 variant={'contained'}
                 size={'small'}
-                onClick={() => navigate(routes.newIncident)}
+                onClick={() => navigate(routes.newEvent)}
               >
                 Creaza
               </Button>
-              <Button
-                variant={'contained'}
-                size={'small'}
-                onClick={() => navigate(routes.incidents)}
-              >
+              <Button variant={'contained'} size={'small'} onClick={() => navigate(routes.events)}>
                 Cauta
               </Button>
             </CardActions>

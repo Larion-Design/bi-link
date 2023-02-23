@@ -21,22 +21,19 @@ export interface Report {
   refs: DataRef[]
 }
 
-export interface ReportAPIInput
-  extends Omit<Report, '_id' | 'sections' | 'person' | 'company' | 'property' | 'event' | 'refs'> {
-  person?: ConnectedEntity
-  company?: ConnectedEntity
-  property?: ConnectedEntity
-  event?: ConnectedEntity
-  sections: ReportSectionAPIInput[]
-  refs: DataRefAPI[]
-}
-
-export interface ReportAPIOutput
+interface ReportAPI
   extends Omit<Report, 'sections' | 'person' | 'company' | 'property' | 'event' | 'refs'> {
   person?: ConnectedEntity
   company?: ConnectedEntity
   property?: ConnectedEntity
   event?: ConnectedEntity
-  sections: ReportSectionAPIOutput[]
   refs: DataRefAPI[]
+}
+
+export interface ReportAPIInput extends Omit<ReportAPI, '_id'> {
+  sections: ReportSectionAPIInput[]
+}
+
+export interface ReportAPIOutput extends ReportAPI {
+  sections: ReportSectionAPIOutput[]
 }

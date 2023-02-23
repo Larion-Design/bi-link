@@ -18,7 +18,7 @@ type Params = {
   personsIds: string[]
   companiesIds: string[]
   propertiesIds: string[]
-  incidentsIds: string[]
+  eventsIds: string[]
 }
 
 const request = gql`
@@ -26,7 +26,7 @@ const request = gql`
     $personsIds: [String!]!
     $companiesIds: [String!]!
     $propertiesIds: [String!]!
-    $incidentsIds: [String!]!
+    $eventsIds: [String!]!
   ) {
     getPersonsInfo(personsIds: $personsIds) {
       _id
@@ -49,7 +49,7 @@ const request = gql`
       name
       type
     }
-    getIncidents(incidentsIds: $incidentsIds) {
+    getIncidents(eventsIds: $eventsIds) {
       _id
       date
       location

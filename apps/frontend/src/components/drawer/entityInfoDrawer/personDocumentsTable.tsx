@@ -26,7 +26,9 @@ export const PersonDocumentsTable: React.FunctionComponent<Props> = ({ personId,
   const copyDocumentInfo = useCallback(
     (documentNumber: IdDocumentAPI['documentNumber'], fieldName: keyof IdDocumentAPI) =>
       copyToClipboard(
-        `{{${'PERSON' as EntityType}:${personId}:documents:${documentNumber}:${fieldName}}}`,
+        `{{${'PERSON' as EntityType}:${personId}:documents:${documentNumber}:${String(
+          fieldName,
+        )}}}`,
       ),
     [personId, copyToClipboard],
   )
