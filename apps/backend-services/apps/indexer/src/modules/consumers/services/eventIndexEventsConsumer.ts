@@ -4,7 +4,7 @@ import { FileEventDispatcherService } from '../../producers/services/fileEventDi
 import { Job } from 'bull'
 import { EventsService } from '@app/entities/services/eventsService'
 import { EventsIndexerService } from '@app/search-tools-module/indexer/eventsIndexerService'
-import { EventEventInfo } from '@app/pub/types/event'
+import { EventEventInfo } from '@app/pub/types/incident'
 import { FileParentEntity } from '@app/pub/types/file'
 import { EVENT_CREATED, EVENT_UPDATED, QUEUE_EVENTS } from '../../producers/constants'
 

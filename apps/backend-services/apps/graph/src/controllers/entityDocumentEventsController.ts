@@ -13,7 +13,7 @@ export class EntityDocumentEventsController {
   constructor(
     private readonly personGraphService: PersonGraphService,
     private readonly companyGraphService: CompanyGraphService,
-    private readonly eventGraphService: EventGraphService,
+    private readonly incidentGraphService: EventGraphService,
     private readonly propertyGraphService: PropertyGraphService,
   ) {}
 
@@ -37,8 +37,8 @@ export class EntityDocumentEventsController {
       case 'COMPANY': {
         return this.companyGraphService.upsertCompanyNode(entityId)
       }
-      case 'EVENT': {
-        return this.eventGraphService.upsertEventNode(entityId)
+      case 'INCIDENT': {
+        return this.incidentGraphService.upsertEventNode(entityId)
       }
       case 'PROPERTY': {
         return this.propertyGraphService.upsertPropertyNode(entityId)

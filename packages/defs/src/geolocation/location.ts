@@ -1,3 +1,4 @@
+import { NodesRelationship } from '../entitiesGraph'
 import { Coordinates, CoordinatesAPI } from './coordinates'
 
 export interface Location {
@@ -21,3 +22,5 @@ export interface LocationAPIInput extends Location {
 export interface LocationAPIOutput extends Required<Location> {
   coordinates: CoordinatesAPI
 }
+
+export interface EntityLocationRelationship extends NodesRelationship {}

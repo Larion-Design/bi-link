@@ -58,7 +58,7 @@ export class EntityEventsController {
         await this.propertyEventDispatcherService.dispatchPropertyUpdated(entityId)
         break
       }
-      case 'EVENT': {
+      case 'INCIDENT': {
         return this.eventEventDispatcherService.dispatchEventUpdated(entityId)
       }
       case 'FILE': {
@@ -104,7 +104,7 @@ export class EntityEventsController {
       case 'PROPERTY': {
         return this.propertyEventDispatcherService.dispatchPropertyCreated(entityId)
       }
-      case 'EVENT': {
+      case 'INCIDENT': {
         return this.eventEventDispatcherService.dispatchEventCreated(entityId)
       }
       case 'FILE': {

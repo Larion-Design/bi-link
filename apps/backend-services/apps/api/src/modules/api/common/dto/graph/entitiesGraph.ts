@@ -27,7 +27,7 @@ export class EntitiesGraph implements EntitiesGraphType {
   personsHomeAddress: EntityLocationRelationship[]
 
   @Field(() => [EntityLocationRelationship])
-  eventsOccurencePlace: EntityLocationRelationship[]
+  eventsOccurrencePlace: EntityLocationRelationship[]
 
   @Field(() => [CompanyAssociateRelationship])
   companiesAssociates: CompanyAssociateRelationship[]

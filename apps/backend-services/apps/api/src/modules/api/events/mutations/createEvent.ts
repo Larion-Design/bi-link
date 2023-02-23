@@ -1,7 +1,7 @@
 import { Args, ArgsType, Field, Mutation, Resolver } from '@nestjs/graphql'
 import { EventInput } from '../dto/eventInput'
 import { Event } from '../dto/event'
-import { EventAPIService } from '../services/eventAPIService'
+import { EventAPIService } from '../services/incidentAPIService'
 import { UseGuards } from '@nestjs/common'
 import { FirebaseAuthGuard } from '../../../users/guards/FirebaseAuthGuard'
 import { UserActionsService } from '@app/pub/services/userActionsService'
@@ -19,7 +19,7 @@ class CreateEventArgs {
 @Resolver(() => Event)
 export class CreateEvent {
   constructor(
-    private readonly eventAPIService: EventAPIService,
+    private readonly incidentAPIService: EventAPIService,
     private readonly userActionsService: UserActionsService,
     private readonly entityEventsService: EntityEventsService,
   ) {}
@@ -27,21 +27,21 @@ export class CreateEvent {
   @Mutation(() => String)
   @UseGuards(FirebaseAuthGuard)
   async createEvent(@CurrentUser() { _id }: User, @Args() { data }: CreateEventArgs) {
-    const eventId = await this.eventAPIService.create(data)
+    const incidentId = await this.incidentAPIService.create(data)
 
     this.entityEventsService.emitEntityCreated({
-      entityId: eventId,
-      entityType: 'EVENT',
+      entityId: incidentId,
+      entityType: 'INCIDENT',
     })
 
     this.userActionsService.recordAction({
       eventType: UserActions.ENTITY_CREATED,
       author: _id,
       timestamp: getUnixTime(new Date()),
-      target: eventId,
-      targetType: 'EVENT',
+      target: incidentId,
+      targetType: 'INCIDENT',
     })
 
-    return eventId
+    return incidentId
   }
 }

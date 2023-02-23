@@ -34,7 +34,7 @@ export const validateCompanyForm = async (values: CompanyAPIInput, companyId?: s
 export const companyFormValidation = {
   name: validateCompanyName,
   cui: validateCompanyCUI,
-  headquarters: validateHeadquarters,
+  headquarters: validateLocations(),
   registrationNumber: validateRegistrationNumber,
   contactDetails: async (contactDetails: CustomFieldAPI[]) => {
     if (contactDetails.length) {

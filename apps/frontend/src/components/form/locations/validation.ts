@@ -1,5 +1,5 @@
 import * as yup from 'yup'
-import { Location } from 'defs'
+import { LocationAPIInput } from 'defs'
 
 const locationsFormat = yup.array().of(
   yup.object().shape({
@@ -8,13 +8,18 @@ const locationsFormat = yup.array().of(
   }),
 )
 
-export const validateLocationsStructure = (locations: unknown) => {
+export const validateLocationsStructure = (locations: unknown[]) => {
   if (!locationsFormat.isValidSync(locations)) {
     return 'Adresa unuia din punctele de lucru este prea scurta.'
   }
 }
 
-export const validateLocations = async (locations: Location[]) => {
+export const validateLocations = async (locations: LocationAPIInput[]) => {
+  const error = validateLocationsStructure(locations)
+  return Promise.resolve(error)
+}
+
+export const validateLocation = async (location: LocationAPIInput[]) => {
   const error = validateLocationsStructure(locations)
   return Promise.resolve(error)
 }

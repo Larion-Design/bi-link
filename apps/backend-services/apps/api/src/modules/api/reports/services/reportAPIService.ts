@@ -16,7 +16,7 @@ export class ReportAPIService {
   constructor(
     private readonly personsService: PersonsService,
     private readonly companiesService: CompaniesService,
-    private readonly eventsService: EventsService,
+    private readonly incidentsService: EventsService,
     private readonly propertiesService: PropertiesService,
     private readonly reportsService: ReportsService,
     private readonly reportContentAPIService: ReportContentAPIService,
@@ -48,8 +48,8 @@ export class ReportAPIService {
       if (reportInput.person?._id) {
         reportModel.person = await this.personsService.find(reportInput.person._id, false)
       }
-      if (reportInput.event?._id) {
-        reportModel.event = await this.eventsService.getEvent(reportInput.event._id, false)
+      if (reportInput.incident?._id) {
+        reportModel.incident = await this.incidentsService.getEvent(reportInput.incident._id, false)
       }
       if (reportInput.property?._id) {
         reportModel.property = await this.propertiesService.getProperty(

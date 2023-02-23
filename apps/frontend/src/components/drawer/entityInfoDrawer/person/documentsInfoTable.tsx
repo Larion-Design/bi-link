@@ -1,5 +1,5 @@
-import Typography from '@mui/material/Typography'
 import React, { useCallback, useState } from 'react'
+import Typography from '@mui/material/Typography'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import Accordion from '@mui/material/Accordion'
 import AccordionDetails from '@mui/material/AccordionDetails'
@@ -11,7 +11,7 @@ import TableContainer from '@mui/material/TableContainer'
 import TableHead from '@mui/material/TableHead'
 import TableRow from '@mui/material/TableRow'
 import { IdDocumentAPI } from 'defs'
-import { formatDate } from '../../../../utils/date'
+import { formatDate } from 'tools'
 
 type Props = {
   documents: IdDocumentAPI[]
@@ -52,10 +52,10 @@ export const DocumentsInfoTable: React.FunctionComponent<Props> = ({
                         {documentNumber}
                       </TableCell>
                       <TableCell onClick={() => createDataRef(documentNumber, 'issueDate')}>
-                        {formatDate(issueDate)}
+                        {issueDate ? formatDate(issueDate) : 'Data nedefinita'}
                       </TableCell>
                       <TableCell onClick={() => createDataRef(documentNumber, 'expirationDate')}>
-                        {formatDate(expirationDate)}
+                        {expirationDate ? formatDate(expirationDate) : 'Data nedefinita'}
                       </TableCell>
                       <TableCell onClick={() => createDataRef(documentNumber, 'status')}>
                         {status}

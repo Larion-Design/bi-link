@@ -72,11 +72,6 @@ const Form: React.FunctionComponent<Props & FormikProps<PropertyAPIInput>> = ({
               </StepButton>
             </Step>
             <Step completed={false}>
-              <StepButton color={'inherit'} onClick={() => setStep(1)}>
-                <FormattedMessage id={'Additional Information'} />
-              </StepButton>
-            </Step>
-            <Step completed={false}>
               <StepButton color={'inherit'} onClick={() => setStep(2)}>
                 Proprietari
               </StepButton>
@@ -84,6 +79,11 @@ const Form: React.FunctionComponent<Props & FormikProps<PropertyAPIInput>> = ({
             <Step completed={false}>
               <StepButton color={'inherit'} onClick={() => setStep(3)}>
                 Fisiere
+              </StepButton>
+            </Step>
+            <Step completed={false}>
+              <StepButton color={'inherit'} onClick={() => setStep(1)}>
+                <FormattedMessage id={'Additional Information'} />
               </StepButton>
             </Step>
           </Stepper>
@@ -222,6 +222,7 @@ const propertyInitialValues: PropertyAPIInput = {
   files: [],
   customFields: [],
   vehicleInfo: null,
+  realEstateInfo: null,
 }
 
 export const PropertyForm = withFormik<Props, PropertyAPIInput>({

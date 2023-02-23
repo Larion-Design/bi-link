@@ -1,25 +1,27 @@
-import {ApolloError} from '@apollo/client'
+import React, { useState } from 'react'
+import { ApolloError } from '@apollo/client'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import Grid from '@mui/material/Grid'
 import Step from '@mui/material/Step'
 import StepButton from '@mui/material/StepButton'
 import Stepper from '@mui/material/Stepper'
-import {CompanyAPIInput} from 'defs'
-import {FormikProps, withFormik} from 'formik'
-import React, {useState} from 'react'
-import {useNavigate} from 'react-router-dom'
-import {getCompanyFrequentCustomFieldsRequest} from '../../../graphql/companies/queries/getCompanyFrequentCustomFields'
-import {routes} from '../../../router/routes'
-import {CONTACT_METHODS} from '../../../utils/constants'
-import {useDialog} from '../../dialog/dialogProvider'
-import {Associates} from '../associates'
-import {CustomInputFields} from '../customInputFields'
-import {FilesManager} from '../fileField'
-import {InputField} from '../inputField'
-import {Locations} from '../locations'
-import {personFormValidation} from '../personForm/validation/validation'
-import {companyFormValidation, validateCompanyForm} from './validation/validation'
+import { CompanyAPIInput } from 'defs'
+import { FormikProps, withFormik } from 'formik'
+import { FormattedMessage } from 'react-intl'
+import { useNavigate } from 'react-router-dom'
+import { getCompanyFrequentCustomFieldsRequest } from '../../../graphql/companies/queries/getCompanyFrequentCustomFields'
+import { routes } from '../../../router/routes'
+import { CONTACT_METHODS } from '../../../utils/constants'
+import { useDialog } from '../../dialog/dialogProvider'
+import { Associates } from '../associates'
+import { CustomInputFields } from '../customInputFields'
+import { FilesManager } from '../fileField'
+import { InputField } from '../inputField'
+import { defaultLocation, Location } from '../location'
+import { Locations } from '../locations'
+import { personFormValidation } from '../personForm/validation/validation'
+import { companyFormValidation, validateCompanyForm } from './validation/validation'
 
 type Props = {
   companyId?: string
@@ -61,12 +63,7 @@ const Form: React.FunctionComponent<Props & FormikProps<CompanyAPIInput>> = ({
           <Stepper nonLinear alternativeLabel activeStep={step}>
             <Step completed={false}>
               <StepButton color={'inherit'} onClick={() => setStep(0)}>
-                Informatii generale
-              </StepButton>
-            </Step>
-            <Step completed={false}>
-              <StepButton color={'inherit'} onClick={() => setStep(1)}>
-                Informatii suplimentare
+                <FormattedMessage id={'General Information'} />
               </StepButton>
             </Step>
             <Step completed={false}>
@@ -86,7 +83,12 @@ const Form: React.FunctionComponent<Props & FormikProps<CompanyAPIInput>> = ({
             </Step>
             <Step completed={false}>
               <StepButton color={'inherit'} onClick={() => setStep(5)}>
-                Fisiere
+                <FormattedMessage id={'Files'} />
+              </StepButton>
+            </Step>
+            <Step completed={false}>
+              <StepButton color={'inherit'} onClick={() => setStep(1)}>
+                <FormattedMessage id={'Additional Information'} />
               </StepButton>
             </Step>
           </Stepper>
@@ -137,15 +139,11 @@ const Form: React.FunctionComponent<Props & FormikProps<CompanyAPIInput>> = ({
               />
             </Grid>
 
-            <Grid item xs={4}>
-              <InputField
-                name={'headquarters'}
+            <Grid item xs={8}>
+              <Location
                 label={'Sediu social'}
-                multiline
-                rows={3}
-                value={values.headquarters}
-                error={errors.headquarters}
-                onChange={async (value) => {
+                location={values.headquarters}
+                updateLocation={async (value) => {
                   const error = await companyFormValidation.headquarters(value)
                   setFieldValue('headquarters', value)
                   setFieldError('headquarters', error)
@@ -159,13 +157,12 @@ const Form: React.FunctionComponent<Props & FormikProps<CompanyAPIInput>> = ({
             <CustomInputFields
               fields={values.customFields}
               suggestions={frequentFields?.getCompanyFrequentCustomFields}
+              error={errors.customFields as string}
               setFieldValue={async (customFields) => {
                 const error = await personFormValidation.customFields(customFields)
-
                 setFieldValue('customFields', customFields)
                 setFieldError('customFields', error)
               }}
-              error={errors.customFields as string}
             />
           </Grid>
         )}
@@ -176,7 +173,6 @@ const Form: React.FunctionComponent<Props & FormikProps<CompanyAPIInput>> = ({
               suggestions={CONTACT_METHODS}
               setFieldValue={async (contactDetails) => {
                 const error = await personFormValidation.contactDetails(contactDetails)
-
                 setFieldValue('contactDetails', contactDetails)
                 setFieldError('contactDetails', error)
               }}
@@ -254,7 +250,7 @@ const companyInitialValues: CompanyAPIInput = {
   name: '',
   cui: '',
   registrationNumber: '',
-  headquarters: '',
+  headquarters: defaultLocation,
   locations: [],
   files: [],
   associates: [],

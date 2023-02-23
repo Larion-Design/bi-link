@@ -13,7 +13,7 @@ export const CreateEvent: React.FunctionComponent = () => {
 
   useEffect(() => {
     if (data?.createEvent) {
-      enqueueSnackbar('Eventul a fost creat cu succes.', {
+      enqueueSnackbar('Evenimentul a fost creat cu succes.', {
         variant: 'success',
         preventDuplicate: true,
       })

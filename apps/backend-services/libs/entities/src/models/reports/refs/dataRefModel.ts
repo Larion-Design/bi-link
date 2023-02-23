@@ -21,7 +21,7 @@ export class DataRefModel implements DataRef {
   property?: PropertyDocument
 
   @Prop({ type: Types.ObjectId, ref: EventModel.name, isRequired: false })
-  event?: EventDocument
+  incident?: EventDocument
 
   @Prop()
   field: string

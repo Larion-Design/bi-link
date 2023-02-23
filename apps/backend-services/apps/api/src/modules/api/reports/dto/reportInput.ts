@@ -28,7 +28,7 @@ export class ReportInput implements ReportAPIInput {
   readonly property?: ConnectedEntityInput
 
   @Field(() => ConnectedEntityInput, { nullable: true })
-  readonly event?: ConnectedEntityInput
+  readonly incident?: ConnectedEntityInput
 
   @Field(() => [DataRefInput])
   readonly refs: DataRefInput[]

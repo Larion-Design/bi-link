@@ -7,7 +7,6 @@ type Response = {
 
 type Params = {
   id: string
-
   depth: number
 }
 
@@ -55,10 +54,22 @@ const request = gql`
           _type
         }
       }
-      incidentsParties {
+      eventsParties {
         _type
         _confirmed
         name
+        startNode {
+          _id
+          _type
+        }
+        endNode {
+          _id
+          _type
+        }
+      }
+      eventsOccurencePlace {
+        _confirmed
+        _type
         startNode {
           _id
           _type

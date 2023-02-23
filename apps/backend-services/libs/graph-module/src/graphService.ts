@@ -182,7 +182,7 @@ export class GraphService {
     const relationships: EntitiesGraph = {
       companiesBranches: [],
       companiesHeadquarters: [],
-      eventsOccurencePlace: [],
+      eventsOccurrencePlace: [],
       personsBirthPlace: [],
       personsHomeAddress: [],
       companiesAssociates: [],

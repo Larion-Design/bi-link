@@ -31,11 +31,11 @@ export const CompanyOwnerInformation: React.FunctionComponent<Props> = ({
           <Grid item xs={12}>
             <InputField
               label={'Numar de înmatriculare'}
-              value={vehicleOwnerInfo.registrationNumber}
+              value={vehicleOwnerInfo.plateNumbers}
               onChange={(registrationNumber) =>
                 updateOwner(_id, {
                   ...ownerInfo,
-                  vehicleOwnerInfo: { ...vehicleOwnerInfo, registrationNumber },
+                  vehicleOwnerInfo: { ...vehicleOwnerInfo, plateNumbers },
                 })
               }
             />

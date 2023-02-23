@@ -51,8 +51,8 @@ export class ReportsService {
         case 'PROPERTY': {
           return this.reportModel.find({ property: entityId, isTemplate: false }, projection)
         }
-        case 'EVENT': {
-          return this.reportModel.find({ event: entityId, isTemplate: false }, projection)
+        case 'INCIDENT': {
+          return this.reportModel.find({ incident: entityId, isTemplate: false }, projection)
         }
       }
     } catch (e) {

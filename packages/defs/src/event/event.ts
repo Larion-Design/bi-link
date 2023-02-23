@@ -1,4 +1,5 @@
 import { CustomField, CustomFieldAPI } from '../customField'
+import { NodesRelationship } from '../entitiesGraph'
 import { File, FileAPIInput, FileAPIOutput } from '../file'
 import { Location, LocationAPIInput, LocationAPIOutput } from '../geolocation'
 import { Party, PartyAPI } from './party'
@@ -38,3 +39,5 @@ export interface EventsSuggestions {
   total: number
   records: EventListRecord[]
 }
+
+export interface EventPartyRelationship extends NodesRelationship, Pick<Party, 'name'> {}

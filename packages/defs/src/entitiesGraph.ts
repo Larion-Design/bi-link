@@ -1,5 +1,6 @@
 import { CompanyAssociateRelationship } from './company'
-import { IncidentPartyRelationship } from './event'
+import { EventPartyRelationship } from './event'
+import { EntityLocationRelationship } from './geolocation'
 import { PersonalRelationship } from './person'
 import { PropertyOwnerRelationship } from './property'
 
@@ -10,9 +11,15 @@ export interface GraphNode {
 
 export interface EntitiesGraph {
   companiesAssociates: CompanyAssociateRelationship[]
-  incidentsParties: IncidentPartyRelationship[]
+  eventsParties: EventPartyRelationship[]
   personalRelationships: PersonalRelationship[]
   propertiesRelationships: PropertyOwnerRelationship[]
+  propertiesLocation: EntityLocationRelationship[]
+  companiesHeadquarters: EntityLocationRelationship[]
+  companiesBranches: EntityLocationRelationship[]
+  personsBirthPlace: EntityLocationRelationship[]
+  personsHomeAddress: EntityLocationRelationship[]
+  eventsOccurrencePlace: EntityLocationRelationship[]
 }
 
 export enum RelationshipLabel {

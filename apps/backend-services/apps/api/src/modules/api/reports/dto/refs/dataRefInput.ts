@@ -17,7 +17,7 @@ export class DataRefInput implements DataRefAPI {
   property?: ConnectedEntityInput
 
   @Field(() => ConnectedEntityInput, { nullable: true })
-  event?: ConnectedEntityInput
+  incident?: ConnectedEntityInput
 
   @Field({ nullable: true })
   targetId?: string
