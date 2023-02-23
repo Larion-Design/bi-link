@@ -32,7 +32,7 @@ export const CompanyOwnerInformation: React.FunctionComponent<Props> = ({
             <InputField
               label={'Numar de înmatriculare'}
               value={vehicleOwnerInfo.plateNumbers}
-              onChange={(registrationNumber) =>
+              onChange={(plateNumbers) =>
                 updateOwner(_id, {
                   ...ownerInfo,
                   vehicleOwnerInfo: { ...vehicleOwnerInfo, plateNumbers },

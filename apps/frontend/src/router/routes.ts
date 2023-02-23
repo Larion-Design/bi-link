@@ -20,7 +20,7 @@ export const routes = {
   properties: '/properties',
 
   newEvent: '/events/new',
-  eventDetails: '/events/:incidentId',
+  eventDetails: '/events/:eventId',
   events: '/events',
 
   users: '/users',

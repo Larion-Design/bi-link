@@ -10,7 +10,7 @@ export const getRelationshipLabelFromType = (relationshipType: string | Relation
   > = {
     [RelationshipLabel.RELATED]: 'Cunoaște',
     [RelationshipLabel.ASSOCIATE]: 'Asociat',
-    [RelationshipLabel.PARTY_INVOLVED]: 'Implicat in incident',
+    [RelationshipLabel.PARTY_INVOLVED]: 'Implicat in event',
     [RelationshipLabel.OWNER]: 'Proprietar',
   }
   return labels[relationshipType] ?? (relationshipType as string)

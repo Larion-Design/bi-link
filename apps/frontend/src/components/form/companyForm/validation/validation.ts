@@ -3,12 +3,18 @@ import { validateContactDetails } from '../../contactDetails/validation'
 import { validateCustomFields } from '../../customInputFields/validation'
 import { validateFilesFormat } from '../../fileField/validation'
 import { validateAssociates } from '../../associates/validation'
-import { validateLocations } from '../../locations/validation'
+import { validateLocation, validateLocations } from '../../locations/validation'
 import { validateCompanyName } from './name'
 import { validateCompanyCUI } from './cui'
-import { validateHeadquarters } from './headquarters'
 import { validateRegistrationNumber } from './registrationNumber'
-import { AssociateAPIInput, CompanyAPIInput, CustomFieldAPI, FileAPIInput, Location } from 'defs'
+import {
+  AssociateAPIInput,
+  CompanyAPIInput,
+  CustomFieldAPI,
+  FileAPIInput,
+  Location,
+  LocationAPIInput,
+} from 'defs'
 
 export const validateCompanyForm = async (values: CompanyAPIInput, companyId?: string) => {
   const errors: FormikErrors<CompanyAPIInput> = {
@@ -34,7 +40,11 @@ export const validateCompanyForm = async (values: CompanyAPIInput, companyId?: s
 export const companyFormValidation = {
   name: validateCompanyName,
   cui: validateCompanyCUI,
-  headquarters: validateLocations(),
+  headquarters: async (location: LocationAPIInput | null) => {
+    if (location) {
+      return validateLocation(location)
+    }
+  },
   registrationNumber: validateRegistrationNumber,
   contactDetails: async (contactDetails: CustomFieldAPI[]) => {
     if (contactDetails.length) {

@@ -62,10 +62,7 @@ interface AppDrawerProps {
   toggleDrawer: () => void
 }
 
-export const AppDrawer: React.FunctionComponent<AppDrawerProps> = ({
-  open,
-  toggleDrawer,
-}) => {
+export const AppDrawer: React.FunctionComponent<AppDrawerProps> = ({ open, toggleDrawer }) => {
   const navigate = useNavigate()
   const { pathname } = useLocation()
   const { hasPrivilegedAccess } = getUserRole()
@@ -127,9 +124,9 @@ export const AppDrawer: React.FunctionComponent<AppDrawerProps> = ({
           </ListItemIcon>
           <ListItemText primary="Bunuri si Proprietati" />
         </ListItemButton>
-        <ListItemButton onClick={() => navigate(routes.incidents)}>
+        <ListItemButton onClick={() => navigate(routes.events)}>
           <ListItemIcon>
-            {pathname === routes.incidents ? (
+            {pathname === routes.events ? (
               <LocalHospitalIcon color={'primary'} />
             ) : (
               <LocalHospitalOutlinedIcon />

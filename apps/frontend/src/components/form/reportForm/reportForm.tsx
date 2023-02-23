@@ -133,8 +133,8 @@ const Form: React.FunctionComponent<Props & FormikProps<ReportAPIInput>> = ({
                     setFieldValue('property', entity)
                     break
                   }
-                  case 'INCIDENT': {
-                    setFieldValue('incident', entity)
+                  case 'EVENT': {
+                    setFieldValue('event', entity)
                     break
                   }
                 }

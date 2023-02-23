@@ -8,6 +8,8 @@ import CardActions from '@mui/material/CardActions'
 import { useFormik } from 'formik'
 import { PersonAPIInput } from 'defs'
 import { InputField } from '../../../form/inputField'
+import { defaultLocation } from '../../../form/location'
+import { OldNames } from '../../../form/oldNames'
 import {
   personFormValidation,
   validatePersonForm,
@@ -74,13 +76,9 @@ export const FastCreatePerson: React.FunctionComponent<Props> = ({
             />
           </Grid>
           <Grid item xs={4}>
-            <InputField
-              label={'Nume vechi'}
-              error={errors.oldName}
-              value={values.oldName}
-              onChange={async (value) => {
-                const error = await personFormValidation.oldName(value)
-                setFieldError('oldName', error)
+            <OldNames
+              oldNames={values.oldNames}
+              updateOldNames={async (value) => {
                 await setFieldValue('oldName', value)
               }}
             />
@@ -130,14 +128,16 @@ export const FastCreatePerson: React.FunctionComponent<Props> = ({
 const personInitialFields: PersonAPIInput = {
   firstName: '',
   lastName: '',
-  oldName: '',
+  oldNames: [],
   cnp: '',
   birthdate: null,
-  homeAddress: '',
+  birthPlace: defaultLocation,
+  homeAddress: defaultLocation,
   customFields: [],
   contactDetails: [],
   images: [],
   documents: [],
   files: [],
   relationships: [],
+  education: [],
 }

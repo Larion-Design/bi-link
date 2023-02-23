@@ -3,6 +3,7 @@ import { PubModule } from '@app/pub'
 import { Module } from '@nestjs/common'
 import { GraphModule } from '@app/graph-module'
 import { EntityDocumentEventsController } from './controllers/entityDocumentEventsController'
+import { LocationGraphService } from './services/locationGraphService'
 import { PersonGraphService } from './services/personGraphService'
 import { ConfigModule, ConfigService } from '@nestjs/config'
 import { SentryModule } from '@ntegral/nestjs-sentry'
@@ -58,7 +59,13 @@ import { ServiceHealthModule } from '@app/service-health'
         }),
     }),
   ],
-  providers: [PersonGraphService, CompanyGraphService, EventGraphService, PropertyGraphService],
+  providers: [
+    PersonGraphService,
+    CompanyGraphService,
+    EventGraphService,
+    PropertyGraphService,
+    LocationGraphService,
+  ],
   controllers: [EntityDocumentEventsController],
 })
 export class AppModule {}
