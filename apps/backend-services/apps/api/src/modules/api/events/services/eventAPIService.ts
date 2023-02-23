@@ -21,18 +21,18 @@ export class EventAPIService {
 
   create = async (eventInfo: EventAPIInput) => {
     try {
-      const incidentModel = await this.createEventDocument(eventInfo)
-      const incidentDocument = await this.eventsService.create(incidentModel)
-      return String(incidentDocument._id)
+      const eventModel = await this.createEventDocument(eventInfo)
+      const eventDocument = await this.eventsService.create(eventModel)
+      return String(eventDocument._id)
     } catch (error) {
       this.logger.error(error)
     }
   }
 
-  update = async (incidentId: string, eventInfo: EventAPIInput) => {
+  update = async (eventId: string, eventInfo: EventAPIInput) => {
     try {
-      const incidentModel = await this.createEventDocument(eventInfo)
-      await this.eventsService.update(incidentId, incidentModel)
+      const eventModel = await this.createEventDocument(eventInfo)
+      await this.eventsService.update(eventId, eventModel)
       return true
     } catch (error) {
       this.logger.error(error)

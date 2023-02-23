@@ -2,7 +2,7 @@ import { CustomField, CustomFieldAPI } from '../customField'
 import { File, FileAPIInput, FileAPIOutput } from '../file'
 import { PropertyOwner, PropertyOwnerAPI } from './propertyOwner'
 import { RealEstateAPIInput, RealEstateAPIOutput, RealEstateInfo } from './realEstateInfo'
-import { VehicleInfo } from './vehicleInfo'
+import { VehicleInfo, VehicleInfoAPIInput, VehicleInfoAPIOutput } from './vehicleInfo'
 
 export interface Property {
   _id: string
@@ -27,7 +27,7 @@ export interface PropertyAPIInput extends Omit<PropertyAPI, '_id'> {
   files: FileAPIInput[]
   images: FileAPIInput[]
   owners: PropertyOwnerAPI[]
-  vehicleInfo: VehicleInfo | null
+  vehicleInfo: VehicleInfoAPIInput | null
   realEstateInfo: RealEstateAPIInput | null
 }
 
@@ -36,6 +36,7 @@ export interface PropertyAPIOutput extends PropertyAPI {
   files: FileAPIOutput[]
   images: FileAPIOutput[]
   customFields: CustomFieldAPI[]
+  vehicleInfo: VehicleInfoAPIOutput | null
   realEstateInfo: RealEstateAPIOutput | null
 }
 

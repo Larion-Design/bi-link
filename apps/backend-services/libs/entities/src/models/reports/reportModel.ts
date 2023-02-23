@@ -32,7 +32,7 @@ export class ReportModel implements Report {
   property?: PropertyDocument
 
   @Prop({ type: Types.ObjectId, ref: EventModel.name, isRequired: false })
-  incident?: EventDocument
+  event?: EventDocument
 
   @Prop({ type: [ReportSectionSchema] })
   sections: ReportSectionModel[]

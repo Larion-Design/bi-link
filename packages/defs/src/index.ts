@@ -15,7 +15,7 @@ export type EntityType =
   | 'PERSON'
   | 'COMPANY'
   | 'PROPERTY'
-  | 'INCIDENT'
+  | 'EVENT'
   | 'REPORT'
   | 'FILE'
   | 'LOCATION'

@@ -5,17 +5,21 @@
   "description": "BI Link types and definitions",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
-  "files": ["dist/index.js"],
+  "files": [
+    "dist/index.js"
+  ],
   "exports": {
     ".": "./dist/index.js",
     "./package.json": "./package.json"
   },
   "scripts": {
     "build": "tsc",
-    "postinstall": "pnpm build"
+    "postinstall": "pnpm build",
+    "prebuild": "rimraf dist"
   },
   "devDependencies": {
-    "typescript": "^4.9.4",
-    "tslib": "^2.4.1"
+    "rimraf": "^3.0.2",
+    "tslib": "^2.4.1",
+    "typescript": "^4.9.4"
   }
 }

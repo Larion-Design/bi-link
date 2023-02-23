@@ -5,15 +5,15 @@ export interface DataRef {
   person?: Person
   company?: Company
   property?: Property
-  incident?: Event
+  event?: Event
   path?: string
   targetId?: string
   field: string
 }
 
-export interface DataRefAPI extends Omit<DataRef, 'person' | 'company' | 'property' | 'incident'> {
+export interface DataRefAPI extends Omit<DataRef, 'person' | 'company' | 'property' | 'event'> {
   person?: ConnectedEntity
   company?: ConnectedEntity
   property?: ConnectedEntity
-  incident?: ConnectedEntity
+  event?: ConnectedEntity
 }

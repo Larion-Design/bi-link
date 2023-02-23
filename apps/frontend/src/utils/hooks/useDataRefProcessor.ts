@@ -1,5 +1,4 @@
 import { useCallback, useEffect, useState } from 'react'
-import { format } from 'date-fns'
 import md5 from 'crypto-js/md5'
 import {
   CompanyAPIOutput,
@@ -11,11 +10,11 @@ import {
   PersonAPIOutput,
   PropertyAPIOutput,
 } from 'defs'
+import { formatDate } from 'tools'
 import { getCompaniesRequest } from '../../graphql/companies/queries/getCompaniesInfo'
 import { getEventsInfoRequest } from '../../graphql/events/queries/getEventsInfo'
 import { getPersonsInfoRequest } from '../../graphql/persons/queries/getPersonsInfo'
 import { getPropertiesInfoRequest } from '../../graphql/properties/queries/getPropertiesInfo'
-import { formatDate } from '../date'
 import { getPersonAge, getPersonFullName } from '../person'
 import { useMap } from './useMap'
 
@@ -163,7 +162,7 @@ export const useDataRefs = (refs: DataRefAPI[]) => {
           dataRef.property = entity
           break
         }
-        case 'INCIDENT': {
+        case 'EVENT': {
           dataRef.event = entity
           break
         }
@@ -312,18 +311,13 @@ const getCompanyInfoValue: EntityInfoHandler<CompanyAPIOutput> = (
           )
           return contactInfo?.[field] ?? ''
         }
-        case 'locations': {
-          const contactInfo = companyInfo.locations.find(({ address }) => address === targetId)
-          return contactInfo?.[field] ?? ''
-        }
       }
     }
   } else {
     switch (field) {
       case 'name':
       case 'cui':
-      case 'registrationNumber':
-      case 'headquarters': {
+      case 'registrationNumber': {
         return companyInfo[field] ?? ''
       }
     }
@@ -384,14 +378,20 @@ const getEventInfoValue: EntityInfoHandler<EventAPIOutput> = (eventInfo, field, 
   } else {
     switch (field) {
       case 'description':
-      case 'location': {
-        return eventInfo[field] ?? ''
-      }
       case 'date': {
         const { date } = eventInfo
         return date ? formatDate(date) : ''
       }
     }
   }
+  return ''
+}
+
+const getEventInfoValue: EntityInfoHandler<LocationAPIOutput> = (
+  locationInfo,
+  field,
+  path,
+  targetId,
+) => {
   return ''
 }

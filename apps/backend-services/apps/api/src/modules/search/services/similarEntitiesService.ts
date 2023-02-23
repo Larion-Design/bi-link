@@ -19,8 +19,7 @@ export class SimilarEntitiesService {
     this.getSimilarDocuments(companyId, INDEX_COMPANIES)
   getSimilarProperties = async (propertyId: string) =>
     this.getSimilarDocuments(propertyId, INDEX_PROPERTIES)
-  getSimilarEvents = async (incidentId: string) =>
-    this.getSimilarDocuments(incidentId, INDEX_EVENTS)
+  getSimilarEvents = async (eventId: string) => this.getSimilarDocuments(eventId, INDEX_EVENTS)
 
   private getSimilarDocuments = async (_id: string, _index: string) => {
     try {

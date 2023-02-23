@@ -6,6 +6,7 @@
     "target": "ESNext",
     "strict": true,
     "declaration": true,
+    "allowJs": false,
     "esModuleInterop": true,
     "removeComments": true,
     "emitDecoratorMetadata": true,
