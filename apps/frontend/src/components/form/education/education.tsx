@@ -27,7 +27,7 @@ export const Education: React.FunctionComponent<Props> = ({ education, updateEdu
     () => removeBulk(selectedRows as string[]),
     [uid, selectedRows],
   )
-  const addOldName = useCallback(
+  const addEducation = useCallback(
     () =>
       create({
         customFields: [],
@@ -53,13 +53,19 @@ export const Education: React.FunctionComponent<Props> = ({ education, updateEdu
   )
 
   return (
-    <Box sx={{ minHeight: '50vh', maxHeight: '100vh' }}>
+    <Box sx={{ minHeight: '50vh', maxHeight: '100vh', width: 1 }}>
       <DataGrid
         autoHeight
         checkboxSelection
+        disableDensitySelector
+        disableColumnMenu
         disableSelectionOnClick
+        disableVirtualization
+        disableColumnFilter
+        disableColumnSelector
         disableIgnoreModificationsIfProcessingProps
         hideFooterPagination
+        hideFooter
         rows={values()}
         columns={columns}
         experimentalFeatures={{ newEditingApi: true }}
@@ -69,7 +75,7 @@ export const Education: React.FunctionComponent<Props> = ({ education, updateEdu
         components={{
           Toolbar: () => (
             <GridToolbarContainer sx={{ p: 2 }}>
-              <AddItemToolbarButton onClick={addOldName} />
+              <AddItemToolbarButton onClick={addEducation} />
 
               {!!selectedRows.length && (
                 <RemoveRowsToolbarButton onRemovalConfirmed={removeSelectedRows} />
@@ -101,6 +107,7 @@ const columns: GridColDef[] = [
     editable: true,
     type: 'string',
     flex: 1.3,
+    renderEditCell: Textarea,
     preProcessEditCellProps: processGridCellValue,
   },
   {
@@ -115,19 +122,15 @@ const columns: GridColDef[] = [
   {
     field: 'startDate',
     headerName: 'Data inceperii',
-    flex: 1.3,
+    flex: 1,
     editable: true,
     type: 'date',
-    renderEditCell: Textarea,
-    preProcessEditCellProps: processGridCellValue,
   },
   {
-    field: 'startDate',
+    field: 'endDate',
     headerName: 'Data finalizarii',
-    flex: 1.3,
+    flex: 1,
     editable: true,
     type: 'date',
-    renderEditCell: Textarea,
-    preProcessEditCellProps: processGridCellValue,
   },
 ]
