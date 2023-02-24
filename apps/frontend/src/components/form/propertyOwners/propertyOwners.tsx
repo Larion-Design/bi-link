@@ -199,7 +199,7 @@ const createPersonsOwners = (personsIds: string[], isVehicle: boolean): Property
     startDate: null,
     endDate: null,
     _confirmed: true,
-    vehicleOwnerInfo: isVehicle ? { registrationNumber: '' } : null,
+    vehicleOwnerInfo: isVehicle ? { plateNumbers: [] } : null,
   }))
 
 const createCompaniesOwners = (companiesIds: string[], isVehicle: boolean): PropertyOwnerAPI[] =>
@@ -212,7 +212,7 @@ const createCompaniesOwners = (companiesIds: string[], isVehicle: boolean): Prop
     startDate: null,
     endDate: null,
     _confirmed: true,
-    vehicleOwnerInfo: isVehicle ? { registrationNumber: '' } : null,
+    vehicleOwnerInfo: isVehicle ? { plateNumbers: [] } : null,
   }))
 
 const sortByOwnershipPeriod = (ownerA: PropertyOwnerAPI, ownerB: PropertyOwnerAPI) => {

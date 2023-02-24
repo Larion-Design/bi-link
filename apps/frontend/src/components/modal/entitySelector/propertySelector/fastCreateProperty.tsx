@@ -190,6 +190,7 @@ const propertyInitialValues: PropertyAPIInput = {
   files: [],
   customFields: [],
   vehicleInfo: null,
+  realEstateInfo: null,
 }
 
 function createVehicleInfo(): VehicleInfo {

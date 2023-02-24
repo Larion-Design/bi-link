@@ -20,7 +20,6 @@ export const validateCompanyForm = async (values: CompanyAPIInput, companyId?: s
   const errors: FormikErrors<CompanyAPIInput> = {
     name: await companyFormValidation.name(values.name),
     cui: await companyFormValidation.cui(values.cui, companyId),
-    headquarters: await companyFormValidation.headquarters(values.headquarters),
     registrationNumber: await companyFormValidation.registrationNumber(
       values.registrationNumber,
       companyId,

@@ -1,3 +1,4 @@
+import { validateLocation } from '@frontend/components/form/locations/validation'
 import { FormikErrors } from 'formik'
 import * as yup from 'yup'
 import { validateCNP } from './cnp'
@@ -10,6 +11,7 @@ import {
   CustomFieldAPI,
   FileAPIInput,
   IdDocument,
+  LocationAPIInput,
   PersonAPIInput,
   RelationshipAPIInput,
 } from 'defs'
@@ -18,8 +20,6 @@ export const validatePersonForm = async (values: PersonAPIInput, personId?: stri
   const errors: FormikErrors<PersonAPIInput> = {
     firstName: await personFormValidation.firstName(values.firstName),
     lastName: await personFormValidation.lastName(values.lastName),
-    oldName: await personFormValidation.oldName(values.oldName),
-    homeAddress: await personFormValidation.homeAddress(values.homeAddress),
     cnp: await personFormValidation.cnp(values.cnp, personId),
     birthdate: await personFormValidation.birthdate(values.birthdate),
     images: await personFormValidation.files(values.images),
@@ -48,14 +48,9 @@ export const personFormValidation = {
       return Promise.resolve('Numele trebuie sa contina minim doua litere.')
     }
   },
-  oldName: async (oldName: string) => {
-    if (oldName.length && oldName.length < 2) {
-      return Promise.resolve('Numele trebuie sa contina minim doua litere.')
-    }
-  },
-  homeAddress: async (homeAddress: string) => {
-    if (homeAddress.length && homeAddress.length < 3) {
-      return Promise.resolve('Adresa este prea scurta.')
+  homeAddress: async (homeAddress: LocationAPIInput) => {
+    if (homeAddress) {
+      return validateLocation(homeAddress)
     }
   },
   cnp: async (cnp: string, personId?: string) => validateCNP(cnp, personId),

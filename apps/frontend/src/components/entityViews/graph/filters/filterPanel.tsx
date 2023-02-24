@@ -104,7 +104,8 @@ const entityTypeLocale: Record<EntityType, string> = {
   PERSON: 'Persoane',
   COMPANY: 'Companii',
   PROPERTY: 'Proprietati',
-  INCIDENT: 'Incidente',
+  EVENT: 'Evenimente',
   REPORT: 'Rapoarte',
   FILE: 'Fisiere',
+  LOCATION: 'Locuri',
 }

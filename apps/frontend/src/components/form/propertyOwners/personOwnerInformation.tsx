@@ -1,3 +1,4 @@
+import { ItemListInput } from '@frontend/components/form/itemListInput'
 import React from 'react'
 import Grid from '@mui/material/Grid'
 import Box from '@mui/material/Box'
@@ -6,7 +7,6 @@ import Typography from '@mui/material/Typography'
 import { DatePicker } from '../datePicker'
 import { getPersonFullName } from '../../../utils/person'
 import { PersonListRecordWithImage, PropertyOwnerAPI } from 'defs'
-import { InputField } from '../inputField'
 import { useIntl } from 'react-intl'
 
 type Props = {
@@ -39,13 +39,13 @@ export const PersonOwnerInformation: React.FunctionComponent<Props> = ({
       <Grid container spacing={2}>
         {!!vehicleOwnerInfo && (
           <Grid item xs={12}>
-            <InputField
-              label={'Numar de înmatriculare'}
-              value={vehicleOwnerInfo.registrationNumber}
-              onChange={(registrationNumber) =>
+            <ItemListInput
+              items={vehicleOwnerInfo.plateNumbers}
+              label={'Numere de inmatriculare'}
+              onChange={(plateNumbers) =>
                 updateOwner(_id, {
                   ...ownerInfo,
-                  vehicleOwnerInfo: { ...vehicleOwnerInfo, registrationNumber },
+                  vehicleOwnerInfo: { ...vehicleOwnerInfo, plateNumbers },
                 })
               }
             />

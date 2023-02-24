@@ -55,19 +55,14 @@ export const EventDetails: React.FunctionComponent<Props> = ({
       </Box>
       <Box sx={{ width: 1 }}>
         {mainTabIndex === 0 && (
-          <EventForm
-            eventId={eventId}
-            eventInfo={eventInfo}
-            readonly={readonly}
-            onSubmit={onSubmit}
-          />
+          <EventForm eventId={eventId} eventInfo={eventInfo} onSubmit={onSubmit} />
         )}
         {mainTabIndex === 1 && !!eventId && (
           <Box sx={{ height: '70vh' }}>
             <Graph entityId={eventId} />
           </Box>
         )}
-        {mainTabIndex === 3 && !!eventId && <Reports entityId={eventId} entityType={'INCIDENT'} />}
+        {mainTabIndex === 3 && !!eventId && <Reports entityId={eventId} entityType={'EVENT'} />}
       </Box>
     </Box>
   )

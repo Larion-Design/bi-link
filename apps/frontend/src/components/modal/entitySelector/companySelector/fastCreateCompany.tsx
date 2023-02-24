@@ -1,3 +1,4 @@
+import { defaultLocation } from '@frontend/components/form/location'
 import React, { useEffect } from 'react'
 import { CompanySelectorView } from './companySelector'
 import { useFormik } from 'formik'
@@ -119,7 +120,7 @@ const companyInitialValues: CompanyAPIInput = {
   name: '',
   cui: '',
   registrationNumber: '',
-  headquarters: '',
+  headquarters: defaultLocation,
   locations: [],
   files: [],
   associates: [],

@@ -1,3 +1,5 @@
+import { defaultLocation, Location } from '@frontend/components/form/location'
+import { OldNames } from '@frontend/components/form/oldNames'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import Grid from '@mui/material/Grid'
@@ -152,20 +154,6 @@ const Form: React.FunctionComponent<Props & FormikProps<PersonAPIInput>> = ({
 
                 <Grid item xs={4}>
                   <InputField
-                    name={'oldName'}
-                    label={'Nume vechi'}
-                    value={values.oldName}
-                    error={errors.oldName}
-                    onChange={async (value) => {
-                      const error = await personFormValidation.oldName(value)
-                      setFieldValue('oldName', value)
-                      setFieldError('oldName', error)
-                    }}
-                  />
-                </Grid>
-
-                <Grid item xs={4}>
-                  <InputField
                     name={'cnp'}
                     label={'Cod numeric personal'}
                     value={values.cnp}
@@ -189,21 +177,34 @@ const Form: React.FunctionComponent<Props & FormikProps<PersonAPIInput>> = ({
                   />
                 </Grid>
 
-                <Grid item xs={8}>
-                  <InputField
-                    name={'homeAddress'}
-                    label={'Domiciliu'}
-                    value={values.homeAddress}
-                    error={errors.homeAddress}
-                    multiline
-                    rows={2}
-                    onChange={async (value) => {
-                      const error = await personFormValidation.homeAddress(value)
-                      setFieldValue('homeAddress', value)
-                      setFieldError('homeAddress', error)
+                <Grid item xs={4}>
+                  <Location
+                    label={'Locul nasterii'}
+                    location={values.birthPlace}
+                    updateLocation={(location) => {
+                      setFieldValue('birthPlace', location)
                     }}
                   />
                 </Grid>
+
+                <Grid item xs={8}>
+                  <Location
+                    label={'Domiciliu'}
+                    location={values.homeAddress}
+                    updateLocation={(location) => {
+                      setFieldValue('homeAddress', location)
+                    }}
+                  />
+                </Grid>
+              </Grid>
+
+              <Grid item xs={12}>
+                <OldNames
+                  oldNames={values.oldNames}
+                  updateOldNames={async (oldNames) => {
+                    setFieldValue('oldName', oldNames)
+                  }}
+                />
               </Grid>
             </Grid>
           )}
@@ -308,16 +309,18 @@ const Form: React.FunctionComponent<Props & FormikProps<PersonAPIInput>> = ({
 const personInitialFields: PersonAPIInput = {
   firstName: '',
   lastName: '',
-  oldName: '',
+  oldNames: [],
   cnp: '',
   birthdate: null,
-  homeAddress: '',
+  birthPlace: defaultLocation,
+  homeAddress: defaultLocation,
   customFields: [],
   contactDetails: [],
   images: [],
   documents: [],
   files: [],
   relationships: [],
+  education: [],
 }
 
 export const PersonForm = withFormik<Props, PersonAPIInput>({

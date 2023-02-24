@@ -14,9 +14,43 @@ const getPersonInfo = gql`
     getPersonInfo(id: $personId) {
       firstName
       lastName
-      oldName
+      oldNames {
+        name
+        changeReason
+      }
       cnp
-      homeAddress
+      birthPlace {
+        locationId
+        street
+        number
+        building
+        door
+        zipCode
+        locality
+        county
+        country
+        otherInfo
+        coordinates {
+          lat
+          long
+        }
+      }
+      homeAddress {
+        locationId
+        street
+        number
+        building
+        door
+        zipCode
+        locality
+        county
+        country
+        otherInfo
+        coordinates {
+          lat
+          long
+        }
+      }
       birthdate
       images {
         fileId

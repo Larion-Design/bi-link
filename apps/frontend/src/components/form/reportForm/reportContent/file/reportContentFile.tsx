@@ -7,7 +7,7 @@ import Typography from '@mui/material/Typography'
 import PostAddOutlinedIcon from '@mui/icons-material/PostAddOutlined'
 import { EntityType, FileAPIInput } from 'defs'
 import { getCompanyInfoRequest } from '../../../../../graphql/companies/queries/getCompany'
-import { getIncidentRequest } from '../../../../../graphql/incidents/queries/getIncident'
+import { getEventRequest } from '../../../../../graphql/events/queries/getEvent'
 import { getPersonInfoRequest } from '../../../../../graphql/persons/queries/getPersonInfo'
 import { getPropertyRequest } from '../../../../../graphql/properties/queries/getProperty'
 import { ActionButton } from '../../../../button/actionButton'
@@ -33,7 +33,7 @@ export const ReportContentFile: React.FunctionComponent<Props> = ({
   const [fetchPerson, { data: personInfo }] = getPersonInfoRequest()
   const [fetchProperty, { data: propertyInfo }] = getPropertyRequest()
   const [fetchCompany, { data: companyInfo }] = getCompanyInfoRequest()
-  const [fetchIncident, { data: incidentInfo }] = getIncidentRequest()
+  const [fetchEvent, { data: eventInfo }] = getEventRequest()
 
   const openFileSelector = useCallback(
     (files: FileAPIInput[], selectedFile: FileAPIInput | null) =>
@@ -51,14 +51,14 @@ export const ReportContentFile: React.FunctionComponent<Props> = ({
     if (companyInfo?.getCompany?.files.length) {
       openFileSelector(companyInfo.getCompany.files, fileInfo)
     }
-    if (incidentInfo?.getIncident?.files.length) {
-      openFileSelector(incidentInfo.getIncident.files, fileInfo)
+    if (eventInfo?.getEvent?.files.length) {
+      openFileSelector(eventInfo.getEvent.files, fileInfo)
     }
   }, [
     personInfo?.getPersonInfo?.images,
     propertyInfo?.getProperty?.images,
     companyInfo?.getCompany?.files,
-    incidentInfo?.getIncident?.files,
+    eventInfo?.getEvent?.files,
     fileInfo,
   ])
 
@@ -67,12 +67,12 @@ export const ReportContentFile: React.FunctionComponent<Props> = ({
       personInfo?.getPersonInfo?.files.length === 0 ||
       propertyInfo?.getProperty?.files.length === 0 ||
       companyInfo?.getCompany?.files.length === 0 ||
-      incidentInfo?.getIncident?.files.length === 0,
+      eventInfo?.getEvent?.files.length === 0,
     [
       personInfo?.getPersonInfo?.files,
       propertyInfo?.getProperty?.files,
       companyInfo?.getCompany?.files,
-      incidentInfo?.getIncident?.files,
+      eventInfo?.getEvent?.files,
     ],
   )
 
@@ -101,12 +101,12 @@ export const ReportContentFile: React.FunctionComponent<Props> = ({
   }, [companyInfo?.getCompany?.files])
 
   useEffect(() => {
-    const files = incidentInfo?.getIncident?.files.filter(({ isHidden }) => !isHidden)
+    const files = eventInfo?.getEvent?.files.filter(({ isHidden }) => !isHidden)
 
     if (files?.length) {
       openFileSelector(files, fileInfo)
     }
-  }, [incidentInfo?.getIncident?.files])
+  }, [eventInfo?.getEvent?.files])
 
   useEffect(() => {
     if (entityId && entityType) {
@@ -123,8 +123,8 @@ export const ReportContentFile: React.FunctionComponent<Props> = ({
           void fetchCompany({ variables: { id: entityId } })
           break
         }
-        case 'INCIDENT': {
-          void fetchIncident({ variables: { incidentId: entityId } })
+        case 'EVENT': {
+          void fetchEvent({ variables: { eventId: entityId } })
           break
         }
       }

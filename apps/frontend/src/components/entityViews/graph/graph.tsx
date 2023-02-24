@@ -45,7 +45,7 @@ export const Graph: React.FunctionComponent<PropsWithRef<Props>> = ({
   const [allEntities, setAllEntities] = useState(new Set<string>())
   const [allRelationships, setAllRelationships] = useState(new Set<string>())
 
-  const [visibleEntities, setVisibleEntities] = useState(new Set<string>())
+  const [visibleEntities, setVisibleEntities] = useState(new Set<string | EntityType>())
   const [visibleRelationships, setVisibleRelationships] = useState(new Set<string>())
 
   const [nodes, setNodes] = useState<Node<unknown>[]>([])
@@ -69,7 +69,7 @@ export const Graph: React.FunctionComponent<PropsWithRef<Props>> = ({
     const companiesIds = new Set<string>()
     const personsIds = new Set<string>()
     const propertiesIds = new Set<string>()
-    const incidentsIds = new Set<string>()
+    const eventsIds = new Set<string>()
 
     const registerNode = (entityId: string, entityType: EntityLabel) => {
       switch (entityType) {
@@ -86,7 +86,7 @@ export const Graph: React.FunctionComponent<PropsWithRef<Props>> = ({
           break
         }
         case EntityLabel.EVENT: {
-          incidentsIds.add(entityId)
+          eventsIds.add(entityId)
           break
         }
       }
@@ -123,7 +123,7 @@ export const Graph: React.FunctionComponent<PropsWithRef<Props>> = ({
       },
     )
 
-    data.getEntitiesGraph.incidentsParties.forEach(
+    data.getEntitiesGraph.eventsParties.forEach(
       ({
         startNode: { _id: startNodeId, _type: startNodeType },
         endNode: { _id: endNodeId, _type: endNodeType },
@@ -158,13 +158,13 @@ export const Graph: React.FunctionComponent<PropsWithRef<Props>> = ({
     setAllRelationships(new Set(allRelationships))
     setVisibleRelationships(new Set(allRelationships))
 
-    if (companiesIds.size || personsIds.size || propertiesIds.size || incidentsIds.size) {
+    if (companiesIds.size || personsIds.size || propertiesIds.size || eventsIds.size) {
       void fetchEntities({
         variables: {
           companiesIds: Array.from(companiesIds),
           personsIds: Array.from(personsIds),
           propertiesIds: Array.from(propertiesIds),
-          incidentsIds: Array.from(incidentsIds),
+          eventsIds: Array.from(eventsIds),
         },
       })
     }
@@ -183,7 +183,8 @@ export const Graph: React.FunctionComponent<PropsWithRef<Props>> = ({
         PERSON: !visibleEntities.has('PERSON'),
         COMPANY: !visibleEntities.has('COMPANY'),
         PROPERTY: !visibleEntities.has('PROPERTY'),
-        INCIDENT: !visibleEntities.has('INCIDENT'),
+        EVENT: !visibleEntities.has('EVENT'),
+        LOCATION: !visibleEntities.has('LOCATION'),
         REPORT: true,
         FILE: true,
       }
@@ -290,19 +291,19 @@ export const Graph: React.FunctionComponent<PropsWithRef<Props>> = ({
             })
           }
         },
-        [EntityLabel.EVENT]: (incidentId: string) => {
-          if (nodesMap.has(incidentId) || hiddenEntities['INCIDENT']) return
+        [EntityLabel.EVENT]: (eventId: string) => {
+          if (nodesMap.has(eventId) || hiddenEntities['INCIDENT']) return
 
-          dagreGraph.setNode(incidentId, nodeConfig)
+          dagreGraph.setNode(eventId, nodeConfig)
 
-          const incidentInfo = entitiesInfo?.getIncidents.find(({ _id }) => incidentId === _id)
+          const incidentInfo = entitiesInfo?.getIncidents.find(({ _id }) => eventId === _id)
 
           if (incidentInfo) {
-            nodesMap.set(incidentId, {
-              id: incidentId,
+            nodesMap.set(eventId, {
+              id: eventId,
               targetPosition: Position.Top,
               sourcePosition: Position.Bottom,
-              hidden: hiddenEntities.INCIDENT && incidentId !== entityId,
+              hidden: hiddenEntities.EVENT && eventId !== entityId,
               position: {
                 x: 0,
                 y: 0,
@@ -310,7 +311,7 @@ export const Graph: React.FunctionComponent<PropsWithRef<Props>> = ({
               type: 'incidentNode',
               data: {
                 label: incidentInfo.location,
-                isRootNode: incidentId === entityId,
+                isRootNode: eventId === entityId,
               },
             })
           }
@@ -371,7 +372,7 @@ export const Graph: React.FunctionComponent<PropsWithRef<Props>> = ({
           createEdge(startNodeId, endNodeId, getRelationshipLabelFromType(_type), _confirmed, _type)
         },
       )
-      data.getEntitiesGraph.incidentsParties.forEach(
+      data.getEntitiesGraph.eventsParties.forEach(
         ({
           startNode: { _id: startNodeId, _type: startNodeType },
           endNode: { _id: endNodeId, _type: endNodeType },

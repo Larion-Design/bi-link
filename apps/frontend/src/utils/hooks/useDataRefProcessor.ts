@@ -386,12 +386,3 @@ const getEventInfoValue: EntityInfoHandler<EventAPIOutput> = (eventInfo, field, 
   }
   return ''
 }
-
-const getEventInfoValue: EntityInfoHandler<LocationAPIOutput> = (
-  locationInfo,
-  field,
-  path,
-  targetId,
-) => {
-  return ''
-}
