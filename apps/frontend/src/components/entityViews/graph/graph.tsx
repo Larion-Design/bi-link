@@ -6,7 +6,7 @@ import { ConnectionLineType, Edge, Node, Position, ReactFlowProvider } from 'rea
 import { getEntitiesGraphRequest } from '../../../graphql/shared/queries/getEntitiesGraph'
 import { getEntitiesInfoRequest } from '../../../graphql/shared/queries/getEntitiesInfo'
 import { useNotification } from '../../../utils/hooks/useNotification'
-import { relationshipsTypes } from '../../form/relationships/utils'
+import { relationshipsTypes } from '../../form/person/relationships/utils'
 import { EntityGraph } from './entityGraph'
 import { getRelationshipLabelFromType } from './utils'
 

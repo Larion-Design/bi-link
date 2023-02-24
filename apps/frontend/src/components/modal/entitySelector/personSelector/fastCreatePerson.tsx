@@ -9,11 +9,11 @@ import { useFormik } from 'formik'
 import { PersonAPIInput } from 'defs'
 import { InputField } from '../../../form/inputField'
 import { defaultLocation } from '../../../form/location'
-import { OldNames } from '../../../form/oldNames'
+import { OldNames } from '../../../form/person/oldNames'
 import {
   personFormValidation,
   validatePersonForm,
-} from '../../../form/personForm/validation/validation'
+} from '../../../form/person/personForm/validation/validation'
 import { PersonSelectorView } from './personSelector'
 import { createPersonRequest } from '../../../../graphql/persons/mutations/createPerson'
 import { ModalHeader } from '../../modalHeader'

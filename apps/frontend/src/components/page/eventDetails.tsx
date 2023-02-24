@@ -5,7 +5,7 @@ import MenuItem from '@mui/material/MenuItem'
 import { Reports } from '../entityViews/reports'
 import { InputFieldMenu } from '../menu/inputFieldMenu'
 import { EventAPIInput } from 'defs'
-import { EventForm } from '../form/eventForm'
+import { EventForm } from '../form/event/eventForm'
 import { Graph } from '../entityViews/graph'
 
 type Props = {

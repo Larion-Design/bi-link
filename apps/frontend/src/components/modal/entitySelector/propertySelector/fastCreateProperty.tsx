@@ -12,7 +12,7 @@ import { createPropertyRequest } from '../../../../graphql/properties/mutations/
 import {
   propertyFormValidation,
   validatePropertyForm,
-} from '../../../form/propertyForm/validation/validation'
+} from '../../../form/property/propertyForm/validation/validation'
 import { PropertyAPIInput, VehicleInfo } from 'defs'
 import { Images } from '../../../form/images'
 import { AutocompleteField } from '../../../form/autocompleteField'

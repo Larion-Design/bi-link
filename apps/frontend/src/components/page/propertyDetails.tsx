@@ -6,7 +6,7 @@ import { Reports } from '../entityViews/reports'
 import { InputFieldMenu } from '../menu/inputFieldMenu'
 import { Graph } from '../entityViews/graph'
 import { PropertyAPIInput } from 'defs'
-import { PropertyForm } from '../form/propertyForm'
+import { PropertyForm } from '../form/property/propertyForm'
 
 type Props = {
   propertyId?: string

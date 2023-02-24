@@ -7,7 +7,7 @@ import { createCompanyRequest } from '../../../../graphql/companies/mutations/cr
 import {
   companyFormValidation,
   validateCompanyForm,
-} from '../../../form/companyForm/validation/validation'
+} from '../../../form/company/companyForm/validation/validation'
 import CardContent from '@mui/material/CardContent'
 import Grid from '@mui/material/Grid'
 import { InputField } from '../../../form/inputField'
