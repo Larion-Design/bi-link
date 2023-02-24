@@ -151,6 +151,9 @@
   "dependenciesMeta": {
     "defs": {
       "injected": true
+    },
+    "tools": {
+      "injected": true
     }
   }
 }

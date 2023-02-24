@@ -122,7 +122,7 @@ dependencies:
   react-pdf: 6.2.2_biqbaboplfbrettd7655fr4n2y
   react-router-dom: 6.8.1_biqbaboplfbrettd7655fr4n2y
   reactflow: 11.5.5_biqbaboplfbrettd7655fr4n2y
-  tools: link:../../packages/tools
+  tools: file:../../packages/tools
   usehooks-ts: 2.9.1_biqbaboplfbrettd7655fr4n2y
   uuid: 8.3.2
   yup: 0.32.11
@@ -167,6 +167,10 @@ devDependencies:
   vite-tsconfig-paths: 4.0.5_typescript@4.9.5
   vitest: 0.16.0_c8@7.12.0
   webpack: 5.75.0
+
+dependenciesMeta:
+  tools:
+    injected: true
 
 packages:
 
@@ -8297,4 +8301,13 @@ packages:
     dependencies:
       react: 18.2.0
       use-sync-external-store: 1.2.0_react@18.2.0
+    dev: false
+
+  file:../../packages/tools:
+    resolution: {directory: ../../packages/tools, type: directory}
+    name: tools
+    version: 0.0.1
+    requiresBuild: true
+    dependencies:
+      date-fns: 2.29.3
     dev: false

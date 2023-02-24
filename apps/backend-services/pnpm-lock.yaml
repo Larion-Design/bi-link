@@ -165,7 +165,7 @@ devDependencies:
   prettier: 2.8.1
   source-map-support: 0.5.21
   supertest: 6.3.3
-  tools: link:../../packages/tools
+  tools: file:../../packages/tools
   ts-jest: 28.0.1_hkt4csl26wvgh326ct4kl3mrsq
   ts-loader: 9.4.2_3fkjkrd3audxnith3e7fo4fnxi
   ts-node: 10.9.1_qacynw5b4krdzzrloasmebsynu
@@ -176,6 +176,8 @@ devDependencies:
 
 dependenciesMeta:
   defs:
+    injected: true
+  tools:
     injected: true
 
 packages:
@@ -5099,7 +5101,6 @@ packages:
   /date-fns/2.29.3:
     resolution: {integrity: sha512-dDCnyH2WnnKusqvZZ6+jA1O51Ibt8ZMRNkDZdyAyK4YfbDwa/cEmuztzG5pk6hqlp9aSBPYcjOlktquahGwGeA==}
     engines: {node: '>=0.11'}
-    dev: false
 
   /dayjs/1.11.7:
     resolution: {integrity: sha512-+Yw9U6YO5TQohxLcIkrXBeY73WP3ejHWVvx8XCk3gxvQDCTEmS48ZrSZCKciI7Bhl/uCMyxYtE9UqRILmFphkQ==}
@@ -10563,4 +10564,13 @@ packages:
     name: defs
     version: 1.0.2
     requiresBuild: true
+    dev: true
+
+  file:../../packages/tools:
+    resolution: {directory: ../../packages/tools, type: directory}
+    name: tools
+    version: 0.0.1
+    requiresBuild: true
+    dependencies:
+      date-fns: 2.29.3
     dev: true
