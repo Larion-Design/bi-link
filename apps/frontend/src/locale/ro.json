@@ -30,5 +30,9 @@
   "zipCode": "Cod postal",
   "county": "Judet",
   "country": "Tara",
-  "otherInfo": "Alte informatii"
+  "actions": "Actiuni",
+  "otherInfo": "Alte informatii",
+  "Associates": "Asociati",
+  "Branches": "Puncte de lucru",
+  "ServerError": "O eroare a intervenit in timpul comunicarii cu serverul."
 }

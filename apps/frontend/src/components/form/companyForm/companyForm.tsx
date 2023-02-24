@@ -73,12 +73,12 @@ const Form: React.FunctionComponent<Props & FormikProps<CompanyAPIInput>> = ({
             </Step>
             <Step completed={false}>
               <StepButton color={'inherit'} onClick={() => setStep(3)}>
-                Puncte de lucru
+                <FormattedMessage id={'Branches'} />
               </StepButton>
             </Step>
             <Step completed={false}>
               <StepButton color={'inherit'} onClick={() => setStep(4)}>
-                Asociati
+                <FormattedMessage id={'Associates'} />
               </StepButton>
             </Step>
             <Step completed={false}>
@@ -139,7 +139,7 @@ const Form: React.FunctionComponent<Props & FormikProps<CompanyAPIInput>> = ({
               />
             </Grid>
 
-            <Grid item xs={8}>
+            <Grid item xs={12}>
               <Location
                 label={'Sediu social'}
                 location={values.headquarters}

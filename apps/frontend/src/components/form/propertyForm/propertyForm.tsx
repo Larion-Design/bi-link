@@ -1,11 +1,16 @@
 import { ApolloError } from '@apollo/client'
+import {
+  propertyTypes,
+  realEstatePropertyTypes,
+} from '@frontend/components/form/propertyForm/constants'
+import { RealEstateInfo } from '@frontend/components/form/realEstateInfo'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import Grid from '@mui/material/Grid'
 import Step from '@mui/material/Step'
 import StepButton from '@mui/material/StepButton'
 import Stepper from '@mui/material/Stepper'
-import { PropertyAPIInput, VehicleInfo as VehicleInfoType } from 'defs'
+import { PropertyAPIInput, VehicleInfoAPIInput, RealEstateAPIInput } from 'defs'
 import { FormikProps, withFormik } from 'formik'
 import React, { useCallback, useState } from 'react'
 import { FormattedMessage, useIntl } from 'react-intl'
@@ -118,16 +123,18 @@ const Form: React.FunctionComponent<Props & FormikProps<PropertyAPIInput>> = ({
                 <Grid item xs={6}>
                   <AutocompleteField
                     label={'Tip de proprietate sau bun'}
-                    suggestions={['Vehicul']}
+                    suggestions={propertyTypes}
                     value={values.type}
                     onValueChange={(value) => {
                       setFieldValue('type', value, false)
 
-                      setFieldValue(
-                        'vehicleInfo',
-                        value === 'Vehicul' ? createVehicleInfo() : null,
-                        false,
-                      )
+                      if (value === 'Vehicul') {
+                        setFieldValue('vehicleInfo', createVehicleInfo(), false)
+                        setFieldValue('realEstateInfo', null, false)
+                      } else if (realEstatePropertyTypes.includes(value)) {
+                        setFieldValue('vehicleInfo', null, false)
+                        setFieldValue('realEstateInfo', createRealEstateInfo(), false)
+                      }
                     }}
                   />
                 </Grid>
@@ -136,6 +143,14 @@ const Form: React.FunctionComponent<Props & FormikProps<PropertyAPIInput>> = ({
                     vehicleInfo={values.vehicleInfo ?? createVehicleInfo()}
                     updateVehicleInfo={(vehicleInfo) => setFieldValue('vehicleInfo', vehicleInfo)}
                     error={errors.vehicleInfo as string}
+                  />
+                )}
+                {realEstatePropertyTypes.includes(values.type) && (
+                  <RealEstateInfo
+                    realEstateInfo={values.realEstateInfo ?? createRealEstateInfo()}
+                    updateRealEstateInfo={(realEstateInfo) =>
+                      setFieldValue('realEstateInfo', realEstateInfo)
+                    }
                   />
                 )}
               </Grid>
@@ -234,11 +249,15 @@ export const PropertyForm = withFormik<Props, PropertyAPIInput>({
   handleSubmit: (values, { props: { onSubmit } }) => onSubmit(values),
 })(Form)
 
-function createVehicleInfo(): VehicleInfoType {
-  return {
-    vin: '',
-    maker: '',
-    model: '',
-    color: '',
-  }
-}
+const createVehicleInfo = (): VehicleInfoAPIInput => ({
+  vin: '',
+  maker: '',
+  model: '',
+  color: '',
+})
+
+const createRealEstateInfo = (): RealEstateAPIInput => ({
+  surface: 0,
+  townArea: true,
+  location: null,
+})

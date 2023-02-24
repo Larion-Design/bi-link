@@ -8,16 +8,16 @@ import Tooltip from '@mui/material/Tooltip'
 import Typography from '@mui/material/Typography'
 import { useNavigate } from 'react-router-dom'
 import { useDebounce } from 'usehooks-ts'
-import { DashboardPage } from '../../../components/page/DashboardPage'
-import { searchPersonsRequest } from '../../../graphql/persons/queries/searchPersons'
+import { DashboardPage } from '@frontend/components/page/DashboardPage'
 import { routes } from '../../../router/routes'
 import { PaginationParams } from '../../../graphql/shared/types/paginationParams'
 import { PersonsTable } from './personsTable'
-import { useSnackbar } from 'notistack'
+import { searchPersonsRequest } from '@frontend/graphql/persons/queries/searchPersons'
+import { useNotification } from '@frontend/utils/hooks/useNotification'
 
 export const PersonsList: React.FunctionComponent = () => {
   const navigate = useNavigate()
-  const { enqueueSnackbar } = useSnackbar()
+  const notification = useNotification()
   const [fetchPersons, { data, error, loading }] = searchPersonsRequest()
 
   const [paginationParams, setPaginationParams] = useState<PaginationParams>({
@@ -44,9 +44,7 @@ export const PersonsList: React.FunctionComponent = () => {
 
   useEffect(() => {
     if (error?.message) {
-      enqueueSnackbar('O eroare a intervenit in timpul comunicarii cu serverul.', {
-        variant: 'error',
-      })
+      notification('ServerError', 'error')
     }
   }, [error?.message])
 

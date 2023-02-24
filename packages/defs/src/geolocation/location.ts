@@ -16,7 +16,7 @@ export interface Location {
   coordinates: Coordinates
 }
 
-export interface LocationAPIInput extends Location {
+export interface LocationAPIInput extends Omit<Location, '_id'> {
   coordinates: CoordinatesAPI
 }
 export interface LocationAPIOutput extends Required<Location> {

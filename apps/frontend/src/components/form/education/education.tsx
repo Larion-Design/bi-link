@@ -1,4 +1,3 @@
-import { Typography } from '@mui/material'
 import Box from '@mui/material/Box'
 import {
   DataGrid,
@@ -8,7 +7,7 @@ import {
   GridToolbarContainer,
 } from '@mui/x-data-grid'
 import React, { useCallback, useEffect, useState } from 'react'
-import { EducationAPIInput, OldNameAPIInput } from 'defs'
+import { EducationAPIInput } from 'defs'
 import { processGridCellValue } from '../../../utils/dataGrid'
 import { GridSetItem, useGridSet } from '../../../utils/hooks/useGridSet'
 import { AddItemToolbarButton } from '../../dataGrid/addItemToolbarButton'
