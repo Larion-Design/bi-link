@@ -1,3 +1,5 @@
+import { Education } from '@frontend/components/form/education'
+import React, { useEffect, useState } from 'react'
 import { defaultLocation, Location } from '@frontend/components/form/location'
 import { OldNames } from '@frontend/components/form/oldNames'
 import Box from '@mui/material/Box'
@@ -8,7 +10,7 @@ import StepButton from '@mui/material/StepButton'
 import Stepper from '@mui/material/Stepper'
 import { IdDocument, PersonAPIInput } from 'defs'
 import { FormikProps, withFormik } from 'formik'
-import React, { useEffect, useState } from 'react'
+import { FormattedMessage } from 'react-intl'
 import { useNavigate } from 'react-router-dom'
 import { getPersonFrequentCustomFieldsRequest } from '../../../graphql/persons/queries/getPersonFrequentCustomFields'
 import { routes } from '../../../router/routes'
@@ -79,32 +81,37 @@ const Form: React.FunctionComponent<Props & FormikProps<PersonAPIInput>> = ({
           <Stepper nonLinear alternativeLabel activeStep={step}>
             <Step completed={false}>
               <StepButton color={'inherit'} onClick={() => setStep(0)}>
-                Informatii generale
+                <FormattedMessage id={'General Information'} />
               </StepButton>
             </Step>
             <Step completed={false}>
               <StepButton color={'inherit'} onClick={() => setStep(1)}>
-                Informatii suplimentare
+                Date de contact
               </StepButton>
             </Step>
             <Step completed={false}>
               <StepButton color={'inherit'} onClick={() => setStep(2)}>
-                Date contact
-              </StepButton>
-            </Step>
-            <Step completed={false}>
-              <StepButton color={'inherit'} onClick={() => setStep(3)}>
                 Documente identitate
               </StepButton>
             </Step>
             <Step completed={false}>
+              <StepButton color={'inherit'} onClick={() => setStep(3)}>
+                <FormattedMessage id={'Relationships'} />
+              </StepButton>
+            </Step>
+            <Step completed={false}>
               <StepButton color={'inherit'} onClick={() => setStep(4)}>
-                Relatii cu persoane
+                <FormattedMessage id={'Education'} />
               </StepButton>
             </Step>
             <Step completed={false}>
               <StepButton color={'inherit'} onClick={() => setStep(5)}>
-                Fisiere
+                <FormattedMessage id={'Files'} />
+              </StepButton>
+            </Step>
+            <Step completed={false}>
+              <StepButton color={'inherit'} onClick={() => setStep(6)}>
+                <FormattedMessage id={'Additional Information'} />
               </StepButton>
             </Step>
           </Stepper>
@@ -177,17 +184,18 @@ const Form: React.FunctionComponent<Props & FormikProps<PersonAPIInput>> = ({
                   />
                 </Grid>
 
-                <Grid item xs={4}>
+                <Grid item xs={12} sx={{ mt: 2 }}>
                   <Location
                     label={'Locul nasterii'}
                     location={values.birthPlace}
                     updateLocation={(location) => {
                       setFieldValue('birthPlace', location)
                     }}
+                    includeFields={['locality', 'country']}
                   />
                 </Grid>
 
-                <Grid item xs={8}>
+                <Grid item xs={12}>
                   <Location
                     label={'Domiciliu'}
                     location={values.homeAddress}
@@ -211,21 +219,6 @@ const Form: React.FunctionComponent<Props & FormikProps<PersonAPIInput>> = ({
           {step === 1 && (
             <Grid container spacing={2}>
               <CustomInputFields
-                fields={values.customFields}
-                suggestions={frequentFields?.getPersonFrequentCustomFields}
-                setFieldValue={async (customFields) => {
-                  const error = await personFormValidation.customFields(customFields)
-
-                  setFieldValue('customFields', customFields)
-                  setFieldError('customFields', error)
-                }}
-                error={errors.customFields as string}
-              />
-            </Grid>
-          )}
-          {step === 2 && (
-            <Grid container spacing={2}>
-              <CustomInputFields
                 suggestions={CONTACT_METHODS}
                 fields={values.contactDetails}
                 setFieldValue={async (contactDetails) => {
@@ -237,7 +230,7 @@ const Form: React.FunctionComponent<Props & FormikProps<PersonAPIInput>> = ({
               />
             </Grid>
           )}
-          {step === 3 && (
+          {step === 2 && (
             <Grid container spacing={2}>
               <IdDocuments
                 suggestions={ID_DOCUMENT_TYPES}
@@ -251,7 +244,7 @@ const Form: React.FunctionComponent<Props & FormikProps<PersonAPIInput>> = ({
               />
             </Grid>
           )}
-          {step === 4 && (
+          {step === 3 && (
             <Grid container spacing={2}>
               <Relationships
                 updateRelationships={async (relationships) => {
@@ -261,6 +254,16 @@ const Form: React.FunctionComponent<Props & FormikProps<PersonAPIInput>> = ({
                   setFieldError('relationships', error)
                 }}
                 relationships={values.relationships}
+              />
+            </Grid>
+          )}
+          {step === 4 && (
+            <Grid container spacing={2}>
+              <Education
+                education={values.education}
+                updateEducation={async (education) => {
+                  setFieldValue('education', education)
+                }}
               />
             </Grid>
           )}
@@ -274,6 +277,21 @@ const Form: React.FunctionComponent<Props & FormikProps<PersonAPIInput>> = ({
                   setFieldValue('files', uploadedFiles)
                   setFieldError('files', error)
                 }}
+              />
+            </Grid>
+          )}
+          {step === 6 && (
+            <Grid container spacing={2}>
+              <CustomInputFields
+                fields={values.customFields}
+                suggestions={frequentFields?.getPersonFrequentCustomFields}
+                setFieldValue={async (customFields) => {
+                  const error = await personFormValidation.customFields(customFields)
+
+                  setFieldValue('customFields', customFields)
+                  setFieldError('customFields', error)
+                }}
+                error={errors.customFields as string}
               />
             </Grid>
           )}

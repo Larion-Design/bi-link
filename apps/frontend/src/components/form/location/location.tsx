@@ -36,14 +36,14 @@ export const Location: React.FunctionComponent<Props> = ({
 
   return (
     <Box>
-      <Typography variant={'h5'} gutterBottom>
+      <Typography variant={'h6'} sx={{ mb: 3 }}>
         {label}
       </Typography>
       <Grid container spacing={4}>
         {locationFields
           .filter(({ field }) => !includeFields || includeFields.includes(field))
           .map(({ gridSize, field }) => (
-            <Grid item xs={gridSize}>
+            <Grid key={field} item xs={gridSize}>
               <InputField
                 label={intl.formatMessage({ id: field })}
                 value={locationInfo[field]}
@@ -58,17 +58,17 @@ export const Location: React.FunctionComponent<Props> = ({
 
 type LocationFieldParams = {
   gridSize: number
-  field: keyof Omit<LocationAPIInput, 'coordinates' | 'locationId'>
+  field: keyof Omit<LocationAPIInput, '_id' | 'coordinates' | 'locationId'>
 }
 
 const locationFields: LocationFieldParams[] = [
-  { gridSize: 4, field: 'street' },
-  { gridSize: 1, field: 'number' },
-  { gridSize: 1, field: 'building' },
-  { gridSize: 1, field: 'door' },
-  { gridSize: 4, field: 'locality' },
+  { gridSize: 5, field: 'street' },
+  { gridSize: 2, field: 'number' },
+  { gridSize: 2, field: 'building' },
+  { gridSize: 3, field: 'door' },
+  { gridSize: 5, field: 'locality' },
   { gridSize: 4, field: 'county' },
-  { gridSize: 4, field: 'country' },
-  { gridSize: 1, field: 'zipCode' },
-  { gridSize: 8, field: 'otherInfo' },
+  { gridSize: 3, field: 'zipCode' },
+  { gridSize: 5, field: 'country' },
+  { gridSize: 7, field: 'otherInfo' },
 ]

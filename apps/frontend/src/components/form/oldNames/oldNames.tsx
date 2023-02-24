@@ -42,13 +42,18 @@ export const OldNames: React.FunctionComponent<Props> = ({ oldNames, updateOldNa
   )
 
   return (
-    <Box sx={{ minHeight: '50vh', maxHeight: '100vh' }}>
-      <Typography variant={'h5'} gutterBottom>
+    <Box sx={{ minHeight: '50vh', maxHeight: '100vh', mt: 5 }}>
+      <Typography variant={'h6'} sx={{ mb: 3 }}>
         Nume vechi
       </Typography>
       <DataGrid
         autoHeight
         checkboxSelection
+        disableColumnMenu
+        disableColumnFilter
+        disableColumnSelector
+        disableDensitySelector
+        disableVirtualization
         disableSelectionOnClick
         disableIgnoreModificationsIfProcessingProps
         hideFooterPagination
@@ -88,7 +93,7 @@ const columns: GridColDef[] = [
   },
   {
     field: 'changeReason',
-    headerName: 'Continutul campului',
+    headerName: 'Motivul schimbarii numelui',
     flex: 2,
     editable: true,
     type: 'string',
