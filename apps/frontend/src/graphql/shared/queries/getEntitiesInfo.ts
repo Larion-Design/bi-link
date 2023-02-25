@@ -3,6 +3,7 @@ import { gql, useLazyQuery } from '@apollo/client'
 import {
   CompanyListRecord,
   EventListRecord,
+  LocationAPIOutput,
   PersonListRecordWithImage,
   PropertyListRecord,
 } from 'defs'
@@ -12,6 +13,7 @@ type Response = {
   getCompanies: CompanyListRecord[]
   getProperties: PropertyListRecord[]
   getIncidents: EventListRecord[]
+  getLocations: LocationAPIOutput[]
 }
 
 type Params = {
@@ -19,6 +21,7 @@ type Params = {
   companiesIds: string[]
   propertiesIds: string[]
   eventsIds: string[]
+  locationsIds: string[]
 }
 
 const request = gql`
@@ -27,6 +30,7 @@ const request = gql`
     $companiesIds: [String!]!
     $propertiesIds: [String!]!
     $eventsIds: [String!]!
+    $locationsIds: [String!]!
   ) {
     getPersonsInfo(personsIds: $personsIds) {
       _id
@@ -52,22 +56,19 @@ const request = gql`
     getEvents(eventsIds: $eventsIds) {
       _id
       date
-      location {
-        locationId
-        street
-        number
-        building
-        door
-        zipCode
-        locality
-        county
-        country
-        otherInfo
-        coordinates {
-          lat
-          long
-        }
-      }
+      type
+    }
+    getLocations(locationsIds: $locationsIds) {
+      locationId
+      street
+      number
+      building
+      door
+      zipCode
+      locality
+      county
+      country
+      otherInfo
     }
   }
 `

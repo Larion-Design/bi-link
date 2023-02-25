@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect } from 'react'
 import Grid from '@mui/material/Grid'
+import { createRelationship } from '@frontend/components/form/person/constants'
 import { getPersonsBasicInfoRequest } from '@frontend/graphql/persons/queries/getPersonsBasicInfo'
 import { AddItemCard } from '../../addItemCard'
 import { PersonCard } from './personCard'
@@ -19,12 +20,13 @@ export const Relationships: React.FunctionComponent<Props> = ({
   updateRelationships,
   personId,
 }) => {
+  const getPersonId = ({ person: { _id } }: RelationshipAPIInput) => _id
   const modal = useModal()
   const [fetchPersonsInfo, { data }] = getPersonsBasicInfoRequest()
   const { entries, values, addBulk, update, remove, keys, uid } = useDebouncedMap(
     1000,
     relationships,
-    ({ person: { _id } }) => _id,
+    getPersonId,
   )
 
   useEffect(() => {
@@ -43,8 +45,7 @@ export const Relationships: React.FunctionComponent<Props> = ({
     }
 
     modal?.openPersonSelector(
-      (personsIds: string[]) =>
-        addBulk(personsIds.map(createRelationship), ({ person: { _id } }) => _id),
+      (personsIds: string[]) => addBulk(personsIds.map(createRelationship), getPersonId),
       personsIds,
     )
   }, [uid])
@@ -74,10 +75,3 @@ export const Relationships: React.FunctionComponent<Props> = ({
     </>
   )
 }
-
-const createRelationship = (_id: string): RelationshipAPIInput => ({
-  person: { _id },
-  type: '',
-  proximity: 1,
-  _confirmed: true,
-})

@@ -17,7 +17,7 @@ class Params {
 
 @Resolver(() => EntitiesGraph)
 export class GetEntitiesGraph {
-  constructor(protected graphService: GraphService) {}
+  constructor(protected readonly graphService: GraphService) {}
 
   @Query(() => EntitiesGraph)
   @UseGuards(FirebaseAuthGuard)

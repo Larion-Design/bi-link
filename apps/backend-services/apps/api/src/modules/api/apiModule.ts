@@ -7,6 +7,7 @@ import { memoryStorage } from 'multer'
 import { SearchModule } from '../search/searchModule'
 import { UsersModule } from '../users/UsersModule'
 import { GetEntitiesGraph } from './common/queries/getEntitiesGraph'
+import { GetLocations } from './common/queries/getLocations'
 import { LocationAPIService } from './common/services/locationAPIService'
 import { CreateCompany } from './companies/mutations/createCompany'
 import { UpdateCompany } from './companies/mutations/updateCompany'
@@ -146,6 +147,7 @@ import { GetUsers } from './users/queries/getUsers'
     GetFileInfo,
     GetFilesInfo,
     GetFileContent,
+    GetLocations,
   ],
   controllers: [FileUploadController],
 })

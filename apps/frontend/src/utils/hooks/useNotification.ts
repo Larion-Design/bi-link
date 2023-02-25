@@ -7,7 +7,7 @@ export const useNotification = () => {
   const { enqueueSnackbar } = useSnackbar()
   return useCallback(
     (message: string, variant: VariantType) =>
-      enqueueSnackbar(intl.formatMessage({ id: message }), { variant }),
+      enqueueSnackbar(intl.formatMessage({ id: message, defaultMessage: message }), { variant }),
     [enqueueSnackbar, intl],
   )
 }

@@ -1,3 +1,4 @@
+import { proximityLevels, relationshipsTypes } from '@frontend/components/form/person/constants'
 import React from 'react'
 import Card from '@mui/material/Card'
 import CardContent from '@mui/material/CardContent'
@@ -7,7 +8,6 @@ import Typography from '@mui/material/Typography'
 import { getPersonFullName } from '@frontend/utils/person'
 import { PersonCardActions } from '../../../card/personCardActions'
 import { DropdownList } from '../../dropdownList'
-import { proximityLevels, relationshipsTypes } from './utils'
 import { PersonListRecordWithImage, RelationshipAPIInput } from 'defs'
 
 type Props = {

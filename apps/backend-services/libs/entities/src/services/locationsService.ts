@@ -12,6 +12,14 @@ export class LocationsService {
     @InjectModel(LocationModel.name) private readonly locationModel: Model<LocationDocument>,
   ) {}
 
+  getLocations = async (locationsIds: string[]) => {
+    try {
+      return this.locationModel.find({ locationId: locationsIds }).exec()
+    } catch (e) {
+      this.logger.error(e)
+    }
+  }
+
   upsertLocation = async (locationModel: LocationModel, session?: ClientSession) => {
     try {
       return this.locationModel.findOneAndUpdate(

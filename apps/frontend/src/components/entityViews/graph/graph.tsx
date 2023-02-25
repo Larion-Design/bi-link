@@ -1,3 +1,4 @@
+import { relationshipsTypes } from '@frontend/components/form/person/constants'
 import Box from '@mui/material/Box'
 import dagre, { Label } from 'dagre'
 import { EntityLabel, EntityType } from 'defs'
@@ -6,7 +7,6 @@ import { ConnectionLineType, Edge, Node, Position, ReactFlowProvider } from 'rea
 import { getEntitiesGraphRequest } from '../../../graphql/shared/queries/getEntitiesGraph'
 import { getEntitiesInfoRequest } from '../../../graphql/shared/queries/getEntitiesInfo'
 import { useNotification } from '../../../utils/hooks/useNotification'
-import { relationshipsTypes } from '../../form/person/relationships/utils'
 import { EntityGraph } from './entityGraph'
 import { getRelationshipLabelFromType } from './utils'
 
@@ -38,8 +38,11 @@ export const Graph: React.FunctionComponent<PropsWithRef<Props>> = ({
   disableControls,
 }) => {
   const showNotification = useNotification()
-  const [fetchGraph, { data, error: graphError }] = getEntitiesGraphRequest()
-  const [fetchEntities, { data: entitiesInfo, error: entitiesInfoError }] = getEntitiesInfoRequest()
+  const [fetchGraph, { data, error: graphError, loading: loadingGraph }] = getEntitiesGraphRequest()
+  const [
+    fetchEntities,
+    { data: entitiesInfo, error: entitiesInfoError, loading: loadingEntities },
+  ] = getEntitiesInfoRequest()
 
   const [graphDepth, updateDepth] = useState(depth ?? 2)
   const [allEntities, setAllEntities] = useState(new Set<string>())
@@ -59,17 +62,21 @@ export const Graph: React.FunctionComponent<PropsWithRef<Props>> = ({
 
   useEffect(() => {
     if (graphError?.message || entitiesInfoError?.message) {
-      showNotification('O eroare a intervenit in timpul comunicarii cu serverul.', 'error')
+      showNotification('Server Error', 'error')
     }
   }, [graphError?.message, entitiesInfoError?.message])
 
   useEffect(() => {
     if (!data?.getEntitiesGraph) return
 
+    allEntities.clear()
+    allRelationships.clear()
+
     const companiesIds = new Set<string>()
     const personsIds = new Set<string>()
     const propertiesIds = new Set<string>()
     const eventsIds = new Set<string>()
+    const locationsIds = new Set<string>()
 
     const registerNode = (entityId: string, entityType: EntityLabel) => {
       switch (entityType) {
@@ -87,6 +94,10 @@ export const Graph: React.FunctionComponent<PropsWithRef<Props>> = ({
         }
         case EntityLabel.EVENT: {
           eventsIds.add(entityId)
+          break
+        }
+        case EntityLabel.LOCATION: {
+          locationsIds.add(entityId)
           break
         }
       }
@@ -165,6 +176,7 @@ export const Graph: React.FunctionComponent<PropsWithRef<Props>> = ({
           personsIds: Array.from(personsIds),
           propertiesIds: Array.from(propertiesIds),
           eventsIds: Array.from(eventsIds),
+          locationsIds: Array.from(locationsIds),
         },
       })
     }
@@ -210,19 +222,20 @@ export const Graph: React.FunctionComponent<PropsWithRef<Props>> = ({
             type: _confirmed ? ConnectionLineType.Straight : ConnectionLineType.Step,
           })
 
-          dagreGraph.setEdge(startNodeId, endNodeId)
+          dagreGraph.setEdge(startNodeId, endNodeId, label)
         }
       }
 
       const entityHandler = {
         [EntityLabel.PERSON]: (personId: string) => {
-          if (nodesMap.has(personId) || hiddenEntities['PERSON']) return
-
-          dagreGraph.setNode(personId, nodeConfig)
+          if (hiddenEntities['PERSON']) return false
+          if (nodesMap.has(personId)) return true
 
           const personInfo = entitiesInfo?.getPersonsInfo.find(({ _id }) => personId === _id)
 
           if (personInfo) {
+            dagreGraph.setNode(personId, nodeConfig)
+
             nodesMap.set(personId, {
               id: personId,
               targetPosition: Position.Top,
@@ -239,16 +252,18 @@ export const Graph: React.FunctionComponent<PropsWithRef<Props>> = ({
                 isRootNode: personId === entityId,
               },
             })
+            return true
           }
         },
         [EntityLabel.COMPANY]: (companyId: string) => {
-          if (nodesMap.has(companyId) || hiddenEntities['COMPANY']) return
-
-          dagreGraph.setNode(companyId, nodeConfig)
+          if (hiddenEntities['COMPANY']) return false
+          if (nodesMap.has(companyId)) return true
 
           const companyInfo = entitiesInfo?.getCompanies.find(({ _id }) => companyId === _id)
 
           if (companyInfo) {
+            dagreGraph.setNode(companyId, nodeConfig)
+
             nodesMap.set(companyId, {
               id: companyId,
               targetPosition: Position.Top,
@@ -264,16 +279,18 @@ export const Graph: React.FunctionComponent<PropsWithRef<Props>> = ({
                 isRootNode: companyId === entityId,
               },
             })
+            return true
           }
         },
         [EntityLabel.PROPERTY]: (propertyId: string) => {
-          if (nodesMap.has(propertyId) || hiddenEntities['PROPERTY']) return
-
-          dagreGraph.setNode(propertyId, nodeConfig)
+          if (hiddenEntities['PROPERTY']) return false
+          if (nodesMap.has(propertyId)) return true
 
           const propertyInfo = entitiesInfo?.getProperties.find(({ _id }) => propertyId === _id)
 
           if (propertyInfo) {
+            dagreGraph.setNode(propertyId, nodeConfig)
+
             nodesMap.set(propertyId, {
               id: propertyId,
               targetPosition: Position.Top,
@@ -289,10 +306,12 @@ export const Graph: React.FunctionComponent<PropsWithRef<Props>> = ({
                 isRootNode: propertyId === entityId,
               },
             })
+            return true
           }
         },
         [EntityLabel.EVENT]: (eventId: string) => {
-          if (nodesMap.has(eventId) || hiddenEntities['INCIDENT']) return
+          if (hiddenEntities['EVENT']) return false
+          if (nodesMap.has(eventId)) return true
 
           dagreGraph.setNode(eventId, nodeConfig)
 
@@ -326,16 +345,15 @@ export const Graph: React.FunctionComponent<PropsWithRef<Props>> = ({
           _confirmed,
           _type,
         }) => {
-          entityHandler[startNodeType](startNodeId)
-          entityHandler[endNodeType](endNodeId)
-
-          createEdge(
-            startNodeId,
-            endNodeId,
-            relationshipsTypes[type],
-            _confirmed,
-            relationshipsTypes[type] ?? type,
-          )
+          if (entityHandler[startNodeType](startNodeId) && entityHandler[endNodeType](endNodeId)) {
+            createEdge(
+              startNodeId,
+              endNodeId,
+              relationshipsTypes[type],
+              _confirmed,
+              relationshipsTypes[type] ?? type,
+            )
+          }
         },
       )
       data.getEntitiesGraph.companiesAssociates.forEach(
@@ -347,16 +365,15 @@ export const Graph: React.FunctionComponent<PropsWithRef<Props>> = ({
           equity,
           _type,
         }) => {
-          entityHandler[startNodeType](startNodeId)
-          entityHandler[endNodeType](endNodeId)
-
-          createEdge(
-            startNodeId,
-            endNodeId,
-            equity > 0 ? `${role} (${equity}%)` : role,
-            _confirmed,
-            role.length ? role : _type,
-          )
+          if (entityHandler[startNodeType](startNodeId) && entityHandler[endNodeType](endNodeId)) {
+            createEdge(
+              startNodeId,
+              endNodeId,
+              equity > 0 ? `${role} (${equity}%)` : role,
+              _confirmed,
+              role.length ? role : _type,
+            )
+          }
         },
       )
       data.getEntitiesGraph.propertiesRelationships.forEach(
@@ -366,10 +383,15 @@ export const Graph: React.FunctionComponent<PropsWithRef<Props>> = ({
           _confirmed,
           _type,
         }) => {
-          entityHandler[startNodeType](startNodeId)
-          entityHandler[endNodeType](endNodeId)
-
-          createEdge(startNodeId, endNodeId, getRelationshipLabelFromType(_type), _confirmed, _type)
+          if (entityHandler[startNodeType](startNodeId) && entityHandler[endNodeType](endNodeId)) {
+            createEdge(
+              startNodeId,
+              endNodeId,
+              getRelationshipLabelFromType(_type),
+              _confirmed,
+              _type,
+            )
+          }
         },
       )
       data.getEntitiesGraph.eventsParties.forEach(
@@ -380,9 +402,9 @@ export const Graph: React.FunctionComponent<PropsWithRef<Props>> = ({
           _confirmed,
           _type,
         }) => {
-          entityHandler[startNodeType](startNodeId)
-          entityHandler[endNodeType](endNodeId)
-          createEdge(startNodeId, endNodeId, name, _confirmed, _type)
+          if (entityHandler[startNodeType](startNodeId) && entityHandler[endNodeType](endNodeId)) {
+            createEdge(startNodeId, endNodeId, name, _confirmed, _type)
+          }
         },
       )
 
@@ -399,7 +421,7 @@ export const Graph: React.FunctionComponent<PropsWithRef<Props>> = ({
     }
   }, [data?.getEntitiesGraph, entitiesInfo, visibleEntities, visibleRelationships])
 
-  return (
+  return loadingGraph || loadingEntities ? (
     <Box sx={{ width: 1, height: 1 }}>
       <ReactFlowProvider>
         <EntityGraph
@@ -425,5 +447,5 @@ export const Graph: React.FunctionComponent<PropsWithRef<Props>> = ({
         />
       </ReactFlowProvider>
     </Box>
-  )
+  ) : null
 }
