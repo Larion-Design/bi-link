@@ -1,22 +1,26 @@
 import { ApolloError } from '@apollo/client'
 import {
+  createRealEstateInfo,
+  createVehicleInfo,
+  getDefaultProperty,
+} from '@frontend/components/form/property/constants'
+import {
   propertyTypes,
   realEstatePropertyTypes,
 } from '@frontend/components/form/property/propertyForm/constants'
 import { RealEstateInfo } from '@frontend/components/form/property/realEstateInfo'
+import { useCancelDialog } from '@frontend/utils/hooks/useCancelDialog'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import Grid from '@mui/material/Grid'
 import Step from '@mui/material/Step'
 import StepButton from '@mui/material/StepButton'
 import Stepper from '@mui/material/Stepper'
-import { PropertyAPIInput, VehicleInfoAPIInput, RealEstateAPIInput } from 'defs'
+import { PropertyAPIInput } from 'defs'
 import { FormikProps, withFormik } from 'formik'
-import React, { useCallback, useState } from 'react'
-import { FormattedMessage, useIntl } from 'react-intl'
-import { useNavigate } from 'react-router-dom'
+import React, { useState } from 'react'
+import { FormattedMessage } from 'react-intl'
 import { routes } from '../../../../router/routes'
-import { useDialog } from '../../../dialog/dialogProvider'
 import { AutocompleteField } from '../../autocompleteField'
 import { CustomInputFields } from '../../customInputFields'
 import { FilesManager } from '../../fileField'
@@ -29,14 +33,13 @@ import { propertyFormValidation, validatePropertyForm } from './validation/valid
 type Props = {
   propertyId?: string
   propertyInfo?: PropertyAPIInput
-  readonly: boolean
+  readonly?: boolean
   onSubmit: (formData: PropertyAPIInput) => Promise<void> | void
   error?: ApolloError
 }
 
 const Form: React.FunctionComponent<Props & FormikProps<PropertyAPIInput>> = ({
   propertyId,
-  readonly,
   setFieldError,
   setFieldValue,
   values,
@@ -45,26 +48,28 @@ const Form: React.FunctionComponent<Props & FormikProps<PropertyAPIInput>> = ({
   isValidating,
   submitForm,
 }) => {
-  const intl = useIntl()
-  const dialog = useDialog()
-  const navigate = useNavigate()
   const [step, setStep] = useState(0)
+  const cancelChanges = useCancelDialog(routes.properties)
 
-  const displayFormCancelDialog = useCallback(
-    () =>
-      dialog.openDialog({
-        title: intl.formatMessage({
-          id: "Are you sure you want to cancel the changes you've made?",
-        }),
-        description: intl.formatMessage({
-          id: 'All unsaved changes will be lost',
-        }),
-        onConfirm: navigateFromPropertyFormPage,
-      }),
-    [dialog],
-  )
-
-  const navigateFromPropertyFormPage = useCallback(() => navigate(routes.properties), [navigate])
+  const renderPropertyFieldsByType = () => {
+    if (values.type === 'Vehicul') {
+      return (
+        <VehicleInfo
+          vehicleInfo={values.vehicleInfo ?? createVehicleInfo()}
+          updateVehicleInfo={(vehicleInfo) => setFieldValue('vehicleInfo', vehicleInfo)}
+          error={errors.vehicleInfo as string}
+        />
+      )
+    } else if (realEstatePropertyTypes.includes(values.type)) {
+      return (
+        <RealEstateInfo
+          realEstateInfo={values.realEstateInfo ?? createRealEstateInfo()}
+          updateRealEstateInfo={(realEstateInfo) => setFieldValue('realEstateInfo', realEstateInfo)}
+        />
+      )
+    }
+    return null
+  }
 
   return (
     <form data-cy={'propertyForm'}>
@@ -138,21 +143,7 @@ const Form: React.FunctionComponent<Props & FormikProps<PropertyAPIInput>> = ({
                     }}
                   />
                 </Grid>
-                {values.type === 'Vehicul' && (
-                  <VehicleInfo
-                    vehicleInfo={values.vehicleInfo ?? createVehicleInfo()}
-                    updateVehicleInfo={(vehicleInfo) => setFieldValue('vehicleInfo', vehicleInfo)}
-                    error={errors.vehicleInfo as string}
-                  />
-                )}
-                {realEstatePropertyTypes.includes(values.type) && (
-                  <RealEstateInfo
-                    realEstateInfo={values.realEstateInfo ?? createRealEstateInfo()}
-                    updateRealEstateInfo={(realEstateInfo) =>
-                      setFieldValue('realEstateInfo', realEstateInfo)
-                    }
-                  />
-                )}
+                {renderPropertyFieldsByType()}
               </Grid>
             </Grid>
           )}
@@ -208,10 +199,10 @@ const Form: React.FunctionComponent<Props & FormikProps<PropertyAPIInput>> = ({
                 color={'error'}
                 disabled={isSubmitting || isValidating}
                 variant={'text'}
-                onClick={readonly ? navigateFromPropertyFormPage : () => displayFormCancelDialog()}
+                onClick={cancelChanges}
                 sx={{ mr: 4 }}
               >
-                Anulează
+                <FormattedMessage id={'cancel'} />
               </Button>
               <Button
                 disabled={isSubmitting || isValidating}
@@ -219,7 +210,7 @@ const Form: React.FunctionComponent<Props & FormikProps<PropertyAPIInput>> = ({
                 onClick={() => void submitForm()}
                 data-cy={'submitForm'}
               >
-                Salvează
+                <FormattedMessage id={'save'} />
               </Button>
             </Box>
           </Grid>
@@ -229,35 +220,11 @@ const Form: React.FunctionComponent<Props & FormikProps<PropertyAPIInput>> = ({
   )
 }
 
-const propertyInitialValues: PropertyAPIInput = {
-  name: '',
-  type: '',
-  images: [],
-  owners: [],
-  files: [],
-  customFields: [],
-  vehicleInfo: null,
-  realEstateInfo: null,
-}
-
 export const PropertyForm = withFormik<Props, PropertyAPIInput>({
-  mapPropsToValues: ({ propertyInfo }) => propertyInfo ?? propertyInitialValues,
+  mapPropsToValues: ({ propertyInfo }) => propertyInfo ?? getDefaultProperty(),
   validate: async (values, { propertyId }) => validatePropertyForm(values, propertyId),
   validateOnChange: false,
   validateOnMount: false,
   validateOnBlur: false,
   handleSubmit: (values, { props: { onSubmit } }) => onSubmit(values),
 })(Form)
-
-const createVehicleInfo = (): VehicleInfoAPIInput => ({
-  vin: '',
-  maker: '',
-  model: '',
-  color: '',
-})
-
-const createRealEstateInfo = (): RealEstateAPIInput => ({
-  surface: 0,
-  townArea: true,
-  location: null,
-})

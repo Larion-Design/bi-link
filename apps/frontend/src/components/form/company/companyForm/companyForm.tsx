@@ -1,6 +1,7 @@
-import { getDefaultCompany } from '@frontend/components/form/company/constants'
 import React, { useState } from 'react'
 import { ApolloError } from '@apollo/client'
+import { getDefaultCompany } from '@frontend/components/form/company/constants'
+import { useCancelDialog } from '@frontend/utils/hooks/useCancelDialog'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import Grid from '@mui/material/Grid'
@@ -10,16 +11,14 @@ import Stepper from '@mui/material/Stepper'
 import { CompanyAPIInput } from 'defs'
 import { FormikProps, withFormik } from 'formik'
 import { FormattedMessage } from 'react-intl'
-import { useNavigate } from 'react-router-dom'
 import { getCompanyFrequentCustomFieldsRequest } from '@frontend/graphql/companies/queries/getCompanyFrequentCustomFields'
 import { routes } from '../../../../router/routes'
 import { CONTACT_METHODS } from '@frontend/utils/constants'
-import { useDialog } from '../../../dialog/dialogProvider'
 import { Associates } from '../associates'
 import { CustomInputFields } from '../../customInputFields'
 import { FilesManager } from '../../fileField'
 import { InputField } from '../../inputField'
-import { getDefaultLocation, Location } from '../../location'
+import { Location } from '../../location'
 import { Locations } from '../../locations'
 import { personFormValidation } from '../../person/personForm/validation/validation'
 import { companyFormValidation, validateCompanyForm } from './validation/validation'
@@ -27,14 +26,13 @@ import { companyFormValidation, validateCompanyForm } from './validation/validat
 type Props = {
   companyId?: string
   companyInfo?: CompanyAPIInput
-  readonly: boolean
+  readonly?: boolean
   onSubmit: (formData: CompanyAPIInput) => void | Promise<void>
   error?: ApolloError
 }
 
 const Form: React.FunctionComponent<Props & FormikProps<CompanyAPIInput>> = ({
   companyId,
-  readonly,
   setFieldError,
   setFieldValue,
   values,
@@ -43,19 +41,9 @@ const Form: React.FunctionComponent<Props & FormikProps<CompanyAPIInput>> = ({
   isValidating,
   submitForm,
 }) => {
-  const dialog = useDialog()
-  const navigate = useNavigate()
   const { data: frequentFields } = getCompanyFrequentCustomFieldsRequest()
   const [step, setStep] = useState(0)
-
-  const displayFormCancelDialog = () =>
-    dialog.openDialog({
-      title: 'Esti sigur(a) ca vrei sa anulezi modificarile?',
-      description: 'Toate modificarile nesalvate vor fi pierdute.',
-      onConfirm: navigateFromCompanyFormPage,
-    })
-
-  const navigateFromCompanyFormPage = () => navigate(routes.companies)
+  const cancelChanges = useCancelDialog(routes.companies)
 
   return (
     <form data-cy={'companyForm'}>
@@ -228,10 +216,10 @@ const Form: React.FunctionComponent<Props & FormikProps<CompanyAPIInput>> = ({
             color={'error'}
             disabled={isSubmitting || isValidating}
             variant={'text'}
-            onClick={readonly ? navigateFromCompanyFormPage : () => displayFormCancelDialog()}
+            onClick={cancelChanges}
             sx={{ mr: 4 }}
           >
-            Anulează
+            <FormattedMessage id={'cancel'} />
           </Button>
           <Button
             disabled={isSubmitting || isValidating}
@@ -239,7 +227,7 @@ const Form: React.FunctionComponent<Props & FormikProps<CompanyAPIInput>> = ({
             onClick={() => void submitForm()}
             data-cy={'submitForm'}
           >
-            Salvează
+            <FormattedMessage id={'save'} />
           </Button>
         </Box>
       </Grid>

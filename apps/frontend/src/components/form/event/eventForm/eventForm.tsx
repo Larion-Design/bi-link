@@ -1,4 +1,5 @@
-import { getDefaultEvent } from '@frontend/components/form/event/constants'
+import { eventTypes, getDefaultEvent } from '@frontend/components/form/event/constants'
+import { useCancelDialog } from '@frontend/utils/hooks/useCancelDialog'
 import React, { useCallback, useState } from 'react'
 import { ApolloError } from '@apollo/client'
 import { FormikProps, withFormik } from 'formik'
@@ -19,7 +20,7 @@ import { CustomInputFields } from '../../customInputFields'
 import { DateTimeSelector } from '../../dateTimeSelector'
 import { FilesManager } from '../../fileField'
 import { InputField } from '../../inputField'
-import { getDefaultLocation, Location } from '../../location'
+import { Location } from '../../location'
 import { Parties } from '../parties'
 import { personFormValidation } from '../../person/personForm/validation/validation'
 
@@ -40,20 +41,9 @@ const Form: React.FunctionComponent<Props & FormikProps<EventAPIInput>> = ({
   isValidating,
   submitForm,
 }) => {
-  const navigate = useNavigate()
   const { data: frequentFields } = getEventFrequentCustomFieldsRequest()
-  const dialog = useDialog()
   const [step, setStep] = useState(0)
-
-  const cancelChanges = useCallback(
-    () =>
-      dialog.openDialog({
-        title: 'Esti sigur(a) ca vrei sa anulezi modificarile?',
-        description: 'Toate modificarile nesalvate vor fi pierdute.',
-        onConfirm: () => navigate(routes.events),
-      }),
-    [],
-  )
+  const cancelChanges = useCancelDialog(routes.events)
 
   return (
     <form data-cy={'eventForm'}>
@@ -82,17 +72,17 @@ const Form: React.FunctionComponent<Props & FormikProps<EventAPIInput>> = ({
             </Step>
           </Stepper>
         </Grid>
-        <Grid item xs={12} container justifyContent={'center'}>
+        <Grid item xs={12} container>
           {step === 0 && (
-            <Grid item xs={6} container spacing={2}>
+            <Grid item xs={12} container spacing={2}>
               <Grid item xs={6}>
                 <AutocompleteField
                   name={'type'}
-                  label={'Tipul eventului'}
+                  label={'Tip de eveniment'}
                   value={values.type}
                   error={errors.type}
                   onValueChange={(value) => setFieldValue('type', value)}
-                  suggestions={['Accident rutier']}
+                  suggestions={eventTypes}
                 />
               </Grid>
 
@@ -130,7 +120,7 @@ const Form: React.FunctionComponent<Props & FormikProps<EventAPIInput>> = ({
             </Grid>
           )}
           {step === 1 && (
-            <Grid container spacing={2}>
+            <Grid item xs={12} container spacing={2}>
               <CustomInputFields
                 fields={values.customFields}
                 suggestions={frequentFields?.getEventFrequentCustomFields}
@@ -144,7 +134,7 @@ const Form: React.FunctionComponent<Props & FormikProps<EventAPIInput>> = ({
             </Grid>
           )}
           {step === 2 && (
-            <Grid container spacing={2}>
+            <Grid item xs={12} container spacing={2}>
               <Parties
                 parties={values.parties}
                 updateParties={(parties) => setFieldValue('parties', parties)}
@@ -152,7 +142,7 @@ const Form: React.FunctionComponent<Props & FormikProps<EventAPIInput>> = ({
             </Grid>
           )}
           {step === 3 && (
-            <Grid container spacing={2}>
+            <Grid item xs={12} container spacing={2}>
               <FilesManager
                 files={values.files}
                 keepDeletedFiles={!!eventId}
@@ -176,7 +166,7 @@ const Form: React.FunctionComponent<Props & FormikProps<EventAPIInput>> = ({
               onClick={cancelChanges}
               sx={{ mr: 4 }}
             >
-              Anulează
+              <FormattedMessage id={'cancel'} />
             </Button>
             <Button
               disabled={isSubmitting || isValidating}
@@ -184,7 +174,7 @@ const Form: React.FunctionComponent<Props & FormikProps<EventAPIInput>> = ({
               onClick={() => void submitForm()}
               data-cy={'submitForm'}
             >
-              Salvează
+              <FormattedMessage id={'save'} />
             </Button>
           </Box>
         </Grid>

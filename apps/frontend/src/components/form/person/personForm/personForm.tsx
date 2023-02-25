@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import { useCancelDialog } from '@frontend/utils/hooks/useCancelDialog'
 import { getDefaultPerson } from '@frontend/components/form/person/constants'
 import { Education } from '@frontend/components/form/person/education'
 import { Location } from '@frontend/components/form/location'
@@ -12,11 +13,9 @@ import Stepper from '@mui/material/Stepper'
 import { IdDocument, PersonAPIInput } from 'defs'
 import { FormikProps, withFormik } from 'formik'
 import { FormattedMessage } from 'react-intl'
-import { useNavigate } from 'react-router-dom'
 import { getPersonFrequentCustomFieldsRequest } from '@frontend/graphql/persons/queries/getPersonFrequentCustomFields'
 import { routes } from '../../../../router/routes'
 import { CONTACT_METHODS, ID_DOCUMENT_TYPES } from '@frontend/utils/constants'
-import { useDialog } from '../../../dialog/dialogProvider'
 import { CustomInputFields } from '../../customInputFields'
 import { DatePicker } from '../../datePicker'
 import { FilesManager } from '../../fileField'
@@ -30,13 +29,12 @@ import { personFormValidation, validatePersonForm } from './validation/validatio
 type Props = {
   personId?: string
   personInfo?: PersonAPIInput
-  readonly: boolean
+  readonly?: boolean
   onSubmit: (formData: PersonAPIInput) => void | Promise<void>
 }
 
 const Form: React.FunctionComponent<Props & FormikProps<PersonAPIInput>> = ({
   personId,
-  readonly,
   setFieldError,
   setFieldValue,
   values,
@@ -45,10 +43,9 @@ const Form: React.FunctionComponent<Props & FormikProps<PersonAPIInput>> = ({
   isValidating,
   submitForm,
 }) => {
-  const dialog = useDialog()
-  const navigate = useNavigate()
   const { data: frequentFields } = getPersonFrequentCustomFieldsRequest()
   const [step, setStep] = useState(0)
+  const cancelChanges = useCancelDialog(routes.persons)
 
   useEffect(() => {
     if (!values.birthdate && values.cnp.length) {
@@ -60,20 +57,11 @@ const Form: React.FunctionComponent<Props & FormikProps<PersonAPIInput>> = ({
     }
   }, [values.cnp])
 
-  const navigateFromPersonFormPage = () => navigate(routes.persons)
-
   const updateBirthdate = async (value: string | null) => {
     const error = await personFormValidation.birthdate(value)
     setFieldValue('birthdate', value?.toString?.() ?? null)
     setFieldError('birthdate', error)
   }
-
-  const openDialog = () =>
-    dialog.openDialog({
-      title: 'Esti sigur(a) ca vrei sa anulezi modificarile pe care le-ai facut?',
-      description: 'Toate modificarile nesalvate vor fi pierdute.',
-      onConfirm: navigateFromPersonFormPage,
-    })
 
   return (
     <form data-cy={'personsForm'}>
@@ -117,7 +105,7 @@ const Form: React.FunctionComponent<Props & FormikProps<PersonAPIInput>> = ({
             </Step>
           </Stepper>
         </Grid>
-        <Grid item xs={12}>
+        <Grid item xs={12} container>
           {step === 0 && (
             <Grid container spacing={2}>
               <Grid item xs={3}>
@@ -304,12 +292,12 @@ const Form: React.FunctionComponent<Props & FormikProps<PersonAPIInput>> = ({
           <Button
             data-cy={'cancelForm'}
             color={'error'}
-            disabled={isSubmitting}
+            disabled={isSubmitting || isValidating}
             variant={'text'}
-            onClick={readonly ? navigateFromPersonFormPage : openDialog}
+            onClick={cancelChanges}
             sx={{ mr: 4 }}
           >
-            Anulează
+            <FormattedMessage id={'cancel'} />
           </Button>
           <Button
             disabled={isSubmitting || isValidating}
@@ -317,7 +305,7 @@ const Form: React.FunctionComponent<Props & FormikProps<PersonAPIInput>> = ({
             onClick={() => void submitForm()}
             data-cy={'submitForm'}
           >
-            Salvează
+            <FormattedMessage id={'save'} />
           </Button>
         </Box>
       </Grid>

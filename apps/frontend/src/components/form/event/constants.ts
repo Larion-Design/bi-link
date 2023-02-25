@@ -10,3 +10,5 @@ export const getDefaultEvent = (): EventAPIInput => ({
   files: [],
   customFields: [],
 })
+
+export const eventTypes = ['Accident rutier']
