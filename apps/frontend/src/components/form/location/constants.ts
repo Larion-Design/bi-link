@@ -1,6 +1,6 @@
-import { LocationAPIInput } from 'defs'
+import { v4 } from 'uuid'
 
-export const defaultLocation: LocationAPIInput = {
+export const getDefaultLocation = () => ({
   street: '',
   number: '',
   building: '',
@@ -10,9 +10,9 @@ export const defaultLocation: LocationAPIInput = {
   county: '',
   country: 'Romania',
   otherInfo: '',
-  locationId: '',
+  locationId: v4(),
   coordinates: {
     lat: 0,
     long: 0,
   },
-}
+})

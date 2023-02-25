@@ -1,3 +1,4 @@
+import { getDefaultCompany } from '@frontend/components/form/company/constants'
 import React, { useState } from 'react'
 import { ApolloError } from '@apollo/client'
 import Box from '@mui/material/Box'
@@ -18,7 +19,7 @@ import { Associates } from '../associates'
 import { CustomInputFields } from '../../customInputFields'
 import { FilesManager } from '../../fileField'
 import { InputField } from '../../inputField'
-import { defaultLocation, Location } from '../../location'
+import { getDefaultLocation, Location } from '../../location'
 import { Locations } from '../../locations'
 import { personFormValidation } from '../../person/personForm/validation/validation'
 import { companyFormValidation, validateCompanyForm } from './validation/validation'
@@ -67,27 +68,27 @@ const Form: React.FunctionComponent<Props & FormikProps<CompanyAPIInput>> = ({
               </StepButton>
             </Step>
             <Step completed={false}>
-              <StepButton color={'inherit'} onClick={() => setStep(2)}>
+              <StepButton color={'inherit'} onClick={() => setStep(1)}>
                 Date contact
               </StepButton>
             </Step>
             <Step completed={false}>
-              <StepButton color={'inherit'} onClick={() => setStep(3)}>
+              <StepButton color={'inherit'} onClick={() => setStep(2)}>
                 <FormattedMessage id={'Branches'} />
               </StepButton>
             </Step>
             <Step completed={false}>
-              <StepButton color={'inherit'} onClick={() => setStep(4)}>
+              <StepButton color={'inherit'} onClick={() => setStep(3)}>
                 <FormattedMessage id={'Associates'} />
               </StepButton>
             </Step>
             <Step completed={false}>
-              <StepButton color={'inherit'} onClick={() => setStep(5)}>
+              <StepButton color={'inherit'} onClick={() => setStep(4)}>
                 <FormattedMessage id={'Files'} />
               </StepButton>
             </Step>
             <Step completed={false}>
-              <StepButton color={'inherit'} onClick={() => setStep(1)}>
+              <StepButton color={'inherit'} onClick={() => setStep(5)}>
                 <FormattedMessage id={'Additional Information'} />
               </StepButton>
             </Step>
@@ -155,20 +156,6 @@ const Form: React.FunctionComponent<Props & FormikProps<CompanyAPIInput>> = ({
         {step === 1 && (
           <Grid container spacing={2}>
             <CustomInputFields
-              fields={values.customFields}
-              suggestions={frequentFields?.getCompanyFrequentCustomFields}
-              error={errors.customFields as string}
-              setFieldValue={async (customFields) => {
-                const error = await personFormValidation.customFields(customFields)
-                setFieldValue('customFields', customFields)
-                setFieldError('customFields', error)
-              }}
-            />
-          </Grid>
-        )}
-        {step === 2 && (
-          <Grid container spacing={2}>
-            <CustomInputFields
               fields={values.contactDetails}
               suggestions={CONTACT_METHODS}
               setFieldValue={async (contactDetails) => {
@@ -180,7 +167,7 @@ const Form: React.FunctionComponent<Props & FormikProps<CompanyAPIInput>> = ({
             />
           </Grid>
         )}
-        {step === 3 && (
+        {step === 2 && (
           <Grid container spacing={3}>
             <Locations
               locations={values.locations}
@@ -192,7 +179,7 @@ const Form: React.FunctionComponent<Props & FormikProps<CompanyAPIInput>> = ({
             />
           </Grid>
         )}
-        {step === 4 && (
+        {step === 3 && (
           <Grid container spacing={2}>
             <Associates
               sectionTitle={'Entitati asociate'}
@@ -206,7 +193,7 @@ const Form: React.FunctionComponent<Props & FormikProps<CompanyAPIInput>> = ({
             />
           </Grid>
         )}
-        {step === 5 && (
+        {step === 4 && (
           <Grid container spacing={2}>
             <FilesManager
               keepDeletedFiles={!!companyId}
@@ -215,6 +202,20 @@ const Form: React.FunctionComponent<Props & FormikProps<CompanyAPIInput>> = ({
                 const error = await companyFormValidation.files(uploadedFiles)
                 setFieldValue('files', uploadedFiles)
                 setFieldError('files', error)
+              }}
+            />
+          </Grid>
+        )}
+        {step === 5 && (
+          <Grid container spacing={2}>
+            <CustomInputFields
+              fields={values.customFields}
+              suggestions={frequentFields?.getCompanyFrequentCustomFields}
+              error={errors.customFields as string}
+              setFieldValue={async (customFields) => {
+                const error = await personFormValidation.customFields(customFields)
+                setFieldValue('customFields', customFields)
+                setFieldError('customFields', error)
               }}
             />
           </Grid>
@@ -246,20 +247,8 @@ const Form: React.FunctionComponent<Props & FormikProps<CompanyAPIInput>> = ({
   )
 }
 
-const companyInitialValues: CompanyAPIInput = {
-  name: '',
-  cui: '',
-  registrationNumber: '',
-  headquarters: defaultLocation,
-  locations: [],
-  files: [],
-  associates: [],
-  contactDetails: [],
-  customFields: [],
-}
-
 export const CompanyForm = withFormik<Props, CompanyAPIInput>({
-  mapPropsToValues: ({ companyInfo }) => companyInfo ?? companyInitialValues,
+  mapPropsToValues: ({ companyInfo }) => companyInfo ?? getDefaultCompany(),
   validate: async (values, { companyId }) => validateCompanyForm(values, companyId),
   validateOnChange: false,
   validateOnMount: false,

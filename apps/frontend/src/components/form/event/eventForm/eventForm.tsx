@@ -1,3 +1,4 @@
+import { getDefaultEvent } from '@frontend/components/form/event/constants'
 import React, { useCallback, useState } from 'react'
 import { ApolloError } from '@apollo/client'
 import { FormikProps, withFormik } from 'formik'
@@ -18,7 +19,7 @@ import { CustomInputFields } from '../../customInputFields'
 import { DateTimeSelector } from '../../dateTimeSelector'
 import { FilesManager } from '../../fileField'
 import { InputField } from '../../inputField'
-import { defaultLocation, Location } from '../../location'
+import { getDefaultLocation, Location } from '../../location'
 import { Parties } from '../parties'
 import { personFormValidation } from '../../person/personForm/validation/validation'
 
@@ -192,18 +193,8 @@ const Form: React.FunctionComponent<Props & FormikProps<EventAPIInput>> = ({
   )
 }
 
-const eventInitialValues: EventAPIInput = {
-  description: '',
-  type: '',
-  date: null,
-  location: defaultLocation,
-  parties: [],
-  files: [],
-  customFields: [],
-}
-
 export const EventForm = withFormik<Props, EventAPIInput>({
-  mapPropsToValues: ({ eventInfo }) => eventInfo ?? eventInitialValues,
+  mapPropsToValues: ({ eventInfo }) => eventInfo ?? getDefaultEvent(),
   validate: (values, { eventId }) => void {},
   validateOnChange: false,
   validateOnMount: false,

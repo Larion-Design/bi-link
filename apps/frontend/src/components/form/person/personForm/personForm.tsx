@@ -1,6 +1,7 @@
-import { Education } from '@frontend/components/form/person/education'
 import React, { useEffect, useState } from 'react'
-import { defaultLocation, Location } from '@frontend/components/form/location'
+import { getDefaultPerson } from '@frontend/components/form/person/constants'
+import { Education } from '@frontend/components/form/person/education'
+import { Location } from '@frontend/components/form/location'
 import { OldNames } from '@frontend/components/form/person/oldNames'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
@@ -324,25 +325,8 @@ const Form: React.FunctionComponent<Props & FormikProps<PersonAPIInput>> = ({
   )
 }
 
-const personInitialFields: PersonAPIInput = {
-  firstName: '',
-  lastName: '',
-  oldNames: [],
-  cnp: '',
-  birthdate: null,
-  birthPlace: defaultLocation,
-  homeAddress: defaultLocation,
-  customFields: [],
-  contactDetails: [],
-  images: [],
-  documents: [],
-  files: [],
-  relationships: [],
-  education: [],
-}
-
 export const PersonForm = withFormik<Props, PersonAPIInput>({
-  mapPropsToValues: ({ personInfo }) => personInfo ?? personInitialFields,
+  mapPropsToValues: ({ personInfo }) => personInfo ?? getDefaultPerson(),
   validate: async (values, { personId }) => validatePersonForm(values, personId),
   validateOnChange: false,
   validateOnMount: false,

@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import { getDefaultLocation } from '@frontend/components/form/location'
 import { useIntl } from 'react-intl'
-import { v4 } from 'uuid'
 import MapOutlinedIcon from '@mui/icons-material/MapOutlined'
 import Box from '@mui/material/Box'
 import { GridActionsColDef } from '@mui/x-data-grid/models/colDef/gridColDef'
@@ -9,7 +9,6 @@ import {
   DataGrid,
   GridActionsCellItem,
   GridColDef,
-  GridPreProcessEditCellProps,
   GridRowModel,
   GridRowParams,
   GridSelectionModel,
@@ -25,13 +24,11 @@ type Props = {
   updateLocations: (locations: LocationAPIInput[]) => void | Promise<void>
 }
 
+const getLocationId = ({ locationId }: LocationAPIInput) => locationId
+
 export const Locations: React.FunctionComponent<Props> = ({ locations, updateLocations }) => {
   const intl = useIntl()
-  const { uid, values, update, removeBulk, add } = useDebouncedMap(
-    1000,
-    locations,
-    ({ locationId }) => locationId,
-  )
+  const { uid, values, update, removeBulk, add } = useDebouncedMap(1000, locations, getLocationId)
 
   useEffect(() => {
     void updateLocations(values())
@@ -49,37 +46,10 @@ export const Locations: React.FunctionComponent<Props> = ({ locations, updateLoc
 
   const removeSelectedRows = useCallback(() => removeBulk(selectedRows as string[]), [selectedRows])
 
-  const addLocation = useCallback(
-    () =>
-      add({
-        locationId: v4(),
-        building: '',
-        coordinates: {
-          lat: 0,
-          long: 0,
-        },
-        country: '',
-        county: '',
-        door: '',
-        locality: '',
-        number: '',
-        otherInfo: '',
-        street: '',
-        zipCode: '',
-      }),
-    [uid],
-  )
+  const addLocation = useCallback(() => add(getDefaultLocation(), getLocationId), [uid])
 
-  const columns: Array<GridColDef | GridActionsColDef> = useMemo(() => {
-    const processCellValue = (params: GridPreProcessEditCellProps<string>) => {
-      if (params.hasChanged) {
-        const hasError = !params.props.value?.length
-        return { ...params.props, error: hasError }
-      }
-      return params
-    }
-
-    return [
+  const columns: Array<GridColDef | GridActionsColDef> = useMemo(
+    () => [
       ...(
         [
           'street',
@@ -117,8 +87,9 @@ export const Locations: React.FunctionComponent<Props> = ({ locations, updateLoc
           />,
         ],
       },
-    ]
-  }, [intl])
+    ],
+    [intl],
+  )
 
   return (
     <Box sx={{ minHeight: '50vh', maxHeight: '100vh', width: 1 }}>
@@ -131,7 +102,7 @@ export const Locations: React.FunctionComponent<Props> = ({ locations, updateLoc
         rows={values()}
         columns={columns}
         experimentalFeatures={{ newEditingApi: true }}
-        getRowId={({ _id }) => _id}
+        getRowId={({ locationId }: LocationAPIInput) => locationId}
         processRowUpdate={processRowUpdate}
         onSelectionModelChange={(selectedRows) => setSelectedRows(selectedRows)}
         components={{
