@@ -45,8 +45,11 @@ export class PersonsService {
     fetchLinkedEntities: boolean,
   ): Promise<PersonDocument[]> => {
     try {
-      const query = this.personModel.find({ _id: personsIds })
-      return (fetchLinkedEntities ? this.getLinkedEntities(query) : query).exec()
+      if (personsIds.length) {
+        const query = this.personModel.find({ _id: personsIds })
+        return (fetchLinkedEntities ? this.getLinkedEntities(query) : query).exec()
+      }
+      return []
     } catch (error) {
       this.logger.error(error)
     }

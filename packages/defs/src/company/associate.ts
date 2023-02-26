@@ -2,7 +2,7 @@ import { CustomField } from '../customField'
 import { Person } from '../person'
 import { Company } from './company'
 import { ConnectedEntity } from '../connectedEntity'
-import { NodesRelationship } from '../entitiesGraph'
+import { NodesRelationship } from '../graphRelationships'
 
 export interface Associate {
   role: string

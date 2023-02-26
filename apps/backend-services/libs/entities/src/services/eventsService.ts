@@ -44,8 +44,11 @@ export class EventsService {
 
   getEvents = async (eventsIds: string[], fetchLinkedEntities: boolean) => {
     try {
-      const query = this.eventModel.find({ _id: eventsIds })
-      return (fetchLinkedEntities ? this.getLinkedEntities(query) : query).exec()
+      if (eventsIds.length) {
+        const query = this.eventModel.find({ _id: eventsIds })
+        return (fetchLinkedEntities ? this.getLinkedEntities(query) : query).exec()
+      }
+      return []
     } catch (e) {
       this.logger.error(e)
     }

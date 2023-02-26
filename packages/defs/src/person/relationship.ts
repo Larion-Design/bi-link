@@ -1,6 +1,6 @@
 import { Person } from './person'
 import { ConnectedEntity } from '../connectedEntity'
-import { NodesRelationship } from '../entitiesGraph'
+import { NodesRelationship } from '../graphRelationships'
 
 export interface Relationship {
   type: string

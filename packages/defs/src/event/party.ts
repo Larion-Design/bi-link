@@ -1,7 +1,7 @@
 import { Company } from '../company'
 import { ConnectedEntity } from '../connectedEntity'
 import { CustomField } from '../customField'
-import { NodesRelationship } from '../entitiesGraph'
+import { NodesRelationship } from '../graphRelationships'
 import { Person } from '../person'
 import { Property } from '../property'
 

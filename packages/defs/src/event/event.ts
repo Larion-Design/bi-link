@@ -1,5 +1,5 @@
 import { CustomField, CustomFieldAPI } from '../customField'
-import { NodesRelationship } from '../entitiesGraph'
+import { NodesRelationship } from '../graphRelationships'
 import { File, FileAPIInput, FileAPIOutput } from '../file'
 import { Location, LocationAPIInput, LocationAPIOutput } from '../geolocation'
 import { Party, PartyAPI } from './party'

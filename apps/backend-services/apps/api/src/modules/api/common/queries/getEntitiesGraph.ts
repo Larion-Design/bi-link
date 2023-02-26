@@ -1,13 +1,18 @@
+import { CompaniesService } from '@app/entities/services/companiesService'
+import { EventsService } from '@app/entities/services/eventsService'
+import { LocationsService } from '@app/entities/services/locationsService'
+import { PersonsService } from '@app/entities/services/personsService'
+import { PropertiesService } from '@app/entities/services/propertiesService'
 import { Args, ArgsType, Field, Int, Query, Resolver } from '@nestjs/graphql'
 import { IsMongoId } from 'class-validator'
 import { UseGuards } from '@nestjs/common'
+import { Graph } from 'defs'
 import { FirebaseAuthGuard } from '../../../users/guards/FirebaseAuthGuard'
 import { GraphService } from '@app/graph-module/graphService'
 import { EntitiesGraph } from '../dto/graph/entitiesGraph'
 
 @ArgsType()
 class Params {
-  @IsMongoId()
   @Field()
   readonly id: string
 
@@ -17,11 +22,46 @@ class Params {
 
 @Resolver(() => EntitiesGraph)
 export class GetEntitiesGraph {
-  constructor(protected readonly graphService: GraphService) {}
+  constructor(
+    private readonly graphService: GraphService,
+    private readonly personsService: PersonsService,
+    private readonly companiesService: CompaniesService,
+    private readonly propertiesService: PropertiesService,
+    private readonly eventsService: EventsService,
+    private readonly locationsService: LocationsService,
+  ) {}
 
   @Query(() => EntitiesGraph)
   @UseGuards(FirebaseAuthGuard)
-  async getEntitiesGraph(@Args() { id, depth }: Params): Promise<EntitiesGraph> {
-    return this.graphService.getEntitiesGraph(id, depth)
+  async getEntitiesGraph(@Args() { id, depth }: Params): Promise<Graph> {
+    const {
+      relationships,
+      entities: { persons, companies, properties, events, locations },
+    } = await this.graphService.getEntitiesGraph(id, depth)
+
+    const [
+      personsDocuments,
+      companiesDocuments,
+      propertiesDocuments,
+      eventsDocuments,
+      locationsDocuments,
+    ] = await Promise.all([
+      this.personsService.getPersons(persons, true),
+      this.companiesService.getCompanies(companies, false),
+      this.propertiesService.getProperties(properties, false),
+      this.eventsService.getEvents(events, false),
+      this.locationsService.getLocations(locations),
+    ])
+
+    return {
+      relationships,
+      entities: {
+        persons: personsDocuments,
+        companies: companiesDocuments,
+        properties: propertiesDocuments,
+        events: eventsDocuments,
+        locations: locationsDocuments,
+      },
+    }
   }
 }

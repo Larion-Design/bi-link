@@ -45,8 +45,11 @@ export class CompaniesService {
 
   getCompanies = async (companiesIds: string[], fetchLinkedEntities: boolean) => {
     try {
-      const query = this.companyModel.find({ _id: companiesIds })
-      return (fetchLinkedEntities ? this.getLinkedEntities(query) : query).exec()
+      if (companiesIds.length) {
+        const query = this.companyModel.find({ _id: companiesIds })
+        return (fetchLinkedEntities ? this.getLinkedEntities(query) : query).exec()
+      }
+      return []
     } catch (error) {
       this.logger.error(error)
     }

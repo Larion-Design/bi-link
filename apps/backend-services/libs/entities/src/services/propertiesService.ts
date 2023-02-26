@@ -51,8 +51,11 @@ export class PropertiesService {
 
   getProperties = async (propertiesIds: string[], fetchLinkedEntities: boolean) => {
     try {
-      const query = this.propertyModel.find({ _id: propertiesIds })
-      return (fetchLinkedEntities ? this.getLinkedEntities(query) : query).exec()
+      if (propertiesIds.length) {
+        const query = this.propertyModel.find({ _id: propertiesIds })
+        return (fetchLinkedEntities ? this.getLinkedEntities(query) : query).exec()
+      }
+      return []
     } catch (e) {
       this.logger.error(e)
     }

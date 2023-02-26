@@ -1,8 +1,8 @@
 import { gql, useLazyQuery } from '@apollo/client'
-import { EntitiesGraph } from 'defs'
+import { GraphRelationships } from 'defs'
 
 type Response = {
-  getEntitiesGraph: EntitiesGraph
+  getEntitiesGraph: GraphRelationships
 }
 
 type Params = {

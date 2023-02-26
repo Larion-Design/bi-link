@@ -1,4 +1,4 @@
-import { NodesRelationship } from '../entitiesGraph'
+import { NodesRelationship } from '../graphRelationships'
 import { Coordinates, CoordinatesAPI } from './coordinates'
 
 export interface Location {

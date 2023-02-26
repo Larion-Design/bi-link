@@ -1,15 +1,15 @@
-import { CompanyAssociateRelationship } from './company'
-import { EventPartyRelationship } from './event'
-import { EntityLocationRelationship } from './geolocation'
-import { PersonalRelationship } from './person'
-import { PropertyOwnerRelationship } from './property'
+import { CompanyAssociateRelationship, CompanyListRecord } from './company'
+import { EventListRecord, EventPartyRelationship } from './event'
+import { EntityLocationRelationship, LocationAPIOutput } from './geolocation'
+import { PersonalRelationship, PersonListRecordWithImage } from './person'
+import { PropertyListRecord, PropertyOwnerRelationship } from './property'
 
 export interface GraphNode {
   _id: string
-  _type: string
+  _type: EntityLabel
 }
 
-export interface EntitiesGraph {
+export interface GraphRelationships {
   companiesAssociates: CompanyAssociateRelationship[]
   eventsParties: EventPartyRelationship[]
   personalRelationships: PersonalRelationship[]
@@ -20,6 +20,19 @@ export interface EntitiesGraph {
   personsBirthPlace: EntityLocationRelationship[]
   personsHomeAddress: EntityLocationRelationship[]
   eventsOccurrencePlace: EntityLocationRelationship[]
+}
+
+export interface GraphEntities {
+  companies: CompanyListRecord[]
+  persons: PersonListRecordWithImage[]
+  properties: PropertyListRecord[]
+  events: EventListRecord[]
+  locations: LocationAPIOutput[]
+}
+
+export interface Graph {
+  relationships: GraphRelationships
+  entities: GraphEntities
 }
 
 export enum RelationshipLabel {
@@ -60,8 +73,8 @@ export type NodeInfo = {
 }
 
 export interface NodesRelationship {
-  startNode: NodeInfo
-  endNode: NodeInfo
+  startNode: GraphNode
+  endNode: GraphNode
   _confirmed: boolean
   _type: RelationshipLabel
 }

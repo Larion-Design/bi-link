@@ -1,8 +1,10 @@
 import { Injectable, Logger } from '@nestjs/common'
 import {
-  EntitiesGraph,
   EntityLabel,
   EntityMetadata,
+  GraphEntities,
+  GraphNode,
+  GraphRelationships,
   RelationshipLabel,
   RelationshipMetadata,
 } from 'defs'
@@ -179,7 +181,7 @@ export class GraphService {
       },
     )
 
-    const relationships: EntitiesGraph = {
+    const relationships: GraphRelationships = {
       companiesBranches: [],
       companiesHeadquarters: [],
       eventsOccurrencePlace: [],
@@ -192,6 +194,39 @@ export class GraphService {
       propertiesLocation: [],
     }
 
+    const entities: Record<keyof GraphEntities, Set<string>> = {
+      persons: new Set(),
+      companies: new Set(),
+      properties: new Set(),
+      events: new Set(),
+      locations: new Set(),
+    }
+
+    const registerEntity = ({ _id: entityId, _type: entityType }: GraphNode) => {
+      switch (entityType) {
+        case EntityLabel.PERSON: {
+          entities.persons.add(entityId)
+          break
+        }
+        case EntityLabel.COMPANY: {
+          entities.companies.add(entityId)
+          break
+        }
+        case EntityLabel.PROPERTY: {
+          entities.properties.add(entityId)
+          break
+        }
+        case EntityLabel.EVENT: {
+          entities.events.add(entityId)
+          break
+        }
+        case EntityLabel.LOCATION: {
+          entities.locations.add(entityId)
+          break
+        }
+      }
+    }
+
     result.records.forEach((record) => {
       const path = record.get('p') as Path | null
 
@@ -199,15 +234,18 @@ export class GraphService {
         const startEntityId = String(start.properties._id)
         const endEntityId = String(end.properties._id)
 
-        const startNode = {
+        const startNode: GraphNode = {
           _id: startEntityId,
           _type: start.labels[0] as EntityLabel,
         }
 
-        const endNode = {
+        const endNode: GraphNode = {
           _id: endEntityId,
           _type: end.labels[0] as EntityLabel,
         }
+
+        registerEntity(startNode)
+        registerEntity(endNode)
 
         switch (type as RelationshipLabel) {
           case RelationshipLabel.ASSOCIATE: {
@@ -300,6 +338,16 @@ export class GraphService {
         }
       })
     })
-    return relationships
+
+    return {
+      relationships,
+      entities: {
+        persons: Array.from(entities.persons),
+        companies: Array.from(entities.companies),
+        properties: Array.from(entities.properties),
+        events: Array.from(entities.events),
+        locations: Array.from(entities.locations),
+      },
+    }
   }
 }

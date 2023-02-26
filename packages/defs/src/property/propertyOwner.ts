@@ -2,7 +2,7 @@ import { Person } from '../person'
 import { Company } from '../company'
 import { CustomField } from '../customField'
 import { ConnectedEntity } from '../connectedEntity'
-import { NodesRelationship } from '../entitiesGraph'
+import { NodesRelationship } from '../graphRelationships'
 
 export interface PropertyOwner {
   person?: Person | null

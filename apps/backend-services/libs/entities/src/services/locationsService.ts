@@ -14,7 +14,10 @@ export class LocationsService {
 
   getLocations = async (locationsIds: string[]) => {
     try {
-      return this.locationModel.find({ locationId: locationsIds }).exec()
+      if (locationsIds.length) {
+        return this.locationModel.find({ locationId: locationsIds }).exec()
+      }
+      return []
     } catch (e) {
       this.logger.error(e)
     }

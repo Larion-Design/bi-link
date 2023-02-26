@@ -1,4 +1,4 @@
-import { Graph, GraphAPI } from './graph'
+import { ReportGraph, GraphAPI } from './reportGraph'
 import { Title, TitleAPI } from './title'
 import { Table, TableAPI } from './table'
 import { Link, LinkAPI } from './link'
@@ -13,7 +13,7 @@ export interface ReportContent {
   file?: File
   table?: Table
   link?: Link
-  graph?: Graph
+  graph?: ReportGraph
 }
 
 interface ReportContentAPI
