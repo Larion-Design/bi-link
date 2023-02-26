@@ -1,16 +1,15 @@
-import Box from '@mui/material/Box'
 import React from 'react'
 import { Handle, NodeProps, Position } from 'reactflow'
 import Typography from '@mui/material/Typography'
-import StoreOutlinedIcon from '@mui/icons-material/StoreOutlined'
 import Paper from '@mui/material/Paper'
+import FmdGoodOutlinedIcon from '@mui/icons-material/FmdGoodOutlined'
 
 type Props = {
   label: string
   isRootNode?: boolean
 }
 
-export const CompanyNode: React.FunctionComponent<NodeProps<Props>> = ({
+export const LocationNode: React.FunctionComponent<NodeProps<Props>> = ({
   data: { label, isRootNode },
 }) => (
   <>
@@ -25,7 +24,7 @@ export const CompanyNode: React.FunctionComponent<NodeProps<Props>> = ({
         background: isRootNode ? background.paper : background.default,
       })}
     >
-      <StoreOutlinedIcon fontSize={'small'} />
+      <FmdGoodOutlinedIcon fontSize={'small'} />
       <Typography sx={{ ml: 1 }} variant={'body2'}>
         {label}
       </Typography>

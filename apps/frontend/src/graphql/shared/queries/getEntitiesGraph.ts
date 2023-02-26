@@ -1,8 +1,8 @@
 import { gql, useLazyQuery } from '@apollo/client'
-import { GraphRelationships } from 'defs'
+import { Graph } from 'defs'
 
 type Response = {
-  getEntitiesGraph: GraphRelationships
+  getEntitiesGraph: Graph
 }
 
 type Params = {
@@ -13,70 +13,113 @@ type Params = {
 const request = gql`
   query GetEntitiesGraph($id: String!, $depth: Int!) {
     getEntitiesGraph(id: $id, depth: $depth) {
-      companiesAssociates {
-        _confirmed
-        _type
-        role
-        equity
-        startNode {
-          _id
+      relationships {
+        companiesAssociates {
+          _confirmed
           _type
+          role
+          equity
+          startNode {
+            _id
+            _type
+          }
+          endNode {
+            _id
+            _type
+          }
         }
-        endNode {
-          _id
+        personalRelationships {
           _type
+          _confirmed
+          type
+          startNode {
+            _id
+            _type
+          }
+          endNode {
+            _id
+            _type
+          }
+        }
+        propertiesRelationships {
+          _type
+          _confirmed
+          startDate
+          endDate
+          startNode {
+            _id
+            _type
+          }
+          endNode {
+            _id
+            _type
+          }
+        }
+        eventsParties {
+          _type
+          _confirmed
+          name
+          startNode {
+            _id
+            _type
+          }
+          endNode {
+            _id
+            _type
+          }
+        }
+        eventsOccurrencePlace {
+          _confirmed
+          _type
+          startNode {
+            _id
+            _type
+          }
+          endNode {
+            _id
+            _type
+          }
         }
       }
-      personalRelationships {
-        _type
-        _confirmed
-        type
-        startNode {
+      entities {
+        persons {
           _id
-          _type
+          firstName
+          lastName
+          images {
+            fileId
+            url {
+              url
+            }
+          }
         }
-        endNode {
+        companies {
           _id
-          _type
+          name
+          cui
+          registrationNumber
         }
-      }
-      propertiesRelationships {
-        _type
-        _confirmed
-        startDate
-        endDate
-        startNode {
+        properties {
           _id
-          _type
+          name
+          type
         }
-        endNode {
+        events {
           _id
-          _type
+          date
+          type
         }
-      }
-      eventsParties {
-        _type
-        _confirmed
-        name
-        startNode {
-          _id
-          _type
-        }
-        endNode {
-          _id
-          _type
-        }
-      }
-      eventsOccurencePlace {
-        _confirmed
-        _type
-        startNode {
-          _id
-          _type
-        }
-        endNode {
-          _id
-          _type
+        locations {
+          locationId
+          street
+          number
+          building
+          door
+          zipCode
+          locality
+          county
+          country
+          otherInfo
         }
       }
     }

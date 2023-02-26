@@ -1,4 +1,5 @@
-import React, { useCallback, useId, useMemo } from 'react'
+import { LocationNode } from '@frontend/components/entityViews/graph/nodes/locationNode'
+import React, { FunctionComponent, useCallback, useId, useMemo } from 'react'
 import { useTheme } from '@mui/material'
 import Paper from '@mui/material/Paper'
 import 'reactflow/dist/style.css'
@@ -12,6 +13,8 @@ import ReactFlow, {
   Node,
   NodeMouseHandler,
   Panel,
+  useNodesState,
+  useEdgesState,
 } from 'reactflow'
 import { EntityType } from 'defs'
 import { PrintControl } from './controls/printControl'
@@ -20,7 +23,7 @@ import { PersonNode } from './nodes/personNode'
 import { CompanyNode } from './nodes/companyNode'
 import { PropertyNode } from './nodes/propertyNode'
 import { EventNode } from './nodes/eventNode'
-import { NodeTypes } from './nodes/type'
+import { NodeTypes, nodeTypeToEntityType } from './nodes/type'
 
 type Props = {
   id?: string
@@ -77,12 +80,13 @@ export const EntityGraph: React.FunctionComponent<Props> = ({
     [onRelationshipSelected],
   )
 
-  const nodeTypes = useMemo(
+  const nodeTypes: Record<NodeTypes, FunctionComponent> = useMemo(
     () => ({
       personNode: PersonNode,
       companyNode: CompanyNode,
       propertyNode: PropertyNode,
       eventNode: EventNode,
+      locationNode: LocationNode,
     }),
     [],
   )
@@ -131,11 +135,4 @@ export const EntityGraph: React.FunctionComponent<Props> = ({
       {!disableMap && <MiniMap nodeStrokeWidth={3} zoomable pannable />}
     </ReactFlow>
   )
-}
-
-const nodeTypeToEntityType: Record<NodeTypes, EntityType> = {
-  personNode: 'PERSON',
-  companyNode: 'COMPANY',
-  propertyNode: 'PROPERTY',
-  eventNode: 'EVENT',
 }
