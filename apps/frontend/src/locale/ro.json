@@ -34,5 +34,16 @@
   "otherInfo": "Alte informatii",
   "Associates": "Asociati",
   "Branches": "Puncte de lucru",
-  "ServerError": "O eroare a intervenit in timpul comunicarii cu serverul."
+  "ServerError": "O eroare a intervenit in timpul comunicarii cu serverul.",
+  "OWNER": "Proprietar",
+  "RELATED": "Cunoaște",
+  "PARTY_INVOLVED": "Implicat in",
+  "ASSOCIATE": "Asociat",
+  "PERSON": "Persoane",
+  "COMPANY": "Companii",
+  "PROPERTY": "Proprietati",
+  "EVENT": "Evenimente",
+  "REPORT": "Rapoarte",
+  "FILE": "Fisiere",
+  "LOCATION": "Locuri"
 }

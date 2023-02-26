@@ -1,5 +1,5 @@
+import React, { FunctionComponent, useCallback, useId, useState } from 'react'
 import { LocationNode } from '@frontend/components/entityViews/graph/nodes/locationNode'
-import React, { FunctionComponent, useCallback, useId, useMemo } from 'react'
 import { useTheme } from '@mui/material'
 import Paper from '@mui/material/Paper'
 import 'reactflow/dist/style.css'
@@ -16,7 +16,7 @@ import ReactFlow, {
   useNodesState,
   useEdgesState,
 } from 'reactflow'
-import { EntityType } from 'defs'
+import { EntityLabel, EntityType } from 'defs'
 import { PrintControl } from './controls/printControl'
 import { FilterPanel } from './filters/filterPanel'
 import { PersonNode } from './nodes/personNode'
@@ -30,12 +30,6 @@ type Props = {
   title?: string
   depth: number
   updateDepth: (depth: number) => void
-  allEntities: string[]
-  visibleEntities: string[]
-  setVisibleEntities: (types: string[]) => void
-  allRelationships: string[]
-  visibleRelationships: string[]
-  setVisibleRelationships: (types: string[]) => void
   data: {
     nodes: Node<unknown>[]
     edges: Edge<unknown>[]
@@ -53,13 +47,7 @@ export const EntityGraph: React.FunctionComponent<Props> = ({
   title,
   depth,
   updateDepth,
-  allEntities,
-  visibleEntities,
-  setVisibleEntities,
-  allRelationships,
-  visibleRelationships,
-  setVisibleRelationships,
-  data: { nodes, edges },
+  data: { nodes: initialNodes, edges: initialEdges },
   onEntitySelected,
   onRelationshipSelected,
   disableFilters,
@@ -70,6 +58,59 @@ export const EntityGraph: React.FunctionComponent<Props> = ({
   const theme = useTheme()
   const graphId = id ?? useId()
 
+  const [nodes, setNodes] = useNodesState(initialNodes)
+  const [edges, setEdges] = useEdgesState(initialEdges)
+
+  const [entitiesTypes, setEntitiesTypes] = useState(() => {
+    const map = new Map<string, boolean>()
+    nodes.forEach(({ type }) => map.set(type, true))
+    return map
+  })
+
+  const [relationshipsTypes, setRelationshipsTypes] = useState(() => {
+    const map = new Map<string, boolean>()
+    edges.forEach(({ type }) => map.set(type, true))
+    return map
+  })
+
+  const filterUpdated = useCallback(
+    (entitiesTypes: Map<string, boolean>, relationshipsTypes: Map<string, boolean>) => {
+      const hiddenEntities = new Set<string>()
+
+      setEdges((edges) =>
+        edges.map((edge) => {
+          const hidden = !relationshipsTypes.get(edge.type)
+
+          if (hidden) {
+            const {
+              sourceNode: { id: sourceNodeId },
+              targetNode: { id: targetNodeId },
+            } = edge
+
+            if (sourceNodeId !== id) {
+              hiddenEntities.add(sourceNodeId)
+            }
+            if (targetNodeId !== id) {
+              hiddenEntities.add(targetNodeId)
+            }
+          }
+          return { ...edge, hidden }
+        }),
+      )
+
+      setNodes((nodes) =>
+        nodes.map((node) => ({
+          ...node,
+          hidden: node.id === id || !entitiesTypes.get(node.type) || hiddenEntities.has(node.id),
+        })),
+      )
+
+      setEntitiesTypes(entitiesTypes)
+      setRelationshipsTypes(relationshipsTypes)
+    },
+    [nodes],
+  )
+
   const onNodeClick: NodeMouseHandler = useCallback(
     (event, node) => onEntitySelected(node.id, nodeTypeToEntityType[node.type]),
     [onEntitySelected],
@@ -78,17 +119,6 @@ export const EntityGraph: React.FunctionComponent<Props> = ({
   const onEdgeClick: EdgeMouseHandler = useCallback(
     (event, edge) => onRelationshipSelected(edge.source, edge.target),
     [onRelationshipSelected],
-  )
-
-  const nodeTypes: Record<NodeTypes, FunctionComponent> = useMemo(
-    () => ({
-      personNode: PersonNode,
-      companyNode: CompanyNode,
-      propertyNode: PropertyNode,
-      eventNode: EventNode,
-      locationNode: LocationNode,
-    }),
-    [],
   )
 
   return (
@@ -117,12 +147,9 @@ export const EntityGraph: React.FunctionComponent<Props> = ({
         <FilterPanel
           depth={depth}
           updateDepth={updateDepth}
-          allEntities={allEntities}
-          visibleEntities={visibleEntities}
-          setVisibleEntities={setVisibleEntities}
-          allRelationships={allRelationships}
-          visibleRelationships={visibleRelationships}
-          setVisibleRelationships={setVisibleRelationships}
+          relationshipsTypes={relationshipsTypes}
+          entitiesTypes={entitiesTypes}
+          filterUpdated={filterUpdated}
         />
       )}
       <Background color={theme.palette.grey[200]} variant={BackgroundVariant.Lines} />
@@ -135,4 +162,13 @@ export const EntityGraph: React.FunctionComponent<Props> = ({
       {!disableMap && <MiniMap nodeStrokeWidth={3} zoomable pannable />}
     </ReactFlow>
   )
+}
+
+const nodeTypes: Record<Partial<EntityLabel>, FunctionComponent> = {
+  PERSON: PersonNode,
+  COMPANY: CompanyNode,
+  PROPERTY: PropertyNode,
+  EVENT: EventNode,
+  LOCATION: LocationNode,
+  [EntityLabel.FILE]: undefined,
 }

@@ -1,14 +1,14 @@
 import React, { PropsWithRef, useEffect, useState } from 'react'
-import { relationshipsTypes } from '@frontend/components/form/person/constants'
-import { getLocationAddress } from '@frontend/utils/location'
 import Box from '@mui/material/Box'
 import dagre, { Label } from 'dagre'
-import { EntityLabel, EntityLocationRelationship, EntityType } from 'defs'
+import { useIntl } from 'react-intl'
 import { ConnectionLineType, Edge, Node, Position, ReactFlowProvider } from 'reactflow'
+import { relationshipsTypes } from '@frontend/components/form/person/constants'
+import { getLocationAddress } from '@frontend/utils/location'
+import { EntityLabel, EntityLocationRelationship, EntityType } from 'defs'
 import { getEntitiesGraphRequest } from '../../../graphql/shared/queries/getEntitiesGraph'
 import { useNotification } from '../../../utils/hooks/useNotification'
 import { EntityGraph } from './entityGraph'
-import { getRelationshipLabelFromType } from './utils'
 
 type Props = {
   id?: string
@@ -37,15 +37,10 @@ export const Graph: React.FunctionComponent<PropsWithRef<Props>> = ({
   disableMap,
   disableControls,
 }) => {
+  const intl = useIntl()
   const showNotification = useNotification()
   const [fetchGraph, { data, error, loading }] = getEntitiesGraphRequest()
-
   const [graphDepth, updateDepth] = useState(depth ?? 2)
-  const [allEntities, setAllEntities] = useState(new Set<string>())
-  const [allRelationships, setAllRelationships] = useState(new Set<string>())
-
-  const [visibleEntities, setVisibleEntities] = useState(new Set<string | EntityType>())
-  const [visibleRelationships, setVisibleRelationships] = useState(new Set<string>())
 
   const [nodes, setNodes] = useState<Node<unknown>[]>([])
   const [edges, setEdges] = useState<Edge<unknown>[]>([])
@@ -58,83 +53,9 @@ export const Graph: React.FunctionComponent<PropsWithRef<Props>> = ({
 
   useEffect(() => {
     if (error?.message) {
-      showNotification('Server Error', 'error')
+      showNotification('ServerError', 'error')
     }
   }, [error?.message])
-
-  useEffect(() => {
-    if (!data?.getEntitiesGraph) return
-
-    allEntities.clear()
-    allRelationships.clear()
-
-    const {
-      companiesAssociates,
-      companiesHeadquarters,
-      companiesBranches,
-      personalRelationships,
-      propertiesRelationships,
-      personsBirthPlace,
-      personsHomeAddress,
-      propertiesLocation,
-      eventsOccurrencePlace,
-      eventsParties,
-    } = data.getEntitiesGraph.relationships
-
-    const entityLocationHandler = ({
-      startNode: { _type: startNodeType },
-      endNode: { _type: endNodeType },
-      _type,
-    }: EntityLocationRelationship) => {
-      allRelationships.add(_type)
-      allEntities.add(startNodeType)
-      allEntities.add(endNodeType)
-    }
-
-    companiesHeadquarters.forEach(entityLocationHandler)
-    companiesBranches.forEach(entityLocationHandler)
-    personsBirthPlace.forEach(entityLocationHandler)
-    personsHomeAddress.forEach(entityLocationHandler)
-    propertiesLocation.forEach(entityLocationHandler)
-    eventsOccurrencePlace.forEach(entityLocationHandler)
-
-    companiesAssociates.forEach(
-      ({ startNode: { _type: startNodeType }, endNode: { _type: endNodeType }, _type }) => {
-        allRelationships.add(_type)
-        allEntities.add(startNodeType)
-        allEntities.add(endNodeType)
-      },
-    )
-
-    personalRelationships.forEach(
-      ({ startNode: { _type: startNodeType }, endNode: { _type: endNodeType }, _type, type }) => {
-        allRelationships.add(relationshipsTypes[type] ?? _type)
-        allEntities.add(startNodeType)
-        allEntities.add(endNodeType)
-      },
-    )
-
-    eventsParties.forEach(
-      ({ startNode: { _type: startNodeType }, endNode: { _type: endNodeType }, _type }) => {
-        allRelationships.add(_type)
-        allEntities.add(startNodeType)
-        allEntities.add(endNodeType)
-      },
-    )
-
-    propertiesRelationships.forEach(
-      ({ startNode: { _type: startNodeType }, endNode: { _type: endNodeType }, _type }) => {
-        allRelationships.add(_type)
-        allEntities.add(startNodeType)
-        allEntities.add(endNodeType)
-      },
-    )
-
-    setAllEntities(new Set(allEntities))
-    setVisibleEntities(new Set(allEntities))
-    setAllRelationships(new Set(allRelationships))
-    setVisibleRelationships(new Set(allRelationships))
-  }, [data?.getEntitiesGraph])
 
   useEffect(() => {
     if (!data?.getEntitiesGraph) return
@@ -146,16 +67,6 @@ export const Graph: React.FunctionComponent<PropsWithRef<Props>> = ({
     const nodesMap = new Map<string, Node>()
     const edgesMap = new Map<string, Edge>()
 
-    const hiddenEntities: Record<EntityType, boolean> = {
-      PERSON: !visibleEntities.has('PERSON'),
-      COMPANY: !visibleEntities.has('COMPANY'),
-      PROPERTY: !visibleEntities.has('PROPERTY'),
-      EVENT: !visibleEntities.has('EVENT'),
-      LOCATION: !visibleEntities.has('LOCATION'),
-      REPORT: true,
-      FILE: true,
-    }
-
     const createEdge = (
       startNodeId: string,
       endNodeId: string,
@@ -166,7 +77,7 @@ export const Graph: React.FunctionComponent<PropsWithRef<Props>> = ({
       const id = `${startNodeId}-${label}-${endNodeId}`
       const invertedId = `${endNodeId}-${label}-${startNodeId}`
 
-      if (!edgesMap.has(id) && !edgesMap.has(invertedId) && visibleRelationships.has(type)) {
+      if (!edgesMap.has(id) && !edgesMap.has(invertedId)) {
         edgesMap.set(id, {
           id,
           source: startNodeId,
@@ -199,7 +110,6 @@ export const Graph: React.FunctionComponent<PropsWithRef<Props>> = ({
 
     const entityHandler = {
       [EntityLabel.PERSON]: (personId: string) => {
-        if (hiddenEntities['PERSON']) return false
         if (nodesMap.has(personId)) return true
 
         const personInfo = persons.find(({ _id }) => personId === _id)
@@ -211,12 +121,12 @@ export const Graph: React.FunctionComponent<PropsWithRef<Props>> = ({
             id: personId,
             targetPosition: Position.Top,
             sourcePosition: Position.Bottom,
-            hidden: hiddenEntities.PERSON && personId !== entityId,
+            hidden: false,
             position: {
               x: 0,
               y: 0,
             },
-            type: 'personNode',
+            type: EntityLabel.PERSON,
             data: {
               label: `${personInfo.lastName} ${personInfo.firstName}`,
               image: personInfo.images?.[0]?.url.url,
@@ -227,7 +137,6 @@ export const Graph: React.FunctionComponent<PropsWithRef<Props>> = ({
         }
       },
       [EntityLabel.COMPANY]: (companyId: string) => {
-        if (hiddenEntities['COMPANY']) return false
         if (nodesMap.has(companyId)) return true
 
         const companyInfo = companies.find(({ _id }) => companyId === _id)
@@ -239,12 +148,12 @@ export const Graph: React.FunctionComponent<PropsWithRef<Props>> = ({
             id: companyId,
             targetPosition: Position.Top,
             sourcePosition: Position.Bottom,
-            hidden: hiddenEntities.COMPANY && companyId !== entityId,
+            hidden: false,
             position: {
               x: 0,
               y: 0,
             },
-            type: 'companyNode',
+            type: EntityLabel.COMPANY,
             data: {
               label: companyInfo.name,
               isRootNode: companyId === entityId,
@@ -254,7 +163,6 @@ export const Graph: React.FunctionComponent<PropsWithRef<Props>> = ({
         }
       },
       [EntityLabel.PROPERTY]: (propertyId: string) => {
-        if (hiddenEntities['PROPERTY']) return false
         if (nodesMap.has(propertyId)) return true
 
         const propertyInfo = properties.find(({ _id }) => propertyId === _id)
@@ -266,12 +174,12 @@ export const Graph: React.FunctionComponent<PropsWithRef<Props>> = ({
             id: propertyId,
             targetPosition: Position.Top,
             sourcePosition: Position.Bottom,
-            hidden: hiddenEntities.PROPERTY && propertyId !== entityId,
+            hidden: false,
             position: {
               x: 0,
               y: 0,
             },
-            type: 'propertyNode',
+            type: EntityLabel.PROPERTY,
             data: {
               label: propertyInfo.name,
               isRootNode: propertyId === entityId,
@@ -281,7 +189,6 @@ export const Graph: React.FunctionComponent<PropsWithRef<Props>> = ({
         }
       },
       [EntityLabel.EVENT]: (eventId: string) => {
-        if (hiddenEntities['EVENT']) return false
         if (nodesMap.has(eventId)) return true
 
         dagreGraph.setNode(eventId, nodeConfig)
@@ -293,12 +200,12 @@ export const Graph: React.FunctionComponent<PropsWithRef<Props>> = ({
             id: eventId,
             targetPosition: Position.Top,
             sourcePosition: Position.Bottom,
-            hidden: hiddenEntities.EVENT && eventId !== entityId,
+            hidden: false,
             position: {
               x: 0,
               y: 0,
             },
-            type: 'eventNode',
+            type: EntityLabel.EVENT,
             data: {
               label: eventInfo.location,
               isRootNode: eventId === entityId,
@@ -307,7 +214,6 @@ export const Graph: React.FunctionComponent<PropsWithRef<Props>> = ({
         }
       },
       [EntityLabel.LOCATION]: (locationId: string) => {
-        if (hiddenEntities['LOCATION']) return false
         if (nodesMap.has(locationId)) return true
 
         dagreGraph.setNode(locationId, nodeConfig)
@@ -319,12 +225,12 @@ export const Graph: React.FunctionComponent<PropsWithRef<Props>> = ({
             id: locationId,
             targetPosition: Position.Top,
             sourcePosition: Position.Bottom,
-            hidden: hiddenEntities.LOCATION && locationId !== entityId,
+            hidden: false,
             position: {
               x: 0,
               y: 0,
             },
-            type: 'locationNode',
+            type: EntityLabel.LOCATION,
             data: {
               label: getLocationAddress(locationInfo),
               isRootNode: locationId === entityId,
@@ -381,7 +287,13 @@ export const Graph: React.FunctionComponent<PropsWithRef<Props>> = ({
         _type,
       }) => {
         if (entityHandler[startNodeType](startNodeId) && entityHandler[endNodeType](endNodeId)) {
-          createEdge(startNodeId, endNodeId, getRelationshipLabelFromType(_type), _confirmed, _type)
+          createEdge(
+            startNodeId,
+            endNodeId,
+            intl.formatMessage({ id: _type, defaultMessage: _type }),
+            _confirmed,
+            _type,
+          )
         }
       },
     )
@@ -427,7 +339,7 @@ export const Graph: React.FunctionComponent<PropsWithRef<Props>> = ({
     )
 
     setEdges(Array.from(edgesMap.values()))
-  }, [data?.getEntitiesGraph, visibleEntities, visibleRelationships])
+  }, [data?.getEntitiesGraph])
 
   return loading ? (
     <Box sx={{ width: 1, height: 1 }}>
@@ -440,14 +352,6 @@ export const Graph: React.FunctionComponent<PropsWithRef<Props>> = ({
           data={{ nodes, edges }}
           onEntitySelected={onEntitySelected}
           onRelationshipSelected={onRelationshipSelected}
-          allEntities={Array.from(allEntities)}
-          visibleEntities={Array.from(visibleEntities)}
-          setVisibleEntities={(entitiesTypes) => setVisibleEntities(new Set(entitiesTypes))}
-          allRelationships={Array.from(allRelationships)}
-          visibleRelationships={Array.from(visibleRelationships)}
-          setVisibleRelationships={(relationshipsTypes) =>
-            setVisibleRelationships(new Set(relationshipsTypes))
-          }
           disableFilters={disableFilters}
           disableTitle={disableTitle}
           disableMap={disableMap}
