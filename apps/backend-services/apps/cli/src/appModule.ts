@@ -9,6 +9,8 @@ import { ElasticsearchIndexEntityCommand } from './commands/elasticsearchIndexEn
 import { ElasticsearchMigrationCommand } from './commands/elasticsearchMigrationCommand'
 import { GraphMigrationCommand } from './commands/graphMigrationCommand'
 import { PubModule } from '@app/pub'
+import { EntitiesIndexerService } from './search/entitiesIndexerService'
+import { EntitiesMappingService } from './search/entitiesMappingService'
 
 @Module({
   imports: [
@@ -47,6 +49,8 @@ import { PubModule } from '@app/pub'
     ElasticsearchMigrationCommand,
     ElasticsearchIndexEntityCommand,
     GraphMigrationCommand,
+    EntitiesIndexerService,
+    EntitiesMappingService,
   ],
 })
 export class AppModule {}

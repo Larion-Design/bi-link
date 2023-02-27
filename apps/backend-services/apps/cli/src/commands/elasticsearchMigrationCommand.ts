@@ -1,20 +1,9 @@
-import {
-  INDEX_COMPANIES,
-  INDEX_EVENTS,
-  INDEX_PERSONS,
-  INDEX_PROPERTIES,
-} from '@app/definitions/constants'
-import {
-  CompaniesMappingService,
-  EventsMappingService,
-  MappingValidatorService,
-  PersonsMappingService,
-  PropertiesMappingService,
-} from '@app/search-tools-module/mapping'
+import { Logger } from '@nestjs/common'
 import { Command, CommandRunner, Option } from 'nest-commander'
+import { EntitiesMappingService } from '../search/entitiesMappingService'
 
 type CommandOptions = {
-  type: 'persons' | 'companies' | 'properties' | 'events'
+  entity: 'persons' | 'companies' | 'properties' | 'events'
 }
 
 @Command({
@@ -24,48 +13,34 @@ type CommandOptions = {
     'Updates mapping for the specified entity type (persons | companies | properties | events).',
 })
 export class ElasticsearchMigrationCommand extends CommandRunner {
-  constructor(
-    private readonly mappingValidatorService: MappingValidatorService,
-    private readonly personsMappingService: PersonsMappingService,
-    private readonly companiesMappingService: CompaniesMappingService,
-    private readonly propertiesMappingService: PropertiesMappingService,
-    private readonly eventsMappingService: EventsMappingService,
-  ) {
+  private readonly logger = new Logger(ElasticsearchMigrationCommand.name)
+
+  constructor(private readonly entitiesMappingService: EntitiesMappingService) {
     super()
   }
 
   async run(passedParam: string[], options?: CommandOptions) {
-    switch (options?.type) {
+    switch (options?.entity) {
       case 'persons': {
-        await this.mappingValidatorService.initIndex(
-          INDEX_PERSONS,
-          this.personsMappingService.getMapping(),
-        )
-        break
+        await this.entitiesMappingService.updatePersonsMapping()
+        return
       }
       case 'companies': {
-        await this.mappingValidatorService.initIndex(
-          INDEX_COMPANIES,
-          this.companiesMappingService.getMapping(),
-        )
-        break
+        await this.entitiesMappingService.updateCompaniesMapping()
+        return
       }
       case 'properties': {
-        await this.mappingValidatorService.initIndex(
-          INDEX_PROPERTIES,
-          this.propertiesMappingService.getMapping(),
-        )
-        break
+        await this.entitiesMappingService.updatePropertiesMapping()
+        return
       }
       case 'events': {
-        await this.mappingValidatorService.initIndex(
-          INDEX_EVENTS,
-          this.eventsMappingService.getMapping(),
-        )
-        break
+        await this.entitiesMappingService.updateEventsMapping()
+        return
       }
     }
-    return Promise.resolve()
+    return Promise.reject(
+      `Entity type is invalid or not specified (value provided: ${options?.entity})`,
+    )
   }
 
   @Option({

@@ -1,8 +1,8 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
-import { Graph } from 'defs'
+import { ReportGraph } from 'defs'
 
 @Schema({ timestamps: false, _id: false })
-export class GraphModel implements Graph {
+export class GraphModel implements ReportGraph {
   @Prop()
   label: string
 }
