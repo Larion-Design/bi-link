@@ -140,7 +140,8 @@
       "^@app/definitions(|/.*)$": "<rootDir>/libs/definitions/src/$1",
       "^@app/search-tools-module(|/.*)$": "<rootDir>/libs/search-tools-module/src/$1",
       "^@app/files(|/.*)$": "<rootDir>/libs/files/src/$1",
-      "^@app/graph-module(|/.*)$": "<rootDir>/libs/graph-module/src/$1"
+      "^@app/graph-module(|/.*)$": "<rootDir>/libs/graph-module/src/$1",
+      "^@app/scheduler-module(|/.*)$": "<rootDir>/libs/scheduler-module/src/$1"
     }
   },
   "peerDependencies": {

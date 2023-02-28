@@ -1,8 +1,8 @@
-import { ReportEventInfo } from '@app/pub/types/report'
+import { EVENT_CREATED, EVENT_UPDATED, ReportEventInfo } from '@app/scheduler-module'
 import { InjectQueue } from '@nestjs/bull'
 import { Injectable, Logger } from '@nestjs/common'
 import { Queue } from 'bull'
-import { EVENT_CREATED, EVENT_UPDATED, QUEUE_REPORTS } from '../constants'
+import { QUEUE_REPORTS } from '../constants'
 
 @Injectable()
 export class ReportEventDispatcherService {

@@ -7,7 +7,7 @@ import { SearchToolsModule } from '@app/search-tools-module'
 import { DatabaseMigrationCommand } from './commands/databaseMigrationCommand'
 import { ElasticsearchIndexEntityCommand } from './commands/elasticsearchIndexEntityCommand'
 import { ElasticsearchMigrationCommand } from './commands/elasticsearchMigrationCommand'
-import { GraphMigrationCommand } from './commands/graphMigrationCommand'
+import { GraphUpdateCommand } from './commands/graphUpdateCommand'
 import { PubModule } from '@app/pub'
 import { EntitiesIndexerService } from './search/entitiesIndexerService'
 import { EntitiesMappingService } from './search/entitiesMappingService'
@@ -48,7 +48,7 @@ import { EntitiesMappingService } from './search/entitiesMappingService'
     DatabaseMigrationCommand,
     ElasticsearchMigrationCommand,
     ElasticsearchIndexEntityCommand,
-    GraphMigrationCommand,
+    GraphUpdateCommand,
     EntitiesIndexerService,
     EntitiesMappingService,
   ],

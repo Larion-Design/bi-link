@@ -1,3 +1,4 @@
+import { SchedulerModule } from '@app/scheduler-module'
 import { Module } from '@nestjs/common'
 import { BullModule } from '@nestjs/bull'
 import { ElasticsearchModule } from '@nestjs/elasticsearch'
@@ -20,6 +21,7 @@ import { ReportEventDispatcherService } from './services/reportEventDispatcherSe
 
 @Module({
   imports: [
+    SchedulerModule,
     BullModule.registerQueue(
       { name: QUEUE_PERSONS },
       { name: QUEUE_COMPANIES },

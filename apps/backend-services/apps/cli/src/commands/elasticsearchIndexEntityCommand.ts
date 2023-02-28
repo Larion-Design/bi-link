@@ -3,7 +3,7 @@ import { Command, CommandRunner, Option } from 'nest-commander'
 import { EntitiesIndexerService } from '../search/entitiesIndexerService'
 
 type CommandOptions = {
-  entity: 'persons' | 'companies' | 'properties' | 'events'
+  type: 'persons' | 'companies' | 'properties' | 'events'
 }
 
 @Command({
@@ -13,15 +13,14 @@ type CommandOptions = {
     'Regenerates index for the specified entity type (persons | companies | properties | events)',
 })
 export class ElasticsearchIndexEntityCommand extends CommandRunner {
-  private readonly logger = new Logger(ElasticsearchIndexEntityCommand.name)
-
   constructor(private readonly entitiesIndexerService: EntitiesIndexerService) {
     super()
   }
-  async run(inputs: string[], options?: CommandOptions) {
-    const { entity } = options
 
-    switch (entity) {
+  async run(inputs: string[], options?: CommandOptions) {
+    const { type } = options
+
+    switch (type) {
       case 'persons': {
         await this.entitiesIndexerService.indexAllPersons()
         return
@@ -40,7 +39,7 @@ export class ElasticsearchIndexEntityCommand extends CommandRunner {
       }
     }
     return Promise.reject(
-      `Entity type is invalid or not specified (value provided: ${options?.entity})`,
+      `Entity type is invalid or not specified (value provided: ${options?.type})`,
     )
   }
 

@@ -1,8 +1,13 @@
+import {
+  EVENT_CREATED,
+  EVENT_UPDATED,
+  FileEventInfo,
+  FileLinkedEntity,
+} from '@app/scheduler-module'
 import { Injectable, Logger } from '@nestjs/common'
 import { InjectQueue } from '@nestjs/bull'
 import { Queue } from 'bull'
-import { FileEventInfo, FileLinkedEntity } from '@app/pub/types/file'
-import { EVENT_CREATED, EVENT_UPDATED, QUEUE_FILES } from '../constants'
+import { QUEUE_FILES } from '../constants'
 
 @Injectable()
 export class FileEventDispatcherService {

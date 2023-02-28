@@ -13,11 +13,18 @@ export const MICROSERVICES = {
     id: 'ENTITY_EVENTS',
     entityCreated: 'entityCreated',
     entityModified: 'entityModified',
-    graphEntityCreated: 'graphEntityCreated',
-    graphEntityUpdated: 'graphEntityUpdated',
+    entitiesRefresh: 'entitiesRefresh',
   },
   INDEXER: {
+    id: 'INDEXER',
     indexEntity: 'indexEntity',
+    entitiesRefresh: 'entitiesRefresh',
+  },
+  GRAPH: {
+    id: 'GRAPH',
+    entitiesRefresh: 'entitiesRefresh',
+    entityCreated: 'entityCreated',
+    entityModified: 'entityModified',
   },
 }
 

@@ -6,6 +6,6 @@ import { Command, CommandRunner } from 'nest-commander'
 })
 export class DatabaseMigrationCommand extends CommandRunner {
   async run(inputs: string[], options: Record<string, never>) {
-    return Promise.resolve()
+    return Promise.reject('Not implemented yet.')
   }
 }

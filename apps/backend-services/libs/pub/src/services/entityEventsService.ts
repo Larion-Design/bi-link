@@ -1,6 +1,7 @@
 import { Inject, Injectable, Logger } from '@nestjs/common'
 import { EntityInfo, MICROSERVICES } from '@app/pub/constants'
 import { ClientProxy } from '@nestjs/microservices'
+import { EntityType } from 'defs'
 
 @Injectable()
 export class EntityEventsService {
@@ -19,6 +20,14 @@ export class EntityEventsService {
   emitEntityCreated(entityEventInfo: EntityInfo) {
     try {
       this.client.emit(MICROSERVICES.ENTITY_EVENTS.entityCreated, entityEventInfo)
+    } catch (e) {
+      this.logger.error(e)
+    }
+  }
+
+  emitEntitiesRefresh(entityType: EntityType) {
+    try {
+      this.client.emit(MICROSERVICES.ENTITY_EVENTS.entitiesRefresh, entityType)
     } catch (e) {
       this.logger.error(e)
     }

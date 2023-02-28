@@ -1,8 +1,8 @@
 import { EmbeddedFileIndex, ProcessedFileIndex } from '@app/definitions/search/file'
+import { FileEventInfo, FileParentEntity } from '@app/scheduler-module'
 import { Injectable, Logger } from '@nestjs/common'
 import { ElasticsearchService } from '@nestjs/elasticsearch'
 import { format } from 'date-fns'
-import { FileEventInfo, FileParentEntity } from '@app/pub/types/file'
 import {
   INDEX_COMPANIES,
   INDEX_FILES,

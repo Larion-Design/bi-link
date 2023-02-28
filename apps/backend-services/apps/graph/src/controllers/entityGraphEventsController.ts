@@ -4,15 +4,16 @@ import { EntityInfo, MICROSERVICES } from '@app/pub/constants'
 
 @Injectable()
 export class EntityGraphEventsController {
-  @EventPattern(MICROSERVICES.ENTITY_EVENTS.graphEntityCreated)
+  @EventPattern(MICROSERVICES.GRAPH.entityCreated)
   async entityCreated(@Payload() entityInfo: EntityInfo) {
     return this.updateEntityDocument(entityInfo)
   }
 
-  @EventPattern(MICROSERVICES.ENTITY_EVENTS.graphEntityUpdated)
+  @EventPattern(MICROSERVICES.GRAPH.entityModified)
   async entityModified(@Payload() entityInfo: EntityInfo) {
     return this.updateEntityDocument(entityInfo)
   }
 
-  private updateEntityDocument = async ({ entityId, entityType }: EntityInfo) => Promise.resolve()
+  private updateEntityDocument = async ({ entityId, entityType }: EntityInfo) =>
+    Promise.reject('Not implemented')
 }

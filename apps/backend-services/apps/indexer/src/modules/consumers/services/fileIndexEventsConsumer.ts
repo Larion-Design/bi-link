@@ -1,9 +1,9 @@
 import { Process, Processor } from '@nestjs/bull'
 import { Job } from 'bull'
 import { Logger } from '@nestjs/common'
-import { EVENT_CREATED, EVENT_UPDATED, QUEUE_FILES } from '../../producers/constants'
-import { FileEventInfo } from '@app/pub/types/file'
+import { QUEUE_FILES } from '../../producers/constants'
 import { FilesIndexerService } from '@app/search-tools-module/indexer/filesIndexerService'
+import { EVENT_CREATED, EVENT_UPDATED, FileEventInfo } from '@app/scheduler-module'
 
 @Processor(QUEUE_FILES)
 export class FileIndexEventsConsumer {

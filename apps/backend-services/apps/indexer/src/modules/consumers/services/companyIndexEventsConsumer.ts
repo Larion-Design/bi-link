@@ -1,12 +1,16 @@
 import { Process, Processor } from '@nestjs/bull'
 import { Job } from 'bull'
 import { Logger } from '@nestjs/common'
-import { EVENT_CREATED, EVENT_UPDATED, QUEUE_COMPANIES } from '../../producers/constants'
+import {
+  CompanyEventInfo,
+  EVENT_CREATED,
+  EVENT_UPDATED,
+  FileParentEntity,
+} from '@app/scheduler-module'
+import { QUEUE_COMPANIES } from '../../producers/constants'
 import { FileEventDispatcherService } from '../../producers/services/fileEventDispatcherService'
-import { CompanyEventInfo } from '@app/pub/types/company'
 import { CompaniesIndexerService } from '@app/search-tools-module/indexer/companiesIndexerService'
 import { CompaniesService } from '@app/entities/services/companiesService'
-import { FileParentEntity } from '@app/pub/types/file'
 
 @Processor(QUEUE_COMPANIES)
 export class CompanyIndexEventsConsumer {

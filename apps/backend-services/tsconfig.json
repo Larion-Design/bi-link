@@ -68,6 +68,12 @@
       ],
       "@app/graph-module/*": [
         "libs/graph-module/src/*"
+      ],
+      "@app/scheduler-module": [
+        "libs/scheduler-module/src"
+      ],
+      "@app/scheduler-module/*": [
+        "libs/scheduler-module/src/*"
       ]
     }
   }

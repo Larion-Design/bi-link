@@ -1,12 +1,16 @@
+import {
+  EVENT_CREATED,
+  EVENT_UPDATED,
+  FileParentEntity,
+  PropertyEventInfo,
+} from '@app/scheduler-module'
 import { Process, Processor } from '@nestjs/bull'
 import { Logger } from '@nestjs/common'
-import { EVENT_CREATED, EVENT_UPDATED, QUEUE_PROPERTIES } from '../../producers/constants'
+import { QUEUE_PROPERTIES } from '../../producers/constants'
 import { FileEventDispatcherService } from '../../producers/services/fileEventDispatcherService'
 import { Job } from 'bull'
-import { FileParentEntity } from '@app/pub/types/file'
 import { PropertiesService } from '@app/entities/services/propertiesService'
 import { PropertiesIndexerService } from '@app/search-tools-module/indexer/propertiesIndexerService'
-import { PropertyEventInfo } from '@app/pub/types/property'
 
 @Processor(QUEUE_PROPERTIES)
 export class PropertyIndexEventsConsumer {

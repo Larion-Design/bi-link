@@ -124,6 +124,15 @@
       "compilerOptions": {
         "tsConfigPath": "apps/cli/tsconfig.app.json"
       }
+    },
+    "scheduler-module": {
+      "type": "library",
+      "root": "libs/scheduler-module",
+      "entryFile": "index",
+      "sourceRoot": "libs/scheduler-module/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/scheduler-module/tsconfig.lib.json"
+      }
     }
   }
 }

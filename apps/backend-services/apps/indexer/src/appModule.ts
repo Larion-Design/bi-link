@@ -27,7 +27,7 @@ import { EntityEventsController } from './modules/controllers/entityEventsContro
             port: +configService.get<number>('REDIS_PORT'),
           },
           defaultJobOptions: {
-            removeOnFail: true,
+            removeOnFail: false,
             removeOnComplete: true,
             timeout: 60000,
           },

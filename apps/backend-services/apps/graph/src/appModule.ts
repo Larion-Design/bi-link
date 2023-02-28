@@ -1,17 +1,15 @@
 import { EntitiesModule } from '@app/entities'
 import { PubModule } from '@app/pub'
+import { BullModule } from '@nestjs/bull'
 import { Module } from '@nestjs/common'
 import { GraphModule } from '@app/graph-module'
+import { ConsumersModule } from './consumers/consumersModule'
+import { ProducersModule } from './producers/producersModule'
 import { EntityDocumentEventsController } from './controllers/entityDocumentEventsController'
-import { LocationGraphService } from './services/locationGraphService'
-import { PersonGraphService } from './services/personGraphService'
 import { ConfigModule, ConfigService } from '@nestjs/config'
 import { SentryModule } from '@ntegral/nestjs-sentry'
 import { MongooseModule } from '@nestjs/mongoose'
 import { Neo4jModule } from 'nest-neo4j/dist'
-import { CompanyGraphService } from './services/companyGraphService'
-import { EventGraphService } from './services/eventGraphService'
-import { PropertyGraphService } from './services/propertyGraphService'
 import { ServiceHealthModule } from '@app/service-health'
 
 @Module({
@@ -20,6 +18,24 @@ import { ServiceHealthModule } from '@app/service-health'
     PubModule,
     GraphModule,
     ServiceHealthModule,
+    ProducersModule,
+    ConsumersModule,
+    BullModule.forRootAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: async (configService: ConfigService) =>
+        Promise.resolve({
+          redis: {
+            host: configService.get<string>('REDIS_HOST'),
+            port: +configService.get<number>('REDIS_PORT'),
+          },
+          defaultJobOptions: {
+            removeOnFail: false,
+            removeOnComplete: true,
+            timeout: 60000,
+          },
+        }),
+    }),
     ConfigModule.forRoot({
       isGlobal: true,
       ignoreEnvVars: true,
@@ -58,13 +74,6 @@ import { ServiceHealthModule } from '@app/service-health'
           port: +configService.get<number>('NEO4J_PORT'),
         }),
     }),
-  ],
-  providers: [
-    PersonGraphService,
-    CompanyGraphService,
-    EventGraphService,
-    PropertyGraphService,
-    LocationGraphService,
   ],
   controllers: [EntityDocumentEventsController],
 })
