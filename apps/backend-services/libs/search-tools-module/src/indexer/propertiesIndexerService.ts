@@ -3,6 +3,7 @@ import {
   ConnectedPersonIndex,
 } from '@app/definitions/search/connectedEntity'
 import { PropertyIndex } from '@app/definitions/search/property'
+import { LocationIndexerService } from '@app/search-tools-module/indexer/locationIndexerService'
 import { Injectable, Logger } from '@nestjs/common'
 import { PropertyModel } from '@app/entities/models/property/propertyModel'
 import { INDEX_PROPERTIES } from '@app/definitions/constants'
@@ -20,6 +21,7 @@ export class PropertiesIndexerService {
     private readonly elasticsearchService: ElasticsearchService,
     private readonly propertiesService: PropertiesService,
     private readonly connectedEntityIndexerService: ConnectedEntityIndexerService,
+    private readonly locationIndexerService: LocationIndexerService,
   ) {}
 
   indexProperty = async (propertyId: string, propertyModel: PropertyModel) => {
@@ -60,6 +62,15 @@ export class PropertiesIndexerService {
               ...propertyModel.owners.map(({ vehicleOwnerInfo: { plateNumbers } }) => plateNumbers),
             ),
           ),
+        ),
+      }
+    }
+
+    if (propertyModel.realEstateInfo) {
+      propertyIndex.realEstateInfo = {
+        surface: propertyModel.realEstateInfo.surface,
+        location: this.locationIndexerService.createLocationIndexData(
+          propertyModel.realEstateInfo.location,
         ),
       }
     }
