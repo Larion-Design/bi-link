@@ -4,7 +4,7 @@ import {
   EVENT_UPDATED,
   FileParentEntity,
 } from '@app/scheduler-module'
-import { Process, Processor } from '@nestjs/bull'
+import { OnQueueActive, OnQueueCompleted, OnQueueFailed, Process, Processor } from '@nestjs/bull'
 import { Logger } from '@nestjs/common'
 import { FileEventDispatcherService } from '../../producers/services/fileEventDispatcherService'
 import { Job } from 'bull'
@@ -21,6 +21,21 @@ export class EventIndexEventsConsumer {
     private readonly eventsIndexerService: EventsIndexerService,
     private readonly fileEventDispatcherService: FileEventDispatcherService,
   ) {}
+
+  @OnQueueActive()
+  onQueueActive({ id, name }: Job) {
+    this.logger.debug(`Processing job ID ${id} (${name})`)
+  }
+
+  @OnQueueCompleted()
+  onQueueCompleted({ id, name }: Job) {
+    this.logger.debug(`Completed job ID ${id} (${name})`)
+  }
+
+  @OnQueueFailed()
+  onQueueFailed({ id, name }: Job) {
+    this.logger.debug(`Failed job ID ${id} (${name})`)
+  }
 
   @Process(EVENT_CREATED)
   async eventCreated(job: Job<EventEventInfo>) {

@@ -1,6 +1,6 @@
 import { Logger } from '@nestjs/common'
 import { Job } from 'bull'
-import { Process, Processor } from '@nestjs/bull'
+import { OnQueueActive, OnQueueCompleted, OnQueueFailed, Process, Processor } from '@nestjs/bull'
 import { QUEUE_GRAPH_PROPERTIES } from '../producers/constants'
 import { EVENT_CREATED, EVENT_UPDATED, PropertyEventInfo } from '@app/scheduler-module'
 import { PropertiesService } from '@app/entities/services/propertiesService'
@@ -14,6 +14,21 @@ export class PropertyEventConsumer {
     private readonly propertiesService: PropertiesService,
     private readonly propertyGraphService: PropertyGraphService,
   ) {}
+
+  @OnQueueActive()
+  onQueueActive({ id, name }: Job) {
+    this.logger.debug(`Processing job ID ${id} (${name})`)
+  }
+
+  @OnQueueCompleted()
+  onQueueCompleted({ id, name }: Job) {
+    this.logger.debug(`Completed job ID ${id} (${name})`)
+  }
+
+  @OnQueueFailed()
+  onQueueFailed({ id, name }: Job) {
+    this.logger.debug(`Failed job ID ${id} (${name})`)
+  }
 
   @Process(EVENT_CREATED)
   async propertyCreated(job: Job<PropertyEventInfo>) {

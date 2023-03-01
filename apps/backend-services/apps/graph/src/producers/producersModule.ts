@@ -9,10 +9,10 @@ import {
   QUEUE_GRAPH_PROPERTIES,
   QUEUE_GRAPH_REPORTS,
 } from './constants'
-import { CompanyGraphDispatcherService } from './services/companyGraphDispatcherService'
+import { CompanyDispatcherService } from './services/companyDispatcherService'
 import { EventDispatcherService } from './services/eventDispatcherService'
-import { PersonEventDispatcherService } from './services/personEventDispatcherService'
-import { PropertyEventDispatcherService } from './services/propertyEventDispatcherService'
+import { PersonDispatcherService } from './services/personDispatcherService'
+import { PropertyDispatcherService } from './services/propertyDispatcherService'
 
 @Module({
   imports: [
@@ -27,15 +27,15 @@ import { PropertyEventDispatcherService } from './services/propertyEventDispatch
     ),
   ],
   providers: [
-    PersonEventDispatcherService,
-    CompanyGraphDispatcherService,
-    PropertyEventDispatcherService,
+    PersonDispatcherService,
+    CompanyDispatcherService,
+    PropertyDispatcherService,
     EventDispatcherService,
   ],
   exports: [
-    PersonEventDispatcherService,
-    CompanyGraphDispatcherService,
-    PropertyEventDispatcherService,
+    PersonDispatcherService,
+    CompanyDispatcherService,
+    PropertyDispatcherService,
     EventDispatcherService,
   ],
 })

@@ -8,7 +8,7 @@ import { EntitiesModule } from '@app/entities/entitiesModule'
 import { ServiceHealthModule } from '@app/service-health/serviceHealthModule'
 import { ProducersModule } from './modules/producers/producersModule'
 import { PubModule } from '@app/pub'
-import { EntityEventsController } from './modules/controllers/entityEventsController'
+import { EntityEventsController } from './modules/rpc/entityEventsController'
 
 @Module({
   imports: [

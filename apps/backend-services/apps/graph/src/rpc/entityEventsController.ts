@@ -8,17 +8,17 @@ import { EventPattern, Payload } from '@nestjs/microservices'
 import { EntityInfo, MICROSERVICES } from '@app/pub/constants'
 import { EntityType } from 'defs'
 import { EventDispatcherService } from '../producers/services/eventDispatcherService'
-import { PersonEventDispatcherService } from '../producers/services/personEventDispatcherService'
-import { PropertyEventDispatcherService } from '../producers/services/propertyEventDispatcherService'
+import { PersonDispatcherService } from '../producers/services/personDispatcherService'
+import { PropertyDispatcherService } from '../producers/services/propertyDispatcherService'
 
 @Controller()
 export class EntityEventsController {
   private readonly logger = new Logger(EntityEventsController.name)
 
   constructor(
-    private readonly personEventDispatcherService: PersonEventDispatcherService,
+    private readonly personEventDispatcherService: PersonDispatcherService,
     private readonly companyEventDispatcherService: CompanyEventSchedulerService,
-    private readonly propertyEventDispatcherService: PropertyEventDispatcherService,
+    private readonly propertyEventDispatcherService: PropertyDispatcherService,
     private readonly eventDispatcherService: EventDispatcherService,
 
     private readonly personsService: PersonsService,

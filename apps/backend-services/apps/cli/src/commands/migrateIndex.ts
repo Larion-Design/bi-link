@@ -12,8 +12,8 @@ type CommandOptions = {
   description:
     'Updates mapping for the specified entity type (persons | companies | properties | events).',
 })
-export class ElasticsearchMigrationCommand extends CommandRunner {
-  private readonly logger = new Logger(ElasticsearchMigrationCommand.name)
+export class MigrateIndex extends CommandRunner {
+  private readonly logger = new Logger(MigrateIndex.name)
 
   constructor(private readonly entitiesMappingService: EntitiesMappingService) {
     super()

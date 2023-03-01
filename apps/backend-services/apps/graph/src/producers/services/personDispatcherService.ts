@@ -5,7 +5,7 @@ import { PersonEventInfo, PersonEventSchedulerService } from '@app/scheduler-mod
 import { QUEUE_GRAPH_PERSONS } from '../constants'
 
 @Injectable()
-export class PersonEventDispatcherService extends PersonEventSchedulerService {
+export class PersonDispatcherService extends PersonEventSchedulerService {
   constructor(
     @InjectQueue(QUEUE_GRAPH_PERSONS)
     protected readonly queue: Queue<PersonEventInfo>,

@@ -4,9 +4,9 @@ import { Neo4jModule } from 'nest-neo4j/dist'
 import { CacheModule, Module } from '@nestjs/common'
 import { EntitiesModule } from '@app/entities'
 import { SearchToolsModule } from '@app/search-tools-module'
-import { DatabaseMigrationCommand } from './commands/databaseMigrationCommand'
-import { ElasticsearchIndexEntityCommand } from './commands/elasticsearchIndexEntityCommand'
-import { ElasticsearchMigrationCommand } from './commands/elasticsearchMigrationCommand'
+import { MigrateDatabaseCommand } from './commands/migrateDatabaseCommand'
+import { IndexEntityCommand } from './commands/indexEntityCommand'
+import { MigrateIndex } from './commands/migrateIndex'
 import { GraphUpdateCommand } from './commands/graphUpdateCommand'
 import { PubModule } from '@app/pub'
 import { EntitiesIndexerService } from './search/entitiesIndexerService'
@@ -45,9 +45,9 @@ import { EntitiesMappingService } from './search/entitiesMappingService'
     }),
   ],
   providers: [
-    DatabaseMigrationCommand,
-    ElasticsearchMigrationCommand,
-    ElasticsearchIndexEntityCommand,
+    MigrateDatabaseCommand,
+    MigrateIndex,
+    IndexEntityCommand,
     GraphUpdateCommand,
     EntitiesIndexerService,
     EntitiesMappingService,

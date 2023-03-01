@@ -3,7 +3,9 @@ import { IndexerService } from '@app/pub/services/indexerService'
 
 @Injectable()
 export class EntitiesIndexerService {
-  constructor(private readonly indexerService: IndexerService) {}
+  constructor(private readonly indexerService: IndexerService) {
+    this.indexAllPersons()
+  }
 
   indexAllPersons = () => this.indexerService.entitiesRefresh('PERSON')
   indexAllCompanies = () => this.indexerService.entitiesRefresh('COMPANY')

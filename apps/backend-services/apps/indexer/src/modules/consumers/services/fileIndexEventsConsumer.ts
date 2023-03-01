@@ -1,4 +1,4 @@
-import { Process, Processor } from '@nestjs/bull'
+import { OnQueueActive, OnQueueCompleted, OnQueueFailed, Process, Processor } from '@nestjs/bull'
 import { Job } from 'bull'
 import { Logger } from '@nestjs/common'
 import { QUEUE_FILES } from '../../producers/constants'
@@ -10,6 +10,21 @@ export class FileIndexEventsConsumer {
   private readonly logger = new Logger(FileIndexEventsConsumer.name)
 
   constructor(private readonly fileIndexerService: FilesIndexerService) {}
+
+  @OnQueueActive()
+  onQueueActive({ id, name }: Job) {
+    this.logger.debug(`Processing job ID ${id} (${name})`)
+  }
+
+  @OnQueueCompleted()
+  onQueueCompleted({ id, name }: Job) {
+    this.logger.debug(`Completed job ID ${id} (${name})`)
+  }
+
+  @OnQueueFailed()
+  onQueueFailed({ id, name }: Job) {
+    this.logger.debug(`Failed job ID ${id} (${name})`)
+  }
 
   @Process(EVENT_CREATED)
   async fileCreated(job: Job<FileEventInfo>) {

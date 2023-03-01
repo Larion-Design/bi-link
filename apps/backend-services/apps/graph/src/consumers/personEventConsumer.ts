@@ -1,5 +1,5 @@
 import { PersonsService } from '@app/entities/services/personsService'
-import { Process, Processor } from '@nestjs/bull'
+import { OnQueueActive, OnQueueCompleted, OnQueueFailed, Process, Processor } from '@nestjs/bull'
 import { Logger } from '@nestjs/common'
 import { Job } from 'bull'
 import { QUEUE_GRAPH_PERSONS } from '../producers/constants'
@@ -14,6 +14,21 @@ export class PersonEventConsumer {
     private readonly personsService: PersonsService,
     private readonly personGraphService: PersonGraphService,
   ) {}
+
+  @OnQueueActive()
+  onQueueActive({ id, name }: Job) {
+    this.logger.debug(`Processing job ID ${id} (${name})`)
+  }
+
+  @OnQueueCompleted()
+  onQueueCompleted({ id, name }: Job) {
+    this.logger.debug(`Completed job ID ${id} (${name})`)
+  }
+
+  @OnQueueFailed()
+  onQueueFailed({ id, name }: Job) {
+    this.logger.debug(`Failed job ID ${id} (${name})`)
+  }
 
   @Process(EVENT_CREATED)
   async personCreated(job: Job<PersonEventInfo>) {

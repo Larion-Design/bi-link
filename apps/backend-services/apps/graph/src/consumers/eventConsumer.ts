@@ -1,7 +1,7 @@
 import { EventsService } from '@app/entities/services/eventsService'
 import { Logger } from '@nestjs/common'
 import { Job } from 'bull'
-import { Process, Processor } from '@nestjs/bull'
+import { OnQueueActive, OnQueueCompleted, OnQueueFailed, Process, Processor } from '@nestjs/bull'
 import { QUEUE_GRAPH_EVENTS } from '../producers/constants'
 import { EVENT_CREATED, EVENT_UPDATED, EventEventInfo } from '@app/scheduler-module'
 import { EventGraphService } from './services/eventGraphService'
@@ -14,6 +14,21 @@ export class EventConsumer {
     private readonly eventsService: EventsService,
     private readonly eventGraphService: EventGraphService,
   ) {}
+
+  @OnQueueActive()
+  onQueueActive({ id, name }: Job) {
+    this.logger.debug(`Processing job ID ${id} (${name})`)
+  }
+
+  @OnQueueCompleted()
+  onQueueCompleted({ id, name }: Job) {
+    this.logger.debug(`Completed job ID ${id} (${name})`)
+  }
+
+  @OnQueueFailed()
+  onQueueFailed({ id, name }: Job) {
+    this.logger.debug(`Failed job ID ${id} (${name})`)
+  }
 
   @Process(EVENT_CREATED)
   async eventCreated(job: Job<EventEventInfo>) {

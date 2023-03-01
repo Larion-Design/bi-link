@@ -12,7 +12,7 @@ type CommandOptions = {
   description:
     'Regenerates index for the specified entity type (persons | companies | properties | events)',
 })
-export class ElasticsearchIndexEntityCommand extends CommandRunner {
+export class IndexEntityCommand extends CommandRunner {
   constructor(private readonly entitiesIndexerService: EntitiesIndexerService) {
     super()
   }
