@@ -8,7 +8,7 @@ type CommandOptions = {
 
 @Command({
   name: 'search-index',
-  arguments: '<entity>',
+  arguments: '<type>',
   description:
     'Regenerates index for the specified entity type (persons | companies | properties | events)',
 })

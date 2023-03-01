@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useCancelDialog } from '@frontend/utils/hooks/useCancelDialog'
 import { getDefaultPerson } from '@frontend/components/form/person/constants'
 import { Education } from '@frontend/components/form/person/education'
-import { Location } from '@frontend/components/form/location'
+import { getDefaultLocation, Location } from '@frontend/components/form/location'
 import { OldNames } from '@frontend/components/form/person/oldNames'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
@@ -176,7 +176,7 @@ const Form: React.FunctionComponent<Props & FormikProps<PersonAPIInput>> = ({
                 <Grid item xs={12} sx={{ mt: 2 }}>
                   <Location
                     label={'Locul nasterii'}
-                    location={values.birthPlace}
+                    location={values.birthPlace ?? getDefaultLocation()}
                     updateLocation={(location) => {
                       setFieldValue('birthPlace', location)
                     }}
@@ -187,7 +187,7 @@ const Form: React.FunctionComponent<Props & FormikProps<PersonAPIInput>> = ({
                 <Grid item xs={12}>
                   <Location
                     label={'Domiciliu'}
-                    location={values.homeAddress}
+                    location={values.homeAddress ?? getDefaultLocation()}
                     updateLocation={(location) => {
                       setFieldValue('homeAddress', location)
                     }}

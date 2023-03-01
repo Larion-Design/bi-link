@@ -25,7 +25,7 @@ export class Person implements PersonAPIOutput {
   @Field()
   lastName: string
 
-  @Field(() => [OldName])
+  @Field(() => [OldName], { defaultValue: [] })
   oldNames: OldName[]
 
   @Field()

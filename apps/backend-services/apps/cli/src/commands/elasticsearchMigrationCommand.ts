@@ -8,7 +8,7 @@ type CommandOptions = {
 
 @Command({
   name: 'search-mapping',
-  arguments: '<entity>',
+  arguments: '<type>',
   description:
     'Updates mapping for the specified entity type (persons | companies | properties | events).',
 })

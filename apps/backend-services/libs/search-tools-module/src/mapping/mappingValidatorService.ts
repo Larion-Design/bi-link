@@ -21,7 +21,7 @@ export class MappingValidatorService {
 
   private createIndex = async (index: string, mapping: Record<string, MappingProperty>) => {
     try {
-      this.logger.debug(`Elasticsearch will create index ${index}`)
+      this.logger.log(`Creating index ${index}`)
       const response = await this.elasticsearchService.indices.create({
         index,
         mappings: {
@@ -29,51 +29,27 @@ export class MappingValidatorService {
           properties: mapping,
         },
       })
-      this.logger.debug(`Elasticsearch successfully created index ${index}`)
+      this.logger.log(`Created index ${index}`)
       return response.acknowledged
     } catch (error) {
       this.logger.error(error)
     }
   }
 
-  private updateIndex = async (index: string, mapping: Record<string, MappingProperty>) => {
+  private deleteMapping = async (index: string) => {
     try {
-      const { acknowledged } = await this.elasticsearchService.indices.putMapping({
-        index,
-        dynamic: false,
-        properties: mapping,
-      })
-
-      if (acknowledged) {
-        this.logger.debug(`Updated mapping for ${index} doesn't require full index rebuild`)
-      }
-      return !acknowledged
-    } catch (error) {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-      if (error?.body?.error.type === 'illegal_argument_exception') {
-        return this.migrateMapping(index, mapping)
-      } else this.logger.error(error)
+      this.logger.log(`Removing index ${index}`)
+      const { acknowledged } = await this.elasticsearchService.indices.delete({ index })
+      return acknowledged
+    } catch (e) {
+      this.logger.error(e)
     }
-    return false
-  }
-
-  private migrateMapping = async (index: string, mapping: Record<string, MappingProperty>) => {
-    try {
-      this.logger.debug(`Removing index ${index}.`)
-      await this.elasticsearchService.indices.delete({ index })
-
-      this.logger.debug(`Recreating index ${index} with updated mapping.`)
-      return this.createIndex(index, mapping)
-    } catch (error) {
-      this.logger.error(error)
-    }
-    return false
   }
 
   initIndex = async (index: string, mapping: Record<string, MappingProperty>) => {
     try {
       if (await this.indexExists(index)) {
-        return this.updateIndex(index, mapping)
+        await this.deleteMapping(index)
       }
       return this.createIndex(index, mapping)
     } catch (error) {
