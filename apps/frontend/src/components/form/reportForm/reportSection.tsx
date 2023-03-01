@@ -4,7 +4,8 @@ import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined'
 import Box from '@mui/material/Box'
 import AddCardOutlinedIcon from '@mui/icons-material/AddCardOutlined'
 import { EntityType, ReportSectionAPIInput } from 'defs'
-import { useMap } from '../../../utils/hooks/useMap'
+import { DragDropContext, Draggable, Droppable, OnDragEndResponder } from 'react-beautiful-dnd'
+import { useDebouncedMap } from '../../../utils/hooks/useMap'
 import { ActionButton } from '../../button/actionButton'
 import { useDialog } from '../../dialog/dialogProvider'
 import { ToolbarMenu } from '../../menu/toolbarMenu'
@@ -33,7 +34,10 @@ export const ReportSection: React.FunctionComponent<Props> = ({
   graphRemoved,
 }) => {
   const dialog = useDialog()
-  const { values, entries, uid, add, update, keys, remove } = useMap(sectionInfo.content)
+  const { values, entries, uid, add, update, updateBulk, keys, remove, map } = useDebouncedMap(
+    1000,
+    sectionInfo.content,
+  )
   const deps = [uid]
   const addTitle = useCallback(() => add({ order: keys().length, title: { content: '' } }), deps)
   const addText = useCallback(() => add({ order: keys().length, text: { content: '' } }), deps)
@@ -66,6 +70,18 @@ export const ReportSection: React.FunctionComponent<Props> = ({
         onConfirm: removeSection,
       }),
     [dialog, uid],
+  )
+
+  const onContentReorder: OnDragEndResponder = useCallback(
+    ({
+      source: { droppableId: sourceUid, index: sourceIndex },
+      destination: { droppableId: targetUid, index: targetIndex },
+    }) =>
+      updateBulk((items) => {
+        items.set(sourceUid, { ...items.get(sourceUid), order: targetIndex })
+        items.set(targetUid, { ...items.get(targetUid), order: sourceIndex })
+      }),
+    [uid],
   )
 
   return (
@@ -108,22 +124,38 @@ export const ReportSection: React.FunctionComponent<Props> = ({
           />
         </Box>
       </Box>
-      <Grid container spacing={2}>
-        {entries().map(([uid, content]) => (
-          <Grid key={uid} item xs={12}>
-            <ReportContentElement
-              entityId={entityId}
-              entityType={entityType}
-              contentInfo={content}
-              updateContentInfo={(contentInfo) => update(uid, contentInfo)}
-              removeContent={() => removeElement(uid)}
-              generateTextPreview={generateTextPreview}
-              graphRemoved={graphRemoved}
-              graphCreated={graphCreated}
-            />
-          </Grid>
-        ))}
-      </Grid>
+      <DragDropContext onDragEnd={onContentReorder}>
+        <Droppable droppableId={'reportContentItems'}>
+          {(provided, snapshot) => (
+            <Grid container spacing={2} ref={provided.innerRef}>
+              {entries().map(([uid, content], index) => (
+                <Draggable draggableId={uid} index={index}>
+                  {(provided, snapshot) => (
+                    <Grid
+                      item
+                      xs={12}
+                      ref={provided.innerRef}
+                      {...provided.draggableProps}
+                      {...provided.dragHandleProps}
+                    >
+                      <ReportContentElement
+                        entityId={entityId}
+                        entityType={entityType}
+                        contentInfo={content}
+                        updateContentInfo={(contentInfo) => update(uid, contentInfo)}
+                        removeContent={() => removeElement(uid)}
+                        generateTextPreview={generateTextPreview}
+                        graphRemoved={graphRemoved}
+                        graphCreated={graphCreated}
+                      />
+                    </Grid>
+                  )}
+                </Draggable>
+              ))}
+            </Grid>
+          )}
+        </Droppable>
+      </DragDropContext>
     </Box>
   )
 }

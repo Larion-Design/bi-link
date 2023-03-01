@@ -1,9 +1,9 @@
 import React, { useCallback, useEffect } from 'react'
 import { EntityType, ReportAPIInput } from 'defs'
-import { createReportRequest } from '../../../../graphql/reports/mutations/createReport'
-import { updateReportRequest } from '../../../../graphql/reports/mutations/updateReport'
-import { getReportRequest } from '../../../../graphql/reports/queries/getReport'
-import { ReportForm } from '../../../form/reportForm'
+import { ReportForm } from '@frontend/components/form/reportForm'
+import { createReportRequest } from '@frontend/graphql/reports/mutations/createReport'
+import { updateReportRequest } from '@frontend/graphql/reports/mutations/updateReport'
+import { getReportRequest } from '@frontend/graphql/reports/queries/getReport'
 
 type Props = {
   entityId: string
