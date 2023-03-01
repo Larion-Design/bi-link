@@ -34,7 +34,7 @@ export const ReportSection: React.FunctionComponent<Props> = ({
   graphRemoved,
 }) => {
   const dialog = useDialog()
-  const { values, entries, uid, add, update, updateBulk, keys, remove, map } = useDebouncedMap(
+  const { values, entries, uid, add, update, updateBulk, keys, remove, size } = useDebouncedMap(
     1000,
     sectionInfo.content,
   )
@@ -74,13 +74,17 @@ export const ReportSection: React.FunctionComponent<Props> = ({
 
   const onContentReorder: OnDragEndResponder = useCallback(
     ({
+      reason,
       source: { droppableId: sourceUid, index: sourceIndex },
       destination: { droppableId: targetUid, index: targetIndex },
-    }) =>
-      updateBulk((items) => {
-        items.set(sourceUid, { ...items.get(sourceUid), order: targetIndex })
-        items.set(targetUid, { ...items.get(targetUid), order: sourceIndex })
-      }),
+    }) => {
+      if (reason === 'DROP') {
+        updateBulk((items) => {
+          items.set(sourceUid, { ...items.get(sourceUid), order: targetIndex })
+          items.set(targetUid, { ...items.get(targetUid), order: sourceIndex })
+        })
+      }
+    },
     [uid],
   )
 
@@ -125,9 +129,9 @@ export const ReportSection: React.FunctionComponent<Props> = ({
         </Box>
       </Box>
       <DragDropContext onDragEnd={onContentReorder}>
-        <Droppable droppableId={'reportContentItems'}>
+        <Droppable droppableId={'reportContentItems'} mode={'virtual'} isDropDisabled={!size}>
           {(provided, snapshot) => (
-            <Grid container spacing={2} ref={provided.innerRef}>
+            <Grid container spacing={2} ref={provided.innerRef} {...provided.droppableProps}>
               {entries().map(([uid, content], index) => (
                 <Draggable draggableId={uid} index={index}>
                   {(provided, snapshot) => (

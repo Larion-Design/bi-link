@@ -28,7 +28,7 @@ export const FilterPanel: React.FunctionComponent<Props> = ({
   relationshipsTypes,
   filterUpdated,
 }) => {
-  const intl = useIntl()
+  const { formatMessage } = useIntl()
   const [open, setOpen] = useState(false)
   const marks = useMemo(() => {
     const sliderValues = []
@@ -67,7 +67,7 @@ export const FilterPanel: React.FunctionComponent<Props> = ({
             label={'Tipuri de entitati'}
             options={Array.from(entitiesTypes.entries()).map(([entityType, selected]) => ({
               value: entityType,
-              label: intl.formatMessage({ id: entityType, defaultMessage: entityType }),
+              label: formatMessage({ id: entityType, defaultMessage: entityType }),
               selected,
             }))}
             onSelectedOptionsChange={(options) => {
@@ -83,7 +83,7 @@ export const FilterPanel: React.FunctionComponent<Props> = ({
             options={Array.from(relationshipsTypes.entries()).map(
               ([relationshipType, selected]) => ({
                 value: relationshipType,
-                label: intl.formatMessage({
+                label: formatMessage({
                   id: relationshipType,
                   defaultMessage: relationshipType,
                 }),

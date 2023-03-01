@@ -30,7 +30,7 @@ export class EventGraphService {
         EntityLabel.EVENT,
       )
 
-      await this.upsertPartyRelationships(eventDocument)
+      await this.upsertEventParties(eventDocument)
       await this.upsertEventLocation(eventDocument)
     } catch (e) {
       this.logger.error(e)
@@ -48,7 +48,7 @@ export class EventGraphService {
     }
   }
 
-  private upsertPartyRelationships = async (eventDocument: EventDocument) => {
+  private upsertEventParties = async (eventDocument: EventDocument) => {
     try {
       if (eventDocument.parties.length) {
         const map = new Map<string, PartyGraphRelationship>()

@@ -11,6 +11,7 @@ import React, { useCallback, useEffect, useState } from 'react'
 import { OldNameAPIInput } from 'defs'
 import { processGridCellValue } from '@frontend/utils/dataGrid'
 import { GridSetItem, useGridSet } from '@frontend/utils/hooks/useGridSet'
+import { FormattedMessage } from 'react-intl'
 import { AddItemToolbarButton } from '../../../dataGrid/addItemToolbarButton'
 import { RemoveRowsToolbarButton } from '../../../dataGrid/removeRowsToolbarButton'
 import { Textarea } from '../../../dataGrid/textArea'
@@ -44,7 +45,7 @@ export const OldNames: React.FunctionComponent<Props> = ({ oldNames, updateOldNa
   return (
     <Box sx={{ minHeight: '50vh', maxHeight: '100vh', mt: 5 }}>
       <Typography variant={'h6'} sx={{ mb: 3 }}>
-        Nume vechi
+        <FormattedMessage id={'Old Names'} />
       </Typography>
       <DataGrid
         autoHeight
