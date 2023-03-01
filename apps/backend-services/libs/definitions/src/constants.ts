@@ -9,5 +9,3 @@ export const INDEX_LOCATIONS = 'locations'
 export const BUCKET_FILES = 'files'
 export const BUCKET_IMAGES = 'images'
 export const BUCKET_REPORTS = 'reports'
-
-export type EntityType = 'PERSON' | 'COMPANY' | 'INCIDENT' | 'PROPERTY' | 'FILE' | 'REPORT'

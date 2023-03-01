@@ -16,10 +16,37 @@ const request = gql`
       name
       cui
       registrationNumber
-      headquarters
+      headquarters {
+        locationId
+        street
+        number
+        building
+        door
+        zipCode
+        locality
+        county
+        country
+        otherInfo
+        coordinates {
+          lat
+          long
+        }
+      }
       locations {
-        address
-        isActive
+        locationId
+        street
+        number
+        building
+        door
+        zipCode
+        locality
+        county
+        country
+        otherInfo
+        coordinates {
+          lat
+          long
+        }
       }
       associates {
         person {

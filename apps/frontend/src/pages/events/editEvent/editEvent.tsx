@@ -4,7 +4,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { useSnackbar } from 'notistack'
 import { DashboardPage } from '../../../components/page/DashboardPage'
 import { routes } from '../../../router/routes'
-import { Loader } from '../../../components/loader/loader'
+import { Loader } from '@frontend/components/loader'
 import { updateEventRequest } from '../../../graphql/events/mutations/updateEvent'
 import { EventDetails } from '../../../components/page/eventDetails'
 

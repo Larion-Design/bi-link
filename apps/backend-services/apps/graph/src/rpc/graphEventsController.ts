@@ -3,7 +3,7 @@ import { EventPattern, Payload } from '@nestjs/microservices'
 import { EntityInfo, MICROSERVICES } from '@app/pub/constants'
 
 @Injectable()
-export class EntityGraphEventsController {
+export class GraphEventsController {
   @EventPattern(MICROSERVICES.GRAPH.entityCreated)
   async entityCreated(@Payload() entityInfo: EntityInfo) {
     return this.updateEntityDocument(entityInfo)

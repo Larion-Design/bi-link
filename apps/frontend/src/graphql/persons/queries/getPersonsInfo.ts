@@ -15,9 +15,27 @@ const request = gql`
       _id
       firstName
       lastName
-      oldName
+      oldNames {
+        name
+        changeReason
+      }
       cnp
-      homeAddress
+      homeAddress {
+        locationId
+        street
+        number
+        building
+        door
+        zipCode
+        locality
+        county
+        country
+        otherInfo
+        coordinates {
+          lat
+          long
+        }
+      }
       birthdate
       images {
         fileId

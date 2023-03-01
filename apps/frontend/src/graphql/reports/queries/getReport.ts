@@ -72,15 +72,9 @@ const request = gql`
         event {
           _id
         }
-        entityInfo {
-          field
-          path
-        }
-        relationshipInfo {
-          field
-          path
-          targetId
-        }
+        field
+        path
+        targetId
       }
     }
   }

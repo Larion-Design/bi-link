@@ -5,7 +5,7 @@ import { Module } from '@nestjs/common'
 import { GraphModule } from '@app/graph-module'
 import { ConsumersModule } from './consumers/consumersModule'
 import { ProducersModule } from './producers/producersModule'
-import { EntityDocumentEventsController } from './controllers/entityDocumentEventsController'
+import { EntityEventsController } from './rpc/entityEventsController'
 import { ConfigModule, ConfigService } from '@nestjs/config'
 import { SentryModule } from '@ntegral/nestjs-sentry'
 import { MongooseModule } from '@nestjs/mongoose'
@@ -75,6 +75,6 @@ import { ServiceHealthModule } from '@app/service-health'
         }),
     }),
   ],
-  controllers: [EntityDocumentEventsController],
+  controllers: [EntityEventsController],
 })
 export class AppModule {}

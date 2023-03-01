@@ -5,7 +5,7 @@ import { getCompanyInfoRequest } from '../../../graphql/companies/queries/getCom
 import { updateCompanyRequest } from '../../../graphql/companies/mutations/updateCompany'
 import { routes } from '../../../router/routes'
 import { useSnackbar } from 'notistack'
-import { Loader } from '../../../components/loader/loader'
+import { Loader } from '@frontend/components/loader'
 import { CompanyDetails } from '../../../components/page/companyDetails'
 
 export const EditCompany: React.FunctionComponent = () => {
