@@ -1,7 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common'
 import { InjectModel } from '@nestjs/mongoose'
 import { ClientSession, Model } from 'mongoose'
-import { FileDocument, FileModel } from '@app/entities/models/fileModel'
+import { FileDocument, FileModel } from '@app/models/models/fileModel'
 import { FileAPIInput } from 'defs'
 
 @Injectable()

@@ -9,9 +9,9 @@ import { Injectable, Logger } from '@nestjs/common'
 import { format } from 'date-fns'
 import { INDEX_EVENTS } from '@app/definitions/constants'
 import { ElasticsearchService } from '@nestjs/elasticsearch'
-import { EventModel } from '@app/entities/models/event/eventModel'
-import { PartyModel } from '@app/entities/models/event/partyModel'
-import { EventsService } from '@app/entities/services/eventsService'
+import { EventModel } from '@app/models/models/event/eventModel'
+import { PartyModel } from '@app/models/models/event/partyModel'
+import { EventsService } from '@app/models/services/eventsService'
 import { ConnectedEntityIndexerService } from './connectedEntityIndexerService'
 
 @Injectable()

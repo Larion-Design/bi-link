@@ -1,5 +1,5 @@
-import { EventDocument } from '@app/entities/models/event/eventModel'
-import { EventsService } from '@app/entities/services/eventsService'
+import { EventDocument } from '@app/models/models/event/eventModel'
+import { EventsService } from '@app/models/services/eventsService'
 import { GraphService } from '@app/graph-module/graphService'
 import { EventGraphNode } from '@app/definitions/graph/event'
 import { PartyGraphRelationship } from '@app/definitions/graph/party'

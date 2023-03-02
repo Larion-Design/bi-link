@@ -1,7 +1,7 @@
 import { UseGuards } from '@nestjs/common'
 import { Args, ArgsType, Field, Query, Resolver } from '@nestjs/graphql'
 import { IsMongoId } from 'class-validator'
-import { ReportsService } from '@app/entities/services/reportsService'
+import { ReportsService } from '@app/models/services/reportsService'
 import { EntityType } from 'defs'
 import { FirebaseAuthGuard } from '../../../users/guards/FirebaseAuthGuard'
 import { Report } from '../dto/report'

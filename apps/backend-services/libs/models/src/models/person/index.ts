@@ -1,0 +1,5 @@
+export * from './educationModel'
+export * from './idDocumentModel'
+export * from './oldNameModel'
+export * from './personModel'
+export * from './relationshipModel'

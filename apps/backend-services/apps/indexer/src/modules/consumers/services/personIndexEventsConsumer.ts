@@ -10,7 +10,7 @@ import {
 import { PersonsIndexerService } from '../../indexer/services/personsIndexerService'
 import { QUEUE_PERSONS } from '../../producers/constants'
 import { FileEventDispatcherService } from '../../producers/services/fileEventDispatcherService'
-import { PersonsService } from '@app/entities/services/personsService'
+import { PersonsService } from '@app/models/services/personsService'
 
 @Processor(QUEUE_PERSONS)
 export class PersonIndexEventsConsumer {

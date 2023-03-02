@@ -1,12 +1,12 @@
 import { PersonIndex } from '@app/definitions/search/person'
-import { EducationModel } from '@app/entities/models/person/educationModel'
-import { IdDocumentModel } from '@app/entities/models/person/idDocumentModel'
+import { EducationModel } from '@app/models/models/person/educationModel'
+import { IdDocumentModel } from '@app/models/models/person/idDocumentModel'
 import { Injectable, Logger } from '@nestjs/common'
 import { ElasticsearchService } from '@nestjs/elasticsearch'
 import { format } from 'date-fns'
-import { PersonDocument, PersonModel } from '@app/entities/models/person/personModel'
+import { PersonDocument, PersonModel } from '@app/models/models/person/personModel'
 import { INDEX_PERSONS } from '@app/definitions/constants'
-import { PersonsService } from '@app/entities/services/personsService'
+import { PersonsService } from '@app/models/services/personsService'
 import { LocationIndexerService } from './locationIndexerService'
 
 @Injectable()

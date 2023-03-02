@@ -21,11 +21,11 @@
     "noFallthroughCasesInSwitch": true,
     "importHelpers": true,
     "paths": {
-      "@app/entities": [
-        "libs/entities/src"
+      "@app/models": [
+        "libs/models/src"
       ],
-      "@app/entities/*": [
-        "libs/entities/src/*"
+      "@app/models/*": [
+        "libs/models/src/*"
       ],
       "@app/pub": [
         "libs/pub/src"

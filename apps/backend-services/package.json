@@ -135,7 +135,7 @@
       "<rootDir>/libs/"
     ],
     "moduleNameMapper": {
-      "^@app/entities(|/.*)$": "<rootDir>/libs/entities/src/$1",
+      "^@app/models(|/.*)$": "<rootDir>/libs/models/src/$1",
       "^@app/pub(|/.*)$": "<rootDir>/libs/pub/src/$1",
       "^@app/service-health(|/.*)$": "<rootDir>/libs/service-health/src/$1",
       "^@app/definitions(|/.*)$": "<rootDir>/libs/definitions/src/$1",

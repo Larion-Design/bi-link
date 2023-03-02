@@ -1,5 +1,5 @@
-import { LocationDocument } from '@app/entities/models/locationModel'
-import { LocationsService } from '@app/entities/services/locationsService'
+import { LocationDocument } from '@app/models/models/locationModel'
+import { LocationsService } from '@app/models/services/locationsService'
 import { GraphService } from '@app/graph-module/graphService'
 import { LocationGraphNode } from '@app/definitions/graph/location'
 import { Injectable, Logger } from '@nestjs/common'

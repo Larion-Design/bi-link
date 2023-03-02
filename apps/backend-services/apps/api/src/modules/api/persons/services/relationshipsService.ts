@@ -4,8 +4,8 @@ import { InjectModel } from '@nestjs/mongoose'
 import {
   RelationshipDocument,
   RelationshipModel,
-} from '@app/entities/models/person/relationshipModel'
-import { PersonDocument, PersonModel } from '@app/entities/models/person/personModel'
+} from '@app/models/models/person/relationshipModel'
+import { PersonDocument, PersonModel } from '@app/models/models/person/personModel'
 import { RelationshipInput } from '../dto/relationshipInput'
 
 @Injectable()

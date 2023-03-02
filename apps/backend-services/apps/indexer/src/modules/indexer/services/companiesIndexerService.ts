@@ -5,10 +5,10 @@ import {
 } from '@app/definitions/search/connectedEntity'
 import { Injectable, Logger } from '@nestjs/common'
 import { ElasticsearchService } from '@nestjs/elasticsearch'
-import { CompanyModel } from '@app/entities/models/company/companyModel'
-import { AssociateModel } from '@app/entities/models/company/associateModel'
+import { CompanyModel } from '@app/models/models/company/companyModel'
+import { AssociateModel } from '@app/models/models/company/associateModel'
 import { INDEX_COMPANIES } from '@app/definitions/constants'
-import { CompaniesService } from '@app/entities/services/companiesService'
+import { CompaniesService } from '@app/models/services/companiesService'
 import { ConnectedEntityIndexerService } from './connectedEntityIndexerService'
 import { LocationIndexerService } from './locationIndexerService'
 

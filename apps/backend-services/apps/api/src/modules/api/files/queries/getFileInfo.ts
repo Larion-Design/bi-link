@@ -1,6 +1,6 @@
 import { Args, ArgsType, Field, Query, Resolver } from '@nestjs/graphql'
 import { UseGuards } from '@nestjs/common'
-import { FilesService } from '@app/entities/services/filesService'
+import { FilesService } from '@app/models/services/filesService'
 import { FirebaseAuthGuard } from '../../../users/guards/FirebaseAuthGuard'
 import { File } from '../dto/file'
 

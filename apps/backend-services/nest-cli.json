@@ -26,13 +26,13 @@
         "tsConfigPath": "apps/indexer/tsconfig.app.json"
       }
     },
-    "entities": {
+    "models": {
       "type": "library",
-      "root": "libs/entities",
+      "root": "libs/models",
       "entryFile": "index",
-      "sourceRoot": "libs/entities/src",
+      "sourceRoot": "libs/models/src",
       "compilerOptions": {
-        "tsConfigPath": "libs/entities/tsconfig.lib.json"
+        "tsConfigPath": "libs/models/tsconfig.lib.json"
       }
     },
     "pub": {
@@ -123,6 +123,15 @@
       "sourceRoot": "libs/scheduler-module/src",
       "compilerOptions": {
         "tsConfigPath": "libs/scheduler-module/tsconfig.lib.json"
+      }
+    },
+    "entities": {
+      "type": "application",
+      "root": "apps/entities",
+      "entryFile": "main",
+      "sourceRoot": "apps/entities/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/entities/tsconfig.app.json"
       }
     }
   }

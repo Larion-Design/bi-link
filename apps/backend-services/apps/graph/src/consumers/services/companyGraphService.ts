@@ -1,5 +1,5 @@
-import { CompanyDocument } from '@app/entities/models/company/companyModel'
-import { CompaniesService } from '@app/entities/services/companiesService'
+import { CompanyDocument } from '@app/models/models/company/companyModel'
+import { CompaniesService } from '@app/models/services/companiesService'
 import { GraphService } from '@app/graph-module/graphService'
 import { AssociateGraphRelationship, CompanyGraphNode } from '@app/definitions/graph'
 import { Injectable, Logger } from '@nestjs/common'

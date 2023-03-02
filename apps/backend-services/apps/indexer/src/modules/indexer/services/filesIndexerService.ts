@@ -10,7 +10,7 @@ import {
   INDEX_PERSONS,
   INDEX_PROPERTIES,
 } from '@app/definitions/constants'
-import { FilesService } from '@app/entities/services/filesService'
+import { FilesService } from '@app/models/services/filesService'
 import { FileParserService } from '@app/pub/services/fileParserService'
 
 @Injectable()

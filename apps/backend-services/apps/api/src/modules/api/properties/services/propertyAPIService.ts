@@ -1,12 +1,12 @@
-import { RealEstateInfoModel } from '@app/entities/models/property/realEstateInfoModel'
+import { RealEstateInfoModel } from '@app/models/models/property/realEstateInfoModel'
 import { Injectable } from '@nestjs/common'
-import { PropertiesService } from '@app/entities/services/propertiesService'
+import { PropertiesService } from '@app/models/services/propertiesService'
 import { PropertyAPIInput } from 'defs'
-import { PropertyModel } from '@app/entities/models/property/propertyModel'
+import { PropertyModel } from '@app/models/models/property/propertyModel'
 import { LocationAPIService } from '../../common/services/locationAPIService'
 import { PropertyOwnerAPIService } from './propertyOwnerAPIService'
 import { CustomFieldsService } from '../../customFields/services/customFieldsService'
-import { VehicleInfoModel } from '@app/entities/models/property/vehicleInfoModel'
+import { VehicleInfoModel } from '@app/models/models/property/vehicleInfoModel'
 import { FileAPIService } from '../../files/services/fileAPIService'
 
 @Injectable()

@@ -10,7 +10,7 @@ import {
 import { QUEUE_COMPANIES } from '../../producers/constants'
 import { FileEventDispatcherService } from '../../producers/services/fileEventDispatcherService'
 import { CompaniesIndexerService } from '../../indexer/services/companiesIndexerService'
-import { CompaniesService } from '@app/entities/services/companiesService'
+import { CompaniesService } from '@app/models/services/companiesService'
 
 @Processor(QUEUE_COMPANIES)
 export class CompanyIndexEventsConsumer {

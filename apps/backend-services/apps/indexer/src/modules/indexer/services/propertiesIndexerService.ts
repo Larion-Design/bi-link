@@ -5,12 +5,12 @@ import {
 import { PropertyIndex } from '@app/definitions/search/property'
 import { LocationIndexerService } from './locationIndexerService'
 import { Injectable, Logger } from '@nestjs/common'
-import { PropertyModel } from '@app/entities/models/property/propertyModel'
+import { PropertyModel } from '@app/models/models/property/propertyModel'
 import { INDEX_PROPERTIES } from '@app/definitions/constants'
 import { ElasticsearchService } from '@nestjs/elasticsearch'
 import { ConnectedEntityIndexerService } from './connectedEntityIndexerService'
-import { PropertiesService } from '@app/entities/services/propertiesService'
-import { PropertyOwnerModel } from '@app/entities/models/property/propertyOwnerModel'
+import { PropertiesService } from '@app/models/services/propertiesService'
+import { PropertyOwnerModel } from '@app/models/models/property/propertyOwnerModel'
 
 @Injectable()
 export class PropertiesIndexerService {

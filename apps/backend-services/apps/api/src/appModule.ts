@@ -10,7 +10,7 @@ import { SearchModule } from './modules/search/searchModule'
 import { GraphqlInterceptor, SentryModule } from '@ntegral/nestjs-sentry'
 import { ApiModule } from './modules/api/apiModule'
 import { UsersModule } from './modules/users/UsersModule'
-import { EntitiesModule } from '@app/entities/entitiesModule'
+import { EntitiesModule } from '@app/models/entitiesModule'
 import { PubModule } from '@app/pub'
 import { GraphModule } from '@app/graph-module'
 
@@ -30,7 +30,7 @@ import { GraphModule } from '@app/graph-module'
       inject: [ConfigService],
       driver: ApolloDriver,
       useFactory: async (configService: ConfigService) => {
-        const isProd = configService.get<string>('NODE_ENV', 'development') === 'production'
+        const isProd = configService.getOrThrow<string>('NODE_ENV', 'development') === 'production'
         return Promise.resolve({
           debug: !isProd,
           cache: 'bounded',
@@ -57,13 +57,13 @@ import { GraphModule } from '@app/graph-module'
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: async (configService: ConfigService) => {
-        const environment = configService.get<string>('NODE_ENV', 'development')
+        const environment = configService.getOrThrow<string>('NODE_ENV', 'development')
         return Promise.resolve({
           dsn: configService.get<string>('SENTRY_DSN'),
           debug: false,
           enabled: environment === 'production',
           environment: environment,
-          release: configService.get<string>('APP_VERSION'),
+          release: configService.getOrThrow<string>('APP_VERSION'),
           logLevel: 'debug',
         })
       },
@@ -73,7 +73,7 @@ import { GraphModule } from '@app/graph-module'
       inject: [ConfigService],
       useFactory: async (configService: ConfigService) =>
         Promise.resolve({
-          uri: configService.get<string>('MONGODB_URI'),
+          uri: configService.getOrThrow<string>('MONGODB_URI'),
         }),
     }),
     Neo4jModule.forRootAsync({
@@ -81,11 +81,11 @@ import { GraphModule } from '@app/graph-module'
       inject: [ConfigService],
       useFactory: async (configService: ConfigService) =>
         Promise.resolve<Partial<Neo4jConfig>>({
-          scheme: configService.get<Neo4jScheme>('NEO4J_SCHEME'),
-          host: configService.get<string>('NEO4J_HOST'),
-          port: +configService.get<number>('NEO4J_PORT'),
-          username: configService.get<string>('NEO4J_USER'),
-          password: configService.get<string>('NEO4J_PASSWORD'),
+          scheme: configService.getOrThrow<Neo4jScheme>('NEO4J_SCHEME'),
+          host: configService.getOrThrow<string>('NEO4J_HOST'),
+          port: +configService.getOrThrow<number>('NEO4J_PORT'),
+          username: configService.getOrThrow<string>('NEO4J_USER'),
+          password: configService.getOrThrow<string>('NEO4J_PASSWORD'),
         }),
     }),
   ],

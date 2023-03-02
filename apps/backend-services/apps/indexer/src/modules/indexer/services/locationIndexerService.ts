@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common'
 import { LocationIndex } from '@app/definitions/search/location'
-import { LocationDocument } from '@app/entities/models/locationModel'
+import { LocationDocument } from '@app/models/models/locationModel'
 
 @Injectable()
 export class LocationIndexerService {

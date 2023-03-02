@@ -1,4 +1,4 @@
-import { PersonsService } from '@app/entities/services/personsService'
+import { PersonsService } from '@app/models/services/personsService'
 import { OnQueueActive, OnQueueCompleted, OnQueueFailed, Process, Processor } from '@nestjs/bull'
 import { Logger } from '@nestjs/common'
 import { Job } from 'bull'

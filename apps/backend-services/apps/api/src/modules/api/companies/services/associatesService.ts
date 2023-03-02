@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common'
-import { AssociateModel } from '@app/entities/models/company/associateModel'
+import { AssociateModel } from '@app/models/models/company/associateModel'
 import { CustomFieldsService } from '../../customFields/services/customFieldsService'
-import { PersonsService } from '@app/entities/services/personsService'
+import { PersonsService } from '@app/models/services/personsService'
 import { AssociateInput } from '../dto/associateInput'
-import { CompaniesService } from '@app/entities/services/companiesService'
+import { CompaniesService } from '@app/models/services/companiesService'
 
 @Injectable()
 export class AssociatesService {

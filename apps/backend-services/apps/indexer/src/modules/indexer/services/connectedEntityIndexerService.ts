@@ -4,9 +4,9 @@ import {
   ConnectedPropertyIndex,
 } from '@app/definitions/search/connectedEntity'
 import { Injectable } from '@nestjs/common'
-import { PersonDocument } from '@app/entities/models/person/personModel'
-import { CompanyDocument } from '@app/entities/models/company/companyModel'
-import { PropertyDocument } from '@app/entities/models/property/propertyModel'
+import { PersonDocument } from '@app/models/models/person/personModel'
+import { CompanyDocument } from '@app/models/models/company/companyModel'
+import { PropertyDocument } from '@app/models/models/property/propertyModel'
 
 @Injectable()
 export class ConnectedEntityIndexerService {
