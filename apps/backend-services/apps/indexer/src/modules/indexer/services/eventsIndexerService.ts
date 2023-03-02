@@ -4,7 +4,7 @@ import {
   ConnectedPropertyIndex,
 } from '@app/definitions/search/connectedEntity'
 import { EventIndex, PartyIndex } from '@app/definitions/search/event'
-import { LocationIndexerService } from '@app/search-tools-module/indexer/locationIndexerService'
+import { LocationIndexerService } from './locationIndexerService'
 import { Injectable, Logger } from '@nestjs/common'
 import { format } from 'date-fns'
 import { INDEX_EVENTS } from '@app/definitions/constants'

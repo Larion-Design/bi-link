@@ -1,4 +1,5 @@
 import { ConfigModule, ConfigService } from '@nestjs/config'
+import { ElasticsearchModule } from '@nestjs/elasticsearch'
 import { MongooseModule } from '@nestjs/mongoose'
 import { BullModule } from '@nestjs/bull'
 import { Module } from '@nestjs/common'
@@ -6,15 +7,19 @@ import { ConsumersModule } from './modules/consumers/consumersModule'
 import { SentryModule } from '@ntegral/nestjs-sentry'
 import { EntitiesModule } from '@app/entities/entitiesModule'
 import { ServiceHealthModule } from '@app/service-health/serviceHealthModule'
+import { IndexerModule } from './modules/indexer/indexerModule'
+import { MappingModule } from './modules/mapping/mappingModule'
 import { ProducersModule } from './modules/producers/producersModule'
 import { PubModule } from '@app/pub'
-import { EntityEventsController } from './modules/rpc/entityEventsController'
+import { EntityEventsRPCController } from './modules/rpc/entityEventsRPCController'
 
 @Module({
   imports: [
     EntitiesModule,
-    ConsumersModule,
+    MappingModule,
+    IndexerModule,
     ProducersModule,
+    ConsumersModule,
     ServiceHealthModule,
     PubModule,
     BullModule.forRootAsync({
@@ -23,8 +28,8 @@ import { EntityEventsController } from './modules/rpc/entityEventsController'
       useFactory: async (configService: ConfigService) =>
         Promise.resolve({
           redis: {
-            host: configService.get<string>('REDIS_HOST'),
-            port: +configService.get<number>('REDIS_PORT'),
+            host: configService.getOrThrow<string>('REDIS_HOST'),
+            port: +configService.getOrThrow<number>('REDIS_PORT'),
           },
           defaultJobOptions: {
             removeOnFail: false,
@@ -42,7 +47,7 @@ import { EntityEventsController } from './modules/rpc/entityEventsController'
       imports: [ConfigModule],
       useFactory: async (configService: ConfigService) =>
         Promise.resolve({
-          uri: configService.get<string>('MONGODB_URI'),
+          uri: configService.getOrThrow<string>('MONGODB_URI'),
         }),
       inject: [ConfigService],
     }),
@@ -50,18 +55,18 @@ import { EntityEventsController } from './modules/rpc/entityEventsController'
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: async (configService: ConfigService) => {
-        const environment = configService.get<string>('NODE_ENV', 'development')
+        const environment = configService.getOrThrow<string>('NODE_ENV', 'development')
         return Promise.resolve({
-          dsn: configService.get<string>('SENTRY_DSN'),
+          dsn: configService.getOrThrow<string>('SENTRY_DSN'),
           debug: false,
           enabled: environment === 'production',
           environment: environment,
-          release: configService.get<string>('APP_VERSION'),
+          release: configService.getOrThrow<string>('APP_VERSION'),
           logLevel: 'debug',
         })
       },
     }),
   ],
-  controllers: [EntityEventsController],
+  controllers: [EntityEventsRPCController],
 })
 export class AppModule {}

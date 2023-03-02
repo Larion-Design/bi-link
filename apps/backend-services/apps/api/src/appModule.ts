@@ -1,10 +1,11 @@
 import { CacheModule, Module } from '@nestjs/common'
 import { GraphQLModule } from '@nestjs/graphql'
-import { Neo4jModule } from 'nest-neo4j/dist'
+import { Neo4jModule, Neo4jScheme } from 'nest-neo4j/dist'
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo'
 import { ConfigModule, ConfigService } from '@nestjs/config'
 import { APP_INTERCEPTOR } from '@nestjs/core'
 import { MongooseModule } from '@nestjs/mongoose'
+import { Neo4jConfig } from 'nest-neo4j/src/interfaces/neo4j-config.interface'
 import { SearchModule } from './modules/search/searchModule'
 import { GraphqlInterceptor, SentryModule } from '@ntegral/nestjs-sentry'
 import { ApiModule } from './modules/api/apiModule'
@@ -79,10 +80,12 @@ import { GraphModule } from '@app/graph-module'
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: async (configService: ConfigService) =>
-        Promise.resolve({
-          scheme: 'neo4j',
+        Promise.resolve<Partial<Neo4jConfig>>({
+          scheme: configService.get<Neo4jScheme>('NEO4J_SCHEME'),
           host: configService.get<string>('NEO4J_HOST'),
           port: +configService.get<number>('NEO4J_PORT'),
+          username: configService.get<string>('NEO4J_USER'),
+          password: configService.get<string>('NEO4J_PASSWORD'),
         }),
     }),
   ],

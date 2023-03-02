@@ -1,4 +1,4 @@
-import { MappingHelperService, MappingInterface } from '@app/search-tools-module/mapping/index'
+import { MappingHelperService, MappingInterface } from './index'
 import { Injectable } from '@nestjs/common'
 import { MappingProperty } from '@elastic/elasticsearch/lib/api/types'
 import { ActivityEventIndex } from 'defs'

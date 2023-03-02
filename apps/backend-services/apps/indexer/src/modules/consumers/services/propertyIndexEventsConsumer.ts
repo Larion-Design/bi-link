@@ -10,7 +10,7 @@ import { QUEUE_PROPERTIES } from '../../producers/constants'
 import { FileEventDispatcherService } from '../../producers/services/fileEventDispatcherService'
 import { Job } from 'bull'
 import { PropertiesService } from '@app/entities/services/propertiesService'
-import { PropertiesIndexerService } from '@app/search-tools-module/indexer/propertiesIndexerService'
+import { PropertiesIndexerService } from '../../indexer/services/propertiesIndexerService'
 
 @Processor(QUEUE_PROPERTIES)
 export class PropertyIndexEventsConsumer {

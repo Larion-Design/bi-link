@@ -1,6 +1,6 @@
 import { CompanyIndex } from '@app/definitions/search/company'
-import { MappingInterface } from '@app/search-tools-module/mapping/mapping'
-import { MappingHelperService } from '@app/search-tools-module/mapping/mappingHelperService'
+import { MappingInterface } from './mapping'
+import { MappingHelperService } from './mappingHelperService'
 import { Injectable } from '@nestjs/common'
 import { MappingProperty } from '@elastic/elasticsearch/lib/api/types'
 

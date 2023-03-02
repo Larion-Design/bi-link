@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common'
 import { MappingProperty } from '@elastic/elasticsearch/lib/api/types'
 import { PropertyIndex } from '@app/definitions/search/property'
-import { MappingInterface } from '@app/search-tools-module/mapping/mapping'
-import { MappingHelperService } from '@app/search-tools-module/mapping/mappingHelperService'
+import { MappingInterface } from './mapping'
+import { MappingHelperService } from './mappingHelperService'
 
 @Injectable()
 export class PropertiesMappingService implements MappingInterface<PropertyIndex> {

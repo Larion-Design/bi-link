@@ -19,6 +19,8 @@ export const MICROSERVICES = {
     id: 'INDEXER',
     indexEntity: 'indexEntity',
     entitiesRefresh: 'entitiesRefresh',
+    createMapping: 'createMapping',
+    recordHistoryEvent: 'addHistoryEvent',
   },
   GRAPH: {
     id: 'GRAPH',

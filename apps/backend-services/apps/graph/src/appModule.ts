@@ -3,13 +3,14 @@ import { PubModule } from '@app/pub'
 import { BullModule } from '@nestjs/bull'
 import { Module } from '@nestjs/common'
 import { GraphModule } from '@app/graph-module'
+import { Neo4jConfig } from 'nest-neo4j/src/interfaces/neo4j-config.interface'
 import { ConsumersModule } from './consumers/consumersModule'
 import { ProducersModule } from './producers/producersModule'
 import { EntityEventsController } from './rpc/entityEventsController'
 import { ConfigModule, ConfigService } from '@nestjs/config'
 import { SentryModule } from '@ntegral/nestjs-sentry'
 import { MongooseModule } from '@nestjs/mongoose'
-import { Neo4jModule } from 'nest-neo4j/dist'
+import { Neo4jModule, Neo4jScheme } from 'nest-neo4j/dist'
 import { ServiceHealthModule } from '@app/service-health'
 
 @Module({
@@ -68,10 +69,12 @@ import { ServiceHealthModule } from '@app/service-health'
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: async (configService: ConfigService) =>
-        Promise.resolve({
-          scheme: 'neo4j',
+        Promise.resolve<Partial<Neo4jConfig>>({
+          scheme: configService.get<Neo4jScheme>('NEO4J_SCHEME'),
           host: configService.get<string>('NEO4J_HOST'),
           port: +configService.get<number>('NEO4J_PORT'),
+          username: configService.get<string>('NEO4J_USER'),
+          password: configService.get<string>('NEO4J_PASSWORD'),
         }),
     }),
   ],

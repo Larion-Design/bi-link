@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import { useIntl } from 'react-intl'
 import { Panel } from 'reactflow'
 import IconButton from '@mui/material/IconButton'
@@ -30,17 +30,7 @@ export const FilterPanel: React.FunctionComponent<Props> = ({
 }) => {
   const { formatMessage } = useIntl()
   const [open, setOpen] = useState(false)
-  const marks = useMemo(() => {
-    const sliderValues = []
-    let current = 0
-    do {
-      current += 1
-      sliderValues.push({ value: current, label: current })
-    } while (current < 10)
-    return sliderValues
-  }, [])
-
-  const togglePanel = useCallback(() => setOpen((open) => !open), [])
+  const togglePanel = useCallback(() => setOpen((open) => !open), [setOpen])
 
   return open ? (
     <Panel position={'top-right'} className={'react-flow__filters'}>
@@ -53,18 +43,18 @@ export const FilterPanel: React.FunctionComponent<Props> = ({
         <Box sx={{ width: 1, mb: 2 }}>
           <Typography gutterBottom>Nivel de complexitate</Typography>
           <Slider
-            aria-label={'Nivel de complexitate'}
             size={'small'}
             value={depth}
             min={1}
-            max={10}
-            marks={marks}
+            max={depthSliderSteps.length}
+            marks={depthSliderSteps}
             onChangeCommitted={(event, value) => updateDepth(+value)}
           />
         </Box>
         <Box sx={{ width: 1, mb: 3 }}>
           <MultiSelect
             label={'Tipuri de entitati'}
+            disabled={!entitiesTypes.size}
             options={Array.from(entitiesTypes.entries()).map(([entityType, selected]) => ({
               value: entityType,
               label: formatMessage({ id: entityType, defaultMessage: entityType }),
@@ -80,6 +70,7 @@ export const FilterPanel: React.FunctionComponent<Props> = ({
         <Box sx={{ width: 1 }}>
           <MultiSelect
             label={'Tipuri de relatii'}
+            disabled={!relationshipsTypes.size}
             options={Array.from(relationshipsTypes.entries()).map(
               ([relationshipType, selected]) => ({
                 value: relationshipType,
@@ -100,7 +91,7 @@ export const FilterPanel: React.FunctionComponent<Props> = ({
     </Panel>
   ) : (
     <Panel position={'top-right'} className={'react-flow__filters'}>
-      <Paper variant={'outlined'} sx={{ p: 2, width: 50 }}>
+      <Paper variant={'outlined'} sx={{ p: 2 }}>
         <IconButton onClick={togglePanel}>
           <FilterListOutlinedIcon fontSize={'small'} />
         </IconButton>
@@ -108,3 +99,13 @@ export const FilterPanel: React.FunctionComponent<Props> = ({
     </Panel>
   )
 }
+
+const depthSliderSteps = (() => {
+  const sliderValues = []
+  let current = 0
+  do {
+    current += 1
+    sliderValues.push({ value: current, label: current })
+  } while (current < 10)
+  return sliderValues
+})()

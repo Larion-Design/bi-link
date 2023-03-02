@@ -1,9 +1,8 @@
-import { Logger } from '@nestjs/common'
 import { Command, CommandRunner, Option } from 'nest-commander'
-import { EntitiesIndexerService } from '../search/entitiesIndexerService'
+import { EntitiesIndexerService } from '../services/entitiesIndexerService'
 
 type CommandOptions = {
-  type: 'persons' | 'companies' | 'properties' | 'events'
+  type: 'persons' | 'companies' | 'properties' | 'events' | 'files'
 }
 
 @Command({
@@ -35,6 +34,10 @@ export class IndexEntityCommand extends CommandRunner {
       }
       case 'events': {
         await this.entitiesIndexerService.indexAllEvents()
+        return
+      }
+      case 'files': {
+        await this.entitiesIndexerService.indexAllFiles()
         return
       }
     }

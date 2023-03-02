@@ -2,7 +2,7 @@ import { OnQueueActive, OnQueueCompleted, OnQueueFailed, Process, Processor } fr
 import { Job } from 'bull'
 import { Logger } from '@nestjs/common'
 import { QUEUE_FILES } from '../../producers/constants'
-import { FilesIndexerService } from '@app/search-tools-module/indexer/filesIndexerService'
+import { FilesIndexerService } from '../../indexer/services/filesIndexerService'
 import { EVENT_CREATED, EVENT_UPDATED, FileEventInfo } from '@app/scheduler-module'
 
 @Processor(QUEUE_FILES)

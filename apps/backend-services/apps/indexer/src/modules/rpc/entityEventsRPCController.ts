@@ -15,8 +15,8 @@ import { PropertyEventDispatcherService } from '../producers/services/propertyEv
 import { ReportEventDispatcherService } from '../producers/services/reportEventDispatcherService'
 
 @Controller()
-export class EntityEventsController {
-  private readonly logger = new Logger(EntityEventsController.name)
+export class EntityEventsRPCController {
+  private readonly logger = new Logger(EntityEventsRPCController.name)
 
   constructor(
     private readonly companyEventDispatcherService: CompanyEventDispatcherService,

@@ -1,9 +1,10 @@
+import { IndexerService } from '@app/pub'
 import { Logger } from '@nestjs/common'
+import { EntityType } from 'defs'
 import { Command, CommandRunner, Option } from 'nest-commander'
-import { EntitiesMappingService } from '../search/entitiesMappingService'
 
 type CommandOptions = {
-  entity: 'persons' | 'companies' | 'properties' | 'events'
+  type: EntityType
 }
 
 @Command({
@@ -15,39 +16,21 @@ type CommandOptions = {
 export class MigrateIndex extends CommandRunner {
   private readonly logger = new Logger(MigrateIndex.name)
 
-  constructor(private readonly entitiesMappingService: EntitiesMappingService) {
+  constructor(private readonly indexerService: IndexerService) {
     super()
   }
 
   async run(passedParam: string[], options?: CommandOptions) {
-    switch (options?.entity) {
-      case 'persons': {
-        await this.entitiesMappingService.updatePersonsMapping()
-        return
-      }
-      case 'companies': {
-        await this.entitiesMappingService.updateCompaniesMapping()
-        return
-      }
-      case 'properties': {
-        await this.entitiesMappingService.updatePropertiesMapping()
-        return
-      }
-      case 'events': {
-        await this.entitiesMappingService.updateEventsMapping()
-        return
-      }
-    }
-    return Promise.reject(
-      `Entity type is invalid or not specified (value provided: ${options?.entity})`,
-    )
+    if (options?.type) {
+      this.indexerService.createMapping(options?.type)
+    } else return Promise.reject('Entity type invalid or not specified.')
   }
 
   @Option({
-    flags: '-t, --type [persons | companies | properties | events]',
+    flags: '-t, --type [person | company | property | event]',
     description: 'Mapping for this entity type will be updated.',
   })
   parseType(value: string) {
-    return value.trim().toLowerCase()
+    return value.trim().toUpperCase()
   }
 }

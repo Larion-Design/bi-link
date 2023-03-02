@@ -1,7 +1,7 @@
 import { Inject, Injectable, Logger } from '@nestjs/common'
 import { EntityInfo, MICROSERVICES } from '@app/pub/constants'
 import { ClientProxy } from '@nestjs/microservices'
-import { EntityType } from 'defs'
+import { ActivityEventIndex, EntityType } from 'defs'
 
 @Injectable()
 export class IndexerService {
@@ -20,6 +20,22 @@ export class IndexerService {
   entitiesRefresh(entityType: EntityType) {
     try {
       this.client.emit(MICROSERVICES.INDEXER.entitiesRefresh, entityType)
+    } catch (e) {
+      this.logger.error(e)
+    }
+  }
+
+  createMapping(entityType: EntityType) {
+    try {
+      this.client.emit(MICROSERVICES.INDEXER.createMapping, entityType)
+    } catch (e) {
+      this.logger.error(e)
+    }
+  }
+
+  recordHistoryEvent(activityEvent: ActivityEventIndex) {
+    try {
+      this.client.emit(MICROSERVICES.INDEXER.recordHistoryEvent, activityEvent)
     } catch (e) {
       this.logger.error(e)
     }

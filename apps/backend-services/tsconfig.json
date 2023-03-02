@@ -45,12 +45,6 @@
       "@app/definitions/*": [
         "libs/definitions/src/*"
       ],
-      "@app/search-tools-module": [
-        "libs/search-tools-module/src"
-      ],
-      "@app/search-tools-module/*": [
-        "libs/search-tools-module/src/*"
-      ],
       "@app/graph": [
         "libs/graph/src"
       ],

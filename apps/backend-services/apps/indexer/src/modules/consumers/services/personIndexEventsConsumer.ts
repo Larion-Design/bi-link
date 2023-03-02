@@ -7,7 +7,7 @@ import {
   FileParentEntity,
   PersonEventInfo,
 } from '@app/scheduler-module'
-import { PersonsIndexerService } from '@app/search-tools-module/indexer/personsIndexerService'
+import { PersonsIndexerService } from '../../indexer/services/personsIndexerService'
 import { QUEUE_PERSONS } from '../../producers/constants'
 import { FileEventDispatcherService } from '../../producers/services/fileEventDispatcherService'
 import { PersonsService } from '@app/entities/services/personsService'

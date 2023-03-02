@@ -3,7 +3,7 @@ import {
   ConnectedPersonIndex,
 } from '@app/definitions/search/connectedEntity'
 import { PropertyIndex } from '@app/definitions/search/property'
-import { LocationIndexerService } from '@app/search-tools-module/indexer/locationIndexerService'
+import { LocationIndexerService } from './locationIndexerService'
 import { Injectable, Logger } from '@nestjs/common'
 import { PropertyModel } from '@app/entities/models/property/propertyModel'
 import { INDEX_PROPERTIES } from '@app/definitions/constants'

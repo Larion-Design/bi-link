@@ -9,7 +9,7 @@ import {
 } from '@app/scheduler-module'
 import { QUEUE_COMPANIES } from '../../producers/constants'
 import { FileEventDispatcherService } from '../../producers/services/fileEventDispatcherService'
-import { CompaniesIndexerService } from '@app/search-tools-module/indexer/companiesIndexerService'
+import { CompaniesIndexerService } from '../../indexer/services/companiesIndexerService'
 import { CompaniesService } from '@app/entities/services/companiesService'
 
 @Processor(QUEUE_COMPANIES)
