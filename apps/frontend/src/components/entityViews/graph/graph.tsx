@@ -37,7 +37,7 @@ export const Graph: React.FunctionComponent<PropsWithRef<Props>> = ({
   disableMap,
   disableControls,
 }) => {
-  const intl = useIntl()
+  const { formatMessage } = useIntl()
   const showNotification = useNotification()
   const [fetchGraph, { data, error, loading }] = getEntitiesGraphRequest()
   const [graphDepth, updateDepth] = useState(depth ?? 2)
@@ -97,11 +97,11 @@ export const Graph: React.FunctionComponent<PropsWithRef<Props>> = ({
         companiesAssociates,
         companiesHeadquarters,
         companiesBranches,
-        personalRelationships,
         propertiesRelationships,
+        propertiesLocation,
+        personalRelationships,
         personsBirthPlace,
         personsHomeAddress,
-        propertiesLocation,
         eventsOccurrencePlace,
         eventsParties,
       },
@@ -290,7 +290,7 @@ export const Graph: React.FunctionComponent<PropsWithRef<Props>> = ({
           createEdge(
             startNodeId,
             endNodeId,
-            intl.formatMessage({ id: _type, defaultMessage: _type }),
+            formatMessage({ id: _type, defaultMessage: _type }),
             _confirmed,
             _type,
           )
@@ -341,7 +341,7 @@ export const Graph: React.FunctionComponent<PropsWithRef<Props>> = ({
     setEdges(Array.from(edgesMap.values()))
   }, [data?.getEntitiesGraph])
 
-  return loading ? (
+  return loading ? null : (
     <Box sx={{ width: 1, height: 1 }}>
       <ReactFlowProvider>
         <EntityGraph
@@ -359,5 +359,5 @@ export const Graph: React.FunctionComponent<PropsWithRef<Props>> = ({
         />
       </ReactFlowProvider>
     </Box>
-  ) : null
+  )
 }

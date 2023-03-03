@@ -34,7 +34,7 @@ export const FilterPanel: React.FunctionComponent<Props> = ({
 
   return open ? (
     <Panel position={'top-right'} className={'react-flow__filters'}>
-      <Paper variant={'outlined'} sx={{ p: 2, width: 250 }}>
+      <Paper variant={'outlined'} sx={{ p: 1, width: 250 }}>
         <Box>
           <IconButton onClick={togglePanel}>
             <FilterListOffOutlinedIcon fontSize={'small'} />
@@ -91,7 +91,7 @@ export const FilterPanel: React.FunctionComponent<Props> = ({
     </Panel>
   ) : (
     <Panel position={'top-right'} className={'react-flow__filters'}>
-      <Paper variant={'outlined'} sx={{ p: 2 }}>
+      <Paper variant={'outlined'} sx={{ p: 1 }}>
         <IconButton onClick={togglePanel}>
           <FilterListOutlinedIcon fontSize={'small'} />
         </IconButton>

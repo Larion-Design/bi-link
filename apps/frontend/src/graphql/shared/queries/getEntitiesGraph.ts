@@ -14,6 +14,30 @@ const request = gql`
   query GetEntitiesGraph($id: String!, $depth: Int!) {
     getEntitiesGraph(id: $id, depth: $depth) {
       relationships {
+        companiesBranches {
+          _confirmed
+          _type
+          startNode {
+            _id
+            _type
+          }
+          endNode {
+            _id
+            _type
+          }
+        }
+        companiesHeadquarters {
+          _confirmed
+          _type
+          startNode {
+            _id
+            _type
+          }
+          endNode {
+            _id
+            _type
+          }
+        }
         companiesAssociates {
           _confirmed
           _type
@@ -32,6 +56,42 @@ const request = gql`
           _type
           _confirmed
           type
+          startNode {
+            _id
+            _type
+          }
+          endNode {
+            _id
+            _type
+          }
+        }
+        personsBirthPlace {
+          _type
+          _confirmed
+          startNode {
+            _id
+            _type
+          }
+          endNode {
+            _id
+            _type
+          }
+        }
+        personsHomeAddress {
+          _type
+          _confirmed
+          startNode {
+            _id
+            _type
+          }
+          endNode {
+            _id
+            _type
+          }
+        }
+        propertiesLocation {
+          _type
+          _confirmed
           startNode {
             _id
             _type
