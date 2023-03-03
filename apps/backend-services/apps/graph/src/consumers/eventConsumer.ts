@@ -26,8 +26,8 @@ export class EventConsumer {
   }
 
   @OnQueueFailed()
-  onQueueFailed({ id, name }: Job) {
-    this.logger.debug(`Failed job ID ${id} (${name})`)
+  onQueueFailed({ id, name, failedReason }: Job) {
+    this.logger.error(`Failed job ID ${id} (${name}) - ${String(failedReason)}`)
   }
 
   @Process(EVENT_CREATED)
@@ -38,9 +38,10 @@ export class EventConsumer {
 
     try {
       await this.eventGraphService.upsertEventNode(eventId)
-      return job.moveToCompleted()
+      return {}
     } catch (error) {
-      return job.moveToFailed(error as { message: string })
+      this.logger.error(error)
+      await job.moveToFailed(error as { message: string })
     }
   }
 
@@ -52,10 +53,10 @@ export class EventConsumer {
 
     try {
       await this.eventGraphService.upsertEventNode(eventId)
-      return job.moveToCompleted()
+      return {}
     } catch (error) {
       this.logger.error(error)
-      return job.moveToFailed(error as { message: string })
+      await job.moveToFailed(error as { message: string })
     }
   }
 }

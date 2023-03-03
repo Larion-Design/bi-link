@@ -1,5 +1,4 @@
 import { ConfigModule, ConfigService } from '@nestjs/config'
-import { ElasticsearchModule } from '@nestjs/elasticsearch'
 import { MongooseModule } from '@nestjs/mongoose'
 import { BullModule } from '@nestjs/bull'
 import { Module } from '@nestjs/common'
@@ -12,6 +11,7 @@ import { MappingModule } from './modules/mapping/mappingModule'
 import { ProducersModule } from './modules/producers/producersModule'
 import { PubModule } from '@app/pub'
 import { EntityEventsRPCController } from './modules/rpc/entityEventsRPCController'
+import { MappingRPCController } from './modules/rpc/mappingRPCController'
 
 @Module({
   imports: [
@@ -47,7 +47,7 @@ import { EntityEventsRPCController } from './modules/rpc/entityEventsRPCControll
       imports: [ConfigModule],
       useFactory: async (configService: ConfigService) =>
         Promise.resolve({
-          uri: configService.getOrThrow<string>('MONGODB_URI'),
+          uri: configService.getOrThrow<string>('MONGODB_URI_READ'),
         }),
       inject: [ConfigService],
     }),
@@ -67,6 +67,6 @@ import { EntityEventsRPCController } from './modules/rpc/entityEventsRPCControll
       },
     }),
   ],
-  controllers: [EntityEventsRPCController],
+  controllers: [EntityEventsRPCController, MappingRPCController],
 })
 export class AppModule {}

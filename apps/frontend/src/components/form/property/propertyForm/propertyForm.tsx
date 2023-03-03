@@ -88,7 +88,7 @@ const Form: React.FunctionComponent<Props & FormikProps<PropertyAPIInput>> = ({
             </Step>
             <Step completed={false}>
               <StepButton color={'inherit'} onClick={() => setStep(3)}>
-                Fisiere
+                <FormattedMessage id={'Files'} />
               </StepButton>
             </Step>
             <Step completed={false}>

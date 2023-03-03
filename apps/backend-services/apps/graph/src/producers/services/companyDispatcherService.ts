@@ -1,7 +1,7 @@
-import { InjectQueue } from '@nestjs/bull'
 import { Injectable } from '@nestjs/common'
+import { InjectQueue } from '@nestjs/bull'
 import { Queue } from 'bull'
-import { CompanyEventSchedulerService, CompanyEventInfo } from '@app/scheduler-module'
+import { CompanyEventInfo, CompanyEventSchedulerService } from '@app/scheduler-module'
 import { QUEUE_GRAPH_COMPANIES } from '../constants'
 
 @Injectable()

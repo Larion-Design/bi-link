@@ -42,7 +42,9 @@ export class EventAPIService {
   private createEventDocument = async (eventInfo: EventAPIInput) => {
     const eventModel = new EventModel()
     eventModel.date = eventInfo.date
-    eventModel.location = await this.locationService.getLocationModel(eventInfo.location)
+    eventModel.location = eventInfo.location
+      ? await this.locationService.getLocationModel(eventInfo.location)
+      : null
     eventModel.parties = await this.partyService.createPartiesModels(eventInfo.parties)
 
     eventModel.customFields = this.customFieldsService.createCustomFieldsModels(

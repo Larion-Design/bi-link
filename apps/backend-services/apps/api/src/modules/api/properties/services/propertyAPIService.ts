@@ -71,7 +71,9 @@ export class PropertyAPIService {
 
       realEstateInfoModel.surface = surface
       realEstateInfoModel.townArea = townArea
-      realEstateInfoModel.location = await this.locationAPIService.getLocationModel(location)
+      realEstateInfoModel.location = location
+        ? await this.locationAPIService.getLocationModel(location)
+        : null
       propertyModel.realEstateInfo = realEstateInfoModel
     }
     return propertyModel

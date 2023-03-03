@@ -21,7 +21,7 @@ export class ConnectedEntityIndexerService {
     firstName: firstName,
     lastName: lastName,
     cnp: cnp,
-    documents: documents.map(({ documentNumber }) => documentNumber),
+    documents: documents?.map(({ documentNumber }) => documentNumber) ?? [],
   })
 
   createConnectedCompanyIndex = ({

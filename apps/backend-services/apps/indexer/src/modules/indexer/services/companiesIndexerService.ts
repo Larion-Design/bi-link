@@ -43,7 +43,9 @@ export class CompaniesIndexerService {
     name: company.name,
     cui: company.cui,
     registrationNumber: company.registrationNumber,
-    headquarters: this.locationIndexerService.createLocationIndexData(company.headquarters),
+    headquarters: company.headquarters
+      ? this.locationIndexerService.createLocationIndexData(company.headquarters)
+      : null,
     customFields: company.customFields,
     contactDetails: company.contactDetails,
     locations: this.locationIndexerService.createLocationsIndexData(company.locations),

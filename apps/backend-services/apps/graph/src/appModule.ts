@@ -1,4 +1,4 @@
-import { EntitiesModule } from '@app/entities'
+import { EntitiesModule } from '@app/models'
 import { PubModule } from '@app/pub'
 import { BullModule } from '@nestjs/bull'
 import { Module } from '@nestjs/common'
@@ -27,8 +27,8 @@ import { ServiceHealthModule } from '@app/service-health'
       useFactory: async (configService: ConfigService) =>
         Promise.resolve({
           redis: {
-            host: configService.get<string>('REDIS_HOST'),
-            port: +configService.get<number>('REDIS_PORT'),
+            host: configService.getOrThrow<string>('REDIS_HOST'),
+            port: +configService.getOrThrow<number>('REDIS_PORT'),
           },
           defaultJobOptions: {
             removeOnFail: false,
@@ -48,11 +48,11 @@ import { ServiceHealthModule } from '@app/service-health'
       useFactory: async (configService: ConfigService) => {
         const environment = configService.get<string>('NODE_ENV', 'development')
         return Promise.resolve({
-          dsn: configService.get<string>('SENTRY_DSN'),
+          dsn: configService.getOrThrow<string>('SENTRY_DSN'),
           debug: false,
           enabled: environment === 'production',
           environment: environment,
-          release: configService.get<string>('APP_VERSION'),
+          release: configService.getOrThrow<string>('APP_VERSION'),
           logLevel: 'debug',
         })
       },
@@ -62,7 +62,7 @@ import { ServiceHealthModule } from '@app/service-health'
       inject: [ConfigService],
       useFactory: async (configService: ConfigService) =>
         Promise.resolve({
-          uri: configService.get<string>('MONGODB_URI'),
+          uri: configService.getOrThrow<string>('MONGODB_URI_READ'),
         }),
     }),
     Neo4jModule.forRootAsync({
@@ -70,11 +70,11 @@ import { ServiceHealthModule } from '@app/service-health'
       inject: [ConfigService],
       useFactory: async (configService: ConfigService) =>
         Promise.resolve<Partial<Neo4jConfig>>({
-          scheme: configService.get<Neo4jScheme>('NEO4J_SCHEME'),
-          host: configService.get<string>('NEO4J_HOST'),
-          port: +configService.get<number>('NEO4J_PORT'),
-          username: configService.get<string>('NEO4J_USER'),
-          password: configService.get<string>('NEO4J_PASSWORD'),
+          scheme: configService.getOrThrow<Neo4jScheme>('NEO4J_SCHEME'),
+          host: configService.getOrThrow<string>('NEO4J_HOST'),
+          port: +configService.getOrThrow<number>('NEO4J_PORT'),
+          username: configService.getOrThrow<string>('NEO4J_USER'),
+          password: configService.getOrThrow<string>('NEO4J_PASSWORD'),
         }),
     }),
   ],

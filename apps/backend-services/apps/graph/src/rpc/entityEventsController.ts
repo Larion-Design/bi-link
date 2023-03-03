@@ -2,11 +2,11 @@ import { CompaniesService } from '@app/models/services/companiesService'
 import { EventsService } from '@app/models/services/eventsService'
 import { PersonsService } from '@app/models/services/personsService'
 import { PropertiesService } from '@app/models/services/propertiesService'
-import { CompanyEventSchedulerService } from '@app/scheduler-module'
 import { Controller, Logger } from '@nestjs/common'
 import { EventPattern, Payload } from '@nestjs/microservices'
 import { EntityInfo, MICROSERVICES } from '@app/pub/constants'
 import { EntityType } from 'defs'
+import { CompanyDispatcherService } from '../producers/services/companyDispatcherService'
 import { EventDispatcherService } from '../producers/services/eventDispatcherService'
 import { PersonDispatcherService } from '../producers/services/personDispatcherService'
 import { PropertyDispatcherService } from '../producers/services/propertyDispatcherService'
@@ -17,7 +17,7 @@ export class EntityEventsController {
 
   constructor(
     private readonly personEventDispatcherService: PersonDispatcherService,
-    private readonly companyEventDispatcherService: CompanyEventSchedulerService,
+    private readonly companyEventDispatcherService: CompanyDispatcherService,
     private readonly propertyEventDispatcherService: PropertyDispatcherService,
     private readonly eventDispatcherService: EventDispatcherService,
 

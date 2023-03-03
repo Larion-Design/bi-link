@@ -40,8 +40,12 @@ export class PersonsIndexerService {
     lastName: person.lastName,
     oldNames: person.oldNames,
     cnp: person.cnp,
-    homeAddress: this.locationIndexerService.createLocationIndexData(person.homeAddress),
-    birthPlace: this.locationIndexerService.createLocationIndexData(person.birthPlace),
+    homeAddress: person.homeAddress
+      ? this.locationIndexerService.createLocationIndexData(person.homeAddress)
+      : null,
+    birthPlace: person.birthPlace
+      ? this.locationIndexerService.createLocationIndexData(person.birthPlace)
+      : null,
     birthdate: person.birthdate ? format(new Date(person.birthdate), 'yyyy-mm-dd') : null,
     contactDetails: person.contactDetails,
     documents: this.createIdDocumentsIndex(person.documents),

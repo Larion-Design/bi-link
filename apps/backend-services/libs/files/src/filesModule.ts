@@ -3,7 +3,7 @@ import { MinioModule } from 'nestjs-minio-client'
 import { ConfigModule, ConfigService } from '@nestjs/config'
 import { FileStorageService } from '@app/files/services/fileStorageService'
 import { FileImporterService } from '@app/files/services/fileImporterService'
-import { EntitiesModule } from '@app/entities'
+import { EntitiesModule } from '@app/models'
 
 @Module({
   imports: [

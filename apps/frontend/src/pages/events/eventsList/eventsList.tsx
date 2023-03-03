@@ -76,12 +76,12 @@ export const EventsList: React.FunctionComponent = () => {
             alignItems={'center'}
           >
             <Typography variant={'h5'} data-cy={'pageTitle'}>
-              Evente
+              Evenimente
             </Typography>
             <Box display={'flex'} sx={{ width: 0.7 }}>
               <TextField
                 value={searchTerm}
-                label={'Cauta evente'}
+                label={'Cauta evenimente'}
                 sx={{ flex: 12, mr: 2 }}
                 onChange={({ target: { value } }) => setSearchTerm(value)}
                 data-cy={'searchEventsInput'}
@@ -92,7 +92,7 @@ export const EventsList: React.FunctionComponent = () => {
                 onClick={() => navigate(routes.newEvent)}
                 data-cy={'createEvent'}
               >
-                <Tooltip title={'Creaza un event'}>
+                <Tooltip title={'Creaza un eveniment'}>
                   <AddOutlinedIcon />
                 </Tooltip>
               </Button>

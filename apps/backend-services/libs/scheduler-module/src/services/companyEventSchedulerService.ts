@@ -15,7 +15,7 @@ export class CompanyEventSchedulerService {
     this.publishJob(EVENT_UPDATED, { companyId })
 
   dispatchCompaniesUpdated = async (companiesIds: string[]) =>
-    this.queue.addBulk(
+    this.queue?.addBulk(
       companiesIds.map((companyId) => ({
         name: EVENT_UPDATED,
         data: {

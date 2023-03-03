@@ -1,10 +1,9 @@
+import React, { useState } from 'react'
 import { eventTypes, getDefaultEvent } from '@frontend/components/form/event/constants'
 import { useCancelDialog } from '@frontend/utils/hooks/useCancelDialog'
-import React, { useCallback, useState } from 'react'
 import { ApolloError } from '@apollo/client'
 import { FormikProps, withFormik } from 'formik'
 import { FormattedMessage } from 'react-intl'
-import { useNavigate } from 'react-router-dom'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import Grid from '@mui/material/Grid'
@@ -14,13 +13,12 @@ import Stepper from '@mui/material/Stepper'
 import { EventAPIInput } from 'defs'
 import { getEventFrequentCustomFieldsRequest } from '@frontend/graphql/events/queries/getEventFrequentCustomFields'
 import { routes } from '../../../../router/routes'
-import { useDialog } from '../../../dialog/dialogProvider'
 import { AutocompleteField } from '../../autocompleteField'
 import { CustomInputFields } from '../../customInputFields'
 import { DateTimeSelector } from '../../dateTimeSelector'
 import { FilesManager } from '../../fileField'
 import { InputField } from '../../inputField'
-import { Location } from '../../location'
+import { getDefaultLocation, Location } from '../../location'
 import { Parties } from '../parties'
 import { personFormValidation } from '../../person/personForm/validation/validation'
 
@@ -99,7 +97,7 @@ const Form: React.FunctionComponent<Props & FormikProps<EventAPIInput>> = ({
               <Grid item xs={12}>
                 <Location
                   label={'Locatie'}
-                  location={values.location}
+                  location={values.location ?? getDefaultLocation()}
                   updateLocation={(location) => {
                     setFieldValue('location', location)
                   }}

@@ -1,4 +1,11 @@
-import { OnQueueActive, OnQueueCompleted, OnQueueFailed, Process, Processor } from '@nestjs/bull'
+import {
+  OnQueueActive,
+  OnQueueCompleted,
+  OnQueueFailed,
+  OnQueueStalled,
+  Process,
+  Processor,
+} from '@nestjs/bull'
 import { Job } from 'bull'
 import { Logger } from '@nestjs/common'
 import {
@@ -7,7 +14,7 @@ import {
   FileParentEntity,
   PersonEventInfo,
 } from '@app/scheduler-module'
-import { PersonsIndexerService } from '../../indexer/services/personsIndexerService'
+import { PersonsIndexerService } from '../../indexer/services'
 import { QUEUE_PERSONS } from '../../producers/constants'
 import { FileEventDispatcherService } from '../../producers/services/fileEventDispatcherService'
 import { PersonsService } from '@app/models/services/personsService'
@@ -33,8 +40,13 @@ export class PersonIndexEventsConsumer {
   }
 
   @OnQueueFailed()
-  onQueueFailed({ id, name }: Job) {
-    this.logger.debug(`Failed job ID ${id} (${name})`)
+  onQueueFailed({ id, name, failedReason }: Job) {
+    this.logger.error(`Failed job ID ${id} (${name}) - ${String(failedReason)}`)
+  }
+
+  @OnQueueStalled()
+  onQueueStalled({ id, name, failedReason }: Job) {
+    this.logger.error(`Job stalled ${id} (${name}) - ${String(failedReason)}`)
   }
 
   @Process(EVENT_CREATED)
@@ -44,11 +56,11 @@ export class PersonIndexEventsConsumer {
     } = job
 
     try {
-      if (await this.indexPersonInfo(personId)) {
-        return job.moveToCompleted()
-      }
+      await this.indexPersonInfo(personId)
+      return {}
     } catch (error) {
-      return job.moveToFailed(error as { message: string })
+      this.logger.error(error)
+      await job.moveToFailed(error as { message: string })
     }
   }
 
@@ -59,13 +71,11 @@ export class PersonIndexEventsConsumer {
     } = job
 
     try {
-      if (await this.indexPersonInfo(personId)) {
-        return job.moveToCompleted()
-      }
-      throw new Error(`Could not index person ${personId}`)
+      await this.indexPersonInfo(personId)
+      return {}
     } catch (error) {
       this.logger.error(error)
-      return job.moveToFailed(error as { message: string })
+      await job.moveToFailed(error as { message: string })
     }
   }
 

@@ -38,9 +38,10 @@ export class CompanyEventConsumer {
 
     try {
       await this.companyGraphService.upsertCompanyNode(companyId)
-      return job.moveToCompleted()
+      return {}
     } catch (error) {
-      return job.moveToFailed(error as { message: string })
+      this.logger.error(error)
+      await job.moveToFailed(error as { message: string })
     }
   }
 
@@ -52,10 +53,10 @@ export class CompanyEventConsumer {
 
     try {
       await this.companyGraphService.upsertCompanyNode(companyId)
-      return job.moveToCompleted()
+      return {}
     } catch (error) {
       this.logger.error(error)
-      return job.moveToFailed(error as { message: string })
+      await job.moveToFailed(error as { message: string })
     }
   }
 }

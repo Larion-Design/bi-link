@@ -99,7 +99,7 @@ export const Home: React.FunctionComponent = () => {
             <CardMedia component={'img'} height={300} image={eventsImage} alt={'Incidente'} />
             <CardContent>
               <Typography gutterBottom variant={'h6'}>
-                Incidente
+                Evenimente
               </Typography>
             </CardContent>
             <CardActions sx={{ p: 2 }}>

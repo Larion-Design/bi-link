@@ -1,4 +1,11 @@
-import { OnQueueActive, OnQueueCompleted, OnQueueFailed, Process, Processor } from '@nestjs/bull'
+import {
+  OnQueueActive,
+  OnQueueCompleted,
+  OnQueueFailed,
+  OnQueueStalled,
+  Process,
+  Processor,
+} from '@nestjs/bull'
 import { Job } from 'bull'
 import { Logger } from '@nestjs/common'
 import {
@@ -9,7 +16,7 @@ import {
 } from '@app/scheduler-module'
 import { QUEUE_COMPANIES } from '../../producers/constants'
 import { FileEventDispatcherService } from '../../producers/services/fileEventDispatcherService'
-import { CompaniesIndexerService } from '../../indexer/services/companiesIndexerService'
+import { CompaniesIndexerService } from '../../indexer/services'
 import { CompaniesService } from '@app/models/services/companiesService'
 
 @Processor(QUEUE_COMPANIES)
@@ -33,8 +40,13 @@ export class CompanyIndexEventsConsumer {
   }
 
   @OnQueueFailed()
-  onQueueFailed({ id, name }: Job) {
-    this.logger.debug(`Failed job ID ${id} (${name})`)
+  onQueueFailed({ id, name, failedReason }: Job) {
+    this.logger.error(`Failed job ID ${id} (${name}) - ${String(failedReason)}`)
+  }
+
+  @OnQueueStalled()
+  onQueueStalled({ id, name }: Job) {
+    this.logger.error(`Job stalled ${id} (${name})`)
   }
 
   @Process(EVENT_CREATED)
@@ -44,13 +56,11 @@ export class CompanyIndexEventsConsumer {
         data: { companyId },
       } = job
 
-      if (await this.indexCompanyInfo(companyId)) {
-        return job.moveToCompleted()
-      }
-      throw new Error(`Could not index company ID ${companyId}`)
+      await this.indexCompanyInfo(companyId)
+      return {}
     } catch (error) {
       this.logger.error(error)
-      return job.moveToFailed(error as { message: string })
+      await job.moveToFailed(error as { message: string })
     }
   }
 
@@ -61,13 +71,11 @@ export class CompanyIndexEventsConsumer {
         data: { companyId },
       } = job
 
-      if (await this.indexCompanyInfo(companyId)) {
-        return job.moveToCompleted()
-      }
-      throw new Error(`Could not index company ID ${companyId}`)
+      await this.indexCompanyInfo(companyId)
+      return {}
     } catch (error) {
       this.logger.error(error)
-      return job.moveToFailed(error as { message: string })
+      await job.moveToFailed(error as { message: string })
     }
   }
 

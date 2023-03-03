@@ -1,6 +1,6 @@
 import { PubModule } from '@app/pub'
 import { Module } from '@nestjs/common'
-import { EntitiesModule } from '@app/entities'
+import { EntitiesModule } from '@app/models'
 import { ProducersModule } from '../producers/producersModule'
 import { CompanyEventConsumer } from './companyEventConsumer'
 import { EventConsumer } from './eventConsumer'

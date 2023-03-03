@@ -4,9 +4,8 @@ import {
   PersonEventSchedulerService,
   PropertyEventSchedulerService,
 } from '@app/scheduler-module/services'
-import { Global, Module } from '@nestjs/common'
+import { Module } from '@nestjs/common'
 
-@Global()
 @Module({
   providers: [
     PersonEventSchedulerService,

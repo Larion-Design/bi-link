@@ -86,6 +86,17 @@ const getPersonInfo = gql`
         issueDate
         expirationDate
       }
+      education {
+        type
+        school
+        specialization
+        customFields {
+          fieldName
+          fieldValue
+        }
+        startDate
+        endDate
+      }
     }
   }
 `

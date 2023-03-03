@@ -14,17 +14,17 @@ export class LocationIndexerService {
     country,
     zipCode,
     otherInfo,
-    coordinates: { lat, long },
+    coordinates: { lat, long: lon },
   }: LocationDocument): LocationIndex => ({
     address: [street, number, building, door, locality, county, country, zipCode, otherInfo]
       .join(' ')
       .trim(),
     coordinates: {
       lat,
-      lon: long,
+      lon,
     },
   })
 
   createLocationsIndexData = (locations: LocationDocument[]) =>
-    locations.map(this.createLocationIndexData)
+    locations?.map(this.createLocationIndexData)
 }

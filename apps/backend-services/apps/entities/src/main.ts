@@ -25,7 +25,7 @@ async function bootstrap() {
   app.useLogger(logger)
 
   await app.startAllMicroservices()
-  await app.listen(process.env.SERVICE_INDEXER_PORT)
+  await app.listen(process.env.SERVICE_ENTITIES_PORT)
   Logger.log('Entities service is now running.')
 }
 

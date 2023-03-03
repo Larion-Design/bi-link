@@ -30,7 +30,7 @@ export class MappingRPCController {
   ) {}
 
   @EventPattern(MICROSERVICES.INDEXER.createMapping)
-  async indexEntity(@Payload() entityType: EntityType) {
+  async createMapping(@Payload() entityType: EntityType) {
     switch (entityType) {
       case 'PERSON': {
         await this.mappingValidatorService.initIndex(

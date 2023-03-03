@@ -6,6 +6,11 @@
       "dependsOn": ["api", "graph", "indexer", "files-parser", "user-actions-recorder", "frontend"],
       "outputs": ["dist/**"]
     },
+    "backend": {
+      "cache": false,
+      "dependsOn": ["api", "graph", "indexer", "files-parser", "user-actions-recorder"],
+      "outputs": ["dist/**"]
+    },
     "frontend": {
       "cache": false,
       "dependsOn": ["^dev"],

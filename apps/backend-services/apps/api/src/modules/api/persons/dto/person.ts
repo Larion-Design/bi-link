@@ -52,6 +52,6 @@ export class Person implements PersonAPIOutput {
   @Field(() => [CustomField])
   customFields: CustomField[]
 
-  @Field(() => [Education])
+  @Field(() => [Education], { defaultValue: [] })
   education: Education[]
 }

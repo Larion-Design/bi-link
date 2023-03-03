@@ -18,7 +18,7 @@ import { Associates } from '../associates'
 import { CustomInputFields } from '../../customInputFields'
 import { FilesManager } from '../../fileField'
 import { InputField } from '../../inputField'
-import { Location } from '../../location'
+import { getDefaultLocation, Location } from '../../location'
 import { Locations } from '../../locations'
 import { personFormValidation } from '../../person/personForm/validation/validation'
 import { companyFormValidation, validateCompanyForm } from './validation/validation'
@@ -131,7 +131,7 @@ const Form: React.FunctionComponent<Props & FormikProps<CompanyAPIInput>> = ({
             <Grid item xs={12}>
               <Location
                 label={'Sediu social'}
-                location={values.headquarters}
+                location={values.headquarters ?? getDefaultLocation()}
                 updateLocation={async (value) => {
                   const error = await companyFormValidation.headquarters(value)
                   setFieldValue('headquarters', value)
