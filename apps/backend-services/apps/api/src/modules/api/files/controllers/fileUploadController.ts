@@ -1,6 +1,6 @@
 import { Controller, Post, UploadedFile, UseInterceptors } from '@nestjs/common'
 import { FileInterceptor } from '@nestjs/platform-express'
-import { EntityEventsService } from '@app/pub/services/entityEventsService'
+import { EntityEventsService } from '@app/rpc/services/entityEventsService'
 import { FileImporterService } from '@app/files/services/fileImporterService'
 
 @Controller()

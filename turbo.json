@@ -3,7 +3,7 @@
   "pipeline": {
     "dev": {
       "cache": false,
-      "dependsOn": ["api", "graph", "indexer", "files-parser", "user-actions-recorder", "frontend"],
+      "dependsOn": ["backend", "frontend"],
       "outputs": ["dist/**"]
     },
     "backend": {

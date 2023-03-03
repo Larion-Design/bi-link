@@ -1,4 +1,4 @@
-import { GraphService } from '@app/pub/services/graphService'
+import { GraphService } from '@app/rpc/services/graphService'
 import { Command, CommandRunner, Option } from 'nest-commander'
 
 type CommandOptions = {

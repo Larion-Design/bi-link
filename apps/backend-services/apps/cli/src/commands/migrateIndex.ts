@@ -1,4 +1,4 @@
-import { IndexerService } from '@app/pub'
+import { IndexerService } from '@app/rpc'
 import { Logger } from '@nestjs/common'
 import { EntityType } from 'defs'
 import { Command, CommandRunner, Option } from 'nest-commander'

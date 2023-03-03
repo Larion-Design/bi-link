@@ -11,7 +11,7 @@ import {
   INDEX_PROPERTIES,
 } from '@app/definitions/constants'
 import { FilesService } from '@app/models/services/filesService'
-import { FileParserService } from '@app/pub/services/fileParserService'
+import { FileParserService } from '@app/rpc/services/fileParserService'
 
 @Injectable()
 export class FilesIndexerService {

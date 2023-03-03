@@ -1,12 +1,12 @@
-import { GraphService } from '@app/pub/services/graphService'
-import { IndexerService } from '@app/pub/services/indexerService'
+import { GraphService } from '@app/rpc/services/graphService'
+import { IndexerService } from '@app/rpc/services/indexerService'
 import { Global, Module } from '@nestjs/common'
 import { ClientsModule, Transport } from '@nestjs/microservices'
-import { MICROSERVICES } from '@app/pub/constants'
+import { MICROSERVICES } from '@app/rpc/constants'
 import { ConfigModule, ConfigService } from '@nestjs/config'
-import { EntityEventsService } from '@app/pub/services/entityEventsService'
-import { UserActionsService } from '@app/pub/services/userActionsService'
-import { FileParserService } from '@app/pub/services/fileParserService'
+import { EntityEventsService } from '@app/rpc/services/entityEventsService'
+import { UserActionsService } from '@app/rpc/services/userActionsService'
+import { FileParserService } from '@app/rpc/services/fileParserService'
 
 @Global()
 @Module({

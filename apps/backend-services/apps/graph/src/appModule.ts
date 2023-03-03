@@ -1,5 +1,5 @@
 import { EntitiesModule } from '@app/models'
-import { PubModule } from '@app/pub'
+import { PubModule } from '@app/rpc'
 import { BullModule } from '@nestjs/bull'
 import { Module } from '@nestjs/common'
 import { GraphModule } from '@app/graph-module'

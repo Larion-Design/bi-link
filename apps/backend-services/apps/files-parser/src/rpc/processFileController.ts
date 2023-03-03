@@ -1,7 +1,7 @@
 import { Controller, Logger } from '@nestjs/common'
 import { MessagePattern, Payload } from '@nestjs/microservices'
 import { ParserService } from '../services/parserService'
-import { MICROSERVICES } from '@app/pub/constants'
+import { MICROSERVICES } from '@app/rpc/constants'
 import { FileStorageService } from '@app/files/services/fileStorageService'
 
 @Controller()

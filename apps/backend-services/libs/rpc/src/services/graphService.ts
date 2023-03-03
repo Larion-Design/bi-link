@@ -1,17 +1,17 @@
 import { Inject, Injectable, Logger } from '@nestjs/common'
-import { EntityInfo, MICROSERVICES } from '@app/pub/constants'
+import { EntityInfo, MICROSERVICES } from '@app/rpc/constants'
 import { ClientProxy } from '@nestjs/microservices'
 import { EntityType } from 'defs'
 
 @Injectable()
-export class EntityEventsService {
-  private readonly logger = new Logger(EntityEventsService.name)
+export class GraphService {
+  private readonly logger = new Logger(GraphService.name)
 
-  constructor(@Inject(MICROSERVICES.ENTITY_EVENTS.id) private client: ClientProxy) {}
+  constructor(@Inject(MICROSERVICES.GRAPH.id) private client: ClientProxy) {}
 
   emitEntityModified(entityEventInfo: EntityInfo) {
     try {
-      this.client.emit(MICROSERVICES.ENTITY_EVENTS.entityModified, entityEventInfo)
+      this.client.emit(MICROSERVICES.GRAPH.entityModified, entityEventInfo)
     } catch (e) {
       this.logger.error(e)
     }
@@ -19,7 +19,7 @@ export class EntityEventsService {
 
   emitEntityCreated(entityEventInfo: EntityInfo) {
     try {
-      this.client.emit(MICROSERVICES.ENTITY_EVENTS.entityCreated, entityEventInfo)
+      this.client.emit(MICROSERVICES.GRAPH.entityCreated, entityEventInfo)
     } catch (e) {
       this.logger.error(e)
     }
@@ -27,7 +27,7 @@ export class EntityEventsService {
 
   emitEntitiesRefresh(entityType: EntityType) {
     try {
-      this.client.emit(MICROSERVICES.ENTITY_EVENTS.entitiesRefresh, entityType)
+      this.client.emit(MICROSERVICES.GRAPH.entitiesRefresh, entityType)
     } catch (e) {
       this.logger.error(e)
     }

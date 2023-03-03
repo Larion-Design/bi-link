@@ -7,8 +7,8 @@ import { FirebaseAuthGuard } from '../../../users/guards/FirebaseAuthGuard'
 import { Report } from '../dto/report'
 import { ReportInput } from '../dto/reportInput'
 import { ReportAPIService } from '../services/reportAPIService'
-import { EntityEventsService } from '@app/pub/services/entityEventsService'
-import { UserActionsService } from '@app/pub/services/userActionsService'
+import { EntityEventsService } from '@app/rpc/services/entityEventsService'
+import { UserActionsService } from '@app/rpc/services/userActionsService'
 
 @ArgsType()
 class Params {

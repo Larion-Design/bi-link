@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common'
-import { IndexerService } from '@app/pub/services/indexerService'
+import { IndexerService } from '@app/rpc/services/indexerService'
 
 @Injectable()
 export class EntitiesIndexerService {

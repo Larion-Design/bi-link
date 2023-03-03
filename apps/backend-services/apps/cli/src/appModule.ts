@@ -6,7 +6,7 @@ import { MigrateDatabaseCommand } from './commands/migrateDatabaseCommand'
 import { IndexEntityCommand } from './commands/indexEntityCommand'
 import { MigrateIndex } from './commands/migrateIndex'
 import { GraphUpdateCommand } from './commands/graphUpdateCommand'
-import { PubModule } from '@app/pub'
+import { PubModule } from '@app/rpc'
 import { EntitiesIndexerService } from './services/entitiesIndexerService'
 
 @Module({

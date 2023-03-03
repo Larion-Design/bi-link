@@ -1,6 +1,6 @@
 import { FilesModule } from '@app/files'
 import { GraphModule } from '@app/graph-module'
-import { PubModule } from '@app/pub'
+import { PubModule } from '@app/rpc'
 import { Module } from '@nestjs/common'
 import { MulterModule } from '@nestjs/platform-express'
 import { memoryStorage } from 'multer'

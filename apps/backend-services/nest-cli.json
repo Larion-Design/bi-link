@@ -35,13 +35,13 @@
         "tsConfigPath": "libs/models/tsconfig.lib.json"
       }
     },
-    "pub": {
+    "rpc": {
       "type": "library",
-      "root": "libs/pub",
+      "root": "libs/rpc",
       "entryFile": "index",
-      "sourceRoot": "libs/pub/src",
+      "sourceRoot": "libs/rpc/src",
       "compilerOptions": {
-        "tsConfigPath": "libs/pub/tsconfig.lib.json"
+        "tsConfigPath": "libs/rpc/tsconfig.lib.json"
       }
     },
     "service-health": {

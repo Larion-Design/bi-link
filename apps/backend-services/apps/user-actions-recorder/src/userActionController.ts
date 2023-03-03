@@ -1,8 +1,8 @@
-import { IndexerService } from '@app/pub'
+import { IndexerService } from '@app/rpc'
 import { Controller } from '@nestjs/common'
 import { EventPattern, Payload } from '@nestjs/microservices'
 import { ActivityEventIndex } from 'defs'
-import { MICROSERVICES } from '@app/pub/constants'
+import { MICROSERVICES } from '@app/rpc/constants'
 
 @Controller()
 export class UserActionController {

@@ -1,5 +1,5 @@
 import { Inject, Injectable, Logger } from '@nestjs/common'
-import { MICROSERVICES } from '@app/pub/constants'
+import { MICROSERVICES } from '@app/rpc/constants'
 import { ClientProxy } from '@nestjs/microservices'
 import { lastValueFrom, timeout } from 'rxjs'
 

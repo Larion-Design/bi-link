@@ -27,11 +27,11 @@
       "@app/models/*": [
         "libs/models/src/*"
       ],
-      "@app/pub": [
-        "libs/pub/src"
+      "@app/rpc": [
+        "libs/rpc/src"
       ],
-      "@app/pub/*": [
-        "libs/pub/src/*"
+      "@app/rpc/*": [
+        "libs/rpc/src/*"
       ],
       "@app/service-health": [
         "libs/service-health/src"

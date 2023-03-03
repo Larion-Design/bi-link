@@ -11,7 +11,7 @@ import { GraphqlInterceptor, SentryModule } from '@ntegral/nestjs-sentry'
 import { ApiModule } from './modules/api/apiModule'
 import { UsersModule } from './modules/users/UsersModule'
 import { EntitiesModule } from '@app/models/entitiesModule'
-import { PubModule } from '@app/pub'
+import { PubModule } from '@app/rpc'
 import { GraphModule } from '@app/graph-module'
 
 @Module({

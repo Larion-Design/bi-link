@@ -1,4 +1,4 @@
-import { PubModule } from '@app/pub'
+import { PubModule } from '@app/rpc'
 import { Module } from '@nestjs/common'
 import { EntitiesModule } from '@app/models'
 import { ProducersModule } from '../producers/producersModule'

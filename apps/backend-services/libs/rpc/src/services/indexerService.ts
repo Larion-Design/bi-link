@@ -1,5 +1,5 @@
 import { Inject, Injectable, Logger } from '@nestjs/common'
-import { EntityInfo, MICROSERVICES } from '@app/pub/constants'
+import { EntityInfo, MICROSERVICES } from '@app/rpc/constants'
 import { ClientProxy } from '@nestjs/microservices'
 import { ActivityEventIndex, EntityType } from 'defs'
 
