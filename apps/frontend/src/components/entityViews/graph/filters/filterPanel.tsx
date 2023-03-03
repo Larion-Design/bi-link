@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { useIntl } from 'react-intl'
 import { Panel } from 'reactflow'
 import IconButton from '@mui/material/IconButton'
@@ -8,6 +8,7 @@ import Slider from '@mui/material/Slider'
 import Typography from '@mui/material/Typography'
 import FilterListOffOutlinedIcon from '@mui/icons-material/FilterListOffOutlined'
 import FilterListOutlinedIcon from '@mui/icons-material/FilterListOutlined'
+import { useDebounce } from 'usehooks-ts'
 import { MultiSelect } from '../../../form/multiSelect'
 
 type Props = {
@@ -31,24 +32,30 @@ export const FilterPanel: React.FunctionComponent<Props> = ({
   const { formatMessage } = useIntl()
   const [open, setOpen] = useState(false)
   const togglePanel = useCallback(() => setOpen((open) => !open), [setOpen])
+  const [depthValue, setDepthValue] = useState(depth)
+  const debouncedDepthValue = useDebounce(depthValue, 2000)
+
+  useEffect(() => {
+    updateDepth(debouncedDepthValue)
+  }, [debouncedDepthValue])
 
   return open ? (
     <Panel position={'top-right'} className={'react-flow__filters'}>
       <Paper variant={'outlined'} sx={{ p: 1, width: 250 }}>
-        <Box>
+        <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
           <IconButton onClick={togglePanel}>
             <FilterListOffOutlinedIcon fontSize={'small'} />
           </IconButton>
         </Box>
-        <Box sx={{ width: 1, mb: 2 }}>
+        <Box sx={{ width: 1, mb: 2, p: 1 }}>
           <Typography gutterBottom>Nivel de complexitate</Typography>
           <Slider
             size={'small'}
-            value={depth}
+            value={depthValue}
             min={1}
             max={depthSliderSteps.length}
             marks={depthSliderSteps}
-            onChangeCommitted={(event, value) => updateDepth(+value)}
+            onChangeCommitted={(event, value) => setDepthValue(+value)}
           />
         </Box>
         <Box sx={{ width: 1, mb: 3 }}>
@@ -61,7 +68,7 @@ export const FilterPanel: React.FunctionComponent<Props> = ({
               selected,
             }))}
             onSelectedOptionsChange={(options) => {
-              options.forEach((option) => entitiesTypes.set(option, true))
+              entitiesTypes.forEach((value, key, map) => map.set(key, options.includes(key)))
               filterUpdated(entitiesTypes, relationshipsTypes)
             }}
           />
@@ -82,7 +89,7 @@ export const FilterPanel: React.FunctionComponent<Props> = ({
               }),
             )}
             onSelectedOptionsChange={(options) => {
-              options.forEach((option) => entitiesTypes.set(option, true))
+              relationshipsTypes.forEach((value, key, map) => map.set(key, options.includes(key)))
               filterUpdated(entitiesTypes, relationshipsTypes)
             }}
           />

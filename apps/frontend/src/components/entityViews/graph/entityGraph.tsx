@@ -81,7 +81,7 @@ export const EntityGraph: React.FunctionComponent<Props> = ({
         edges.map((edge) => {
           const hidden = !relationshipsTypes.get(edge.type)
 
-          if (hidden) {
+          if (!hidden) {
             const {
               sourceNode: { id: sourceNodeId },
               targetNode: { id: targetNodeId },

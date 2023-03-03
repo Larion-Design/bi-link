@@ -1,4 +1,4 @@
-import React, { PropsWithRef, useEffect, useState } from 'react'
+import React, { PropsWithRef, useEffect, useRef, useState } from 'react'
 import Box from '@mui/material/Box'
 import dagre, { Label } from 'dagre'
 import { useIntl } from 'react-intl'
@@ -23,7 +23,7 @@ type Props = {
   disableTitle?: boolean
 }
 
-const nodeConfig: Label = { width: 200, height: 150 }
+const nodeConfig: Label = { width: 250, height: 250 }
 
 export const Graph: React.FunctionComponent<PropsWithRef<Props>> = ({
   id,
@@ -41,6 +41,12 @@ export const Graph: React.FunctionComponent<PropsWithRef<Props>> = ({
   const showNotification = useNotification()
   const [fetchGraph, { data, error, loading }] = getEntitiesGraphRequest()
   const [graphDepth, updateDepth] = useState(depth ?? 2)
+  const graph = useRef(
+    new dagre.graphlib.Graph({ directed: true, compound: true })
+      .setGraph({ rankdir: 'TB' })
+      .setDefaultEdgeLabel(() => '')
+      .setDefaultNodeLabel(() => ''),
+  )
 
   const [nodes, setNodes] = useState<Node<unknown>[]>([])
   const [edges, setEdges] = useState<Edge<unknown>[]>([])
@@ -61,8 +67,9 @@ export const Graph: React.FunctionComponent<PropsWithRef<Props>> = ({
     if (!data?.getEntitiesGraph) return
 
     const dagreGraph = new dagre.graphlib.Graph({ directed: true, compound: true })
-    dagreGraph.setDefaultEdgeLabel(() => ({}))
-    dagreGraph.setGraph({ rankdir: 'TB' })
+      .setGraph({ rankdir: 'TB' })
+      .setDefaultEdgeLabel(() => '')
+      .setDefaultNodeLabel(() => '')
 
     const nodesMap = new Map<string, Node>()
     const edgesMap = new Map<string, Edge>()
@@ -74,8 +81,8 @@ export const Graph: React.FunctionComponent<PropsWithRef<Props>> = ({
       _confirmed: boolean,
       type: string,
     ) => {
-      const id = `${startNodeId}-${label}-${endNodeId}`
-      const invertedId = `${endNodeId}-${label}-${startNodeId}`
+      const id = `${startNodeId}-${type}-${endNodeId}`
+      const invertedId = `${endNodeId}-${type}-${startNodeId}`
 
       if (!edgesMap.has(id) && !edgesMap.has(invertedId)) {
         edgesMap.set(id, {
@@ -91,6 +98,16 @@ export const Graph: React.FunctionComponent<PropsWithRef<Props>> = ({
         dagreGraph.setEdge(startNodeId, endNodeId, label)
       }
     }
+
+    const createNode = (id: string, type: EntityLabel, data: any) =>
+      nodesMap.set(id, {
+        id,
+        targetPosition: Position.Top,
+        sourcePosition: Position.Bottom,
+        position: { x: 0, y: 0 },
+        type,
+        data,
+      })
 
     const {
       relationships: {
@@ -117,21 +134,10 @@ export const Graph: React.FunctionComponent<PropsWithRef<Props>> = ({
         if (personInfo) {
           dagreGraph.setNode(personId, nodeConfig)
 
-          nodesMap.set(personId, {
-            id: personId,
-            targetPosition: Position.Top,
-            sourcePosition: Position.Bottom,
-            hidden: false,
-            position: {
-              x: 0,
-              y: 0,
-            },
-            type: EntityLabel.PERSON,
-            data: {
-              label: `${personInfo.lastName} ${personInfo.firstName}`,
-              image: personInfo.images?.[0]?.url.url,
-              isRootNode: personId === entityId,
-            },
+          createNode(personId, EntityLabel.PERSON, {
+            label: `${personInfo.lastName} ${personInfo.firstName}`,
+            image: personInfo.images?.[0]?.url.url,
+            isRootNode: personId === entityId,
           })
           return true
         }
@@ -144,20 +150,9 @@ export const Graph: React.FunctionComponent<PropsWithRef<Props>> = ({
         if (companyInfo) {
           dagreGraph.setNode(companyId, nodeConfig)
 
-          nodesMap.set(companyId, {
-            id: companyId,
-            targetPosition: Position.Top,
-            sourcePosition: Position.Bottom,
-            hidden: false,
-            position: {
-              x: 0,
-              y: 0,
-            },
-            type: EntityLabel.COMPANY,
-            data: {
-              label: companyInfo.name,
-              isRootNode: companyId === entityId,
-            },
+          createNode(companyId, EntityLabel.COMPANY, {
+            label: companyInfo.name,
+            isRootNode: companyId === entityId,
           })
           return true
         }
@@ -170,20 +165,9 @@ export const Graph: React.FunctionComponent<PropsWithRef<Props>> = ({
         if (propertyInfo) {
           dagreGraph.setNode(propertyId, nodeConfig)
 
-          nodesMap.set(propertyId, {
-            id: propertyId,
-            targetPosition: Position.Top,
-            sourcePosition: Position.Bottom,
-            hidden: false,
-            position: {
-              x: 0,
-              y: 0,
-            },
-            type: EntityLabel.PROPERTY,
-            data: {
-              label: propertyInfo.name,
-              isRootNode: propertyId === entityId,
-            },
+          createNode(propertyId, EntityLabel.PROPERTY, {
+            label: propertyInfo.name,
+            isRootNode: propertyId === entityId,
           })
           return true
         }
@@ -191,51 +175,31 @@ export const Graph: React.FunctionComponent<PropsWithRef<Props>> = ({
       [EntityLabel.EVENT]: (eventId: string) => {
         if (nodesMap.has(eventId)) return true
 
-        dagreGraph.setNode(eventId, nodeConfig)
-
         const eventInfo = events.find(({ _id }) => eventId === _id)
 
         if (eventInfo) {
-          nodesMap.set(eventId, {
-            id: eventId,
-            targetPosition: Position.Top,
-            sourcePosition: Position.Bottom,
-            hidden: false,
-            position: {
-              x: 0,
-              y: 0,
-            },
-            type: EntityLabel.EVENT,
-            data: {
-              label: eventInfo.location,
-              isRootNode: eventId === entityId,
-            },
+          dagreGraph.setNode(eventId, nodeConfig)
+
+          createNode(eventId, EntityLabel.EVENT, {
+            label: eventInfo.location,
+            isRootNode: eventId === entityId,
           })
+          return true
         }
       },
       [EntityLabel.LOCATION]: (locationId: string) => {
         if (nodesMap.has(locationId)) return true
 
-        dagreGraph.setNode(locationId, nodeConfig)
-
         const locationInfo = locations.find(({ _id }) => locationId === _id)
 
         if (locationInfo) {
-          nodesMap.set(locationId, {
-            id: locationId,
-            targetPosition: Position.Top,
-            sourcePosition: Position.Bottom,
-            hidden: false,
-            position: {
-              x: 0,
-              y: 0,
-            },
-            type: EntityLabel.LOCATION,
-            data: {
-              label: getLocationAddress(locationInfo),
-              isRootNode: locationId === entityId,
-            },
+          dagreGraph.setNode(locationId, nodeConfig)
+
+          createNode(locationId, EntityLabel.LOCATION, {
+            label: getLocationAddress(locationInfo),
+            isRootNode: locationId === entityId,
           })
+          return true
         }
       },
     }
@@ -252,13 +216,14 @@ export const Graph: React.FunctionComponent<PropsWithRef<Props>> = ({
           createEdge(
             startNodeId,
             endNodeId,
-            relationshipsTypes[type],
+            relationshipsTypes[type] ?? type,
             _confirmed,
             relationshipsTypes[type] ?? type,
           )
         }
       },
     )
+
     companiesAssociates.forEach(
       ({
         startNode: { _id: startNodeId, _type: startNodeType },
@@ -339,9 +304,9 @@ export const Graph: React.FunctionComponent<PropsWithRef<Props>> = ({
     )
 
     setEdges(Array.from(edgesMap.values()))
-  }, [data?.getEntitiesGraph])
+  }, [data?.getEntitiesGraph, setNodes, setEdges])
 
-  return loading ? null : (
+  return loading || (nodes.length === 0 && edges.length === 0) ? null : (
     <Box sx={{ width: 1, height: 1 }}>
       <ReactFlowProvider>
         <EntityGraph
