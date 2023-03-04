@@ -1,4 +1,3 @@
-import Box from '@mui/material/Box'
 import React from 'react'
 import { Handle, NodeProps, Position } from 'reactflow'
 import Typography from '@mui/material/Typography'
@@ -17,12 +16,14 @@ export const CompanyNode: React.FunctionComponent<NodeProps<Props>> = ({
     <Handle type={'target'} position={Position.Top} />
     <Paper
       sx={({ palette: { background } }) => ({
-        p: 2,
+        p: 1,
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'center',
         background: isRootNode ? background.paper : background.default,
+        width: 150,
+        height: 150,
       })}
     >
       <StoreOutlinedIcon fontSize={'small'} />

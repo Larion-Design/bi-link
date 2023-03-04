@@ -23,7 +23,7 @@ import { PersonNode } from './nodes/personNode'
 import { CompanyNode } from './nodes/companyNode'
 import { PropertyNode } from './nodes/propertyNode'
 import { EventNode } from './nodes/eventNode'
-import { NodeTypes, nodeTypeToEntityType } from './nodes/type'
+import { nodeTypeToEntityType } from './nodes/type'
 
 type Props = {
   id?: string
@@ -34,8 +34,8 @@ type Props = {
     nodes: Node<unknown>[]
     edges: Edge<unknown>[]
   }
-  onEntitySelected: (entityId: string, entityType: EntityType) => void
-  onRelationshipSelected: (sourceEntityId: string, targetEntityId: string) => void
+  onEntitySelected?: (entityId: string, entityType: EntityType) => void
+  onRelationshipSelected?: (sourceEntityId: string, targetEntityId: string) => void
   disableFilters?: boolean
   disableMap?: boolean
   disableControls?: boolean
@@ -79,45 +79,47 @@ export const EntityGraph: React.FunctionComponent<Props> = ({
 
       setEdges((edges) =>
         edges.map((edge) => {
+          const { source, target } = edge
           const hidden = !relationshipsTypes.get(edge.type)
 
-          if (!hidden) {
-            const {
-              sourceNode: { id: sourceNodeId },
-              targetNode: { id: targetNodeId },
-            } = edge
-
-            if (sourceNodeId !== id) {
-              hiddenEntities.add(sourceNodeId)
+          if (hidden) {
+            if (source !== id) {
+              hiddenEntities.add(source)
             }
-            if (targetNodeId !== id) {
-              hiddenEntities.add(targetNodeId)
+            if (target !== id) {
+              hiddenEntities.add(target)
             }
+          } else {
+            hiddenEntities.delete(source)
+            hiddenEntities.delete(target)
           }
-          return { ...edge, hidden }
+          return {
+            ...edge,
+            hidden: hidden || hiddenEntities.has(source) || hiddenEntities.has(target),
+          }
         }),
       )
 
       setNodes((nodes) =>
         nodes.map((node) => ({
           ...node,
-          hidden: node.id === id || !entitiesTypes.get(node.type) || hiddenEntities.has(node.id),
+          hidden: !entitiesTypes.get(node.type) || hiddenEntities.has(node.id),
         })),
       )
 
       setEntitiesTypes(entitiesTypes)
       setRelationshipsTypes(relationshipsTypes)
     },
-    [nodes],
+    [setEdges, setNodes, setEntitiesTypes, setRelationshipsTypes],
   )
 
   const onNodeClick: NodeMouseHandler = useCallback(
-    (event, node) => onEntitySelected(node.id, nodeTypeToEntityType[node.type]),
+    (event, node) => onEntitySelected?.(node.id, nodeTypeToEntityType[node.type]),
     [onEntitySelected],
   )
 
   const onEdgeClick: EdgeMouseHandler = useCallback(
-    (event, edge) => onRelationshipSelected(edge.source, edge.target),
+    (event, edge) => onRelationshipSelected?.(edge.source, edge.target),
     [onRelationshipSelected],
   )
 
@@ -130,7 +132,6 @@ export const EntityGraph: React.FunctionComponent<Props> = ({
       defaultEdges={edges}
       onNodeClick={onNodeClick}
       onEdgeClick={onEdgeClick}
-      fitView
       nodesDraggable
       nodesFocusable
       proOptions={{ hideAttribution: true }}
@@ -170,5 +171,5 @@ const nodeTypes: Record<Partial<EntityLabel>, FunctionComponent> = {
   PROPERTY: PropertyNode,
   EVENT: EventNode,
   LOCATION: LocationNode,
-  [EntityLabel.FILE]: undefined,
+  FILE: undefined,
 }

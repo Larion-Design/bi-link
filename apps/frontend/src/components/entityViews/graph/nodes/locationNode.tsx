@@ -22,6 +22,8 @@ export const LocationNode: React.FunctionComponent<NodeProps<Props>> = ({
         justifyContent: 'center',
         alignItems: 'center',
         background: isRootNode ? background.paper : background.default,
+        width: 150,
+        height: 150,
       })}
     >
       <FmdGoodOutlinedIcon fontSize={'small'} />

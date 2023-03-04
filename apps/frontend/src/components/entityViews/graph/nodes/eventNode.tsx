@@ -22,6 +22,8 @@ export const EventNode: React.FunctionComponent<NodeProps<Props>> = ({
         justifyContent: 'center',
         alignItems: 'center',
         background: isRootNode ? background.paper : background.default,
+        width: 150,
+        height: 150,
       })}
     >
       <WheelchairPickupOutlinedIcon fontSize={'small'} />

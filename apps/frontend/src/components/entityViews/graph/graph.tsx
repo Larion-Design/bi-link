@@ -1,11 +1,12 @@
-import React, { PropsWithRef, useEffect, useRef, useState } from 'react'
+import React, { PropsWithRef, useEffect, useState } from 'react'
 import Box from '@mui/material/Box'
-import dagre, { Label } from 'dagre'
+import ELK, { ElkNode } from 'elkjs'
 import { useIntl } from 'react-intl'
 import { ConnectionLineType, Edge, Node, Position, ReactFlowProvider } from 'reactflow'
 import { relationshipsTypes } from '@frontend/components/form/person/constants'
 import { getLocationAddress } from '@frontend/utils/location'
 import { EntityLabel, EntityLocationRelationship, EntityType } from 'defs'
+import { v4 } from 'uuid'
 import { getEntitiesGraphRequest } from '../../../graphql/shared/queries/getEntitiesGraph'
 import { useNotification } from '../../../utils/hooks/useNotification'
 import { EntityGraph } from './entityGraph'
@@ -23,8 +24,6 @@ type Props = {
   disableTitle?: boolean
 }
 
-const nodeConfig: Label = { width: 250, height: 250 }
-
 export const Graph: React.FunctionComponent<PropsWithRef<Props>> = ({
   id,
   title,
@@ -41,12 +40,6 @@ export const Graph: React.FunctionComponent<PropsWithRef<Props>> = ({
   const showNotification = useNotification()
   const [fetchGraph, { data, error, loading }] = getEntitiesGraphRequest()
   const [graphDepth, updateDepth] = useState(depth ?? 2)
-  const graph = useRef(
-    new dagre.graphlib.Graph({ directed: true, compound: true })
-      .setGraph({ rankdir: 'TB' })
-      .setDefaultEdgeLabel(() => '')
-      .setDefaultNodeLabel(() => ''),
-  )
 
   const [nodes, setNodes] = useState<Node<unknown>[]>([])
   const [edges, setEdges] = useState<Edge<unknown>[]>([])
@@ -66,10 +59,18 @@ export const Graph: React.FunctionComponent<PropsWithRef<Props>> = ({
   useEffect(() => {
     if (!data?.getEntitiesGraph) return
 
-    const dagreGraph = new dagre.graphlib.Graph({ directed: true, compound: true })
-      .setGraph({ rankdir: 'TB' })
-      .setDefaultEdgeLabel(() => '')
-      .setDefaultNodeLabel(() => '')
+    const graphEngine = new ELK()
+
+    const graphConfig: ElkNode = {
+      id: id ?? v4(),
+      children: [],
+      edges: [],
+      layoutOptions: {
+        'elk.algorithm': 'radial',
+        'elk.direction': 'DOWN',
+        'nodePlacement.strategy': 'SIMPLE',
+      },
+    }
 
     const nodesMap = new Map<string, Node>()
     const edgesMap = new Map<string, Edge>()
@@ -95,19 +96,32 @@ export const Graph: React.FunctionComponent<PropsWithRef<Props>> = ({
           type: _confirmed ? ConnectionLineType.Straight : ConnectionLineType.Step,
         })
 
-        dagreGraph.setEdge(startNodeId, endNodeId, label)
+        graphConfig.edges.push({
+          id,
+          sources: [startNodeId],
+          targets: [endNodeId],
+        })
       }
     }
 
-    const createNode = (id: string, type: EntityLabel, data: any) =>
-      nodesMap.set(id, {
-        id,
-        targetPosition: Position.Top,
-        sourcePosition: Position.Bottom,
-        position: { x: 0, y: 0 },
-        type,
-        data,
-      })
+    const createNode = (id: string, type: EntityLabel, data: any) => {
+      if (!nodesMap.has(id)) {
+        nodesMap.set(id, {
+          id,
+          targetPosition: Position.Top,
+          sourcePosition: Position.Bottom,
+          position: { x: 0, y: 0 },
+          type,
+          data,
+        })
+
+        graphConfig.children.push({
+          id,
+          width: 250,
+          height: 250,
+        })
+      }
+    }
 
     const {
       relationships: {
@@ -132,7 +146,12 @@ export const Graph: React.FunctionComponent<PropsWithRef<Props>> = ({
         const personInfo = persons.find(({ _id }) => personId === _id)
 
         if (personInfo) {
-          dagreGraph.setNode(personId, nodeConfig)
+          graphConfig.children.push({
+            id: personId,
+            children: [],
+            width: 250,
+            height: 250,
+          })
 
           createNode(personId, EntityLabel.PERSON, {
             label: `${personInfo.lastName} ${personInfo.firstName}`,
@@ -148,8 +167,6 @@ export const Graph: React.FunctionComponent<PropsWithRef<Props>> = ({
         const companyInfo = companies.find(({ _id }) => companyId === _id)
 
         if (companyInfo) {
-          dagreGraph.setNode(companyId, nodeConfig)
-
           createNode(companyId, EntityLabel.COMPANY, {
             label: companyInfo.name,
             isRootNode: companyId === entityId,
@@ -163,8 +180,6 @@ export const Graph: React.FunctionComponent<PropsWithRef<Props>> = ({
         const propertyInfo = properties.find(({ _id }) => propertyId === _id)
 
         if (propertyInfo) {
-          dagreGraph.setNode(propertyId, nodeConfig)
-
           createNode(propertyId, EntityLabel.PROPERTY, {
             label: propertyInfo.name,
             isRootNode: propertyId === entityId,
@@ -178,8 +193,6 @@ export const Graph: React.FunctionComponent<PropsWithRef<Props>> = ({
         const eventInfo = events.find(({ _id }) => eventId === _id)
 
         if (eventInfo) {
-          dagreGraph.setNode(eventId, nodeConfig)
-
           createNode(eventId, EntityLabel.EVENT, {
             label: eventInfo.location,
             isRootNode: eventId === entityId,
@@ -193,8 +206,6 @@ export const Graph: React.FunctionComponent<PropsWithRef<Props>> = ({
         const locationInfo = locations.find(({ _id }) => locationId === _id)
 
         if (locationInfo) {
-          dagreGraph.setNode(locationId, nodeConfig)
-
           createNode(locationId, EntityLabel.LOCATION, {
             label: getLocationAddress(locationInfo),
             isRootNode: locationId === entityId,
@@ -294,16 +305,15 @@ export const Graph: React.FunctionComponent<PropsWithRef<Props>> = ({
     propertiesLocation.forEach(entityLocationEdgeHandler)
     eventsOccurrencePlace.forEach(entityLocationEdgeHandler)
 
-    dagre.layout(dagreGraph, { compound: true })
-
-    setNodes(
-      Array.from(nodesMap.values()).map((node) => {
-        const { x, y } = dagreGraph.node(node.id)
-        return { ...node, position: { x: x - 100, y: y - 75 } }
-      }),
-    )
-
-    setEdges(Array.from(edgesMap.values()))
+    graphEngine
+      .layout(graphConfig)
+      .then(({ children }) => {
+        setEdges(Array.from(edgesMap.values()))
+        setNodes(() =>
+          children.map(({ id, x, y }) => ({ ...nodesMap.get(id), position: { x, y } })),
+        )
+      })
+      .catch((error) => console.error(error))
   }, [data?.getEntitiesGraph, setNodes, setEdges])
 
   return loading || (nodes.length === 0 && edges.length === 0) ? null : (

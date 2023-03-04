@@ -16,12 +16,14 @@ export const PropertyNode: React.FunctionComponent<NodeProps<Props>> = ({
     <Handle type={'target'} position={Position.Bottom} />
     <Paper
       sx={({ palette: { background } }) => ({
-        p: 2,
+        p: 1,
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'center',
         background: isRootNode ? background.paper : background.default,
+        width: 150,
+        height: 150,
       })}
     >
       <AirportShuttleOutlinedIcon fontSize={'small'} />
