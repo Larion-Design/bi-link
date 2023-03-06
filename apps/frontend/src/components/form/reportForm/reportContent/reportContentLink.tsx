@@ -1,5 +1,6 @@
 import React, { useCallback, useMemo, useState } from 'react'
-import Grid from '@mui/material/Grid'
+import Typography from '@mui/material/Typography'
+import Stack from '@mui/material/Stack'
 import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined'
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined'
 import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined'
@@ -7,7 +8,7 @@ import AccordionActions from '@mui/material/AccordionActions'
 import AccordionDetails from '@mui/material/AccordionDetails'
 import { LinkAPI } from 'defs'
 import { useIntl } from 'react-intl'
-import { GeneratePreviewHandler } from '../../../../utils/hooks/useDataRefProcessor'
+import { GeneratePreviewHandler } from '@frontend/utils/hooks/useDataRefProcessor'
 import { ActionButton } from '../../../button/actionButton'
 import { InputField } from '../../inputField'
 
@@ -32,22 +33,19 @@ export const ReportContentLink: React.FunctionComponent<Props> = ({
   return (
     <>
       <AccordionDetails>
-        <Grid container spacing={4}>
-          <Grid item xs={6}>
-            {preview ? (
-              contentPreview
-            ) : (
-              <InputField
-                label={'Titlu'}
-                value={label}
-                onChange={(label) => updateLink({ url, label })}
-              />
-            )}
-          </Grid>
-          <Grid item xs={6}>
-            <InputField label={'URL'} value={url} onChange={(url) => updateLink({ url, label })} />
-          </Grid>
-        </Grid>
+        <Stack spacing={3}>
+          {preview ? (
+            <Typography variant={'body2'}>{contentPreview}</Typography>
+          ) : (
+            <InputField
+              label={'Titlu'}
+              value={label}
+              onChange={(label) => updateLink({ url, label })}
+            />
+          )}
+
+          <InputField label={'URL'} value={url} onChange={(url) => updateLink({ url, label })} />
+        </Stack>
       </AccordionDetails>
       <AccordionActions>
         <ActionButton

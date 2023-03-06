@@ -173,18 +173,18 @@ export const ReportSection: React.FunctionComponent<Props> = ({
               />
             ))}
           </SortableContext>
-          <DragOverlay
-            dropAnimation={{
-              sideEffects: defaultDropAnimationSideEffects({
-                styles: {
-                  active: {
-                    opacity: '0.4',
+          {size > 1 && !!draggingElement && (
+            <DragOverlay
+              dropAnimation={{
+                sideEffects: defaultDropAnimationSideEffects({
+                  styles: {
+                    active: {
+                      opacity: '0.6',
+                    },
                   },
-                },
-              }),
-            }}
-          >
-            {!draggingElement && (
+                }),
+              }}
+            >
               <ReportContentElement
                 contentId={draggingElement}
                 entityId={entityId}
@@ -196,8 +196,8 @@ export const ReportSection: React.FunctionComponent<Props> = ({
                 graphRemoved={graphRemoved}
                 graphCreated={graphCreated}
               />
-            )}
-          </DragOverlay>
+            </DragOverlay>
+          )}
         </DndContext>
       </Grid>
     </Box>
