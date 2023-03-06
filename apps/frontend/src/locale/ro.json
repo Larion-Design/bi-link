@@ -48,5 +48,7 @@
   "EVENT": "Evenimente",
   "REPORT": "Rapoarte",
   "FILE": "Fisiere",
-  "LOCATION": "Locuri"
+  "LOCATION": "Locuri",
+  "Have no location": "Nu cunosc detaliile locatiei",
+  "Have location": "Cunosc detaliile locatiei"
 }

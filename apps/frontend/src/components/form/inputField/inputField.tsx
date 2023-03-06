@@ -34,6 +34,12 @@ export const InputField: React.FunctionComponent<Props> = ({
     void onChange(debouncedValue)
   }, [debouncedValue])
 
+  useEffect(() => {
+    if (value !== debouncedValue) {
+      setCurrentValue(value)
+    }
+  }, [value])
+
   return (
     <TextField
       required={required}

@@ -10,6 +10,8 @@ export * from './reports'
 export * from './person'
 export * from './company'
 export * from './event'
+export * from './metadata'
+export * from './model'
 
 export type EntityType =
   | 'PERSON'

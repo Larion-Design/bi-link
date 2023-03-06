@@ -4,7 +4,9 @@
   "private": true,
   "description": "BI Link Monorepo",
   "scripts": {
-    "start": "pnpm turbo run dev",
+    "start": "pnpm turbo dev",
+    "backend": "pnpm turbo backend",
+    "frontend": "pnpm turbo frontend",
     "build": "pnpm --filter {./apps/**} build",
     "test": "turbo run test --parallel --stream --concurency=4",
     "lint": "eslint --ext=.tsx,.ts --quiet ."

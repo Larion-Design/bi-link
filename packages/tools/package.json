@@ -5,7 +5,9 @@
   "description": "BI Link tools",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "exports": {
     ".": "./dist/index.js",
     "./package.json": "./package.json"
@@ -16,10 +18,12 @@
     "prebuild": "rimraf dist"
   },
   "dependencies": {
-    "date-fns": "^2.29.3"
+    "date-fns": "^2.29.3",
+    "zod": "^3.21.0"
   },
   "devDependencies": {
     "tslib": "^2.4.1",
-    "typescript": "^4.9.4"
+    "typescript": "^4.9.4",
+    "defs": "workspace:*"
   }
 }

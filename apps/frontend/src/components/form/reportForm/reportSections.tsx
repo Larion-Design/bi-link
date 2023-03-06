@@ -34,7 +34,10 @@ export const ReportSections: React.FunctionComponent<Props> = ({
   graphCreated,
   graphRemoved,
 }) => {
-  const { uid, entries, values, add, remove, update, map, keys } = useDebouncedMap(1000, sections)
+  const { uid, entries, values, add, remove, update, map, keys, size } = useDebouncedMap(
+    1000,
+    sections,
+  )
   const [activeSection, setActiveSection] = useState<string | null>(null)
   const [open, setOpen] = useState(false)
   const addSection = useCallback(() => add({ name: 'Capitol nou', content: [] }), [uid])
@@ -50,9 +53,9 @@ export const ReportSections: React.FunctionComponent<Props> = ({
     updateSections(Array.from(values()))
   }, [uid])
 
-  const sectionsList = useMemo(() => entries(), [uid])
   const closeDrawer = useCallback(() => setOpen(false), [setOpen])
   const openDrawer = useCallback(() => setOpen(true), [setOpen])
+  const activeSectionInfo = useMemo(() => map.get(activeSection), [activeSection])
 
   return (
     <Box>
@@ -80,35 +83,43 @@ export const ReportSections: React.FunctionComponent<Props> = ({
           />
         </Box>
       </Box>
-      {sectionsList.length > 0 && activeSection && (
+      {!!size && !!activeSection && map.has(activeSection) && (
         <Grid container spacing={2}>
           <Grid item xs={2}>
             <Tabs
+              indicatorColor={'primary'}
               selectionFollowsFocus
               orientation={'vertical'}
               value={activeSection}
               onChange={(event, newValue) => setActiveSection(newValue)}
               sx={{ borderRight: 1, borderColor: 'divider' }}
             >
-              {sectionsList.map(([uid, { name }]) => (
-                <Tab value={uid} key={uid} label={name} />
+              {entries().map(([uid, { name }]) => (
+                <Tab
+                  key={uid}
+                  value={uid}
+                  label={name}
+                  onClick={() => setActiveSection(uid)}
+                  sx={{ fontWeight: activeSection === uid ? 'bold' : 'inherit' }}
+                  color={activeSection === uid ? 'primary' : 'inherit'}
+                />
               ))}
             </Tabs>
           </Grid>
-          <Grid item xs={10}>
-            {!!activeSection && map.has(activeSection) && (
+          {!!activeSectionInfo && (
+            <Grid item xs={10}>
               <ReportSection
                 entityId={entityId}
                 entityType={entityType}
-                sectionInfo={map.get(activeSection)}
+                sectionInfo={activeSectionInfo}
                 updateSectionInfo={(sectionInfo) => update(activeSection, sectionInfo)}
                 removeSection={() => remove(activeSection)}
                 generateTextPreview={generateTextPreview}
                 graphCreated={graphCreated}
                 graphRemoved={graphRemoved}
               />
-            )}
-          </Grid>
+            </Grid>
+          )}
         </Grid>
       )}
     </Box>

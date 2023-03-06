@@ -1,11 +1,13 @@
-import React, { useCallback, useEffect } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import { useDebouncedMap } from '@frontend/utils/hooks/useMap'
+import { DragOverlay, defaultDropAnimationSideEffects } from '@dnd-kit/core'
+import { DndContext, KeyboardSensor, PointerSensor, useSensor, useSensors } from '@dnd-kit/core'
+import { SortableContext, sortableKeyboardCoordinates } from '@dnd-kit/sortable'
 import Grid from '@mui/material/Grid'
 import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined'
 import Box from '@mui/material/Box'
 import AddCardOutlinedIcon from '@mui/icons-material/AddCardOutlined'
 import { EntityType, ReportSectionAPIInput } from 'defs'
-import { DragDropContext, Draggable, Droppable, OnDragEndResponder } from 'react-beautiful-dnd'
-import { useDebouncedMap } from '../../../utils/hooks/useMap'
 import { ActionButton } from '../../button/actionButton'
 import { useDialog } from '../../dialog/dialogProvider'
 import { ToolbarMenu } from '../../menu/toolbarMenu'
@@ -34,23 +36,36 @@ export const ReportSection: React.FunctionComponent<Props> = ({
   graphRemoved,
 }) => {
   const dialog = useDialog()
-  const { values, entries, uid, add, update, updateBulk, keys, remove, size } = useDebouncedMap(
-    1000,
-    sectionInfo.content,
-  )
+  const { values, uid, add, update, updateBulk, remove, size, keys, entries, map } =
+    useDebouncedMap(1000, sectionInfo.content)
+  const [draggingElement, setDraggingElement] = useState<string | null>(null)
   const deps = [uid]
-  const addTitle = useCallback(() => add({ order: keys().length, title: { content: '' } }), deps)
-  const addText = useCallback(() => add({ order: keys().length, text: { content: '' } }), deps)
-  const addLink = useCallback(
-    () => add({ order: keys().length, link: { label: '', url: '' } }),
-    deps,
-  )
-  const addTable = useCallback(() => add({ order: keys().length, table: { id: '' } }), deps)
-  const addGraph = useCallback(() => add({ order: keys().length, graph: { label: '' } }), deps)
-  const addImages = useCallback(() => add({ order: keys().length, images: [] }), deps)
-  const addFile = useCallback(() => add({ order: keys().length, file: null }), deps)
+  const addTitle = useCallback(() => add({ order: size, title: { content: '' } }), deps)
+  const addText = useCallback(() => add({ order: size, text: { content: '' } }), deps)
+  const addLink = useCallback(() => add({ order: size, link: { label: '', url: '' } }), deps)
+  const addTable = useCallback(() => add({ order: size, table: { id: '' } }), deps)
+  const addGraph = useCallback(() => add({ order: size, graph: { label: '' } }), deps)
+  const addImages = useCallback(() => add({ order: size, images: [] }), deps)
+  const addFile = useCallback(() => add({ order: size, file: null }), deps)
 
   useEffect(() => updateSectionInfo({ ...sectionInfo, content: values() }), deps)
+
+  const sortedSections = useMemo(() => {
+    const sections = entries()
+
+    if (size > 1) {
+      sections.sort(([_, { order: firstSectionOrder }], [__, { order: secondSectionOrder }]) => {
+        if (firstSectionOrder < secondSectionOrder) {
+          return -1
+        }
+        if (firstSectionOrder > secondSectionOrder) {
+          return 1
+        }
+        return 0
+      })
+    }
+    return sections
+  }, deps)
 
   const removeElement = useCallback(
     (elementId: string) =>
@@ -72,20 +87,11 @@ export const ReportSection: React.FunctionComponent<Props> = ({
     [dialog, uid],
   )
 
-  const onContentReorder: OnDragEndResponder = useCallback(
-    ({
-      reason,
-      source: { droppableId: sourceUid, index: sourceIndex },
-      destination: { droppableId: targetUid, index: targetIndex },
-    }) => {
-      if (reason === 'DROP') {
-        updateBulk((items) => {
-          items.set(sourceUid, { ...items.get(sourceUid), order: targetIndex })
-          items.set(targetUid, { ...items.get(targetUid), order: sourceIndex })
-        })
-      }
-    },
-    [uid],
+  const sensors = useSensors(
+    useSensor(PointerSensor),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    }),
   )
 
   return (
@@ -101,7 +107,7 @@ export const ReportSection: React.FunctionComponent<Props> = ({
       >
         <Box sx={{ width: 0.5 }}>
           <InputField
-            label={'Nume sectiune'}
+            label={'Nume capitol'}
             value={sectionInfo.name}
             onChange={(value) => updateSectionInfo({ ...sectionInfo, name: value })}
           />
@@ -128,38 +134,72 @@ export const ReportSection: React.FunctionComponent<Props> = ({
           />
         </Box>
       </Box>
-      <DragDropContext onDragEnd={onContentReorder}>
-        <Droppable droppableId={'reportContentItems'} mode={'virtual'} isDropDisabled={!size}>
-          {(provided, snapshot) => (
-            <Grid container spacing={2} ref={provided.innerRef} {...provided.droppableProps}>
-              {entries().map(([uid, content], index) => (
-                <Draggable draggableId={uid} index={index}>
-                  {(provided, snapshot) => (
-                    <Grid
-                      item
-                      xs={12}
-                      ref={provided.innerRef}
-                      {...provided.draggableProps}
-                      {...provided.dragHandleProps}
-                    >
-                      <ReportContentElement
-                        entityId={entityId}
-                        entityType={entityType}
-                        contentInfo={content}
-                        updateContentInfo={(contentInfo) => update(uid, contentInfo)}
-                        removeContent={() => removeElement(uid)}
-                        generateTextPreview={generateTextPreview}
-                        graphRemoved={graphRemoved}
-                        graphCreated={graphCreated}
-                      />
-                    </Grid>
-                  )}
-                </Draggable>
-              ))}
-            </Grid>
-          )}
-        </Droppable>
-      </DragDropContext>
+      <Grid container spacing={2}>
+        <DndContext
+          sensors={sensors}
+          onDragStart={({ active }) => setDraggingElement(String(active.id))}
+          onDragEnd={({ active, over }) => {
+            if (over && active && active?.id !== over?.id) {
+              const firstItemId = String(active.id)
+              const secondItemId = String(over.id)
+
+              updateBulk((map) => {
+                if (map.has(firstItemId) && map.has(secondItemId)) {
+                  const { order: firstItemOrder, ...firstItemInfo } = map.get(firstItemId)
+                  const { order: secondItemOrder, ...secondItemInfo } = map.get(secondItemId)
+
+                  map.set(firstItemId, { ...firstItemInfo, order: secondItemOrder })
+                  map.set(secondItemId, { ...secondItemInfo, order: firstItemOrder })
+                }
+              })
+            }
+            setDraggingElement(null)
+          }}
+          onDragCancel={() => setDraggingElement(null)}
+        >
+          <SortableContext items={keys()} disabled={size < 2}>
+            {sortedSections.map(([uid, content]) => (
+              <ReportContentElement
+                key={uid}
+                contentId={uid}
+                entityId={entityId}
+                entityType={entityType}
+                contentInfo={content}
+                updateContentInfo={(contentInfo) => update(uid, contentInfo)}
+                removeContent={() => removeElement(uid)}
+                generateTextPreview={generateTextPreview}
+                graphRemoved={graphRemoved}
+                graphCreated={graphCreated}
+              />
+            ))}
+          </SortableContext>
+          <DragOverlay
+            dropAnimation={{
+              sideEffects: defaultDropAnimationSideEffects({
+                styles: {
+                  active: {
+                    opacity: '0.4',
+                  },
+                },
+              }),
+            }}
+          >
+            {!draggingElement && (
+              <ReportContentElement
+                contentId={draggingElement}
+                entityId={entityId}
+                entityType={entityType}
+                contentInfo={map.get(draggingElement)}
+                updateContentInfo={(contentInfo) => update(draggingElement, contentInfo)}
+                removeContent={() => removeElement(uid)}
+                generateTextPreview={generateTextPreview}
+                graphRemoved={graphRemoved}
+                graphCreated={graphCreated}
+              />
+            )}
+          </DragOverlay>
+        </DndContext>
+      </Grid>
     </Box>
   )
 }

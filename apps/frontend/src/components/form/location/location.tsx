@@ -1,7 +1,7 @@
-import { Typography } from '@mui/material'
+import React, { useCallback, useEffect, useState } from 'react'
+import Typography from '@mui/material/Typography'
 import Box from '@mui/material/Box'
 import Grid from '@mui/material/Grid'
-import React, { useCallback, useEffect, useState } from 'react'
 import { useIntl } from 'react-intl'
 import { useDebounce } from 'usehooks-ts'
 import { LocationAPIInput } from 'defs'
@@ -9,8 +9,8 @@ import { InputField } from '../inputField'
 
 type Props = {
   label: string
-  location: LocationAPIInput
-  updateLocation: (location: LocationAPIInput) => void | Promise<void>
+  location: LocationAPIInput | null
+  updateLocation: (location: LocationAPIInput | null) => void | Promise<void>
   includeFields?: Array<keyof Omit<LocationAPIInput, 'locationId'>>
 }
 
@@ -20,7 +20,7 @@ export const Location: React.FunctionComponent<Props> = ({
   updateLocation,
   includeFields,
 }) => {
-  const intl = useIntl()
+  const { formatMessage } = useIntl()
   const [locationInfo, setLocationInfo] = useState(location)
   const debouncedLocationInfo = useDebounce(locationInfo, 1000)
 
@@ -45,7 +45,7 @@ export const Location: React.FunctionComponent<Props> = ({
           .map(({ gridSize, field }) => (
             <Grid key={field} item xs={gridSize}>
               <InputField
-                label={intl.formatMessage({ id: field })}
+                label={formatMessage({ id: field, defaultMessage: field })}
                 value={locationInfo[field]}
                 onChange={(value) => updateLocationInfo(field, value)}
               />

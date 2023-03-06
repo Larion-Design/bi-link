@@ -1,4 +1,4 @@
-import React, { PropsWithRef, useEffect, useState } from 'react'
+import React, { PropsWithRef, useEffect, useRef, useState } from 'react'
 import Box from '@mui/material/Box'
 import ELK, { ElkNode } from 'elkjs'
 import { useIntl } from 'react-intl'
@@ -6,6 +6,7 @@ import { ConnectionLineType, Edge, Node, Position, ReactFlowProvider } from 'rea
 import { relationshipsTypes } from '@frontend/components/form/person/constants'
 import { getLocationAddress } from '@frontend/utils/location'
 import { EntityLabel, EntityLocationRelationship, EntityType } from 'defs'
+import { useElementSize } from 'usehooks-ts'
 import { v4 } from 'uuid'
 import { getEntitiesGraphRequest } from '../../../graphql/shared/queries/getEntitiesGraph'
 import { useNotification } from '../../../utils/hooks/useNotification'
@@ -43,6 +44,7 @@ export const Graph: React.FunctionComponent<PropsWithRef<Props>> = ({
 
   const [nodes, setNodes] = useState<Node<unknown>[]>([])
   const [edges, setEdges] = useState<Edge<unknown>[]>([])
+  const [containerRef, { width, height }] = useElementSize()
 
   useEffect(() => {
     void fetchGraph({ variables: { id: entityId, depth: graphDepth } })
@@ -57,12 +59,14 @@ export const Graph: React.FunctionComponent<PropsWithRef<Props>> = ({
   }, [error?.message])
 
   useEffect(() => {
-    if (!data?.getEntitiesGraph) return
+    if (!data?.getEntitiesGraph || !width || !height) return
 
     const graphEngine = new ELK()
 
     const graphConfig: ElkNode = {
       id: id ?? v4(),
+      width,
+      height,
       children: [],
       edges: [],
       layoutOptions: {
@@ -314,10 +318,14 @@ export const Graph: React.FunctionComponent<PropsWithRef<Props>> = ({
         )
       })
       .catch((error) => console.error(error))
-  }, [data?.getEntitiesGraph, setNodes, setEdges])
+  }, [data?.getEntitiesGraph, setNodes, setEdges, width, height])
+
+  useEffect(() => {
+    nodes.map(({ position }) => console.debug(position))
+  }, [nodes])
 
   return loading || (nodes.length === 0 && edges.length === 0) ? null : (
-    <Box sx={{ width: 1, height: 1 }}>
+    <Box sx={{ width: 1, height: 1 }} ref={containerRef}>
       <ReactFlowProvider>
         <EntityGraph
           id={id}

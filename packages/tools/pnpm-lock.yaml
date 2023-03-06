@@ -2,13 +2,17 @@ lockfileVersion: 5.4
 
 specifiers:
   date-fns: ^2.29.3
+  defs: workspace:*
   tslib: ^2.4.1
   typescript: ^4.9.4
+  zod: ^3.21.0
 
 dependencies:
   date-fns: 2.29.3
+  zod: 3.21.0
 
 devDependencies:
+  defs: link:../defs
   tslib: 2.5.0
   typescript: 4.9.5
 
@@ -28,3 +32,7 @@ packages:
     engines: {node: '>=4.2.0'}
     hasBin: true
     dev: true
+
+  /zod/3.21.0:
+    resolution: {integrity: sha512-UYdykTcVxB6lfdyLzAqLyyYAlOcpoluECvjsdoaqfQmz9p+3LRaIqYcNiL/J2kFYp66fBM8wwBvIGVEjq7KtZw==}
+    dev: false
