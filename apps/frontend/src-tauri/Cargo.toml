@@ -1,5 +1,5 @@
 [package]
-name = "BI Link"
+name = "app"
 version = "1.0.0"
 description = "Intelligence Tools"
 authors = ["Alex Tudor"]

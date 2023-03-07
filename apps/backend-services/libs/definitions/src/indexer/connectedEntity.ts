@@ -1,4 +1,4 @@
-import { LocationIndex } from '@app/definitions/search/location'
+import { LocationIndex } from '@app/definitions'
 import { Company, IdDocument, Person, Property, RealEstateInfo, VehicleInfo } from 'defs'
 
 export interface ConnectedPersonIndex

@@ -1,4 +1,4 @@
-import { EmbeddedFileIndex, ProcessedFileIndex } from '@app/definitions/search/file'
+import { EmbeddedFileIndex, ProcessedFileIndex } from '@app/definitions'
 import { FileEventInfo, FileParentEntity } from '@app/scheduler-module'
 import { Injectable, Logger } from '@nestjs/common'
 import { ElasticsearchService } from '@nestjs/elasticsearch'
@@ -9,9 +9,9 @@ import {
   INDEX_EVENTS,
   INDEX_PERSONS,
   INDEX_PROPERTIES,
-} from '@app/definitions/constants'
-import { FilesService } from '@app/models/services/filesService'
-import { FileParserService } from '@app/rpc/services/fileParserService'
+} from '@app/definitions'
+import { FilesService } from '@app/models'
+import { FileParserService } from '@app/rpc'
 
 @Injectable()
 export class FilesIndexerService {

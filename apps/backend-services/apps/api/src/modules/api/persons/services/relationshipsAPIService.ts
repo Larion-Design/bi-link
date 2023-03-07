@@ -1,4 +1,6 @@
+import { PersonsService } from '@app/models'
 import { Injectable, Logger } from '@nestjs/common'
+import { RelationshipAPIInput } from 'defs'
 import { ClientSession, Model } from 'mongoose'
 import { InjectModel } from '@nestjs/mongoose'
 import {
@@ -6,36 +8,53 @@ import {
   RelationshipModel,
 } from '@app/models/models/person/relationshipModel'
 import { PersonDocument, PersonModel } from '@app/models/models/person/personModel'
-import { RelationshipInput } from '../dto/relationshipInput'
 
 @Injectable()
-export class RelationshipsService {
-  private readonly logger = new Logger(RelationshipsService.name)
+export class RelationshipsAPIService {
+  private readonly logger = new Logger(RelationshipsAPIService.name)
 
   constructor(
     @InjectModel(RelationshipModel.name)
     private readonly relationshipModel: Model<RelationshipDocument>,
     @InjectModel(PersonModel.name) private readonly personModel: Model<PersonDocument>,
+    private readonly personsService: PersonsService,
   ) {}
 
-  getRelationshipsModelsFromInputData = async (relationships: RelationshipInput[]) => {
-    const personsModels = await this.personModel.find({
-      _id: relationships.map(({ person: { _id } }) => _id),
-    })
+  getRelationshipsModelsFromInputData = async (relationships: RelationshipAPIInput[]) => {
+    const personsModels = await this.personsService.getPersons(
+      Array.from(
+        new Set(
+          [].concat(
+            ...relationships.map(({ person: { _id: personId }, relatedPersons }) => [
+              ...relatedPersons.map(({ _id }) => _id),
+              personId,
+            ]),
+          ),
+        ),
+      ),
+      false,
+    )
 
-    return personsModels.map((person) => {
-      const relationship = relationships.find(({ person: { _id } }) => _id === String(person._id))
-      const relationshipModel = new RelationshipModel()
-      relationshipModel.proximity = relationship.proximity
-      relationshipModel.type = relationship.type
-      relationshipModel.person = person
-      return relationshipModel
-    })
+    return relationships.map(
+      ({ person: { _id }, relatedPersons, proximity, type, description, _confirmed }) => {
+        const personModel = personsModels.find(({ _id: personId }) => _id === String(personId))
+
+        const relationshipModel = new RelationshipModel()
+        relationshipModel.proximity = proximity
+        relationshipModel.type = type
+        relationshipModel.person = personModel
+        relationshipModel.description = description
+        relationshipModel.relatedPersons = relatedPersons.map(({ _id }) =>
+          personsModels.find(({ _id: personId }) => String(personId) === _id),
+        )
+        return relationshipModel
+      },
+    )
   }
 
   addRelationshipToConnectedPersons = async (
     person: PersonDocument,
-    personsRelations: RelationshipInput[],
+    personsRelations: RelationshipAPIInput[],
   ) => {
     try {
       const session = await this.personModel.startSession()
@@ -66,13 +85,14 @@ export class RelationshipsService {
   private upsertRelationship = async (
     relatingPerson: PersonDocument,
     relatedPerson: PersonDocument,
-    relationshipInfo: RelationshipInput,
+    relationshipInfo: RelationshipAPIInput,
     session?: ClientSession,
   ) => {
     const relationship = new RelationshipModel()
     relationship.person = relatingPerson
     relationship.proximity = relationshipInfo.proximity
     relationship.type = relationshipInfo.type
+    relationship.description = relationshipInfo.description
 
     const relationships = [
       relationship,

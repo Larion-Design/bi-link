@@ -12,6 +12,7 @@ export * from './company'
 export * from './event'
 export * from './metadata'
 export * from './model'
+export * from './proceeding'
 
 export type EntityType =
   | 'PERSON'
@@ -21,6 +22,7 @@ export type EntityType =
   | 'REPORT'
   | 'FILE'
   | 'LOCATION'
+  | 'PROCEEDING'
 
 export type EntityInfo = {
   entityId: string

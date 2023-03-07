@@ -6,7 +6,6 @@ import { EventEventInfo } from '@app/scheduler-module'
 @Injectable()
 export class EventSchedulerService {
   protected readonly logger = new Logger(EventSchedulerService.name)
-
   protected readonly queue: Queue<EventEventInfo>
 
   dispatchEventCreated = async (eventId: string) => this.publishJob(EVENT_CREATED, { eventId })

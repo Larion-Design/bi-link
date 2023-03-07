@@ -5,6 +5,9 @@ import { RelationshipAPIInput } from 'defs'
 
 @InputType()
 export class RelationshipInput implements RelationshipAPIInput {
+  @Field()
+  readonly description: string
+
   @Length(1, 30)
   @Field()
   readonly type: string
@@ -16,6 +19,9 @@ export class RelationshipInput implements RelationshipAPIInput {
 
   @Field(() => ConnectedEntityInput)
   readonly person: ConnectedEntityInput
+
+  @Field(() => [ConnectedEntityInput])
+  readonly relatedPersons: ConnectedEntityInput[]
 
   @Field({ nullable: true, defaultValue: true })
   readonly _confirmed: boolean

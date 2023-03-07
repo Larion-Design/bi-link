@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common'
 import { MappingProperty } from '@elastic/elasticsearch/lib/api/types'
-import { PropertyIndex } from '@app/definitions/search/property'
+import { PropertyIndex } from '@app/definitions'
 import { MappingInterface } from './mapping'
 import { MappingHelperService } from './mappingHelperService'
 

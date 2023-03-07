@@ -1,204 +1,186 @@
 lockfileVersion: 5.4
 
+specifiers:
+  '@elastic/elasticsearch': ^8.5.0
+  '@faker-js/faker': ^7.6.0
+  '@firebase/app-types': ^0.8.1
+  '@nestjs-modules/ioredis': ^1.0.1
+  '@nestjs/apollo': ^10.1.7
+  '@nestjs/bull': ^0.6.2
+  '@nestjs/cli': ^8.2.8
+  '@nestjs/common': ^8.4.7
+  '@nestjs/config': ^2.2.0
+  '@nestjs/core': ^8.4.7
+  '@nestjs/elasticsearch': ^8.1.0
+  '@nestjs/graphql': ^10.1.7
+  '@nestjs/jwt': ^9.0.0
+  '@nestjs/microservices': ^9.2.1
+  '@nestjs/mongoose': ^9.2.1
+  '@nestjs/passport': ^8.2.2
+  '@nestjs/platform-express': ^8.4.7
+  '@nestjs/schematics': ^8.0.11
+  '@nestjs/testing': ^8.4.7
+  '@ntegral/nestjs-sentry': ^3.0.7
+  '@sentry/hub': ^7.28.1
+  '@sentry/node': ^7.28.1
+  '@sentry/tracing': ^7.28.1
+  '@types/bull': ^3.15.9
+  '@types/cache-manager': ^4.0.2
+  '@types/elasticsearch': ^5.0.40
+  '@types/express': ^4.17.15
+  '@types/inquirer': ^9.0.3
+  '@types/jest': 27.5.0
+  '@types/mime-types': ^2.1.1
+  '@types/multer': ^1.4.7
+  '@types/node': ^16.18.11
+  '@types/passport-jwt': ^3.0.8
+  '@types/pdf-parse': ^1.1.1
+  '@types/supertest': ^2.0.12
+  '@types/uuid': ^8.3.4
+  '@types/word-extractor': ^1.0.1
+  apollo-server-core: ^3.11.1
+  apollo-server-express: ^3.11.1
+  bull: ^4.10.2
+  cache-manager: ^4.1.0
+  class-transformer: ^0.5.1
+  class-validator: ^0.13.2
+  crawlee: ^3.1.4
+  date-fns: ^2.29.3
+  defs: workspace:*
+  express: ^4.18.2
+  firebase-admin: ^11.4.1
+  graphql: ^16.6.0
+  helmet: ^5.1.1
+  ioredis: ^5.2.4
+  jest: 28.0.3
+  jwks-rsa: ^2.1.5
+  mime-types: ^2.1.35
+  mongoose: ^6.8.1
+  multer: 1.4.5-lts.1
+  neo4j-driver: ^5.3.0
+  nest-commander: ^3.3.0
+  nest-commander-testing: ^3.1.0
+  nest-neo4j: ^0.2.0
+  nestjs-minio-client: ^1.2.0
+  passport: ^0.5.3
+  passport-firebase-jwt: ^1.2.1
+  passport-jwt: ^4.0.1
+  pdf-lib: ^1.17.1
+  pdf-parse: ^1.1.1
+  prettier: ^2.8.1
+  puppeteer: ^19.4.1
+  reflect-metadata: ^0.1.13
+  rxjs: ^7.8.0
+  source-map-support: ^0.5.21
+  supertest: ^6.3.3
+  supertokens-node: ^12.1.4
+  tesseract.js: ^3.0.3
+  tools: workspace:*
+  ts-jest: 28.0.1
+  ts-loader: ^9.4.2
+  ts-node: ^10.9.1
+  tsconfig-paths: 4.0.0
+  tslib: ^2.4.1
+  typescript: ^4.9.4
+  uuid: ^8.3.2
+  webpack: ^5.75.0
+  word-extractor: ^1.0.4
+  xlsx: ^0.18.5
+
+dependencies:
+  '@elastic/elasticsearch': 8.5.0
+  '@nestjs-modules/ioredis': 1.0.1_mcijkclrzahmvzs6uioeankb6i
+  '@nestjs/apollo': 10.1.7_eegty7okh5ozv4gufipzioc7t4
+  '@nestjs/bull': 0.6.2_xib4hcxuz3bohehdphxh6qxm5y
+  '@nestjs/common': 8.4.7_t3livvr4rnphsnpp4otxjboi6u
+  '@nestjs/config': 2.2.0_q6tehokzwy3z4akuawpn6kiwbe
+  '@nestjs/core': 8.4.7_mjutc65w77xjv7x3jmahgprpma
+  '@nestjs/elasticsearch': 8.1.0_sm4qdkwe3hmwy7mavpftwsxz3u
+  '@nestjs/graphql': 10.1.7_vidbvhpv4hwn234liq737aiomy
+  '@nestjs/jwt': 9.0.0_@nestjs+common@8.4.7
+  '@nestjs/microservices': 9.2.1_dwoof66in3bj466nts66kv5hju
+  '@nestjs/mongoose': 9.2.1_smq2q2le3fpfjcgux2lvfpx6my
+  '@nestjs/passport': 8.2.2_vmlpjpjapp5nw4nimfi5m56upy
+  '@nestjs/platform-express': 8.4.7_7tsmhnugyerf5okgqzer2mfqme
+  '@ntegral/nestjs-sentry': 3.0.7_ahcoolqm5obggzd2wckg2hf5tm
+  '@sentry/node': 7.28.1
+  '@sentry/tracing': 7.28.1
+  apollo-server-core: 3.11.1_graphql@16.6.0
+  apollo-server-express: 3.11.1_5ha345eiak62qiwwva5z4dp6gu
+  bull: 4.10.2
+  cache-manager: 4.1.0
+  class-transformer: 0.5.1
+  class-validator: 0.13.2
+  crawlee: 3.1.4_puppeteer@19.4.1
+  date-fns: 2.29.3
+  firebase-admin: 11.4.1_@firebase+app-types@0.8.1
+  graphql: 16.6.0
+  helmet: 5.1.1
+  ioredis: 5.2.4
+  jwks-rsa: 2.1.5
+  mime-types: 2.1.35
+  mongoose: 6.8.1
+  multer: 1.4.5-lts.1
+  neo4j-driver: 5.3.0
+  nest-commander: 3.3.0_55vypnucnva7rn6tnyv6q2g7iu
+  nest-neo4j: 0.2.0
+  nestjs-minio-client: 1.2.0
+  passport: 0.5.3
+  passport-firebase-jwt: 1.2.1
+  passport-jwt: 4.0.1
+  pdf-lib: 1.17.1
+  pdf-parse: 1.1.1
+  puppeteer: 19.4.1
+  reflect-metadata: 0.1.13
+  rxjs: 7.8.0
+  supertokens-node: 12.1.4
+  tesseract.js: 3.0.3_eslint@8.30.0
+  uuid: 8.3.2
+  word-extractor: 1.0.4
+  xlsx: 0.18.5
+
+devDependencies:
+  '@faker-js/faker': 7.6.0
+  '@firebase/app-types': 0.8.1
+  '@nestjs/cli': 8.2.8
+  '@nestjs/schematics': 8.0.11_typescript@4.9.4
+  '@nestjs/testing': 8.4.7_penjb27zn6mgqqlipiussuv564
+  '@sentry/hub': 7.28.1
+  '@types/bull': 3.15.9
+  '@types/cache-manager': 4.0.2
+  '@types/elasticsearch': 5.0.40
+  '@types/express': 4.17.15
+  '@types/inquirer': 9.0.3
+  '@types/jest': 27.5.0
+  '@types/mime-types': 2.1.1
+  '@types/multer': 1.4.7
+  '@types/node': 16.18.11
+  '@types/passport-jwt': 3.0.8
+  '@types/pdf-parse': 1.1.1
+  '@types/supertest': 2.0.12
+  '@types/uuid': 8.3.4
+  '@types/word-extractor': 1.0.1
+  defs: file:../../packages/defs
+  express: 4.18.2
+  jest: 28.0.3_35bb52e3ngsl3trrvg3csiponq
+  nest-commander-testing: 3.1.0_er2l7wg7hu7mk24u6duhdq5zoy
+  prettier: 2.8.1
+  source-map-support: 0.5.21
+  supertest: 6.3.3
+  tools: file:../../packages/tools
+  ts-jest: 28.0.1_hkt4csl26wvgh326ct4kl3mrsq
+  ts-loader: 9.4.2_3fkjkrd3audxnith3e7fo4fnxi
+  ts-node: 10.9.1_qacynw5b4krdzzrloasmebsynu
+  tsconfig-paths: 4.0.0
+  tslib: 2.4.1
+  typescript: 4.9.4
+  webpack: 5.75.0
+
 dependenciesMeta:
   defs:
     injected: true
   tools:
     injected: true
-
-importers:
-
-  .:
-    specifiers:
-      '@elastic/elasticsearch': ^8.5.0
-      '@faker-js/faker': ^7.6.0
-      '@firebase/app-types': ^0.8.1
-      '@nestjs-modules/ioredis': ^1.0.1
-      '@nestjs/apollo': ^10.1.7
-      '@nestjs/bull': ^0.6.2
-      '@nestjs/cli': ^8.2.8
-      '@nestjs/common': ^8.4.7
-      '@nestjs/config': ^2.2.0
-      '@nestjs/core': ^8.4.7
-      '@nestjs/elasticsearch': ^8.1.0
-      '@nestjs/graphql': ^10.1.7
-      '@nestjs/jwt': ^9.0.0
-      '@nestjs/microservices': ^9.2.1
-      '@nestjs/mongoose': ^9.2.1
-      '@nestjs/passport': ^8.2.2
-      '@nestjs/platform-express': ^8.4.7
-      '@nestjs/schematics': ^8.0.11
-      '@nestjs/testing': ^8.4.7
-      '@ntegral/nestjs-sentry': ^3.0.7
-      '@sentry/hub': ^7.28.1
-      '@sentry/node': ^7.28.1
-      '@sentry/tracing': ^7.28.1
-      '@types/bull': ^3.15.9
-      '@types/cache-manager': ^4.0.2
-      '@types/elasticsearch': ^5.0.40
-      '@types/express': ^4.17.15
-      '@types/inquirer': ^9.0.3
-      '@types/jest': 27.5.0
-      '@types/mime-types': ^2.1.1
-      '@types/multer': ^1.4.7
-      '@types/node': ^16.18.11
-      '@types/passport-jwt': ^3.0.8
-      '@types/pdf-parse': ^1.1.1
-      '@types/supertest': ^2.0.12
-      '@types/uuid': ^8.3.4
-      '@types/word-extractor': ^1.0.1
-      apollo-server-core: ^3.11.1
-      apollo-server-express: ^3.11.1
-      bull: ^4.10.2
-      cache-manager: ^4.1.0
-      class-transformer: ^0.5.1
-      class-validator: ^0.13.2
-      crawlee: ^3.1.4
-      date-fns: ^2.29.3
-      defs: workspace:*
-      express: ^4.18.2
-      firebase-admin: ^11.4.1
-      graphql: ^16.6.0
-      helmet: ^5.1.1
-      ioredis: ^5.2.4
-      jest: 28.0.3
-      jwks-rsa: ^2.1.5
-      mime-types: ^2.1.35
-      mongoose: ^6.8.1
-      multer: 1.4.5-lts.1
-      neo4j-driver: ^5.3.0
-      nest-commander: ^3.3.0
-      nest-commander-testing: ^3.1.0
-      nest-neo4j: ^0.2.0
-      nestjs-minio-client: ^1.2.0
-      passport: ^0.5.3
-      passport-firebase-jwt: ^1.2.1
-      passport-jwt: ^4.0.1
-      pdf-lib: ^1.17.1
-      pdf-parse: ^1.1.1
-      prettier: ^2.8.1
-      puppeteer: ^19.4.1
-      reflect-metadata: ^0.1.13
-      rxjs: ^7.8.0
-      source-map-support: ^0.5.21
-      supertest: ^6.3.3
-      supertokens-node: ^12.1.4
-      tesseract.js: ^3.0.3
-      tools: workspace:*
-      ts-jest: 28.0.1
-      ts-loader: ^9.4.2
-      ts-node: ^10.9.1
-      tsconfig-paths: 4.0.0
-      tslib: ^2.4.1
-      typescript: ^4.9.4
-      uuid: ^8.3.2
-      webpack: ^5.75.0
-      word-extractor: ^1.0.4
-      xlsx: ^0.18.5
-    dependencies:
-      '@elastic/elasticsearch': 8.5.0
-      '@nestjs-modules/ioredis': 1.0.1_mcijkclrzahmvzs6uioeankb6i
-      '@nestjs/apollo': 10.1.7_eegty7okh5ozv4gufipzioc7t4
-      '@nestjs/bull': 0.6.2_xib4hcxuz3bohehdphxh6qxm5y
-      '@nestjs/common': 8.4.7_t3livvr4rnphsnpp4otxjboi6u
-      '@nestjs/config': 2.2.0_q6tehokzwy3z4akuawpn6kiwbe
-      '@nestjs/core': 8.4.7_mjutc65w77xjv7x3jmahgprpma
-      '@nestjs/elasticsearch': 8.1.0_sm4qdkwe3hmwy7mavpftwsxz3u
-      '@nestjs/graphql': 10.1.7_vidbvhpv4hwn234liq737aiomy
-      '@nestjs/jwt': 9.0.0_@nestjs+common@8.4.7
-      '@nestjs/microservices': 9.2.1_dwoof66in3bj466nts66kv5hju
-      '@nestjs/mongoose': 9.2.1_smq2q2le3fpfjcgux2lvfpx6my
-      '@nestjs/passport': 8.2.2_vmlpjpjapp5nw4nimfi5m56upy
-      '@nestjs/platform-express': 8.4.7_7tsmhnugyerf5okgqzer2mfqme
-      '@ntegral/nestjs-sentry': 3.0.7_ahcoolqm5obggzd2wckg2hf5tm
-      '@sentry/node': 7.28.1
-      '@sentry/tracing': 7.28.1
-      apollo-server-core: 3.11.1_graphql@16.6.0
-      apollo-server-express: 3.11.1_5ha345eiak62qiwwva5z4dp6gu
-      bull: 4.10.2
-      cache-manager: 4.1.0
-      class-transformer: 0.5.1
-      class-validator: 0.13.2
-      crawlee: 3.1.4_puppeteer@19.4.1
-      date-fns: 2.29.3
-      firebase-admin: 11.4.1_@firebase+app-types@0.8.1
-      graphql: 16.6.0
-      helmet: 5.1.1
-      ioredis: 5.2.4
-      jwks-rsa: 2.1.5
-      mime-types: 2.1.35
-      mongoose: 6.8.1
-      multer: 1.4.5-lts.1
-      neo4j-driver: 5.3.0
-      nest-commander: 3.3.0_55vypnucnva7rn6tnyv6q2g7iu
-      nest-neo4j: 0.2.0
-      nestjs-minio-client: 1.2.0
-      passport: 0.5.3
-      passport-firebase-jwt: 1.2.1
-      passport-jwt: 4.0.1
-      pdf-lib: 1.17.1
-      pdf-parse: 1.1.1
-      puppeteer: 19.4.1
-      reflect-metadata: 0.1.13
-      rxjs: 7.8.0
-      supertokens-node: 12.1.4
-      tesseract.js: 3.0.3_eslint@8.30.0
-      uuid: 8.3.2
-      word-extractor: 1.0.4
-      xlsx: 0.18.5
-    devDependencies:
-      '@faker-js/faker': 7.6.0
-      '@firebase/app-types': 0.8.1
-      '@nestjs/cli': 8.2.8
-      '@nestjs/schematics': 8.0.11_typescript@4.9.4
-      '@nestjs/testing': 8.4.7_penjb27zn6mgqqlipiussuv564
-      '@sentry/hub': 7.28.1
-      '@types/bull': 3.15.9
-      '@types/cache-manager': 4.0.2
-      '@types/elasticsearch': 5.0.40
-      '@types/express': 4.17.15
-      '@types/inquirer': 9.0.3
-      '@types/jest': 27.5.0
-      '@types/mime-types': 2.1.1
-      '@types/multer': 1.4.7
-      '@types/node': 16.18.11
-      '@types/passport-jwt': 3.0.8
-      '@types/pdf-parse': 1.1.1
-      '@types/supertest': 2.0.12
-      '@types/uuid': 8.3.4
-      '@types/word-extractor': 1.0.1
-      defs: file:../../packages/defs
-      express: 4.18.2
-      jest: 28.0.3_35bb52e3ngsl3trrvg3csiponq
-      nest-commander-testing: 3.1.0_er2l7wg7hu7mk24u6duhdq5zoy
-      prettier: 2.8.1
-      source-map-support: 0.5.21
-      supertest: 6.3.3
-      tools: file:../../packages/tools
-      ts-jest: 28.0.1_hkt4csl26wvgh326ct4kl3mrsq
-      ts-loader: 9.4.2_3fkjkrd3audxnith3e7fo4fnxi
-      ts-node: 10.9.1_qacynw5b4krdzzrloasmebsynu
-      tsconfig-paths: 4.0.0
-      tslib: 2.4.1
-      typescript: 4.9.4
-      webpack: 5.75.0
-    dependenciesMeta:
-      defs:
-        injected: true
-      tools:
-        injected: true
-
-  ../..:
-    specifiers: {}
-
-  ../../packages/defs:
-    specifiers: {}
-
-  ../../packages/tools:
-    specifiers: {}
-
-  ../frontend:
-    specifiers: {}
 
 packages:
 
@@ -10588,6 +10570,10 @@ packages:
     resolution: {integrity: sha512-+J9RrgTKOmlxFSDHo0pI1xM6BLVUv+o0ZT9ANtCxGkjIVCCUdx9alUF8Gm+dGLKbkkkidWIHFDZHDMpfITt4+w==}
     dev: false
 
+  /zod/3.21.2:
+    resolution: {integrity: sha512-0Ygy2/IZNIxHterZdHjE5Vb8hp1fUHJD/BGvSHj8QJx+UipEVNvo9WLchoyBpz5JIaN6KmdGDGYdloGzpFK98g==}
+    dev: true
+
   file:../../packages/defs:
     resolution: {directory: ../../packages/defs, type: directory}
     name: defs
@@ -10602,4 +10588,5 @@ packages:
     requiresBuild: true
     dependencies:
       date-fns: 2.29.3
+      zod: 3.21.2
     dev: true

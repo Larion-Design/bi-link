@@ -1,9 +1,9 @@
 import { Person } from 'defs'
-import { EmbeddedFileIndex } from '@app/definitions/search/file'
-import { LocationIndex } from '@app/definitions/search/location'
-import { EducationIndex } from '@app/definitions/search/person/education'
-import { OldNameIndex } from '@app/definitions/search/person/oldName'
-import { IdDocumentIndex } from '@app/definitions/search/person/idDocument'
+import { EmbeddedFileIndex } from '@app/definitions'
+import { LocationIndex } from '@app/definitions'
+import { EducationIndex } from '@app/definitions'
+import { OldNameIndex } from '@app/definitions'
+import { IdDocumentIndex } from '@app/definitions'
 
 export type PersonIndex = Pick<
   Person,

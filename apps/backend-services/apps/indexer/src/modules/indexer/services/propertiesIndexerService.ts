@@ -1,16 +1,14 @@
 import {
   ConnectedCompanyIndex,
   ConnectedPersonIndex,
-} from '@app/definitions/search/connectedEntity'
-import { PropertyIndex } from '@app/definitions/search/property'
-import { LocationIndexerService } from './locationIndexerService'
+  INDEX_PROPERTIES,
+  PropertyIndex,
+} from '@app/definitions'
+import { PropertiesService, PropertyModel, PropertyOwnerModel } from '@app/models'
 import { Injectable, Logger } from '@nestjs/common'
-import { PropertyModel } from '@app/models/models/property/propertyModel'
-import { INDEX_PROPERTIES } from '@app/definitions/constants'
 import { ElasticsearchService } from '@nestjs/elasticsearch'
 import { ConnectedEntityIndexerService } from './connectedEntityIndexerService'
-import { PropertiesService } from '@app/models/services/propertiesService'
-import { PropertyOwnerModel } from '@app/models/models/property/propertyOwnerModel'
+import { LocationIndexerService } from './locationIndexerService'
 
 @Injectable()
 export class PropertiesIndexerService {

@@ -1,11 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common'
 import { ElasticsearchService } from '@nestjs/elasticsearch'
-import {
-  INDEX_COMPANIES,
-  INDEX_EVENTS,
-  INDEX_PERSONS,
-  INDEX_PROPERTIES,
-} from '@app/definitions/constants'
+import { INDEX_COMPANIES, INDEX_EVENTS, INDEX_PERSONS, INDEX_PROPERTIES } from '@app/definitions'
 
 @Injectable()
 export class SimilarEntitiesService {

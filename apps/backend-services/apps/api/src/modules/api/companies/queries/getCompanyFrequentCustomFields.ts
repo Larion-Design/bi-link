@@ -1,7 +1,7 @@
 import { Query, Resolver } from '@nestjs/graphql'
 import { CustomField } from '../../customFields/dto/customField'
 import { FrequentCustomFieldsService } from '../../../search/services/frequentCustomFieldsService'
-import { INDEX_COMPANIES } from '@app/definitions/constants'
+import { INDEX_COMPANIES } from '@app/definitions'
 import { UseGuards } from '@nestjs/common'
 import { FirebaseAuthGuard } from '../../../users/guards/FirebaseAuthGuard'
 

@@ -11,7 +11,7 @@ import { FileAPIService } from '../../files/services/fileAPIService'
 import { EducationInput } from '../dto/educationInput'
 import { OldNameInput } from '../dto/oldNameInput'
 import { PersonInput } from '../dto/personInput'
-import { RelationshipsService } from './relationshipsService'
+import { RelationshipsAPIService } from './relationshipsAPIService'
 
 @Injectable()
 export class PersonAPIService {
@@ -21,7 +21,7 @@ export class PersonAPIService {
     private readonly personsService: PersonsService,
     private readonly fileService: FileAPIService,
     private readonly customFieldsService: CustomFieldsService,
-    private readonly relationshipsService: RelationshipsService,
+    private readonly relationshipsService: RelationshipsAPIService,
     private readonly locationAPIService: LocationAPIService,
   ) {}
 
@@ -47,7 +47,7 @@ export class PersonAPIService {
       const model = await this.createPersonDocument(personInfo)
       const personDocument = await this.personsService.update(personId, model)
 
-      if (personInfo.relationships?.length) {
+      if (personInfo.relationships.length) {
         await this.relationshipsService.addRelationshipToConnectedPersons(
           personDocument,
           personInfo.relationships,

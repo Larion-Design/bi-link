@@ -14,8 +14,14 @@ export class RelationshipModel implements Relationship {
   @Prop()
   proximity: number
 
+  @Prop()
+  description: string
+
   @Prop({ type: Types.ObjectId, ref: 'PersonModel' })
   person: PersonDocument
+
+  @Prop({ type: [{ type: Types.ObjectId, ref: 'PersonModel' }] })
+  relatedPersons: PersonDocument[]
 }
 
 export type RelationshipDocument = RelationshipModel & Document

@@ -14,6 +14,8 @@ async function bootstrap() {
     options: {
       host: process.env.REDIS_HOST,
       port: parseInt(process.env.REDIS_PORT),
+      password: process.env.REDIS_PASSWORD,
+      tls: {},
       retryDelay: 2000,
       retryAttempts: 100,
     },

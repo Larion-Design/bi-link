@@ -1,14 +1,10 @@
-import { CompanyIndex } from '@app/definitions/search/company'
-import {
-  ConnectedCompanyIndex,
-  ConnectedPersonIndex,
-} from '@app/definitions/search/connectedEntity'
+import { CompanyIndex, ConnectedCompanyIndex, ConnectedPersonIndex } from '@app/definitions'
 import { Injectable, Logger } from '@nestjs/common'
 import { ElasticsearchService } from '@nestjs/elasticsearch'
-import { CompanyModel } from '@app/models/models/company/companyModel'
-import { AssociateModel } from '@app/models/models/company/associateModel'
-import { INDEX_COMPANIES } from '@app/definitions/constants'
-import { CompaniesService } from '@app/models/services/companiesService'
+import { CompanyModel } from '@app/models'
+import { AssociateModel } from '@app/models'
+import { INDEX_COMPANIES } from '@app/definitions'
+import { CompaniesService } from '@app/models'
 import { ConnectedEntityIndexerService } from './connectedEntityIndexerService'
 import { LocationIndexerService } from './locationIndexerService'
 

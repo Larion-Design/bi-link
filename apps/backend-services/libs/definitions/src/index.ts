@@ -1,3 +1,3 @@
-export * from './search'
+export * from './indexer'
 export * from './graph'
 export * from './constants'

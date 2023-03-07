@@ -3,7 +3,7 @@ import { Cache } from 'cache-manager'
 import { MinioService } from 'nestjs-minio-client'
 import { ConfigService } from '@nestjs/config'
 import { extension as mimeTypeToExtension } from 'mime-types'
-import { BUCKET_FILES } from '@app/definitions/constants'
+import { BUCKET_FILES } from '@app/definitions'
 
 @Injectable()
 export class FileStorageService {

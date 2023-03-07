@@ -3,9 +3,9 @@ import {
   ConnectedCompanyIndex,
   ConnectedPersonIndex,
   ConnectedPropertyIndex,
-} from '@app/definitions/search/connectedEntity'
-import { EmbeddedFileIndex } from '@app/definitions/search/file'
-import { LocationIndex } from '@app/definitions/search/location'
+} from '@app/definitions'
+import { EmbeddedFileIndex } from '@app/definitions'
+import { LocationIndex } from '@app/definitions'
 
 export interface EventIndex extends Pick<Event, 'type' | 'description' | 'customFields'> {
   date: string

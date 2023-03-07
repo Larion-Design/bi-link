@@ -1,4 +1,4 @@
-import { ProcessedFileIndex } from '@app/definitions/search/file'
+import { ProcessedFileIndex } from '@app/definitions'
 import { MappingInterface } from './mapping'
 import { MappingHelperService } from './mappingHelperService'
 import { Injectable } from '@nestjs/common'

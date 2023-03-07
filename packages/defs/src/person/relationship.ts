@@ -7,10 +7,13 @@ export interface Relationship {
   proximity: number
   person: Person
   _confirmed: boolean
+  description: string
+  relatedPersons: Person[]
 }
 
-interface RelationshipAPI extends Omit<Relationship, 'person'> {
+interface RelationshipAPI extends Omit<Relationship, 'person' | 'relatedPersons'> {
   person: ConnectedEntity
+  relatedPersons: ConnectedEntity[]
 }
 
 export interface RelationshipAPIOutput extends RelationshipAPI {}

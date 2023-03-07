@@ -1,9 +1,13 @@
-import { CompanyIndex } from '@app/definitions/search/company'
-import { EventIndex } from '@app/definitions/search/event'
-import { PropertyIndex } from '@app/definitions/search/property'
+import {
+  CompanyIndex,
+  EventIndex,
+  PropertyIndex,
+  INDEX_COMPANIES,
+  INDEX_EVENTS,
+  INDEX_PROPERTIES,
+} from '@app/definitions'
 import { Injectable, Logger } from '@nestjs/common'
 import { ElasticsearchService } from '@nestjs/elasticsearch'
-import { INDEX_COMPANIES, INDEX_EVENTS, INDEX_PROPERTIES } from '@app/definitions/constants'
 
 @Injectable()
 export class RelatedEntitiesSearchService {

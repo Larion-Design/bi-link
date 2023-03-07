@@ -2,16 +2,16 @@ import {
   ConnectedCompanyIndex,
   ConnectedPersonIndex,
   ConnectedPropertyIndex,
-} from '@app/definitions/search/connectedEntity'
-import { EventIndex, PartyIndex } from '@app/definitions/search/event'
+} from '@app/definitions'
+import { EventIndex, PartyIndex } from '@app/definitions'
 import { LocationIndexerService } from './locationIndexerService'
 import { Injectable, Logger } from '@nestjs/common'
 import { format } from 'date-fns'
-import { INDEX_EVENTS } from '@app/definitions/constants'
+import { INDEX_EVENTS } from '@app/definitions'
 import { ElasticsearchService } from '@nestjs/elasticsearch'
-import { EventModel } from '@app/models/models/event/eventModel'
-import { PartyModel } from '@app/models/models/event/partyModel'
-import { EventsService } from '@app/models/services/eventsService'
+import { EventModel } from '@app/models'
+import { PartyModel } from '@app/models'
+import { EventsService } from '@app/models'
 import { ConnectedEntityIndexerService } from './connectedEntityIndexerService'
 
 @Injectable()

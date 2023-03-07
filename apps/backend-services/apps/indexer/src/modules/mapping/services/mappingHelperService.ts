@@ -2,7 +2,7 @@ import {
   ConnectedCompanyIndex,
   ConnectedPersonIndex,
   ConnectedPropertyIndex,
-} from '@app/definitions/search/connectedEntity'
+} from '@app/definitions'
 import { Injectable } from '@nestjs/common'
 import { MappingProperty } from '@elastic/elasticsearch/lib/api/types'
 

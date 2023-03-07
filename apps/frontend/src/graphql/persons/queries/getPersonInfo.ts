@@ -66,8 +66,12 @@ const getPersonInfo = gql`
         person {
           _id
         }
+        relatedPersons {
+          _id
+        }
         type
         proximity
+        description
         _confirmed
       }
       customFields {

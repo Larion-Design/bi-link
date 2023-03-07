@@ -26,8 +26,10 @@ import { FileParserService } from '@app/rpc/services/fileParserService'
           Promise.resolve({
             transport: Transport.REDIS,
             options: {
-              host: configService.get('REDIS_HOST'),
-              port: configService.get('REDIS_PORT'),
+              host: configService.getOrThrow('REDIS_HOST'),
+              port: configService.getOrThrow('REDIS_PORT'),
+              password: configService.getOrThrow('REDIS_PASSWORD'),
+              tls: {},
             },
           }),
       })),

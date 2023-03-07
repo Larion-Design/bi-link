@@ -43,7 +43,7 @@ import { PersonCNPExists } from './persons/queries/personCNPExists'
 import { PersonIdDocumentExists } from './persons/queries/personIdDocumentExists'
 import { SearchPersons } from './persons/queries/searchPersons'
 import { PersonAPIService } from './persons/services/personAPIService'
-import { RelationshipsService } from './persons/services/relationshipsService'
+import { RelationshipsAPIService } from './persons/services/relationshipsAPIService'
 import { CreateProperty } from './properties/mutations/createProperty'
 import { UpdateProperty } from './properties/mutations/updateProperty'
 import { GetProperties } from './properties/queries/getProperties'
@@ -87,7 +87,7 @@ import { GetUsers } from './users/queries/getUsers'
     /* Service classes */
     CustomFieldsService,
     PersonAPIService,
-    RelationshipsService,
+    RelationshipsAPIService,
     FileAPIService,
     CompanyAPIService,
     LocationAPIService,

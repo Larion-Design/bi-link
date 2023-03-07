@@ -1,6 +1,7 @@
-import { Module } from '@nestjs/common'
+import { Global, Module } from '@nestjs/common'
 import { ServiceHealthController } from './serviceHealthController'
 
+@Global()
 @Module({
   providers: [ServiceHealthController],
   controllers: [ServiceHealthController],

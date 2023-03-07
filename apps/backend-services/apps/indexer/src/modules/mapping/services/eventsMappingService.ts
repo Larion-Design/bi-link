@@ -1,4 +1,4 @@
-import { EventIndex, PartyIndex } from '@app/definitions/search/event'
+import { EventIndex, PartyIndex } from '@app/definitions'
 import { MappingInterface } from './mapping'
 import { MappingHelperService } from './mappingHelperService'
 import { Injectable } from '@nestjs/common'

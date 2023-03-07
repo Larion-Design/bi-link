@@ -1,4 +1,4 @@
-import { PersonIndex } from '@app/definitions/search/person'
+import { PersonIndex } from '@app/definitions'
 import { MappingInterface } from './mapping'
 import { MappingHelperService } from './mappingHelperService'
 import { Injectable } from '@nestjs/common'

@@ -1,10 +1,7 @@
 import { Company } from 'defs'
-import {
-  ConnectedCompanyIndex,
-  ConnectedPersonIndex,
-} from '@app/definitions/search/connectedEntity'
-import { EmbeddedFileIndex } from '@app/definitions/search/file'
-import { LocationIndex } from '@app/definitions/search/location'
+import { ConnectedCompanyIndex, ConnectedPersonIndex } from '@app/definitions'
+import { EmbeddedFileIndex } from '@app/definitions'
+import { LocationIndex } from '@app/definitions'
 
 export type CompanyIndex = Pick<
   Company,

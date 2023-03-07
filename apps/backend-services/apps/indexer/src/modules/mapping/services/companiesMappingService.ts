@@ -1,4 +1,4 @@
-import { CompanyIndex } from '@app/definitions/search/company'
+import { CompanyIndex } from '@app/definitions/indexer/company'
 import { MappingInterface } from './mapping'
 import { MappingHelperService } from './mappingHelperService'
 import { Injectable } from '@nestjs/common'

@@ -1,7 +1,7 @@
-import { ProcessedFileIndex } from '@app/definitions/search/file'
+import { ProcessedFileIndex } from '@app/definitions'
 import { Injectable, Logger } from '@nestjs/common'
 import { ElasticsearchService } from '@nestjs/elasticsearch'
-import { INDEX_FILES } from '@app/definitions/constants'
+import { INDEX_FILES } from '@app/definitions'
 
 @Injectable()
 export class SearchFilesService {
