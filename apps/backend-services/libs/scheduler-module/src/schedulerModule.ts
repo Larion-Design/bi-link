@@ -1,10 +1,12 @@
+import { Module } from '@nestjs/common'
 import {
   CompanyEventSchedulerService,
   EventSchedulerService,
   PersonEventSchedulerService,
+  ProceedingEventSchedulerService,
   PropertyEventSchedulerService,
+  ReportEventSchedulerService,
 } from '@app/scheduler-module/services'
-import { Module } from '@nestjs/common'
 
 @Module({
   providers: [
@@ -12,12 +14,16 @@ import { Module } from '@nestjs/common'
     CompanyEventSchedulerService,
     PropertyEventSchedulerService,
     EventSchedulerService,
+    ProceedingEventSchedulerService,
+    ReportEventSchedulerService,
   ],
   exports: [
     PersonEventSchedulerService,
     CompanyEventSchedulerService,
     PropertyEventSchedulerService,
     EventSchedulerService,
+    ProceedingEventSchedulerService,
+    ReportEventSchedulerService,
   ],
 })
 export class SchedulerModule {}
