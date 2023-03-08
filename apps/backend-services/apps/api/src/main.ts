@@ -4,22 +4,9 @@ import helmet from 'helmet'
 import { AppModule } from './appModule'
 import { SentryService } from '@ntegral/nestjs-sentry'
 import { Logger } from '@nestjs/common'
-import { RedisOptions, Transport } from '@nestjs/microservices'
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule)
-
-  app.connectMicroservice<RedisOptions>({
-    transport: Transport.REDIS,
-    options: {
-      host: process.env.REDIS_HOST,
-      port: parseInt(process.env.REDIS_PORT),
-      password: process.env.REDIS_PASSWORD,
-      tls: {},
-      retryDelay: 2000,
-      retryAttempts: 100,
-    },
-  })
 
   app.use(
     helmet({
