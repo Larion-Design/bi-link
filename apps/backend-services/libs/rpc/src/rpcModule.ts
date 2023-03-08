@@ -50,4 +50,4 @@ import { FileParserService } from '@app/rpc/services/fileParserService'
     IndexerService,
   ],
 })
-export class PubModule {}
+export class RpcModule {}

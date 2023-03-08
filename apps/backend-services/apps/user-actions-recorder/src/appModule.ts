@@ -1,4 +1,4 @@
-import { PubModule } from '@app/rpc'
+import { RpcModule } from '@app/rpc'
 import { Module } from '@nestjs/common'
 import { ConfigModule } from '@nestjs/config'
 import { ServiceHealthModule } from '@app/service-health'
@@ -6,7 +6,7 @@ import { UserActionController } from './userActionController'
 
 @Module({
   imports: [
-    PubModule,
+    RpcModule,
     ServiceHealthModule,
     ConfigModule.forRoot({
       isGlobal: true,

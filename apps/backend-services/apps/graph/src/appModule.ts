@@ -1,5 +1,5 @@
 import { EntitiesModule } from '@app/models'
-import { PubModule } from '@app/rpc'
+import { RpcModule } from '@app/rpc'
 import { BullModule } from '@nestjs/bull'
 import { Module } from '@nestjs/common'
 import { GraphModule } from '@app/graph-module'
@@ -16,7 +16,7 @@ import { ServiceHealthModule } from '@app/service-health'
 @Module({
   imports: [
     EntitiesModule,
-    PubModule,
+    RpcModule,
     GraphModule,
     ServiceHealthModule,
     ProducersModule,
@@ -30,6 +30,7 @@ import { ServiceHealthModule } from '@app/service-health'
             host: configService.getOrThrow<string>('REDIS_HOST'),
             port: +configService.getOrThrow<number>('REDIS_PORT'),
             password: configService.getOrThrow<string>('REDIS_PASSWORD'),
+            tls: {},
           },
           defaultJobOptions: {
             removeOnFail: false,

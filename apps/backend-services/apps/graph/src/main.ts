@@ -1,20 +1,12 @@
+import { configureMicroservice } from '@app/rpc'
 import { NestFactory } from '@nestjs/core'
 import { AppModule } from './appModule'
 import { SentryService } from '@ntegral/nestjs-sentry'
-import { RedisOptions, Transport } from '@nestjs/microservices'
 import { Logger } from '@nestjs/common'
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule)
-
-  app.connectMicroservice<RedisOptions>({
-    transport: Transport.REDIS,
-    options: {
-      host: process.env.REDIS_HOST,
-      port: parseInt(process.env.REDIS_PORT),
-      password: process.env.REDIS_PASSWORD,
-    },
-  })
+  configureMicroservice(app)
 
   const logger = SentryService.SentryServiceInstance()
   logger.setContext('Graph')

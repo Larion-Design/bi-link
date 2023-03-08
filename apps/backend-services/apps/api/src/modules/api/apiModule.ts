@@ -1,6 +1,6 @@
 import { FilesModule } from '@app/files'
 import { GraphModule } from '@app/graph-module'
-import { PubModule } from '@app/rpc'
+import { RpcModule } from '@app/rpc'
 import { Module } from '@nestjs/common'
 import { MulterModule } from '@nestjs/platform-express'
 import { memoryStorage } from 'multer'
@@ -71,7 +71,7 @@ import { GetUsers } from './users/queries/getUsers'
 
 @Module({
   imports: [
-    PubModule,
+    RpcModule,
     SearchModule,
     UsersModule,
     FilesModule,

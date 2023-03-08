@@ -9,7 +9,7 @@ import { ServiceHealthModule } from '@app/service-health/serviceHealthModule'
 import { IndexerModule } from './modules/indexer/indexerModule'
 import { MappingModule } from './modules/mapping/mappingModule'
 import { ProducersModule } from './modules/producers/producersModule'
-import { PubModule } from '@app/rpc'
+import { RpcModule } from '@app/rpc'
 import { EntityEventsRPCController } from './modules/rpc/entityEventsRPCController'
 import { MappingRPCController } from './modules/rpc/mappingRPCController'
 
@@ -21,7 +21,7 @@ import { MappingRPCController } from './modules/rpc/mappingRPCController'
     ProducersModule,
     ConsumersModule,
     ServiceHealthModule,
-    PubModule,
+    RpcModule,
     BullModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
@@ -31,6 +31,7 @@ import { MappingRPCController } from './modules/rpc/mappingRPCController'
             host: configService.getOrThrow<string>('REDIS_HOST'),
             port: +configService.getOrThrow<number>('REDIS_PORT'),
             password: configService.getOrThrow<string>('REDIS_PASSWORD'),
+            tls: {},
           },
           defaultJobOptions: {
             removeOnFail: false,

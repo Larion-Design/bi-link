@@ -1,4 +1,4 @@
-import { PubModule } from '@app/rpc'
+import { RpcModule } from '@app/rpc'
 import { Module } from '@nestjs/common'
 import { EntitiesModule } from '@app/models'
 import { ProducersModule } from '../producers/producersModule'
@@ -13,7 +13,7 @@ import { PersonGraphService } from './services/personGraphService'
 import { PropertyGraphService } from './services/propertyGraphService'
 
 @Module({
-  imports: [EntitiesModule, PubModule, ProducersModule],
+  imports: [EntitiesModule, RpcModule, ProducersModule],
   providers: [
     PersonEventConsumer,
     PropertyEventConsumer,
