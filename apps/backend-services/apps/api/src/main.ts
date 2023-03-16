@@ -23,7 +23,7 @@ async function bootstrap() {
   app.enableCors()
 
   await app.startAllMicroservices()
-  await app.listen(process.env.SERVICE_API_PORT, '0.0.0.0')
+  await app.listen(process.env.SERVICE_API_PORT ?? 80, '0.0.0.0')
   Logger.log('API service is now running.')
 }
 void bootstrap()

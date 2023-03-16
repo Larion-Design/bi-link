@@ -1,5 +1,5 @@
 // noinspection JSUnusedGlobalSymbols
-import react from '@vitejs/plugin-react'
+import react from '@vitejs/plugin-react-swc'
 // import basicSSL from '@vitejs/plugin-basic-ssl'
 import { defineConfig, splitVendorChunkPlugin } from 'vite'
 import tsconfigPaths from 'vite-tsconfig-paths'
@@ -11,9 +11,8 @@ export default defineConfig({
   plugins: [
     tsconfigPaths(),
     react({
-      babel: {
-        babelrc: true,
-      },
+      tsDecorators: true,
+      plugins: [],
     }),
     splitVendorChunkPlugin(),
     // basicSSL(),
