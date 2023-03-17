@@ -6,7 +6,7 @@ import { Proceeding } from '../dto/proceeding'
 
 @ArgsType()
 class Params {
-  @Field()
+  @Field(() => [String])
   proceedingsIds: string[]
 }
 

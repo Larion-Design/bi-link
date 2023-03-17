@@ -5,7 +5,9 @@ import {
   ProceedingEntityModel,
   ProceedingEntitySchema,
 } from '@app/models/models/proceeding/proceedingEntityModel'
-import { CustomFieldModel, CustomFieldSchema, FileModel } from '@app/models'
+
+import { FileModel } from '@app/models/models/fileModel'
+import { CustomFieldModel, CustomFieldSchema } from '@app/models'
 
 @Schema({ timestamps: true })
 export class ProceedingModel implements Proceeding {
