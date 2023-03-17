@@ -1,4 +1,5 @@
 import { CustomField } from '../customField'
+import { File, FileAPIInput, FileAPIOutput } from '../file'
 import { ProceedingEntityInvolved, ProceedingEntityInvolvedAPI } from './proceedingEntityInvolved'
 
 export interface Proceeding {
@@ -11,11 +12,17 @@ export interface Proceeding {
   description: string
   entitiesInvolved: ProceedingEntityInvolved[]
   customFields: CustomField[]
+  files: File[]
 }
 
-interface ProceedingAPI extends Omit<Proceeding, 'entitiesInvolved'> {
+interface ProceedingAPI extends Omit<Proceeding, 'entitiesInvolved' | 'files'> {
   entitiesInvolved: ProceedingEntityInvolvedAPI[]
 }
 
-export interface ProceedingAPIInput extends Omit<ProceedingAPI, '_id'> {}
-export interface ProceedingAPIOutput extends ProceedingAPI {}
+export interface ProceedingAPIInput extends Omit<ProceedingAPI, '_id'> {
+  files: FileAPIInput[]
+}
+
+export interface ProceedingAPIOutput extends ProceedingAPI {
+  files: FileAPIOutput[]
+}

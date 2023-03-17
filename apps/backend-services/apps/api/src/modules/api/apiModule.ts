@@ -44,8 +44,11 @@ import { PersonIdDocumentExists } from './persons/queries/personIdDocumentExists
 import { SearchPersons } from './persons/queries/searchPersons'
 import { PersonAPIService } from './persons/services/personAPIService'
 import { RelationshipsAPIService } from './persons/services/relationshipsAPIService'
+import { CreateProceeding } from './proceedings/mutations/createProceeding'
+import { UpdateProceeding } from './proceedings/mutations/updateProceeding'
 import { GetProceeding } from './proceedings/queries/getProceeding'
 import { GetProceedings } from './proceedings/queries/getProceedings'
+import { ProceedingAPIService } from './proceedings/services/proceedingAPIService'
 import { CreateProperty } from './properties/mutations/createProperty'
 import { UpdateProperty } from './properties/mutations/updateProperty'
 import { GetProperties } from './properties/queries/getProperties'
@@ -99,6 +102,7 @@ import { GetUsers } from './users/queries/getUsers'
     PropertyAPIService,
     PropertyOwnerAPIService,
     ReportAPIService,
+    ProceedingAPIService,
     ReportContentAPIService,
     ReportRefsAPIService,
 
@@ -152,6 +156,8 @@ import { GetUsers } from './users/queries/getUsers'
     GetLocations,
     GetProceeding,
     GetProceedings,
+    CreateProceeding,
+    UpdateProceeding,
   ],
   controllers: [FileUploadController],
 })
