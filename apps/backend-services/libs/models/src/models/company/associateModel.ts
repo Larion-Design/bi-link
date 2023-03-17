@@ -1,7 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
 import { Document, Types, SchemaTypes } from 'mongoose'
-import { PersonDocument, PersonModel } from '../person/personModel'
-import { CustomFieldModel, CustomFieldSchema } from '../customFieldModel'
+import { PersonDocument, PersonModel } from '@app/models/models'
+import { CustomFieldModel, CustomFieldSchema } from '@app/models/models'
 import { Associate } from 'defs'
 import { CompanyDocument, CompanyModel } from '@app/models/models/company/companyModel'
 
