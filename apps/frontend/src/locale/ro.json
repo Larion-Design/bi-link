@@ -19,6 +19,7 @@
   "Education": "Educatie",
   "Files": "Fisiere",
   "Relationships": "Relatii",
+  "Personal relationships": "Relatii cu persoane",
   "firstName": "Prenume",
   "lastName": "Nume",
   "oldNames": "Nume anterioare",
@@ -50,5 +51,6 @@
   "FILE": "Fisiere",
   "LOCATION": "Locuri",
   "Have no location": "Nu cunosc detaliile locatiei",
-  "Have location": "Cunosc detaliile locatiei"
+  "Have location": "Cunosc detaliile locatiei",
+  "Related persons": "Persoane de legatura"
 }

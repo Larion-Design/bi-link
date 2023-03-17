@@ -21,8 +21,10 @@ export const getDefaultPerson = (): PersonAPIInput => ({
 export const createRelationship = (_id: string): RelationshipAPIInput => ({
   person: { _id },
   type: '',
+  description: '',
   proximity: 1,
   _confirmed: true,
+  relatedPersons: [],
 })
 
 export const relationshipsTypes = {

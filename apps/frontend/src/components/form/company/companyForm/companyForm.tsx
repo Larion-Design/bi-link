@@ -241,5 +241,6 @@ export const CompanyForm = withFormik<Props, CompanyAPIInput>({
   validateOnChange: false,
   validateOnMount: false,
   validateOnBlur: false,
+  enableReinitialize: true,
   handleSubmit: (values, { props: { onSubmit } }) => onSubmit(values),
 })(Form)

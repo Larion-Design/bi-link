@@ -226,5 +226,6 @@ export const PropertyForm = withFormik<Props, PropertyAPIInput>({
   validateOnChange: false,
   validateOnMount: false,
   validateOnBlur: false,
+  enableReinitialize: true,
   handleSubmit: (values, { props: { onSubmit } }) => onSubmit(values),
 })(Form)

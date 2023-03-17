@@ -1,12 +1,16 @@
+import Box from '@mui/material/Box'
+import Divider from '@mui/material/Divider'
 import React, { useCallback, useEffect } from 'react'
-import Grid from '@mui/material/Grid'
+import { FormattedMessage } from 'react-intl'
+import Typography from '@mui/material/Typography'
+import Stack from '@mui/material/Stack'
+import { RelationshipAPIInput } from 'defs'
 import { createRelationship } from '@frontend/components/form/person/constants'
 import { getPersonsBasicInfoRequest } from '@frontend/graphql/persons/queries/getPersonsBasicInfo'
-import { AddItemCard } from '../../addItemCard'
-import { PersonCard } from './personCard'
+import { RelationshipCard } from './relationshipCard'
 import { useModal } from '../../../modal/modalProvider'
-import { RelationshipAPIInput } from 'defs'
 import { useDebouncedMap } from '@frontend/utils/hooks/useMap'
+import { AddItemButton } from '@frontend/components/button/addItemButton'
 
 type Props = {
   personId?: string
@@ -20,8 +24,8 @@ export const Relationships: React.FunctionComponent<Props> = ({
   updateRelationships,
   personId,
 }) => {
-  const getPersonId = ({ person: { _id } }: RelationshipAPIInput) => _id
   const modal = useModal()
+  const getPersonId = ({ person: { _id } }: RelationshipAPIInput) => _id
   const [fetchPersonsInfo, { data }] = getPersonsBasicInfoRequest()
   const { entries, values, addBulk, update, remove, keys, uid } = useDebouncedMap(
     1000,
@@ -30,10 +34,15 @@ export const Relationships: React.FunctionComponent<Props> = ({
   )
 
   useEffect(() => {
-    const personsIds = keys()
+    const personsIds = new Set<string>()
 
-    if (personsIds.length) {
-      void fetchPersonsInfo({ variables: { personsIds } })
+    values().map(({ person: { _id }, relatedPersons }) => {
+      personsIds.add(_id)
+      relatedPersons.forEach(({ _id }) => personsIds.add(_id))
+    })
+
+    if (personsIds.size) {
+      void fetchPersonsInfo({ variables: { personsIds: Array.from(personsIds) } })
     }
     void updateRelationships(values())
   }, [uid])
@@ -51,27 +60,46 @@ export const Relationships: React.FunctionComponent<Props> = ({
   }, [uid])
 
   return (
-    <>
-      <Grid container spacing={6}>
+    <Stack sx={{ width: 1 }}>
+      <Box
+        sx={{ width: 1, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
+      >
+        <Typography variant={'h5'}>
+          <FormattedMessage
+            id={'Personal relationships'}
+            defaultMessage={'Personal relationships'}
+          />
+        </Typography>
+
+        <Box>
+          <AddItemButton
+            label={'Adauga persoana in cercul relational'}
+            onClick={openPersonSelector}
+          />
+        </Box>
+      </Box>
+      <Divider variant={'fullWidth'} sx={{ mb: 2, mt: 2 }} />
+      <Stack spacing={6}>
         {!!data?.getPersonsInfo?.length &&
           entries().map(([personId, relationship]) => {
             const personInfo = data.getPersonsInfo.find(({ _id }) => _id === personId)
             return personInfo ? (
-              <Grid key={personId} item xs={4}>
-                <PersonCard
-                  personInfo={personInfo}
-                  relationshipInfo={relationship}
-                  updateRelationship={update}
-                  removeRelationship={remove}
-                />
-              </Grid>
+              <RelationshipCard
+                key={personId}
+                personInfo={personInfo}
+                relatedPersonsInfo={data.getPersonsInfo.filter(
+                  ({ _id }) =>
+                    !!relationship.relatedPersons.find(
+                      ({ _id: relatedPersonId }) => relatedPersonId === _id,
+                    ),
+                )}
+                relationshipInfo={relationship}
+                updateRelationship={update}
+                removeRelationship={remove}
+              />
             ) : null
           })}
-
-        <Grid item xs={3}>
-          <AddItemCard data-cy={'openPersonsModalButton'} onClick={openPersonSelector} />
-        </Grid>
-      </Grid>
-    </>
+      </Stack>
+    </Stack>
   )
 }

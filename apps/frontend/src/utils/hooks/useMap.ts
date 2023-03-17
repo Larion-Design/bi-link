@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { v4 } from 'uuid'
 import { useDebounce } from 'usehooks-ts'
 
@@ -15,6 +15,14 @@ export function useMap<Item>(
     items.forEach((item) => itemsMap.set(idExtractFunc?.(item) ?? v4(), item))
     return itemsMap
   })
+
+  useEffect(() => {
+    setMap(() => {
+      const itemsMap = new Map<string, Item>()
+      items.forEach((item) => itemsMap.set(idExtractFunc?.(item) ?? v4(), item))
+      return itemsMap
+    })
+  }, [items])
 
   const deps = [map]
   const uid = useMemo(v4, deps)

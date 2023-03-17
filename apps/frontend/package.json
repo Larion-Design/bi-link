@@ -47,6 +47,7 @@
     "graphql": "^16.6.0",
     "hierarchy": "^1.0.0",
     "html-to-image": "^1.11.11",
+    "immer": "^9.0.19",
     "mui-color-input": "^1.0.4",
     "mui-image": "^1.0.7",
     "notistack": "^2.0.8",
@@ -64,7 +65,8 @@
     "tools": "workspace:*",
     "usehooks-ts": "^2.9.1",
     "uuid": "^8.3.2",
-    "yup": "^0.32.11"
+    "yup": "^0.32.11",
+    "zustand": "^4.3.6"
   },
   "devDependencies": {
     "@babel/core": "^7.20.12",

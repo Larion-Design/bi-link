@@ -187,5 +187,6 @@ export const EventForm = withFormik<Props, EventAPIInput>({
   validateOnChange: false,
   validateOnMount: false,
   validateOnBlur: false,
+  enableReinitialize: true,
   handleSubmit: (values, { props: { onSubmit } }) => void onSubmit(values),
 })(Form)
