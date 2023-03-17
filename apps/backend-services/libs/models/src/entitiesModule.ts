@@ -1,3 +1,10 @@
+import {
+  ProceedingEntityModel,
+  ProceedingEntitySchema,
+  ProceedingModel,
+  ProceedingSchema,
+} from '@app/models/models/proceeding'
+import { ProceedingsService } from '@app/models/services/proceedingsService'
 import { Global, Module } from '@nestjs/common'
 import { MongooseModule } from '@nestjs/mongoose'
 import { LocationsService } from '@app/models/services/locationsService'
@@ -59,6 +66,8 @@ import { ReportsService } from '@app/models/services/reportsService'
       { name: PartyModel.name, schema: PartySchema },
       { name: PropertyModel.name, schema: PropertySchema },
       { name: PropertyOwnerModel.name, schema: PropertyOwnerSchema },
+      { name: ProceedingModel.name, schema: ProceedingSchema },
+      { name: ProceedingEntityModel.name, schema: ProceedingEntitySchema },
       { name: ReportModel.name, schema: ReportSchema },
       { name: ReportSectionModel.name, schema: ReportSectionSchema },
       { name: ReportContentModel.name, schema: ReportContentSchema },
@@ -77,6 +86,7 @@ import { ReportsService } from '@app/models/services/reportsService'
     PropertiesService,
     ReportsService,
     LocationsService,
+    ProceedingsService,
   ],
   exports: [
     MongooseModule,
@@ -87,6 +97,7 @@ import { ReportsService } from '@app/models/services/reportsService'
     PropertiesService,
     ReportsService,
     LocationsService,
+    ProceedingsService,
   ],
 })
 export class EntitiesModule {}

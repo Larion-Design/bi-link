@@ -1,10 +1,11 @@
 import { CustomFieldModel, CustomFieldSchema } from '@app/models'
-import { Prop, Schema } from '@nestjs/mongoose'
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
 import { Proceeding } from 'defs'
 import {
   ProceedingEntityModel,
   ProceedingEntitySchema,
 } from '@app/models/models/proceeding/proceedingEntityModel'
+import { Document } from 'mongoose'
 
 @Schema({ timestamps: true })
 export class ProceedingModel implements Proceeding {
@@ -34,3 +35,6 @@ export class ProceedingModel implements Proceeding {
   @Prop({ type: [CustomFieldSchema] })
   customFields: CustomFieldModel[]
 }
+
+export type ProceedingDocument = ProceedingModel & Document<string>
+export const ProceedingSchema = SchemaFactory.createForClass(ProceedingModel)

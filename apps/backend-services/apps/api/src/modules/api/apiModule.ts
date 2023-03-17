@@ -1,9 +1,9 @@
-import { FilesModule } from '@app/files'
-import { GraphModule } from '@app/graph-module'
-import { RpcModule } from '@app/rpc'
 import { Module } from '@nestjs/common'
 import { MulterModule } from '@nestjs/platform-express'
 import { memoryStorage } from 'multer'
+import { FilesModule } from '@app/files'
+import { GraphModule } from '@app/graph-module'
+import { RpcModule } from '@app/rpc'
 import { SearchModule } from '../search/searchModule'
 import { UsersModule } from '../users/UsersModule'
 import { GetEntitiesGraph } from './common/queries/getEntitiesGraph'
@@ -44,6 +44,8 @@ import { PersonIdDocumentExists } from './persons/queries/personIdDocumentExists
 import { SearchPersons } from './persons/queries/searchPersons'
 import { PersonAPIService } from './persons/services/personAPIService'
 import { RelationshipsAPIService } from './persons/services/relationshipsAPIService'
+import { GetProceeding } from './proceedings/queries/getProceeding'
+import { GetProceedings } from './proceedings/queries/getProceedings'
 import { CreateProperty } from './properties/mutations/createProperty'
 import { UpdateProperty } from './properties/mutations/updateProperty'
 import { GetProperties } from './properties/queries/getProperties'
@@ -148,6 +150,8 @@ import { GetUsers } from './users/queries/getUsers'
     GetFilesInfo,
     GetFileContent,
     GetLocations,
+    GetProceeding,
+    GetProceedings,
   ],
   controllers: [FileUploadController],
 })

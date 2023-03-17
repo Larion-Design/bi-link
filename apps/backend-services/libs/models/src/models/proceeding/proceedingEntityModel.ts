@@ -1,7 +1,8 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
 import { ProceedingEntityInvolved } from 'defs'
 import { Types } from 'mongoose'
-import { CompanyDocument, CompanyModel, PersonDocument, PersonModel } from '@app/models'
+import { PersonModel, PersonDocument } from '../person'
+import { CompanyModel, CompanyDocument } from '../company'
 
 @Schema({ _id: false, timestamps: false })
 export class ProceedingEntityModel implements ProceedingEntityInvolved {
