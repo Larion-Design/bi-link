@@ -7,6 +7,7 @@ import { PersonEventDispatcherService } from './services/personEventDispatcherSe
 import { CompanyEventDispatcherService } from './services/companyEventDispatcherService'
 import { FileEventDispatcherService } from './services/fileEventDispatcherService'
 import { EventDispatcherService } from './services/eventDispatcherService'
+import { ProceedingEventDispatcherService } from './services/proceedingEventDispatcherService'
 import { RelatedEntitiesSearchService } from './services/relatedEntitiesSearchService'
 import {
   QUEUE_COMPANIES,
@@ -15,6 +16,7 @@ import {
   QUEUE_PERSONS,
   QUEUE_PROPERTIES,
   QUEUE_REPORTS,
+  QUEUE_PROCEEDINGS,
 } from './constants'
 import { PropertyEventDispatcherService } from './services/propertyEventDispatcherService'
 import { ReportEventDispatcherService } from './services/reportEventDispatcherService'
@@ -29,6 +31,7 @@ import { ReportEventDispatcherService } from './services/reportEventDispatcherSe
       { name: QUEUE_EVENTS },
       { name: QUEUE_PROPERTIES },
       { name: QUEUE_REPORTS },
+      { name: QUEUE_PROCEEDINGS },
     ),
     ElasticsearchModule.registerAsync({
       imports: [ConfigModule],
@@ -47,6 +50,7 @@ import { ReportEventDispatcherService } from './services/reportEventDispatcherSe
     EventDispatcherService,
     RelatedEntitiesSearchService,
     ReportEventDispatcherService,
+    ProceedingEventDispatcherService,
   ],
   exports: [
     PropertyEventDispatcherService,
@@ -56,6 +60,7 @@ import { ReportEventDispatcherService } from './services/reportEventDispatcherSe
     EventDispatcherService,
     ReportEventDispatcherService,
     RelatedEntitiesSearchService,
+    ProceedingEventDispatcherService,
   ],
 })
 export class ProducersModule {}
