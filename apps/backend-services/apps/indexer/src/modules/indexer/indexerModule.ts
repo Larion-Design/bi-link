@@ -11,6 +11,7 @@ import {
   PersonsIndexerService,
   PropertiesIndexerService,
 } from './services'
+import { ProceedingsIndexerService } from './services/proceedingsIndexerService'
 
 @Module({
   imports: [
@@ -32,6 +33,7 @@ import {
     EventsIndexerService,
     PropertiesIndexerService,
     HistoryIndexerService,
+    ProceedingsIndexerService,
   ],
   exports: [
     ConnectedEntityIndexerService,
@@ -42,6 +44,7 @@ import {
     EventsIndexerService,
     PropertiesIndexerService,
     HistoryIndexerService,
+    ProceedingsIndexerService,
   ],
 })
 export class IndexerModule {}

@@ -9,7 +9,7 @@ import { Logger } from '@nestjs/common'
 import { FileEventDispatcherService } from '../../producers/services/fileEventDispatcherService'
 import { Job } from 'bull'
 import { EventsService } from '@app/models/services/eventsService'
-import { EventsIndexerService } from '../../indexer/services/eventsIndexerService'
+import { EventsIndexerService } from '../../indexer/services'
 import { QUEUE_EVENTS } from '../../producers/constants'
 
 @Processor(QUEUE_EVENTS)
@@ -45,11 +45,11 @@ export class EventIndexEventsConsumer {
 
     try {
       if (await this.indexEventInfo(eventId)) {
-        return job.moveToCompleted(eventId)
+        return {}
       }
     } catch (error) {
       this.logger.error(error)
-      return job.moveToFailed(error as { message: string })
+      await job.moveToFailed(error as { message: string })
     }
   }
 
@@ -61,11 +61,11 @@ export class EventIndexEventsConsumer {
 
     try {
       if (await this.indexEventInfo(eventId)) {
-        return job.moveToCompleted()
+        return {}
       }
     } catch (error) {
       this.logger.error(error)
-      return job.moveToFailed(error as { message: string })
+      await job.moveToFailed(error as { message: string })
     }
   }
 

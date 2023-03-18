@@ -3,6 +3,7 @@ export enum FileParentEntity {
   COMPANY = 'COMPANY',
   EVENT = 'EVENT',
   PROPERTY = 'PROPERTY',
+  PROCEEDING = 'PROCEEDING',
 }
 
 export type FileLinkedEntity = {

@@ -4,7 +4,7 @@ import { ConnectedCompanyIndex, ConnectedPersonIndex, EmbeddedFileIndex } from '
 export interface ProceedingIndex
   extends Pick<
     Proceeding,
-    '_id' | 'name' | 'type' | 'fileNumber' | 'description' | 'year' | 'customFields'
+    'name' | 'type' | 'fileNumber' | 'description' | 'year' | 'customFields'
   > {
   persons: ConnectedPersonIndex[]
   companies: ConnectedCompanyIndex[]
@@ -12,4 +12,4 @@ export interface ProceedingIndex
 }
 
 export interface EmbeddedProceedingIndex
-  extends Pick<Proceeding, '_id' | 'name' | 'type' | 'fileNumber' | 'description'> {}
+  extends Pick<Proceeding, '_id' | 'name' | 'fileNumber' | 'description' | 'year'> {}

@@ -9,6 +9,7 @@ import {
   MappingHelperService,
   MappingValidatorService,
   PersonsMappingService,
+  ProceedingsMappingService,
   PropertiesMappingService,
 } from './services'
 
@@ -32,6 +33,7 @@ import {
     MappingValidatorService,
     PersonsMappingService,
     PropertiesMappingService,
+    ProceedingsMappingService,
   ],
   exports: [
     CompaniesMappingService,
@@ -41,6 +43,7 @@ import {
     MappingValidatorService,
     PersonsMappingService,
     PropertiesMappingService,
+    ProceedingsMappingService,
   ],
 })
 export class MappingModule {}

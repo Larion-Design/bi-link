@@ -5,6 +5,7 @@ import {
   INDEX_EVENTS,
   INDEX_FILES,
   INDEX_PERSONS,
+  INDEX_PROCEEDINGS,
   INDEX_PROPERTIES,
 } from '@app/definitions'
 import {
@@ -13,6 +14,7 @@ import {
   FilesMappingService,
   MappingValidatorService,
   PersonsMappingService,
+  ProceedingsMappingService,
   PropertiesMappingService,
 } from '../mapping/services'
 import { EventPattern, Payload } from '@nestjs/microservices'
@@ -26,6 +28,7 @@ export class MappingRPCController {
     private readonly propertiesMappingService: PropertiesMappingService,
     private readonly eventsMappingService: EventsMappingService,
     private readonly filesMappingService: FilesMappingService,
+    private readonly proceedingsMappingService: ProceedingsMappingService,
     private readonly mappingValidatorService: MappingValidatorService,
   ) {}
 
@@ -66,6 +69,12 @@ export class MappingRPCController {
           this.filesMappingService.getMapping(),
         )
         break
+      }
+      case 'PROCEEDING': {
+        await this.mappingValidatorService.initIndex(
+          INDEX_PROCEEDINGS,
+          this.proceedingsMappingService.getMapping(),
+        )
       }
     }
   }

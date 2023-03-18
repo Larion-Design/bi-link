@@ -31,11 +31,12 @@ export class FileIndexEventsConsumer {
     const { data } = job
 
     try {
-      const indexUpdated = await this.fileIndexerService.appendFileContent(data)
-      return job.moveToCompleted(String(indexUpdated))
+      if (await this.fileIndexerService.appendFileContent(data)) {
+        return {}
+      }
     } catch (error) {
       this.logger.error(error)
-      return job.moveToFailed(error as { message: string })
+      await job.moveToFailed(error as { message: string })
     }
   }
 
@@ -43,15 +44,12 @@ export class FileIndexEventsConsumer {
   async fileUpdated(job: Job<FileEventInfo>) {
     const { data } = job
     try {
-      const indexUpdated = await this.fileIndexerService.appendFileContent(data)
-
-      if (indexUpdated) {
-        return job.moveToCompleted(job.data.fileId)
+      if (await this.fileIndexerService.appendFileContent(data)) {
+        return {}
       }
     } catch (error) {
       this.logger.error(error)
-      return job.moveToFailed(error as { message: string })
+      await job.moveToFailed(error as { message: string })
     }
-    return job.moveToFailed(new Error(`File ID ${data.fileId} could not be indexed`))
   }
 }

@@ -1,14 +1,17 @@
+import { Controller, Logger } from '@nestjs/common'
+import { EventPattern, Payload } from '@nestjs/microservices'
+import { ReportsService } from '@app/models'
 import { CompaniesService } from '@app/models/services/companiesService'
 import { EventsService } from '@app/models/services/eventsService'
 import { PersonsService } from '@app/models/services/personsService'
+import { ProceedingsService } from '@app/models/services/proceedingsService'
 import { PropertiesService } from '@app/models/services/propertiesService'
-import { Controller, Logger } from '@nestjs/common'
-import { EventPattern, Payload } from '@nestjs/microservices'
 import { EntityInfo, MICROSERVICES } from '@app/rpc/constants'
 import { EntityType } from 'defs'
 import { CompanyEventDispatcherService } from '../producers/services/companyEventDispatcherService'
 import { PersonEventDispatcherService } from '../producers/services/personEventDispatcherService'
 import { EventDispatcherService } from '../producers/services/eventDispatcherService'
+import { ProceedingEventDispatcherService } from '../producers/services/proceedingEventDispatcherService'
 import { RelatedEntitiesSearchService } from '../producers/services/relatedEntitiesSearchService'
 import { FileEventDispatcherService } from '../producers/services/fileEventDispatcherService'
 import { PropertyEventDispatcherService } from '../producers/services/propertyEventDispatcherService'
@@ -25,12 +28,15 @@ export class EntityEventsRPCController {
     private readonly eventEventDispatcherService: EventDispatcherService,
     private readonly fileEventDispatcherService: FileEventDispatcherService,
     private readonly reportEventDispatcherService: ReportEventDispatcherService,
+    private readonly proceedingEventDispatcherService: ProceedingEventDispatcherService,
     private readonly relatedEntitiesSearchService: RelatedEntitiesSearchService,
 
     private readonly personsService: PersonsService,
     private readonly companiesService: CompaniesService,
     private readonly propertiesService: PropertiesService,
     private readonly eventsService: EventsService,
+    private readonly reportsService: ReportsService,
+    private readonly proceedingsService: ProceedingsService,
   ) {}
 
   @EventPattern(MICROSERVICES.ENTITY_EVENTS.entityModified)
@@ -54,10 +60,13 @@ export class EntityEventsRPCController {
         return this.eventEventDispatcherService.dispatchEventCreated(entityId)
       }
       case 'FILE': {
-        return this.fileEventDispatcherService.dispatchFileCreated({ fileId: entityId })
+        return this.fileEventDispatcherService.dispatchFileCreated(entityId)
       }
       case 'REPORT': {
-        return this.reportEventDispatcherService.dispatchReportCreated({ reportId: entityId })
+        return this.reportEventDispatcherService.dispatchReportCreated(entityId)
+      }
+      case 'PROCEEDING': {
+        return this.proceedingEventDispatcherService.dispatchProceedingCreated(entityId)
       }
     }
   }
@@ -117,10 +126,13 @@ export class EntityEventsRPCController {
         return this.eventEventDispatcherService.dispatchEventUpdated(entityId)
       }
       case 'FILE': {
-        return this.fileEventDispatcherService.dispatchFileCreated({ fileId: entityId })
+        return this.fileEventDispatcherService.dispatchFileUpdated(entityId)
       }
       case 'REPORT': {
-        return this.reportEventDispatcherService.dispatchReportUpdated({ reportId: entityId })
+        return this.reportEventDispatcherService.dispatchReportUpdated(entityId)
+      }
+      case 'PROCEEDING': {
+        return this.proceedingEventDispatcherService.dispatchProceedingUpdated(entityId)
       }
     }
 
@@ -150,46 +162,68 @@ export class EntityEventsRPCController {
   private refreshAllIndexEntitiesByType = async (entityType: EntityType) => {
     switch (entityType) {
       case 'PERSON': {
-        const personsIds = await this.getAllPersons()
+        const entitiesIds = await this.getAllPersons()
 
-        if (personsIds.length) {
-          this.logger.debug(`Refreshing ${personsIds.length} persons in index`)
-          return this.personEventDispatcherService.dispatchPersonsUpdated(personsIds)
+        if (entitiesIds.length) {
+          this.logger.debug(`Refreshing ${entitiesIds.length} persons in index`)
+          return this.personEventDispatcherService.dispatchPersonsUpdated(entitiesIds)
         } else {
           this.logger.debug(`No persons to refresh in index`)
         }
         break
       }
       case 'COMPANY': {
-        const companiesIds = await this.getAllCompanies()
+        const entitiesIds = await this.getAllCompanies()
 
-        if (companiesIds.length) {
-          this.logger.debug(`Refreshing ${companiesIds.length} companies in index`)
-          return this.companyEventDispatcherService.dispatchCompaniesUpdated(companiesIds)
+        if (entitiesIds.length) {
+          this.logger.debug(`Refreshing ${entitiesIds.length} companies in index`)
+          return this.companyEventDispatcherService.dispatchCompaniesUpdated(entitiesIds)
         } else {
           this.logger.debug(`No companies to refresh in index`)
         }
         break
       }
       case 'EVENT': {
-        const eventsIds = await this.getAllEvents()
+        const entitiesIds = await this.getAllEvents()
 
-        if (eventsIds.length) {
-          this.logger.debug(`Refreshing ${eventsIds.length} events in index`)
-          return this.eventEventDispatcherService.dispatchEventsUpdated(eventsIds)
+        if (entitiesIds.length) {
+          this.logger.debug(`Refreshing ${entitiesIds.length} events in index`)
+          return this.eventEventDispatcherService.dispatchEventsUpdated(entitiesIds)
         } else {
           this.logger.debug(`No events to refresh in index`)
         }
         break
       }
       case 'PROPERTY': {
-        const propertiesIds = await this.getAllProperties()
+        const entitiesIds = await this.getAllProperties()
 
-        if (propertiesIds.length) {
-          this.logger.debug(`Refreshing ${propertiesIds.length} properties in index`)
-          return this.propertyEventDispatcherService.dispatchPropertiesUpdated(propertiesIds)
+        if (entitiesIds.length) {
+          this.logger.debug(`Refreshing ${entitiesIds.length} properties in index`)
+          return this.propertyEventDispatcherService.dispatchPropertiesUpdated(entitiesIds)
         } else {
           this.logger.debug(`No properties to refresh in index`)
+        }
+        break
+      }
+      case 'REPORT': {
+        const entitiesIds = await this.getAllReports()
+
+        if (entitiesIds.length) {
+          this.logger.debug(`Refreshing ${entitiesIds.length} reports in index`)
+          return this.reportEventDispatcherService.dispatchReportsUpdated(entitiesIds)
+        } else {
+          this.logger.debug(`No reports to refresh in index`)
+        }
+        break
+      }
+      case 'PROCEEDING': {
+        const entitiesIds = await this.getAllProceedings()
+
+        if (entitiesIds.length) {
+          this.logger.debug(`Refreshing ${entitiesIds.length} proceedings in index`)
+          return this.proceedingEventDispatcherService.dispatchProceedingsUpdated(entitiesIds)
+        } else {
+          this.logger.debug(`No proceedings to refresh in index`)
         }
         break
       }
@@ -227,6 +261,24 @@ export class EntityEventsRPCController {
     const entitiesIds: string[] = []
 
     for await (const { _id } of this.eventsService.getAllEvents()) {
+      entitiesIds.push(String(_id))
+    }
+    return entitiesIds
+  }
+
+  private getAllReports = async () => {
+    const entitiesIds: string[] = []
+
+    for await (const { _id } of this.reportsService.getAllReports()) {
+      entitiesIds.push(String(_id))
+    }
+    return entitiesIds
+  }
+
+  private getAllProceedings = async () => {
+    const entitiesIds: string[] = []
+
+    for await (const { _id } of this.proceedingsService.getAllProceedings()) {
       entitiesIds.push(String(_id))
     }
     return entitiesIds

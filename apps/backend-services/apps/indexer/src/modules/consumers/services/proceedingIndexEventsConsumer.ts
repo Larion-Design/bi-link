@@ -1,24 +1,24 @@
 import { OnQueueActive, OnQueueCompleted, OnQueueFailed, Process, Processor } from '@nestjs/bull'
 import { Logger } from '@nestjs/common'
 import { Job } from 'bull'
+import { ProceedingsService } from '@app/models/services/proceedingsService'
 import {
   EVENT_CREATED,
   EVENT_UPDATED,
   FileParentEntity,
-  PropertyEventInfo,
+  ProceedingEventInfo,
 } from '@app/scheduler-module'
-import { QUEUE_PROPERTIES } from '../../producers/constants'
+import { ProceedingsIndexerService } from '../../indexer/services/proceedingsIndexerService'
+import { QUEUE_PROCEEDINGS } from '../../producers/constants'
 import { FileEventDispatcherService } from '../../producers/services/fileEventDispatcherService'
-import { PropertiesService } from '@app/models/services/propertiesService'
-import { PropertiesIndexerService } from '../../indexer/services'
 
-@Processor(QUEUE_PROPERTIES)
-export class PropertyIndexEventsConsumer {
-  private readonly logger = new Logger(PropertyIndexEventsConsumer.name)
+@Processor(QUEUE_PROCEEDINGS)
+export class ProceedingIndexEventsConsumer {
+  private readonly logger = new Logger(ProceedingIndexEventsConsumer.name)
 
   constructor(
-    private readonly propertiesService: PropertiesService,
-    private readonly propertiesIndexerService: PropertiesIndexerService,
+    private readonly proceedingsService: ProceedingsService,
+    private readonly proceedingsIndexerService: ProceedingsIndexerService,
     private readonly fileEventDispatcherService: FileEventDispatcherService,
   ) {}
 
@@ -38,14 +38,14 @@ export class PropertyIndexEventsConsumer {
   }
 
   @Process(EVENT_CREATED)
-  async propertyCreated(job: Job<PropertyEventInfo>) {
+  async proceedingCreated(job: Job<ProceedingEventInfo>) {
     const {
-      data: { propertyId },
+      data: { proceedingId },
     } = job
 
     try {
-      if (await this.indexPropertyInfo(propertyId)) {
-        return job.moveToCompleted(propertyId)
+      if (await this.indexProceedingInfo(proceedingId)) {
+        return job.moveToCompleted(proceedingId)
       }
     } catch (error) {
       this.logger.error(error)
@@ -54,13 +54,13 @@ export class PropertyIndexEventsConsumer {
   }
 
   @Process(EVENT_UPDATED)
-  async propertyUpdated(job: Job<PropertyEventInfo>) {
+  async propertyUpdated(job: Job<ProceedingEventInfo>) {
     const {
-      data: { propertyId },
+      data: { proceedingId },
     } = job
 
     try {
-      if (await this.indexPropertyInfo(propertyId)) {
+      if (await this.indexProceedingInfo(proceedingId)) {
         return job.moveToCompleted()
       }
     } catch (error) {
@@ -69,10 +69,10 @@ export class PropertyIndexEventsConsumer {
     }
   }
 
-  private indexPropertyInfo = async (propertyId: string) => {
-    const property = await this.propertiesService.getProperty(propertyId, true)
-    const indexingSuccessful = await this.propertiesIndexerService.indexProperty(
-      propertyId,
+  private indexProceedingInfo = async (proceedingId: string) => {
+    const property = await this.proceedingsService.getProceeding(proceedingId, true)
+    const indexingSuccessful = await this.proceedingsIndexerService.indexProceeding(
+      proceedingId,
       property,
     )
 
@@ -81,8 +81,8 @@ export class PropertyIndexEventsConsumer {
 
       if (filesIds.length) {
         await this.fileEventDispatcherService.dispatchFilesUpdated(filesIds, {
-          type: FileParentEntity.PROPERTY,
-          id: propertyId,
+          type: FileParentEntity.PROCEEDING,
+          id: proceedingId,
         })
       }
       return true

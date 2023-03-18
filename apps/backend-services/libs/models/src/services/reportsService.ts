@@ -1,6 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common'
 import { InjectModel } from '@nestjs/mongoose'
-import { Model, ProjectionType } from 'mongoose'
+import { Model, ProjectionFields, ProjectionType } from 'mongoose'
 import { ReportDocument, ReportModel } from '@app/models/models/reports/reportModel'
 import { EntityInfo } from '@app/rpc/constants'
 
@@ -71,6 +71,12 @@ export class ReportsService {
       )
     } catch (e) {
       this.logger.error(e)
+    }
+  }
+
+  async *getAllReports(fields: ProjectionFields<ReportDocument> = { _id: 1 }) {
+    for await (const model of this.reportModel.find({}, fields)) {
+      yield model
     }
   }
 }

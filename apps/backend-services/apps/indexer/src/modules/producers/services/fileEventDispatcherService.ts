@@ -17,11 +17,9 @@ export class FileEventDispatcherService {
     void this.queue.empty()
   }
 
-  dispatchFileCreated = async (eventInfo: FileEventInfo) =>
-    this.publishJob(EVENT_CREATED, eventInfo)
+  dispatchFileCreated = async (fileId: string) => this.publishJob(EVENT_CREATED, { fileId })
 
-  dispatchFileUpdated = async (eventInfo: FileEventInfo) =>
-    this.publishJob(EVENT_UPDATED, eventInfo)
+  dispatchFileUpdated = async (fileId: string) => this.publishJob(EVENT_UPDATED, { fileId })
 
   dispatchFilesUpdated = async (filesIds: string[], linkedEntity?: FileLinkedEntity) =>
     this.queue.addBulk(

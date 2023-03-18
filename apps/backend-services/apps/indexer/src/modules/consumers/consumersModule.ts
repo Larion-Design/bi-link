@@ -5,6 +5,7 @@ import { CompanyIndexEventsConsumer } from './services/companyIndexEventsConsume
 import { FileIndexEventsConsumer } from './services/fileIndexEventsConsumer'
 import { EventIndexEventsConsumer } from './services/eventIndexEventsConsumer'
 import { ProducersModule } from '../producers/producersModule'
+import { ProceedingIndexEventsConsumer } from './services/proceedingIndexEventsConsumer'
 import { PropertyIndexEventsConsumer } from './services/propertyIndexEventsConsumer'
 
 @Module({
@@ -15,6 +16,7 @@ import { PropertyIndexEventsConsumer } from './services/propertyIndexEventsConsu
     FileIndexEventsConsumer,
     EventIndexEventsConsumer,
     PropertyIndexEventsConsumer,
+    ProceedingIndexEventsConsumer,
   ],
 })
 export class ConsumersModule {}
