@@ -47,6 +47,9 @@ export enum RelationshipLabel {
   BRANCH_AT = 'BRANCH_AT',
   OCCURED_AT = 'OCCURED_AT',
   LOCATED_AT = 'LOCATED_AT',
+  INVOLVED_AS = 'INVOLVED_AS',
+  REPORTED = 'REPORTED',
+  MENTIONED = 'MENTIONED',
 }
 
 export enum EntityLabel {
@@ -56,6 +59,8 @@ export enum EntityLabel {
   FILE = 'FILE',
   PROPERTY = 'PROPERTY',
   LOCATION = 'LOCATION',
+  PROCEEDING = 'PROCEEDING',
+  REPORT = 'REPORT',
 }
 
 export type RelationshipMetadata = {

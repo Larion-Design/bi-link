@@ -1,15 +1,19 @@
-import { CompaniesService } from '@app/models/services/companiesService'
-import { EventsService } from '@app/models/services/eventsService'
-import { PersonsService } from '@app/models/services/personsService'
-import { PropertiesService } from '@app/models/services/propertiesService'
 import { Controller, Logger } from '@nestjs/common'
 import { EventPattern, Payload } from '@nestjs/microservices'
 import { EntityInfo, MICROSERVICES } from '@app/rpc/constants'
 import { EntityType } from 'defs'
+import { ReportsService } from '@app/models'
+import { CompaniesService } from '@app/models/services/companiesService'
+import { EventsService } from '@app/models/services/eventsService'
+import { PersonsService } from '@app/models/services/personsService'
+import { ProceedingsService } from '@app/models/services/proceedingsService'
+import { PropertiesService } from '@app/models/services/propertiesService'
 import { CompanyDispatcherService } from '../producers/services/companyDispatcherService'
 import { EventDispatcherService } from '../producers/services/eventDispatcherService'
 import { PersonDispatcherService } from '../producers/services/personDispatcherService'
+import { ProceedingDispatcherService } from '../producers/services/proceedingDispatcherService'
 import { PropertyDispatcherService } from '../producers/services/propertyDispatcherService'
+import { ReportDispatcherService } from '../producers/services/reportDispatcherService'
 
 @Controller()
 export class EntityEventsController {
@@ -20,11 +24,15 @@ export class EntityEventsController {
     private readonly companyEventDispatcherService: CompanyDispatcherService,
     private readonly propertyEventDispatcherService: PropertyDispatcherService,
     private readonly eventDispatcherService: EventDispatcherService,
+    private readonly reportDispatcherService: ReportDispatcherService,
+    private readonly proceedingDispatcherService: ProceedingDispatcherService,
 
     private readonly personsService: PersonsService,
     private readonly companiesService: CompaniesService,
     private readonly propertiesService: PropertiesService,
     private readonly eventsService: EventsService,
+    private readonly reportsService: ReportsService,
+    private readonly proceedingsService: ProceedingsService,
   ) {}
 
   @EventPattern(MICROSERVICES.ENTITY_EVENTS.entityCreated)
@@ -95,6 +103,28 @@ export class EntityEventsController {
         }
         break
       }
+      case 'REPORT': {
+        const entitiesIds = await this.getAllReports()
+
+        if (entitiesIds.length) {
+          this.logger.debug(`Refreshing ${entitiesIds.length} reports in graph`)
+          return this.reportDispatcherService.dispatchReportsUpdated(entitiesIds)
+        } else {
+          this.logger.debug(`No reports to refresh in graph`)
+        }
+        break
+      }
+      case 'PROCEEDING': {
+        const entitiesIds = await this.getAllProceedings()
+
+        if (entitiesIds.length) {
+          this.logger.debug(`Refreshing ${entitiesIds.length} proceedings in graph`)
+          return this.proceedingDispatcherService.dispatchProceedingsUpdated(entitiesIds)
+        } else {
+          this.logger.debug(`No proceedings to refresh in graph`)
+        }
+        break
+      }
     }
   }
 
@@ -111,6 +141,12 @@ export class EntityEventsController {
       }
       case 'PROPERTY': {
         return this.propertyEventDispatcherService.dispatchPropertyUpdated(entityId)
+      }
+      case 'REPORT': {
+        return this.reportDispatcherService.dispatchReportUpdated(entityId)
+      }
+      case 'PROCEEDING': {
+        return this.proceedingDispatcherService.dispatchProceedingUpdated(entityId)
       }
     }
   }
@@ -146,6 +182,24 @@ export class EntityEventsController {
     const entitiesIds: string[] = []
 
     for await (const { _id } of this.eventsService.getAllEvents()) {
+      entitiesIds.push(String(_id))
+    }
+    return entitiesIds
+  }
+
+  private getAllReports = async () => {
+    const entitiesIds: string[] = []
+
+    for await (const { _id } of this.reportsService.getAllReports()) {
+      entitiesIds.push(String(_id))
+    }
+    return entitiesIds
+  }
+
+  private getAllProceedings = async () => {
+    const entitiesIds: string[] = []
+
+    for await (const { _id } of this.proceedingsService.getAllProceedings()) {
       entitiesIds.push(String(_id))
     }
     return entitiesIds

@@ -1,6 +1,10 @@
 import { Injectable, Logger } from '@nestjs/common'
 import { InjectModel } from '@nestjs/mongoose'
-import { Model, ProjectionFields, ProjectionType } from 'mongoose'
+import { Model, ProjectionFields, ProjectionType, Query } from 'mongoose'
+import { EventDocument, EventModel } from '@app/models/models/event/eventModel'
+import { PersonDocument, PersonModel } from '@app/models/models/person/personModel'
+import { CompanyDocument, CompanyModel } from '@app/models/models/company/companyModel'
+import { PropertyDocument, PropertyModel } from '@app/models/models/property/propertyModel'
 import { ReportDocument, ReportModel } from '@app/models/models/reports/reportModel'
 import { EntityInfo } from '@app/rpc/constants'
 
@@ -8,7 +12,13 @@ import { EntityInfo } from '@app/rpc/constants'
 export class ReportsService {
   private readonly logger = new Logger(ReportsService.name)
 
-  constructor(@InjectModel(ReportModel.name) private readonly reportModel: Model<ReportDocument>) {}
+  constructor(
+    @InjectModel(ReportModel.name) private readonly reportModel: Model<ReportDocument>,
+    @InjectModel(EventModel.name) private readonly eventModel: Model<EventDocument>,
+    @InjectModel(PersonModel.name) private readonly personModel: Model<PersonDocument>,
+    @InjectModel(PropertyModel.name) private readonly propertyModel: Model<PropertyDocument>,
+    @InjectModel(CompanyModel.name) private readonly companyModel: Model<CompanyDocument>,
+  ) {}
 
   createReport = async (reportModel: ReportModel) => {
     try {
@@ -26,9 +36,10 @@ export class ReportsService {
     }
   }
 
-  getReport = async (reportId: string) => {
+  getReport = async (reportId: string, fetchLinkedEntities: boolean) => {
     try {
-      return this.reportModel.findById(reportId)
+      const query = this.reportModel.findById(reportId)
+      return (fetchLinkedEntities ? this.getLinkedEntities(query) : query).exec()
     } catch (e) {
       this.logger.error(e)
     }
@@ -79,4 +90,11 @@ export class ReportsService {
       yield model
     }
   }
+
+  private getLinkedEntities = (query: Query<any, ReportDocument>) =>
+    query
+      .populate({ path: 'person', model: this.personModel })
+      .populate({ path: 'company', model: this.companyModel })
+      .populate({ path: 'property', model: this.propertyModel })
+      .populate({ path: 'event', model: this.eventModel })
 }

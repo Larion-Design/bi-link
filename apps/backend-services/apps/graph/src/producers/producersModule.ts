@@ -6,13 +6,16 @@ import {
   QUEUE_GRAPH_EVENTS,
   QUEUE_GRAPH_FILES,
   QUEUE_GRAPH_PERSONS,
+  QUEUE_GRAPH_PROCEEDINGS,
   QUEUE_GRAPH_PROPERTIES,
   QUEUE_GRAPH_REPORTS,
 } from './constants'
 import { CompanyDispatcherService } from './services/companyDispatcherService'
 import { EventDispatcherService } from './services/eventDispatcherService'
 import { PersonDispatcherService } from './services/personDispatcherService'
+import { ProceedingDispatcherService } from './services/proceedingDispatcherService'
 import { PropertyDispatcherService } from './services/propertyDispatcherService'
+import { ReportDispatcherService } from './services/reportDispatcherService'
 
 @Module({
   imports: [
@@ -24,6 +27,7 @@ import { PropertyDispatcherService } from './services/propertyDispatcherService'
       { name: QUEUE_GRAPH_EVENTS },
       { name: QUEUE_GRAPH_REPORTS },
       { name: QUEUE_GRAPH_FILES },
+      { name: QUEUE_GRAPH_PROCEEDINGS },
     ),
   ],
   providers: [
@@ -31,12 +35,16 @@ import { PropertyDispatcherService } from './services/propertyDispatcherService'
     CompanyDispatcherService,
     PropertyDispatcherService,
     EventDispatcherService,
+    ProceedingDispatcherService,
+    ReportDispatcherService,
   ],
   exports: [
     PersonDispatcherService,
     CompanyDispatcherService,
     PropertyDispatcherService,
     EventDispatcherService,
+    ProceedingDispatcherService,
+    ReportDispatcherService,
   ],
 })
 export class ProducersModule {}

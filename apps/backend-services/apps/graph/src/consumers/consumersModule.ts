@@ -5,11 +5,13 @@ import { ProducersModule } from '../producers/producersModule'
 import { CompanyEventConsumer } from './companyEventConsumer'
 import { EventConsumer } from './eventConsumer'
 import { PersonEventConsumer } from './personEventConsumer'
+import { ProceedingEventConsumer } from './proceedingEventConsumer'
 import { PropertyEventConsumer } from './propertyEventConsumer'
 import { CompanyGraphService } from './services/companyGraphService'
 import { EventGraphService } from './services/eventGraphService'
 import { LocationGraphService } from './services/locationGraphService'
 import { PersonGraphService } from './services/personGraphService'
+import { ProceedingGraphService } from './services/proceedingGraphService'
 import { PropertyGraphService } from './services/propertyGraphService'
 
 @Module({
@@ -19,12 +21,14 @@ import { PropertyGraphService } from './services/propertyGraphService'
     PropertyEventConsumer,
     EventConsumer,
     CompanyEventConsumer,
+    ProceedingEventConsumer,
 
     PersonGraphService,
     CompanyGraphService,
     EventGraphService,
     PropertyGraphService,
     LocationGraphService,
+    ProceedingGraphService,
   ],
 })
 export class ConsumersModule {}
