@@ -19,6 +19,6 @@ export class GetReport {
   @Query(() => Report)
   @UseGuards(FirebaseAuthGuard)
   async getReport(@Args() { id }: Params) {
-    return this.reportsService.getReport(id)
+    return this.reportsService.getReport(id, true)
   }
 }

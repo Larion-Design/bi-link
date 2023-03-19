@@ -44,7 +44,7 @@ export class LocationGraphService {
     try {
       const map = new Map<string, RelationshipMetadata>()
       map.set(locationId, { _confirmed: true })
-      await this.graphService.replaceRelationships(entityId, map, relationshipType)
+      return this.graphService.replaceRelationships(entityId, map, relationshipType)
     } catch (e) {
       this.logger.error(e)
     }
@@ -58,7 +58,7 @@ export class LocationGraphService {
     try {
       const map = new Map<string, RelationshipMetadata>()
       locationsIds.forEach((locationId) => map.set(locationId, { _confirmed: true }))
-      await this.graphService.replaceRelationships(entityId, map, relationshipType)
+      return this.graphService.replaceRelationships(entityId, map, relationshipType)
     } catch (e) {
       this.logger.error(e)
     }

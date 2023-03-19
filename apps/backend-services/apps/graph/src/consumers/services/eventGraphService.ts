@@ -1,11 +1,11 @@
+import { Injectable, Logger } from '@nestjs/common'
+import { formatDateTime } from 'tools'
+import { EntityLabel, RelationshipLabel } from 'defs'
 import { EventDocument } from '@app/models/models/event/eventModel'
 import { EventsService } from '@app/models/services/eventsService'
 import { GraphService } from '@app/graph-module/graphService'
 import { EventGraphNode } from '@app/definitions/graph/event'
 import { PartyGraphRelationship } from '@app/definitions/graph/party'
-import { Injectable, Logger } from '@nestjs/common'
-import { format } from 'date-fns'
-import { EntityLabel, RelationshipLabel } from 'defs'
 import { LocationGraphService } from './locationGraphService'
 
 @Injectable()
@@ -25,7 +25,7 @@ export class EventGraphService {
       await this.graphService.upsertEntity<EventGraphNode>(
         {
           _id: eventId,
-          date: format(eventDocument.date, 'yyyy-MM-dd HH:mm:ss'),
+          date: formatDateTime(eventDocument.date),
         },
         EntityLabel.EVENT,
       )

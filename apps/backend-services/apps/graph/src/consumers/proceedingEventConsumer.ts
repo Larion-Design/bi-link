@@ -38,9 +38,9 @@ export class ProceedingEventConsumer {
 
     try {
       await this.proceedingGraphService.upsertProceedingNode(proceedingId)
-      return job.moveToCompleted()
+      return {}
     } catch (error) {
-      return job.moveToFailed(error as { message: string })
+      await job.moveToFailed(error as { message: string })
     }
   }
 
@@ -52,10 +52,10 @@ export class ProceedingEventConsumer {
 
     try {
       await this.proceedingGraphService.upsertProceedingNode(proceedingId)
-      return job.moveToCompleted()
+      return {}
     } catch (error) {
       this.logger.error(error)
-      return job.moveToFailed(error as { message: string })
+      await job.moveToFailed(error as { message: string })
     }
   }
 }

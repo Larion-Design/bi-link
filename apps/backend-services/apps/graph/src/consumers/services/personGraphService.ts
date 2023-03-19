@@ -64,33 +64,33 @@ export class PersonGraphService {
     }
   }
 
-  private upsertPersonLocations = async (personDocument: PersonDocument) => {
+  private upsertPersonLocations = async ({ _id, birthPlace, homeAddress }: PersonDocument) => {
     try {
       const locations: LocationDocument[] = []
 
-      if (personDocument.homeAddress) {
-        locations.push(personDocument.homeAddress)
+      if (homeAddress) {
+        locations.push(homeAddress)
       }
-      if (personDocument.birthPlace) {
-        locations.push(personDocument.birthPlace)
+      if (birthPlace) {
+        locations.push(birthPlace)
       }
 
       if (locations.length) {
         await this.locationGraphservice.upsertLocationNodes(locations)
 
-        const personId = String(personDocument._id)
+        const personId = String(_id)
 
-        if (personDocument.homeAddress) {
+        if (homeAddress) {
           await this.locationGraphservice.upsertLocationRelationship(
-            personDocument.homeAddress.locationId,
+            homeAddress.locationId,
             personId,
             RelationshipLabel.LIVES_AT,
           )
         }
 
-        if (personDocument.birthPlace) {
+        if (birthPlace) {
           await this.locationGraphservice.upsertLocationRelationship(
-            personDocument.birthPlace.locationId,
+            birthPlace.locationId,
             personId,
             RelationshipLabel.BORN_IN,
           )

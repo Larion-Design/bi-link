@@ -29,7 +29,7 @@ export class ProceedingGraphService {
         },
         EntityLabel.PROCEEDING,
       )
-      await this.upsertProceedingParties(proceedingDocument)
+      return this.upsertProceedingParties(proceedingDocument)
     } catch (e) {
       this.logger.error(e)
     }
@@ -45,7 +45,7 @@ export class ProceedingGraphService {
       }),
     )
 
-    await this.graphService.replaceRelationships(
+    return this.graphService.replaceRelationships(
       String(proceedingDocument._id),
       map,
       RelationshipLabel.INVOLVED_AS,

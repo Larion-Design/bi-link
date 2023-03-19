@@ -6,6 +6,7 @@ import { PropertiesService } from '@app/models/services/propertiesService'
 import { GraphService } from '@app/graph-module/graphService'
 import { PropertyGraphNode } from '@app/definitions/graph/property'
 import { PropertyOwnerGraphRelationship } from '@app/definitions/graph/propertyOwner'
+import { formatDate } from 'tools'
 import { LocationGraphService } from './locationGraphService'
 
 @Injectable()
@@ -15,7 +16,7 @@ export class PropertyGraphService {
   constructor(
     private readonly propertiesService: PropertiesService,
     private readonly graphService: GraphService,
-    private readonly locationGraphservice: LocationGraphService,
+    private readonly locationGraphService: LocationGraphService,
   ) {}
 
   upsertPropertyNode = async (propertyId: string) => {
@@ -49,33 +50,27 @@ export class PropertyGraphService {
     }
   }
 
-  private upsertPropertyOwners = async (propertyDocument: PropertyDocument) => {
+  private upsertPropertyOwners = async ({ _id, owners }: PropertyDocument) => {
     try {
-      if (propertyDocument.owners.length) {
-        const map = new Map<string, PropertyOwnerGraphRelationship>()
+      const map = new Map<string, PropertyOwnerGraphRelationship>()
 
-        propertyDocument.owners.forEach(
-          ({ startDate, endDate, company, person, _confirmed, vehicleOwnerInfo }) => {
-            const owner: PropertyOwnerGraphRelationship = { _confirmed }
+      owners.forEach(({ startDate, endDate, company, person, _confirmed, vehicleOwnerInfo }) => {
+        const owner: PropertyOwnerGraphRelationship = { _confirmed }
 
-            if (startDate) {
-              owner.startDate = format(new Date(startDate), 'yyyy-MM-dd')
-            }
-            if (endDate) {
-              owner.endDate = format(new Date(endDate), 'yyyy-MM-dd')
-            }
-            if (vehicleOwnerInfo) {
-              owner.plateNumbers = vehicleOwnerInfo.plateNumbers
-            }
-            map.set(String(person?._id ?? company?._id), owner)
-          },
-        )
+        if (startDate) {
+          owner.startDate = formatDate(startDate)
+        }
+        if (endDate) {
+          owner.endDate = formatDate(endDate)
+        }
+        if (vehicleOwnerInfo) {
+          owner.plateNumbers = vehicleOwnerInfo.plateNumbers
+        }
+        map.set(String(person?._id ?? company?._id), owner)
+      })
 
-        await this.graphService.replaceRelationships(
-          String(propertyDocument._id),
-          map,
-          RelationshipLabel.OWNER,
-        )
+      if (map.size) {
+        return this.graphService.replaceRelationships(String(_id), map, RelationshipLabel.OWNER)
       }
     } catch (e) {
       this.logger.error(e)
@@ -87,8 +82,8 @@ export class PropertyGraphService {
       const locationDocument = realEstateInfo?.location
 
       if (locationDocument) {
-        await this.locationGraphservice.upsertLocationNode(locationDocument)
-        await this.locationGraphservice.upsertLocationRelationship(
+        await this.locationGraphService.upsertLocationNode(locationDocument)
+        await this.locationGraphService.upsertLocationRelationship(
           locationDocument.locationId,
           String(_id),
           RelationshipLabel.LOCATED_AT,

@@ -1,8 +1,8 @@
+import { Injectable, Logger } from '@nestjs/common'
 import { CompanyDocument } from '@app/models/models/company/companyModel'
 import { CompaniesService } from '@app/models/services/companiesService'
 import { GraphService } from '@app/graph-module/graphService'
 import { AssociateGraphRelationship, CompanyGraphNode } from '@app/definitions/graph'
-import { Injectable, Logger } from '@nestjs/common'
 import { EntityLabel, RelationshipLabel } from 'defs'
 import { LocationGraphService } from './locationGraphService'
 
@@ -68,33 +68,39 @@ export class CompanyGraphService {
     }
   }
 
-  private upsertCompanyLocations = async (companyDocument: CompanyDocument) => {
-    const locations = new Set(companyDocument.locations)
+  private upsertCompanyLocations = async ({ _id, headquarters, locations }: CompanyDocument) => {
+    const companyLocations = new Set(locations)
 
-    if (companyDocument.headquarters) {
-      locations.add(companyDocument.headquarters)
+    if (headquarters) {
+      companyLocations.add(headquarters)
     }
 
-    if (locations.size) {
-      await this.locationGraphservice.upsertLocationNodes(Array.from(locations))
+    if (companyLocations.size) {
+      await this.locationGraphservice.upsertLocationNodes(Array.from(companyLocations))
 
-      const companyId = String(companyDocument._id)
+      const companyId = String(_id)
+      const relationshipsQueries = []
 
-      if (companyDocument.headquarters) {
-        await this.locationGraphservice.upsertLocationRelationship(
-          companyDocument.headquarters.locationId,
-          companyId,
-          RelationshipLabel.HQ_AT,
+      if (headquarters) {
+        relationshipsQueries.push(
+          this.locationGraphservice.upsertLocationRelationship(
+            headquarters.locationId,
+            companyId,
+            RelationshipLabel.HQ_AT,
+          ),
         )
       }
 
-      if (companyDocument.locations.length) {
-        await this.locationGraphservice.upsertLocationsRelationships(
-          companyId,
-          companyDocument.locations.map(({ locationId }) => locationId),
-          RelationshipLabel.BRANCH_AT,
+      if (locations.length) {
+        relationshipsQueries.push(
+          this.locationGraphservice.upsertLocationsRelationships(
+            companyId,
+            locations.map(({ locationId }) => locationId),
+            RelationshipLabel.BRANCH_AT,
+          ),
         )
       }
+      await Promise.allSettled(relationshipsQueries)
     }
   }
 }

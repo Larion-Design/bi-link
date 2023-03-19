@@ -19,7 +19,7 @@ export class ReportGraphService {
       const reportDocument = await this.reportsService.getReport(reportId, true)
 
       if (!reportDocument.isTemplate) {
-        await this.graphService.upsertEntity<ReportGraphNode>(
+        return this.graphService.upsertEntity<ReportGraphNode>(
           {
             _id: reportId,
             name: reportDocument.name,
@@ -43,7 +43,7 @@ export class ReportGraphService {
     try {
       const map = new Map<string, ReportTargetEntityRelationship>()
       map.set(company?._id ?? event?._id ?? person?._id ?? property?._id, { _confirmed: true })
-      await this.graphService.replaceRelationships(String(_id), map, RelationshipLabel.REPORTED)
+      return this.graphService.replaceRelationships(String(_id), map, RelationshipLabel.REPORTED)
     } catch (e) {
       this.logger.error(e)
     }
