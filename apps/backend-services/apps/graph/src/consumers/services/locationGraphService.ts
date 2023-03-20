@@ -1,9 +1,10 @@
+import { Injectable, Logger } from '@nestjs/common'
+import { EntityLabel, RelationshipLabel, RelationshipMetadata } from 'defs'
+import { formatAddress } from 'tools'
 import { LocationDocument } from '@app/models/models/locationModel'
 import { LocationsService } from '@app/models/services/locationsService'
 import { GraphService } from '@app/graph-module/graphService'
 import { LocationGraphNode } from '@app/definitions/graph/location'
-import { Injectable, Logger } from '@nestjs/common'
-import { EntityLabel, RelationshipLabel, RelationshipMetadata } from 'defs'
 
 @Injectable()
 export class LocationGraphService {
@@ -64,23 +65,10 @@ export class LocationGraphService {
     }
   }
 
-  private transformAddress = ({
-    street,
-    number,
-    building,
-    door,
-    locality,
-    county,
-    country,
-    zipCode,
-    otherInfo,
-  }: LocationDocument) =>
-    [street, number, building, door, locality, county, country, zipCode, otherInfo].join(' ').trim()
-
   private createLocationData = (locationDocument: LocationDocument): LocationGraphNode => {
     const locationData: LocationGraphNode = {
       _id: locationDocument.locationId,
-      address: this.transformAddress(locationDocument),
+      address: formatAddress(locationDocument),
     }
 
     const {

@@ -11,13 +11,13 @@ import { useDebounce } from 'usehooks-ts'
 import { DashboardPage } from '../../../components/page/DashboardPage'
 import { routes } from '../../../router/routes'
 import { PaginationParams } from '../../../graphql/shared/types/paginationParams'
-import { useSnackbar } from 'notistack'
+import { useNotification } from '@frontend/utils/hooks/useNotification'
 import { EventsTable } from './eventsTable'
 import { searchEventsRequest } from '../../../graphql/events/queries/searchEvents'
 
 export const EventsList: React.FunctionComponent = () => {
   const navigate = useNavigate()
-  const { enqueueSnackbar } = useSnackbar()
+  const showNotification = useNotification()
   const [fetchEvents, { data, error, loading }] = searchEventsRequest()
 
   const [paginationParams, setPaginationParams] = useState<PaginationParams>({
@@ -59,14 +59,12 @@ export const EventsList: React.FunctionComponent = () => {
 
   useEffect(() => {
     if (error?.message) {
-      enqueueSnackbar('O eroare a intervenit in timpul comunicarii cu serverul.', {
-        variant: 'error',
-      })
+      showNotification('ServerError', 'error')
     }
   }, [error?.message])
 
   return (
-    <DashboardPage title={'Evente'}>
+    <DashboardPage title={'Evenimente'}>
       <Grid container spacing={2} sx={{ width: 1, p: 4 }}>
         <Grid item xs={12} mb={4}>
           <Box

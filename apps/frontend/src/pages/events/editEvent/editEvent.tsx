@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
-import { getEventRequest } from '../../../graphql/events/queries/getEvent'
 import { useNavigate, useParams } from 'react-router-dom'
-import { useSnackbar } from 'notistack'
+import { useNotification } from '@frontend/utils/hooks/useNotification'
+import { getEventRequest } from '../../../graphql/events/queries/getEvent'
 import { DashboardPage } from '../../../components/page/DashboardPage'
 import { routes } from '../../../router/routes'
 import { Loader } from '@frontend/components/loader'
@@ -15,14 +15,11 @@ export const EditEvent: React.FunctionComponent = () => {
     getEventRequest()
   const [updateEvent, { data: updateData, loading: updateLoading, error: updateError }] =
     updateEventRequest()
-  const { enqueueSnackbar } = useSnackbar()
+  const showNotification = useNotification()
 
   useEffect(() => {
     if (updateData?.updateEvent) {
-      enqueueSnackbar('Eventul a fost actualizat.', {
-        variant: 'success',
-        preventDuplicate: true,
-      })
+      showNotification('Evenimentul a fost actualizat.', 'success')
       navigate(routes.events)
     }
   }, [updateData?.updateEvent])
@@ -39,9 +36,7 @@ export const EditEvent: React.FunctionComponent = () => {
 
   useEffect(() => {
     if (fetchError?.message || updateError?.message) {
-      enqueueSnackbar('O eroare a intervenit in timpul comunicarii cu serverul.', {
-        variant: 'error',
-      })
+      showNotification('ServerError', 'error')
     }
   }, [fetchError?.message, updateError?.message])
 
@@ -55,11 +50,7 @@ export const EditEvent: React.FunctionComponent = () => {
         readonly={true}
         onSubmit={(eventInfo) => {
           if (!updateLoading) {
-            void updateEvent({
-              variables: {
-                data: eventInfo,
-              },
-            })
+            void updateEvent({ variables: { data: eventInfo } })
           }
         }}
       />

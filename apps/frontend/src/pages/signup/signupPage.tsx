@@ -5,7 +5,7 @@ import Container from '@mui/material/Container'
 import { Navigate } from 'react-router-dom'
 import { routes } from '../../router/routes'
 import { useAuth } from '../../utils/auth'
-import { Loader } from '../../components/loader/loader'
+import { Loader } from '@frontend/components/loader'
 import { SignupForm } from '../../components/form/signupForm'
 import { getUserRegisteredRequest } from '../../graphql/users/mutations/userRegistered'
 

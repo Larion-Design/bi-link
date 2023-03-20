@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'
+import OpenInNewOutlinedIcon from '@mui/icons-material/OpenInNewOutlined'
 import Box from '@mui/material/Box'
 import {
   DataGrid,
@@ -8,11 +8,11 @@ import {
   GridRowParams,
 } from '@mui/x-data-grid'
 import { GridActionsColDef } from '@mui/x-data-grid/models/colDef/gridColDef'
-import OpenInNewOutlinedIcon from '@mui/icons-material/OpenInNewOutlined'
-import { generatePath, useNavigate } from 'react-router-dom'
-import { routes } from '../../../router/routes'
-import { PaginationParams } from '../../../graphql/shared/types/paginationParams'
 import { CompaniesSuggestions, CompanyListRecord } from 'defs'
+import React, { useMemo } from 'react'
+import { generatePath, useNavigate } from 'react-router-dom'
+import { PaginationParams } from '../../../graphql/shared/types/paginationParams'
+import { routes } from '../../../router/routes'
 
 type Props = {
   paginationParams: PaginationParams
