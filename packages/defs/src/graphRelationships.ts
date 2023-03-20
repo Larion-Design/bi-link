@@ -2,7 +2,9 @@ import { CompanyAssociateRelationship, CompanyListRecord } from './company'
 import { EventListRecord, EventPartyRelationship } from './event'
 import { EntityLocationRelationship, LocationAPIOutput } from './geolocation'
 import { PersonalRelationship, PersonListRecordWithImage } from './person'
+import { ProceedingAPIOutput, ProceedingEntityRelationship } from './proceeding'
 import { PropertyListRecord, PropertyOwnerRelationship } from './property'
+import { ReportAPIOutput, ReportedEntityRelationship } from './reports'
 
 export interface GraphNode {
   _id: string
@@ -20,6 +22,8 @@ export interface GraphRelationships {
   personsBirthPlace: EntityLocationRelationship[]
   personsHomeAddress: EntityLocationRelationship[]
   eventsOccurrencePlace: EntityLocationRelationship[]
+  entitiesReported: ReportedEntityRelationship[]
+  entitiesInvolvedInProceeding: ProceedingEntityRelationship[]
 }
 
 export interface GraphEntities {
@@ -28,6 +32,8 @@ export interface GraphEntities {
   properties: PropertyListRecord[]
   events: EventListRecord[]
   locations: LocationAPIOutput[]
+  proceedings: ProceedingAPIOutput[]
+  reports: ReportAPIOutput[]
 }
 
 export interface Graph {

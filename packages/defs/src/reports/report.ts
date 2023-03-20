@@ -1,4 +1,5 @@
 import { Company } from '../company'
+import { NodesRelationship } from '../graphRelationships'
 import { Person } from '../person'
 import { Event } from '../event'
 import { Property } from '../property'
@@ -37,3 +38,5 @@ export interface ReportAPIInput extends Omit<ReportAPI, '_id'> {
 export interface ReportAPIOutput extends ReportAPI {
   sections: ReportSectionAPIOutput[]
 }
+
+export interface ReportedEntityRelationship extends NodesRelationship {}

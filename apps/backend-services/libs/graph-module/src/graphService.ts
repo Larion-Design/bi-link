@@ -192,6 +192,8 @@ export class GraphService {
       propertiesRelationships: [],
       personalRelationships: [],
       propertiesLocation: [],
+      entitiesReported: [],
+      entitiesInvolvedInProceeding: [],
     }
 
     const entities: Record<keyof GraphEntities, Set<string>> = {
@@ -200,6 +202,8 @@ export class GraphService {
       properties: new Set(),
       events: new Set(),
       locations: new Set(),
+      proceedings: new Set(),
+      reports: new Set(),
     }
 
     const registerEntity = ({ _id: entityId, _type: entityType }: GraphNode) => {
@@ -222,6 +226,14 @@ export class GraphService {
         }
         case EntityLabel.LOCATION: {
           entities.locations.add(entityId)
+          break
+        }
+        case EntityLabel.PROCEEDING: {
+          entities.proceedings.add(entityId)
+          break
+        }
+        case EntityLabel.REPORT: {
+          entities.reports.add(entityId)
           break
         }
       }
@@ -335,6 +347,34 @@ export class GraphService {
             })
             break
           }
+          case RelationshipLabel.INVOLVED_AS: {
+            relationships.entitiesInvolvedInProceeding.push({
+              startNode,
+              endNode,
+              involvedAs: String(properties.involvedAs),
+              _type: type as RelationshipLabel,
+              _confirmed: Boolean(properties._confirmed),
+            })
+            break
+          }
+          case RelationshipLabel.REPORTED: {
+            relationships.entitiesReported.push({
+              startNode,
+              endNode,
+              _type: type as RelationshipLabel,
+              _confirmed: Boolean(properties._confirmed),
+            })
+            break
+          }
+          case RelationshipLabel.OCCURED_AT: {
+            relationships.eventsOccurrencePlace.push({
+              startNode,
+              endNode,
+              _type: type as RelationshipLabel,
+              _confirmed: Boolean(properties._confirmed),
+            })
+            break
+          }
         }
       })
     })
@@ -347,6 +387,8 @@ export class GraphService {
         properties: Array.from(entities.properties),
         events: Array.from(entities.events),
         locations: Array.from(entities.locations),
+        proceedings: Array.from(entities.proceedings),
+        reports: Array.from(entities.reports),
       },
     }
   }
