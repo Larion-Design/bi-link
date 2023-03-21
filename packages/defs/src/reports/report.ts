@@ -40,3 +40,5 @@ export interface ReportAPIOutput extends ReportAPI {
 }
 
 export interface ReportedEntityRelationship extends NodesRelationship {}
+
+export interface ReportListRecord extends Pick<Report, '_id' | 'name' | 'type'> {}

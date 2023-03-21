@@ -1,7 +1,9 @@
+import { ReportsService } from '@app/models'
 import { CompaniesService } from '@app/models/services/companiesService'
 import { EventsService } from '@app/models/services/eventsService'
 import { LocationsService } from '@app/models/services/locationsService'
 import { PersonsService } from '@app/models/services/personsService'
+import { ProceedingsService } from '@app/models/services/proceedingsService'
 import { PropertiesService } from '@app/models/services/propertiesService'
 import { Args, ArgsType, Field, Int, Query, Resolver } from '@nestjs/graphql'
 import { UseGuards } from '@nestjs/common'
@@ -28,6 +30,8 @@ export class GetEntitiesGraph {
     private readonly propertiesService: PropertiesService,
     private readonly eventsService: EventsService,
     private readonly locationsService: LocationsService,
+    private readonly reportsService: ReportsService,
+    private readonly proceedingsService: ProceedingsService,
   ) {}
 
   @Query(() => EntitiesGraph)
@@ -35,7 +39,7 @@ export class GetEntitiesGraph {
   async getEntitiesGraph(@Args() { id, depth }: Params): Promise<Graph> {
     const {
       relationships,
-      entities: { persons, companies, properties, events, locations },
+      entities: { persons, companies, properties, events, locations, reports, proceedings },
     } = await this.graphService.getEntitiesGraph(id, depth)
 
     const [
@@ -44,12 +48,16 @@ export class GetEntitiesGraph {
       propertiesDocuments,
       eventsDocuments,
       locationsDocuments,
+      reportsDocuments,
+      proceedingsDocuments,
     ] = await Promise.all([
       this.personsService.getPersons(persons, true),
       this.companiesService.getCompanies(companies, false),
       this.propertiesService.getProperties(properties, false),
       this.eventsService.getEvents(events, false),
       this.locationsService.getLocations(locations),
+      this.reportsService.getReports(reports, false),
+      this.proceedingsService.getProceedings(proceedings, false),
     ])
 
     return {
@@ -60,6 +68,8 @@ export class GetEntitiesGraph {
         properties: propertiesDocuments,
         events: eventsDocuments,
         locations: locationsDocuments,
+        proceedings: proceedingsDocuments,
+        reports: reportsDocuments,
       },
     }
   }

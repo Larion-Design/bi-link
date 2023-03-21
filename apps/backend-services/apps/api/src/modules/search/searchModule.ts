@@ -8,6 +8,7 @@ import { SearchHistoryService } from './services/searchHistoryService'
 import { SearchCompaniesService } from './services/searchCompaniesService'
 import { FrequentCustomFieldsService } from './services/frequentCustomFieldsService'
 import { SearchHelperService } from './services/searchHelperService'
+import { SearchProceedingsService } from './services/searchProceedingsService'
 import { SearchVehiclesService } from './services/searchVehiclesService'
 import { SimilarEntitiesService } from './services/similarEntitiesService'
 import { SearchPropertiesService } from './services/searchPropertiesService'
@@ -34,6 +35,7 @@ import { SearchPropertiesService } from './services/searchPropertiesService'
     FrequentCustomFieldsService,
     SimilarEntitiesService,
     SearchFilesService,
+    SearchProceedingsService,
   ],
   exports: [
     SearchPersonsService,
@@ -45,6 +47,7 @@ import { SearchPropertiesService } from './services/searchPropertiesService'
     FrequentCustomFieldsService,
     SimilarEntitiesService,
     SearchFilesService,
+    SearchProceedingsService,
   ],
 })
 export class SearchModule {}

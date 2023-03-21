@@ -26,3 +26,11 @@ export interface ProceedingAPIInput extends Omit<ProceedingAPI, '_id'> {
 export interface ProceedingAPIOutput extends ProceedingAPI {
   files: FileAPIOutput[]
 }
+
+export interface ProceedingListRecord
+  extends Pick<Proceeding, '_id' | 'name' | 'type' | 'year' | 'fileNumber'> {}
+
+export interface ProceedingSuggestions {
+  total: number
+  records: ProceedingListRecord[]
+}

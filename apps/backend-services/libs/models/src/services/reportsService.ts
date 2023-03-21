@@ -45,6 +45,15 @@ export class ReportsService {
     }
   }
 
+  getReports = async (reportsIds: string[], fetchLinkedEntities: boolean) => {
+    try {
+      const query = this.reportModel.find({ _id: reportsIds })
+      return (fetchLinkedEntities ? this.getLinkedEntities(query) : query).exec()
+    } catch (e) {
+      this.logger.error(e)
+    }
+  }
+
   getEntityReports = async ({ entityId, entityType }: EntityInfo) => {
     try {
       const projection: ProjectionType<ReportDocument> = {

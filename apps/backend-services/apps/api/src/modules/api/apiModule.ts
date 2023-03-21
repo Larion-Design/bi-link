@@ -48,6 +48,7 @@ import { CreateProceeding } from './proceedings/mutations/createProceeding'
 import { UpdateProceeding } from './proceedings/mutations/updateProceeding'
 import { GetProceeding } from './proceedings/queries/getProceeding'
 import { GetProceedings } from './proceedings/queries/getProceedings'
+import { SearchProceedings } from './proceedings/queries/searchProceedings'
 import { ProceedingAPIService } from './proceedings/services/proceedingAPIService'
 import { CreateProperty } from './properties/mutations/createProperty'
 import { UpdateProperty } from './properties/mutations/updateProperty'
@@ -158,6 +159,7 @@ import { GetUsers } from './users/queries/getUsers'
     GetProceedings,
     CreateProceeding,
     UpdateProceeding,
+    SearchProceedings,
   ],
   controllers: [FileUploadController],
 })

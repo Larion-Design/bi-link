@@ -46,7 +46,7 @@ export class ProceedingsService {
   getProceedings = async (
     proceedingsIds: string[],
     fetchLinkedEntities: boolean,
-  ): Promise<ProceedingDocument> => {
+  ): Promise<ProceedingDocument[]> => {
     try {
       const query = this.proceedingModel.find({ _id: proceedingsIds })
       return (fetchLinkedEntities ? this.getLinkedEntities(query) : query).exec()

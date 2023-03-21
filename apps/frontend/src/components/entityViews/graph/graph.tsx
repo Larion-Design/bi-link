@@ -1,16 +1,28 @@
-import React, { PropsWithRef, useEffect, useRef, useState } from 'react'
+import React, { PropsWithRef, useEffect, useState } from 'react'
 import Box from '@mui/material/Box'
 import ELK, { ElkNode } from 'elkjs'
 import { useIntl } from 'react-intl'
 import { ConnectionLineType, Edge, Node, Position, ReactFlowProvider } from 'reactflow'
 import { relationshipsTypes } from '@frontend/components/form/person/constants'
-import { getLocationAddress } from '@frontend/utils/location'
-import { EntityLabel, EntityLocationRelationship, EntityType } from 'defs'
+import {
+  CompanyListRecord,
+  EntityLabel,
+  EntityLocationRelationship,
+  EntityType,
+  EventListRecord,
+  LocationAPIOutput,
+  PersonListRecordWithImage,
+  ProceedingListRecord,
+  PropertyListRecord,
+  ReportListRecord,
+} from 'defs'
+import { formatAddress } from 'tools'
 import { useElementSize } from 'usehooks-ts'
 import { v4 } from 'uuid'
 import { getEntitiesGraphRequest } from '../../../graphql/shared/queries/getEntitiesGraph'
 import { useNotification } from '../../../utils/hooks/useNotification'
 import { EntityGraph } from './entityGraph'
+import { Graph as GraphType } from 'defs'
 
 type Props = {
   id?: string
@@ -139,15 +151,31 @@ export const Graph: React.FunctionComponent<PropsWithRef<Props>> = ({
         personsHomeAddress,
         eventsOccurrencePlace,
         eventsParties,
+        entitiesInvolvedInProceeding,
+        entitiesReported,
       },
-      entities: { persons, companies, properties, events, locations },
+      entities: { persons, companies, properties, events, locations, reports, proceedings },
     } = data.getEntitiesGraph
+
+    type GraphEntityInfo = GraphType['entities'][keyof GraphType['entities']][number]
+
+    const entitiesInfo = new Map<string, GraphEntityInfo>()
+    const addEntityInfo = (entityInfo: GraphEntityInfo) =>
+      entitiesInfo.set(entityInfo._id, entityInfo)
+
+    persons.forEach(addEntityInfo)
+    companies.forEach(addEntityInfo)
+    properties.forEach(addEntityInfo)
+    events.forEach(addEntityInfo)
+    proceedings.forEach(addEntityInfo)
+    reports.forEach(addEntityInfo)
+    locations.forEach(addEntityInfo)
 
     const entityHandler = {
       [EntityLabel.PERSON]: (personId: string) => {
         if (nodesMap.has(personId)) return true
 
-        const personInfo = persons.find(({ _id }) => personId === _id)
+        const personInfo = entitiesInfo.get(personId) as PersonListRecordWithImage
 
         if (personInfo) {
           graphConfig.children.push({
@@ -168,7 +196,7 @@ export const Graph: React.FunctionComponent<PropsWithRef<Props>> = ({
       [EntityLabel.COMPANY]: (companyId: string) => {
         if (nodesMap.has(companyId)) return true
 
-        const companyInfo = companies.find(({ _id }) => companyId === _id)
+        const companyInfo = entitiesInfo.get(companyId) as CompanyListRecord
 
         if (companyInfo) {
           createNode(companyId, EntityLabel.COMPANY, {
@@ -181,7 +209,7 @@ export const Graph: React.FunctionComponent<PropsWithRef<Props>> = ({
       [EntityLabel.PROPERTY]: (propertyId: string) => {
         if (nodesMap.has(propertyId)) return true
 
-        const propertyInfo = properties.find(({ _id }) => propertyId === _id)
+        const propertyInfo = entitiesInfo.get(propertyId) as PropertyListRecord
 
         if (propertyInfo) {
           createNode(propertyId, EntityLabel.PROPERTY, {
@@ -194,7 +222,7 @@ export const Graph: React.FunctionComponent<PropsWithRef<Props>> = ({
       [EntityLabel.EVENT]: (eventId: string) => {
         if (nodesMap.has(eventId)) return true
 
-        const eventInfo = events.find(({ _id }) => eventId === _id)
+        const eventInfo = entitiesInfo.get(eventId) as EventListRecord
 
         if (eventInfo) {
           createNode(eventId, EntityLabel.EVENT, {
@@ -207,12 +235,38 @@ export const Graph: React.FunctionComponent<PropsWithRef<Props>> = ({
       [EntityLabel.LOCATION]: (locationId: string) => {
         if (nodesMap.has(locationId)) return true
 
-        const locationInfo = locations.find(({ _id }) => locationId === _id)
+        const locationInfo = entitiesInfo.get(locationId) as LocationAPIOutput
 
         if (locationInfo) {
           createNode(locationId, EntityLabel.LOCATION, {
-            label: getLocationAddress(locationInfo),
+            label: formatAddress(locationInfo),
             isRootNode: locationId === entityId,
+          })
+          return true
+        }
+      },
+      [EntityLabel.PROCEEDING]: (proceedingId: string) => {
+        if (nodesMap.has(proceedingId)) return true
+
+        const proceedingInfo = entitiesInfo.get(proceedingId) as ProceedingListRecord
+
+        if (proceedingInfo) {
+          createNode(proceedingId, EntityLabel.PROCEEDING, {
+            label: proceedingInfo.name,
+            isRootNode: proceedingId === entityId,
+          })
+          return true
+        }
+      },
+      [EntityLabel.REPORT]: (reportId: string) => {
+        if (nodesMap.has(reportId)) return true
+
+        const reportInfo = entitiesInfo.get(reportId) as ReportListRecord
+
+        if (reportInfo) {
+          createNode(reportId, EntityLabel.REPORT, {
+            label: reportInfo.name,
+            isRootNode: reportId === entityId,
           })
           return true
         }
@@ -291,6 +345,33 @@ export const Graph: React.FunctionComponent<PropsWithRef<Props>> = ({
       },
     )
 
+    entitiesReported.forEach(
+      ({
+        startNode: { _id: startNodeId, _type: startNodeType },
+        endNode: { _id: endNodeId, _type: endNodeType },
+        _confirmed,
+        _type,
+      }) => {
+        if (entityHandler[startNodeType](startNodeId) && entityHandler[endNodeType](endNodeId)) {
+          createEdge(startNodeId, endNodeId, _type, _confirmed, _type)
+        }
+      },
+    )
+
+    entitiesInvolvedInProceeding.forEach(
+      ({
+        startNode: { _id: startNodeId, _type: startNodeType },
+        endNode: { _id: endNodeId, _type: endNodeType },
+        _confirmed,
+        _type,
+        involvedAs,
+      }) => {
+        if (entityHandler[startNodeType](startNodeId) && entityHandler[endNodeType](endNodeId)) {
+          createEdge(startNodeId, endNodeId, involvedAs, _confirmed, _type)
+        }
+      },
+    )
+
     const entityLocationEdgeHandler = ({
       startNode: { _id: startNodeId, _type: startNodeType },
       endNode: { _id: endNodeId, _type: endNodeType },
@@ -318,7 +399,7 @@ export const Graph: React.FunctionComponent<PropsWithRef<Props>> = ({
         )
       })
       .catch((error) => console.error(error))
-  }, [data?.getEntitiesGraph, setNodes, setEdges, width, height])
+  }, [data?.getEntitiesGraph, setNodes, setEdges, width, height, entityId])
 
   useEffect(() => {
     nodes.map(({ position }) => console.debug(position))

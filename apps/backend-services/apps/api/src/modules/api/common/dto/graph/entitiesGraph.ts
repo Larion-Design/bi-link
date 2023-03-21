@@ -7,12 +7,16 @@ import {
 import { CompanyListRecord } from '../../../companies/dto/companyListRecord'
 import { EventListRecord } from '../../../events/dto/eventListRecord'
 import { Person } from '../../../persons/dto/person'
+import { ProceedingListRecord } from '../../../proceedings/dto/proceedingListRecord'
 import { PropertyListRecord } from '../../../properties/dto/propertyListRecord'
+import { ReportListRecord } from '../../../reports/dto/reportListRecord'
 import { Location } from '../geolocation/location'
 import { CompanyAssociateRelationship } from './companyAssociateRelationship'
 import { EntityLocationRelationship } from './entityLocationRelationship'
+import { EntityReportedRelationship } from './entityReportedRelationship'
 import { EventPartyRelationship } from './eventPartyRelationship'
 import { PersonalRelationship } from './personalRelationship'
+import { ProceedingEntityRelationship } from './ProceedingEntityRelationship'
 import { PropertyOwnerRelationship } from './propertyOwnerRelationship'
 
 @ObjectType()
@@ -46,6 +50,12 @@ export class GraphRelationships implements GraphRelationshipsType {
 
   @Field(() => [PersonalRelationship])
   personalRelationships: PersonalRelationship[]
+
+  @Field(() => [EntityReportedRelationship])
+  entitiesReported: EntityReportedRelationship[]
+
+  @Field(() => [ProceedingEntityRelationship])
+  entitiesInvolvedInProceeding: ProceedingEntityRelationship[]
 }
 
 @ObjectType()
@@ -64,6 +74,12 @@ export class GraphEntities implements GraphEntitiesType {
 
   @Field(() => [PropertyListRecord])
   properties: PropertyListRecord[]
+
+  @Field(() => [ReportListRecord])
+  reports: ReportListRecord[]
+
+  @Field(() => [ProceedingListRecord])
+  proceedings: ProceedingListRecord[]
 }
 
 @ObjectType()

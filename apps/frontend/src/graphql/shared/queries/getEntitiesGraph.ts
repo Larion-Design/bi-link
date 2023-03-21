@@ -181,6 +181,18 @@ const request = gql`
           country
           otherInfo
         }
+        reports {
+          _id
+          name
+          type
+        }
+        proceedings {
+          _id
+          fileNumber
+          name
+          type
+          year
+        }
       }
     }
   }
