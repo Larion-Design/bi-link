@@ -140,6 +140,31 @@ const request = gql`
             _type
           }
         }
+        entitiesInvolvedInProceeding {
+          _confirmed
+          _type
+          startNode {
+            _id
+            _type
+          }
+          endNode {
+            _id
+            _type
+          }
+          involvedAs
+        }
+        entitiesReported {
+          _confirmed
+          _type
+          startNode {
+            _id
+            _type
+          }
+          endNode {
+            _id
+            _type
+          }
+        }
       }
       entities {
         persons {
