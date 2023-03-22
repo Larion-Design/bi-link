@@ -1,3 +1,5 @@
+import { ProceedingNode } from '@frontend/components/entityViews/graph/nodes/proceedingNode'
+import { ReportNode } from '@frontend/components/entityViews/graph/nodes/reportNode'
 import React, { FunctionComponent, useCallback, useId, useState } from 'react'
 import { LocationNode } from '@frontend/components/entityViews/graph/nodes/locationNode'
 import { useTheme } from '@mui/material'
@@ -172,4 +174,6 @@ const nodeTypes: Record<Partial<EntityLabel>, FunctionComponent> = {
   EVENT: EventNode,
   LOCATION: LocationNode,
   FILE: undefined,
+  PROCEEDING: ProceedingNode,
+  REPORT: ReportNode,
 }

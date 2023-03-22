@@ -5,13 +5,13 @@ import AddOutlinedIcon from '@mui/icons-material/AddOutlined'
 import Tooltip from '@mui/material/Tooltip'
 import Button from '@mui/material/Button'
 import Typography from '@mui/material/Typography'
-import { PartyAPI } from 'defs'
+import { ProceedingEntityInvolvedAPI } from 'defs'
 import { PartyCard } from './partyCard'
 import { useMap } from '@frontend/utils/hooks/useMap'
 
 type Props = {
-  parties: PartyAPI[]
-  updateParties: (parties: PartyAPI[]) => void | Promise<void>
+  parties: ProceedingEntityInvolvedAPI[]
+  updateParties: (parties: ProceedingEntityInvolvedAPI[]) => void | Promise<void>
 }
 
 export const Parties: React.FunctionComponent<Props> = ({ parties, updateParties }) => {
@@ -21,13 +21,13 @@ export const Parties: React.FunctionComponent<Props> = ({ parties, updateParties
     void updateParties(values())
   }, [uid])
 
-  const createIncident = useCallback(() => add(createEventParty()), [])
+  const createParty = useCallback(() => add(createProceedingParty()), [])
 
   return (
     <>
       <Box display={'flex'} justifyContent={'space-between'} alignItems={'baseline'}>
         <Tooltip title={'Adaugă o noua parte implicata in incident.'}>
-          <Button variant={'contained'} onClick={createIncident}>
+          <Button variant={'contained'} onClick={createParty}>
             <AddOutlinedIcon />
           </Button>
         </Tooltip>
@@ -64,12 +64,7 @@ export const Parties: React.FunctionComponent<Props> = ({ parties, updateParties
   )
 }
 
-const createEventParty = (): PartyAPI => ({
-  name: '',
+const createProceedingParty = (): ProceedingEntityInvolvedAPI => ({
+  involvedAs: '',
   description: '',
-  persons: [],
-  companies: [],
-  properties: [],
-  customFields: [],
-  _confirmed: true,
 })

@@ -23,6 +23,7 @@ import ListItemIcon from '@mui/material/ListItemIcon'
 import ListItemText from '@mui/material/ListItemText'
 import { styled } from '@mui/material/styles'
 import Toolbar from '@mui/material/Toolbar'
+import GavelOutlinedIcon from '@mui/icons-material/GavelOutlined'
 import { useLocation, useNavigate } from 'react-router-dom'
 
 import { routes } from '../../router/routes'
@@ -132,7 +133,13 @@ export const AppDrawer: React.FunctionComponent<AppDrawerProps> = ({ open, toggl
               <LocalHospitalOutlinedIcon />
             )}
           </ListItemIcon>
-          <ListItemText primary="Incidente" />
+          <ListItemText primary="Evenimente" />
+        </ListItemButton>
+        <ListItemButton onClick={() => navigate(routes.newProceeding)}>
+          <ListItemIcon>
+            <GavelOutlinedIcon />
+          </ListItemIcon>
+          <ListItemText primary="Dosare" />
         </ListItemButton>
         {hasPrivilegedAccess && (
           <>

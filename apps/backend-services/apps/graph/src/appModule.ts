@@ -29,8 +29,8 @@ import { ServiceHealthModule } from '@app/service-health'
           redis: {
             host: configService.getOrThrow<string>('REDIS_HOST'),
             port: +configService.getOrThrow<number>('REDIS_PORT'),
-            password: configService.getOrThrow<string>('REDIS_PASSWORD'),
-            tls: {},
+            // password: configService.get<string>('REDIS_PASSWORD', undefined),
+            // tls: {},
           },
           defaultJobOptions: {
             removeOnFail: false,

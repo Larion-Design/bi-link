@@ -1,5 +1,6 @@
 import React, { ReactNode } from 'react'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import { CreateProceeding } from '../pages/proceedings/createProceeding/createProceeding'
 import { routes } from './routes'
 import { InvalidPage } from '../pages/invalidPage'
 import { Page } from '../components/page/Page'
@@ -36,6 +37,7 @@ const privateRoutes: Record<string, ReactNode> = {
   [routes.properties]: <PropertiesList />,
   [routes.newProperty]: <CreateProperty />,
   [routes.propertyDetails]: <EditProperty />,
+  [routes.newProceeding]: <CreateProceeding />,
 }
 
 const publicRoutes: Record<string, ReactNode> = {

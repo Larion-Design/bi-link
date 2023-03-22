@@ -28,8 +28,8 @@ import { FileParserService } from '@app/rpc/services/fileParserService'
             options: {
               host: configService.getOrThrow('REDIS_HOST'),
               port: configService.getOrThrow('REDIS_PORT'),
-              password: configService.getOrThrow('REDIS_PASSWORD'),
-              tls: {},
+              // password: configService.getOrThrow('REDIS_PASSWORD'),
+              // tls: {},
             },
           }),
       })),
