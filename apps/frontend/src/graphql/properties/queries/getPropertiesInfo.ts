@@ -45,7 +45,7 @@ const request = gql`
           fieldValue
         }
         vehicleOwnerInfo {
-          registrationNumber
+          plateNumbers
         }
         _confirmed
       }

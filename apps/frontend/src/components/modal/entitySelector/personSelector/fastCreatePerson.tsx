@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react'
+import { getDefaultPerson } from '@frontend/components/form/person/constants'
 import CardContent from '@mui/material/CardContent'
 import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined'
 import Grid from '@mui/material/Grid'
@@ -6,14 +7,14 @@ import Button from '@mui/material/Button'
 import Box from '@mui/material/Box'
 import CardActions from '@mui/material/CardActions'
 import { useFormik } from 'formik'
-import { PersonAPIInput } from 'defs'
 import { InputField } from '../../../form/inputField'
+import { OldNames } from '../../../form/person/oldNames'
 import {
   personFormValidation,
   validatePersonForm,
-} from '../../../form/personForm/validation/validation'
+} from '../../../form/person/personForm/validation/validation'
 import { PersonSelectorView } from './personSelector'
-import { createPersonRequest } from '../../../../graphql/persons/mutations/createPerson'
+import { createPersonRequest } from '@frontend/graphql/persons/mutations/createPerson'
 import { ModalHeader } from '../../modalHeader'
 
 type Props = {
@@ -29,7 +30,7 @@ export const FastCreatePerson: React.FunctionComponent<Props> = ({
 }) => {
   const [createPerson, { data }] = createPersonRequest()
   const { values, errors, setFieldError, setFieldValue, submitForm, isSubmitting } = useFormik({
-    initialValues: personInitialFields,
+    initialValues: getDefaultPerson(),
     validateOnMount: false,
     validateOnBlur: false,
     validateOnChange: false,
@@ -74,13 +75,9 @@ export const FastCreatePerson: React.FunctionComponent<Props> = ({
             />
           </Grid>
           <Grid item xs={4}>
-            <InputField
-              label={'Nume vechi'}
-              error={errors.oldName}
-              value={values.oldName}
-              onChange={async (value) => {
-                const error = await personFormValidation.oldName(value)
-                setFieldError('oldName', error)
+            <OldNames
+              oldNames={values.oldNames}
+              updateOldNames={async (value) => {
                 await setFieldValue('oldName', value)
               }}
             />
@@ -125,19 +122,4 @@ export const FastCreatePerson: React.FunctionComponent<Props> = ({
       </CardActions>
     </>
   )
-}
-
-const personInitialFields: PersonAPIInput = {
-  firstName: '',
-  lastName: '',
-  oldName: '',
-  cnp: '',
-  birthdate: null,
-  homeAddress: '',
-  customFields: [],
-  contactDetails: [],
-  images: [],
-  documents: [],
-  files: [],
-  relationships: [],
 }

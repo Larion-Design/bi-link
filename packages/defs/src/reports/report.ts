@@ -1,6 +1,7 @@
 import { Company } from '../company'
+import { NodesRelationship } from '../graphRelationships'
 import { Person } from '../person'
-import { Incident } from '../incident'
+import { Event } from '../event'
 import { Property } from '../property'
 import { DataRef, DataRefAPI } from './dataRef'
 import { ReportSection, ReportSectionAPIInput, ReportSectionAPIOutput } from './reportSection'
@@ -13,7 +14,7 @@ export interface Report {
   isTemplate: boolean
   company?: Company
   person?: Person
-  incident?: Incident
+  event?: Event
   property?: Property
   sections: ReportSection[]
   createdAt?: Date
@@ -21,25 +22,23 @@ export interface Report {
   refs: DataRef[]
 }
 
-export interface ReportAPIInput
-  extends Omit<
-    Report,
-    '_id' | 'sections' | 'person' | 'company' | 'property' | 'incident' | 'refs'
-  > {
+interface ReportAPI
+  extends Omit<Report, 'sections' | 'person' | 'company' | 'property' | 'event' | 'refs'> {
   person?: ConnectedEntity
   company?: ConnectedEntity
   property?: ConnectedEntity
-  incident?: ConnectedEntity
-  sections: ReportSectionAPIInput[]
+  event?: ConnectedEntity
   refs: DataRefAPI[]
 }
 
-export interface ReportAPIOutput
-  extends Omit<Report, 'sections' | 'person' | 'company' | 'property' | 'incident' | 'refs'> {
-  person?: ConnectedEntity
-  company?: ConnectedEntity
-  property?: ConnectedEntity
-  incident?: ConnectedEntity
-  sections: ReportSectionAPIOutput[]
-  refs: DataRefAPI[]
+export interface ReportAPIInput extends Omit<ReportAPI, '_id'> {
+  sections: ReportSectionAPIInput[]
 }
+
+export interface ReportAPIOutput extends ReportAPI {
+  sections: ReportSectionAPIOutput[]
+}
+
+export interface ReportedEntityRelationship extends NodesRelationship {}
+
+export interface ReportListRecord extends Pick<Report, '_id' | 'name' | 'type'> {}

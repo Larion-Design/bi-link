@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react'
+import { FormattedMessage } from 'react-intl'
 import { useDebounce } from 'usehooks-ts'
 import CardContent from '@mui/material/CardContent'
 import Box from '@mui/material/Box'
@@ -8,7 +9,7 @@ import Button from '@mui/material/Button'
 import AddOutlinedIcon from '@mui/icons-material/AddOutlined'
 import { DataGrid, GridColDef, GridSelectionModel } from '@mui/x-data-grid'
 import { PropertySelectorView } from './propertySelector'
-import { searchPropertiesRequest } from '../../../../graphql/properties/queries/searchProperties'
+import { searchPropertiesRequest } from '@frontend/graphql/properties/queries/searchProperties'
 import { PropertyListRecord } from 'defs'
 import { ModalHeader } from '../../modalHeader'
 
@@ -111,7 +112,7 @@ export const SearchProperties: React.FunctionComponent<Props> = ({
 
         <Box display={'flex'}>
           <Button variant={'outlined'} color={'error'} onClick={closeModal} sx={{ mr: 2 }}>
-            Inchide
+            <FormattedMessage id={'close'} />
           </Button>
           <Button
             variant={'contained'}
@@ -119,7 +120,7 @@ export const SearchProperties: React.FunctionComponent<Props> = ({
             disabled={!properties.length}
             onClick={submitSelectedProperties}
           >
-            Selectează
+            <FormattedMessage id={'select'} />
           </Button>
         </Box>
       </CardActions>
@@ -135,14 +136,14 @@ const columns: GridColDef[] = [
     flex: 1,
   },
   {
-    field: 'type',
-    headerName: 'Tip de proprietate',
+    field: 'name',
+    headerName: 'Nume',
     sortable: false,
     flex: 1,
   },
   {
-    field: 'name',
-    headerName: 'Nume',
+    field: 'type',
+    headerName: 'Tip de proprietate',
     sortable: false,
     flex: 1,
   },

@@ -1,20 +1,17 @@
-import { CacheModule, Module } from '@nestjs/common'
-import { EntitiesModule } from '@app/entities'
 import { ConfigModule, ConfigService } from '@nestjs/config'
 import { MongooseModule } from '@nestjs/mongoose'
-import { Neo4jModule } from 'nest-neo4j/dist'
-import { SearchToolsModule } from '@app/search-mapping-tools'
-import { DatabaseMigrationCommand } from './commands/databaseMigrationCommand'
-import { ElasticsearchIndexEntityCommand } from './commands/elasticsearchIndexEntityCommand'
-import { ElasticsearchMigrationCommand } from './commands/elasticsearchMigrationCommand'
-import { GraphMigrationCommand } from './commands/graphMigrationCommand'
-import { PubModule } from '@app/pub'
+import { CacheModule, Module } from '@nestjs/common'
+import { EntitiesModule } from '@app/models'
+import { MigrateDatabaseCommand } from './commands/migrateDatabaseCommand'
+import { IndexEntityCommand } from './commands/indexEntityCommand'
+import { MigrateIndex } from './commands/migrateIndex'
+import { GraphUpdateCommand } from './commands/graphUpdateCommand'
+import { RpcModule } from '@app/rpc'
+import { EntitiesIndexerService } from './services/entitiesIndexerService'
 
 @Module({
   imports: [
-    EntitiesModule,
-    PubModule,
-    SearchToolsModule,
+    RpcModule,
     CacheModule.register({
       isGlobal: true,
     }),
@@ -28,25 +25,16 @@ import { PubModule } from '@app/pub'
       inject: [ConfigService],
       useFactory: async (configService: ConfigService) =>
         Promise.resolve({
-          uri: configService.get<string>('MONGODB_URI'),
-        }),
-    }),
-    Neo4jModule.forRootAsync({
-      imports: [ConfigModule],
-      inject: [ConfigService],
-      useFactory: async (configService: ConfigService) =>
-        Promise.resolve({
-          scheme: 'neo4j',
-          host: configService.get<string>('NEO4J_HOST'),
-          port: +configService.get<number>('NEO4J_PORT'),
+          uri: configService.getOrThrow<string>('MONGODB_URI'),
         }),
     }),
   ],
   providers: [
-    DatabaseMigrationCommand,
-    ElasticsearchMigrationCommand,
-    ElasticsearchIndexEntityCommand,
-    GraphMigrationCommand,
+    MigrateDatabaseCommand,
+    MigrateIndex,
+    IndexEntityCommand,
+    GraphUpdateCommand,
+    EntitiesIndexerService,
   ],
 })
 export class AppModule {}

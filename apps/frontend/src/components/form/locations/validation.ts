@@ -1,20 +1,43 @@
 import * as yup from 'yup'
-import { Location } from 'defs'
+import { LocationAPIInput } from 'defs'
 
-const locationsFormat = yup.array().of(
-  yup.object().shape({
-    address: yup.string().min(3),
-    isActive: yup.boolean(),
+const locationFormat = yup.object().shape({
+  locationId: yup.string(),
+  street: yup.string(),
+  number: yup.string(),
+  building: yup.string(),
+  door: yup.string(),
+  zipCode: yup.string(),
+  locality: yup.string(),
+  county: yup.string(),
+  country: yup.string(),
+  otherInfo: yup.string(),
+  coordinates: yup.object().shape({
+    lat: yup.number(),
+    long: yup.number(),
   }),
-)
+})
 
-export const validateLocationsStructure = (locations: unknown) => {
+const locationsFormat = yup.array().of(locationFormat)
+
+export const validateLocationsStructure = (locations: unknown[]) => {
   if (!locationsFormat.isValidSync(locations)) {
-    return 'Adresa unuia din punctele de lucru este prea scurta.'
+    return 'Una din adresele introduse este invalida.'
   }
 }
 
-export const validateLocations = async (locations: Location[]) => {
+export const validateLocationStructure = (locations: unknown) => {
+  if (!locationsFormat.isValidSync(locations)) {
+    return 'Adresa este invalida.'
+  }
+}
+
+export const validateLocations = async (locations: LocationAPIInput[]) => {
   const error = validateLocationsStructure(locations)
+  return Promise.resolve(error)
+}
+
+export const validateLocation = async (location: LocationAPIInput) => {
+  const error = validateLocationStructure(location)
   return Promise.resolve(error)
 }

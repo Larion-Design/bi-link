@@ -1,11 +1,9 @@
-import { Field, Int, ObjectType } from '@nestjs/graphql'
+import { Field, Int, ObjectType, PickType } from '@nestjs/graphql'
+import { Suggestions } from '../../common/dto/suggestions'
 import { PersonListRecord } from './personListRecord'
 
 @ObjectType()
-export class PersonsSuggestions {
-  @Field(() => [PersonListRecord], { nullable: 'items' })
+export class PersonsSuggestions extends PickType(Suggestions, ['total'] as const) {
+  @Field(() => [PersonListRecord])
   records: PersonListRecord[]
-
-  @Field(() => Int, { nullable: false })
-  total: number
 }

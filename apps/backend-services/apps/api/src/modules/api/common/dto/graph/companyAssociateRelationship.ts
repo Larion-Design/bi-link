@@ -4,24 +4,20 @@ import {
   CompanyAssociateRelationship as CompanyAssociateRelationshipType,
   RelationshipLabel,
 } from 'defs'
+import { NodesRelationship } from './nodesRelationship'
 
-@ObjectType()
-export class CompanyAssociateRelationship implements CompanyAssociateRelationshipType {
-  @Field(() => GraphNode)
+@ObjectType({ implements: () => [NodesRelationship] })
+export class CompanyAssociateRelationship
+  implements NodesRelationship, CompanyAssociateRelationshipType
+{
   startNode: GraphNode
-
-  @Field(() => GraphNode)
   endNode: GraphNode
+  _type: RelationshipLabel
+  _confirmed: boolean
 
   @Field()
   role: string
 
-  @Field()
-  _confirmed: boolean
-
   @Field({ nullable: true, defaultValue: 0 })
   equity: number
-
-  @Field(() => String)
-  _type: RelationshipLabel
 }

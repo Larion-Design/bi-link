@@ -1,12 +1,13 @@
 import React, { useEffect } from 'react'
+import { getDefaultCompany } from '@frontend/components/form/company/constants'
+import { FormattedMessage } from 'react-intl'
 import { CompanySelectorView } from './companySelector'
 import { useFormik } from 'formik'
-import { CompanyAPIInput } from 'defs'
-import { createCompanyRequest } from '../../../../graphql/companies/mutations/createCompany'
+import { createCompanyRequest } from '@frontend/graphql/companies/mutations/createCompany'
 import {
   companyFormValidation,
   validateCompanyForm,
-} from '../../../form/companyForm/validation/validation'
+} from '../../../form/company/companyForm/validation/validation'
 import CardContent from '@mui/material/CardContent'
 import Grid from '@mui/material/Grid'
 import { InputField } from '../../../form/inputField'
@@ -29,7 +30,7 @@ export const FastCreateCompany: React.FunctionComponent<Props> = ({
 }) => {
   const [createCompany, { data }] = createCompanyRequest()
   const { values, errors, setFieldError, setFieldValue, submitForm, isSubmitting } = useFormik({
-    initialValues: companyInitialValues,
+    initialValues: getDefaultCompany(),
     validateOnMount: false,
     validateOnBlur: false,
     validateOnChange: false,
@@ -46,7 +47,7 @@ export const FastCreateCompany: React.FunctionComponent<Props> = ({
 
   return (
     <>
-      <ModalHeader title={'Creaza o companie rapid'} closeModal={closeModal} />
+      <ModalHeader title={'Creaza o companie'} closeModal={closeModal} />
       <CardContent sx={{ height: 0.8, mb: 2 }}>
         <Grid container spacing={4}>
           <Grid item xs={4}>
@@ -99,7 +100,7 @@ export const FastCreateCompany: React.FunctionComponent<Props> = ({
 
         <Box display={'flex'}>
           <Button variant={'outlined'} color={'error'} onClick={closeModal} sx={{ mr: 2 }}>
-            Inchide
+            <FormattedMessage id={'close'} />
           </Button>
           <Button
             variant={'contained'}
@@ -107,22 +108,10 @@ export const FastCreateCompany: React.FunctionComponent<Props> = ({
             disabled={isSubmitting}
             onClick={submitForm}
           >
-            Salvează
+            <FormattedMessage id={'save'} />
           </Button>
         </Box>
       </CardActions>
     </>
   )
-}
-
-const companyInitialValues: CompanyAPIInput = {
-  name: '',
-  cui: '',
-  registrationNumber: '',
-  headquarters: '',
-  locations: [],
-  files: [],
-  associates: [],
-  contactDetails: [],
-  customFields: [],
 }

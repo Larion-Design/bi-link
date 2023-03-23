@@ -1,9 +1,10 @@
+import { PropertyIndex, PropertySearchIndex } from '@app/definitions'
 import { Injectable, Logger } from '@nestjs/common'
 import { ElasticsearchService } from '@nestjs/elasticsearch'
-import { INDEX_PROPERTIES } from '@app/definitions/constants'
+import { INDEX_PROPERTIES } from '@app/definitions'
 import { SearchRequest, SearchTotalHits } from '@elastic/elasticsearch/lib/api/types'
 import { SearchHelperService } from './searchHelperService'
-import { PropertiesSuggestions, PropertyIndex, PropertyListRecord, PropertySearchIndex } from 'defs'
+import { PropertiesSuggestions, PropertyListRecord } from 'defs'
 
 @Injectable()
 export class SearchPropertiesService {

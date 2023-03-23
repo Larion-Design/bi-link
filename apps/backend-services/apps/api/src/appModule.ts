@@ -1,22 +1,23 @@
 import { CacheModule, Module } from '@nestjs/common'
 import { GraphQLModule } from '@nestjs/graphql'
-import { Neo4jModule } from 'nest-neo4j/dist'
+import { Neo4jModule, Neo4jScheme } from 'nest-neo4j/dist'
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo'
 import { ConfigModule, ConfigService } from '@nestjs/config'
 import { APP_INTERCEPTOR } from '@nestjs/core'
 import { MongooseModule } from '@nestjs/mongoose'
+import { Neo4jConfig } from 'nest-neo4j/src/interfaces/neo4j-config.interface'
 import { SearchModule } from './modules/search/searchModule'
 import { GraphqlInterceptor, SentryModule } from '@ntegral/nestjs-sentry'
 import { ApiModule } from './modules/api/apiModule'
 import { UsersModule } from './modules/users/UsersModule'
-import { EntitiesModule } from '@app/entities/entitiesModule'
-import { PubModule } from '@app/pub'
+import { EntitiesModule } from '@app/models/entitiesModule'
+import { RpcModule } from '@app/rpc'
 import { GraphModule } from '@app/graph-module'
 
 @Module({
   imports: [
     EntitiesModule,
-    PubModule,
+    RpcModule,
     ApiModule,
     SearchModule,
     UsersModule,
@@ -29,7 +30,7 @@ import { GraphModule } from '@app/graph-module'
       inject: [ConfigService],
       driver: ApolloDriver,
       useFactory: async (configService: ConfigService) => {
-        const isProd = configService.get<string>('NODE_ENV', 'development') === 'production'
+        const isProd = configService.getOrThrow<string>('NODE_ENV', 'development') === 'production'
         return Promise.resolve({
           debug: !isProd,
           cache: 'bounded',
@@ -56,13 +57,13 @@ import { GraphModule } from '@app/graph-module'
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: async (configService: ConfigService) => {
-        const environment = configService.get<string>('NODE_ENV', 'development')
+        const environment = configService.getOrThrow<string>('NODE_ENV', 'development')
         return Promise.resolve({
           dsn: configService.get<string>('SENTRY_DSN'),
           debug: false,
           enabled: environment === 'production',
           environment: environment,
-          release: configService.get<string>('APP_VERSION'),
+          release: configService.getOrThrow<string>('APP_VERSION'),
           logLevel: 'debug',
         })
       },
@@ -72,17 +73,19 @@ import { GraphModule } from '@app/graph-module'
       inject: [ConfigService],
       useFactory: async (configService: ConfigService) =>
         Promise.resolve({
-          uri: configService.get<string>('MONGODB_URI'),
+          uri: configService.getOrThrow<string>('MONGODB_URI'),
         }),
     }),
     Neo4jModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: async (configService: ConfigService) =>
-        Promise.resolve({
-          scheme: 'neo4j',
-          host: configService.get<string>('NEO4J_HOST'),
-          port: +configService.get<number>('NEO4J_PORT'),
+        Promise.resolve<Partial<Neo4jConfig>>({
+          scheme: configService.getOrThrow<Neo4jScheme>('NEO4J_SCHEME'),
+          host: configService.getOrThrow<string>('NEO4J_HOST'),
+          port: +configService.getOrThrow<number>('NEO4J_PORT'),
+          username: configService.getOrThrow<string>('NEO4J_USER'),
+          password: configService.getOrThrow<string>('NEO4J_PASSWORD'),
         }),
     }),
   ],

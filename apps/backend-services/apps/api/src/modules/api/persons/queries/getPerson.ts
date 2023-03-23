@@ -1,4 +1,4 @@
-import { PersonsService } from '@app/entities/services/personsService'
+import { PersonsService } from '@app/models/services/personsService'
 import { UseGuards } from '@nestjs/common'
 import { Args, ArgsType, Field, Query, Resolver } from '@nestjs/graphql'
 import { IsMongoId } from 'class-validator'
@@ -19,6 +19,6 @@ export class GetPerson {
   @Query(() => Person)
   @UseGuards(FirebaseAuthGuard)
   async getPersonInfo(@Args() { id }: Params) {
-    return this.personsService.find(id)
+    return this.personsService.find(id, true)
   }
 }

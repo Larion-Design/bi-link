@@ -1,9 +1,9 @@
 import React, { useEffect } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
-import { useSnackbar } from 'notistack'
+import { useNotification } from '@frontend/utils/hooks/useNotification'
 import { DashboardPage } from '../../../components/page/DashboardPage'
 import { routes } from '../../../router/routes'
-import { Loader } from '../../../components/loader/loader'
+import { Loader } from '@frontend/components/loader'
 import { PropertyDetails } from '../../../components/page/propertyDetails'
 import { updatePropertyRequest } from '../../../graphql/properties/mutations/updateProperty'
 import { getPropertyRequest } from '../../../graphql/properties/queries/getProperty'
@@ -15,14 +15,11 @@ export const EditProperty: React.FunctionComponent = () => {
     getPropertyRequest()
   const [updateProperty, { data: updateData, loading: updateLoading, error: updateError }] =
     updatePropertyRequest()
-  const { enqueueSnackbar } = useSnackbar()
+  const showNotification = useNotification()
 
   useEffect(() => {
     if (updateData?.updateProperty) {
-      enqueueSnackbar('Proprietatea a fost actualizata.', {
-        variant: 'success',
-        preventDuplicate: true,
-      })
+      showNotification('Proprietatea a fost actualizata.', 'success')
       navigate(routes.properties)
     }
   }, [updateData?.updateProperty])
@@ -39,16 +36,13 @@ export const EditProperty: React.FunctionComponent = () => {
 
   useEffect(() => {
     if (fetchError?.message || updateError?.message) {
-      enqueueSnackbar('O eroare a intervenit in timpul comunicarii cu serverul.', {
-        variant: 'error',
-      })
+      showNotification('ServerError', 'error')
     }
   }, [fetchError?.message, updateError?.message])
 
   if (fetchLoading) {
     return <Loader visible={true} message={'Informatiile sunt incarcate...'} />
   }
-
   return (
     <DashboardPage title={'Creaza o proprietate'}>
       <PropertyDetails
@@ -57,11 +51,7 @@ export const EditProperty: React.FunctionComponent = () => {
         propertyInfo={fetchData?.getProperty}
         onSubmit={(propertyInfo) => {
           if (!updateLoading) {
-            void updateProperty({
-              variables: {
-                data: propertyInfo,
-              },
-            })
+            void updateProperty({ variables: { data: propertyInfo } })
           }
         }}
       />

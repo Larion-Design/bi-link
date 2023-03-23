@@ -1,5 +1,6 @@
 import React, { ReactNode } from 'react'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import { CreateProceeding } from '../pages/proceedings/createProceeding/createProceeding'
 import { routes } from './routes'
 import { InvalidPage } from '../pages/invalidPage'
 import { Page } from '../components/page/Page'
@@ -13,9 +14,9 @@ import { CreateCompany } from '../pages/companies/createCompany'
 import { CompaniesList } from '../pages/companies/companiesList'
 import { SignupPage } from '../pages/signup'
 import { EditCompany } from '../pages/companies/editCompany'
-import { IncidentsList } from '../pages/incidents/incidentsList'
-import { CreateIncident } from '../pages/incidents/createIncident'
-import { EditIncident } from '../pages/incidents/editIncident'
+import { EventsList } from '../pages/events/eventsList'
+import { CreateEvent } from '../pages/events/createEvent'
+import { EditEvent } from '../pages/events/editEvent'
 import { UsersList } from '../pages/users'
 import { PropertiesList } from '../pages/properties/propertiesList'
 import { CreateProperty } from '../pages/properties/createProperty'
@@ -29,13 +30,14 @@ const privateRoutes: Record<string, ReactNode> = {
   [routes.companies]: <CompaniesList />,
   [routes.newCompany]: <CreateCompany />,
   [routes.companyDetails]: <EditCompany />,
-  [routes.incidents]: <IncidentsList />,
-  [routes.newIncident]: <CreateIncident />,
-  [routes.incidentDetails]: <EditIncident />,
+  [routes.events]: <EventsList />,
+  [routes.newEvent]: <CreateEvent />,
+  [routes.eventDetails]: <EditEvent />,
   [routes.users]: <UsersList />,
   [routes.properties]: <PropertiesList />,
   [routes.newProperty]: <CreateProperty />,
   [routes.propertyDetails]: <EditProperty />,
+  [routes.newProceeding]: <CreateProceeding />,
 }
 
 const publicRoutes: Record<string, ReactNode> = {

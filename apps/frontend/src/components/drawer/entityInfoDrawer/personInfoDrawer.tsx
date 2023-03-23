@@ -2,7 +2,7 @@ import React, { useCallback, useMemo } from 'react'
 import Box from '@mui/material/Box'
 import { PersonAPIInput } from 'defs'
 import { useCopyToClipboard } from 'usehooks-ts'
-import { formatDate } from '../../../utils/date'
+import { formatDate } from 'tools'
 import { CreateDataRefHandler } from '../../../utils/hooks/useDataRefProcessor'
 import { getPersonAge, getPersonFullName } from '../../../utils/person'
 import { EntityInfoTable } from './entityInfoTable'
@@ -25,12 +25,10 @@ export const PersonInfoDrawer: React.FunctionComponent<Props> = ({
     () => ({
       firstName: personInfo.firstName,
       lastName: personInfo.lastName,
-      oldName: personInfo.oldName,
       age: getPersonAge(personInfo),
       fullName: getPersonFullName(personInfo),
       cnp: personInfo.cnp,
       birthdate: personInfo.birthdate ? formatDate(personInfo.birthdate) : '',
-      homeAddress: personInfo.homeAddress,
     }),
     [personInfo],
   )

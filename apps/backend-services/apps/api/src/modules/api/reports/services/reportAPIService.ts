@@ -1,10 +1,10 @@
-import { ReportModel } from '@app/entities/models/reports/reportModel'
-import { ReportSectionModel } from '@app/entities/models/reports/reportSectionModel'
-import { CompaniesService } from '@app/entities/services/companiesService'
-import { IncidentsService } from '@app/entities/services/incidentsService'
-import { PersonsService } from '@app/entities/services/personsService'
-import { PropertiesService } from '@app/entities/services/propertiesService'
-import { ReportsService } from '@app/entities/services/reportsService'
+import { ReportModel } from '@app/models/models/reports/reportModel'
+import { ReportSectionModel } from '@app/models/models/reports/reportSectionModel'
+import { CompaniesService } from '@app/models/services/companiesService'
+import { EventsService } from '@app/models/services/eventsService'
+import { PersonsService } from '@app/models/services/personsService'
+import { PropertiesService } from '@app/models/services/propertiesService'
+import { ReportsService } from '@app/models/services/reportsService'
 import { Injectable } from '@nestjs/common'
 import { ReportInput } from '../dto/reportInput'
 import { ReportSectionInput } from '../dto/reportSectionInput'
@@ -16,7 +16,7 @@ export class ReportAPIService {
   constructor(
     private readonly personsService: PersonsService,
     private readonly companiesService: CompaniesService,
-    private readonly incidentsService: IncidentsService,
+    private readonly eventsService: EventsService,
     private readonly propertiesService: PropertiesService,
     private readonly reportsService: ReportsService,
     private readonly reportContentAPIService: ReportContentAPIService,
@@ -43,16 +43,19 @@ export class ReportAPIService {
 
     if (!reportInput.isTemplate) {
       if (reportInput.company?._id) {
-        reportModel.company = await this.companiesService.getCompany(reportInput.company._id)
+        reportModel.company = await this.companiesService.getCompany(reportInput.company._id, false)
       }
       if (reportInput.person?._id) {
-        reportModel.person = await this.personsService.find(reportInput.person._id)
+        reportModel.person = await this.personsService.find(reportInput.person._id, false)
       }
-      if (reportInput.incident?._id) {
-        reportModel.incident = await this.incidentsService.getIncident(reportInput.incident._id)
+      if (reportInput.event?._id) {
+        reportModel.event = await this.eventsService.getEvent(reportInput.event._id, false)
       }
       if (reportInput.property?._id) {
-        reportModel.property = await this.propertiesService.getProperty(reportInput.property._id)
+        reportModel.property = await this.propertiesService.getProperty(
+          reportInput.property._id,
+          false,
+        )
       }
     }
 

@@ -1,71 +1,222 @@
 import { gql, useLazyQuery } from '@apollo/client'
-import { EntitiesGraph } from 'defs'
+import { Graph } from 'defs'
 
 type Response = {
-  getEntitiesGraph: EntitiesGraph
+  getEntitiesGraph: Graph
 }
 
 type Params = {
   id: string
-
   depth: number
 }
 
 const request = gql`
   query GetEntitiesGraph($id: String!, $depth: Int!) {
     getEntitiesGraph(id: $id, depth: $depth) {
-      companiesAssociates {
-        _confirmed
-        _type
-        role
-        equity
-        startNode {
-          _id
+      relationships {
+        companiesBranches {
+          _confirmed
           _type
+          startNode {
+            _id
+            _type
+          }
+          endNode {
+            _id
+            _type
+          }
         }
-        endNode {
-          _id
+        companiesHeadquarters {
+          _confirmed
           _type
+          startNode {
+            _id
+            _type
+          }
+          endNode {
+            _id
+            _type
+          }
+        }
+        companiesAssociates {
+          _confirmed
+          _type
+          role
+          equity
+          startNode {
+            _id
+            _type
+          }
+          endNode {
+            _id
+            _type
+          }
+        }
+        personalRelationships {
+          _type
+          _confirmed
+          type
+          startNode {
+            _id
+            _type
+          }
+          endNode {
+            _id
+            _type
+          }
+        }
+        personsBirthPlace {
+          _type
+          _confirmed
+          startNode {
+            _id
+            _type
+          }
+          endNode {
+            _id
+            _type
+          }
+        }
+        personsHomeAddress {
+          _type
+          _confirmed
+          startNode {
+            _id
+            _type
+          }
+          endNode {
+            _id
+            _type
+          }
+        }
+        propertiesLocation {
+          _type
+          _confirmed
+          startNode {
+            _id
+            _type
+          }
+          endNode {
+            _id
+            _type
+          }
+        }
+        propertiesRelationships {
+          _type
+          _confirmed
+          startDate
+          endDate
+          startNode {
+            _id
+            _type
+          }
+          endNode {
+            _id
+            _type
+          }
+        }
+        eventsParties {
+          _type
+          _confirmed
+          name
+          startNode {
+            _id
+            _type
+          }
+          endNode {
+            _id
+            _type
+          }
+        }
+        eventsOccurrencePlace {
+          _confirmed
+          _type
+          startNode {
+            _id
+            _type
+          }
+          endNode {
+            _id
+            _type
+          }
+        }
+        entitiesInvolvedInProceeding {
+          _confirmed
+          _type
+          startNode {
+            _id
+            _type
+          }
+          endNode {
+            _id
+            _type
+          }
+          involvedAs
+        }
+        entitiesReported {
+          _confirmed
+          _type
+          startNode {
+            _id
+            _type
+          }
+          endNode {
+            _id
+            _type
+          }
         }
       }
-      personalRelationships {
-        _type
-        _confirmed
-        type
-        startNode {
+      entities {
+        persons {
           _id
-          _type
+          firstName
+          lastName
+          images {
+            fileId
+            url {
+              url
+            }
+          }
         }
-        endNode {
+        companies {
           _id
-          _type
+          name
+          cui
+          registrationNumber
         }
-      }
-      propertiesRelationships {
-        _type
-        _confirmed
-        startDate
-        endDate
-        startNode {
+        properties {
           _id
-          _type
+          name
+          type
         }
-        endNode {
+        events {
           _id
-          _type
+          date
+          type
         }
-      }
-      incidentsParties {
-        _type
-        _confirmed
-        name
-        startNode {
-          _id
-          _type
+        locations {
+          locationId
+          street
+          number
+          building
+          door
+          zipCode
+          locality
+          county
+          country
+          otherInfo
         }
-        endNode {
+        reports {
           _id
-          _type
+          name
+          type
+        }
+        proceedings {
+          _id
+          fileNumber
+          name
+          type
+          year
         }
       }
     }

@@ -1,11 +1,16 @@
-// import { usePDF } from '@react-pdf/renderer'
+import {
+  addEntityToReport,
+  createReportInitialValues,
+} from '@frontend/components/form/reportForm/constants'
 import React, { useCallback, useEffect, useState } from 'react'
+// import { usePDF } from '@react-pdf/renderer'
 import Button from '@mui/material/Button'
 import Box from '@mui/material/Box'
 import Grid from '@mui/material/Grid'
 // import ApprovalOutlinedIcon from '@mui/icons-material/ApprovalOutlined';
 import { ConnectedEntity, EntityType, ReportAPIInput } from 'defs'
 import { FormikProps, withFormik } from 'formik'
+import { FormattedMessage } from 'react-intl/lib'
 import { useDataRefs } from '../../../utils/hooks/useDataRefProcessor'
 // import { ReportDocument } from '../../reports/reportDocument'
 import { AutocompleteField } from '../autocompleteField'
@@ -133,8 +138,8 @@ const Form: React.FunctionComponent<Props & FormikProps<ReportAPIInput>> = ({
                     setFieldValue('property', entity)
                     break
                   }
-                  case 'INCIDENT': {
-                    setFieldValue('incident', entity)
+                  case 'EVENT': {
+                    setFieldValue('event', entity)
                     break
                   }
                 }
@@ -164,7 +169,7 @@ const Form: React.FunctionComponent<Props & FormikProps<ReportAPIInput>> = ({
               onClick={onCancel}
               sx={{ mr: 4 }}
             >
-              Anulează
+              <FormattedMessage id={'cancel'} />
             </Button>
             <Button
               data-cy={'generateDocument'}
@@ -173,7 +178,7 @@ const Form: React.FunctionComponent<Props & FormikProps<ReportAPIInput>> = ({
               onClick={onCancel}
               sx={{ mr: 4 }}
             >
-              Generează document
+              <FormattedMessage id={'Generate Document'} />
             </Button>
             <Button
               disabled={actionDisabled}
@@ -181,7 +186,7 @@ const Form: React.FunctionComponent<Props & FormikProps<ReportAPIInput>> = ({
               onClick={() => void submitForm()}
               data-cy={'submitForm'}
             >
-              Salvează
+              <FormattedMessage id={'save'} />
             </Button>
           </Box>
         </Grid>
@@ -193,7 +198,7 @@ const Form: React.FunctionComponent<Props & FormikProps<ReportAPIInput>> = ({
 export const ReportForm = withFormik<Props, ReportAPIInput>({
   mapPropsToValues: ({ entityId, entityType, reportInfo, reportType }) =>
     reportInfo
-      ? addExistingReport(entityId, entityType, reportInfo)
+      ? addEntityToReport(entityId, entityType, reportInfo)
       : createReportInitialValues(reportType, entityId, entityType),
   validate: async (values, { reportId }) => Promise.resolve(),
   validateOnChange: false,
@@ -201,58 +206,3 @@ export const ReportForm = withFormik<Props, ReportAPIInput>({
   validateOnBlur: false,
   handleSubmit: (values, { props: { onSubmit } }) => onSubmit(values),
 })(Form)
-
-const addExistingReport = (
-  entityId: string,
-  entityType: EntityType,
-  reportInfo: ReportAPIInput,
-): ReportAPIInput => {
-  switch (entityType) {
-    case 'PERSON':
-      return { ...reportInfo, person: { _id: entityId } }
-    case 'COMPANY':
-      return { ...reportInfo, company: { _id: entityId } }
-    case 'PROPERTY':
-      return { ...reportInfo, property: { _id: entityId } }
-    case 'INCIDENT':
-      return { ...reportInfo, incident: { _id: entityId } }
-  }
-}
-
-const createReportInitialValues = (
-  type: string,
-  entityId: string,
-  entityType: EntityType,
-): ReportAPIInput => {
-  const reportInfo: ReportAPIInput = {
-    name: '',
-    type,
-    isTemplate: false,
-    sections: [],
-    refs: [],
-  }
-
-  const connectedEntity: ConnectedEntity = {
-    _id: entityId,
-  }
-
-  switch (entityType) {
-    case 'COMPANY': {
-      reportInfo.company = connectedEntity
-      break
-    }
-    case 'PERSON': {
-      reportInfo.person = connectedEntity
-      break
-    }
-    case 'PROPERTY': {
-      reportInfo.property = connectedEntity
-      break
-    }
-    case 'INCIDENT': {
-      reportInfo.incident = connectedEntity
-      break
-    }
-  }
-  return reportInfo
-}

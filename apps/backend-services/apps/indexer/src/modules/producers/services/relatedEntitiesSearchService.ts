@@ -1,7 +1,13 @@
+import {
+  CompanyIndex,
+  EventIndex,
+  PropertyIndex,
+  INDEX_COMPANIES,
+  INDEX_EVENTS,
+  INDEX_PROPERTIES,
+} from '@app/definitions'
 import { Injectable, Logger } from '@nestjs/common'
 import { ElasticsearchService } from '@nestjs/elasticsearch'
-import { INDEX_COMPANIES, INDEX_INCIDENTS, INDEX_PROPERTIES } from '@app/definitions/constants'
-import { CompanyIndex, IncidentIndex, PropertyIndex } from 'defs'
 
 @Injectable()
 export class RelatedEntitiesSearchService {
@@ -21,11 +27,11 @@ export class RelatedEntitiesSearchService {
   getPropertiesRelatedToCompany = async (companyId: string) =>
     this.getRelatedEntities(INDEX_PROPERTIES, 'companyOwners' as keyof PropertyIndex, companyId)
 
-  getIncidentsRelatedToProperty = async (propertyId: string) =>
-    this.getRelatedEntities(INDEX_INCIDENTS, 'properties' as keyof IncidentIndex, propertyId)
+  getEventsRelatedToProperty = async (propertyId: string) =>
+    this.getRelatedEntities(INDEX_EVENTS, 'properties' as keyof EventIndex, propertyId)
 
-  getIncidentsRelatedToPerson = async (personId: string) =>
-    this.getRelatedEntities(INDEX_INCIDENTS, 'persons' as keyof IncidentIndex, personId)
+  getEventsRelatedToPerson = async (personId: string) =>
+    this.getRelatedEntities(INDEX_EVENTS, 'persons' as keyof EventIndex, personId)
 
   private getRelatedEntities = async (index: string, path: string, entityId: string) => {
     try {

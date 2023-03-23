@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { useSnackbar } from 'notistack'
+import { useNotification } from '@frontend/utils/hooks/useNotification'
 import AddOutlinedIcon from '@mui/icons-material/AddOutlined'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
@@ -17,7 +17,7 @@ import { searchPropertiesRequest } from '../../../graphql/properties/queries/sea
 
 export const PropertiesList: React.FunctionComponent = () => {
   const navigate = useNavigate()
-  const { enqueueSnackbar } = useSnackbar()
+  const showNotification = useNotification()
   const [fetchProperties, { data, error, loading }] = searchPropertiesRequest()
 
   const [paginationParams, setPaginationParams] = useState<PaginationParams>({
@@ -59,9 +59,7 @@ export const PropertiesList: React.FunctionComponent = () => {
 
   useEffect(() => {
     if (error?.message) {
-      enqueueSnackbar('O eroare a intervenit in timpul comunicarii cu serverul.', {
-        variant: 'error',
-      })
+      showNotification('ServerError', 'error')
     }
   }, [error?.message])
 

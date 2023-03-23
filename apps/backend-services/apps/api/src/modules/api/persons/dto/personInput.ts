@@ -1,9 +1,12 @@
 import { Field, InputType } from '@nestjs/graphql'
 import { IsDateString, IsNumberString, IsOptional, Length } from 'class-validator'
 import { PersonAPIInput } from 'defs'
+import { LocationInput } from '../../common/dto/geolocation/locationInput'
 import { CustomFieldInput } from '../../customFields/dto/customFieldInput'
 import { FileInput } from '../../files/dto/fileInput'
+import { EducationInput } from './educationInput'
 import { IdDocumentInput } from './idDocumentInput'
+import { OldNameInput } from './oldNameInput'
 import { RelationshipInput } from './relationshipInput'
 
 @InputType()
@@ -24,20 +27,23 @@ export class PersonInput implements PersonAPIInput {
   @Field({ nullable: true })
   readonly cnp: string
 
-  @IsOptional()
-  @Length(2, 50)
-  @Field({ nullable: true })
-  readonly oldName: string
+  @Field(() => [OldNameInput])
+  readonly oldNames: OldNameInput[]
 
   @IsOptional()
   @IsDateString()
   @Field({ nullable: true })
   readonly birthdate: Date
 
+  @Field(() => LocationInput, { nullable: true })
+  readonly birthPlace: LocationInput
+
   @IsOptional()
-  @Length(2, 100)
-  @Field({ nullable: true })
-  readonly homeAddress: string
+  @Field(() => LocationInput, { nullable: true })
+  readonly homeAddress: LocationInput
+
+  @Field(() => [EducationInput])
+  readonly education: EducationInput[]
 
   @Field(() => [CustomFieldInput])
   readonly contactDetails: CustomFieldInput[]

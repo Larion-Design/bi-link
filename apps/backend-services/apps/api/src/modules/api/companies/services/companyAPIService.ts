@@ -1,10 +1,10 @@
 import { Injectable, Logger } from '@nestjs/common'
-import { CompanyModel } from '@app/entities/models/companyModel'
+import { CompanyModel } from '@app/models/models/company/companyModel'
 import { FileAPIService } from '../../files/services/fileAPIService'
 import { CustomFieldsService } from '../../customFields/services/customFieldsService'
-import { LocationService } from './locationService'
+import { LocationAPIService } from '../../common/services/locationAPIService'
 import { CompanyInput } from '../dto/companyInput'
-import { CompaniesService } from '@app/entities/services/companiesService'
+import { CompaniesService } from '@app/models/services/companiesService'
 import { AssociatesService } from './associatesService'
 
 @Injectable()
@@ -12,9 +12,9 @@ export class CompanyAPIService {
   private readonly logger = new Logger(CompanyAPIService.name)
 
   constructor(
+    private readonly locationAPIService: LocationAPIService,
     private readonly fileService: FileAPIService,
     private readonly customFieldsService: CustomFieldsService,
-    private readonly locationService: LocationService,
     private readonly companiesService: CompaniesService,
     private readonly associatesService: AssociatesService,
   ) {}
@@ -44,19 +44,22 @@ export class CompanyAPIService {
       const companyModel = new CompanyModel()
       companyModel.name = companyInfo.name
       companyModel.cui = companyInfo.cui
-      companyModel.headquarters = companyInfo.headquarters
       companyModel.registrationNumber = companyInfo.registrationNumber
 
+      companyModel.headquarters = companyInfo.headquarters
+        ? await this.locationAPIService.getLocationModel(companyInfo.headquarters)
+        : null
+
       companyModel.locations = companyInfo.locations.length
-        ? this.locationService.getLocationsDocumentsForInputData(companyInfo.locations)
+        ? await this.locationAPIService.getLocationsModels(companyInfo.locations)
         : []
 
       companyModel.contactDetails = companyInfo.contactDetails.length
-        ? this.customFieldsService.getCustomFieldsDocumentsForInputData(companyInfo.contactDetails)
+        ? this.customFieldsService.createCustomFieldsModels(companyInfo.contactDetails)
         : []
 
       companyModel.customFields = companyInfo.customFields.length
-        ? this.customFieldsService.getCustomFieldsDocumentsForInputData(companyInfo.customFields)
+        ? this.customFieldsService.createCustomFieldsModels(companyInfo.customFields)
         : []
 
       companyModel.files = companyInfo.files.length
@@ -64,7 +67,7 @@ export class CompanyAPIService {
         : []
 
       companyModel.associates = companyInfo.associates.length
-        ? await this.associatesService.getAssociatesDocumentsForInputData(companyInfo.associates)
+        ? await this.associatesService.createAssociatesModels(companyInfo.associates)
         : []
 
       return companyModel

@@ -1,10 +1,10 @@
 import { CacheModule, Module } from '@nestjs/common'
+import { MongooseModule } from '@nestjs/mongoose'
 import { ServiceHealthModule } from '@app/service-health'
 import { ConfigModule, ConfigService } from '@nestjs/config'
-import { ProcessFileController } from './controllers/processFileController'
+import { ProcessFileController } from './rpc/processFileController'
 import { ParserService } from './services/parserService'
 import { FilesModule } from '@app/files'
-import { MongooseModule } from '@nestjs/mongoose'
 
 @Module({
   imports: [

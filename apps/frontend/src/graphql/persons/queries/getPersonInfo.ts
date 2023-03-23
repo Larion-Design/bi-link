@@ -14,9 +14,43 @@ const getPersonInfo = gql`
     getPersonInfo(id: $personId) {
       firstName
       lastName
-      oldName
+      oldNames {
+        name
+        changeReason
+      }
       cnp
-      homeAddress
+      birthPlace {
+        locationId
+        street
+        number
+        building
+        door
+        zipCode
+        locality
+        county
+        country
+        otherInfo
+        coordinates {
+          lat
+          long
+        }
+      }
+      homeAddress {
+        locationId
+        street
+        number
+        building
+        door
+        zipCode
+        locality
+        county
+        country
+        otherInfo
+        coordinates {
+          lat
+          long
+        }
+      }
       birthdate
       images {
         fileId
@@ -32,8 +66,15 @@ const getPersonInfo = gql`
         person {
           _id
         }
+        relatedPersons {
+          _id
+        }
         type
         proximity
+        description
+        relatedPersons {
+          _id
+        }
         _confirmed
       }
       customFields {
@@ -51,6 +92,17 @@ const getPersonInfo = gql`
         documentNumber
         issueDate
         expirationDate
+      }
+      education {
+        type
+        school
+        specialization
+        customFields {
+          fieldName
+          fieldValue
+        }
+        startDate
+        endDate
       }
     }
   }

@@ -1,8 +1,11 @@
 import { Field, ObjectType } from '@nestjs/graphql'
 import { PersonAPIOutput } from 'defs'
+import { Location } from '../../common/dto/geolocation/location'
 import { CustomField } from '../../customFields/dto/customField'
 import { File } from '../../files/dto/file'
+import { Education } from './education'
 import { IdDocument } from './idDocument'
+import { OldName } from './oldName'
 import { Relationship } from './relationship'
 
 @ObjectType()
@@ -13,36 +16,42 @@ export class Person implements PersonAPIOutput {
   @Field({ nullable: true })
   birthdate: Date
 
-  @Field({ nullable: true })
+  @Field(() => Location, { nullable: true })
+  birthPlace: Location
+
+  @Field()
   firstName: string
 
-  @Field({ nullable: true })
+  @Field()
   lastName: string
 
-  @Field({ nullable: true, defaultValue: '' })
-  oldName: string
+  @Field(() => [OldName], { defaultValue: [] })
+  oldNames: OldName[]
 
-  @Field({ nullable: true })
+  @Field()
   cnp: string
 
-  @Field({ nullable: true })
-  homeAddress: string
+  @Field(() => Location, { nullable: true })
+  homeAddress: Location
 
   @Field(() => [File])
   images: File[]
 
-  @Field(() => [IdDocument], { nullable: true })
+  @Field(() => [IdDocument])
   documents: IdDocument[]
 
-  @Field(() => [Relationship], { nullable: true })
+  @Field(() => [Relationship])
   relationships: Relationship[]
 
-  @Field(() => [File], { nullable: true })
+  @Field(() => [File])
   files: File[]
 
-  @Field(() => [CustomField], { nullable: true })
+  @Field(() => [CustomField])
   contactDetails: CustomField[]
 
-  @Field(() => [CustomField], { nullable: true })
+  @Field(() => [CustomField])
   customFields: CustomField[]
+
+  @Field(() => [Education], { defaultValue: [] })
+  education: Education[]
 }

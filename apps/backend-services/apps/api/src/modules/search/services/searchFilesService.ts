@@ -1,18 +1,14 @@
-import { INDEX_FILES, INDEX_INCIDENTS } from '@app/definitions/constants'
+import { ProcessedFileIndex } from '@app/definitions'
 import { Injectable, Logger } from '@nestjs/common'
 import { ElasticsearchService } from '@nestjs/elasticsearch'
-import { ProcessedFileIndex } from 'defs'
-import { SearchHelperService } from './searchHelperService'
+import { INDEX_FILES } from '@app/definitions'
 
 @Injectable()
 export class SearchFilesService {
   private readonly index = INDEX_FILES
   private readonly logger = new Logger(SearchFilesService.name)
 
-  constructor(
-    private readonly elasticsearchService: ElasticsearchService,
-    private readonly searchHelperService: SearchHelperService,
-  ) {}
+  constructor(private readonly elasticsearchService: ElasticsearchService) {}
 
   getFileContent = async (fileId: string) => {
     try {

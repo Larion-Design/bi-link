@@ -1,7 +1,7 @@
 import { Args, ArgsType, Field, Query, Resolver } from '@nestjs/graphql'
 import { IsMongoId } from 'class-validator'
 import { Company } from '../dto/company'
-import { CompaniesService } from '@app/entities/services/companiesService'
+import { CompaniesService } from '@app/models/services/companiesService'
 import { UseGuards } from '@nestjs/common'
 import { FirebaseAuthGuard } from '../../../users/guards/FirebaseAuthGuard'
 
@@ -19,6 +19,6 @@ export class GetCompany {
   @Query(() => Company)
   @UseGuards(FirebaseAuthGuard)
   async getCompany(@Args() { id }: Params) {
-    return this.companiesService.getCompany(id)
+    return this.companiesService.getCompany(id, true)
   }
 }

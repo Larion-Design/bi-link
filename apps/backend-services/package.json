@@ -70,7 +70,6 @@
     "pdf-parse": "^1.1.1",
     "puppeteer": "^19.4.1",
     "reflect-metadata": "^0.1.13",
-    "rimraf": "^3.0.2",
     "rxjs": "^7.8.0",
     "supertokens-node": "^12.1.4",
     "tesseract.js": "^3.0.3",
@@ -102,9 +101,11 @@
     "defs": "workspace:*",
     "express": "^4.18.2",
     "jest": "28.0.3",
+    "nest-commander-testing": "^3.1.0",
     "prettier": "^2.8.1",
     "source-map-support": "^0.5.21",
     "supertest": "^6.3.3",
+    "tools": "workspace:*",
     "ts-jest": "28.0.1",
     "ts-loader": "^9.4.2",
     "ts-node": "^10.9.1",
@@ -134,13 +135,13 @@
       "<rootDir>/libs/"
     ],
     "moduleNameMapper": {
-      "^@app/entities(|/.*)$": "<rootDir>/libs/entities/src/$1",
-      "^@app/pub(|/.*)$": "<rootDir>/libs/pub/src/$1",
+      "^@app/models(|/.*)$": "<rootDir>/libs/models/src/$1",
+      "^@app/rpc(|/.*)$": "<rootDir>/libs/rpc/src/$1",
       "^@app/service-health(|/.*)$": "<rootDir>/libs/service-health/src/$1",
       "^@app/definitions(|/.*)$": "<rootDir>/libs/definitions/src/$1",
-      "^@app/search-mapping-tools(|/.*)$": "<rootDir>/libs/search-mapping-tools/src/$1",
       "^@app/files(|/.*)$": "<rootDir>/libs/files/src/$1",
-      "^@app/graph-module(|/.*)$": "<rootDir>/libs/graph-module/src/$1"
+      "^@app/graph-module(|/.*)$": "<rootDir>/libs/graph-module/src/$1",
+      "^@app/scheduler-module(|/.*)$": "<rootDir>/libs/scheduler-module/src/$1"
     }
   },
   "peerDependencies": {
@@ -150,6 +151,9 @@
   },
   "dependenciesMeta": {
     "defs": {
+      "injected": true
+    },
+    "tools": {
       "injected": true
     }
   }

@@ -23,6 +23,7 @@ import ListItemIcon from '@mui/material/ListItemIcon'
 import ListItemText from '@mui/material/ListItemText'
 import { styled } from '@mui/material/styles'
 import Toolbar from '@mui/material/Toolbar'
+import GavelOutlinedIcon from '@mui/icons-material/GavelOutlined'
 import { useLocation, useNavigate } from 'react-router-dom'
 
 import { routes } from '../../router/routes'
@@ -62,10 +63,7 @@ interface AppDrawerProps {
   toggleDrawer: () => void
 }
 
-export const AppDrawer: React.FunctionComponent<AppDrawerProps> = ({
-  open,
-  toggleDrawer,
-}) => {
+export const AppDrawer: React.FunctionComponent<AppDrawerProps> = ({ open, toggleDrawer }) => {
   const navigate = useNavigate()
   const { pathname } = useLocation()
   const { hasPrivilegedAccess } = getUserRole()
@@ -127,15 +125,21 @@ export const AppDrawer: React.FunctionComponent<AppDrawerProps> = ({
           </ListItemIcon>
           <ListItemText primary="Bunuri si Proprietati" />
         </ListItemButton>
-        <ListItemButton onClick={() => navigate(routes.incidents)}>
+        <ListItemButton onClick={() => navigate(routes.events)}>
           <ListItemIcon>
-            {pathname === routes.incidents ? (
+            {pathname === routes.events ? (
               <LocalHospitalIcon color={'primary'} />
             ) : (
               <LocalHospitalOutlinedIcon />
             )}
           </ListItemIcon>
-          <ListItemText primary="Incidente" />
+          <ListItemText primary="Evenimente" />
+        </ListItemButton>
+        <ListItemButton onClick={() => navigate(routes.newProceeding)}>
+          <ListItemIcon>
+            <GavelOutlinedIcon />
+          </ListItemIcon>
+          <ListItemText primary="Dosare" />
         </ListItemButton>
         {hasPrivilegedAccess && (
           <>

@@ -1,12 +1,23 @@
-import { Process, Processor } from '@nestjs/bull'
+import {
+  OnQueueActive,
+  OnQueueCompleted,
+  OnQueueFailed,
+  OnQueueStalled,
+  Process,
+  Processor,
+} from '@nestjs/bull'
 import { Job } from 'bull'
 import { Logger } from '@nestjs/common'
-import { EVENT_CREATED, EVENT_UPDATED, QUEUE_COMPANIES } from '../../producers/constants'
+import {
+  CompanyEventInfo,
+  EVENT_CREATED,
+  EVENT_UPDATED,
+  FileParentEntity,
+} from '@app/scheduler-module'
+import { QUEUE_COMPANIES } from '../../producers/constants'
 import { FileEventDispatcherService } from '../../producers/services/fileEventDispatcherService'
-import { CompanyEventInfo } from '@app/pub/types/company'
-import { CompaniesIndexerService } from '../../indexer/company/services/companiesIndexerService'
-import { CompaniesService } from '@app/entities/services/companiesService'
-import { FileParentEntity } from '@app/pub/types/file'
+import { CompaniesIndexerService } from '../../indexer/services'
+import { CompaniesService } from '@app/models/services/companiesService'
 
 @Processor(QUEUE_COMPANIES)
 export class CompanyIndexEventsConsumer {
@@ -18,6 +29,26 @@ export class CompanyIndexEventsConsumer {
     private readonly fileEventDispatcherService: FileEventDispatcherService,
   ) {}
 
+  @OnQueueActive()
+  onQueueActive({ id, name }: Job) {
+    this.logger.debug(`Processing job ID ${id} (${name})`)
+  }
+
+  @OnQueueCompleted()
+  onQueueCompleted({ id, name }: Job) {
+    this.logger.debug(`Completed job ID ${id} (${name})`)
+  }
+
+  @OnQueueFailed()
+  onQueueFailed({ id, name, failedReason }: Job) {
+    this.logger.error(`Failed job ID ${id} (${name}) - ${String(failedReason)}`)
+  }
+
+  @OnQueueStalled()
+  onQueueStalled({ id, name }: Job) {
+    this.logger.error(`Job stalled ${id} (${name})`)
+  }
+
   @Process(EVENT_CREATED)
   async companyCreated(job: Job<CompanyEventInfo>) {
     try {
@@ -25,13 +56,11 @@ export class CompanyIndexEventsConsumer {
         data: { companyId },
       } = job
 
-      if (await this.indexCompanyInfo(companyId)) {
-        return job.moveToCompleted()
-      }
-      throw new Error(`Could not index company ID ${companyId}`)
+      await this.indexCompanyInfo(companyId)
+      return {}
     } catch (error) {
       this.logger.error(error)
-      return job.moveToFailed(error as { message: string })
+      await job.moveToFailed(error as { message: string })
     }
   }
 
@@ -42,18 +71,16 @@ export class CompanyIndexEventsConsumer {
         data: { companyId },
       } = job
 
-      if (await this.indexCompanyInfo(companyId)) {
-        return job.moveToCompleted()
-      }
-      throw new Error(`Could not index company ID ${companyId}`)
+      await this.indexCompanyInfo(companyId)
+      return {}
     } catch (error) {
       this.logger.error(error)
-      return job.moveToFailed(error as { message: string })
+      await job.moveToFailed(error as { message: string })
     }
   }
 
   private indexCompanyInfo = async (companyId: string) => {
-    const company = await this.companiesService.getCompany(companyId)
+    const company = await this.companiesService.getCompany(companyId, false)
     const indexingSuccessful = await this.companiesIndexerService.indexCompany(companyId, company)
 
     if (indexingSuccessful) {

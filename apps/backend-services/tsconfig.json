@@ -21,17 +21,17 @@
     "noFallthroughCasesInSwitch": true,
     "importHelpers": true,
     "paths": {
-      "@app/entities": [
-        "libs/entities/src"
+      "@app/models": [
+        "libs/models/src"
       ],
-      "@app/entities/*": [
-        "libs/entities/src/*"
+      "@app/models/*": [
+        "libs/models/src/*"
       ],
-      "@app/pub": [
-        "libs/pub/src"
+      "@app/rpc": [
+        "libs/rpc/src"
       ],
-      "@app/pub/*": [
-        "libs/pub/src/*"
+      "@app/rpc/*": [
+        "libs/rpc/src/*"
       ],
       "@app/service-health": [
         "libs/service-health/src"
@@ -44,12 +44,6 @@
       ],
       "@app/definitions/*": [
         "libs/definitions/src/*"
-      ],
-      "@app/search-mapping-tools": [
-        "libs/search-mapping-tools/src"
-      ],
-      "@app/search-mapping-tools/*": [
-        "libs/search-mapping-tools/src/*"
       ],
       "@app/graph": [
         "libs/graph/src"
@@ -68,6 +62,12 @@
       ],
       "@app/graph-module/*": [
         "libs/graph-module/src/*"
+      ],
+      "@app/scheduler-module": [
+        "libs/scheduler-module/src"
+      ],
+      "@app/scheduler-module/*": [
+        "libs/scheduler-module/src/*"
       ]
     }
   }

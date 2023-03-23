@@ -6,7 +6,7 @@ import { LoginForm } from '../../components/form/loginForm'
 import { Navigate } from 'react-router-dom'
 import { routes } from '../../router/routes'
 import { useAuth } from '../../utils/auth'
-import { Loader } from '../../components/loader/loader'
+import { Loader } from '@frontend/components/loader'
 
 export const LoginPage: React.FunctionComponent = () => {
   const { user, login, loading, error } = useAuth()

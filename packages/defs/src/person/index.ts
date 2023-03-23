@@ -1,0 +1,5 @@
+export * from './education'
+export * from './idDocument'
+export * from './oldName'
+export * from './person'
+export * from './relationship'

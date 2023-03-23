@@ -24,7 +24,7 @@ const request = gql`
       property {
         _id
       }
-      incident {
+      event {
         _id
       }
       sections {
@@ -69,18 +69,12 @@ const request = gql`
         property {
           _id
         }
-        incident {
+        event {
           _id
         }
-        entityInfo {
-          field
-          path
-        }
-        relationshipInfo {
-          field
-          path
-          targetId
-        }
+        field
+        path
+        targetId
       }
     }
   }

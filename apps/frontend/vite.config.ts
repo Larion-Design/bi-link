@@ -1,23 +1,24 @@
 // noinspection JSUnusedGlobalSymbols
-import react from '@vitejs/plugin-react'
+import react from '@vitejs/plugin-react-swc'
 // import basicSSL from '@vitejs/plugin-basic-ssl'
 import { defineConfig, splitVendorChunkPlugin } from 'vite'
+import tsconfigPaths from 'vite-tsconfig-paths'
 
 /**
  * @see https://vitejs.dev/config/
  */
 export default defineConfig({
   plugins: [
+    tsconfigPaths(),
     react({
-      babel: {
-        babelrc: true,
-      },
+      tsDecorators: true,
+      plugins: [],
     }),
     splitVendorChunkPlugin(),
     // basicSSL(),
   ],
   preview: {
-    port: 3000,
+    port: 5173,
     strictPort: true,
   },
   clearScreen: false,
@@ -26,7 +27,7 @@ export default defineConfig({
   },
   envPrefix: ['VITE_', 'TAURI_'],
   optimizeDeps: {
-    include: ['defs'],
+    include: ['defs', 'tools'],
   },
   build: {
     chunkSizeWarningLimit: 8192,

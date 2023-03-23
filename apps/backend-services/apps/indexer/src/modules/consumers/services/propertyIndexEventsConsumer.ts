@@ -1,12 +1,16 @@
-import { Process, Processor } from '@nestjs/bull'
-import { EVENT_CREATED, EVENT_UPDATED, QUEUE_PROPERTIES } from '@app/pub'
+import { OnQueueActive, OnQueueCompleted, OnQueueFailed, Process, Processor } from '@nestjs/bull'
 import { Logger } from '@nestjs/common'
-import { FileEventDispatcherService } from '../../producers/services/fileEventDispatcherService'
 import { Job } from 'bull'
-import { FileParentEntity } from '@app/pub/types/file'
-import { PropertiesService } from '@app/entities/services/propertiesService'
-import { PropertiesIndexerService } from '../../indexer/property/services/propertiesIndexerService'
-import { PropertyEventInfo } from '@app/pub/types/property'
+import {
+  EVENT_CREATED,
+  EVENT_UPDATED,
+  FileParentEntity,
+  PropertyEventInfo,
+} from '@app/scheduler-module'
+import { QUEUE_PROPERTIES } from '../../producers/constants'
+import { FileEventDispatcherService } from '../../producers/services/fileEventDispatcherService'
+import { PropertiesService } from '@app/models/services/propertiesService'
+import { PropertiesIndexerService } from '../../indexer/services'
 
 @Processor(QUEUE_PROPERTIES)
 export class PropertyIndexEventsConsumer {
@@ -17,6 +21,21 @@ export class PropertyIndexEventsConsumer {
     private readonly propertiesIndexerService: PropertiesIndexerService,
     private readonly fileEventDispatcherService: FileEventDispatcherService,
   ) {}
+
+  @OnQueueActive()
+  onQueueActive({ id, name }: Job) {
+    this.logger.debug(`Processing job ID ${id} (${name})`)
+  }
+
+  @OnQueueCompleted()
+  onQueueCompleted({ id, name }: Job) {
+    this.logger.debug(`Completed job ID ${id} (${name})`)
+  }
+
+  @OnQueueFailed()
+  onQueueFailed({ id, name }: Job) {
+    this.logger.debug(`Failed job ID ${id} (${name})`)
+  }
 
   @Process(EVENT_CREATED)
   async propertyCreated(job: Job<PropertyEventInfo>) {
@@ -51,7 +70,7 @@ export class PropertyIndexEventsConsumer {
   }
 
   private indexPropertyInfo = async (propertyId: string) => {
-    const property = await this.propertiesService.getProperty(propertyId)
+    const property = await this.propertiesService.getProperty(propertyId, true)
     const indexingSuccessful = await this.propertiesIndexerService.indexProperty(
       propertyId,
       property,

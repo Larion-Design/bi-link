@@ -18,6 +18,7 @@ export function useMap<Item>(
 
   const deps = [map]
   const uid = useMemo(v4, deps)
+  const size = useMemo(() => map.size, deps)
 
   const update = useCallback(
     (id: string, item: Item) => setMap((map) => new Map(map.set(id, item))),
@@ -93,6 +94,7 @@ export function useMap<Item>(
     removeBulk,
     clear,
     filter,
+    size,
   }
 }
 

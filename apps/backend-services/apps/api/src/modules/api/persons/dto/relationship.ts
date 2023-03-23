@@ -4,6 +4,9 @@ import { RelationshipAPIOutput } from 'defs'
 
 @ObjectType()
 export class Relationship implements RelationshipAPIOutput {
+  @Field({ defaultValue: '' })
+  description: string
+
   @Field()
   type: string
 
@@ -12,6 +15,9 @@ export class Relationship implements RelationshipAPIOutput {
 
   @Field(() => ConnectedEntity)
   person: ConnectedEntity
+
+  @Field(() => [ConnectedEntity])
+  relatedPersons: ConnectedEntity[]
 
   @Field({ nullable: true, defaultValue: true })
   _confirmed: boolean

@@ -1,10 +1,12 @@
+import { RealEstateInfoModel } from '@app/models/models/property/realEstateInfoModel'
 import { Injectable } from '@nestjs/common'
-import { PropertiesService } from '@app/entities/services/propertiesService'
+import { PropertiesService } from '@app/models/services/propertiesService'
 import { PropertyAPIInput } from 'defs'
-import { PropertyModel } from '@app/entities/models/propertyModel'
+import { PropertyModel } from '@app/models/models/property/propertyModel'
+import { LocationAPIService } from '../../common/services/locationAPIService'
 import { PropertyOwnerAPIService } from './propertyOwnerAPIService'
 import { CustomFieldsService } from '../../customFields/services/customFieldsService'
-import { VehicleInfoModel } from '@app/entities/models/vehicleInfoModel'
+import { VehicleInfoModel } from '@app/models/models/property/vehicleInfoModel'
 import { FileAPIService } from '../../files/services/fileAPIService'
 
 @Injectable()
@@ -14,6 +16,7 @@ export class PropertyAPIService {
     private readonly propertyOwnerAPIService: PropertyOwnerAPIService,
     private readonly customFieldsService: CustomFieldsService,
     private readonly fileAPIService: FileAPIService,
+    private readonly locationAPIService: LocationAPIService,
   ) {}
 
   createProperty = async (propertyInfo: PropertyAPIInput) => {
@@ -40,7 +43,7 @@ export class PropertyAPIService {
     }
 
     if (propertyInfo.customFields.length) {
-      propertyModel.customFields = this.customFieldsService.getCustomFieldsDocumentsForInputData(
+      propertyModel.customFields = this.customFieldsService.createCustomFieldsModels(
         propertyInfo.customFields,
       )
     }
@@ -62,6 +65,16 @@ export class PropertyAPIService {
       vehicleInfoModel.color = color
 
       propertyModel.vehicleInfo = vehicleInfoModel
+    } else if (propertyInfo.realEstateInfo) {
+      const realEstateInfoModel = new RealEstateInfoModel()
+      const { surface, townArea, location } = propertyInfo.realEstateInfo
+
+      realEstateInfoModel.surface = surface
+      realEstateInfoModel.townArea = townArea
+      realEstateInfoModel.location = location
+        ? await this.locationAPIService.getLocationModel(location)
+        : null
+      propertyModel.realEstateInfo = realEstateInfoModel
     }
     return propertyModel
   }

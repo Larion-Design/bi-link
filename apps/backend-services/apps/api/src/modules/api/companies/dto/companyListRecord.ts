@@ -1,17 +1,8 @@
 import { CompanyListRecord as CompanyListRecordType } from 'defs'
-import { Field, ObjectType } from '@nestjs/graphql'
+import { ObjectType, PickType } from '@nestjs/graphql'
+import { Company } from './company'
 
 @ObjectType()
-export class CompanyListRecord implements CompanyListRecordType {
-  @Field()
-  _id: string
-
-  @Field()
-  cui: string
-
-  @Field()
-  name: string
-
-  @Field()
-  registrationNumber: string
-}
+export class CompanyListRecord
+  extends PickType(Company, ['_id', 'cui', 'name', 'registrationNumber'] as const)
+  implements CompanyListRecordType {}

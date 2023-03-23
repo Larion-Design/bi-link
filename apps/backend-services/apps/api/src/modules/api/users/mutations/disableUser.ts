@@ -4,7 +4,7 @@ import { UserService } from '../../../users/services/UserService'
 import { UseGuards } from '@nestjs/common'
 import { FirebaseAuthGuard } from '../../../users/guards/FirebaseAuthGuard'
 import { CurrentUser } from '../../../users/decorators/currentUser'
-import { Role } from '../../../users/constants'
+import { Role } from 'defs'
 import { RolesGuard } from '../../../users/guards/RolesGuard'
 import { Roles } from '../../../users/decorators/roles'
 

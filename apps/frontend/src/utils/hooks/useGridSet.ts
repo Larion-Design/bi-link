@@ -64,6 +64,8 @@ export function useGridSet<Item>(
     [map],
   )
 
+  const size = useMemo(() => map.size, [map])
+
   return {
     uid,
     create,
@@ -73,5 +75,6 @@ export function useGridSet<Item>(
     removeBulk,
     values,
     rawValues,
+    size,
   }
 }

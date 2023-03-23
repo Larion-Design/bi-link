@@ -1,19 +1,16 @@
+import { PropertySearchIndex } from '@app/definitions'
 import { Injectable, Logger } from '@nestjs/common'
 import { ElasticsearchService } from '@nestjs/elasticsearch'
-import { INDEX_PROPERTIES } from '@app/definitions/constants'
+import { INDEX_PROPERTIES } from '@app/definitions'
 import { QueryDslQueryContainer } from '@elastic/elasticsearch/lib/api/types'
-import { SearchHelperService } from './searchHelperService'
-import { PropertyListRecord, PropertySearchIndex } from 'defs'
+import { PropertyListRecord } from 'defs'
 
 @Injectable()
 export class SearchVehiclesService {
   private readonly index = INDEX_PROPERTIES
   private readonly logger = new Logger(SearchVehiclesService.name)
 
-  constructor(
-    private readonly elasticsearchService: ElasticsearchService,
-    private readonly searchHelperService: SearchHelperService,
-  ) {}
+  constructor(private readonly elasticsearchService: ElasticsearchService) {}
 
   vinExists = async (vin: string, propertyId?: string) => {
     try {

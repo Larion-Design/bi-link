@@ -1,5 +1,5 @@
-import { EntityEventsService } from '@app/pub/services/entityEventsService'
-import { UserActionsService } from '@app/pub/services/userActionsService'
+import { EntityEventsService } from '@app/rpc/services/entityEventsService'
+import { UserActionsService } from '@app/rpc/services/userActionsService'
 import { UseGuards } from '@nestjs/common'
 import { Args, ArgsType, Field, Mutation, Resolver } from '@nestjs/graphql'
 import { getUnixTime } from 'date-fns'

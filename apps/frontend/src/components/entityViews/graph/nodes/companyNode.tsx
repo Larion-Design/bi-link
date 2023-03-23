@@ -15,14 +15,15 @@ export const CompanyNode: React.FunctionComponent<NodeProps<Props>> = ({
   <>
     <Handle type={'target'} position={Position.Top} />
     <Paper
-      sx={(theme) => ({
-        p: 2,
+      sx={({ palette: { background } }) => ({
+        p: 1,
         display: 'flex',
+        flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'center',
-        background: isRootNode
-          ? theme.palette.background.paper
-          : theme.palette.background.default,
+        background: isRootNode ? background.paper : background.default,
+        width: 150,
+        height: 150,
       })}
     >
       <StoreOutlinedIcon fontSize={'small'} />

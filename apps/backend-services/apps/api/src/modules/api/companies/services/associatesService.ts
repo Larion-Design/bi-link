@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common'
-import { AssociateModel } from '@app/entities/models/associateModel'
+import { AssociateModel } from '@app/models/models/company/associateModel'
 import { CustomFieldsService } from '../../customFields/services/customFieldsService'
-import { PersonsService } from '@app/entities/services/personsService'
+import { PersonsService } from '@app/models/services/personsService'
 import { AssociateInput } from '../dto/associateInput'
-import { CompaniesService } from '@app/entities/services/companiesService'
+import { CompaniesService } from '@app/models/services/companiesService'
 
 @Injectable()
 export class AssociatesService {
@@ -17,8 +17,9 @@ export class AssociatesService {
     const personsAssociates = associates.filter(({ person }) => !!person?._id)
 
     if (personsAssociates.length) {
-      const personsModels = await this.personService.getPersonsDocuments(
+      const personsModels = await this.personService.getPersons(
         personsAssociates.map(({ person: { _id } }) => _id),
+        false,
       )
       return personsModels.map((personModel) => {
         const associateInfo = personsAssociates.find(
@@ -36,8 +37,9 @@ export class AssociatesService {
     const companiesAssociates = associates.filter(({ company }) => !!company?._id)
 
     if (companiesAssociates.length) {
-      const companiesModels = await this.companiesService.getCompaniesDocuments(
+      const companiesModels = await this.companiesService.getCompanies(
         companiesAssociates.map(({ company: { _id } }) => _id),
+        false,
       )
       return companiesModels.map((companyModel) => {
         const associateInfo = companiesAssociates.find(
@@ -52,7 +54,7 @@ export class AssociatesService {
     return []
   }
 
-  getAssociatesDocumentsForInputData = async (associates: AssociateInput[]) => {
+  createAssociatesModels = async (associates: AssociateInput[]) => {
     return [
       ...(await this.createPersonsAssociates(associates)),
       ...(await this.createCompaniesAssociates(associates)),
@@ -66,7 +68,7 @@ export class AssociatesService {
     associate.endDate = associateInfo.endDate
     associate.equity = associateInfo.equity
     associate.isActive = associateInfo.isActive
-    associate.customFields = this.customFieldsService.getCustomFieldsDocumentsForInputData(
+    associate.customFields = this.customFieldsService.createCustomFieldsModels(
       associateInfo.customFields,
     )
     associate._confirmed = associateInfo._confirmed

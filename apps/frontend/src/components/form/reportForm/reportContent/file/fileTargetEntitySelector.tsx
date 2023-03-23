@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react'
 import Box from '@mui/material/Box'
 import { EntityInfo, EntityType, FileAPIInput } from 'defs'
 import { getCompanyInfoRequest } from '../../../../../graphql/companies/queries/getCompany'
-import { getIncidentRequest } from '../../../../../graphql/incidents/queries/getIncident'
+import { getEventRequest } from '../../../../../graphql/events/queries/getEvent'
 import { getPersonInfoRequest } from '../../../../../graphql/persons/queries/getPersonInfo'
 import { getPropertyRequest } from '../../../../../graphql/properties/queries/getProperty'
 import { Graph } from '../../../../entityViews/graph'
@@ -24,7 +24,7 @@ export const FileTargetEntitySelector: React.FunctionComponent<Props> = ({
   const [fetchPerson, { data: personInfo }] = getPersonInfoRequest()
   const [fetchProperty, { data: propertyInfo }] = getPropertyRequest()
   const [fetchCompany, { data: companyInfo }] = getCompanyInfoRequest()
-  const [fetchIncident, { data: incidentInfo }] = getIncidentRequest()
+  const [fetchIncident, { data: eventInfo }] = getEventRequest()
 
   const openFileSelector = useCallback(
     (files: FileAPIInput[], selectedFile: FileAPIInput | null) =>
@@ -57,12 +57,12 @@ export const FileTargetEntitySelector: React.FunctionComponent<Props> = ({
   }, [companyInfo?.getCompany?.files])
 
   useEffect(() => {
-    const files = incidentInfo?.getIncident?.files.filter(({ isHidden }) => !isHidden)
+    const files = eventInfo?.getEvent?.files.filter(({ isHidden }) => !isHidden)
 
     if (files?.length) {
       openFileSelector(files, selectedFile)
     }
-  }, [incidentInfo?.getIncident?.files])
+  }, [eventInfo?.getEvent?.files])
 
   useEffect(() => {
     if (selectedEntity) {
@@ -81,8 +81,8 @@ export const FileTargetEntitySelector: React.FunctionComponent<Props> = ({
           void fetchCompany({ variables: { id: entityId } })
           break
         }
-        case 'INCIDENT': {
-          void fetchIncident({ variables: { incidentId: entityId } })
+        case 'EVENT': {
+          void fetchIncident({ variables: { eventId: entityId } })
           break
         }
       }

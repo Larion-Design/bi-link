@@ -1,4 +1,4 @@
-import { ReportsService } from '@app/entities/services/reportsService'
+import { ReportsService } from '@app/models/services/reportsService'
 import { UseGuards } from '@nestjs/common'
 import { Args, ArgsType, Field, Query, Resolver } from '@nestjs/graphql'
 import { IsMongoId } from 'class-validator'
@@ -19,6 +19,6 @@ export class GetReport {
   @Query(() => Report)
   @UseGuards(FirebaseAuthGuard)
   async getReport(@Args() { id }: Params) {
-    return this.reportsService.getReport(id)
+    return this.reportsService.getReport(id, true)
   }
 }

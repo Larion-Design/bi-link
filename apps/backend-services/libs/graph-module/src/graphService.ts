@@ -1,13 +1,15 @@
 import { Injectable, Logger } from '@nestjs/common'
-import { Path } from 'neo4j-driver'
-import { Neo4jService } from 'nest-neo4j/dist'
 import {
-  EntitiesGraph,
   EntityLabel,
   EntityMetadata,
+  GraphEntities,
+  GraphNode,
+  GraphRelationships,
   RelationshipLabel,
   RelationshipMetadata,
 } from 'defs'
+import { Path } from 'neo4j-driver'
+import { Neo4jService } from 'nest-neo4j/dist'
 
 @Injectable()
 export class GraphService {
@@ -158,6 +160,17 @@ export class GraphService {
     }
   }
 
+  deleteRelationshipType = async (entityId: string, relationship: RelationshipLabel) => {
+    try {
+      await this.neo4jService.write(
+        `OPTIONAL MATCH (n {_id: $entityId})-[r:${relationship}]->(s) DELETE r`,
+        { entityId },
+      )
+    } catch (e) {
+      this.logger.error(e)
+    }
+  }
+
   getEntitiesGraph = async (entityId: string, depth = 1, relationshipType?: RelationshipLabel) => {
     const result = await this.neo4jService.read(
       `OPTIONAL MATCH p=(n {_id: $entityId})-[${
@@ -168,11 +181,62 @@ export class GraphService {
       },
     )
 
-    const relationships: EntitiesGraph = {
+    const relationships: GraphRelationships = {
+      companiesBranches: [],
+      companiesHeadquarters: [],
+      eventsOccurrencePlace: [],
+      personsBirthPlace: [],
+      personsHomeAddress: [],
       companiesAssociates: [],
-      incidentsParties: [],
+      eventsParties: [],
       propertiesRelationships: [],
       personalRelationships: [],
+      propertiesLocation: [],
+      entitiesReported: [],
+      entitiesInvolvedInProceeding: [],
+    }
+
+    const entities: Record<keyof GraphEntities, Set<string>> = {
+      persons: new Set(),
+      companies: new Set(),
+      properties: new Set(),
+      events: new Set(),
+      locations: new Set(),
+      proceedings: new Set(),
+      reports: new Set(),
+    }
+
+    const registerEntity = ({ _id: entityId, _type: entityType }: GraphNode) => {
+      switch (entityType) {
+        case EntityLabel.PERSON: {
+          entities.persons.add(entityId)
+          break
+        }
+        case EntityLabel.COMPANY: {
+          entities.companies.add(entityId)
+          break
+        }
+        case EntityLabel.PROPERTY: {
+          entities.properties.add(entityId)
+          break
+        }
+        case EntityLabel.EVENT: {
+          entities.events.add(entityId)
+          break
+        }
+        case EntityLabel.LOCATION: {
+          entities.locations.add(entityId)
+          break
+        }
+        case EntityLabel.PROCEEDING: {
+          entities.proceedings.add(entityId)
+          break
+        }
+        case EntityLabel.REPORT: {
+          entities.reports.add(entityId)
+          break
+        }
+      }
     }
 
     result.records.forEach((record) => {
@@ -182,15 +246,18 @@ export class GraphService {
         const startEntityId = String(start.properties._id)
         const endEntityId = String(end.properties._id)
 
-        const startNode = {
+        const startNode: GraphNode = {
           _id: startEntityId,
           _type: start.labels[0] as EntityLabel,
         }
 
-        const endNode = {
+        const endNode: GraphNode = {
           _id: endEntityId,
           _type: end.labels[0] as EntityLabel,
         }
+
+        registerEntity(startNode)
+        registerEntity(endNode)
 
         switch (type as RelationshipLabel) {
           case RelationshipLabel.ASSOCIATE: {
@@ -226,7 +293,7 @@ export class GraphService {
             break
           }
           case RelationshipLabel.PARTY_INVOLVED: {
-            relationships.incidentsParties.push({
+            relationships.eventsParties.push({
               startNode,
               endNode,
               _type: type as RelationshipLabel,
@@ -235,9 +302,94 @@ export class GraphService {
             })
             break
           }
+          case RelationshipLabel.LOCATED_AT: {
+            relationships.propertiesLocation.push({
+              startNode,
+              endNode,
+              _type: type as RelationshipLabel,
+              _confirmed: Boolean(properties._confirmed),
+            })
+            break
+          }
+          case RelationshipLabel.BORN_IN: {
+            relationships.personsBirthPlace.push({
+              startNode,
+              endNode,
+              _type: type as RelationshipLabel,
+              _confirmed: Boolean(properties._confirmed),
+            })
+            break
+          }
+          case RelationshipLabel.HQ_AT: {
+            relationships.companiesHeadquarters.push({
+              startNode,
+              endNode,
+              _type: type as RelationshipLabel,
+              _confirmed: Boolean(properties._confirmed),
+            })
+            break
+          }
+          case RelationshipLabel.BRANCH_AT: {
+            relationships.companiesBranches.push({
+              startNode,
+              endNode,
+              _type: type as RelationshipLabel,
+              _confirmed: Boolean(properties._confirmed),
+            })
+            break
+          }
+          case RelationshipLabel.LIVES_AT: {
+            relationships.personsHomeAddress.push({
+              startNode,
+              endNode,
+              _type: type as RelationshipLabel,
+              _confirmed: Boolean(properties._confirmed),
+            })
+            break
+          }
+          case RelationshipLabel.INVOLVED_AS: {
+            relationships.entitiesInvolvedInProceeding.push({
+              startNode,
+              endNode,
+              involvedAs: String(properties.involvedAs),
+              _type: type as RelationshipLabel,
+              _confirmed: Boolean(properties._confirmed),
+            })
+            break
+          }
+          case RelationshipLabel.REPORTED: {
+            relationships.entitiesReported.push({
+              startNode,
+              endNode,
+              _type: type as RelationshipLabel,
+              _confirmed: Boolean(properties._confirmed),
+            })
+            break
+          }
+          case RelationshipLabel.OCCURED_AT: {
+            relationships.eventsOccurrencePlace.push({
+              startNode,
+              endNode,
+              _type: type as RelationshipLabel,
+              _confirmed: Boolean(properties._confirmed),
+            })
+            break
+          }
         }
       })
     })
-    return relationships
+
+    return {
+      relationships,
+      entities: {
+        persons: Array.from(entities.persons),
+        companies: Array.from(entities.companies),
+        properties: Array.from(entities.properties),
+        events: Array.from(entities.events),
+        locations: Array.from(entities.locations),
+        proceedings: Array.from(entities.proceedings),
+        reports: Array.from(entities.reports),
+      },
+    }
   }
 }

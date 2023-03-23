@@ -26,22 +26,22 @@
         "tsConfigPath": "apps/indexer/tsconfig.app.json"
       }
     },
-    "entities": {
+    "models": {
       "type": "library",
-      "root": "libs/entities",
+      "root": "libs/models",
       "entryFile": "index",
-      "sourceRoot": "libs/entities/src",
+      "sourceRoot": "libs/models/src",
       "compilerOptions": {
-        "tsConfigPath": "libs/entities/tsconfig.lib.json"
+        "tsConfigPath": "libs/models/tsconfig.lib.json"
       }
     },
-    "pub": {
+    "rpc": {
       "type": "library",
-      "root": "libs/pub",
+      "root": "libs/rpc",
       "entryFile": "index",
-      "sourceRoot": "libs/pub/src",
+      "sourceRoot": "libs/rpc/src",
       "compilerOptions": {
-        "tsConfigPath": "libs/pub/tsconfig.lib.json"
+        "tsConfigPath": "libs/rpc/tsconfig.lib.json"
       }
     },
     "service-health": {
@@ -80,15 +80,6 @@
         "tsConfigPath": "apps/user-actions-recorder/tsconfig.app.json"
       }
     },
-    "search-mapping-tools": {
-      "type": "library",
-      "root": "libs/search-mapping-tools",
-      "entryFile": "index",
-      "sourceRoot": "libs/search-mapping-tools/src",
-      "compilerOptions": {
-        "tsConfigPath": "libs/search-mapping-tools/tsconfig.lib.json"
-      }
-    },
     "files": {
       "type": "library",
       "root": "libs/files",
@@ -123,6 +114,24 @@
       "sourceRoot": "apps/cli/src",
       "compilerOptions": {
         "tsConfigPath": "apps/cli/tsconfig.app.json"
+      }
+    },
+    "scheduler-module": {
+      "type": "library",
+      "root": "libs/scheduler-module",
+      "entryFile": "index",
+      "sourceRoot": "libs/scheduler-module/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/scheduler-module/tsconfig.lib.json"
+      }
+    },
+    "entities": {
+      "type": "application",
+      "root": "apps/entities",
+      "entryFile": "main",
+      "sourceRoot": "apps/entities/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/entities/tsconfig.app.json"
       }
     }
   }

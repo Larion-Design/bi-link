@@ -26,7 +26,7 @@ export class Associate implements AssociateAPIOutput {
   @Field()
   isActive: boolean
 
-  @Field(() => [CustomField], { nullable: true })
+  @Field(() => [CustomField])
   customFields: CustomField[]
 
   @Field({ nullable: true, defaultValue: true })

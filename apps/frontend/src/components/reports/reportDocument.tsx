@@ -16,7 +16,7 @@ type Props = {
 }
 
 export const ReportDocument: React.FunctionComponent<Props> = ({ reportInfo }) => {
-  const { name, sections, type, person, company, property, incident } = reportInfo
+  const { name, sections, type, person, company, property, event } = reportInfo
   const { transform } = useDataRefs(reportInfo.refs)
   const [fetchFilesInfo, { data: filesInfo }] = getFilesInfoRequest()
 

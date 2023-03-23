@@ -6,7 +6,7 @@ import { PersonAPIInput } from 'defs'
 import { getPersonFullName } from '../../utils/person'
 import { Graph } from '../entityViews/graph'
 import { Reports } from '../entityViews/reports'
-import { PersonForm } from '../form/personForm'
+import { PersonForm } from '../form/person/personForm'
 import { InputFieldMenu } from '../menu/inputFieldMenu'
 
 type Props = {

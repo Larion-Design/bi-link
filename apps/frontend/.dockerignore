@@ -15,6 +15,7 @@ dist-ssr
 coverage
 cypress
 .nyc_output
+.swc
 
 # Editor directories and files
 .vscode/*

@@ -19,9 +19,11 @@ export const routes = {
   propertyDetails: '/properties/:propertyId',
   properties: '/properties',
 
-  newIncident: '/incidents/new',
-  incidentDetails: '/incidents/:incidentId',
-  incidents: '/incidents',
+  newEvent: '/events/new',
+  eventDetails: '/events/:eventId',
+  events: '/events',
+
+  newProceeding: '/proceedings/new',
 
   users: '/users',
   history: '/history',

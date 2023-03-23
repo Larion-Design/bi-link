@@ -1,8 +1,13 @@
+import {
+  EVENT_CREATED,
+  EVENT_UPDATED,
+  FileEventInfo,
+  FileLinkedEntity,
+} from '@app/scheduler-module'
 import { Injectable, Logger } from '@nestjs/common'
 import { InjectQueue } from '@nestjs/bull'
 import { Queue } from 'bull'
-import { FileEventInfo, FileLinkedEntity } from '@app/pub/types/file'
-import { EVENT_CREATED, EVENT_UPDATED, QUEUE_FILES } from '../constants'
+import { QUEUE_FILES } from '../constants'
 
 @Injectable()
 export class FileEventDispatcherService {
@@ -12,11 +17,9 @@ export class FileEventDispatcherService {
     void this.queue.empty()
   }
 
-  dispatchFileCreated = async (eventInfo: FileEventInfo) =>
-    this.publishJob(EVENT_CREATED, eventInfo)
+  dispatchFileCreated = async (fileId: string) => this.publishJob(EVENT_CREATED, { fileId })
 
-  dispatchFileUpdated = async (eventInfo: FileEventInfo) =>
-    this.publishJob(EVENT_UPDATED, eventInfo)
+  dispatchFileUpdated = async (fileId: string) => this.publishJob(EVENT_UPDATED, { fileId })
 
   dispatchFilesUpdated = async (filesIds: string[], linkedEntity?: FileLinkedEntity) =>
     this.queue.addBulk(

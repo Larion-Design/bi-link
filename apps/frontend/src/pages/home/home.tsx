@@ -12,7 +12,7 @@ import { routes } from '../../router/routes'
 import companiesImage from '../../../assets/images/companies.jpg'
 import personsImage from '../../../assets/images/people.jpg'
 import vehiclesImage from '../../../assets/images/vehicles.jpg'
-import incidentsImage from '../../../assets/images/incidents.jpg'
+import eventsImage from '../../../assets/images/events.jpg'
 
 export const Home: React.FunctionComponent = () => {
   const navigate = useNavigate()
@@ -96,25 +96,21 @@ export const Home: React.FunctionComponent = () => {
         </Grid>
         <Grid item xs={3}>
           <Card sx={{ maxWidth: 400 }}>
-            <CardMedia component={'img'} height={300} image={incidentsImage} alt={'Incidente'} />
+            <CardMedia component={'img'} height={300} image={eventsImage} alt={'Incidente'} />
             <CardContent>
               <Typography gutterBottom variant={'h6'}>
-                Incidente
+                Evenimente
               </Typography>
             </CardContent>
             <CardActions sx={{ p: 2 }}>
               <Button
                 variant={'contained'}
                 size={'small'}
-                onClick={() => navigate(routes.newIncident)}
+                onClick={() => navigate(routes.newEvent)}
               >
                 Creaza
               </Button>
-              <Button
-                variant={'contained'}
-                size={'small'}
-                onClick={() => navigate(routes.incidents)}
-              >
+              <Button variant={'contained'} size={'small'} onClick={() => navigate(routes.events)}>
                 Cauta
               </Button>
             </CardActions>
