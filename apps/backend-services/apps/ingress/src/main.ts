@@ -4,7 +4,7 @@ import { AppModule } from './appModule'
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule)
-  await configureMicroservice(app, 'Entities', +process.env.SERVICE_ENTITIES_PORT)
+  await configureMicroservice(app, 'Ingress', +process.env.SERVICE_INGRESS_PORT)
 }
 
 void bootstrap()

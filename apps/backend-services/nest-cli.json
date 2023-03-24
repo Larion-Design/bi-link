@@ -125,13 +125,13 @@
         "tsConfigPath": "libs/scheduler-module/tsconfig.lib.json"
       }
     },
-    "entities": {
+    "ingress": {
       "type": "application",
-      "root": "apps/entities",
+      "root": "apps/ingress",
       "entryFile": "main",
-      "sourceRoot": "apps/entities/src",
+      "sourceRoot": "apps/ingress/src",
       "compilerOptions": {
-        "tsConfigPath": "apps/entities/tsconfig.app.json"
+        "tsConfigPath": "apps/ingress/tsconfig.app.json"
       }
     }
   }
