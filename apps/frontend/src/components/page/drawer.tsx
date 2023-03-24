@@ -24,6 +24,7 @@ import ListItemText from '@mui/material/ListItemText'
 import { styled } from '@mui/material/styles'
 import Toolbar from '@mui/material/Toolbar'
 import GavelOutlinedIcon from '@mui/icons-material/GavelOutlined'
+import GavelIcon from '@mui/icons-material/Gavel'
 import { useLocation, useNavigate } from 'react-router-dom'
 
 import { routes } from '../../router/routes'
@@ -123,7 +124,7 @@ export const AppDrawer: React.FunctionComponent<AppDrawerProps> = ({ open, toggl
               <AddHomeWorkOutlinedIcon />
             )}
           </ListItemIcon>
-          <ListItemText primary="Bunuri si Proprietati" />
+          <ListItemText primary={'Bunuri si proprietati'} />
         </ListItemButton>
         <ListItemButton onClick={() => navigate(routes.events)}>
           <ListItemIcon>
@@ -135,11 +136,15 @@ export const AppDrawer: React.FunctionComponent<AppDrawerProps> = ({ open, toggl
           </ListItemIcon>
           <ListItemText primary="Evenimente" />
         </ListItemButton>
-        <ListItemButton onClick={() => navigate(routes.newProceeding)}>
+        <ListItemButton onClick={() => navigate(routes.proceedings)}>
           <ListItemIcon>
-            <GavelOutlinedIcon />
+            {pathname === routes.proceedings ? (
+              <GavelIcon color={'primary'} />
+            ) : (
+              <GavelOutlinedIcon />
+            )}
           </ListItemIcon>
-          <ListItemText primary="Dosare" />
+          <ListItemText primary={'Procese juridice'} />
         </ListItemButton>
         {hasPrivilegedAccess && (
           <>

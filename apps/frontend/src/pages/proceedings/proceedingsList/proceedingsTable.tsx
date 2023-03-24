@@ -1,3 +1,5 @@
+import React, { useMemo } from 'react'
+import { ProceedingListRecord, ProceedingSuggestions } from 'defs'
 import OpenInNewOutlinedIcon from '@mui/icons-material/OpenInNewOutlined'
 import Box from '@mui/material/Box'
 import {
@@ -8,8 +10,6 @@ import {
   GridRowParams,
 } from '@mui/x-data-grid'
 import { GridActionsColDef } from '@mui/x-data-grid/models/colDef/gridColDef'
-import React, { useMemo } from 'react'
-import { PersonListRecord, ProceedingListRecord, ProceedingSuggestions } from 'defs'
 import { PaginationParams } from '@frontend/graphql/shared/types/paginationParams'
 import { generatePath, useNavigate } from 'react-router-dom'
 import { routes } from '../../../router/routes'
@@ -91,7 +91,7 @@ export const ProceedingsTable: React.FunctionComponent<Props> = ({
         columns={columns}
         getRowId={({ _id }: GridRowModel<ProceedingListRecord>) => _id}
         localeText={{
-          noRowsLabel: 'Nu exista persoane.',
+          noRowsLabel: 'Nu exista procese juridice.',
           footerRowSelected: () => '',
         }}
       />

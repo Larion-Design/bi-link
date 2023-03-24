@@ -7,6 +7,7 @@ import Button from '@mui/material/Button'
 import Box from '@mui/material/Box'
 import CardActions from '@mui/material/CardActions'
 import { useFormik } from 'formik'
+import { FormattedMessage } from 'react-intl'
 import { InputField } from '../../../form/inputField'
 import { OldNames } from '../../../form/person/oldNames'
 import {
@@ -75,14 +76,6 @@ export const FastCreatePerson: React.FunctionComponent<Props> = ({
             />
           </Grid>
           <Grid item xs={4}>
-            <OldNames
-              oldNames={values.oldNames}
-              updateOldNames={async (value) => {
-                await setFieldValue('oldName', value)
-              }}
-            />
-          </Grid>
-          <Grid item xs={4}>
             <InputField
               label={'CNP'}
               value={values.cnp}
@@ -91,6 +84,14 @@ export const FastCreatePerson: React.FunctionComponent<Props> = ({
                 const error = await personFormValidation.cnp(value)
                 setFieldError('cnp', error)
                 await setFieldValue('cnp', value)
+              }}
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <OldNames
+              oldNames={values.oldNames}
+              updateOldNames={async (value) => {
+                await setFieldValue('oldName', value)
               }}
             />
           </Grid>
@@ -108,7 +109,7 @@ export const FastCreatePerson: React.FunctionComponent<Props> = ({
 
         <Box display={'flex'}>
           <Button variant={'outlined'} color={'error'} onClick={closeModal} sx={{ mr: 2 }}>
-            Inchide
+            <FormattedMessage id={'close'} />
           </Button>
           <Button
             variant={'contained'}
@@ -116,7 +117,7 @@ export const FastCreatePerson: React.FunctionComponent<Props> = ({
             disabled={isSubmitting}
             onClick={submitForm}
           >
-            Salvează
+            <FormattedMessage id={'save'} />
           </Button>
         </Box>
       </CardActions>

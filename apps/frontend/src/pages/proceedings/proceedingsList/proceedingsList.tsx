@@ -60,7 +60,7 @@ export const ProceedingsList: React.FunctionComponent = () => {
             alignItems={'center'}
           >
             <Typography variant={'h5'} data-cy={'pageTitle'}>
-              Persoane
+              Procese juridice
             </Typography>
             <Box display={'flex'} sx={{ width: 0.7 }}>
               <TextField
