@@ -12,7 +12,7 @@ export class SearchProceedings {
 
   @Query(() => [ProceedingListRecord])
   @UseGuards(FirebaseAuthGuard)
-  async getProceeding(@Args() { searchTerm, skip, limit }: SearchPaginationArgs) {
+  async searchProceedings(@Args() { searchTerm, skip, limit }: SearchPaginationArgs) {
     return this.searchProceedingsService.searchProceedings(searchTerm, skip, limit)
   }
 }

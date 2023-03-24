@@ -1,11 +1,9 @@
-import { DashboardPage } from '@frontend/components/page/DashboardPage'
-import { EventDetails } from '@frontend/components/page/eventDetails'
-import { ProceedingDetails } from '@frontend/components/page/proceedingDetails'
-import { createEventRequest } from '@frontend/graphql/events/mutations/createEvent'
-import { createProceedingRequest } from '@frontend/graphql/proceedings/mutations/createProceeding'
-import { useNotification } from '@frontend/utils/hooks/useNotification'
 import React, { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { DashboardPage } from '@frontend/components/page/DashboardPage'
+import { ProceedingDetails } from '@frontend/components/page/proceedingDetails'
+import { createProceedingRequest } from '@frontend/graphql/proceedings/mutations/createProceeding'
+import { useNotification } from '@frontend/utils/hooks/useNotification'
 import { routes } from '../../../router/routes'
 
 export const CreateProceeding: React.FunctionComponent = () => {

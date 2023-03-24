@@ -1,6 +1,7 @@
 import { CustomField } from '../customField'
 import { FileAPIInput, FileAPIOutput } from '../file'
 import { Location, LocationAPIInput, LocationAPIOutput } from '../geolocation'
+import { SearchSuggestions } from '../searchSuggestions'
 import { Associate, AssociateAPIInput, AssociateAPIOutput } from './associate'
 
 export interface Company {
@@ -36,7 +37,4 @@ export interface CompanyAPIInput extends Omit<CompanyAPI, '_id'> {
   files: FileAPIInput[]
 }
 
-export interface CompaniesSuggestions {
-  total: number
-  records: CompanyListRecord[]
-}
+export interface CompaniesSuggestions extends SearchSuggestions<CompanyListRecord> {}

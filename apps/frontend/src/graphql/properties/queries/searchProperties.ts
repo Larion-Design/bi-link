@@ -1,11 +1,6 @@
 import { gql, useLazyQuery } from '@apollo/client'
+import { SearchParams } from '@frontend/graphql/shared/types/searchParams'
 import { PropertiesSuggestions } from 'defs'
-
-type Params = {
-  searchTerm: string
-  limit: number
-  skip: number
-}
 
 type Response = {
   searchProperties: PropertiesSuggestions
@@ -25,4 +20,4 @@ const request = gql`
 `
 
 export const searchPropertiesRequest = () =>
-  useLazyQuery<Response, Params>(request, { fetchPolicy: 'cache-and-network' })
+  useLazyQuery<Response, SearchParams>(request, { fetchPolicy: 'cache-first' })

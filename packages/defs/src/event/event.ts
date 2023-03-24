@@ -2,6 +2,7 @@ import { CustomField, CustomFieldAPI } from '../customField'
 import { NodesRelationship } from '../graphRelationships'
 import { File, FileAPIInput, FileAPIOutput } from '../file'
 import { Location, LocationAPIInput, LocationAPIOutput } from '../geolocation'
+import { SearchSuggestions } from '../searchSuggestions'
 import { Party, PartyAPI } from './party'
 
 export interface Event {
@@ -35,9 +36,6 @@ export interface EventListRecord extends Required<Pick<Event, '_id' | 'type' | '
   location: string
 }
 
-export interface EventsSuggestions {
-  total: number
-  records: EventListRecord[]
-}
+export interface EventsSuggestions extends SearchSuggestions<EventListRecord> {}
 
 export interface EventPartyRelationship extends NodesRelationship, Pick<Party, 'name'> {}

@@ -1,5 +1,6 @@
 import { CustomField } from '../customField'
 import { File, FileAPIInput, FileAPIOutput } from '../file'
+import { SearchSuggestions } from '../searchSuggestions'
 import { ProceedingEntityInvolved, ProceedingEntityInvolvedAPI } from './proceedingEntityInvolved'
 
 export interface Proceeding {
@@ -30,7 +31,4 @@ export interface ProceedingAPIOutput extends ProceedingAPI {
 export interface ProceedingListRecord
   extends Pick<Proceeding, '_id' | 'name' | 'type' | 'year' | 'fileNumber'> {}
 
-export interface ProceedingSuggestions {
-  total: number
-  records: ProceedingListRecord[]
-}
+export interface ProceedingSuggestions extends SearchSuggestions<ProceedingListRecord> {}

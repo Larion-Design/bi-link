@@ -1,6 +1,7 @@
 import { CustomField } from '../customField'
 import { File, FileAPIInput, FileAPIOutput } from '../file'
 import { Location, LocationAPIInput, LocationAPIOutput } from '../geolocation'
+import { SearchSuggestions } from '../searchSuggestions'
 import { Education, EducationAPIInput, EducationAPIOutput } from './education'
 import { IdDocument } from './idDocument'
 import { OldName, OldNameAPIInput, OldNameAPIOutput } from './oldName'
@@ -30,10 +31,7 @@ export interface PersonListRecordWithImage
   extends PersonListRecord,
     Required<Pick<PersonAPIOutput, 'images'>> {}
 
-export interface PersonsSuggestions<T> {
-  total: number
-  records: T[]
-}
+export interface PersonsSuggestions<T> extends SearchSuggestions<T> {}
 
 interface PersonAPI
   extends Readonly<

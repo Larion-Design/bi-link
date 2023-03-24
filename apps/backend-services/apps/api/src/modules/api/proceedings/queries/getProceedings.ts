@@ -16,7 +16,7 @@ export class GetProceedings {
 
   @Query(() => [Proceeding])
   @UseGuards(FirebaseAuthGuard)
-  async getProceeding(@Args() { proceedingsIds }: Params) {
+  async getProceedings(@Args() { proceedingsIds }: Params) {
     return this.proceedingsService.getProceedings(proceedingsIds, true)
   }
 }

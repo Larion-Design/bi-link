@@ -1,5 +1,6 @@
 import { CustomField, CustomFieldAPI } from '../customField'
 import { File, FileAPIInput, FileAPIOutput } from '../file'
+import { SearchSuggestions } from '../searchSuggestions'
 import { PropertyOwner, PropertyOwnerAPI } from './propertyOwner'
 import { RealEstateAPIInput, RealEstateAPIOutput, RealEstateInfo } from './realEstateInfo'
 import { VehicleInfo, VehicleInfoAPIInput, VehicleInfoAPIOutput } from './vehicleInfo'
@@ -42,7 +43,4 @@ export interface PropertyAPIOutput extends PropertyAPI {
 
 export interface PropertyListRecord extends Pick<Property, '_id' | 'name' | 'type'> {}
 
-export type PropertiesSuggestions = {
-  total: number
-  records: PropertyListRecord[]
-}
+export interface PropertiesSuggestions extends SearchSuggestions<PropertyListRecord> {}

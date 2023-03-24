@@ -23,7 +23,9 @@ export const routes = {
   eventDetails: '/events/:eventId',
   events: '/events',
 
+  proceedings: '/proceedings',
   newProceeding: '/proceedings/new',
+  proceedingDetails: '/proceedings/:proceedingId',
 
   users: '/users',
   history: '/history',

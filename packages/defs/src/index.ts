@@ -13,6 +13,7 @@ export * from './event'
 export * from './metadata'
 export * from './model'
 export * from './proceeding'
+export * from './searchSuggestions'
 
 export type EntityType =
   | 'PERSON'
