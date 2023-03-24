@@ -14,6 +14,7 @@ export * from './metadata'
 export * from './model'
 export * from './proceeding'
 export * from './searchSuggestions'
+export * from './snapshot'
 
 export type EntityType =
   | 'PERSON'
