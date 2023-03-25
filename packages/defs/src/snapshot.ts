@@ -7,5 +7,6 @@ export const withSnapshotSchema = z.object({
   service: z.string().nullish(),
   dateCreated: z.date(),
   entityId: z.string().uuid(),
-  entityInfo: z.object({}),
 })
+
+export type EntitySnapshot = z.infer<typeof withSnapshotSchema>

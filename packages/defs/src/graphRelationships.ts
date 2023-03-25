@@ -1,6 +1,6 @@
 import { z } from 'zod'
 import { companyListRecordSchema, graphCompanyAssociateSchema } from './company'
-import { entityTypeSchema } from './entity'
+import { entityInfoSchema, entityTypeSchema } from './entity'
 import { eventListRecordSchema, graphEventParticipantSchema } from './event'
 import { locationSchema } from './geolocation'
 import { graphPersonalRelationship, personListRecordWithImage } from './person'
@@ -36,8 +36,8 @@ export const nodeMetadataSchema = z.object({
 
 export const nodesRelationshipSchema = graphRelationshipMetadataSchema.merge(
   z.object({
-    startNode: entityTypeSchema,
-    endNode: entityTypeSchema,
+    startNode: entityInfoSchema,
+    endNode: entityInfoSchema,
     _type: graphRelationshipSchema,
   }),
 )
