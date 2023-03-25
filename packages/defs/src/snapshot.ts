@@ -1,10 +1,11 @@
-import { User } from './user'
+import { z } from 'zod'
+import { userSchema } from './user'
 
-export interface Snapshot<T> {
-  _id: string
-  user?: User
-  service?: string
-  dateCreated: Date
-  entityId: string
-  entityInfo: T
-}
+export const withSnapshotSchema = z.object({
+  _id: z.string().uuid(),
+  user: userSchema.nullish(),
+  service: z.string().nullish(),
+  dateCreated: z.date(),
+  entityId: z.string().uuid(),
+  entityInfo: z.object({}),
+})

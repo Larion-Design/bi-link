@@ -1,9 +1,12 @@
-export interface VehicleInfo {
-  vin: string
-  maker: string
-  model: string
-  color: string
-}
+import { z } from 'zod'
+import { textWithMetadataSchema } from '../generic'
 
-export interface VehicleInfoAPIInput extends VehicleInfo {}
-export interface VehicleInfoAPIOutput extends VehicleInfo {}
+export const vehicleSchema = z.object({
+  vin: textWithMetadataSchema,
+  maker: textWithMetadataSchema,
+  model: textWithMetadataSchema,
+  color: textWithMetadataSchema,
+})
+
+export type VehicleInfo = z.infer<typeof vehicleSchema>
+export type VehicleInfoAPI = VehicleInfo

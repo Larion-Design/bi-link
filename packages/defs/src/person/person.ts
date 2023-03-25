@@ -1,59 +1,86 @@
-import { CustomField } from '../customField'
-import { File, FileAPIInput, FileAPIOutput } from '../file'
-import { Location, LocationAPIInput, LocationAPIOutput } from '../geolocation'
+import { z } from 'zod'
+import { customFieldSchema } from '../customField'
+import { fileOutputSchema, fileSchema } from '../file'
+import { optionalDateWithMetadataSchema, textWithMetadataSchema } from '../generic'
+import { locationSchema } from '../geolocation'
+import { withMetadataSchema } from '../metadata'
 import { SearchSuggestions } from '../searchSuggestions'
-import { Education, EducationAPIInput, EducationAPIOutput } from './education'
-import { IdDocument } from './idDocument'
-import { OldName, OldNameAPIInput, OldNameAPIOutput } from './oldName'
-import { Relationship, RelationshipAPIInput, RelationshipAPIOutput } from './relationship'
+import { educationSchema } from './education'
+import { idDocumentSchema } from './idDocument'
+import { oldNameSchema } from './oldName'
+import { relationshipAPISchema, relationshipSchema } from './relationship'
 
-export interface Person {
-  _id: string
-  birthdate: Date | string | null
-  birthPlace: Location | null
-  firstName: string
-  lastName: string
-  oldNames: OldName[]
-  cnp: string
-  homeAddress: Location | null
-  education: Education[]
-  images: File[]
-  documents: IdDocument[]
-  relationships: Relationship[]
-  files: File[]
-  contactDetails: CustomField[]
-  customFields: CustomField[]
-}
+export const personSchema = withMetadataSchema.merge(
+  z.object({
+    _id: z.string().uuid(),
+    birthdate: optionalDateWithMetadataSchema,
+    birthPlace: locationSchema.nullable(),
+    firstName: textWithMetadataSchema,
+    lastName: textWithMetadataSchema,
+    oldNames: z.array(oldNameSchema),
+    cnp: textWithMetadataSchema,
+    homeAddress: locationSchema.nullable(),
+    education: z.array(educationSchema),
+    images: z.array(fileSchema),
+    documents: z.array(idDocumentSchema),
+    relationships: z.array(relationshipSchema),
+    files: z.array(fileSchema),
+    contactDetails: z.array(customFieldSchema),
+    customFields: z.array(customFieldSchema),
+  }),
+)
 
-export interface PersonListRecord extends Pick<Person, '_id' | 'firstName' | 'lastName' | 'cnp'> {}
+export const personListRecord = personSchema.pick({
+  _id: true,
+  firstName: true,
+  lastName: true,
+  cnp: true,
+})
 
-export interface PersonListRecordWithImage
-  extends PersonListRecord,
-    Required<Pick<PersonAPIOutput, 'images'>> {}
+export const personListRecordWithImage = personSchema.pick({
+  _id: true,
+  firstName: true,
+  lastName: true,
+  cnp: true,
+  images: true,
+})
+
+export type Person = z.infer<typeof personSchema>
+export type PersonListRecord = z.infer<typeof personListRecord>
+export type PersonListRecordWithImage = z.infer<typeof personListRecordWithImage>
 
 export interface PersonsSuggestions<T> extends SearchSuggestions<T> {}
 
-interface PersonAPI
-  extends Readonly<
-    Omit<Person, 'relationships' | 'files' | 'images' | 'oldNames' | 'birthPlace' | 'homeAddress'>
-  > {}
+export const personAPISchema = personSchema.omit({
+  relationships: true,
+  files: true,
+  images: true,
+})
 
-export interface PersonAPIOutput extends PersonAPI {
-  relationships: RelationshipAPIOutput[]
-  files: FileAPIOutput[]
-  images: FileAPIOutput[]
-  oldNames: OldNameAPIOutput[]
-  education: EducationAPIOutput[]
-  birthPlace: LocationAPIOutput | null
-  homeAddress: LocationAPIOutput | null
-}
+export const personAPIOutputSchema = personSchema
+  .omit({
+    relationships: true,
+    files: true,
+    images: true,
+  })
+  .merge(
+    z.object({
+      relationships: z.array(relationshipAPISchema),
+      files: z.array(fileOutputSchema),
+      images: z.array(fileOutputSchema),
+    }),
+  )
 
-export interface PersonAPIInput extends Omit<PersonAPI, '_id'> {
-  files: FileAPIInput[]
-  images: FileAPIInput[]
-  relationships: RelationshipAPIInput[]
-  oldNames: OldNameAPIInput[]
-  education: EducationAPIInput[]
-  birthPlace: LocationAPIInput | null
-  homeAddress: LocationAPIInput | null
-}
+export const personAPIInputSchema = personSchema
+  .omit({
+    _id: true,
+    relationships: true,
+  })
+  .merge(
+    z.object({
+      relationships: z.array(relationshipAPISchema),
+    }),
+  )
+
+export type PersonAPIInput = z.infer<typeof personAPIInputSchema>
+export type PersonAPIOutput = z.infer<typeof personAPIOutputSchema>

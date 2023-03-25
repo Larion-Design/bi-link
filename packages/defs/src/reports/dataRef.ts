@@ -1,19 +1,42 @@
-import { Company, ConnectedEntity, Event, Person, Property } from '../index'
+import { z } from 'zod'
+import {
+  companySchema,
+  connectedEntitySchema,
+  eventSchema,
+  personSchema,
+  proceedingSchema,
+  propertySchema,
+} from '../index'
 
-export interface DataRef {
-  _id: string
-  person?: Person
-  company?: Company
-  property?: Property
-  event?: Event
-  path?: string
-  targetId?: string
-  field: string
-}
+export const dataRefSchema = z.object({
+  _id: z.string(),
+  person: personSchema.nullish(),
+  company: companySchema.nullish(),
+  property: propertySchema.nullish(),
+  event: eventSchema.nullish(),
+  proceeding: proceedingSchema.nullish(),
+  path: z.string().nullish(),
+  targetId: z.string().nullish(),
+  field: z.string(),
+})
 
-export interface DataRefAPI extends Omit<DataRef, 'person' | 'company' | 'property' | 'event'> {
-  person?: ConnectedEntity
-  company?: ConnectedEntity
-  property?: ConnectedEntity
-  event?: ConnectedEntity
-}
+export const dataRefAPISchema = dataRefSchema
+  .omit({
+    person: true,
+    company: true,
+    property: true,
+    proceeding: true,
+    event: true,
+  })
+  .merge(
+    z.object({
+      person: connectedEntitySchema.nullish(),
+      company: connectedEntitySchema.nullish(),
+      property: connectedEntitySchema.nullish(),
+      proceeding: connectedEntitySchema.nullish(),
+      event: connectedEntitySchema.nullish(),
+    }),
+  )
+
+export type DataRef = z.infer<typeof dataRefSchema>
+export type DataRefAPI = z.infer<typeof dataRefAPISchema>

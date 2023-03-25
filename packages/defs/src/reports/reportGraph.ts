@@ -1,5 +1,8 @@
-export interface ReportGraph {
-  label: string
-}
+import { z } from 'zod'
 
-export interface GraphAPI extends ReportGraph {}
+export const reportGraphSchema = z.object({
+  label: z.string(),
+})
+
+export type ReportGraph = z.infer<typeof reportGraphSchema>
+export type GraphAPI = ReportGraph

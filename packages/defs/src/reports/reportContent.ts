@@ -1,40 +1,32 @@
-import { ReportGraph, GraphAPI } from './reportGraph'
-import { Title, TitleAPI } from './title'
-import { Table, TableAPI } from './table'
-import { Link, LinkAPI } from './link'
-import { Text, TextAPI } from './text'
-import { File, FileAPIInput, FileAPIOutput } from '../file'
+import { z } from 'zod'
+import { reportGraphSchema } from './reportGraph'
+import { titleSchema } from './title'
+import { tableSchema } from './table'
+import { linkSchema } from './link'
+import { reportTextSchema } from './text'
+import { fileOutputSchema, fileSchema } from '../file'
 
-export interface ReportContent {
-  order: number
-  title?: Title
-  text?: Text
-  images?: File[]
-  file?: File
-  table?: Table
-  link?: Link
-  graph?: ReportGraph
-}
+export const reportContentSchema = z.object({
+  order: z.number().positive(),
+  isActive: z.boolean().default(true),
+  title: titleSchema.nullish(),
+  text: reportTextSchema.nullish(),
+  images: z.array(fileSchema).nullish(),
+  file: fileSchema.nullish(),
+  table: tableSchema.nullish(),
+  link: linkSchema.nullish(),
+  graph: reportGraphSchema.nullish(),
+})
 
-interface ReportContentAPI
-  extends Omit<ReportContent, 'images' | 'title' | 'text' | 'file' | 'table' | 'link' | 'graph'> {}
+export const reportContentAPIOutputSchema = reportContentSchema
+  .omit({ file: true, images: true })
+  .merge(
+    z.object({
+      file: fileOutputSchema.nullish(),
+      images: z.array(fileOutputSchema),
+    }),
+  )
 
-export interface ReportContentAPIInput extends ReportContentAPI {
-  title?: TitleAPI
-  text?: TextAPI
-  images?: FileAPIInput[]
-  file?: FileAPIInput
-  table?: TableAPI
-  link?: LinkAPI
-  graph?: GraphAPI
-}
-
-export interface ReportContentAPIOutput extends ReportContentAPI {
-  title?: TitleAPI
-  text?: TextAPI
-  images?: FileAPIOutput[]
-  file?: FileAPIOutput
-  table?: TableAPI
-  link?: LinkAPI
-  graph?: GraphAPI
-}
+export type ReportContent = z.infer<typeof reportContentSchema>
+export type ReportContentAPIInput = ReportContent
+export type ReportContentAPIOutput = z.infer<typeof reportContentAPIOutputSchema>

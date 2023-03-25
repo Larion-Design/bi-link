@@ -1,22 +1,42 @@
-import { Person } from './person'
-import { ConnectedEntity } from '../connectedEntity'
-import { NodesRelationship } from '../graphRelationships'
+import { z } from 'zod'
+import { numberWithMetadataSchema, textWithMetadataSchema } from '../generic'
+import { withMetadataSchema } from '../metadata'
+import { connectedEntitySchema } from '../connectedEntity'
+import {
+  graphRelationshipSchema,
+  NodesRelationship,
+  nodesRelationshipSchema,
+} from '../graphRelationships'
+import { personSchema } from './person'
 
-export interface Relationship {
-  type: string
-  proximity: number
-  person: Person
-  _confirmed: boolean
-  description: string
-  relatedPersons: Person[]
-}
+export const relationshipSchema = withMetadataSchema.merge(
+  z.object({
+    type: textWithMetadataSchema,
+    proximity: numberWithMetadataSchema,
+    person: personSchema,
+    description: textWithMetadataSchema,
+    relatedPersons: z.array(personSchema),
+  }),
+)
 
-interface RelationshipAPI extends Omit<Relationship, 'person' | 'relatedPersons'> {
-  person: ConnectedEntity
-  relatedPersons: ConnectedEntity[]
-}
+export const relationshipAPISchema = relationshipSchema
+  .omit({ person: true, relatedPersons: true })
+  .merge(
+    z.object({
+      person: connectedEntitySchema,
+      relatedPersons: z.array(connectedEntitySchema),
+    }),
+  )
 
-export interface RelationshipAPIOutput extends RelationshipAPI {}
-export interface RelationshipAPIInput extends Readonly<RelationshipAPI> {}
+export const graphPersonalRelationship = nodesRelationshipSchema.merge(
+  z.object({
+    type: z.string(),
+  }),
+)
 
-export interface PersonalRelationship extends NodesRelationship, Pick<Relationship, 'type'> {}
+export type Relationship = z.infer<typeof relationshipSchema>
+export type RelationshipAPI = z.infer<typeof relationshipAPISchema>
+export type RelationshipAPIOutput = RelationshipAPI
+export type RelationshipAPIInput = RelationshipAPI
+
+export type PersonalRelationship = z.infer<typeof graphPersonalRelationship>

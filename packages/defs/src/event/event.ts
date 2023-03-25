@@ -1,41 +1,55 @@
-import { CustomField, CustomFieldAPI } from '../customField'
-import { NodesRelationship } from '../graphRelationships'
-import { File, FileAPIInput, FileAPIOutput } from '../file'
-import { Location, LocationAPIInput, LocationAPIOutput } from '../geolocation'
+import { z } from 'zod'
+import { customFieldSchema } from '../customField'
+import { optionalDateWithMetadataSchema, textWithMetadataSchema } from '../generic'
+import { nodesRelationshipSchema } from '../graphRelationships'
+import { fileOutputSchema, fileSchema } from '../file'
+import { locationSchema } from '../geolocation'
+import { withMetadataSchema } from '../metadata'
 import { SearchSuggestions } from '../searchSuggestions'
-import { Party, PartyAPI } from './party'
+import { eventParticipantAPISchema, eventParticipantSchema } from './party'
 
-export interface Event {
-  _id: string
-  type: string
-  date: Date | null
-  location: Location
-  description: string
-  parties: Party[]
-  customFields: CustomField[]
-  files: File[]
-}
+export const eventSchema = withMetadataSchema.merge(
+  z.object({
+    _id: z.string(),
+    type: textWithMetadataSchema,
+    date: optionalDateWithMetadataSchema,
+    location: locationSchema.nullish(),
+    description: z.string(),
+    parties: z.array(eventParticipantSchema),
+    customFields: z.array(customFieldSchema),
+    files: z.array(fileSchema),
+  }),
+)
 
-interface EventAPI extends Omit<Event, 'parties' | 'files' | 'location' | 'customFields'> {}
+export const eventAPIInputSchema = eventSchema.omit({ _id: true, parties: true }).merge(
+  z.object({
+    parties: z.array(eventParticipantAPISchema),
+  }),
+)
 
-export interface EventAPIInput extends Omit<EventAPI, '_id'> {
-  parties: PartyAPI[]
-  customFields: CustomFieldAPI[]
-  files: FileAPIInput[]
-  location: LocationAPIInput
-}
+export const eventAPIOutputSchema = eventSchema.omit({ files: true, parties: true }).merge(
+  z.object({
+    files: z.array(fileOutputSchema),
+    parties: z.array(eventParticipantAPISchema),
+  }),
+)
 
-export interface EventAPIOutput extends EventAPI {
-  parties: PartyAPI[]
-  customFields: CustomFieldAPI[]
-  files: FileAPIOutput[]
-  location: LocationAPIOutput
-}
+export const eventListRecordSchema = eventSchema.pick({ _id: true, type: true, date: true }).merge(
+  z.object({
+    location: z.string().nullish(),
+  }),
+)
 
-export interface EventListRecord extends Required<Pick<Event, '_id' | 'type' | 'date'>> {
-  location: string
-}
+export const graphEventParticipantSchema = nodesRelationshipSchema.merge(
+  z.object({
+    type: z.string(),
+  }),
+)
+
+export type Event = z.infer<typeof eventSchema>
+export type EventAPIInput = z.infer<typeof eventAPIInputSchema>
+export type EventAPIOutput = z.infer<typeof eventAPIOutputSchema>
+export type EventListRecord = z.infer<typeof eventListRecordSchema>
+export type EventPartyRelationship = z.infer<typeof graphEventParticipantSchema>
 
 export interface EventsSuggestions extends SearchSuggestions<EventListRecord> {}
-
-export interface EventPartyRelationship extends NodesRelationship, Pick<Party, 'name'> {}

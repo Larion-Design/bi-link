@@ -1,6 +1,9 @@
-export interface Link {
-  label: string
-  url: string
-}
+import { z } from 'zod'
 
-export interface LinkAPI extends Link {}
+export const linkSchema = z.object({
+  label: z.string(),
+  url: z.string().url(),
+})
+
+export type Link = z.infer<typeof linkSchema>
+export type LinkAPI = Link

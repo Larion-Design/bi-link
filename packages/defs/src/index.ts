@@ -11,22 +11,8 @@ export * from './person'
 export * from './company'
 export * from './event'
 export * from './metadata'
-export * from './model'
 export * from './proceeding'
 export * from './searchSuggestions'
 export * from './snapshot'
-
-export type EntityType =
-  | 'PERSON'
-  | 'COMPANY'
-  | 'PROPERTY'
-  | 'EVENT'
-  | 'REPORT'
-  | 'FILE'
-  | 'LOCATION'
-  | 'PROCEEDING'
-
-export type EntityInfo = {
-  entityId: string
-  entityType: EntityType
-}
+export * from './entity'
+export * from './generic'

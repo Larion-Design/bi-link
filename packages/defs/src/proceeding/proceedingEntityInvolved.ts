@@ -1,21 +1,34 @@
-import { Company } from '../company'
-import { ConnectedEntity } from '../connectedEntity'
-import { NodesRelationship } from '../graphRelationships'
-import { Person } from '../person'
+import { z } from 'zod'
+import { companySchema } from '../company'
+import { connectedEntitySchema } from '../connectedEntity'
+import { textWithMetadataSchema } from '../generic'
+import { NodesRelationship, nodesRelationshipSchema } from "../graphRelationships";
+import { withMetadataSchema } from '../metadata'
+import { personSchema } from '../person'
 
-export interface ProceedingEntityInvolved {
-  person?: Person
-  company?: Company
-  involvedAs: string
-  description: string
-}
+export const proceedingEntityInvolvedSchema = withMetadataSchema.merge(
+  z.object({
+    person: personSchema.nullish(),
+    company: companySchema.nullish(),
+    involvedAs: textWithMetadataSchema,
+    description: z.string(),
+  }),
+)
 
-export interface ProceedingEntityInvolvedAPI
-  extends Omit<ProceedingEntityInvolved, 'person' | 'company'> {
-  person?: ConnectedEntity
-  company?: ConnectedEntity
-}
+export const proceedingEntityInvolvedAPISchema = proceedingEntityInvolvedSchema
+  .omit({ person: true, company: true })
+  .merge(
+    z.object({
+      person: connectedEntitySchema.nullish(),
+      company: connectedEntitySchema.nullish(),
+    }),
+  )
 
-export interface ProceedingEntityRelationship
-  extends NodesRelationship,
-    Pick<ProceedingEntityInvolved, 'involvedAs'> {}
+export const graphProceedingEntitySchema = nodesRelationshipSchema.merge(z.object({
+  involvedAs: z.string()
+}))
+
+export type ProceedingEntityInvolved = z.infer<typeof proceedingEntityInvolvedSchema>
+export type ProceedingEntityInvolvedAPI = z.infer<typeof proceedingEntityInvolvedAPISchema>
+
+export type ProceedingEntityRelationship = z.infer<typeof graphProceedingEntitySchema>

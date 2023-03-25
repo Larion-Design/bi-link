@@ -1,46 +1,44 @@
-import { CustomField, CustomFieldAPI } from '../customField'
-import { File, FileAPIInput, FileAPIOutput } from '../file'
+import { z } from 'zod'
+import { customFieldSchema } from '../customField'
+import { fileOutputSchema, fileSchema } from '../file'
+import { withMetadataSchema } from '../metadata'
 import { SearchSuggestions } from '../searchSuggestions'
-import { PropertyOwner, PropertyOwnerAPI } from './propertyOwner'
-import { RealEstateAPIInput, RealEstateAPIOutput, RealEstateInfo } from './realEstateInfo'
-import { VehicleInfo, VehicleInfoAPIInput, VehicleInfoAPIOutput } from './vehicleInfo'
+import { propertyOwnerAPISchema, propertyOwnerSchema } from './propertyOwner'
+import { realEstateSchema } from './realEstateInfo'
+import { vehicleSchema } from './vehicleInfo'
 
-export interface Property {
-  _id: string
-  name: string
-  type: string
-  customFields: CustomField[]
-  files: File[]
-  images: File[]
-  owners: PropertyOwner[]
-  vehicleInfo: VehicleInfo | null
-  realEstateInfo: RealEstateInfo | null
-}
+export const propertySchema = withMetadataSchema.merge(
+  z.object({
+    _id: z.string().uuid(),
+    name: z.string(),
+    type: z.string(),
+    customFields: z.array(customFieldSchema),
+    files: z.array(fileSchema),
+    images: z.array(fileSchema),
+    owners: z.array(propertyOwnerSchema),
+    vehicleInfo: vehicleSchema.nullish(),
+    realEstateInfo: realEstateSchema.nullish(),
+  }),
+)
 
-interface PropertyAPI
-  extends Omit<
-    Property,
-    'owners' | 'files' | 'customFields' | 'images' | 'vehicleInfo' | 'realEstateInfo'
-  > {}
+export const propertyAPIOutputSchema = propertySchema.omit({ owners: true, files: true }).merge(
+  z.object({
+    files: z.array(fileOutputSchema),
+    owners: z.array(propertyOwnerAPISchema),
+  }),
+)
 
-export interface PropertyAPIInput extends Omit<PropertyAPI, '_id'> {
-  customFields: CustomFieldAPI[]
-  files: FileAPIInput[]
-  images: FileAPIInput[]
-  owners: PropertyOwnerAPI[]
-  vehicleInfo: VehicleInfoAPIInput | null
-  realEstateInfo: RealEstateAPIInput | null
-}
+export const propertyAPIInputSchema = propertySchema.omit({ _id: true, owners: true }).merge(
+  z.object({
+    owners: z.array(propertyOwnerAPISchema),
+  }),
+)
 
-export interface PropertyAPIOutput extends PropertyAPI {
-  owners: PropertyOwnerAPI[]
-  files: FileAPIOutput[]
-  images: FileAPIOutput[]
-  customFields: CustomFieldAPI[]
-  vehicleInfo: VehicleInfoAPIOutput | null
-  realEstateInfo: RealEstateAPIOutput | null
-}
+export const propertyListRecordSchema = propertySchema.pick({ _id: true, name: true, type: true })
 
-export interface PropertyListRecord extends Pick<Property, '_id' | 'name' | 'type'> {}
+export type Property = z.infer<typeof propertySchema>
+export type PropertyAPIInput = z.infer<typeof propertyAPIInputSchema>
+export type PropertyAPIOutput = z.infer<typeof propertyAPIOutputSchema>
+export type PropertyListRecord = z.infer<typeof propertyListRecordSchema>
 
 export interface PropertiesSuggestions extends SearchSuggestions<PropertyListRecord> {}

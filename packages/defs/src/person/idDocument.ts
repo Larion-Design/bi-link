@@ -1,15 +1,22 @@
-export enum IdDocumentStatus {
-  VALID = 'VALID',
-  EXPIRED = 'EXPIRED',
-  LOST_OR_STOLEN = 'LOST_OR_STOLEN',
-}
+import { z } from 'zod'
+import { optionalDateWithMetadataSchema, textWithMetadataSchema } from '../generic'
+import { withMetadataSchema } from '../metadata'
 
-export interface IdDocument {
-  documentType: string
-  documentNumber: string
-  issueDate?: Date | string
-  expirationDate?: Date | string
-  status: IdDocumentStatus
-}
+export const documentStatusSchema = withMetadataSchema.merge(
+  z.object({
+    value: z.enum(['VALID', 'EXPIRED', 'LOST_OR_STOLEN']).default('VALID'),
+  }),
+)
 
-export interface IdDocumentAPI extends IdDocument {}
+export const idDocumentSchema = withMetadataSchema.merge(
+  z.object({
+    documentType: z.string(),
+    documentNumber: textWithMetadataSchema,
+    issueDate: optionalDateWithMetadataSchema,
+    expirationDate: optionalDateWithMetadataSchema,
+    status: documentStatusSchema,
+  }),
+)
+
+export type IdDocument = z.infer<typeof idDocumentSchema>
+export type IdDocumentAPI = IdDocument

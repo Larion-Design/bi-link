@@ -1,94 +1,84 @@
-import { CompanyAssociateRelationship, CompanyListRecord } from './company'
-import { EventListRecord, EventPartyRelationship } from './event'
-import { EntityLocationRelationship, LocationAPIOutput } from './geolocation'
-import { PersonalRelationship, PersonListRecordWithImage } from './person'
-import {
-  ProceedingEntityRelationship,
-  ProceedingListRecord,
-} from './proceeding'
-import { PropertyListRecord, PropertyOwnerRelationship } from './property'
-import { ReportedEntityRelationship, ReportListRecord } from './reports'
+import { z } from 'zod'
+import { companyListRecordSchema, graphCompanyAssociateSchema } from './company'
+import { entityTypeSchema } from './entity'
+import { eventListRecordSchema, graphEventParticipantSchema } from './event'
+import { locationSchema } from './geolocation'
+import { graphPersonalRelationship, personListRecordWithImage } from './person'
+import { graphProceedingEntitySchema, proceedingListRecord } from './proceeding'
+import { graphPropertyOwnerSchema, propertyListRecordSchema } from './property'
+import { reportListRecordSchema } from './reports'
 
-export interface GraphNode {
-  _id: string
-  _type: EntityLabel
-}
+export const graphRelationshipSchema = z.enum([
+  'RELATED',
+  'BORN_IN',
+  'LIVES_AT',
+  'ASSOCIATE',
+  'OWNER',
+  'PARTY_INVOLVED',
+  'HAS_ATTACHMENT',
+  'HQ_AT',
+  'BRANCH_AT',
+  'OCCURED_AT',
+  'LOCATED_AT',
+  'INVOLVED_AS',
+  'REPORTED',
+  'MENTIONED',
+])
 
-export interface GraphRelationships {
-  companiesAssociates: CompanyAssociateRelationship[]
-  eventsParties: EventPartyRelationship[]
-  personalRelationships: PersonalRelationship[]
-  propertiesRelationships: PropertyOwnerRelationship[]
-  propertiesLocation: EntityLocationRelationship[]
-  companiesHeadquarters: EntityLocationRelationship[]
-  companiesBranches: EntityLocationRelationship[]
-  personsBirthPlace: EntityLocationRelationship[]
-  personsHomeAddress: EntityLocationRelationship[]
-  eventsOccurrencePlace: EntityLocationRelationship[]
-  entitiesReported: ReportedEntityRelationship[]
-  entitiesInvolvedInProceeding: ProceedingEntityRelationship[]
-}
+export const graphRelationshipMetadataSchema = z.object({
+  _confirmed: z.boolean().default(true),
+  _trustworthiness: z.number().default(3),
+})
 
-export interface GraphEntities {
-  companies: CompanyListRecord[]
-  persons: PersonListRecordWithImage[]
-  properties: PropertyListRecord[]
-  events: EventListRecord[]
-  locations: LocationAPIOutput[]
-  proceedings: ProceedingListRecord[]
-  reports: ReportListRecord[]
-}
+export const nodeMetadataSchema = z.object({
+  _id: z.string(),
+})
 
-export interface Graph {
-  relationships: GraphRelationships
-  entities: GraphEntities
-}
+export const nodesRelationshipSchema = graphRelationshipMetadataSchema.merge(
+  z.object({
+    startNode: entityTypeSchema,
+    endNode: entityTypeSchema,
+    _type: graphRelationshipSchema,
+  }),
+)
 
-export enum RelationshipLabel {
-  RELATED = 'RELATED',
-  BORN_IN = 'BORN_IN',
-  LIVES_AT = 'LIVES_AT',
-  ASSOCIATE = 'ASSOCIATE',
-  OWNER = 'OWNER',
-  PARTY_INVOLVED = 'PARTY_INVOLVED',
-  HAS_ATTACHMENT = 'HAS_ATTACHMENT',
-  HQ_AT = 'HQ_AT',
-  BRANCH_AT = 'BRANCH_AT',
-  OCCURED_AT = 'OCCURED_AT',
-  LOCATED_AT = 'LOCATED_AT',
-  INVOLVED_AS = 'INVOLVED_AS',
-  REPORTED = 'REPORTED',
-  MENTIONED = 'MENTIONED',
-}
+export type GraphNode = z.infer<typeof entityTypeSchema>
 
-export enum EntityLabel {
-  PERSON = 'PERSON',
-  COMPANY = 'COMPANY',
-  EVENT = 'EVENT',
-  FILE = 'FILE',
-  PROPERTY = 'PROPERTY',
-  LOCATION = 'LOCATION',
-  PROCEEDING = 'PROCEEDING',
-  REPORT = 'REPORT',
-}
+export const graphRelationshipsSchema = z.object({
+  companiesAssociates: z.array(graphCompanyAssociateSchema),
+  eventsParties: z.array(graphEventParticipantSchema),
+  personalRelationships: z.array(graphPersonalRelationship),
+  propertiesLocation: z.array(nodesRelationshipSchema),
+  companiesHeadquarters: z.array(nodesRelationshipSchema),
+  companiesBranches: z.array(nodesRelationshipSchema),
+  personsBirthPlace: z.array(nodesRelationshipSchema),
+  personsHomeAddress: z.array(nodesRelationshipSchema),
+  eventsOccurrencePlace: z.array(nodesRelationshipSchema),
+  propertiesRelationships: z.array(graphPropertyOwnerSchema),
+  entitiesReported: z.array(nodesRelationshipSchema),
+  entitiesInvolvedInProceeding: z.array(graphProceedingEntitySchema),
+})
 
-export type RelationshipMetadata = {
-  _confirmed: boolean
-}
+export const graphEntitiesSchema = z.object({
+  companies: z.array(companyListRecordSchema),
+  persons: z.array(personListRecordWithImage),
+  properties: z.array(propertyListRecordSchema),
+  events: z.array(eventListRecordSchema),
+  locations: z.array(locationSchema),
+  proceedings: z.array(proceedingListRecord),
+  reports: z.array(reportListRecordSchema),
+})
 
-export type EntityMetadata = { _id: string } & Record<
-  string,
-  number | string | Array<number | string>
->
+export const graphSchema = z.object({
+  relationships: graphRelationshipsSchema,
+  entities: graphEntitiesSchema,
+})
 
-export type NodeInfo = {
-  _id: string
-  _type: EntityLabel
-}
+export type Graph = z.infer<typeof graphSchema>
+export type GraphRelationships = z.infer<typeof graphRelationshipsSchema>
+export type GraphEntities = z.infer<typeof graphEntitiesSchema>
 
-export interface NodesRelationship {
-  startNode: GraphNode
-  endNode: GraphNode
-  _confirmed: boolean
-  _type: RelationshipLabel
-}
+export type GraphRelationship = z.infer<typeof graphRelationshipSchema>
+export type EntityMetadata = z.infer<typeof nodeMetadataSchema>
+export type RelationshipMetadata = z.infer<typeof graphRelationshipMetadataSchema>
+export type NodesRelationship = z.infer<typeof nodesRelationshipSchema>

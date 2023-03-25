@@ -1,9 +1,7 @@
-import { Company } from './company'
-import { Event } from './event'
-import { Person } from './person'
-import { Property } from './property'
+import { z } from 'zod'
 
-export interface ConnectedEntity
-  extends NonNullable<Pick<Person | Company | Property | Event, '_id'>> {
-  _confirmed?: boolean
-}
+export const connectedEntitySchema = z.object({
+  _id: z.string().uuid(),
+})
+
+export type ConnectedEntity = z.infer<typeof connectedEntitySchema>

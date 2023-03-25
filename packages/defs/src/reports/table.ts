@@ -1,5 +1,8 @@
-export interface Table {
-  id: string
-}
+import { z } from 'zod'
 
-export interface TableAPI extends Table {}
+export const tableSchema = z.object({
+  id: z.string(),
+})
+
+export type Table = z.infer<typeof tableSchema>
+export type TableAPI = Table
