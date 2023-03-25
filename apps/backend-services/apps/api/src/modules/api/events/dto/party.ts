@@ -1,12 +1,16 @@
 import { Field, ObjectType } from '@nestjs/graphql'
 import { CustomField } from '../../customFields/dto/customField'
-import { ConnectedEntity } from '../../common/dto/connectedEntity'
-import { PartyAPI } from 'defs'
+import { ConnectedEntity } from '../../entityInfo/dto/connectedEntity'
+import { EventParticipantAPI } from 'defs'
+import { Metadata } from '../../metadata/dto/metadata'
+import { WithMetadata } from '../../metadata/dto/withMetadata'
 
-@ObjectType()
-export class Party implements PartyAPI {
+@ObjectType({ implements: () => [WithMetadata] })
+export class Party implements EventParticipantAPI {
+  metadata: Metadata
+
   @Field()
-  name: string
+  type: string
 
   @Field({ nullable: true })
   description: string
@@ -22,7 +26,4 @@ export class Party implements PartyAPI {
 
   @Field(() => [CustomField])
   customFields: CustomField[]
-
-  @Field({ nullable: true, defaultValue: true })
-  _confirmed: boolean
 }

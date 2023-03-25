@@ -1,6 +1,6 @@
 import { Field, ObjectType, PickType } from '@nestjs/graphql'
 import { EventsSuggestions as EventsSuggestionsType } from 'defs'
-import { Suggestions } from '../../common/dto/suggestions'
+import { Suggestions } from '../../search/dto/suggestions'
 import { EventListRecord } from './eventListRecord'
 
 @ObjectType()

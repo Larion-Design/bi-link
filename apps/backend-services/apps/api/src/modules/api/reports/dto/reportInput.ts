@@ -1,6 +1,6 @@
 import { Field, InputType } from '@nestjs/graphql'
 import { ReportAPIInput } from 'defs'
-import { ConnectedEntityInput } from '../../common/dto/connectedEntityInput'
+import { ConnectedEntityInput } from '../../entityInfo/dto/connectedEntityInput'
 import { DataRefInput } from './refs/dataRefInput'
 import { ReportSectionInput } from './reportSectionInput'
 

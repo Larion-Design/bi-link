@@ -1,6 +1,6 @@
 import { Field, InputType } from '@nestjs/graphql'
 import { ProceedingEntityInvolvedAPI } from 'defs'
-import { ConnectedEntityInput } from '../../common/dto/connectedEntityInput'
+import { ConnectedEntityInput } from '../../entityInfo/dto/connectedEntityInput'
 
 @InputType()
 export class ProceedingEntityInput implements ProceedingEntityInvolvedAPI {

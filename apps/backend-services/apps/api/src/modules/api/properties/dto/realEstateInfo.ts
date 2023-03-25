@@ -1,6 +1,6 @@
 import { Field, ObjectType } from '@nestjs/graphql'
 import { RealEstateAPIOutput } from 'defs'
-import { Location } from '../../common/dto/geolocation/location'
+import { Location } from '../../geolocation/dto/location'
 
 @ObjectType()
 export class RealEstateInfo implements RealEstateAPIOutput {

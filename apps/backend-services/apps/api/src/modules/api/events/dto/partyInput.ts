@@ -1,12 +1,16 @@
 import { Field, InputType } from '@nestjs/graphql'
 import { CustomFieldInput } from '../../customFields/dto/customFieldInput'
-import { ConnectedEntityInput } from '../../common/dto/connectedEntityInput'
-import { PartyAPI } from 'defs'
+import { ConnectedEntityInput } from '../../entityInfo/dto/connectedEntityInput'
+import { EventParticipantAPI } from 'defs'
+import { MetadataInput } from '../../metadata/dto/metadataInput'
 
 @InputType()
-export class PartyInput implements PartyAPI {
+export class PartyInput implements EventParticipantAPI {
   @Field()
-  readonly name: string
+  readonly type: string
+
+  @Field(() => MetadataInput)
+  readonly metadata: MetadataInput
 
   @Field()
   readonly description: string
@@ -22,7 +26,4 @@ export class PartyInput implements PartyAPI {
 
   @Field(() => [CustomFieldInput])
   readonly customFields: CustomFieldInput[]
-
-  @Field({ nullable: true, defaultValue: true })
-  readonly _confirmed: boolean
 }

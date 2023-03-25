@@ -1,5 +1,5 @@
 import { Args, Query, Resolver } from '@nestjs/graphql'
-import { SearchPaginationArgs } from '../../common/dto/searchPaginationArgs'
+import { SearchPaginationArgs } from '../../search/dto/searchPaginationArgs'
 import { Event } from '../dto/event'
 import { EventsSuggestions } from '../dto/eventsSuggestions'
 import { SearchEventsService } from '../../../search/services/searchEventsService'

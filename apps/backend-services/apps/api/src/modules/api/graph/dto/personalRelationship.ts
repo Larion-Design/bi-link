@@ -1,14 +1,14 @@
 import { Field, ObjectType } from '@nestjs/graphql'
-import { GraphNode } from './graphNode'
-import { PersonalRelationship as PersonalRelationshipType, RelationshipLabel } from 'defs'
+import { EntityInfo } from '../../entityInfo/dto/entityInfo'
+import { GraphRelationship, PersonalRelationship as PersonalRelationshipType } from 'defs'
 import { NodesRelationship } from './nodesRelationship'
 
 @ObjectType({ implements: () => [NodesRelationship] })
 export class PersonalRelationship implements NodesRelationship, PersonalRelationshipType {
-  startNode: GraphNode
-  endNode: GraphNode
+  startNode: EntityInfo
+  endNode: EntityInfo
   _confirmed: boolean
-  _type: RelationshipLabel
+  _type: GraphRelationship
 
   @Field()
   type: string

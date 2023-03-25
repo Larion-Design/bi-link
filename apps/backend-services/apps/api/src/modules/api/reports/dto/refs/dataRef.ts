@@ -1,6 +1,6 @@
 import { Field, ObjectType } from '@nestjs/graphql'
 import { DataRefAPI } from 'defs'
-import { ConnectedEntity } from '../../../common/dto/connectedEntity'
+import { ConnectedEntity } from '../../../entityInfo/dto/connectedEntity'
 
 @ObjectType()
 export class DataRef implements DataRefAPI {

@@ -1,5 +1,5 @@
 import { Field, InputType } from '@nestjs/graphql'
-import { LocationInput } from '../../common/dto/geolocation/locationInput'
+import { LocationInput } from '../../geolocation/dto/locationInput'
 import { CustomFieldInput } from '../../customFields/dto/customFieldInput'
 import { FileInput } from '../../files/dto/fileInput'
 import { PartyInput } from './partyInput'

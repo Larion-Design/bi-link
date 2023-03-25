@@ -1,6 +1,6 @@
 import { Field, InputType } from '@nestjs/graphql'
 import { DataRefAPI } from 'defs'
-import { ConnectedEntityInput } from '../../../common/dto/connectedEntityInput'
+import { ConnectedEntityInput } from '../../../entityInfo/dto/connectedEntityInput'
 
 @InputType()
 export class DataRefInput implements DataRefAPI {

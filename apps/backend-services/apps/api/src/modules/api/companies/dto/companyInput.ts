@@ -3,7 +3,7 @@ import { CustomFieldInput } from '../../customFields/dto/customFieldInput'
 import { FileInput } from '../../files/dto/fileInput'
 import { AssociateInput } from './associateInput'
 import { Length } from 'class-validator'
-import { LocationInput } from '../../common/dto/geolocation/locationInput'
+import { LocationInput } from '../../geolocation/dto/locationInput'
 import { CompanyAPIInput } from 'defs'
 
 @InputType()

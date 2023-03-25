@@ -1,6 +1,6 @@
 import { Field, ObjectType } from '@nestjs/graphql'
 import { PersonAPIOutput } from 'defs'
-import { Location } from '../../common/dto/geolocation/location'
+import { Location } from '../../geolocation/dto/location'
 import { CustomField } from '../../customFields/dto/customField'
 import { File } from '../../files/dto/file'
 import { Education } from './education'

@@ -2,7 +2,7 @@ import { LocationsService } from '@app/models/services/locationsService'
 import { UseGuards } from '@nestjs/common'
 import { Args, ArgsType, Field, Query, Resolver } from '@nestjs/graphql'
 import { FirebaseAuthGuard } from '../../../users/guards/FirebaseAuthGuard'
-import { Location } from '../dto/geolocation/location'
+import { Location } from '../dto/location'
 
 @ArgsType()
 class Params {

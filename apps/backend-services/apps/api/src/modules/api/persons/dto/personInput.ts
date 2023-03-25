@@ -1,7 +1,7 @@
 import { Field, InputType } from '@nestjs/graphql'
 import { IsDateString, IsNumberString, IsOptional, Length } from 'class-validator'
 import { PersonAPIInput } from 'defs'
-import { LocationInput } from '../../common/dto/geolocation/locationInput'
+import { LocationInput } from '../../geolocation/dto/locationInput'
 import { CustomFieldInput } from '../../customFields/dto/customFieldInput'
 import { FileInput } from '../../files/dto/fileInput'
 import { EducationInput } from './educationInput'

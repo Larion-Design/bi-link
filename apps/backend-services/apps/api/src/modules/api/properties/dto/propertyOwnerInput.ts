@@ -1,6 +1,6 @@
 import { PropertyOwnerAPI } from 'defs'
 import { Field, InputType } from '@nestjs/graphql'
-import { ConnectedEntityInput } from '../../common/dto/connectedEntityInput'
+import { ConnectedEntityInput } from '../../entityInfo/dto/connectedEntityInput'
 import { CustomFieldInput } from '../../customFields/dto/customFieldInput'
 import { VehicleOwnerInfoInput } from './vehicleOwnerInfoInput'
 

@@ -2,7 +2,7 @@ import { UseGuards } from '@nestjs/common'
 import { Args, Query, Resolver } from '@nestjs/graphql'
 import { SearchProceedingsService } from '../../../search/services/searchProceedingsService'
 import { FirebaseAuthGuard } from '../../../users/guards/FirebaseAuthGuard'
-import { SearchPaginationArgs } from '../../common/dto/searchPaginationArgs'
+import { SearchPaginationArgs } from '../../search/dto/searchPaginationArgs'
 import { ProceedingListRecord } from '../dto/proceedingListRecord'
 import { ProceedingsSuggestions } from '../dto/proceedingsSuggestions'
 

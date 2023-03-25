@@ -1,6 +1,6 @@
 import { Field, ObjectType } from '@nestjs/graphql'
 import { ReportAPIOutput } from 'defs'
-import { ConnectedEntity } from '../../common/dto/connectedEntity'
+import { ConnectedEntity } from '../../entityInfo/dto/connectedEntity'
 import { DataRef } from './refs/dataRef'
 import { ReportSection } from './reportSection'
 

@@ -1,13 +1,14 @@
 import { PropertyOwnerAPI } from 'defs'
 import { Field, ObjectType } from '@nestjs/graphql'
-import { ConnectedEntity } from '../../common/dto/connectedEntity'
+import { ConnectedEntity } from '../../entityInfo/dto/connectedEntity'
 import { CustomField } from '../../customFields/dto/customField'
+import { Metadata } from '../../metadata/dto/metadata'
 import { VehicleOwnerInfo } from './vehicleOwnerInfo'
 
 @ObjectType()
 export class PropertyOwner implements PropertyOwnerAPI {
-  @Field()
-  _confirmed: boolean
+  @Field(() => Metadata)
+  metadata: Metadata
 
   @Field(() => ConnectedEntity, { nullable: true })
   company: ConnectedEntity

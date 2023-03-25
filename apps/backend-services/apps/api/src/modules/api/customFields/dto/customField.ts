@@ -1,14 +1,15 @@
 import { Field, ObjectType } from '@nestjs/graphql'
 import { CustomFieldAPI } from 'defs'
+import { Metadata } from '../../metadata/dto/metadata'
 
 @ObjectType()
 export class CustomField implements CustomFieldAPI {
-  @Field({ nullable: true })
-  readonly _id?: string
+  @Field(() => Metadata)
+  metadata: Metadata
 
   @Field()
-  readonly fieldName: string
+  fieldName: string
 
   @Field()
-  readonly fieldValue: string
+  fieldValue: string
 }

@@ -1,11 +1,12 @@
-import { Field, ObjectType } from '@nestjs/graphql'
-import { LocationAPIOutput } from 'defs'
-import { Coordinates } from './coordinates'
+import { Field, InputType } from '@nestjs/graphql'
+import { LocationAPIInput } from 'defs'
+import { MetadataInput } from '../../metadata/dto/metadataInput'
+import { CoordinatesInput } from './coordinatesInput'
 
-@ObjectType()
-export class Location implements LocationAPIOutput {
-  @Field()
-  _id: string
+@InputType()
+export class LocationInput implements LocationAPIInput {
+  @Field(() => MetadataInput)
+  metadata: MetadataInput
 
   @Field({ nullable: true, defaultValue: '' })
   building: string
@@ -37,6 +38,6 @@ export class Location implements LocationAPIOutput {
   @Field({ nullable: true, defaultValue: '' })
   zipCode: string
 
-  @Field(() => Coordinates)
-  coordinates: Coordinates
+  @Field(() => CoordinatesInput)
+  coordinates: CoordinatesInput
 }

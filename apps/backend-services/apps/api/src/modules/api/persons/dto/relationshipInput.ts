@@ -1,6 +1,6 @@
 import { Field, InputType } from '@nestjs/graphql'
 import { Length, Max, Min } from 'class-validator'
-import { ConnectedEntityInput } from '../../common/dto/connectedEntityInput'
+import { ConnectedEntityInput } from '../../entityInfo/dto/connectedEntityInput'
 import { RelationshipAPIInput } from 'defs'
 
 @InputType()

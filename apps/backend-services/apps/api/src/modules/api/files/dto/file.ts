@@ -1,9 +1,13 @@
 import { Field, ObjectType } from '@nestjs/graphql'
+import { Metadata } from '../../metadata/dto/metadata'
+import { WithMetadata } from '../../metadata/dto/withMetadata'
 import { DownloadUrl } from './downloadUrl'
 import { FileAPIOutput } from 'defs'
 
-@ObjectType()
-export class File implements FileAPIOutput {
+@ObjectType({ implements: () => [WithMetadata] })
+export class File implements WithMetadata, FileAPIOutput {
+  metadata: Metadata
+
   @Field()
   fileId: string
 

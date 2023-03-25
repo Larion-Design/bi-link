@@ -10,7 +10,7 @@ import { UseGuards } from '@nestjs/common'
 import { Graph } from 'defs'
 import { FirebaseAuthGuard } from '../../../users/guards/FirebaseAuthGuard'
 import { GraphService } from '@app/graph-module/graphService'
-import { EntitiesGraph } from '../dto/graph/entitiesGraph'
+import { EntitiesGraph } from '../dto/entitiesGraph'
 
 @ArgsType()
 class Params {

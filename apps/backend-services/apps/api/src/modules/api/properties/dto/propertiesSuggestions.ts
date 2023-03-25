@@ -1,5 +1,5 @@
 import { Field, Int, ObjectType, PickType } from '@nestjs/graphql'
-import { Suggestions } from '../../common/dto/suggestions'
+import { Suggestions } from '../../search/dto/suggestions'
 import { PropertyListRecord } from './propertyListRecord'
 
 @ObjectType()

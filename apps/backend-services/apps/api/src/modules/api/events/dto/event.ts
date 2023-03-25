@@ -1,20 +1,26 @@
 import { Field, ObjectType } from '@nestjs/graphql'
-import { Location } from '../../common/dto/geolocation/location'
+import { OptionalDateValue } from '../../generic/dto/optionalDateValue'
+import { TextValue } from '../../generic/dto/textValue'
+import { Location } from '../../geolocation/dto/location'
 import { CustomField } from '../../customFields/dto/customField'
 import { File } from '../../files/dto/file'
+import { Metadata } from '../../metadata/dto/metadata'
+import { WithMetadata } from '../../metadata/dto/withMetadata'
 import { Party } from './party'
 import { EventAPIOutput } from 'defs'
 
-@ObjectType()
-export class Event implements EventAPIOutput {
+@ObjectType({ implements: () => [WithMetadata] })
+export class Event implements WithMetadata, EventAPIOutput {
+  metadata: Metadata
+
   @Field()
   _id: string
 
-  @Field({ nullable: true })
-  date: Date
+  @Field(() => OptionalDateValue)
+  date: OptionalDateValue
 
   @Field()
-  type: string
+  type: TextValue
 
   @Field(() => Location, { nullable: true })
   location: Location

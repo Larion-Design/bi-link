@@ -1,5 +1,5 @@
 import { Args, Query, Resolver } from '@nestjs/graphql'
-import { SearchPaginationArgs } from '../../common/dto/searchPaginationArgs'
+import { SearchPaginationArgs } from '../../search/dto/searchPaginationArgs'
 import { SearchCompaniesService } from '../../../search/services/searchCompaniesService'
 import { CompaniesSuggestions } from '../dto/companiesSuggestions'
 import { UseGuards } from '@nestjs/common'

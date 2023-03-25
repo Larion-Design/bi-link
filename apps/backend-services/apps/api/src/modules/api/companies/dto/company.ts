@@ -3,7 +3,7 @@ import { CompanyAPIOutput } from 'defs'
 import { CustomField } from '../../customFields/dto/customField'
 import { File } from '../../files/dto/file'
 import { Associate } from './associate'
-import { Location } from '../../common/dto/geolocation/location'
+import { Location } from '../../geolocation/dto/location'
 
 @ObjectType()
 export class Company implements CompanyAPIOutput {

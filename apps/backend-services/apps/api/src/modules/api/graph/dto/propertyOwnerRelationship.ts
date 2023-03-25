@@ -1,14 +1,14 @@
 import { Field, ObjectType } from '@nestjs/graphql'
-import { GraphNode } from './graphNode'
-import { PropertyOwnerRelationship as PropertyOwnerRelationshipType, RelationshipLabel } from 'defs'
+import { GraphRelationship, PropertyOwnerRelationship as PropertyOwnerRelationshipType } from 'defs'
+import { EntityInfo } from '../../entityInfo/dto/entityInfo'
 import { NodesRelationship } from './nodesRelationship'
 
 @ObjectType({ implements: () => [NodesRelationship] })
 export class PropertyOwnerRelationship implements NodesRelationship, PropertyOwnerRelationshipType {
-  startNode: GraphNode
-  endNode: GraphNode
+  startNode: EntityInfo
+  endNode: EntityInfo
   _confirmed: boolean
-  _type: RelationshipLabel
+  _type: GraphRelationship
 
   @Field({ nullable: true, defaultValue: null })
   startDate: Date | null

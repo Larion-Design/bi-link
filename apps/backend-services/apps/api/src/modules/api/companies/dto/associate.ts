@@ -1,6 +1,6 @@
 import { Field, ObjectType } from '@nestjs/graphql'
 import { CustomField } from '../../customFields/dto/customField'
-import { ConnectedEntity } from '../../common/dto/connectedEntity'
+import { ConnectedEntity } from '../../entityInfo/dto/connectedEntity'
 import { AssociateAPIOutput } from 'defs'
 
 @ObjectType()

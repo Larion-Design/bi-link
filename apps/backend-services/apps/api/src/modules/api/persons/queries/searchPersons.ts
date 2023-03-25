@@ -2,7 +2,7 @@ import { UseGuards } from '@nestjs/common'
 import { Args, Query, Resolver } from '@nestjs/graphql'
 import { PersonsSuggestions } from '../dto/personsSuggestions'
 import { SearchPersonsService } from '../../../search/services/searchPersonsService'
-import { SearchPaginationArgs } from '../../common/dto/searchPaginationArgs'
+import { SearchPaginationArgs } from '../../search/dto/searchPaginationArgs'
 import { FirebaseAuthGuard } from '../../../users/guards/FirebaseAuthGuard'
 import { CurrentUser } from '../../../users/decorators/currentUser'
 
