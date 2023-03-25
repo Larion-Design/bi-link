@@ -1,19 +1,21 @@
 # compiled output
-dist
-node_modules
-.turbo
-build
-out
-target
+/dist
+/node_modules
+/out
 
 # Logs
+npm-debug.log*
+pnpm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
 
 # OS
 .DS_Store
 
 # Tests
-coverage
-.nyc_output
+/coverage
+/.nyc_output
 
 # IDEs and editors
 /.idea
@@ -22,6 +24,9 @@ coverage
 .c9/
 *.launch
 .settings/
+*.sublime-workspace
+
+# IDE - VSCode
 .vscode/*
 !.vscode/settings.json
 !.vscode/tasks.json
@@ -34,6 +39,5 @@ coverage
 # Others
 .prettierrc
 .prettierignore
-.eslintrc
-.eslintignore
 .github
+ron.traineddata

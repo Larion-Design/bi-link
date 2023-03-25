@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json.schemastore.org/nest-cli",
+  "collection": "@nestjs/schematics",
+  "sourceRoot": "apps/osint/src",
+  "monorepo": true,
+  "root": "apps/osint",
+  "compilerOptions": {
+    "webpack": true,
+    "tsConfigPath": "apps/osint/tsconfig.app.json"
+  },
+  "projects": {
+    "osint": {
+      "type": "application",
+      "root": "apps/osint",
+      "entryFile": "main",
+      "sourceRoot": "apps/osint/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/osint/tsconfig.app.json"
+      }
+    },
+    "files-parser": {
+      "type": "application",
+      "root": "apps/files-parser",
+      "entryFile": "main",
+      "sourceRoot": "apps/files-parser/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/files-parser/tsconfig.app.json"
+      }
+    }
+  }
+}

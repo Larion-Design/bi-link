@@ -1,0 +1,14 @@
+{
+  "env": {
+    "node": true,
+    "jest": true,
+    "es6": true
+  },
+  "parserOptions": {
+    "project": ["./apps/osint/tsconfig.eslint.json"],
+    "extraFileExtensions": [".json"]
+  },
+  "rules": {
+    "@typescript-eslint/no-empty-interface": "off"
+  }
+}
