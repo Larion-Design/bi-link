@@ -1,7 +1,10 @@
 import { User } from './user'
 
 export interface Snapshot<T> {
-  author: User
+  _id: string
+  user?: User
+  service?: string
   dateCreated: Date
+  entityId: string
   entityInfo: T
 }
