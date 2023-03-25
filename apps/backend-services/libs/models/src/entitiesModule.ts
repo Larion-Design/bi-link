@@ -1,3 +1,21 @@
+import { MetadataModel, MetadataSchema } from '@app/models/models'
+import {
+  DateValueWithMetadataModel,
+  DateValueWithMetadataSchema,
+} from '@app/models/models/generic/dateValueWithMetadataModel'
+import {
+  NumberValueWithMetadataModel,
+  NumberValueWithMetadataSchema,
+} from '@app/models/models/generic/numberValueWithMetadataModel'
+import {
+  OptionalDateValueWithMetadataModel,
+  OptionalDateValueWithMetadataSchema,
+} from '@app/models/models/generic/optionalDateValueWithMetadataModel'
+import {
+  TextValueWithMetadataModel,
+  TextValueWithMetadataSchema,
+} from '@app/models/models/generic/textValueWithMetadataModel'
+import { TrustModel, TrustSchema } from '@app/models/models/metadata/trustModel'
 import {
   ProceedingEntityModel,
   ProceedingEntitySchema,
@@ -51,6 +69,15 @@ import { ReportsService } from '@app/models/services/reportsService'
 @Module({
   imports: [
     MongooseModule.forFeature([
+      { name: TrustModel.name, schema: TrustSchema },
+      { name: MetadataModel.name, schema: MetadataSchema },
+      { name: TextValueWithMetadataModel.name, schema: TextValueWithMetadataSchema },
+      { name: NumberValueWithMetadataModel.name, schema: NumberValueWithMetadataSchema },
+      { name: DateValueWithMetadataModel.name, schema: DateValueWithMetadataSchema },
+      {
+        name: OptionalDateValueWithMetadataModel.name,
+        schema: OptionalDateValueWithMetadataSchema,
+      },
       { name: FileModel.name, schema: FileSchema },
       { name: LocationModel.name, schema: LocationSchema },
       { name: CoordinatesModel.name, schema: CoordinatesSchema },

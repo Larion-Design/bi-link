@@ -13,7 +13,7 @@ export const eventSchema = withMetadataSchema.merge(
     _id: z.string(),
     type: textWithMetadataSchema,
     date: optionalDateWithMetadataSchema,
-    location: locationSchema.nullish(),
+    location: locationSchema.nullable(),
     description: z.string(),
     parties: z.array(eventParticipantSchema),
     customFields: z.array(customFieldSchema),
@@ -50,6 +50,6 @@ export type Event = z.infer<typeof eventSchema>
 export type EventAPIInput = z.infer<typeof eventAPIInputSchema>
 export type EventAPIOutput = z.infer<typeof eventAPIOutputSchema>
 export type EventListRecord = z.infer<typeof eventListRecordSchema>
-export type EventPartyRelationship = z.infer<typeof graphEventParticipantSchema>
+export type EventParticipantRelationship = z.infer<typeof graphEventParticipantSchema>
 
 export interface EventsSuggestions extends SearchSuggestions<EventListRecord> {}

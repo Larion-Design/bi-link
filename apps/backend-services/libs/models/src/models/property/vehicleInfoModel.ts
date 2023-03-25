@@ -1,19 +1,23 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
 import { VehicleInfo } from 'defs'
+import {
+  TextValueWithMetadataModel,
+  TextValueWithMetadataSchema,
+} from '../generic/textValueWithMetadataModel'
 
 @Schema({ _id: false, timestamps: false })
 export class VehicleInfoModel implements VehicleInfo {
-  @Prop({ isRequired: false })
-  vin: string
+  @Prop({ type: TextValueWithMetadataSchema })
+  vin: TextValueWithMetadataModel
 
-  @Prop({ isRequired: false })
-  maker: string
+  @Prop({ type: TextValueWithMetadataSchema })
+  maker: TextValueWithMetadataModel
 
-  @Prop({ isRequired: false })
-  color: string
+  @Prop({ type: TextValueWithMetadataSchema })
+  color: TextValueWithMetadataModel
 
-  @Prop({ isRequired: false })
-  model: string
+  @Prop({ type: TextValueWithMetadataSchema })
+  model: TextValueWithMetadataModel
 }
 
 export const VehicleSchema = SchemaFactory.createForClass(VehicleInfoModel)

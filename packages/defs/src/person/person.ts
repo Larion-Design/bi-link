@@ -30,33 +30,6 @@ export const personSchema = withMetadataSchema.merge(
   }),
 )
 
-export const personListRecord = personSchema.pick({
-  _id: true,
-  firstName: true,
-  lastName: true,
-  cnp: true,
-})
-
-export const personListRecordWithImage = personSchema.pick({
-  _id: true,
-  firstName: true,
-  lastName: true,
-  cnp: true,
-  images: true,
-})
-
-export type Person = z.infer<typeof personSchema>
-export type PersonListRecord = z.infer<typeof personListRecord>
-export type PersonListRecordWithImage = z.infer<typeof personListRecordWithImage>
-
-export interface PersonsSuggestions<T> extends SearchSuggestions<T> {}
-
-export const personAPISchema = personSchema.omit({
-  relationships: true,
-  files: true,
-  images: true,
-})
-
 export const personAPIOutputSchema = personSchema
   .omit({
     relationships: true,
@@ -81,6 +54,27 @@ export const personAPIInputSchema = personSchema
       relationships: z.array(relationshipAPISchema),
     }),
   )
+
+export const personListRecord = personSchema.pick({
+  _id: true,
+  firstName: true,
+  lastName: true,
+  cnp: true,
+})
+
+export const personListRecordWithImage = personSchema.pick({
+  _id: true,
+  firstName: true,
+  lastName: true,
+  cnp: true,
+  images: true,
+})
+
+export type Person = z.infer<typeof personSchema>
+export type PersonListRecord = z.infer<typeof personListRecord>
+export type PersonListRecordWithImage = z.infer<typeof personListRecordWithImage>
+
+export interface PersonsSuggestions<T> extends SearchSuggestions<T> {}
 
 export type PersonAPIInput = z.infer<typeof personAPIInputSchema>
 export type PersonAPIOutput = z.infer<typeof personAPIOutputSchema>

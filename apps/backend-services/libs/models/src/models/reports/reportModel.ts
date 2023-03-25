@@ -13,6 +13,10 @@ import {
 
 @Schema({ _id: true, timestamps: true })
 export class ReportModel implements Report {
+  _id: string
+  updatedAt: Date
+  createdAt: Date
+
   @Prop()
   name: string
 

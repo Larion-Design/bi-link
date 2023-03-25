@@ -1,31 +1,26 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
 import { SchemaTypes } from 'mongoose'
 import { IdDocument, IdDocumentStatus } from 'defs'
+import { MetadataModel, MetadataSchema } from '@app/models/models'
 
-@Schema({ _id: false })
+@Schema({ _id: false, timestamps: false })
 export class IdDocumentModel implements IdDocument {
-  constructor(idDocument?: IdDocument) {
-    if (idDocument) {
-      this.documentType = idDocument.documentType
-      this.documentNumber = idDocument.documentNumber
-      this.issueDate = idDocument.issueDate
-      this.expirationDate = idDocument.expirationDate
-    }
-  }
+  @Prop({ type: MetadataSchema })
+  metadata: MetadataModel
 
   @Prop({ isRequired: true })
   documentType: string
 
-  @Prop({ isRequired: true, unique: true, sparse: true })
+  @Prop()
   documentNumber: string
 
-  @Prop({ type: SchemaTypes.Date, isRequired: false })
-  issueDate?: string | Date
+  @Prop({ type: SchemaTypes.Date, default: null })
+  issueDate: Date | null
 
-  @Prop({ type: SchemaTypes.Date, isRequired: false })
-  expirationDate?: string | Date
+  @Prop({ type: SchemaTypes.Date, default: null })
+  expirationDate: Date | null
 
-  @Prop({ type: SchemaTypes.String, default: IdDocumentStatus.VALID })
+  @Prop({ type: SchemaTypes.String })
   status: IdDocumentStatus
 }
 

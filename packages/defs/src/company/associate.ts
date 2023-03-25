@@ -1,4 +1,5 @@
 import { z } from 'zod'
+import { dateSchema } from '../date'
 import {
   booleanWithMetadataSchema,
   numberWithMetadataSchema,
@@ -9,19 +10,19 @@ import { withMetadataSchema } from '../metadata'
 import { customFieldSchema } from '../customField'
 import { personSchema } from '../person'
 import { connectedEntitySchema } from '../connectedEntity'
-import { NodesRelationship, nodesRelationshipSchema } from '../graphRelationships'
+import { nodesRelationshipSchema } from '../graphRelationships'
 import { companySchema } from './company'
 
 export const associateSchema = withMetadataSchema.merge(
   z.object({
-    role: textWithMetadataSchema,
-    startDate: optionalDateWithMetadataSchema,
-    endDate: optionalDateWithMetadataSchema,
-    isActive: booleanWithMetadataSchema,
+    role: z.string(),
+    startDate: dateSchema.nullable(),
+    endDate: dateSchema.nullable(),
+    isActive: z.boolean(),
     customFields: z.array(customFieldSchema),
     person: personSchema.nullish(),
     company: companySchema.nullish(),
-    equity: numberWithMetadataSchema,
+    equity: z.number(),
   }),
 )
 
@@ -33,10 +34,7 @@ export const associateAPISchema = associateSchema.omit({ person: true, company: 
 )
 
 export const graphCompanyAssociateSchema = nodesRelationshipSchema.merge(
-  z.object({
-    role: z.string(),
-    equity: z.number(),
-  }),
+  associateSchema.pick({ role: true, equity: true }),
 )
 
 export type Associate = z.infer<typeof associateSchema>

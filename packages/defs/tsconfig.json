@@ -19,7 +19,8 @@
     "noImplicitAny": false,
     "noUncheckedIndexedAccess": true,
     "forceConsistentCasingInFileNames": true,
-    "noFallthroughCasesInSwitch": true
+    "noFallthroughCasesInSwitch": true,
+    "importHelpers": true
   },
   "include": ["src"],
   "exclude": ["dist", "node_modules"]

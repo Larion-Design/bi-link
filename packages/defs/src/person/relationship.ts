@@ -1,20 +1,15 @@
 import { z } from 'zod'
-import { numberWithMetadataSchema, textWithMetadataSchema } from '../generic'
 import { withMetadataSchema } from '../metadata'
 import { connectedEntitySchema } from '../connectedEntity'
-import {
-  graphRelationshipSchema,
-  NodesRelationship,
-  nodesRelationshipSchema,
-} from '../graphRelationships'
+import { nodesRelationshipSchema } from '../graphRelationships'
 import { personSchema } from './person'
 
 export const relationshipSchema = withMetadataSchema.merge(
   z.object({
-    type: textWithMetadataSchema,
-    proximity: numberWithMetadataSchema,
+    type: z.string(),
+    proximity: z.number(),
     person: personSchema,
-    description: textWithMetadataSchema,
+    description: z.string(),
     relatedPersons: z.array(personSchema),
   }),
 )

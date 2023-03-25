@@ -1,11 +1,15 @@
+import { MetadataModel, MetadataSchema } from '@app/models/models/metadata/metadataModel'
 import { Document } from 'mongoose'
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
 import { File, FileSources } from 'defs'
 
-export type FileDocument = FileModel & Document
-
 @Schema({ timestamps: true })
 export class FileModel implements File {
+  _id: string
+
+  @Prop({ type: MetadataSchema })
+  metadata: MetadataModel
+
   @Prop({ unique: true, required: true })
   fileId: string
 
@@ -28,4 +32,5 @@ export class FileModel implements File {
   isHidden: boolean
 }
 
+export type FileDocument = FileModel & Document
 export const FileSchema = SchemaFactory.createForClass(FileModel)

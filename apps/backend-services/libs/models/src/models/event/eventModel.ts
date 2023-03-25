@@ -1,6 +1,15 @@
+import { MetadataModel, MetadataSchema } from '@app/models/models'
+import {
+  OptionalDateValueWithMetadataModel,
+  OptionalDateValueWithMetadataSchema,
+} from '@app/models/models/generic/optionalDateValueWithMetadataModel'
+import {
+  TextValueWithMetadataModel,
+  TextValueWithMetadataSchema,
+} from '@app/models/models/generic/textValueWithMetadataModel'
 import { LocationDocument, LocationModel } from '@app/models/models/locationModel'
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
-import { Document, Types, SchemaTypes } from 'mongoose'
+import { Document, Types } from 'mongoose'
 import { Event } from 'defs'
 import { CustomFieldModel, CustomFieldSchema } from '../customFieldModel'
 import { FileModel } from '../fileModel'
@@ -10,25 +19,28 @@ import { PartyModel, PartySchema } from './partyModel'
 export class EventModel implements Event {
   _id: string
 
-  @Prop({ isRequired: false, default: '' })
-  description: string
+  @Prop({ type: MetadataSchema })
+  metadata: MetadataModel
+
+  @Prop({ type: TextValueWithMetadataSchema })
+  type: TextValueWithMetadataModel
 
   @Prop()
-  type: string
+  description: string
 
-  @Prop({ type: SchemaTypes.Date })
-  date: Date
+  @Prop({ type: OptionalDateValueWithMetadataSchema })
+  date: OptionalDateValueWithMetadataModel
 
   @Prop({ type: Types.ObjectId, ref: LocationModel.name, isRequired: false, default: null })
   location: LocationDocument | null
 
-  @Prop({ type: [PartySchema], isRequired: false })
+  @Prop({ type: [PartySchema] })
   parties: PartyModel[]
 
   @Prop({ type: [{ type: Types.ObjectId, ref: FileModel.name }] })
   files: FileModel[]
 
-  @Prop({ type: [CustomFieldSchema], isRequired: false })
+  @Prop({ type: [CustomFieldSchema] })
   customFields: CustomFieldModel[]
 }
 

@@ -1,8 +1,7 @@
 import { z } from 'zod'
 import { companySchema } from '../company'
 import { connectedEntitySchema } from '../connectedEntity'
-import { textWithMetadataSchema } from '../generic'
-import { NodesRelationship, nodesRelationshipSchema } from '../graphRelationships'
+import { nodesRelationshipSchema } from '../graphRelationships'
 import { withMetadataSchema } from '../metadata'
 import { personSchema } from '../person'
 
@@ -10,7 +9,7 @@ export const proceedingEntityInvolvedSchema = withMetadataSchema.merge(
   z.object({
     person: personSchema.nullish(),
     company: companySchema.nullish(),
-    involvedAs: textWithMetadataSchema,
+    involvedAs: z.string(),
     description: z.string(),
   }),
 )

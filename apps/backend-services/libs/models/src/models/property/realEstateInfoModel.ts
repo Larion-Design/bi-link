@@ -1,18 +1,26 @@
+import {
+  BooleanValueWithMetadataModel,
+  BooleanValueWithMetadataSchema,
+} from '@app/models/models/generic/booleanValueWithMetadataModel'
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
 import { Types } from 'mongoose'
 import { LocationDocument, LocationModel } from '@app/models/models/locationModel'
 import { RealEstateInfo } from 'defs'
+import {
+  NumberValueWithMetadataModel,
+  NumberValueWithMetadataSchema,
+} from '../generic/numberValueWithMetadataModel'
 
 @Schema({ _id: false, timestamps: false })
 export class RealEstateInfoModel implements RealEstateInfo {
   @Prop({ type: Types.ObjectId, ref: LocationModel.name, isRequired: false })
   location: LocationDocument | null
 
-  @Prop()
-  surface: number
+  @Prop({ type: NumberValueWithMetadataSchema })
+  surface: NumberValueWithMetadataModel
 
-  @Prop()
-  townArea: boolean
+  @Prop({ type: BooleanValueWithMetadataSchema })
+  townArea: BooleanValueWithMetadataModel
 }
 
 export const RealEstateSchema = SchemaFactory.createForClass(RealEstateInfoModel)

@@ -13,6 +13,9 @@ export class ReportContentModel implements ReportContent {
   @Prop()
   order: number
 
+  @Prop()
+  isActive: boolean
+
   @Prop({ type: [TitleSchema], isRequired: false })
   title?: TitleModel
 

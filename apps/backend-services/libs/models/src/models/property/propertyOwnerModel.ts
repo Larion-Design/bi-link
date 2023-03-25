@@ -1,6 +1,11 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
-import { Document, Types, SchemaTypes } from 'mongoose'
+import { Document, Types } from 'mongoose'
 import { PropertyOwner } from 'defs'
+import { MetadataModel, MetadataSchema } from '@app/models/models'
+import {
+  OptionalDateValueWithMetadataModel,
+  OptionalDateValueWithMetadataSchema,
+} from '@app/models/models/generic/optionalDateValueWithMetadataModel'
 import { PersonDocument, PersonModel } from '@app/models/models/person/personModel'
 import { CompanyDocument, CompanyModel } from '@app/models/models/company/companyModel'
 import { CustomFieldModel, CustomFieldSchema } from '@app/models/models/customFieldModel'
@@ -11,14 +16,14 @@ import {
 
 @Schema({ timestamps: false, _id: false })
 export class PropertyOwnerModel implements PropertyOwner {
-  @Prop({ isRequired: false, default: true })
-  _confirmed: boolean
+  @Prop({ type: MetadataSchema })
+  metadata: MetadataModel
 
-  @Prop({ type: SchemaTypes.Date, isRequired: false, default: null })
-  startDate: Date | null
+  @Prop({ type: OptionalDateValueWithMetadataSchema })
+  startDate: OptionalDateValueWithMetadataModel
 
-  @Prop({ type: SchemaTypes.Date, isRequired: false, default: null })
-  endDate: Date | null
+  @Prop({ type: OptionalDateValueWithMetadataSchema })
+  endDate: OptionalDateValueWithMetadataModel
 
   @Prop({ type: Types.ObjectId, ref: PersonModel.name, isRequired: false })
   person?: PersonDocument

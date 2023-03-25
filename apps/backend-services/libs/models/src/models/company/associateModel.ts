@@ -1,14 +1,14 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
 import { Document, Types, SchemaTypes } from 'mongoose'
-import { PersonDocument, PersonModel } from '@app/models/models'
-import { CustomFieldModel, CustomFieldSchema } from '@app/models/models'
 import { Associate } from 'defs'
+import { MetadataModel, MetadataSchema, PersonDocument, PersonModel } from '@app/models/models'
+import { CustomFieldModel, CustomFieldSchema } from '@app/models/models'
 import { CompanyDocument, CompanyModel } from '@app/models/models/company/companyModel'
 
 @Schema({ _id: false, timestamps: false })
 export class AssociateModel implements Associate {
-  @Prop({ isRequired: false, default: true })
-  _confirmed: boolean
+  @Prop({ type: MetadataSchema })
+  metadata: MetadataModel
 
   @Prop()
   role: string

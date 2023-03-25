@@ -48,7 +48,6 @@ specifiers:
   defs: workspace:*
   express: ^4.18.2
   firebase-admin: ^11.4.1
-  frontend-bridge: workspace:*
   graphql: ^16.6.0
   helmet: ^5.1.1
   ioredis: ^5.2.4
@@ -110,7 +109,6 @@ dependencies:
   class-validator: 0.13.2
   date-fns: 2.29.3
   firebase-admin: 11.4.1_@firebase+app-types@0.8.1
-  frontend-bridge: file:../../packages/frontend-bridge
   graphql: 16.6.0
   helmet: 5.1.1
   ioredis: 5.2.4
@@ -174,8 +172,6 @@ dependenciesMeta:
   defs:
     injected: true
   tools:
-    injected: true
-  frontend-bridge:
     injected: true
 
 packages:
@@ -9151,6 +9147,7 @@ packages:
 
   /zod/3.21.2:
     resolution: {integrity: sha512-0Ygy2/IZNIxHterZdHjE5Vb8hp1fUHJD/BGvSHj8QJx+UipEVNvo9WLchoyBpz5JIaN6KmdGDGYdloGzpFK98g==}
+    dev: true
 
   file:../../packages/defs:
     resolution: {directory: ../../packages/defs, type: directory}
@@ -9160,15 +9157,6 @@ packages:
     dependencies:
       zod: 3.21.2
     dev: true
-
-  file:../../packages/frontend-bridge:
-    resolution: {directory: ../../packages/frontend-bridge, type: directory}
-    name: frontend-bridge
-    version: 1.0.0
-    requiresBuild: true
-    dependencies:
-      zod: 3.21.2
-    dev: false
 
   file:../../packages/tools:
     resolution: {directory: ../../packages/tools, type: directory}

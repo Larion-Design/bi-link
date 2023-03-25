@@ -1,3 +1,4 @@
+import { MetadataModel, MetadataSchema } from '@app/models/models'
 import {
   RealEstateInfoModel,
   RealEstateSchema,
@@ -16,6 +17,9 @@ import { VehicleInfoModel, VehicleSchema } from '@app/models/models/property/veh
 @Schema({ timestamps: true })
 export class PropertyModel implements Property {
   _id: string
+
+  @Prop({ type: MetadataSchema })
+  metadata: MetadataModel
 
   @Prop()
   name: string

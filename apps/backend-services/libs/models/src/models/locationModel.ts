@@ -1,11 +1,15 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
 import { Document } from 'mongoose'
 import { Location } from 'defs'
+import { MetadataModel, MetadataSchema } from '@app/models/models/metadata/metadataModel'
 import { CoordinatesModel, CoordinatesSchema } from '@app/models/models/coordinatesModel'
 
 @Schema({ timestamps: false })
 export class LocationModel implements Location {
   _id: string
+
+  @Prop({ type: MetadataSchema })
+  metadata: MetadataModel
 
   @Prop()
   building: string

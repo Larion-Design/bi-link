@@ -1,18 +1,19 @@
+import { MetadataModel, MetadataSchema } from '@app/models/models'
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
 import { Document, Types } from 'mongoose'
-import { Party } from 'defs'
+import { EventParticipant } from 'defs'
 import { PersonDocument, PersonModel } from '@app/models/models/person/personModel'
 import { CompanyDocument, CompanyModel } from '@app/models/models/company/companyModel'
 import { CustomFieldModel, CustomFieldSchema } from '../customFieldModel'
 import { PropertyDocument, PropertyModel } from '@app/models/models/property/propertyModel'
 
-@Schema({ _id: false, timestamps: true })
-export class PartyModel implements Party {
-  @Prop({ isRequired: false, default: true })
-  _confirmed: boolean
+@Schema({ _id: false, timestamps: false })
+export class PartyModel implements EventParticipant {
+  @Prop({ type: MetadataSchema })
+  metadata: MetadataModel
 
   @Prop()
-  name: string
+  type: string
 
   @Prop()
   description: string
@@ -26,7 +27,7 @@ export class PartyModel implements Party {
   @Prop({ type: [{ type: Types.ObjectId, ref: PropertyModel.name }] })
   properties: PropertyDocument[]
 
-  @Prop({ type: [CustomFieldSchema], isRequired: false })
+  @Prop({ type: [CustomFieldSchema] })
   customFields: CustomFieldModel[]
 }
 

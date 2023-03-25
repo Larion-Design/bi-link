@@ -1,5 +1,14 @@
+import { MetadataModel, MetadataSchema } from '@app/models/models'
+import {
+  OptionalDateValueWithMetadataModel,
+  OptionalDateValueWithMetadataSchema,
+} from '@app/models/models/generic/optionalDateValueWithMetadataModel'
+import {
+  TextValueWithMetadataModel,
+  TextValueWithMetadataSchema,
+} from '@app/models/models/generic/textValueWithMetadataModel'
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
-import { Document, SchemaTypes, Types } from 'mongoose'
+import { Document, Types } from 'mongoose'
 import { LocationDocument, LocationModel } from '@app/models/models/locationModel'
 import { EducationModel, EducationSchema } from '@app/models/models/person/educationModel'
 import { OldNameModel, OldNameSchema } from '@app/models/models/person/oldNameModel'
@@ -13,40 +22,43 @@ import { RelationshipModel, RelationshipSchema } from './relationshipModel'
 export class PersonModel implements Person {
   _id: string
 
-  @Prop({ isRequired: false, default: '' })
-  firstName: string
+  @Prop({ type: MetadataSchema })
+  metadata: MetadataModel
 
-  @Prop({ isRequired: false, default: '' })
-  lastName: string
+  @Prop({ type: TextValueWithMetadataSchema })
+  firstName: TextValueWithMetadataModel
 
-  @Prop({ type: [OldNameSchema], isRequired: false })
+  @Prop({ type: TextValueWithMetadataSchema })
+  lastName: TextValueWithMetadataModel
+
+  @Prop({ type: [OldNameSchema] })
   oldNames: OldNameModel[]
 
-  @Prop({ isRequired: false, sparse: true })
-  cnp: string
+  @Prop({ type: TextValueWithMetadataSchema })
+  cnp: TextValueWithMetadataModel
 
-  @Prop({ type: SchemaTypes.Date, isRequired: false })
-  birthdate: string | Date
+  @Prop({ type: OptionalDateValueWithMetadataSchema })
+  birthdate: OptionalDateValueWithMetadataModel
 
-  @Prop({ type: Types.ObjectId, ref: LocationModel.name })
+  @Prop({ type: Types.ObjectId, ref: LocationModel.name, default: null })
   birthPlace: LocationDocument | null
 
-  @Prop({ type: Types.ObjectId, ref: LocationModel.name })
-  homeAddress: LocationDocument
+  @Prop({ type: Types.ObjectId, ref: LocationModel.name, default: null })
+  homeAddress: LocationDocument | null
 
   @Prop({ type: [{ type: Types.ObjectId, ref: FileModel.name }] })
   images: FileModel[]
 
-  @Prop({ type: [IdDocumentSchema], isRequired: false })
+  @Prop({ type: [IdDocumentSchema] })
   documents: IdDocumentModel[]
 
-  @Prop({ type: [RelationshipSchema], isRequired: false })
+  @Prop({ type: [RelationshipSchema] })
   relationships: RelationshipModel[]
 
   @Prop({ type: [CustomFieldSchema] })
   contactDetails: CustomFieldModel[]
 
-  @Prop({ type: [EducationSchema], isRequired: false })
+  @Prop({ type: [EducationSchema] })
   education: EducationModel[]
 
   @Prop({ type: [{ type: Types.ObjectId, ref: FileModel.name }] })

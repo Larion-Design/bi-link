@@ -30,7 +30,7 @@ export class DataRefModel implements DataRef {
   path?: string
 
   @Prop({ isRequired: false })
-  targetId: string
+  targetId?: string
 }
 
 export type DataRefDocument = DataRefModel & Document

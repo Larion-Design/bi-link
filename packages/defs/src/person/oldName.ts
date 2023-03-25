@@ -1,10 +1,12 @@
 import { z } from 'zod'
-import { textWithMetadataSchema } from '../generic'
+import { withMetadataSchema } from '../metadata'
 
-export const oldNameSchema = z.object({
-  name: textWithMetadataSchema,
-  changeReason: textWithMetadataSchema,
-})
+export const oldNameSchema = withMetadataSchema.merge(
+  z.object({
+    name: z.string(),
+    changeReason: z.string(),
+  }),
+)
 
 export type OldName = z.infer<typeof oldNameSchema>
 export type OldNameAPIInput = OldName

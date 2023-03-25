@@ -1,3 +1,8 @@
+import { MetadataModel, MetadataSchema } from '@app/models/models'
+import {
+  TextValueWithMetadataModel,
+  TextValueWithMetadataSchema,
+} from '@app/models/models/generic/textValueWithMetadataModel'
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
 import { Document, Types } from 'mongoose'
 import { CustomFieldModel, CustomFieldSchema } from '../customFieldModel'
@@ -10,11 +15,14 @@ import { Company } from 'defs'
 export class CompanyModel implements Company {
   _id: string
 
-  @Prop({ isRequired: true })
-  cui: string
+  @Prop({ type: MetadataSchema })
+  metadata: MetadataModel
 
-  @Prop({ isRequired: true })
-  name: string
+  @Prop({ type: TextValueWithMetadataSchema })
+  cui: TextValueWithMetadataModel
+
+  @Prop({ type: TextValueWithMetadataSchema })
+  name: TextValueWithMetadataModel
 
   @Prop({ type: Types.ObjectId, ref: LocationModel.name, isRequired: false })
   headquarters: LocationDocument | null
@@ -22,8 +30,8 @@ export class CompanyModel implements Company {
   @Prop({ type: [{ type: Types.ObjectId, ref: LocationModel.name }] })
   locations: LocationDocument[]
 
-  @Prop({ isRequired: true })
-  registrationNumber: string
+  @Prop({ type: TextValueWithMetadataSchema })
+  registrationNumber: TextValueWithMetadataModel
 
   @Prop({ type: [CustomFieldSchema], isRequired: false })
   contactDetails: CustomFieldModel[]

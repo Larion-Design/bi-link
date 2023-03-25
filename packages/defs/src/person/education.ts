@@ -1,16 +1,14 @@
 import { z } from 'zod'
-import { customFieldSchema } from '../customField'
-import { optionalDateWithMetadataSchema, textWithMetadataSchema } from '../generic'
+import { dateSchema } from '../date'
 import { withMetadataSchema } from '../metadata'
 
 export const educationSchema = withMetadataSchema.merge(
   z.object({
-    type: textWithMetadataSchema,
-    school: textWithMetadataSchema,
-    specialization: textWithMetadataSchema,
-    customFields: z.array(customFieldSchema),
-    startDate: optionalDateWithMetadataSchema,
-    endDate: optionalDateWithMetadataSchema,
+    type: z.string(),
+    school: z.string(),
+    specialization: z.string(),
+    startDate: dateSchema.nullish(),
+    endDate: dateSchema.nullish(),
   }),
 )
 
