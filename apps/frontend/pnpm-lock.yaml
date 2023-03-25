@@ -45,6 +45,7 @@ specifiers:
   elkjs: ^0.8.2
   firebase: ^9.17.1
   formik: ^2.2.9
+  frontend-bridge: workspace:*
   graphql: ^16.6.0
   hierarchy: ^1.0.0
   html-to-image: ^1.11.11
@@ -101,6 +102,7 @@ dependencies:
   elkjs: 0.8.2
   firebase: 9.17.1
   formik: 2.2.9_react@18.2.0
+  frontend-bridge: link:../../packages/frontend-bridge
   graphql: 16.6.0
   hierarchy: 1.0.0
   html-to-image: 1.11.11

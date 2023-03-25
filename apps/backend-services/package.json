@@ -72,7 +72,8 @@
     "tesseract.js": "^3.0.3",
     "uuid": "^8.3.2",
     "word-extractor": "^1.0.4",
-    "xlsx": "^0.18.5"
+    "xlsx": "^0.18.5",
+    "frontend-bridge": "workspace:*"
   },
   "devDependencies": {
     "@faker-js/faker": "^7.6.0",
@@ -150,6 +151,9 @@
       "injected": true
     },
     "tools": {
+      "injected": true
+    },
+    "frontend-bridge": {
       "injected": true
     }
   }

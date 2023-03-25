@@ -40,6 +40,7 @@
     "crypto-js": "^4.1.1",
     "date-fns": "^2.29.3",
     "defs": "workspace:*",
+    "frontend-bridge": "workspace:*",
     "elkjs": "^0.8.2",
     "firebase": "^9.17.1",
     "formik": "^2.2.9",
