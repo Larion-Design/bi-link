@@ -5,8 +5,7 @@
   "monorepo": true,
   "root": "apps/osint",
   "compilerOptions": {
-    "webpack": true,
-    "tsConfigPath": "apps/osint/tsconfig.app.json"
+    "webpack": true
   },
   "projects": {
     "osint": {
