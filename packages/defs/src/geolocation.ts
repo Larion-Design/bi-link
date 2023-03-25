@@ -1,6 +1,6 @@
 import { z } from 'zod'
-import { nodesRelationshipSchema } from "./graphRelationships";
-import { withMetadataSchema } from "./metadata";
+import { nodesRelationshipSchema } from './graphRelationships'
+import { withMetadataSchema } from './metadata'
 
 export const coordinatesSchema = z.object({
   lat: z.number(),

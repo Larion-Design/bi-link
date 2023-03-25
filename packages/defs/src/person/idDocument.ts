@@ -2,9 +2,11 @@ import { z } from 'zod'
 import { optionalDateWithMetadataSchema, textWithMetadataSchema } from '../generic'
 import { withMetadataSchema } from '../metadata'
 
-export const documentStatusSchema = withMetadataSchema.merge(
+export const idDocumentStatusType = z.enum(['VALID', 'EXPIRED', 'LOST_OR_STOLEN']).default('VALID')
+
+export const idDocumentStatusSchema = withMetadataSchema.merge(
   z.object({
-    value: z.enum(['VALID', 'EXPIRED', 'LOST_OR_STOLEN']).default('VALID'),
+    value: idDocumentStatusType,
   }),
 )
 
@@ -14,9 +16,11 @@ export const idDocumentSchema = withMetadataSchema.merge(
     documentNumber: textWithMetadataSchema,
     issueDate: optionalDateWithMetadataSchema,
     expirationDate: optionalDateWithMetadataSchema,
-    status: documentStatusSchema,
+    status: idDocumentStatusSchema,
   }),
 )
 
+export type IdDocumentStatus = z.infer<typeof idDocumentStatusSchema>
+export type IdDocumentStatusType = z.infer<typeof idDocumentStatusType>
 export type IdDocument = z.infer<typeof idDocumentSchema>
 export type IdDocumentAPI = IdDocument

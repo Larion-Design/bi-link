@@ -2,7 +2,7 @@ import { z } from 'zod'
 import { companySchema } from '../company'
 import { connectedEntitySchema } from '../connectedEntity'
 import { textWithMetadataSchema } from '../generic'
-import { NodesRelationship, nodesRelationshipSchema } from "../graphRelationships";
+import { NodesRelationship, nodesRelationshipSchema } from '../graphRelationships'
 import { withMetadataSchema } from '../metadata'
 import { personSchema } from '../person'
 
@@ -24,9 +24,11 @@ export const proceedingEntityInvolvedAPISchema = proceedingEntityInvolvedSchema
     }),
   )
 
-export const graphProceedingEntitySchema = nodesRelationshipSchema.merge(z.object({
-  involvedAs: z.string()
-}))
+export const graphProceedingEntitySchema = nodesRelationshipSchema.merge(
+  z.object({
+    involvedAs: z.string(),
+  }),
+)
 
 export type ProceedingEntityInvolved = z.infer<typeof proceedingEntityInvolvedSchema>
 export type ProceedingEntityInvolvedAPI = z.infer<typeof proceedingEntityInvolvedAPISchema>

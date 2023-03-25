@@ -30,3 +30,9 @@ export const booleanWithMetadataSchema = withMetadataSchema.merge(
     value: z.boolean(),
   }),
 )
+
+export type TextWithMetadata = z.infer<typeof textWithMetadataSchema>
+export type NumberWithMetadata = z.infer<typeof numberWithMetadataSchema>
+export type BooleanWithMetadata = z.infer<typeof booleanWithMetadataSchema>
+export type DateWithMetadata = z.infer<typeof dateWithMetadataSchema>
+export type OptionalDateWithMetadata = z.infer<typeof optionalDateWithMetadataSchema>

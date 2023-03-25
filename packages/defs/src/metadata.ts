@@ -11,15 +11,10 @@ export const metadataSchema = z.object({
   trustworthiness: trustworthinessSchema,
 })
 
-export type Metadata<T = {}> = z.infer<typeof metadataSchema> & T
-
-export type Trustworthiness = z.infer<typeof trustworthinessSchema> & {
-  source: string
-  level: 1 | 2 | 3 | 4 | 5
-}
-
 export const withMetadataSchema = z.object({
   metadata: metadataSchema,
 })
 
+export type Metadata<T = {}> = z.infer<typeof metadataSchema> & T
+export type Trustworthiness = z.infer<typeof trustworthinessSchema>
 export type WithMetadata = z.infer<typeof withMetadataSchema>
