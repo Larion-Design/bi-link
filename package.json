@@ -7,7 +7,7 @@
     "start": "pnpm turbo dev",
     "backend": "pnpm turbo backend",
     "frontend": "pnpm turbo frontend",
-    "build": "pnpm --filter {./apps/**} build",
+    "build": "pnpm turbo build",
     "test": "turbo run test --parallel --stream --concurency=4",
     "lint": "eslint --ext=.tsx,.ts --quiet ."
   },

@@ -60,6 +60,11 @@
       "cache": true,
       "dependsOn": ["^test"],
       "outputs": []
+    },
+    "build": {
+      "cache": true,
+      "dependsOn": ["^build"],
+      "outputs": []
     }
   }
 }
