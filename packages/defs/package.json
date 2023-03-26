@@ -18,7 +18,7 @@
     "postinstall": "pnpm build"
   },
   "devDependencies": {
-    "tslib": "^2.4.1",
+    "tslib": "^2.5.0",
     "typescript": "^4.9.4"
   },
   "dependencies": {
