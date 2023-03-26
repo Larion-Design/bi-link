@@ -4,14 +4,15 @@ import { fileOutputSchema, fileSchema } from '../file'
 import { optionalDateWithMetadataSchema, textWithMetadataSchema } from '../generic'
 import { locationSchema } from '../geolocation'
 import { withMetadataSchema } from '../metadata'
+import { withTimestamps } from '../modelTimestamps'
 import { SearchSuggestions } from '../searchSuggestions'
 import { educationSchema } from './education'
 import { idDocumentSchema } from './idDocument'
 import { oldNameSchema } from './oldName'
 import { relationshipAPISchema, relationshipSchema } from './relationship'
 
-export const personSchema = withMetadataSchema.merge(
-  z.object({
+export const personSchema = z
+  .object({
     _id: z.string().uuid(),
     birthdate: optionalDateWithMetadataSchema,
     birthPlace: locationSchema.nullable(),
@@ -27,33 +28,26 @@ export const personSchema = withMetadataSchema.merge(
     files: z.array(fileSchema),
     contactDetails: z.array(customFieldSchema),
     customFields: z.array(customFieldSchema),
+  })
+  .merge(withTimestamps)
+  .merge(withMetadataSchema)
+
+const personAPISchema = personSchema.merge(
+  z.object({
+    relationships: z.array(relationshipAPISchema),
   }),
 )
 
-export const personAPIOutputSchema = personSchema
-  .omit({
-    relationships: true,
-    files: true,
-    images: true,
-  })
-  .merge(
-    z.object({
-      relationships: z.array(relationshipAPISchema),
-      files: z.array(fileOutputSchema),
-      images: z.array(fileOutputSchema),
-    }),
-  )
+export const personAPIOutputSchema = personAPISchema.merge(
+  z.object({
+    files: z.array(fileOutputSchema),
+    images: z.array(fileOutputSchema),
+  }),
+)
 
-export const personAPIInputSchema = personSchema
-  .omit({
-    _id: true,
-    relationships: true,
-  })
-  .merge(
-    z.object({
-      relationships: z.array(relationshipAPISchema),
-    }),
-  )
+export const personAPIInputSchema = personAPISchema.omit({
+  _id: true,
+})
 
 export const personListRecord = personSchema.pick({
   _id: true,

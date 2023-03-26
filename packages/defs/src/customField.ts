@@ -1,12 +1,12 @@
 import { z } from 'zod'
 import { withMetadataSchema } from './metadata'
 
-export const customFieldSchema = withMetadataSchema.merge(
-  z.object({
+export const customFieldSchema = z
+  .object({
     fieldName: z.string().min(1),
     fieldValue: z.string(),
-  }),
-)
+  })
+  .merge(withMetadataSchema)
 
 export type CustomField = z.infer<typeof customFieldSchema>
 export type CustomFieldAPI = CustomField

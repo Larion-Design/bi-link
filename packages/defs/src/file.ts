@@ -1,19 +1,21 @@
 import { z } from 'zod'
 import { withMetadataSchema } from './metadata'
+import { withTimestamps } from './modelTimestamps'
 
 export const downloadUrlSchema = z.object({
   url: z.string(),
   ttl: z.number(),
 })
 
-export const fileSchema = withMetadataSchema.merge(
-  z.object({
+export const fileSchema = z
+  .object({
     fileId: z.string(),
     name: z.string(),
     description: z.string(),
     isHidden: z.boolean().default(false),
-  }),
-)
+  })
+  .merge(withTimestamps)
+  .merge(withMetadataSchema)
 
 export const fileOutputSchema = fileSchema.merge(
   z.object({
@@ -21,10 +23,6 @@ export const fileOutputSchema = fileSchema.merge(
     url: downloadUrlSchema.optional(),
   }),
 )
-
-export const FileSources = {
-  USER_UPLOAD: 'USER_UPLOAD',
-}
 
 export type DownloadUrl = z.infer<typeof downloadUrlSchema>
 export type File = z.infer<typeof fileSchema>

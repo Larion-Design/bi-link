@@ -7,8 +7,8 @@ export const coordinatesSchema = z.object({
   long: z.number(),
 })
 
-export const locationSchema = withMetadataSchema.merge(
-  z.object({
+export const locationSchema = z
+  .object({
     locationId: z.string(),
     street: z.string(),
     number: z.string(),
@@ -20,8 +20,8 @@ export const locationSchema = withMetadataSchema.merge(
     country: z.string(),
     otherInfo: z.string(),
     coordinates: coordinatesSchema,
-  }),
-)
+  })
+  .merge(withMetadataSchema)
 
 export type Coordinates = z.infer<typeof coordinatesSchema>
 export type CoordinatesAPI = Coordinates

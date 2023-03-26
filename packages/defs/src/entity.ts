@@ -12,7 +12,7 @@ export const entityTypeSchema = z.enum([
 ])
 
 export const entityInfoSchema = z.object({
-  entityId: z.string(),
+  entityId: z.string().nonempty(),
   entityType: entityTypeSchema,
 })
 

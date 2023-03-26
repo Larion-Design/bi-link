@@ -2,13 +2,14 @@ import { z } from 'zod'
 import { customFieldSchema } from '../customField'
 import { fileOutputSchema, fileSchema } from '../file'
 import { withMetadataSchema } from '../metadata'
+import { withTimestamps } from '../modelTimestamps'
 import { SearchSuggestions } from '../searchSuggestions'
 import { propertyOwnerAPISchema, propertyOwnerSchema } from './propertyOwner'
 import { realEstateSchema } from './realEstateInfo'
 import { vehicleSchema } from './vehicleInfo'
 
-export const propertySchema = withMetadataSchema.merge(
-  z.object({
+export const propertySchema = z
+  .object({
     _id: z.string().uuid(),
     name: z.string(),
     type: z.string(),
@@ -18,8 +19,9 @@ export const propertySchema = withMetadataSchema.merge(
     owners: z.array(propertyOwnerSchema),
     vehicleInfo: vehicleSchema.nullish(),
     realEstateInfo: realEstateSchema.nullish(),
-  }),
-)
+  })
+  .merge(withMetadataSchema)
+  .merge(withTimestamps)
 
 export const propertyAPIOutputSchema = propertySchema.omit({ owners: true, files: true }).merge(
   z.object({

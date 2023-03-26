@@ -1,3 +1,4 @@
+import 'tslib'
 export * from './activityEvent'
 export * from './customField'
 export * from './connectedEntity'

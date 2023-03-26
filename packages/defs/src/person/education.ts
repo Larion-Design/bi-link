@@ -2,15 +2,15 @@ import { z } from 'zod'
 import { dateSchema } from '../date'
 import { withMetadataSchema } from '../metadata'
 
-export const educationSchema = withMetadataSchema.merge(
-  z.object({
+export const educationSchema = z
+  .object({
     type: z.string(),
     school: z.string(),
     specialization: z.string(),
     startDate: dateSchema.nullish(),
     endDate: dateSchema.nullish(),
-  }),
-)
+  })
+  .merge(withMetadataSchema)
 
 export type Education = z.infer<typeof educationSchema>
 export type EducationAPIInput = Education

@@ -5,11 +5,12 @@ import { nodesRelationshipSchema } from '../graphRelationships'
 import { fileOutputSchema, fileSchema } from '../file'
 import { locationSchema } from '../geolocation'
 import { withMetadataSchema } from '../metadata'
+import { withTimestamps } from '../modelTimestamps'
 import { SearchSuggestions } from '../searchSuggestions'
 import { eventParticipantAPISchema, eventParticipantSchema } from './party'
 
-export const eventSchema = withMetadataSchema.merge(
-  z.object({
+export const eventSchema = z
+  .object({
     _id: z.string(),
     type: textWithMetadataSchema,
     date: optionalDateWithMetadataSchema,
@@ -18,14 +19,17 @@ export const eventSchema = withMetadataSchema.merge(
     parties: z.array(eventParticipantSchema),
     customFields: z.array(customFieldSchema),
     files: z.array(fileSchema),
-  }),
-)
+  })
+  .merge(withMetadataSchema)
+  .merge(withTimestamps)
 
-export const eventAPIInputSchema = eventSchema.omit({ _id: true, parties: true }).merge(
-  z.object({
-    parties: z.array(eventParticipantAPISchema),
-  }),
-)
+export const eventAPIInputSchema = eventSchema
+  .omit({ _id: true, createdAt: true, updatedAt: true })
+  .merge(
+    z.object({
+      parties: z.array(eventParticipantAPISchema),
+    }),
+  )
 
 export const eventAPIOutputSchema = eventSchema.omit({ files: true, parties: true }).merge(
   z.object({
