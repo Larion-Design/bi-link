@@ -5,7 +5,6 @@ import { ReportSnapshot } from 'defs'
 @Schema({ _id: true, timestamps: true })
 export class ReportPendingSnapshotModel implements ReportSnapshot {
   _id: string
-  dateCreated: Date
 
   @Prop({ index: true })
   entityId: string
@@ -18,6 +17,12 @@ export class ReportPendingSnapshotModel implements ReportSnapshot {
 
   @Prop({ type: ReportSchema })
   entityInfo: ReportModel
+
+  @Prop()
+  createdAt?: Date
+
+  @Prop()
+  updatedAt?: Date
 }
 
 export type ReportPendingSnapshotDocument = Document & ReportPendingSnapshotModel

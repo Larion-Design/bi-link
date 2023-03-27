@@ -1,10 +1,11 @@
-import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
+import { ProceedingDocument, ProceedingModel } from '@app/models/models/proceeding/proceedingModel'
 import { Document, Types } from 'mongoose'
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
+import { DataRef } from 'defs'
 import { CompanyDocument, CompanyModel } from '@app/models/models/company/companyModel'
 import { EventDocument, EventModel } from '@app/models/models/event/eventModel'
 import { PersonDocument, PersonModel } from '@app/models/models/person/personModel'
 import { PropertyDocument, PropertyModel } from '@app/models/models/property/propertyModel'
-import { DataRef } from 'defs'
 
 @Schema({ timestamps: false })
 export class DataRefModel implements DataRef {
@@ -22,6 +23,9 @@ export class DataRefModel implements DataRef {
 
   @Prop({ type: Types.ObjectId, ref: EventModel.name, isRequired: false })
   event?: EventDocument
+
+  @Prop({ type: Types.ObjectId, ref: ProceedingModel.name, isRequired: false })
+  proceeding?: ProceedingDocument
 
   @Prop()
   field: string

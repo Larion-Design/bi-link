@@ -6,7 +6,6 @@ import { CompanyModel, CompanySchema } from '@app/models'
 @Schema({ _id: true, timestamps: true })
 export class CompanyHistorySnapshotModel implements CompanySnapshot {
   _id: string
-  dateCreated: Date
 
   @Prop({ index: true })
   entityId: string
@@ -19,6 +18,12 @@ export class CompanyHistorySnapshotModel implements CompanySnapshot {
 
   @Prop({ type: CompanySchema })
   entityInfo: CompanyModel
+
+  @Prop()
+  createdAt?: Date
+
+  @Prop()
+  updatedAt?: Date
 }
 
 export type CompanyHistorySnapshotDocument = Document & CompanyHistorySnapshotModel

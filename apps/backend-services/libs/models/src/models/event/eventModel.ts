@@ -1,4 +1,4 @@
-import { MetadataModel, MetadataSchema } from '@app/models/models'
+import { MetadataModel, MetadataSchema } from '@app/models/models/metadata/metadataModel'
 import {
   OptionalDateValueWithMetadataModel,
   OptionalDateValueWithMetadataSchema,
@@ -42,6 +42,12 @@ export class EventModel implements Event {
 
   @Prop({ type: [CustomFieldSchema] })
   customFields: CustomFieldModel[]
+
+  @Prop()
+  createdAt?: Date
+
+  @Prop()
+  updatedAt?: Date
 }
 
 export type EventDocument = EventModel & Document<string>

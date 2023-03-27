@@ -1,7 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
 import { Document, Types } from 'mongoose'
 import { PropertyOwner } from 'defs'
-import { MetadataModel, MetadataSchema } from '@app/models/models'
+import { MetadataModel, MetadataSchema } from '@app/models/models/metadata/metadataModel'
 import {
   OptionalDateValueWithMetadataModel,
   OptionalDateValueWithMetadataSchema,

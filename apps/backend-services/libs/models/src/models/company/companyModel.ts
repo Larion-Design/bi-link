@@ -1,4 +1,4 @@
-import { MetadataModel, MetadataSchema } from '@app/models/models'
+import { MetadataModel, MetadataSchema } from '@app/models/models/metadata/metadataModel'
 import {
   TextValueWithMetadataModel,
   TextValueWithMetadataSchema,
@@ -46,6 +46,12 @@ export class CompanyModel implements Company {
 
   @Prop({ type: [CustomFieldSchema], isRequired: false })
   customFields: CustomFieldModel[]
+
+  @Prop()
+  createdAt?: Date
+
+  @Prop()
+  updatedAt?: Date
 }
 
 export type CompanyDocument = CompanyModel & Document<string>

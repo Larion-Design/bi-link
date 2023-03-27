@@ -1,7 +1,7 @@
-import { MetadataModel, MetadataSchema } from '@app/models/models/metadata/metadataModel'
 import { Document } from 'mongoose'
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
-import { File, FileSources } from 'defs'
+import { File } from 'defs'
+import { MetadataModel, MetadataSchema } from '@app/models/models/metadata/metadataModel'
 
 @Schema({ timestamps: true })
 export class FileModel implements File {
@@ -25,11 +25,17 @@ export class FileModel implements File {
   @Prop()
   mimeType: string
 
-  @Prop({ enum: [FileSources.USER_UPLOAD], isRequired: false, default: FileSources.USER_UPLOAD })
+  @Prop()
   source: string
 
   @Prop({ isRequired: false, default: false })
   isHidden: boolean
+
+  @Prop()
+  createdAt?: Date
+
+  @Prop()
+  updatedAt?: Date
 }
 
 export type FileDocument = FileModel & Document

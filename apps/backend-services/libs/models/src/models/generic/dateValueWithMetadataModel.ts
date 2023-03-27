@@ -1,7 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
 import { SchemaTypes } from 'mongoose'
 import { DateWithMetadata } from 'defs'
-import { MetadataModel, MetadataSchema } from '..'
+import { MetadataModel, MetadataSchema } from '../metadata/metadataModel'
 
 @Schema({ _id: false, timestamps: false })
 export class DateValueWithMetadataModel implements DateWithMetadata {

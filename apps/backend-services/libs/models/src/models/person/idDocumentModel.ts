@@ -1,7 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
 import { SchemaTypes } from 'mongoose'
 import { IdDocument, IdDocumentStatus } from 'defs'
-import { MetadataModel, MetadataSchema } from '@app/models/models'
+import { MetadataModel, MetadataSchema } from '@app/models/models/metadata/metadataModel'
 
 @Schema({ _id: false, timestamps: false })
 export class IdDocumentModel implements IdDocument {

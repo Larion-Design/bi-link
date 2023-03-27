@@ -14,8 +14,6 @@ import {
 @Schema({ _id: true, timestamps: true })
 export class ReportModel implements Report {
   _id: string
-  updatedAt: Date
-  createdAt: Date
 
   @Prop()
   name: string
@@ -43,6 +41,12 @@ export class ReportModel implements Report {
 
   @Prop({ type: [DataRefSchema] })
   refs: DataRefModel[]
+
+  @Prop()
+  createdAt?: Date
+
+  @Prop()
+  updatedAt?: Date
 }
 
 export type ReportDocument = ReportModel & Document

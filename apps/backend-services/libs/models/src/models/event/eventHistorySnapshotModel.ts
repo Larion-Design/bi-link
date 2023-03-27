@@ -6,7 +6,6 @@ import { EventModel, EventSchema } from './eventModel'
 @Schema({ _id: true, timestamps: true })
 export class EventHistorySnapshotModel implements EventSnapshot {
   _id: string
-  dateCreated: Date
 
   @Prop({ index: true })
   entityId: string
@@ -19,6 +18,12 @@ export class EventHistorySnapshotModel implements EventSnapshot {
 
   @Prop({ type: EventSchema })
   entityInfo: EventModel
+
+  @Prop()
+  createdAt?: Date
+
+  @Prop()
+  updatedAt?: Date
 }
 
 export type EventHistorySnapshotDocument = Document & EventHistorySnapshotModel

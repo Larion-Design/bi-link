@@ -1,3 +1,6 @@
+import { Document, Types } from 'mongoose'
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
+import { Proceeding } from 'defs'
 import {
   NumberValueWithMetadataModel,
   NumberValueWithMetadataSchema,
@@ -6,9 +9,6 @@ import {
   TextValueWithMetadataModel,
   TextValueWithMetadataSchema,
 } from '@app/models/models/generic/textValueWithMetadataModel'
-import { Document, Types } from 'mongoose'
-import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
-import { Proceeding } from 'defs'
 import {
   ProceedingEntityModel,
   ProceedingEntitySchema,
@@ -50,6 +50,12 @@ export class ProceedingModel implements Proceeding {
 
   @Prop({ type: [CustomFieldSchema] })
   customFields: CustomFieldModel[]
+
+  @Prop()
+  createdAt?: Date
+
+  @Prop()
+  updatedAt?: Date
 }
 
 export type ProceedingDocument = ProceedingModel & Document<string>

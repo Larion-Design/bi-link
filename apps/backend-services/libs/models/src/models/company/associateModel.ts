@@ -1,7 +1,20 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
-import { Document, Types, SchemaTypes } from 'mongoose'
+import { Document, Types } from 'mongoose'
 import { Associate } from 'defs'
-import { MetadataModel, MetadataSchema, PersonDocument, PersonModel } from '@app/models/models'
+import {
+  BooleanValueWithMetadataModel,
+  BooleanValueWithMetadataSchema,
+  MetadataModel,
+  MetadataSchema,
+  NumberValueWithMetadataModel,
+  NumberValueWithMetadataSchema,
+  OptionalDateValueWithMetadataModel,
+  OptionalDateValueWithMetadataSchema,
+  PersonDocument,
+  PersonModel,
+  TextValueWithMetadataModel,
+  TextValueWithMetadataSchema,
+} from '@app/models/models'
 import { CustomFieldModel, CustomFieldSchema } from '@app/models/models'
 import { CompanyDocument, CompanyModel } from '@app/models/models/company/companyModel'
 
@@ -10,8 +23,8 @@ export class AssociateModel implements Associate {
   @Prop({ type: MetadataSchema })
   metadata: MetadataModel
 
-  @Prop()
-  role: string
+  @Prop({ type: TextValueWithMetadataSchema })
+  role: TextValueWithMetadataModel
 
   @Prop({ type: Types.ObjectId, ref: PersonModel.name, isRequired: false })
   person?: PersonDocument
@@ -19,17 +32,17 @@ export class AssociateModel implements Associate {
   @Prop({ type: Types.ObjectId, ref: 'CompanyModel', isRequired: false })
   company?: CompanyDocument
 
-  @Prop()
-  equity: number
+  @Prop({ type: NumberValueWithMetadataSchema })
+  equity: NumberValueWithMetadataModel
 
-  @Prop({ type: SchemaTypes.Date, isRequired: false, default: null })
-  startDate: Date | null
+  @Prop({ type: OptionalDateValueWithMetadataSchema })
+  startDate: OptionalDateValueWithMetadataModel
 
-  @Prop({ type: SchemaTypes.Date, isRequired: false, default: null })
-  endDate: Date | null
+  @Prop({ type: OptionalDateValueWithMetadataSchema })
+  endDate: OptionalDateValueWithMetadataModel
 
-  @Prop({ isRequired: false })
-  isActive: boolean
+  @Prop({ type: BooleanValueWithMetadataSchema })
+  isActive: BooleanValueWithMetadataModel
 
   @Prop({ type: [CustomFieldSchema], isRequired: false })
   customFields: CustomFieldModel[]

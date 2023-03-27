@@ -5,7 +5,6 @@ import { PropertySnapshot } from 'defs'
 @Schema({ _id: true, timestamps: true })
 export class PropertyHistorySnapshotModel implements PropertySnapshot {
   _id: string
-  dateCreated: Date
 
   @Prop({ index: true })
   entityId: string
@@ -18,6 +17,12 @@ export class PropertyHistorySnapshotModel implements PropertySnapshot {
 
   @Prop({ type: PropertySchema })
   entityInfo: PropertyModel
+
+  @Prop()
+  createdAt?: Date
+
+  @Prop()
+  updatedAt?: Date
 }
 
 export type PropertyHistorySnapshotDocument = Document & PropertyHistorySnapshotModel

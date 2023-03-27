@@ -1,4 +1,4 @@
-import { MetadataModel, MetadataSchema } from '@app/models/models'
+import { MetadataModel, MetadataSchema } from '@app/models/models/metadata/metadataModel'
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
 import { Document, Types } from 'mongoose'
 import { EventParticipant } from 'defs'

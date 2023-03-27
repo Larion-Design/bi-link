@@ -1,7 +1,7 @@
-import { MetadataModel, MetadataSchema } from '@app/models/models'
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
 import { Education } from 'defs'
 import { SchemaTypes } from 'mongoose'
+import { MetadataModel, MetadataSchema } from '@app/models/models/metadata/metadataModel'
 
 @Schema({ _id: false, timestamps: false })
 export class EducationModel implements Education {

@@ -1,4 +1,4 @@
-import { MetadataModel, MetadataSchema } from '@app/models/models'
+import { MetadataModel, MetadataSchema } from '@app/models/models/metadata/metadataModel'
 import {
   RealEstateInfoModel,
   RealEstateSchema,
@@ -44,6 +44,12 @@ export class PropertyModel implements Property {
 
   @Prop({ type: RealEstateSchema, isRequired: false, default: null })
   realEstateInfo: RealEstateInfoModel | null
+
+  @Prop()
+  createdAt?: Date
+
+  @Prop()
+  updatedAt?: Date
 }
 
 export type PropertyDocument = PropertyModel & Document<string>

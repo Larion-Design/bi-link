@@ -1,4 +1,6 @@
-import { MetadataModel, MetadataSchema } from '@app/models/models'
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
+import { Document, Types } from 'mongoose'
+import { MetadataModel, MetadataSchema } from '@app/models/models/metadata/metadataModel'
 import {
   OptionalDateValueWithMetadataModel,
   OptionalDateValueWithMetadataSchema,
@@ -7,8 +9,6 @@ import {
   TextValueWithMetadataModel,
   TextValueWithMetadataSchema,
 } from '@app/models/models/generic/textValueWithMetadataModel'
-import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
-import { Document, Types } from 'mongoose'
 import { LocationDocument, LocationModel } from '@app/models/models/locationModel'
 import { EducationModel, EducationSchema } from '@app/models/models/person/educationModel'
 import { OldNameModel, OldNameSchema } from '@app/models/models/person/oldNameModel'
@@ -66,6 +66,12 @@ export class PersonModel implements Person {
 
   @Prop({ type: [CustomFieldSchema], isRequired: false })
   customFields: CustomFieldModel[]
+
+  @Prop()
+  createdAt?: Date
+
+  @Prop()
+  updatedAt?: Date
 }
 
 export type PersonDocument = PersonModel & Document<string>

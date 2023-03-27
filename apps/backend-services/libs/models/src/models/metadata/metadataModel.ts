@@ -12,6 +12,12 @@ export class MetadataModel implements Metadata {
 
   @Prop({ type: TrustSchema })
   trustworthiness: TrustModel
+
+  @Prop()
+  createdAt?: Date
+
+  @Prop()
+  updatedAt?: Date
 }
 
 export const MetadataSchema = SchemaFactory.createForClass(MetadataModel)

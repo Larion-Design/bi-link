@@ -5,7 +5,6 @@ import { ProceedingModel, ProceedingSchema } from '@app/models'
 @Schema({ _id: true, timestamps: true })
 export class ProceedingPendingSnapshotModel implements ProceedingSnapshot {
   _id: string
-  dateCreated: Date
 
   @Prop({ index: true })
   entityId: string
@@ -18,6 +17,12 @@ export class ProceedingPendingSnapshotModel implements ProceedingSnapshot {
 
   @Prop({ type: ProceedingSchema })
   entityInfo: ProceedingModel
+
+  @Prop()
+  createdAt?: Date
+
+  @Prop()
+  updatedAt?: Date
 }
 
 export type ProceedingPendingSnapshotDocument = Document & ProceedingPendingSnapshotModel

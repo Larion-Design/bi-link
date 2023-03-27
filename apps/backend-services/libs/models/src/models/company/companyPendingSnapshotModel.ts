@@ -1,12 +1,11 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
 import { CompanySnapshot } from 'defs'
 import { Document } from 'mongoose'
-import { CompanyModel, CompanySchema } from '@app/models'
+import { CompanyModel, CompanySchema } from './companyModel'
 
 @Schema({ _id: true, timestamps: true })
 export class CompanyPendingSnapshotModel implements CompanySnapshot {
   _id: string
-  dateCreated: Date
 
   @Prop({ index: true })
   entityId: string
@@ -19,6 +18,12 @@ export class CompanyPendingSnapshotModel implements CompanySnapshot {
 
   @Prop({ type: CompanySchema })
   entityInfo: CompanyModel
+
+  @Prop()
+  createdAt?: Date
+
+  @Prop()
+  updatedAt?: Date
 }
 
 export type CompanyPendingSnapshotDocument = Document & CompanyPendingSnapshotModel

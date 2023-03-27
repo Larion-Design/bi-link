@@ -1,17 +1,16 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
 import { Document } from 'mongoose'
-import { PersonModel } from '@app/models'
-import { PersonSnapshot } from 'defs/dist/person/personSnapshot'
+import { PersonSnapshot } from 'defs'
+import { PersonModel, PersonSchema } from '@app/models/models/person/personModel'
 
 @Schema({ _id: true, timestamps: true })
 export class PersonPendingSnapshotModel implements PersonSnapshot {
   _id: string
-  dateCreated: Date
 
   @Prop()
   entityId: string
 
-  @Prop({ type: PersonModel.name })
+  @Prop({ type: PersonSchema })
   entityInfo: PersonModel
 
   @Prop({ isRequired: false })
@@ -19,6 +18,12 @@ export class PersonPendingSnapshotModel implements PersonSnapshot {
 
   @Prop({ isRequired: false })
   userId?: string
+
+  @Prop()
+  createdAt?: Date
+
+  @Prop()
+  updatedAt?: Date
 }
 
 export type PersonPendingSnapshotDocument = Document & PersonPendingSnapshotModel
