@@ -3,12 +3,12 @@ import { reportContentAPIOutputSchema, reportContentSchema } from './reportConte
 
 export const reportSectionSchema = z.object({
   name: z.string(),
-  content: z.array(reportContentSchema),
+  content: reportContentSchema.array(),
 })
 
 export const reportSectionAPIOutputSchema = reportSectionSchema.omit({ content: true }).merge(
   z.object({
-    content: z.array(reportContentAPIOutputSchema),
+    content: reportContentAPIOutputSchema.array(),
   }),
 )
 

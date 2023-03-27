@@ -6,7 +6,6 @@ export const withSnapshotSchema = z
     _id: z.string().uuid(),
     userId: z.string().nullish(),
     serviceId: z.string().nullish(),
-    dateCreated: z.date(),
-    entityId: z.any(),
+    entityId: z.string().nonempty(),
   })
   .merge(withTimestamps)

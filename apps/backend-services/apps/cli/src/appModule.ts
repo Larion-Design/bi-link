@@ -1,7 +1,6 @@
 import { ConfigModule, ConfigService } from '@nestjs/config'
 import { MongooseModule } from '@nestjs/mongoose'
 import { CacheModule, Module } from '@nestjs/common'
-import { EntitiesModule } from '@app/models'
 import { MigrateDatabaseCommand } from './commands/migrateDatabaseCommand'
 import { IndexEntityCommand } from './commands/indexEntityCommand'
 import { MigrateIndex } from './commands/migrateIndex'

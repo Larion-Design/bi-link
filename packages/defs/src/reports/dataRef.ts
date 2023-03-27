@@ -20,23 +20,15 @@ export const dataRefSchema = z.object({
   field: z.string(),
 })
 
-export const dataRefAPISchema = dataRefSchema
-  .omit({
-    person: true,
-    company: true,
-    property: true,
-    proceeding: true,
-    event: true,
-  })
-  .merge(
-    z.object({
-      person: connectedEntitySchema.nullish(),
-      company: connectedEntitySchema.nullish(),
-      property: connectedEntitySchema.nullish(),
-      proceeding: connectedEntitySchema.nullish(),
-      event: connectedEntitySchema.nullish(),
-    }),
-  )
+export const dataRefAPISchema = dataRefSchema.merge(
+  z.object({
+    person: connectedEntitySchema.nullish(),
+    company: connectedEntitySchema.nullish(),
+    property: connectedEntitySchema.nullish(),
+    proceeding: connectedEntitySchema.nullish(),
+    event: connectedEntitySchema.nullish(),
+  }),
+)
 
 export type DataRef = z.infer<typeof dataRefSchema>
 export type DataRefAPI = z.infer<typeof dataRefAPISchema>

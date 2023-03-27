@@ -42,8 +42,6 @@ export const nodesRelationshipSchema = graphRelationshipMetadataSchema.merge(
   }),
 )
 
-export type GraphNode = z.infer<typeof entityTypeSchema>
-
 export const graphRelationshipsSchema = z.object({
   companiesAssociates: z.array(graphCompanyAssociateSchema),
   eventsParties: z.array(graphEventParticipantSchema),
@@ -66,7 +64,7 @@ export const graphEntitiesSchema = z.object({
   events: z.array(eventListRecordSchema),
   locations: z.array(locationSchema),
   proceedings: z.array(proceedingListRecord),
-  reports: z.array(reportListRecordSchema),
+  reports: reportListRecordSchema.array(),
 })
 
 export const graphSchema = z.object({
@@ -74,6 +72,7 @@ export const graphSchema = z.object({
   entities: graphEntitiesSchema,
 })
 
+export type GraphNode = z.infer<typeof entityTypeSchema>
 export type Graph = z.infer<typeof graphSchema>
 export type GraphRelationships = z.infer<typeof graphRelationshipsSchema>
 export type GraphEntities = z.infer<typeof graphEntitiesSchema>

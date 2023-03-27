@@ -11,21 +11,19 @@ export const reportContentSchema = z.object({
   isActive: z.boolean().default(true),
   title: titleSchema.nullish(),
   text: reportTextSchema.nullish(),
-  images: z.array(fileSchema).nullish(),
+  images: fileSchema.array().nullish(),
   file: fileSchema.nullish(),
   table: tableSchema.nullish(),
   link: linkSchema.nullish(),
   graph: reportGraphSchema.nullish(),
 })
 
-export const reportContentAPIOutputSchema = reportContentSchema
-  .omit({ file: true, images: true })
-  .merge(
-    z.object({
-      file: fileOutputSchema.nullish(),
-      images: z.array(fileOutputSchema),
-    }),
-  )
+export const reportContentAPIOutputSchema = reportContentSchema.merge(
+  z.object({
+    file: fileOutputSchema.nullish(),
+    images: fileOutputSchema.array().nullish(),
+  }),
+)
 
 export type ReportContent = z.infer<typeof reportContentSchema>
 export type ReportContentAPIInput = ReportContent

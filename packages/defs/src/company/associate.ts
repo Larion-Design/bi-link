@@ -11,7 +11,6 @@ import { customFieldSchema } from '../customField'
 import { personSchema } from '../person'
 import { connectedEntitySchema } from '../connectedEntity'
 import { nodesRelationshipSchema } from '../graphRelationships'
-import { companySchema } from './company'
 
 export const associateSchema = z
   .object({
@@ -21,7 +20,7 @@ export const associateSchema = z
     isActive: booleanWithMetadataSchema,
     customFields: z.array(customFieldSchema),
     person: personSchema.nullish(),
-    company: companySchema.nullish(),
+    company: connectedEntitySchema.nullish(),
     equity: numberWithMetadataSchema,
   })
   .merge(withMetadataSchema)

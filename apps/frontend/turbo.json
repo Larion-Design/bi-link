@@ -1,0 +1,13 @@
+{
+  "extends": ["//"],
+  "pipeline": {
+    "build": {
+      "cache": true,
+      "outputs": ["./dist"]
+    },
+    "dev": {
+      "persistent": true,
+      "outputs": ["./dist"]
+    }
+  }
+}

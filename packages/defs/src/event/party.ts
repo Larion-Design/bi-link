@@ -19,9 +19,9 @@ export const eventParticipantSchema = z
 
 export const eventParticipantAPISchema = eventParticipantSchema.merge(
   z.object({
-    persons: z.array(connectedEntitySchema),
-    companies: z.array(connectedEntitySchema),
-    properties: z.array(connectedEntitySchema),
+    persons: connectedEntitySchema.array(),
+    companies: connectedEntitySchema.array(),
+    properties: connectedEntitySchema.array(),
   }),
 )
 

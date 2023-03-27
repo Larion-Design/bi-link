@@ -1,0 +1,33 @@
+{
+  "extends": ["//"],
+  "pipeline": {
+    "build": {
+      "cache": true,
+      "outputs": ["./dist"]
+    },
+    "api": {
+      "persistent": true,
+      "outputs": ["./dist"]
+    },
+    "indexer": {
+      "persistent": true,
+      "outputs": ["./dist"]
+    },
+    "graph": {
+      "persistent": true,
+      "outputs": ["./dist"]
+    },
+    "ingress": {
+      "persistent": true,
+      "outputs": ["./dist"]
+    },
+    "user-actions-recorder": {
+      "persistent": true,
+      "outputs": ["./dist"]
+    },
+    "cli": {
+      "persistent": true,
+      "outputs": ["./dist"]
+    }
+  }
+}
