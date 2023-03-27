@@ -1,8 +1,8 @@
 import { EntityEventsService, UserActionsService } from '@app/rpc'
 import { UseGuards } from '@nestjs/common'
-import { Args, ArgsType, Field, Mutation, Resolver } from '@nestjs/graphql'
+import { Args, ArgsType, Field, ID, Mutation, Resolver } from '@nestjs/graphql'
 import { getUnixTime } from 'date-fns'
-import { User, UserActions } from 'defs'
+import { EntityInfo, User, UserActions } from 'defs'
 import { CurrentUser } from '../../../users/decorators/currentUser'
 import { FirebaseAuthGuard } from '../../../users/guards/FirebaseAuthGuard'
 import { Proceeding } from '../dto/proceeding'
@@ -23,22 +23,23 @@ export class CreateProceeding {
     private readonly entityEventsService: EntityEventsService,
   ) {}
 
-  @Mutation(() => String)
+  @Mutation(() => ID)
   @UseGuards(FirebaseAuthGuard)
   async createProceeding(@CurrentUser() { _id }: User, @Args() { data }: Params) {
     const proceedingId = await this.proceedingAPIService.create(data)
 
-    this.entityEventsService.emitEntityCreated({
+    const entityInfo: EntityInfo = {
       entityId: proceedingId,
       entityType: 'PROCEEDING',
-    })
+    }
+
+    this.entityEventsService.emitEntityCreated(entityInfo)
 
     this.userActionsService.recordAction({
       eventType: UserActions.ENTITY_CREATED,
       author: _id,
       timestamp: getUnixTime(new Date()),
-      target: proceedingId,
-      targetType: 'PROCEEDING',
+      targetEntityInfo: entityInfo,
     })
 
     return proceedingId

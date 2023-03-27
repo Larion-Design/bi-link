@@ -12,6 +12,9 @@ export class ReportContentInput implements ReportContentAPIInput {
   @Field(() => Int)
   order: number
 
+  @Field()
+  isActive: boolean
+
   @Field(() => [FileInput], { nullable: true })
   images?: FileInput[]
 

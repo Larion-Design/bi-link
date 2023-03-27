@@ -1,12 +1,12 @@
-import { Field, ObjectType } from '@nestjs/graphql'
+import { Field, ObjectType, PickType } from '@nestjs/graphql'
 import { TextWithMetadata } from 'defs'
-import { MetadataInput } from '../../metadata/dto/metadataInput'
+import { WithMetadataInput } from '../../metadata/dto/withMetadataInput'
 
 @ObjectType()
-export class TextValueInput implements TextWithMetadata {
-  @Field(() => MetadataInput)
-  metadata: MetadataInput
-
+export class TextValueInput
+  extends PickType(WithMetadataInput, ['metadata'] as const)
+  implements TextWithMetadata
+{
   @Field()
   value: string
 }

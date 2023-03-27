@@ -1,12 +1,12 @@
 import { Field, ObjectType, PickType } from '@nestjs/graphql'
-import { TextWithMetadata } from 'defs'
+import { BooleanWithMetadata } from 'defs'
 import { WithMetadata } from '../../metadata/dto/withMetadata'
 
 @ObjectType()
-export class TextValue
+export class BooleanValue
   extends PickType(WithMetadata, ['metadata'] as const)
-  implements TextWithMetadata
+  implements BooleanWithMetadata
 {
   @Field()
-  value: string
+  value: boolean
 }

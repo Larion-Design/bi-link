@@ -1,8 +1,8 @@
-import { Field, InterfaceType } from '@nestjs/graphql'
+import { Field, ObjectType } from '@nestjs/graphql'
 import { Metadata } from './metadata'
 
-@InterfaceType()
-export abstract class WithMetadata {
+@ObjectType()
+export class WithMetadata {
   @Field(() => Metadata)
   metadata: Metadata
 }

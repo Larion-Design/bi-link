@@ -1,13 +1,8 @@
-import { Field, InputType } from '@nestjs/graphql'
-import { IsMongoId } from 'class-validator'
+import { Field, ID, InputType } from '@nestjs/graphql'
 import { ConnectedEntity as ConnectedEntityType } from 'defs'
 
 @InputType()
 export class ConnectedEntityInput implements ConnectedEntityType {
-  @IsMongoId()
-  @Field()
+  @Field(() => ID)
   _id: string
-
-  @Field({ nullable: true })
-  _confirmed?: boolean
 }

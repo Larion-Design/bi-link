@@ -1,9 +1,13 @@
-import { Field, InputType } from '@nestjs/graphql'
+import { Field, InputType, PickType } from '@nestjs/graphql'
 import { EducationAPIInput } from 'defs'
 import { CustomFieldInput } from '../../customFields/dto/customFieldInput'
+import { WithMetadataInput } from '../../metadata/dto/withMetadataInput'
 
 @InputType()
-export class EducationInput implements EducationAPIInput {
+export class EducationInput
+  extends PickType(WithMetadataInput, ['metadata'] as const)
+  implements EducationAPIInput
+{
   @Field()
   type: string
 

@@ -1,8 +1,9 @@
-import { Field, ObjectType } from '@nestjs/graphql'
-import { OldNameAPIOutput } from 'defs'
+import { Field, ObjectType, PickType } from '@nestjs/graphql'
+import { OldNameAPI } from 'defs'
+import { WithMetadata } from '../../metadata/dto/withMetadata'
 
 @ObjectType()
-export class OldName implements OldNameAPIOutput {
+export class OldName extends PickType(WithMetadata, ['metadata'] as const) implements OldNameAPI {
   @Field()
   name: string
 

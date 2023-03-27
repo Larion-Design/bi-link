@@ -1,12 +1,12 @@
 import { UseGuards } from '@nestjs/common'
-import { Args, ArgsType, Field, Query, Resolver } from '@nestjs/graphql'
+import { Args, ArgsType, Field, ID, Query, Resolver } from '@nestjs/graphql'
 import { ProceedingsService } from '@app/models/services/proceedingsService'
 import { FirebaseAuthGuard } from '../../../users/guards/FirebaseAuthGuard'
 import { Proceeding } from '../dto/proceeding'
 
 @ArgsType()
 class Params {
-  @Field(() => [String])
+  @Field(() => [ID])
   proceedingsIds: string[]
 }
 

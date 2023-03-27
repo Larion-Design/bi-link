@@ -1,15 +1,17 @@
 import { Field, InputType } from '@nestjs/graphql'
-import { RealEstateAPIInput } from 'defs'
+import { RealEstateInfo } from 'defs'
+import { BooleanValueInput } from '../../generic/dto/booleanValueInput'
+import { NumberValueInput } from '../../generic/dto/numberValueInput'
 import { LocationInput } from '../../geolocation/dto/locationInput'
 
 @InputType()
-export class RealEstateInfoInput implements RealEstateAPIInput {
+export class RealEstateInfoInput implements RealEstateInfo {
   @Field(() => LocationInput, { nullable: true })
   location: LocationInput
 
-  @Field()
-  surface: number
+  @Field(() => NumberValueInput)
+  surface: NumberValueInput
 
-  @Field()
-  townArea: boolean
+  @Field(() => BooleanValueInput)
+  townArea: BooleanValueInput
 }

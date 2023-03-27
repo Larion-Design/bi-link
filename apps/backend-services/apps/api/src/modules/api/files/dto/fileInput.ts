@@ -1,21 +1,21 @@
-import { Field, InputType } from '@nestjs/graphql'
-import { IsOptional, IsUUID } from 'class-validator'
+import { Field, InputType, PickType } from '@nestjs/graphql'
 import { FileAPIInput } from 'defs'
+import { WithMetadataInput } from '../../metadata/dto/withMetadataInput'
 
 @InputType()
-export class FileInput implements FileAPIInput {
-  @IsUUID()
+export class FileInput
+  extends PickType(WithMetadataInput, ['metadata'] as const)
+  implements FileAPIInput
+{
   @Field()
   readonly fileId: string
 
-  @IsOptional()
   @Field({ nullable: true })
   readonly name: string
 
-  @IsOptional()
   @Field({ nullable: true })
   readonly description: string
 
-  @Field({ nullable: true, defaultValue: false })
+  @Field()
   readonly isHidden: boolean
 }

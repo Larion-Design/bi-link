@@ -1,44 +1,39 @@
-import { Field, InputType } from '@nestjs/graphql'
-import { IsDateString, IsNumberString, IsOptional, Length } from 'class-validator'
+import { Field, InputType, PickType } from '@nestjs/graphql'
 import { PersonAPIInput } from 'defs'
+import { OptionalDateValueInput } from '../../generic/dto/optionalDateValueInput'
+import { TextValueInput } from '../../generic/dto/textValueInput'
 import { LocationInput } from '../../geolocation/dto/locationInput'
 import { CustomFieldInput } from '../../customFields/dto/customFieldInput'
 import { FileInput } from '../../files/dto/fileInput'
+import { WithMetadataInput } from '../../metadata/dto/withMetadataInput'
 import { EducationInput } from './educationInput'
 import { IdDocumentInput } from './idDocumentInput'
 import { OldNameInput } from './oldNameInput'
 import { RelationshipInput } from './relationshipInput'
 
 @InputType()
-export class PersonInput implements PersonAPIInput {
-  @IsOptional()
-  @Length(3, 30)
-  @Field({ nullable: true })
-  readonly firstName: string
+export class PersonInput
+  extends PickType(WithMetadataInput, ['metadata'] as const)
+  implements PersonAPIInput
+{
+  @Field(() => TextValueInput)
+  readonly firstName: TextValueInput
 
-  @IsOptional()
-  @Length(2, 30)
-  @Field({ nullable: true })
-  readonly lastName: string
+  @Field(() => TextValueInput)
+  readonly lastName: TextValueInput
 
-  @IsOptional()
-  @IsNumberString()
-  @Length(13)
-  @Field({ nullable: true })
-  readonly cnp: string
+  @Field(() => TextValueInput)
+  readonly cnp: TextValueInput
 
   @Field(() => [OldNameInput])
   readonly oldNames: OldNameInput[]
 
-  @IsOptional()
-  @IsDateString()
-  @Field({ nullable: true })
-  readonly birthdate: Date
+  @Field(() => OptionalDateValueInput)
+  readonly birthdate: OptionalDateValueInput
 
   @Field(() => LocationInput, { nullable: true })
   readonly birthPlace: LocationInput
 
-  @IsOptional()
   @Field(() => LocationInput, { nullable: true })
   readonly homeAddress: LocationInput
 

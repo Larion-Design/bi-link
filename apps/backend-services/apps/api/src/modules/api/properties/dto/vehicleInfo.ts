@@ -1,17 +1,18 @@
 import { VehicleInfo as VehicleInfoType } from 'defs'
 import { Field, ObjectType } from '@nestjs/graphql'
+import { TextValue } from '../../generic/dto/textValue'
 
 @ObjectType()
 export class VehicleInfo implements VehicleInfoType {
   @Field()
-  vin: string
+  vin: TextValue
 
   @Field()
-  maker: string
+  maker: TextValue
 
   @Field()
-  model: string
+  model: TextValue
 
   @Field()
-  color: string
+  color: TextValue
 }

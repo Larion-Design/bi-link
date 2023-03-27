@@ -1,26 +1,31 @@
-import { Field, ObjectType } from '@nestjs/graphql'
+import { Field, ID, ObjectType, PickType } from '@nestjs/graphql'
 import { CompanyAPIOutput } from 'defs'
 import { CustomField } from '../../customFields/dto/customField'
 import { File } from '../../files/dto/file'
+import { TextValue } from '../../generic/dto/textValue'
+import { WithMetadata } from '../../metadata/dto/withMetadata'
 import { Associate } from './associate'
 import { Location } from '../../geolocation/dto/location'
 
 @ObjectType()
-export class Company implements CompanyAPIOutput {
-  @Field()
+export class Company
+  extends PickType(WithMetadata, ['metadata'] as const)
+  implements CompanyAPIOutput
+{
+  @Field(() => ID)
   _id: string
 
-  @Field()
-  cui: string
+  @Field(() => TextValue)
+  cui: TextValue
 
-  @Field()
-  name: string
+  @Field(() => TextValue)
+  name: TextValue
 
   @Field(() => Location, { nullable: true })
   headquarters: Location
 
-  @Field()
-  registrationNumber: string
+  @Field(() => TextValue)
+  registrationNumber: TextValue
 
   @Field(() => [CustomField], { nullable: true })
   contactDetails: CustomField[]
@@ -36,4 +41,10 @@ export class Company implements CompanyAPIOutput {
 
   @Field(() => [File], { nullable: true })
   files: File[]
+
+  @Field(() => Date)
+  createdAt: Date
+
+  @Field(() => Date)
+  updatedAt: Date
 }

@@ -1,4 +1,4 @@
-import { Args, ArgsType, Field, Mutation, Resolver } from '@nestjs/graphql'
+import { Args, ArgsType, Field, ID, Mutation, Resolver } from '@nestjs/graphql'
 import { CompanyInput } from '../dto/companyInput'
 import { Company } from '../dto/company'
 import { CompanyAPIService } from '../services/companyAPIService'
@@ -7,12 +7,12 @@ import { FirebaseAuthGuard } from '../../../users/guards/FirebaseAuthGuard'
 import { UserActionsService } from '@app/rpc/services/userActionsService'
 import { CurrentUser } from '../../../users/decorators/currentUser'
 import { EntityEventsService } from '@app/rpc/services/entityEventsService'
-import { User, UserActions } from 'defs'
+import { EntityInfo, User, UserActions } from 'defs'
 import { getUnixTime } from 'date-fns'
 
 @ArgsType()
 class UpdateCompanyArgs {
-  @Field()
+  @Field(() => ID)
   companyId: string
 
   @Field(() => CompanyInput)
@@ -36,17 +36,18 @@ export class UpdateCompany {
     const updated = await this.companyService.update(companyId, companyInfo)
 
     if (updated) {
-      this.entityEventsService.emitEntityModified({
+      const entityInfo: EntityInfo = {
         entityId: companyId,
         entityType: 'COMPANY',
-      })
+      }
+
+      this.entityEventsService.emitEntityModified(entityInfo)
 
       this.userActionsService.recordAction({
         eventType: UserActions.ENTITY_UPDATED,
         author: _id,
         timestamp: getUnixTime(new Date()),
-        target: companyId,
-        targetType: 'COMPANY',
+        targetEntityInfo: entityInfo,
       })
     }
     return updated

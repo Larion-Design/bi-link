@@ -1,15 +1,15 @@
-import { Field, ObjectType } from '@nestjs/graphql'
+import { Field, ID, ObjectType, PickType } from '@nestjs/graphql'
 import { LocationAPIOutput } from 'defs'
-import { Metadata } from '../../metadata/dto/metadata'
 import { WithMetadata } from '../../metadata/dto/withMetadata'
 import { Coordinates } from './coordinates'
 
-@ObjectType({ implements: () => [WithMetadata] })
-export class Location implements WithMetadata, LocationAPIOutput {
-  metadata: Metadata
-
-  @Field()
-  _id: string
+@ObjectType()
+export class Location
+  extends PickType(WithMetadata, ['metadata'] as const)
+  implements LocationAPIOutput
+{
+  @Field(() => ID, { nullable: true, defaultValue: '' })
+  locationId: string
 
   @Field({ nullable: true, defaultValue: '' })
   building: string
@@ -25,9 +25,6 @@ export class Location implements WithMetadata, LocationAPIOutput {
 
   @Field({ nullable: true, defaultValue: '' })
   locality: string
-
-  @Field({ nullable: true, defaultValue: '' })
-  locationId: string
 
   @Field({ nullable: true, defaultValue: '' })
   number: string

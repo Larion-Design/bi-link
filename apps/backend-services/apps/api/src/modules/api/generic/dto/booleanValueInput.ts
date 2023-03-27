@@ -1,15 +1,12 @@
 import { Field, InputType, PickType } from '@nestjs/graphql'
-import { OldNameAPI } from 'defs'
+import { BooleanWithMetadata } from 'defs'
 import { WithMetadataInput } from '../../metadata/dto/withMetadataInput'
 
 @InputType()
-export class OldNameInput
+export class BooleanValueInput
   extends PickType(WithMetadataInput, ['metadata'] as const)
-  implements OldNameAPI
+  implements BooleanWithMetadata
 {
   @Field()
-  name: string
-
-  @Field()
-  changeReason: string
+  value: boolean
 }

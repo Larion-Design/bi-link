@@ -1,4 +1,4 @@
-import { Args, ArgsType, Field, Mutation, Resolver } from '@nestjs/graphql'
+import { Args, ArgsType, Field, ID, Mutation, Resolver } from '@nestjs/graphql'
 import { EventInput } from '../dto/eventInput'
 import { Event } from '../dto/event'
 import { EventAPIService } from '../services/eventAPIService'
@@ -24,7 +24,7 @@ export class CreateEvent {
     private readonly entityEventsService: EntityEventsService,
   ) {}
 
-  @Mutation(() => String)
+  @Mutation(() => ID)
   @UseGuards(FirebaseAuthGuard)
   async createEvent(@CurrentUser() { _id }: User, @Args() { data }: CreateEventArgs) {
     const eventId = await this.eventAPIService.create(data)
@@ -38,8 +38,10 @@ export class CreateEvent {
       eventType: UserActions.ENTITY_CREATED,
       author: _id,
       timestamp: getUnixTime(new Date()),
-      target: eventId,
-      targetType: 'EVENT',
+      targetEntityInfo: {
+        entityId: eventId,
+        entityType: 'EVENT',
+      },
     })
 
     return eventId

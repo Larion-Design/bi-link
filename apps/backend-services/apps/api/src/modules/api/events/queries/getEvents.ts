@@ -1,4 +1,4 @@
-import { Args, ArgsType, Field, Query, Resolver } from '@nestjs/graphql'
+import { Args, ArgsType, Field, ID, Query, Resolver } from '@nestjs/graphql'
 import { UseGuards } from '@nestjs/common'
 import { Event } from '../dto/event'
 import { EventsService } from '@app/models/services/eventsService'
@@ -6,7 +6,7 @@ import { FirebaseAuthGuard } from '../../../users/guards/FirebaseAuthGuard'
 
 @ArgsType()
 class Params {
-  @Field(() => [String])
+  @Field(() => [ID])
   readonly eventsIds: string[]
 }
 

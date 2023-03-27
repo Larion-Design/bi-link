@@ -1,17 +1,18 @@
 import { VehicleInfo } from 'defs'
 import { Field, InputType } from '@nestjs/graphql'
+import { TextValueInput } from '../../generic/dto/textValueInput'
 
 @InputType()
 export class VehicleInfoInput implements VehicleInfo {
-  @Field()
-  readonly vin: string
+  @Field(() => TextValueInput)
+  readonly vin: TextValueInput
 
-  @Field()
-  readonly maker: string
+  @Field(() => TextValueInput)
+  readonly maker: TextValueInput
 
-  @Field()
-  readonly model: string
+  @Field(() => TextValueInput)
+  readonly model: TextValueInput
 
-  @Field()
-  readonly color: string
+  @Field(() => TextValueInput)
+  readonly color: TextValueInput
 }

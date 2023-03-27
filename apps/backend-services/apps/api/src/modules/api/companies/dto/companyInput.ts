@@ -1,25 +1,28 @@
-import { Field, InputType } from '@nestjs/graphql'
+import { Field, InputType, PickType } from '@nestjs/graphql'
 import { CustomFieldInput } from '../../customFields/dto/customFieldInput'
 import { FileInput } from '../../files/dto/fileInput'
+import { TextValueInput } from '../../generic/dto/textValueInput'
+import { WithMetadataInput } from '../../metadata/dto/withMetadataInput'
 import { AssociateInput } from './associateInput'
-import { Length } from 'class-validator'
 import { LocationInput } from '../../geolocation/dto/locationInput'
 import { CompanyAPIInput } from 'defs'
 
 @InputType()
-export class CompanyInput implements CompanyAPIInput {
-  @Field()
-  readonly cui: string
+export class CompanyInput
+  extends PickType(WithMetadataInput, ['metadata'] as const)
+  implements CompanyAPIInput
+{
+  @Field(() => TextValueInput)
+  readonly cui: TextValueInput
 
-  @Length(2, 100)
-  @Field()
-  readonly name: string
+  @Field(() => TextValueInput)
+  readonly name: TextValueInput
 
   @Field(() => LocationInput, { nullable: true })
   readonly headquarters: LocationInput
 
-  @Field()
-  readonly registrationNumber: string
+  @Field(() => TextValueInput)
+  readonly registrationNumber: TextValueInput
 
   @Field(() => [LocationInput])
   readonly locations: LocationInput[]

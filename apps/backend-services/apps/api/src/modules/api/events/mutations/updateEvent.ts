@@ -1,4 +1,4 @@
-import { Args, ArgsType, Field, Mutation, Resolver } from '@nestjs/graphql'
+import { Args, ArgsType, Field, ID, Mutation, Resolver } from '@nestjs/graphql'
 import { EventInput } from '../dto/eventInput'
 import { Event } from '../dto/event'
 import { EventAPIService } from '../services/eventAPIService'
@@ -12,7 +12,7 @@ import { getUnixTime } from 'date-fns'
 
 @ArgsType()
 class UpdateEventArgs {
-  @Field()
+  @Field(() => ID)
   eventId: string
 
   @Field(() => EventInput)
@@ -42,8 +42,10 @@ export class UpdateEvent {
         eventType: UserActions.ENTITY_UPDATED,
         author: _id,
         timestamp: getUnixTime(new Date()),
-        target: eventId,
-        targetType: 'EVENT',
+        targetEntityInfo: {
+          entityId: eventId,
+          entityType: 'EVENT',
+        },
       })
     }
     return eventId

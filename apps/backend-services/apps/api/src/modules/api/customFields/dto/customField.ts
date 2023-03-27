@@ -1,12 +1,12 @@
-import { Field, ObjectType } from '@nestjs/graphql'
+import { Field, ObjectType, PickType } from '@nestjs/graphql'
 import { CustomFieldAPI } from 'defs'
-import { Metadata } from '../../metadata/dto/metadata'
+import { WithMetadata } from '../../metadata/dto/withMetadata'
 
 @ObjectType()
-export class CustomField implements CustomFieldAPI {
-  @Field(() => Metadata)
-  metadata: Metadata
-
+export class CustomField
+  extends PickType(WithMetadata, ['metadata'] as const)
+  implements CustomFieldAPI
+{
   @Field()
   fieldName: string
 

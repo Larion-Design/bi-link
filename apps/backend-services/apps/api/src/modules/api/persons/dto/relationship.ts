@@ -1,9 +1,13 @@
-import { Field, ObjectType } from '@nestjs/graphql'
+import { Field, ObjectType, PickType } from '@nestjs/graphql'
 import { ConnectedEntity } from '../../entityInfo/dto/connectedEntity'
-import { RelationshipAPIOutput } from 'defs'
+import { RelationshipAPI } from 'defs'
+import { WithMetadata } from '../../metadata/dto/withMetadata'
 
 @ObjectType()
-export class Relationship implements RelationshipAPIOutput {
+export class Relationship
+  extends PickType(WithMetadata, ['metadata'] as const)
+  implements RelationshipAPI
+{
   @Field({ defaultValue: '' })
   description: string
 
@@ -18,7 +22,4 @@ export class Relationship implements RelationshipAPIOutput {
 
   @Field(() => [ConnectedEntity])
   relatedPersons: ConnectedEntity[]
-
-  @Field({ nullable: true, defaultValue: true })
-  _confirmed: boolean
 }

@@ -9,4 +9,5 @@ export class EntityReportedRelationship implements NodesRelationship {
   _type: GraphRelationship
   endNode: EntityInfo
   startNode: EntityInfo
+  _trustworthiness: number
 }

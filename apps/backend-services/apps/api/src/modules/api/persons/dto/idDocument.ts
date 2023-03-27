@@ -1,8 +1,12 @@
-import { Field, ObjectType } from '@nestjs/graphql'
+import { Field, ObjectType, PickType } from '@nestjs/graphql'
 import { IdDocumentAPI, IdDocumentStatus } from 'defs'
+import { WithMetadata } from '../../metadata/dto/withMetadata'
 
 @ObjectType()
-export class IdDocument implements IdDocumentAPI {
+export class IdDocument
+  extends PickType(WithMetadata, ['metadata'] as const)
+  implements IdDocumentAPI
+{
   @Field()
   documentType: string
 

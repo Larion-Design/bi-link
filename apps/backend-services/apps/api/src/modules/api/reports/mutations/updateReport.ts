@@ -1,7 +1,7 @@
 import { UseGuards } from '@nestjs/common'
-import { Args, ArgsType, Field, Mutation, Resolver } from '@nestjs/graphql'
+import { Args, ArgsType, Field, ID, Mutation, Resolver } from '@nestjs/graphql'
 import { getUnixTime } from 'date-fns'
-import { User, UserActions } from 'defs'
+import { EntityInfo, User, UserActions } from 'defs'
 import { CurrentUser } from '../../../users/decorators/currentUser'
 import { FirebaseAuthGuard } from '../../../users/guards/FirebaseAuthGuard'
 import { Report } from '../dto/report'
@@ -12,7 +12,7 @@ import { UserActionsService } from '@app/rpc/services/userActionsService'
 
 @ArgsType()
 class Params {
-  @Field()
+  @Field(() => ID)
   reportId: string
 
   @Field(() => ReportInput)
@@ -33,17 +33,18 @@ export class UpdateReport {
     const updated = await this.reportAPIService.updateReport(reportId, data)
 
     if (updated) {
-      this.entityEventsService.emitEntityModified({
+      const entityInfo: EntityInfo = {
         entityId: reportId,
         entityType: 'REPORT',
-      })
+      }
+
+      this.entityEventsService.emitEntityModified(entityInfo)
 
       this.userActionsService.recordAction({
         eventType: UserActions.ENTITY_UPDATED,
         author: _id,
         timestamp: getUnixTime(new Date()),
-        target: reportId,
-        targetType: 'REPORT',
+        targetEntityInfo: entityInfo,
       })
     }
     return updated

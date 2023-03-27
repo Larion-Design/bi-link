@@ -1,18 +1,15 @@
-import { Field, InputType } from '@nestjs/graphql'
-import { Length } from 'class-validator'
+import { Field, InputType, PickType } from '@nestjs/graphql'
 import { CustomFieldAPI } from 'defs'
-import { MetadataInput } from '../../metadata/dto/metadataInput'
+import { WithMetadataInput } from '../../metadata/dto/withMetadataInput'
 
 @InputType()
-export class CustomFieldInput implements CustomFieldAPI {
-  @Field(() => MetadataInput)
-  readonly metadata: MetadataInput
-
-  @Length(2, 30)
+export class CustomFieldInput
+  extends PickType(WithMetadataInput, ['metadata'] as const)
+  implements CustomFieldAPI
+{
   @Field()
   readonly fieldName: string
 
-  @Length(1)
   @Field()
   readonly fieldValue: string
 }

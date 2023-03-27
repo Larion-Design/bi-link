@@ -9,7 +9,11 @@ export class EventPartyRelationship implements NodesRelationship, EventParticipa
   endNode: EntityInfo
   _confirmed: boolean
   _type: GraphRelationship
+  _trustworthiness: number
 
   @Field()
   name: string
+
+  @Field()
+  type: string
 }

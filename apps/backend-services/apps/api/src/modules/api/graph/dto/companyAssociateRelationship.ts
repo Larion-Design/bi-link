@@ -14,6 +14,7 @@ export class CompanyAssociateRelationship
   endNode: EntityInfo
   _type: GraphRelationship
   _confirmed: boolean
+  _trustworthiness: number
 
   @Field()
   role: string

@@ -1,6 +1,6 @@
-import { Args, ArgsType, Field, Mutation, Resolver } from '@nestjs/graphql'
+import { Args, ArgsType, Field, ID, Mutation, Resolver } from '@nestjs/graphql'
 import { UseGuards } from '@nestjs/common'
-import { User, UserActions } from 'defs'
+import { EntityInfo, User, UserActions } from 'defs'
 import { Person } from '../dto/person'
 import { PersonInput } from '../dto/personInput'
 import { PersonAPIService } from '../services/personAPIService'
@@ -24,22 +24,23 @@ export class CreatePerson {
     private readonly entityEventsService: EntityEventsService,
   ) {}
 
-  @Mutation(() => String)
+  @Mutation(() => ID)
   @UseGuards(FirebaseAuthGuard)
   async createPerson(@CurrentUser() { _id }: User, @Args() { data }: Params) {
     const personId = await this.personsAPIService.create(data)
 
-    this.entityEventsService.emitEntityCreated({
+    const entityInfo: EntityInfo = {
       entityId: personId,
       entityType: 'PERSON',
-    })
+    }
+
+    this.entityEventsService.emitEntityCreated(entityInfo)
 
     this.userActionsService.recordAction({
       eventType: UserActions.ENTITY_CREATED,
       author: _id,
       timestamp: getUnixTime(new Date()),
-      target: personId,
-      targetType: 'PERSON',
+      targetEntityInfo: entityInfo,
     })
     return personId
   }

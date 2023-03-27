@@ -1,18 +1,18 @@
-import { Field, ObjectType } from '@nestjs/graphql'
+import { Field, ObjectType, PickType } from '@nestjs/graphql'
 import { CustomField } from '../../customFields/dto/customField'
 import { ConnectedEntity } from '../../entityInfo/dto/connectedEntity'
 import { EventParticipantAPI } from 'defs'
-import { Metadata } from '../../metadata/dto/metadata'
 import { WithMetadata } from '../../metadata/dto/withMetadata'
 
-@ObjectType({ implements: () => [WithMetadata] })
-export class Party implements EventParticipantAPI {
-  metadata: Metadata
-
+@ObjectType()
+export class Party
+  extends PickType(WithMetadata, ['metadata'] as const)
+  implements EventParticipantAPI
+{
   @Field()
   type: string
 
-  @Field({ nullable: true })
+  @Field()
   description: string
 
   @Field(() => [ConnectedEntity])

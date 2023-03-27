@@ -1,9 +1,9 @@
-import { Field, InputType } from '@nestjs/graphql'
+import { Field, ID, InputType } from '@nestjs/graphql'
 import { EntityInfo as EntityInfoAPI, EntityType } from 'defs'
 
 @InputType()
 export class EntityInfoInput implements EntityInfoAPI {
-  @Field()
+  @Field(() => ID)
   entityId: string
 
   @Field(() => String)

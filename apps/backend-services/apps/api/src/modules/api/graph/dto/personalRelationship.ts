@@ -9,6 +9,7 @@ export class PersonalRelationship implements NodesRelationship, PersonalRelation
   endNode: EntityInfo
   _confirmed: boolean
   _type: GraphRelationship
+  _trustworthiness: number
 
   @Field()
   type: string

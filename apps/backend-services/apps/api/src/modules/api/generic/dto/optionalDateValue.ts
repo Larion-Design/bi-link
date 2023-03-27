@@ -1,12 +1,12 @@
-import { Field, ObjectType } from '@nestjs/graphql'
+import { Field, ObjectType, PickType } from '@nestjs/graphql'
 import { OptionalDateWithMetadata } from 'defs'
-import { Metadata } from '../../metadata/dto/metadata'
 import { WithMetadata } from '../../metadata/dto/withMetadata'
 
-@ObjectType({ implements: () => [WithMetadata] })
-export class OptionalDateValue implements WithMetadata, OptionalDateWithMetadata {
-  metadata: Metadata
-
+@ObjectType()
+export class OptionalDateValue
+  extends PickType(WithMetadata, ['metadata'] as const)
+  implements OptionalDateWithMetadata
+{
   @Field({ nullable: true })
   value: Date
 }

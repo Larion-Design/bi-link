@@ -1,9 +1,9 @@
 import { Query, Resolver } from '@nestjs/graphql'
+import { Role } from 'defs'
 import { User } from '../dto/user'
 import { UseGuards } from '@nestjs/common'
 import { FirebaseAuthGuard } from '../../../users/guards/FirebaseAuthGuard'
 import { UserService } from '../../../users/services/UserService'
-import { Role } from '../../../users/constants'
 import { RolesGuard } from '../../../users/guards/RolesGuard'
 import { Roles } from '../../../users/decorators/roles'
 

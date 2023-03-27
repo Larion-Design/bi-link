@@ -1,5 +1,4 @@
-import { Args, ArgsType, Field, Query, Resolver } from '@nestjs/graphql'
-import { IsMongoId } from 'class-validator'
+import { Args, ArgsType, Field, ID, Query, Resolver } from '@nestjs/graphql'
 import { Company } from '../dto/company'
 import { CompaniesService } from '@app/models/services/companiesService'
 import { UseGuards } from '@nestjs/common'
@@ -7,8 +6,7 @@ import { FirebaseAuthGuard } from '../../../users/guards/FirebaseAuthGuard'
 
 @ArgsType()
 class Params {
-  @IsMongoId()
-  @Field()
+  @Field(() => ID)
   id: string
 }
 

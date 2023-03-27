@@ -1,7 +1,6 @@
-import { Args, ArgsType, Field, Query, Resolver } from '@nestjs/graphql'
+import { Args, ArgsType, Field, ID, Query, Resolver } from '@nestjs/graphql'
 import { Person } from '../dto/person'
 import { SearchPersonsService } from '../../../search/services/searchPersonsService'
-import { IsMongoId, IsOptional } from 'class-validator'
 import { UseGuards } from '@nestjs/common'
 import { FirebaseAuthGuard } from '../../../users/guards/FirebaseAuthGuard'
 
@@ -10,9 +9,7 @@ class Params {
   @Field()
   documentNumber: string
 
-  @IsOptional()
-  @IsMongoId()
-  @Field({ nullable: true })
+  @Field(() => ID, { nullable: true })
   personId?: string
 }
 

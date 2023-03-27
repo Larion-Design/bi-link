@@ -1,4 +1,4 @@
-import { Args, ArgsType, Field, Query, Resolver } from '@nestjs/graphql'
+import { Args, ArgsType, Field, ID, Query, Resolver } from '@nestjs/graphql'
 import { UseGuards } from '@nestjs/common'
 import { SearchFilesService } from '../../../search/services/searchFilesService'
 import { FirebaseAuthGuard } from '../../../users/guards/FirebaseAuthGuard'
@@ -6,7 +6,7 @@ import { File } from '../dto/file'
 
 @ArgsType()
 class Params {
-  @Field()
+  @Field(() => ID)
   fileId: string
 }
 

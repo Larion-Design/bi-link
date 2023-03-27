@@ -1,12 +1,12 @@
-import { Field, InputType } from '@nestjs/graphql'
+import { Field, InputType, PickType } from '@nestjs/graphql'
 import { OptionalDateWithMetadata } from 'defs'
-import { MetadataInput } from '../../metadata/dto/metadataInput'
+import { WithMetadataInput } from '../../metadata/dto/withMetadataInput'
 
 @InputType()
-export class DateValueInput implements OptionalDateWithMetadata {
-  @Field(() => MetadataInput)
-  metadata: MetadataInput
-
+export class DateValueInput
+  extends PickType(WithMetadataInput, ['metadata'] as const)
+  implements OptionalDateWithMetadata
+{
   @Field()
   value: Date
 }

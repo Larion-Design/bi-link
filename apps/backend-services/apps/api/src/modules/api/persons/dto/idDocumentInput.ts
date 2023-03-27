@@ -1,22 +1,21 @@
-import { Field, InputType } from '@nestjs/graphql'
-import { IsDate, IsOptional } from 'class-validator'
+import { Field, InputType, PickType } from '@nestjs/graphql'
 import { IdDocumentAPI, IdDocumentStatus } from 'defs'
+import { WithMetadataInput } from '../../metadata/dto/withMetadataInput'
 
 @InputType()
-export class IdDocumentInput implements IdDocumentAPI {
+export class IdDocumentInput
+  extends PickType(WithMetadataInput, ['metadata'] as const)
+  implements IdDocumentAPI
+{
   @Field()
   readonly documentType: string
 
   @Field()
   readonly documentNumber: string
 
-  @IsOptional()
-  @IsDate()
   @Field({ nullable: true })
   readonly issueDate?: Date
 
-  @IsOptional()
-  @IsDate()
   @Field({ nullable: true })
   readonly expirationDate?: Date
 

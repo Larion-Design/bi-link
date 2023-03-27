@@ -12,6 +12,9 @@ export class ReportContent implements ReportContentType {
   @Field(() => Int)
   order: number
 
+  @Field()
+  isActive: boolean
+
   @Field(() => [File], { nullable: true })
   images?: File[]
 

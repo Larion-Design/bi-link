@@ -14,6 +14,7 @@ export class ProceedingEntityRelationship
   _type: GraphRelationship
   endNode: EntityInfo
   startNode: EntityInfo
+  _trustworthiness: number
 
   @Field()
   involvedAs: string

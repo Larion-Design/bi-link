@@ -1,12 +1,12 @@
-import { Field, ObjectType } from '@nestjs/graphql'
+import { Field, ObjectType, PickType } from '@nestjs/graphql'
 import { DateWithMetadata } from 'defs'
-import { Metadata } from '../../metadata/dto/metadata'
 import { WithMetadata } from '../../metadata/dto/withMetadata'
 
-@ObjectType({ implements: () => [WithMetadata] })
-export class DateValue implements WithMetadata, DateWithMetadata {
-  metadata: Metadata
-
+@ObjectType()
+export class DateValue
+  extends PickType(WithMetadata, ['metadata'] as const)
+  implements DateWithMetadata
+{
   @Field()
   value: Date
 }

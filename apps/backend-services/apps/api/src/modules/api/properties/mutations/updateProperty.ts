@@ -1,5 +1,5 @@
-import { Args, ArgsType, Field, Mutation, Resolver } from '@nestjs/graphql'
-import { User, UserActions } from 'defs'
+import { Args, ArgsType, Field, ID, Mutation, Resolver } from '@nestjs/graphql'
+import { EntityInfo, User, UserActions } from 'defs'
 import { UserActionsService } from '@app/rpc/services/userActionsService'
 import { EntityEventsService } from '@app/rpc/services/entityEventsService'
 import { CurrentUser } from '../../../users/decorators/currentUser'
@@ -12,7 +12,7 @@ import { getUnixTime } from 'date-fns'
 
 @ArgsType()
 class Params {
-  @Field()
+  @Field(() => ID)
   propertyId: string
 
   @Field(() => PropertyInput)
@@ -33,17 +33,18 @@ export class UpdateProperty {
     const propertyUpdated = await this.propertyAPIService.updateProperty(propertyId, data)
 
     if (propertyUpdated) {
-      this.entityEventsService.emitEntityModified({
+      const entityInfo: EntityInfo = {
         entityId: propertyId,
         entityType: 'PROPERTY',
-      })
+      }
+
+      this.entityEventsService.emitEntityModified(entityInfo)
 
       this.userActionsService.recordAction({
         eventType: UserActions.ENTITY_UPDATED,
         author: _id,
         timestamp: getUnixTime(new Date()),
-        target: propertyId,
-        targetType: 'PROPERTY',
+        targetEntityInfo: entityInfo,
       })
     }
     return propertyUpdated

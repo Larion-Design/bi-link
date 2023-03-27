@@ -1,19 +1,20 @@
-import { Field, ObjectType } from '@nestjs/graphql'
+import { Field, ID, ObjectType, PickType } from '@nestjs/graphql'
+import { Timestamps } from 'defs/dist/modelTimestamps'
 import { OptionalDateValue } from '../../generic/dto/optionalDateValue'
 import { TextValue } from '../../generic/dto/textValue'
 import { Location } from '../../geolocation/dto/location'
 import { CustomField } from '../../customFields/dto/customField'
 import { File } from '../../files/dto/file'
-import { Metadata } from '../../metadata/dto/metadata'
 import { WithMetadata } from '../../metadata/dto/withMetadata'
 import { Party } from './party'
 import { EventAPIOutput } from 'defs'
 
-@ObjectType({ implements: () => [WithMetadata] })
-export class Event implements WithMetadata, EventAPIOutput {
-  metadata: Metadata
-
-  @Field()
+@ObjectType()
+export class Event
+  extends PickType(WithMetadata, ['metadata'] as const)
+  implements EventAPIOutput, Timestamps
+{
+  @Field(() => ID)
   _id: string
 
   @Field(() => OptionalDateValue)
@@ -36,4 +37,10 @@ export class Event implements WithMetadata, EventAPIOutput {
 
   @Field(() => [File])
   files: File[]
+
+  @Field(() => Date)
+  createdAt: Date
+
+  @Field(() => Date)
+  updatedAt: Date
 }

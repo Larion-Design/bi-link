@@ -9,6 +9,7 @@ export class PropertyOwnerRelationship implements NodesRelationship, PropertyOwn
   endNode: EntityInfo
   _confirmed: boolean
   _type: GraphRelationship
+  _trustworthiness: number
 
   @Field({ nullable: true, defaultValue: null })
   startDate: Date | null

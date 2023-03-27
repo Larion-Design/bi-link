@@ -1,14 +1,20 @@
-import { Field, InputType } from '@nestjs/graphql'
+import { Field, InputType, PickType } from '@nestjs/graphql'
 import { CustomFieldInput } from '../../customFields/dto/customFieldInput'
-import { Length } from 'class-validator'
 import { ConnectedEntityInput } from '../../entityInfo/dto/connectedEntityInput'
-import { AssociateAPIInput } from 'defs'
+import { AssociateAPI } from 'defs'
+import { BooleanValueInput } from '../../generic/dto/booleanValueInput'
+import { NumberValueInput } from '../../generic/dto/numberValueInput'
+import { OptionalDateValueInput } from '../../generic/dto/optionalDateValueInput'
+import { TextValueInput } from '../../generic/dto/textValueInput'
+import { WithMetadataInput } from '../../metadata/dto/withMetadataInput'
 
 @InputType()
-export class AssociateInput implements AssociateAPIInput {
-  @Length(1, 50)
-  @Field()
-  readonly role: string
+export class AssociateInput
+  extends PickType(WithMetadataInput, ['metadata'] as const)
+  implements AssociateAPI
+{
+  @Field(() => TextValueInput)
+  readonly role: TextValueInput
 
   @Field(() => ConnectedEntityInput, { nullable: true })
   readonly person?: ConnectedEntityInput
@@ -16,21 +22,18 @@ export class AssociateInput implements AssociateAPIInput {
   @Field(() => ConnectedEntityInput, { nullable: true })
   readonly company?: ConnectedEntityInput
 
-  @Field({ nullable: true })
-  readonly startDate: Date | null
+  @Field(() => OptionalDateValueInput)
+  readonly startDate: OptionalDateValueInput
 
-  @Field({ nullable: true })
-  readonly endDate: Date | null
+  @Field(() => OptionalDateValueInput)
+  readonly endDate: OptionalDateValueInput
 
-  @Field()
-  readonly isActive: boolean
+  @Field(() => BooleanValueInput)
+  readonly isActive: BooleanValueInput
 
-  @Field()
-  readonly equity: number
+  @Field(() => NumberValueInput)
+  readonly equity: NumberValueInput
 
   @Field(() => [CustomFieldInput])
   readonly customFields: CustomFieldInput[]
-
-  @Field({ nullable: true, defaultValue: true })
-  readonly _confirmed: boolean
 }

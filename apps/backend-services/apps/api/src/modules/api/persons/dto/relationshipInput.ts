@@ -1,19 +1,19 @@
-import { Field, InputType } from '@nestjs/graphql'
-import { Length, Max, Min } from 'class-validator'
+import { Field, InputType, PickType } from '@nestjs/graphql'
 import { ConnectedEntityInput } from '../../entityInfo/dto/connectedEntityInput'
-import { RelationshipAPIInput } from 'defs'
+import { RelationshipAPI } from 'defs'
+import { WithMetadataInput } from '../../metadata/dto/withMetadataInput'
 
 @InputType()
-export class RelationshipInput implements RelationshipAPIInput {
+export class RelationshipInput
+  extends PickType(WithMetadataInput, ['metadata'] as const)
+  implements RelationshipAPI
+{
   @Field()
   readonly description: string
 
-  @Length(1, 30)
   @Field()
   readonly type: string
 
-  @Min(1)
-  @Max(5)
   @Field()
   readonly proximity: number
 

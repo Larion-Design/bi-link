@@ -1,9 +1,12 @@
-import { Field, ObjectType } from '@nestjs/graphql'
+import { Field, ObjectType, PickType } from '@nestjs/graphql'
 import { EducationAPIOutput } from 'defs'
-import { CustomField } from '../../customFields/dto/customField'
+import { WithMetadata } from '../../metadata/dto/withMetadata'
 
 @ObjectType()
-export class Education implements EducationAPIOutput {
+export class Education
+  extends PickType(WithMetadata, ['metadata'] as const)
+  implements EducationAPIOutput
+{
   @Field()
   type: string
 
@@ -18,7 +21,4 @@ export class Education implements EducationAPIOutput {
 
   @Field(() => Date, { nullable: true })
   endDate: Date | null
-
-  @Field(() => [CustomField])
-  customFields: CustomField[]
 }

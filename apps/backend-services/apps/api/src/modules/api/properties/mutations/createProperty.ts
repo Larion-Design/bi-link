@@ -1,10 +1,10 @@
-import { Args, ArgsType, Field, Mutation, Resolver } from '@nestjs/graphql'
+import { Args, ArgsType, Field, ID, Mutation, Resolver } from '@nestjs/graphql'
 import { Property } from '../dto/property'
 import { PropertyInput } from '../dto/propertyInput'
 import { UserActionsService } from '@app/rpc/services/userActionsService'
 import { EntityEventsService } from '@app/rpc/services/entityEventsService'
 import { PropertyAPIService } from '../services/propertyAPIService'
-import { User, UserActions } from 'defs'
+import { EntityInfo, User, UserActions } from 'defs'
 import { UseGuards } from '@nestjs/common'
 import { FirebaseAuthGuard } from '../../../users/guards/FirebaseAuthGuard'
 import { CurrentUser } from '../../../users/decorators/currentUser'
@@ -24,22 +24,23 @@ export class CreateProperty {
     private readonly propertyAPIService: PropertyAPIService,
   ) {}
 
-  @Mutation(() => String)
+  @Mutation(() => ID)
   @UseGuards(FirebaseAuthGuard)
   async createProperty(@CurrentUser() { _id }: User, @Args() { data }: Params) {
     const propertyId = await this.propertyAPIService.createProperty(data)
 
-    this.entityEventsService.emitEntityCreated({
+    const entityInfo: EntityInfo = {
       entityId: propertyId,
       entityType: 'PROPERTY',
-    })
+    }
+
+    this.entityEventsService.emitEntityCreated(entityInfo)
 
     this.userActionsService.recordAction({
       eventType: UserActions.ENTITY_CREATED,
       author: _id,
       timestamp: getUnixTime(new Date()),
-      target: propertyId,
-      targetType: 'PROPERTY',
+      targetEntityInfo: entityInfo,
     })
 
     return propertyId
