@@ -1,4 +1,4 @@
-import { PersonsService } from '@app/models/services/personsService'
+import { PersonsService } from '@app/models/person/services/personsService'
 import { UseGuards } from '@nestjs/common'
 import { Args, ArgsType, Field, ID, Query, Resolver } from '@nestjs/graphql'
 import { FirebaseAuthGuard } from '../../../users/guards/FirebaseAuthGuard'

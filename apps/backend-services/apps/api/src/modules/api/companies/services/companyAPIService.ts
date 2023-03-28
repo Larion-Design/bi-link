@@ -1,10 +1,10 @@
 import { Injectable, Logger } from '@nestjs/common'
-import { CompanyModel } from '@app/models/models/company/companyModel'
+import { CompanyModel } from '@app/models/company/models/companyModel'
 import { FileAPIService } from '../../files/services/fileAPIService'
 import { CustomFieldsService } from '../../customFields/services/customFieldsService'
 import { LocationAPIService } from '../../geolocation/services/locationAPIService'
 import { CompanyInput } from '../dto/companyInput'
-import { CompaniesService } from '@app/models/services/companiesService'
+import { CompaniesService } from '@app/models/company/services/companiesService'
 import { AssociatesService } from './associatesService'
 
 @Injectable()

@@ -1,4 +1,26 @@
 export const MICROSERVICES = {
+  INGRESS: {
+    id: 'INGRESS',
+    persons: {
+      getPerson: 'getPerson',
+      getPersonSnapshot: 'getPersonSnapshot',
+      getPersonSnapshots: 'getPersonSnapshots',
+      getAllPersonSnapshots: 'getAllPersonSnapshots',
+      createPersonPendingSnapshot: 'createPersonPendingSnapshot',
+      createPersonHistorySnapshot: 'createPersonHistorySnapshot',
+      applyPersonSnapshot: 'applyPersonSnapshot',
+      getPersons: 'getPersons',
+      createPerson: 'createPerson',
+      updatePerson: 'updatePerson',
+    },
+    companies: {
+      getCompany: 'getCompany',
+      getCompanies: 'getCompanies',
+      createCompany: 'createCompany',
+      updateCompany: 'updateCompany',
+      getCompanySnapshot: 'getCompanySnapshot',
+    },
+  },
   FILES_PARSER: {
     id: 'FILES_PARSER',
     extractText: 'extractText',

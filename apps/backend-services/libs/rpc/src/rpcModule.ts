@@ -13,6 +13,7 @@ import { FileParserService } from '@app/rpc/services/fileParserService'
   imports: [
     ClientsModule.registerAsync(
       [
+        MICROSERVICES.INGRESS.id,
         MICROSERVICES.ENTITY_EVENTS.id,
         MICROSERVICES.USER_ACTIONS_RECORDER.id,
         MICROSERVICES.FILES_PARSER.id,

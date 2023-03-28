@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common'
-import { CustomFieldModel } from '@app/models/models/customFieldModel'
+import { CustomFieldModel } from '@app/models/shared/models/customFieldModel'
 import { CustomField } from '../dto/customField'
 
 @Injectable()

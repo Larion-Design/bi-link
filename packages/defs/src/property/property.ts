@@ -23,14 +23,14 @@ export const propertySchema = z
   .merge(withMetadataSchema)
   .merge(withTimestamps)
 
-export const propertyAPIOutputSchema = propertySchema.omit({ owners: true, files: true }).merge(
+export const propertyAPIOutputSchema = propertySchema.merge(
   z.object({
     files: z.array(fileOutputSchema),
     owners: z.array(propertyOwnerAPISchema),
   }),
 )
 
-export const propertyAPIInputSchema = propertySchema.omit({ _id: true, owners: true }).merge(
+export const propertyAPIInputSchema = propertySchema.merge(
   z.object({
     owners: z.array(propertyOwnerAPISchema),
   }),

@@ -3,7 +3,7 @@ import { Job } from 'bull'
 import { OnQueueActive, OnQueueCompleted, OnQueueFailed, Process, Processor } from '@nestjs/bull'
 import { QUEUE_GRAPH_PROPERTIES } from '../producers/constants'
 import { EVENT_CREATED, EVENT_UPDATED, PropertyEventInfo } from '@app/scheduler-module'
-import { PropertiesService } from '@app/models/services/propertiesService'
+import { PropertiesService } from '@app/models/property/services/propertiesService'
 import { PropertyGraphService } from './services/propertyGraphService'
 
 @Processor(QUEUE_GRAPH_PROPERTIES)

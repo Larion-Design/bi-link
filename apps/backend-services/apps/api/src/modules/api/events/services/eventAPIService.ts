@@ -3,8 +3,8 @@ import { EventAPIInput } from 'defs'
 import { LocationAPIService } from '../../geolocation/services/locationAPIService'
 import { FileAPIService } from '../../files/services/fileAPIService'
 import { CustomFieldsService } from '../../customFields/services/customFieldsService'
-import { EventModel } from '@app/models/models/event/eventModel'
-import { EventsService } from '@app/models/services/eventsService'
+import { EventModel } from '@app/models/event/models/eventModel'
+import { EventsService } from '@app/models/event/services/eventsService'
 import { PartyAPIService } from './partyAPIService'
 
 @Injectable()

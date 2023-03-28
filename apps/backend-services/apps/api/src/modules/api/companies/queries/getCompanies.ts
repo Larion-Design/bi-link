@@ -1,5 +1,5 @@
 import { Args, ArgsType, Field, ID, Query, Resolver } from '@nestjs/graphql'
-import { CompaniesService } from '@app/models/services/companiesService'
+import { CompaniesService } from '@app/models/company/services/companiesService'
 import { Company } from '../dto/company'
 import { UseGuards } from '@nestjs/common'
 import { FirebaseAuthGuard } from '../../../users/guards/FirebaseAuthGuard'

@@ -80,6 +80,7 @@ specifiers:
   webpack: ^5.75.0
   word-extractor: ^1.0.4
   xlsx: ^0.18.5
+  zod: ^3.21.0
 
 dependencies:
   '@elastic/elasticsearch': 8.5.0
@@ -127,6 +128,7 @@ dependencies:
   uuid: 8.3.2
   word-extractor: 1.0.4
   xlsx: 0.18.5
+  zod: 3.21.2
 
 devDependencies:
   '@faker-js/faker': 7.6.0
@@ -9146,7 +9148,6 @@ packages:
 
   /zod/3.21.2:
     resolution: {integrity: sha512-0Ygy2/IZNIxHterZdHjE5Vb8hp1fUHJD/BGvSHj8QJx+UipEVNvo9WLchoyBpz5JIaN6KmdGDGYdloGzpFK98g==}
-    dev: true
 
   file:../../packages/defs:
     resolution: {directory: ../../packages/defs, type: directory}

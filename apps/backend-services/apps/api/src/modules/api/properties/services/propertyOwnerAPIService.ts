@@ -3,10 +3,10 @@ import { Model } from 'mongoose'
 import { InjectModel } from '@nestjs/mongoose'
 import { CustomFieldsService } from '../../customFields/services/customFieldsService'
 import { PropertyOwnerAPI } from 'defs'
-import { CompanyDocument, CompanyModel } from '@app/models/models/company/companyModel'
-import { PersonDocument, PersonModel } from '@app/models/models/person/personModel'
-import { PropertyOwnerModel } from '@app/models/models/property/propertyOwnerModel'
-import { VehicleOwnerInfoModel } from '@app/models/models/property/vehicleOwnerInfoModel'
+import { CompanyDocument, CompanyModel } from '@app/models/company/models/companyModel'
+import { PersonDocument, PersonModel } from '@app/models/person/models/personModel'
+import { PropertyOwnerModel } from '@app/models/property/models/propertyOwnerModel'
+import { VehicleOwnerInfoModel } from '@app/models/property/models/vehicleOwnerInfoModel'
 
 @Injectable()
 export class PropertyOwnerAPIService {

@@ -1,4 +1,4 @@
-import { ReportsService } from '@app/models/services/reportsService'
+import { ReportsService } from '@app/models/report/services/reportsService'
 import { UseGuards } from '@nestjs/common'
 import { Query, Resolver } from '@nestjs/graphql'
 import { FirebaseAuthGuard } from '../../../users/guards/FirebaseAuthGuard'

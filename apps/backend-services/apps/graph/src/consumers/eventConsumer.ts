@@ -1,4 +1,4 @@
-import { EventsService } from '@app/models/services/eventsService'
+import { EventsService } from '@app/models/event/services/eventsService'
 import { Logger } from '@nestjs/common'
 import { Job } from 'bull'
 import { OnQueueActive, OnQueueCompleted, OnQueueFailed, Process, Processor } from '@nestjs/bull'

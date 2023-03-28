@@ -8,7 +8,7 @@ import { OnQueueActive, OnQueueCompleted, OnQueueFailed, Process, Processor } fr
 import { Logger } from '@nestjs/common'
 import { FileEventDispatcherService } from '../../producers/services/fileEventDispatcherService'
 import { Job } from 'bull'
-import { EventsService } from '@app/models/services/eventsService'
+import { EventsService } from '@app/models/event/services/eventsService'
 import { EventsIndexerService } from '../../indexer/services'
 import { QUEUE_EVENTS } from '../../producers/constants'
 

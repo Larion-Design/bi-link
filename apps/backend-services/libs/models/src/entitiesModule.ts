@@ -1,103 +1,129 @@
-import { Global, Module } from '@nestjs/common'
-import { MongooseModule } from '@nestjs/mongoose'
-
+import { AssociateModel, AssociateSchema } from '@app/models/company/models/associateModel'
 import {
-  AssociateModel,
-  AssociateSchema,
   CompanyHistorySnapshotModel,
   CompanyHistorySnapshotSchema,
-  CompanyModel,
+} from '@app/models/company/models/companyHistorySnapshotModel'
+import { CompanyModel, CompanySchema } from '@app/models/company/models/companyModel'
+import {
   CompanyPendingSnapshotModel,
   CompanyPendingSnapshotSchema,
-  CompanySchema,
-  CoordinatesModel,
-  CoordinatesSchema,
-  CustomFieldModel,
-  CustomFieldSchema,
-  DataRefModel,
-  DataRefSchema,
-  DateValueWithMetadataModel,
-  DateValueWithMetadataSchema,
-  EducationModel,
-  EducationSchema,
+} from '@app/models/company/models/companyPendingSnapshotModel'
+import { CompaniesService } from '@app/models/company/services/companiesService'
+import { CompanyHistorySnapshotService } from '@app/models/company/services/companyHistorySnapshotService'
+import { CompanyPendingSnapshotService } from '@app/models/company/services/companyPendingSnapshotService'
+import {
   EventHistorySnapshotModel,
   EventHistorySnapshotSchema,
-  EventModel,
+} from '@app/models/event/models/eventHistorySnapshotModel'
+import { EventModel, EventSchema } from '@app/models/event/models/eventModel'
+import {
   EventPendingSnapshotModel,
   EventPendingSnapshotSchema,
-  EventSchema,
-  FileModel,
-  FileSchema,
-  IdDocumentModel,
-  IdDocumentSchema,
-  LinkModel,
-  LinkSchema,
-  LocationModel,
-  LocationSchema,
-  MetadataModel,
-  MetadataSchema,
+} from '@app/models/event/models/eventPendingSnapshotModel'
+import { PartyModel, PartySchema } from '@app/models/event/models/partyModel'
+import { EventHistorySnapshotService } from '@app/models/event/services/eventHistorySnapshotService'
+import { EventPendingSnapshotService } from '@app/models/event/services/eventPendingSnapshotService'
+import { EventsService } from '@app/models/event/services/eventsService'
+import { FileModel, FileSchema } from '@app/models/file/models/fileModel'
+import { FilesService } from '@app/models/file/services/filesService'
+import { CoordinatesModel, CoordinatesSchema } from '@app/models/location/models/coordinatesModel'
+import { LocationsService } from '@app/models/location/services/locationsService'
+import {
+  DateValueWithMetadataModel,
+  DateValueWithMetadataSchema,
+} from '@app/models/metadata/models/dateValueWithMetadataModel'
+import { MetadataModel, MetadataSchema } from '@app/models/metadata/models/metadataModel'
+import {
   NumberValueWithMetadataModel,
   NumberValueWithMetadataSchema,
-  OldNameModel,
-  OldNameSchema,
+} from '@app/models/metadata/models/numberValueWithMetadataModel'
+import {
   OptionalDateValueWithMetadataModel,
   OptionalDateValueWithMetadataSchema,
-  PartyModel,
-  PartySchema,
-  PersonHistorySnapshopModel,
-  PersonHistorySnapshopSchema,
-  PersonModel,
-  PersonPendingSnapshopSchema,
-  PersonPendingSnapshotModel,
-  PersonSchema,
-  ProceedingEntityModel,
-  ProceedingEntitySchema,
-  ProceedingHistorySnapshotModel,
-  ProceedingHistorySnapshotSchema,
-  ProceedingModel,
-  ProceedingPendingSnapshotModel,
-  ProceedingPendingSnapshotSchema,
-  ProceedingSchema,
-  PropertyHistorySnapshotModel,
-  PropertyHistorySnapshotSchema,
-  PropertyModel,
-  PropertyOwnerModel,
-  PropertyOwnerSchema,
-  PropertyPendingSnapshotModel,
-  PropertyPendingSnapshotSchema,
-  PropertySchema,
-  RelationshipModel,
-  RelationshipSchema,
-  ReportContentModel,
-  ReportContentSchema,
-  ReportHistorySnapshotModel,
-  ReportHistorySnapshotSchema,
-  ReportModel,
-  ReportPendingSnapshotModel,
-  ReportPendingSnapshotSchema,
-  ReportSchema,
-  ReportSectionModel,
-  ReportSectionSchema,
-  TableModel,
-  TableSchema,
-  TextModel,
-  TextSchema,
+} from '@app/models/metadata/models/optionalDateValueWithMetadataModel'
+import {
   TextValueWithMetadataModel,
   TextValueWithMetadataSchema,
-  TitleModel,
-  TitleSchema,
-  TrustModel,
-  TrustSchema,
-} from './models'
+} from '@app/models/metadata/models/textValueWithMetadataModel'
+import { TrustModel, TrustSchema } from '@app/models/metadata/models/trustModel'
+import { EducationModel, EducationSchema } from '@app/models/person/models/educationModel'
+import { IdDocumentModel, IdDocumentSchema } from '@app/models/person/models/idDocumentModel'
+import { PersonModel, PersonSchema } from '@app/models/person/models/personModel'
+import { RelationshipModel, RelationshipSchema } from '@app/models/person/models/relationshipModel'
+import { PersonHistorySnapshotService } from '@app/models/person/services/personHistorySnapshotService'
+import { PersonPendingSnapshotService } from '@app/models/person/services/personPendingSnapshotService'
+import { PersonsService } from '@app/models/person/services/personsService'
+import {
+  ProceedingEntityModel,
+  ProceedingEntitySchema,
+} from '@app/models/proceeding/models/proceedingEntityModel'
+import {
+  ProceedingHistorySnapshotModel,
+  ProceedingHistorySnapshotSchema,
+} from '@app/models/proceeding/models/proceedingHistorySnapshotModel'
+import { ProceedingModel, ProceedingSchema } from '@app/models/proceeding/models/proceedingModel'
+import {
+  ProceedingPendingSnapshotModel,
+  ProceedingPendingSnapshotSchema,
+} from '@app/models/proceeding/models/proceedingPendingSnapshotModel'
+import { ProceedingHistorySnapshotService } from '@app/models/proceeding/services/proceedingHistorySnapshotService'
+import { ProceedingPendingSnapshotService } from '@app/models/proceeding/services/proceedingPendingSnapshotService'
+import { ProceedingsService } from '@app/models/proceeding/services/proceedingsService'
+import {
+  PropertyHistorySnapshotModel,
+  PropertyHistorySnapshotSchema,
+} from '@app/models/property/models/propertyHistorySnapshotModel'
+import { PropertyModel, PropertySchema } from '@app/models/property/models/propertyModel'
+import {
+  PropertyOwnerModel,
+  PropertyOwnerSchema,
+} from '@app/models/property/models/propertyOwnerModel'
+import {
+  PropertyPendingSnapshotModel,
+  PropertyPendingSnapshotSchema,
+} from '@app/models/property/models/propertyPendingSnapshotModel'
+import { PropertiesService } from '@app/models/property/services/propertiesService'
+import { PropertyHistorySnapshotService } from '@app/models/property/services/propertyHistorySnapshotService'
+import { PropertyPendingSnapshotService } from '@app/models/property/services/propertyPendingSnapshotService'
+import { LinkModel, LinkSchema } from '@app/models/report/models/content/linkModel'
+import { TableModel, TableSchema } from '@app/models/report/models/content/tableModel'
+import { TextModel, TextSchema } from '@app/models/report/models/content/textModel'
+import { TitleModel, TitleSchema } from '@app/models/report/models/content/titleModel'
+import { DataRefModel, DataRefSchema } from '@app/models/report/models/dataRefModel'
+import {
+  ReportContentModel,
+  ReportContentSchema,
+} from '@app/models/report/models/reportContentModel'
+import {
+  ReportHistorySnapshotModel,
+  ReportHistorySnapshotSchema,
+} from '@app/models/report/models/reportHistorySnapshotModel'
+import { ReportModel, ReportSchema } from '@app/models/report/models/reportModel'
+import {
+  ReportPendingSnapshotModel,
+  ReportPendingSnapshotSchema,
+} from '@app/models/report/models/reportPendingSnapshotModel'
+import {
+  ReportSectionModel,
+  ReportSectionSchema,
+} from '@app/models/report/models/reportSectionModel'
+import { ReportHistorySnapshotService } from '@app/models/report/services/reportHistorySnapshotService'
+import { ReportPendingSnapshotService } from '@app/models/report/services/reportPendingSnapshotService'
+import { ReportsService } from '@app/models/report/services/reportsService'
+import { CustomFieldModel, CustomFieldSchema } from '@app/models/shared/models/customFieldModel'
 
-import { ProceedingsService } from '@app/models/services/proceedingsService'
-import { LocationsService } from '@app/models/services/locationsService'
-import { CompaniesService } from '@app/models/services/companiesService'
-import { FilesService } from '@app/models/services/filesService'
-import { EventsService } from '@app/models/services/eventsService'
-import { PersonsService } from '@app/models/services/personsService'
-import { PropertiesService } from '@app/models/services/propertiesService'
-import { ReportsService } from '@app/models/services/reportsService'
+import { Global, Module } from '@nestjs/common'
+import { MongooseModule } from '@nestjs/mongoose'
+import { LocationModel, LocationSchema } from '@app/models/location/models/locationModel'
+import {
+  PersonPendingSnapshotModel,
+  PersonPendingSnapshotSchema,
+} from '@app/models/person/models/personPendingSnapshotModel'
+import {
+  PersonHistorySnapshotModel,
+  PersonHistorySnapshotSchema,
+} from '@app/models/person/models/personHistorySnapshotModel'
+import { OldNameModel, OldNameSchema } from '@app/models/person/models/oldNameModel'
 
 @Global()
 @Module({
@@ -117,8 +143,8 @@ import { ReportsService } from '@app/models/services/reportsService'
       { name: CoordinatesModel.name, schema: CoordinatesSchema },
       { name: CustomFieldModel.name, schema: CustomFieldSchema },
       { name: PersonModel.name, schema: PersonSchema },
-      { name: PersonHistorySnapshopModel.name, schema: PersonHistorySnapshopSchema },
-      { name: PersonPendingSnapshotModel.name, schema: PersonPendingSnapshopSchema },
+      { name: PersonHistorySnapshotModel.name, schema: PersonHistorySnapshotSchema },
+      { name: PersonPendingSnapshotModel.name, schema: PersonPendingSnapshotSchema },
       { name: OldNameModel.name, schema: OldNameSchema },
       { name: IdDocumentModel.name, schema: IdDocumentSchema },
       { name: RelationshipModel.name, schema: RelationshipSchema },
@@ -153,24 +179,61 @@ import { ReportsService } from '@app/models/services/reportsService'
   ],
   providers: [
     PersonsService,
+    PersonHistorySnapshotService,
+    PersonPendingSnapshotService,
+
     CompaniesService,
-    FilesService,
+    CompanyHistorySnapshotService,
+    CompanyPendingSnapshotService,
+
     EventsService,
-    PropertiesService,
-    ReportsService,
-    LocationsService,
+    EventHistorySnapshotService,
+    EventPendingSnapshotService,
+
     ProceedingsService,
+    ProceedingHistorySnapshotService,
+    ProceedingPendingSnapshotService,
+
+    PropertiesService,
+    PropertyPendingSnapshotService,
+    PropertyHistorySnapshotService,
+
+    ReportsService,
+    ReportPendingSnapshotService,
+    ReportHistorySnapshotService,
+
+    LocationsService,
+    FilesService,
   ],
   exports: [
     MongooseModule,
+
     PersonsService,
+    PersonHistorySnapshotService,
+    PersonPendingSnapshotService,
+
     CompaniesService,
-    FilesService,
+    CompanyHistorySnapshotService,
+    CompanyPendingSnapshotService,
+
     EventsService,
-    PropertiesService,
-    ReportsService,
-    LocationsService,
+    EventHistorySnapshotService,
+    EventPendingSnapshotService,
+
     ProceedingsService,
+    ProceedingHistorySnapshotService,
+    ProceedingPendingSnapshotService,
+
+    PropertiesService,
+    PropertyPendingSnapshotService,
+    PropertyHistorySnapshotService,
+
+    ReportsService,
+    ReportPendingSnapshotService,
+    ReportHistorySnapshotService,
+
+    LocationsService,
+    FilesService,
   ],
 })
 export class EntitiesModule {}

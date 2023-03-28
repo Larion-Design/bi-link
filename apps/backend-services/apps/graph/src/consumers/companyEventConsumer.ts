@@ -1,6 +1,6 @@
 import { Logger } from '@nestjs/common'
 import { Job } from 'bull'
-import { CompaniesService } from '@app/models/services/companiesService'
+import { CompaniesService } from '@app/models/company/services/companiesService'
 import { OnQueueActive, OnQueueCompleted, OnQueueFailed, Process, Processor } from '@nestjs/bull'
 import { QUEUE_GRAPH_COMPANIES } from '../producers/constants'
 import { CompanyEventInfo, EVENT_CREATED, EVENT_UPDATED } from '@app/scheduler-module'

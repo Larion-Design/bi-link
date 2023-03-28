@@ -31,7 +31,7 @@ export const eventAPIInputSchema = eventSchema
     }),
   )
 
-export const eventAPIOutputSchema = eventSchema.omit({ files: true, parties: true }).merge(
+export const eventAPIOutputSchema = eventSchema.merge(
   z.object({
     files: z.array(fileOutputSchema),
     parties: z.array(eventParticipantAPISchema),

@@ -1,9 +1,9 @@
 import { Injectable, Logger } from '@nestjs/common'
-import { CompaniesService } from '@app/models/services/companiesService'
-import { PersonsService } from '@app/models/services/personsService'
-import { PropertiesService } from '@app/models/services/propertiesService'
+import { CompaniesService } from '@app/models/company/services/companiesService'
+import { PersonsService } from '@app/models/person/services/personsService'
+import { PropertiesService } from '@app/models/property/services/propertiesService'
 import { PartyAPI } from 'defs'
-import { PartyModel } from '@app/models/models/event/partyModel'
+import { PartyModel } from '@app/models/event/models/partyModel'
 import { CustomFieldsService } from '../../customFields/services/customFieldsService'
 
 @Injectable()

@@ -3,7 +3,7 @@ import { ProceedingGraphNode } from '@app/definitions/graph/proceeding'
 import { ProceedingEntityRelationship } from '@app/definitions/graph/proceedingEntity'
 import { GraphService } from '@app/graph-module'
 import { ProceedingDocument } from '@app/models'
-import { ProceedingsService } from '@app/models/services/proceedingsService'
+import { ProceedingsService } from '@app/models/proceeding/services/proceedingsService'
 import { EntityLabel, RelationshipLabel } from 'defs'
 
 @Injectable()

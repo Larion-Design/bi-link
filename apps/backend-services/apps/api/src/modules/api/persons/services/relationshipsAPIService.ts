@@ -6,8 +6,8 @@ import { InjectModel } from '@nestjs/mongoose'
 import {
   RelationshipDocument,
   RelationshipModel,
-} from '@app/models/models/person/relationshipModel'
-import { PersonDocument, PersonModel } from '@app/models/models/person/personModel'
+} from '@app/models/person/models/relationshipModel'
+import { PersonDocument, PersonModel } from '@app/models/person/models/personModel'
 
 @Injectable()
 export class RelationshipsAPIService {

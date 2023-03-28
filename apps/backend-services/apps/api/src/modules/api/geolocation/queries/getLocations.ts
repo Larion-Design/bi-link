@@ -1,4 +1,4 @@
-import { LocationsService } from '@app/models/services/locationsService'
+import { LocationsService } from '@app/models/location/services/locationsService'
 import { UseGuards } from '@nestjs/common'
 import { Args, ArgsType, Field, Query, Resolver } from '@nestjs/graphql'
 import { FirebaseAuthGuard } from '../../../users/guards/FirebaseAuthGuard'

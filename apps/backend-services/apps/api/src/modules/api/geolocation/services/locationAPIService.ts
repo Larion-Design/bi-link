@@ -1,7 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common'
-import { CoordinatesModel } from '@app/models/models/coordinatesModel'
-import { LocationsService } from '@app/models/services/locationsService'
-import { LocationModel } from '@app/models/models/locationModel'
+import { CoordinatesModel } from '@app/models/location/models/coordinatesModel'
+import { LocationsService } from '@app/models/location/services/locationsService'
+import { LocationModel } from '@app/models/location/models/locationModel'
 import { LocationAPIInput } from 'defs'
 
 @Injectable()

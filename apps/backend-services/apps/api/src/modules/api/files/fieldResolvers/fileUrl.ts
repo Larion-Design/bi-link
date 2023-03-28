@@ -1,7 +1,7 @@
 import { Parent, ResolveField, Resolver } from '@nestjs/graphql'
 import { File } from '../dto/file'
 import { DownloadUrl } from '../dto/downloadUrl'
-import { FileDocument } from '@app/models/models/fileModel'
+import { FileDocument } from '@app/models/file/models/fileModel'
 import { FileStorageService } from '@app/files/services/fileStorageService'
 
 @Resolver(() => File)

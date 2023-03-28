@@ -2,7 +2,7 @@ import { Injectable, Logger } from '@nestjs/common'
 import { Model } from 'mongoose'
 import { createHash } from 'node:crypto'
 import { InjectModel } from '@nestjs/mongoose'
-import { FileDocument, FileModel } from '@app/models/models/fileModel'
+import { FileDocument, FileModel } from '@app/models/file/models/fileModel'
 import { FileSources } from 'defs'
 import { FileStorageService } from '@app/files/services/fileStorageService'
 

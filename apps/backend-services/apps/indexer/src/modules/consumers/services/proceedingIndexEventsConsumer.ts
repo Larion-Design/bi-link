@@ -1,7 +1,7 @@
 import { OnQueueActive, OnQueueCompleted, OnQueueFailed, Process, Processor } from '@nestjs/bull'
 import { Logger } from '@nestjs/common'
 import { Job } from 'bull'
-import { ProceedingsService } from '@app/models/services/proceedingsService'
+import { ProceedingsService } from '@app/models/proceeding/services/proceedingsService'
 import {
   EVENT_CREATED,
   EVENT_UPDATED,

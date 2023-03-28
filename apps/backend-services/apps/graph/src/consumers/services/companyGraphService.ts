@@ -1,6 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common'
-import { CompanyDocument } from '@app/models/models/company/companyModel'
-import { CompaniesService } from '@app/models/services/companiesService'
+import { CompanyDocument } from '@app/models/company/models/companyModel'
+import { CompaniesService } from '@app/models/company/services/companiesService'
 import { GraphService } from '@app/graph-module/graphService'
 import { AssociateGraphRelationship, CompanyGraphNode } from '@app/definitions/graph'
 import { EntityLabel, RelationshipLabel } from 'defs'

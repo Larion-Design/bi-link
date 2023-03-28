@@ -9,7 +9,7 @@ import {
 } from '@app/scheduler-module'
 import { QUEUE_PROPERTIES } from '../../producers/constants'
 import { FileEventDispatcherService } from '../../producers/services/fileEventDispatcherService'
-import { PropertiesService } from '@app/models/services/propertiesService'
+import { PropertiesService } from '@app/models/property/services/propertiesService'
 import { PropertiesIndexerService } from '../../indexer/services'
 
 @Processor(QUEUE_PROPERTIES)

@@ -6,7 +6,7 @@ export const reportSectionSchema = z.object({
   content: reportContentSchema.array(),
 })
 
-export const reportSectionAPIOutputSchema = reportSectionSchema.omit({ content: true }).merge(
+export const reportSectionAPIOutputSchema = reportSectionSchema.merge(
   z.object({
     content: reportContentAPIOutputSchema.array(),
   }),

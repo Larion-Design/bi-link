@@ -1,11 +1,11 @@
 import { InjectModel } from '@nestjs/mongoose'
 import { Model } from 'mongoose'
-import { CompanyDocument, CompanyModel } from '@app/models/models/company/companyModel'
-import { EventDocument, EventModel } from '@app/models/models/event/eventModel'
-import { PersonDocument, PersonModel } from '@app/models/models/person/personModel'
-import { PropertyDocument, PropertyModel } from '@app/models/models/property/propertyModel'
+import { CompanyDocument, CompanyModel } from '@app/models/company/models/companyModel'
+import { EventDocument, EventModel } from '@app/models/event/models/eventModel'
+import { PersonDocument, PersonModel } from '@app/models/person/models/personModel'
+import { PropertyDocument, PropertyModel } from '@app/models/property/models/propertyModel'
 import { Injectable } from '@nestjs/common'
-import { DataRefModel } from '@app/models/models/reports/dataRefModel'
+import { DataRefModel } from '@app/models/report/models/dataRefModel'
 import { DataRefInput } from '../dto/refs/dataRefInput'
 
 @Injectable()
