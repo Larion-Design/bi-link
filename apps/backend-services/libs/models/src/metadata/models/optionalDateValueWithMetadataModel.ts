@@ -9,7 +9,7 @@ export class OptionalDateValueWithMetadataModel implements OptionalDateWithMetad
   metadata: MetadataModel
 
   @Prop({ type: SchemaTypes.Date, default: null })
-  value: Date | string | null
+  value?: Date | string | null
 }
 
 export const OptionalDateValueWithMetadataSchema = SchemaFactory.createForClass(Text)

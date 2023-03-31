@@ -8,7 +8,7 @@ import { MICROSERVICES } from '@app/rpc/constants'
 export class UserActionController {
   constructor(private readonly indexerService: IndexerService) {}
 
-  @EventPattern(MICROSERVICES.USER_ACTIONS_RECORDER.recordUserAction)
+  @EventPattern(MICROSERVICES.ACTIVITY_HISTORY.recordAction)
   async recordUserAction(@Payload() userActionInfo: ActivityEventIndex) {
     return this.indexerService.recordHistoryEvent(userActionInfo)
   }

@@ -1,24 +1,25 @@
-import { GraphService } from '@app/rpc/services/graphService'
-import { IndexerService } from '@app/rpc/services/indexerService'
 import { Global, Module } from '@nestjs/common'
 import { ClientsModule, Transport } from '@nestjs/microservices'
+import { ActivityHistoryService } from '@app/rpc/microservices/activityHistory/activityHistoryService'
+import { GlobalEventsService } from '@app/rpc/microservices/globalEvents/globalEventsService'
+import { GraphService } from '@app/rpc/microservices/graph/graphService'
+import { IndexerService } from '@app/rpc/microservices/indexer/indexerService'
+import { IngressService } from '@app/rpc/microservices/ingress'
 import { MICROSERVICES } from '@app/rpc/constants'
 import { ConfigModule, ConfigService } from '@nestjs/config'
-import { EntityEventsService } from '@app/rpc/services/entityEventsService'
-import { UserActionsService } from '@app/rpc/services/userActionsService'
-import { FileParserService } from '@app/rpc/services/fileParserService'
+import { FileParserService } from '@app/rpc/microservices/filesParser/fileParserService'
 
 @Global()
 @Module({
   imports: [
     ClientsModule.registerAsync(
       [
+        MICROSERVICES.GLOBAL.id,
         MICROSERVICES.INGRESS.id,
-        MICROSERVICES.ENTITY_EVENTS.id,
-        MICROSERVICES.USER_ACTIONS_RECORDER.id,
+        MICROSERVICES.GRAPH.id,
+        MICROSERVICES.ACTIVITY_HISTORY.id,
         MICROSERVICES.FILES_PARSER.id,
         MICROSERVICES.INDEXER.id,
-        MICROSERVICES.GRAPH.id,
       ].map((name) => ({
         name,
         imports: [ConfigModule],
@@ -37,18 +38,20 @@ import { FileParserService } from '@app/rpc/services/fileParserService'
     ),
   ],
   providers: [
-    EntityEventsService,
-    UserActionsService,
+    GlobalEventsService,
+    IngressService,
+    IndexerService,
+    ActivityHistoryService,
     FileParserService,
     GraphService,
-    IndexerService,
   ],
   exports: [
-    EntityEventsService,
-    UserActionsService,
+    GlobalEventsService,
+    IngressService,
+    IndexerService,
+    ActivityHistoryService,
     FileParserService,
     GraphService,
-    IndexerService,
   ],
 })
 export class RpcModule {}

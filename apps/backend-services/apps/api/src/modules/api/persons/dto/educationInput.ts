@@ -1,6 +1,5 @@
 import { Field, InputType, PickType } from '@nestjs/graphql'
 import { EducationAPIInput } from 'defs'
-import { CustomFieldInput } from '../../customFields/dto/customFieldInput'
 import { WithMetadataInput } from '../../metadata/dto/withMetadataInput'
 
 @InputType()
@@ -22,7 +21,4 @@ export class EducationInput
 
   @Field(() => Date, { nullable: true })
   endDate: Date | null
-
-  @Field(() => [CustomFieldInput])
-  customFields: CustomFieldInput[]
 }

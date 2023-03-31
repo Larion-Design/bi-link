@@ -1,7 +1,8 @@
 import { Inject, Injectable, Logger } from '@nestjs/common'
-import { MICROSERVICES } from '@app/rpc/constants'
 import { ClientProxy } from '@nestjs/microservices'
 import { lastValueFrom, timeout } from 'rxjs'
+import { FilesParserServiceMethods } from '@app/rpc/microservices/filesParser/filesParserServiceConfig'
+import { MICROSERVICES } from '@app/rpc/constants'
 
 @Injectable()
 export class FileParserService {
@@ -11,9 +12,12 @@ export class FileParserService {
 
   extractText = async (fileId: string) => {
     try {
+      type Params = Parameters<FilesParserServiceMethods['extractText']>[0]
+      type Result = ReturnType<FilesParserServiceMethods['extractText']>
+
       return lastValueFrom(
         this.client
-          .send<string, string>(MICROSERVICES.FILES_PARSER.extractText, fileId)
+          .send<Result, Params>(MICROSERVICES.FILES_PARSER.extractText, fileId)
           .pipe(timeout(60000)),
       )
     } catch (e) {

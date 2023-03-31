@@ -21,7 +21,7 @@ export class ParserService {
       .split('<w:t')
       .map((component) => {
         const tags = component.split('>')
-        return tags[1].replace(/<.*$/, '')
+        return tags[1]?.replace(/<.*$/, '') ?? ''
       })
       .join(' ')
 
@@ -70,11 +70,10 @@ export class ParserService {
         case 'jpeg':
         case 'bmp':
           return this.parseImage(fileContent)
-        default:
-          return fileContent.toString()
       }
     } catch (error) {
       this.logger.error(error)
     }
+    return fileContent.toString()
   }
 }

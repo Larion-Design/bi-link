@@ -17,8 +17,8 @@ export class Education
   specialization: string
 
   @Field(() => Date, { nullable: true })
-  startDate: Date | null
+  startDate: Date | string | null
 
   @Field(() => Date, { nullable: true })
-  endDate: Date | null
+  endDate: Date | string | null
 }

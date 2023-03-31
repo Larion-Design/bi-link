@@ -31,7 +31,7 @@ const reportAPISchema = reportSchema.merge(
     event: connectedEntitySchema.nullish(),
     property: connectedEntitySchema.nullish(),
     proceeding: connectedEntitySchema.nullish(),
-    refs: z.array(dataRefAPISchema),
+    refs: dataRefAPISchema.array(),
   }),
 )
 

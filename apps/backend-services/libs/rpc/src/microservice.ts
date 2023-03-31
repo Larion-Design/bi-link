@@ -11,7 +11,7 @@ export const configureMicroservice = async (
     transport: Transport.REDIS,
     options: {
       host: process.env.REDIS_HOST,
-      port: parseInt(process.env.REDIS_PORT),
+      port: process.env.REDIS_PORT ? parseInt(process.env.REDIS_PORT) : 3769,
       // password: process.env.REDIS_PASSWORD,
       // tls: {},
       retryDelay: 2000,

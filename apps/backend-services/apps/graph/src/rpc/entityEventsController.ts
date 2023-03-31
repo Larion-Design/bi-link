@@ -1,13 +1,8 @@
 import { Controller, Logger } from '@nestjs/common'
 import { EventPattern, Payload } from '@nestjs/microservices'
-import { EntityInfo, MICROSERVICES } from '@app/rpc/constants'
-import { EntityType } from 'defs'
-import { ReportsService } from '@app/models'
-import { CompaniesService } from '@app/models/company/services/companiesService'
-import { EventsService } from '@app/models/event/services/eventsService'
-import { PersonsService } from '@app/models/person/services/personsService'
-import { ProceedingsService } from '@app/models/proceeding/services/proceedingsService'
-import { PropertiesService } from '@app/models/property/services/propertiesService'
+import { EntityInfo, EntityType } from 'defs'
+import { IngressService } from '@app/rpc/microservices/ingress'
+import { MICROSERVICES } from '@app/rpc/constants'
 import { CompanyDispatcherService } from '../producers/services/companyDispatcherService'
 import { EventDispatcherService } from '../producers/services/eventDispatcherService'
 import { PersonDispatcherService } from '../producers/services/personDispatcherService'
@@ -26,106 +21,62 @@ export class EntityEventsController {
     private readonly eventDispatcherService: EventDispatcherService,
     private readonly reportDispatcherService: ReportDispatcherService,
     private readonly proceedingDispatcherService: ProceedingDispatcherService,
-
-    private readonly personsService: PersonsService,
-    private readonly companiesService: CompaniesService,
-    private readonly propertiesService: PropertiesService,
-    private readonly eventsService: EventsService,
-    private readonly reportsService: ReportsService,
-    private readonly proceedingsService: ProceedingsService,
+    private readonly ingressService: IngressService,
   ) {}
 
-  @EventPattern(MICROSERVICES.ENTITY_EVENTS.entityCreated)
+  @EventPattern(MICROSERVICES.GLOBAL.entityCreated)
   async entityCreated(@Payload() entityInfo: EntityInfo) {
     this.logger.debug(`Adding ${entityInfo.entityType}:${entityInfo.entityId} to graph`)
     return this.scheduleGraphUpdate(entityInfo)
   }
 
-  @EventPattern(MICROSERVICES.ENTITY_EVENTS.entityModified)
+  @EventPattern(MICROSERVICES.GLOBAL.entityModified)
   async entityModified(@Payload() entityInfo: EntityInfo) {
     this.logger.debug(`Updating ${entityInfo.entityType}:${entityInfo.entityId} in graph`)
     return this.scheduleGraphUpdate(entityInfo)
   }
 
-  @EventPattern(MICROSERVICES.ENTITY_EVENTS.entitiesRefresh)
+  @EventPattern(MICROSERVICES.GLOBAL.entitiesRefreshed)
   async entitiesRefresh(@Payload() entityType: EntityType) {
     return this.refreshAllGraphEntitiesByType(entityType)
   }
 
-  @EventPattern(MICROSERVICES.GRAPH.entitiesRefresh)
-  async graphEntitiesRefresh(@Payload() entityType: EntityType) {
+  @EventPattern(MICROSERVICES.GRAPH.refreshNodes)
+  async graphNodesRefresh(@Payload() entityType: EntityType) {
     return this.refreshAllGraphEntitiesByType(entityType)
   }
 
   private readonly refreshAllGraphEntitiesByType = async (entityType: EntityType) => {
-    switch (entityType) {
-      case 'PERSON': {
-        const personsIds = await this.getAllPersons()
+    const entitiesIds = await this.ingressService.getAllEntities(entityType)
 
-        if (personsIds.length) {
-          this.logger.debug(`Refreshing ${personsIds.length} persons in graph`)
-          return this.personEventDispatcherService.dispatchPersonsUpdated(personsIds)
-        } else {
-          this.logger.debug(`No persons to refresh in graph`)
+    if (entitiesIds?.length) {
+      switch (entityType) {
+        case 'PERSON': {
+          this.logger.debug(`Refreshing ${entitiesIds.length} persons in graph`)
+          return this.personEventDispatcherService.dispatchPersonsUpdated(entitiesIds)
         }
-        break
-      }
-      case 'COMPANY': {
-        const companiesIds = await this.getAllCompanies()
-
-        if (companiesIds.length) {
-          this.logger.debug(`Refreshing ${companiesIds.length} companies in graph`)
-          return this.companyEventDispatcherService.dispatchCompaniesUpdated(companiesIds)
-        } else {
-          this.logger.debug(`No companies to refresh in graph`)
+        case 'COMPANY': {
+          this.logger.debug(`Refreshing ${entitiesIds.length} companies in graph`)
+          return this.companyEventDispatcherService.dispatchCompaniesUpdated(entitiesIds)
         }
-        break
-      }
-      case 'EVENT': {
-        const eventsIds = await this.getAllEvents()
-
-        if (eventsIds.length) {
-          this.logger.debug(`Refreshing ${eventsIds.length} events in graph`)
-          return this.eventDispatcherService.dispatchEventsUpdated(eventsIds)
-        } else {
-          this.logger.debug(`No events to refresh in graph`)
+        case 'EVENT': {
+          this.logger.debug(`Refreshing ${entitiesIds.length} events in graph`)
+          return this.eventDispatcherService.dispatchEventsUpdated(entitiesIds)
         }
-        break
-      }
-      case 'PROPERTY': {
-        const propertiesIds = await this.getAllProperties()
-
-        if (propertiesIds.length) {
-          this.logger.debug(`Refreshing ${propertiesIds.length} properties in graph`)
-          return this.propertyEventDispatcherService.dispatchPropertiesUpdated(propertiesIds)
-        } else {
-          this.logger.debug(`No properties to refresh in graph`)
+        case 'PROPERTY': {
+          this.logger.debug(`Refreshing ${entitiesIds.length} properties in graph`)
+          return this.propertyEventDispatcherService.dispatchPropertiesUpdated(entitiesIds)
         }
-        break
-      }
-      case 'REPORT': {
-        const entitiesIds = await this.getAllReports()
-
-        if (entitiesIds.length) {
+        case 'REPORT': {
           this.logger.debug(`Refreshing ${entitiesIds.length} reports in graph`)
           return this.reportDispatcherService.dispatchReportsUpdated(entitiesIds)
-        } else {
-          this.logger.debug(`No reports to refresh in graph`)
         }
-        break
-      }
-      case 'PROCEEDING': {
-        const entitiesIds = await this.getAllProceedings()
-
-        if (entitiesIds.length) {
+        case 'PROCEEDING': {
           this.logger.debug(`Refreshing ${entitiesIds.length} proceedings in graph`)
           return this.proceedingDispatcherService.dispatchProceedingsUpdated(entitiesIds)
-        } else {
-          this.logger.debug(`No proceedings to refresh in graph`)
         }
-        break
       }
-    }
+    } else this.logger.debug(`No entities of type ${entityType} to refresh in graph`)
   }
 
   private readonly scheduleGraphUpdate = async ({ entityId, entityType }: EntityInfo) => {
@@ -149,59 +100,5 @@ export class EntityEventsController {
         return this.proceedingDispatcherService.dispatchProceedingUpdated(entityId)
       }
     }
-  }
-
-  private getAllPersons = async () => {
-    const entitiesIds: string[] = []
-
-    for await (const { _id } of this.personsService.getAllPersons()) {
-      entitiesIds.push(String(_id))
-    }
-    return entitiesIds
-  }
-
-  private getAllCompanies = async () => {
-    const entitiesIds: string[] = []
-
-    for await (const { _id } of this.companiesService.getAllCompanies()) {
-      entitiesIds.push(String(_id))
-    }
-    return entitiesIds
-  }
-
-  private getAllProperties = async () => {
-    const entitiesIds: string[] = []
-
-    for await (const { _id } of this.propertiesService.getAllProperties()) {
-      entitiesIds.push(String(_id))
-    }
-    return entitiesIds
-  }
-
-  private getAllEvents = async () => {
-    const entitiesIds: string[] = []
-
-    for await (const { _id } of this.eventsService.getAllEvents()) {
-      entitiesIds.push(String(_id))
-    }
-    return entitiesIds
-  }
-
-  private getAllReports = async () => {
-    const entitiesIds: string[] = []
-
-    for await (const { _id } of this.reportsService.getAllReports()) {
-      entitiesIds.push(String(_id))
-    }
-    return entitiesIds
-  }
-
-  private getAllProceedings = async () => {
-    const entitiesIds: string[] = []
-
-    for await (const { _id } of this.proceedingsService.getAllProceedings()) {
-      entitiesIds.push(String(_id))
-    }
-    return entitiesIds
   }
 }

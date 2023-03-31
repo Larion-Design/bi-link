@@ -45,7 +45,7 @@ export const personAPIInputSchema = personSchema.omit({
   updatedAt: true,
 })
 
-export const personListRecord = personSchema.pick({
+export const personListRecordSchema = personSchema.pick({
   _id: true,
   firstName: true,
   lastName: true,
@@ -61,7 +61,7 @@ export const personListRecordWithImage = personSchema.pick({
 })
 
 export type Person = z.infer<typeof personSchema>
-export type PersonListRecord = z.infer<typeof personListRecord>
+export type PersonListRecord = z.infer<typeof personListRecordSchema>
 export type PersonListRecordWithImage = z.infer<typeof personListRecordWithImage>
 
 export interface PersonsSuggestions<T> extends SearchSuggestions<T> {}

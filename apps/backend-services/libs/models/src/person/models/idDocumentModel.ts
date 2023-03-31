@@ -15,10 +15,10 @@ export class IdDocumentModel implements IdDocument {
   documentNumber: string
 
   @Prop({ type: SchemaTypes.Date, default: null })
-  issueDate: Date | null
+  issueDate: Date | string | null
 
   @Prop({ type: SchemaTypes.Date, default: null })
-  expirationDate: Date | null
+  expirationDate: Date | string | null
 
   @Prop({ type: SchemaTypes.String })
   status: IdDocumentStatus

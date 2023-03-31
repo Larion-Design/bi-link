@@ -1,6 +1,5 @@
-import { PersonsService } from '@app/models'
 import { Injectable, Logger } from '@nestjs/common'
-import { RelationshipAPIInput } from 'defs'
+import { RelationshipAPI } from 'defs'
 import { ClientSession, Model } from 'mongoose'
 import { InjectModel } from '@nestjs/mongoose'
 import {
@@ -8,6 +7,7 @@ import {
   RelationshipModel,
 } from '@app/models/person/models/relationshipModel'
 import { PersonDocument, PersonModel } from '@app/models/person/models/personModel'
+import { PersonsService } from '@app/models/person/services/personsService'
 
 @Injectable()
 export class RelationshipsAPIService {
@@ -20,7 +20,7 @@ export class RelationshipsAPIService {
     private readonly personsService: PersonsService,
   ) {}
 
-  getRelationshipsModelsFromInputData = async (relationships: RelationshipAPIInput[]) => {
+  getRelationshipsModelsFromInputData = async (relationships: RelationshipAPI[]) => {
     const personsModels = await this.personsService.getPersons(
       Array.from(
         new Set(
@@ -36,7 +36,7 @@ export class RelationshipsAPIService {
     )
 
     return relationships.map(
-      ({ person: { _id }, relatedPersons, proximity, type, description, _confirmed }) => {
+      ({ person: { _id }, relatedPersons, proximity, type, description }) => {
         const personModel = personsModels.find(({ _id: personId }) => _id === String(personId))
 
         const relationshipModel = new RelationshipModel()
@@ -54,7 +54,7 @@ export class RelationshipsAPIService {
 
   addRelationshipToConnectedPersons = async (
     person: PersonDocument,
-    personsRelations: RelationshipAPIInput[],
+    personsRelations: RelationshipAPI[],
   ) => {
     try {
       const session = await this.personModel.startSession()
@@ -85,7 +85,7 @@ export class RelationshipsAPIService {
   private upsertRelationship = async (
     relatingPerson: PersonDocument,
     relatedPerson: PersonDocument,
-    relationshipInfo: RelationshipAPIInput,
+    relationshipInfo: RelationshipAPI,
     session?: ClientSession,
   ) => {
     const relationship = new RelationshipModel()

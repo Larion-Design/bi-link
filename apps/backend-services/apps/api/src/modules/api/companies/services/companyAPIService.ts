@@ -1,9 +1,9 @@
 import { Injectable, Logger } from '@nestjs/common'
 import { CompanyModel } from '@app/models/company/models/companyModel'
+import { CompanyAPIInput } from 'defs'
 import { FileAPIService } from '../../files/services/fileAPIService'
 import { CustomFieldsService } from '../../customFields/services/customFieldsService'
 import { LocationAPIService } from '../../geolocation/services/locationAPIService'
-import { CompanyInput } from '../dto/companyInput'
 import { CompaniesService } from '@app/models/company/services/companiesService'
 import { AssociatesService } from './associatesService'
 
@@ -19,7 +19,7 @@ export class CompanyAPIService {
     private readonly associatesService: AssociatesService,
   ) {}
 
-  create = async (companyInfo: CompanyInput) => {
+  create = async (companyInfo: CompanyAPIInput) => {
     try {
       const companyModel = await this.createCompanyDocument(companyInfo)
       const companyDocument = await this.companiesService.create(companyModel)
@@ -29,7 +29,7 @@ export class CompanyAPIService {
     }
   }
 
-  update = async (companyId: string, companyInfo: CompanyInput) => {
+  update = async (companyId: string, companyInfo: CompanyAPIInput) => {
     try {
       const companyModel = await this.createCompanyDocument(companyInfo)
       await this.companiesService.update(companyId, companyModel)
@@ -39,7 +39,7 @@ export class CompanyAPIService {
     }
   }
 
-  private createCompanyDocument = async (companyInfo: CompanyInput) => {
+  private createCompanyDocument = async (companyInfo: CompanyAPIInput) => {
     try {
       const companyModel = new CompanyModel()
       companyModel.name = companyInfo.name

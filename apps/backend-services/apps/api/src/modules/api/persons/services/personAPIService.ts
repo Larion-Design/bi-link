@@ -1,16 +1,15 @@
+import { Injectable, Logger } from '@nestjs/common'
+import { EducationAPIInput, IdDocument, OldNameAPI, PersonAPIInput, UpdateSource } from 'defs'
 import { EducationModel } from '@app/models/person/models/educationModel'
 import { IdDocumentModel } from '@app/models/person/models/idDocumentModel'
 import { OldNameModel } from '@app/models/person/models/oldNameModel'
 import { PersonModel } from '@app/models/person/models/personModel'
+import { PersonHistorySnapshotService } from '@app/models/person/services/personHistorySnapshotService'
+import { PersonPendingSnapshotService } from '@app/models/person/services/personPendingSnapshotService'
 import { PersonsService } from '@app/models/person/services/personsService'
-import { Injectable, Logger } from '@nestjs/common'
-import { IdDocument } from 'defs'
 import { LocationAPIService } from '../../geolocation/services/locationAPIService'
 import { CustomFieldsService } from '../../customFields/services/customFieldsService'
 import { FileAPIService } from '../../files/services/fileAPIService'
-import { EducationInput } from '../dto/educationInput'
-import { OldNameInput } from '../dto/oldNameInput'
-import { PersonInput } from '../dto/personInput'
 import { RelationshipsAPIService } from './relationshipsAPIService'
 
 @Injectable()
@@ -23,9 +22,11 @@ export class PersonAPIService {
     private readonly customFieldsService: CustomFieldsService,
     private readonly relationshipsService: RelationshipsAPIService,
     private readonly locationAPIService: LocationAPIService,
+    private readonly personPendingSnapshotService: PersonPendingSnapshotService,
+    private readonly personHistorySnapshotService: PersonHistorySnapshotService,
   ) {}
 
-  create = async (personInfo: PersonInput) => {
+  create = async (personInfo: PersonAPIInput) => {
     try {
       const personModel = await this.createPersonDocument(personInfo)
       const personDocument = await this.personsService.create(personModel)
@@ -42,7 +43,7 @@ export class PersonAPIService {
     }
   }
 
-  update = async (personId: string, personInfo: PersonInput) => {
+  update = async (personId: string, personInfo: PersonAPIInput) => {
     try {
       const model = await this.createPersonDocument(personInfo)
       const personDocument = await this.personsService.update(personId, model)
@@ -59,7 +60,25 @@ export class PersonAPIService {
     }
   }
 
-  private createPersonDocument = async (personInfo: PersonInput) => {
+  createPendingSnapshot = async (personId: string, data: PersonAPIInput, source: UpdateSource) => {
+    try {
+      const personModel = await this.createPersonDocument(data)
+      return this.personPendingSnapshotService.create(personId, personModel, source)
+    } catch (e) {
+      this.logger.error(e)
+    }
+  }
+
+  createHistorySnapshot = async (personId: string, source: UpdateSource) => {
+    try {
+      const personDocument = await this.personsService.find(personId, false)
+      return this.personHistorySnapshotService.create(personId, personDocument, source)
+    } catch (e) {
+      this.logger.error(e)
+    }
+  }
+
+  private createPersonDocument = async (personInfo: PersonAPIInput) => {
     const personModel = new PersonModel()
     personModel.firstName = personInfo.firstName
     personModel.lastName = personInfo.lastName
@@ -97,7 +116,7 @@ export class PersonAPIService {
     return personModel
   }
 
-  private createOldNamesModels = (oldNames: OldNameInput[]) =>
+  private createOldNamesModels = (oldNames: OldNameAPI[]) =>
     oldNames.map(({ name, changeReason }) => {
       const oldNameModel = new OldNameModel()
       oldNameModel.name = name
@@ -105,18 +124,25 @@ export class PersonAPIService {
       return oldNameModel
     })
 
-  private createEducationModels = (educationsInfo: EducationInput[]) =>
-    educationsInfo.map(({ startDate, endDate, type, specialization, school, customFields }) => {
+  private createEducationModels = (educationsInfo: EducationAPIInput[]) =>
+    educationsInfo.map(({ startDate, endDate, type, specialization, school }) => {
       const educationModel = new EducationModel()
       educationModel.startDate = startDate
       educationModel.endDate = endDate
       educationModel.type = type
       educationModel.specialization = specialization
       educationModel.school = school
-      educationModel.customFields = this.customFieldsService.createCustomFieldsModels(customFields)
       return educationModel
     })
 
   private createIdDocumentsModels = (idDocuments: IdDocument[]) =>
-    idDocuments.map((idDocument) => new IdDocumentModel(idDocument))
+    idDocuments.map((idDocument) => {
+      const idDocumentModel = new IdDocumentModel()
+      idDocumentModel.metadata = idDocument.metadata
+      idDocumentModel.documentType = idDocument.documentType
+      idDocumentModel.documentNumber = idDocument.documentNumber
+      idDocumentModel.expirationDate = idDocument.expirationDate
+      idDocumentModel.issueDate = idDocument.issueDate
+      return idDocumentModel
+    })
 }

@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common'
+import { AssociateAPI } from 'defs'
 import { AssociateModel } from '@app/models/company/models/associateModel'
 import { CustomFieldsService } from '../../customFields/services/customFieldsService'
 import { PersonsService } from '@app/models/person/services/personsService'
-import { AssociateInput } from '../dto/associateInput'
 import { CompaniesService } from '@app/models/company/services/companiesService'
 
 @Injectable()
@@ -13,7 +13,7 @@ export class AssociatesService {
     private readonly companiesService: CompaniesService,
   ) {}
 
-  private createPersonsAssociates = async (associates: AssociateInput[]) => {
+  private createPersonsAssociates = async (associates: AssociateAPI[]) => {
     const personsAssociates = associates.filter(({ person }) => !!person?._id)
 
     if (personsAssociates.length) {
@@ -33,7 +33,7 @@ export class AssociatesService {
     return []
   }
 
-  private createCompaniesAssociates = async (associates: AssociateInput[]) => {
+  private createCompaniesAssociates = async (associates: AssociateAPI[]) => {
     const companiesAssociates = associates.filter(({ company }) => !!company?._id)
 
     if (companiesAssociates.length) {
@@ -54,14 +54,14 @@ export class AssociatesService {
     return []
   }
 
-  createAssociatesModels = async (associates: AssociateInput[]) => {
+  createAssociatesModels = async (associates: AssociateAPI[]) => {
     return [
       ...(await this.createPersonsAssociates(associates)),
       ...(await this.createCompaniesAssociates(associates)),
     ]
   }
 
-  private createAssociateModel = (associateInfo: AssociateInput) => {
+  private createAssociateModel = (associateInfo: AssociateAPI) => {
     const associate = new AssociateModel()
     associate.role = associateInfo.role
     associate.startDate = associateInfo.startDate
@@ -71,7 +71,6 @@ export class AssociatesService {
     associate.customFields = this.customFieldsService.createCustomFieldsModels(
       associateInfo.customFields,
     )
-    associate._confirmed = associateInfo._confirmed
     return associate
   }
 }
