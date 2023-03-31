@@ -1,6 +1,8 @@
 import { UseGuards } from '@nestjs/common'
 import { Args, ArgsType, Field, ID, Query, Resolver } from '@nestjs/graphql'
-import { ProceedingsService } from '@app/models/proceeding/services/proceedingsService'
+import { User } from 'defs'
+import { IngressService } from '@app/rpc/microservices/ingress'
+import { CurrentUser } from '../../../users/decorators/currentUser'
 import { FirebaseAuthGuard } from '../../../users/guards/FirebaseAuthGuard'
 import { Proceeding } from '../dto/proceeding'
 
@@ -12,11 +14,18 @@ class Params {
 
 @Resolver(() => Proceeding)
 export class GetProceeding {
-  constructor(private readonly proceedingsService: ProceedingsService) {}
+  constructor(private readonly ingressService: IngressService) {}
 
   @Query(() => Proceeding)
   @UseGuards(FirebaseAuthGuard)
-  async getProceeding(@Args() { proceedingId }: Params) {
-    return this.proceedingsService.getProceeding(proceedingId, true)
+  async getProceeding(@CurrentUser() { _id }: User, @Args() { proceedingId }: Params) {
+    return this.ingressService.getEntity(
+      { entityId: proceedingId, entityType: 'PROCEEDING' },
+      true,
+      {
+        type: 'USER',
+        sourceId: _id,
+      },
+    )
   }
 }

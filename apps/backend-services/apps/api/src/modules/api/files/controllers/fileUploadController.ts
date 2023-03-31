@@ -1,37 +1,45 @@
-import { GlobalEventsService } from '@app/rpc/microservices/globalEvents/globalEventsService'
 import { Controller, Post, UploadedFile, UseInterceptors } from '@nestjs/common'
 import { FileInterceptor } from '@nestjs/platform-express'
-import { FileImporterService } from '@app/files/services/fileImporterService'
-import { FileAPIInput } from 'defs'
+import { FilesManagerService } from '@app/rpc/microservices/filesManager/filesManagerService'
+import { IngressService } from '@app/rpc/microservices/ingress'
+import { FileAPIInput, File } from 'defs'
 
 @Controller()
 export class FileUploadController {
   constructor(
-    private readonly fileImporterService: FileImporterService,
-    private readonly globalEventsService: GlobalEventsService,
+    private readonly filesManagerService: FilesManagerService,
+    private readonly ingressService: IngressService,
   ) {}
 
   @Post('fileUpload')
   @UseInterceptors(FileInterceptor('file'))
   async uploadFile(@UploadedFile() file: Express.Multer.File): Promise<FileAPIInput | void> {
     if (file) {
-      const result = await this.fileImporterService.getFileDocumentFromBuffer(
-        file.buffer,
-        file.mimetype,
-      )
+      const uploadedFile = await this.filesManagerService.uploadFile(file.buffer)
 
-      if (result) {
-        const { fileDocument, created } = result
-
-        if (fileDocument?.fileId) {
-          if (created) {
-            this.globalEventsService.dispatchEntityCreated({
-              entityType: 'FILE',
-              entityId: fileDocument.fileId,
-            })
-          }
-          return fileDocument
+      if (uploadedFile) {
+        const fileModel: File = {
+          fileId: uploadedFile.fileId,
+          hash: uploadedFile.hash,
+          name: '',
+          description: '',
+          mimeType: file.mimetype,
+          isHidden: false,
+          metadata: {
+            access: '',
+            confirmed: true,
+            trustworthiness: {
+              source: '',
+              level: 0,
+            },
+          },
         }
+
+        await this.ingressService.createEntity('FILE', fileModel, {
+          type: 'SERVICE',
+          sourceId: 'SERVICE_API',
+        })
+        return fileModel
       }
     }
   }

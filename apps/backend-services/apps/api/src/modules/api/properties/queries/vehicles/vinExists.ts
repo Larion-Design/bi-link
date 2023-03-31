@@ -1,5 +1,5 @@
+import { IndexerService } from '@app/rpc/microservices/indexer/indexerService'
 import { Args, ArgsType, Field, Query, Resolver } from '@nestjs/graphql'
-import { SearchVehiclesService } from '../../../../search/services/searchVehiclesService'
 import { Property } from '../../dto/property'
 
 @ArgsType()
@@ -13,10 +13,10 @@ class Params {
 
 @Resolver(() => Property)
 export class VinExists {
-  constructor(private readonly searchVehiclesService: SearchVehiclesService) {}
+  constructor(private readonly indexerService: IndexerService) {}
 
   @Query(() => Boolean)
   async vinExists(@Args() { vin, vehicleId }: Params) {
-    return this.searchVehiclesService.vinExists(vin, vehicleId)
+    return this.indexerService.vehicleVINExists(vin, vehicleId)
   }
 }

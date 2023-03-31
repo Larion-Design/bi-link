@@ -1,3 +1,4 @@
+import { IngressService } from '@app/rpc/microservices/ingress'
 import { OnQueueActive, OnQueueCompleted, OnQueueFailed, Process, Processor } from '@nestjs/bull'
 import { Logger } from '@nestjs/common'
 import { Job } from 'bull'
@@ -7,9 +8,9 @@ import {
   FileParentEntity,
   PropertyEventInfo,
 } from '@app/scheduler-module'
+import { Property } from 'defs'
 import { QUEUE_PROPERTIES } from '../../constants'
 import { FileEventDispatcherService } from '../../producers/services/fileEventDispatcherService'
-import { PropertiesService } from '@app/models/property/services/propertiesService'
 import { PropertiesIndexerService } from '../../indexer/services'
 
 @Processor(QUEUE_PROPERTIES)
@@ -17,7 +18,7 @@ export class PropertyIndexEventsConsumer {
   private readonly logger = new Logger(PropertyIndexEventsConsumer.name)
 
   constructor(
-    private readonly propertiesService: PropertiesService,
+    private readonly ingressService: IngressService,
     private readonly propertiesIndexerService: PropertiesIndexerService,
     private readonly fileEventDispatcherService: FileEventDispatcherService,
   ) {}
@@ -70,22 +71,32 @@ export class PropertyIndexEventsConsumer {
   }
 
   private indexPropertyInfo = async (propertyId: string) => {
-    const property = await this.propertiesService.getProperty(propertyId, true)
-    const indexingSuccessful = await this.propertiesIndexerService.indexProperty(
-      propertyId,
-      property,
-    )
+    const property = (await this.ingressService.getEntity(
+      { entityId: propertyId, entityType: 'PROPERTY' },
+      true,
+      {
+        type: 'SERVICE',
+        sourceId: 'SERVICE_INDEXER',
+      },
+    )) as Property
 
-    if (indexingSuccessful) {
-      const filesIds = property.files.map(({ fileId }) => fileId)
+    if (property) {
+      const indexingSuccessful = await this.propertiesIndexerService.indexProperty(
+        propertyId,
+        property,
+      )
 
-      if (filesIds.length) {
-        await this.fileEventDispatcherService.dispatchFilesUpdated(filesIds, {
-          type: FileParentEntity.PROPERTY,
-          id: propertyId,
-        })
+      if (indexingSuccessful) {
+        const filesIds = property.files.map(({ fileId }) => fileId)
+
+        if (filesIds.length) {
+          await this.fileEventDispatcherService.dispatchFilesUpdated(filesIds, {
+            type: FileParentEntity.PROPERTY,
+            id: propertyId,
+          })
+        }
+        return true
       }
-      return true
     }
   }
 }

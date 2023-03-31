@@ -1,5 +1,5 @@
+import { GraphService } from '@app/rpc/microservices/graph/graphService'
 import { Args, ArgsType, Field, Query, Resolver } from '@nestjs/graphql'
-import { SearchPropertiesService } from '../../../search/services/searchPropertiesService'
 import { Property } from '../dto/property'
 import { PropertyListRecord } from '../dto/propertyListRecord'
 
@@ -11,10 +11,10 @@ class Params {
 
 @Resolver(() => Property)
 export class GetPropertiesByPerson {
-  constructor(private readonly searchPropertiesService: SearchPropertiesService) {}
+  constructor(private readonly graphService: GraphService) {}
 
   @Query(() => [PropertyListRecord])
   async getPropertiesByPerson(@Args() { personId }: Params) {
-    return this.searchPropertiesService.getPropertiesByPerson(personId)
+    return []
   }
 }

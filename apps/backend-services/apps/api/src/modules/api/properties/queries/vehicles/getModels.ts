@@ -1,7 +1,7 @@
+import { IndexerService } from '@app/rpc/microservices/indexer/indexerService'
 import { Args, ArgsType, Field, Query, Resolver } from '@nestjs/graphql'
 import { UseGuards } from '@nestjs/common'
 import { FirebaseAuthGuard } from '../../../../users/guards/FirebaseAuthGuard'
-import { SearchVehiclesService } from '../../../../search/services/searchVehiclesService'
 import { Property } from '../../dto/property'
 
 @ArgsType()
@@ -12,11 +12,11 @@ class Params {
 
 @Resolver(() => Property)
 export class GetModels {
-  constructor(private readonly searchVehiclesService: SearchVehiclesService) {}
+  constructor(private readonly indexerService: IndexerService) {}
 
   @Query(() => [String])
   @UseGuards(FirebaseAuthGuard)
   async getModels(@Args() { maker }: Params) {
-    return this.searchVehiclesService.getModels(maker)
+    return []
   }
 }

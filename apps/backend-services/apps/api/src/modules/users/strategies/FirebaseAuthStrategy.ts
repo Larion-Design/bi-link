@@ -5,7 +5,7 @@ import { AuthService } from '../services/AuthService'
 import { passportJwtSecret } from 'jwks-rsa'
 import { ConfigService } from '@nestjs/config'
 import { DecodedIdToken } from 'firebase-admin/lib/auth'
-import { User } from 'defs'
+import { User, UserRole } from 'defs'
 
 @Injectable()
 export class FirebaseAuthStrategy extends PassportStrategy(Strategy, 'firebase') {
@@ -25,7 +25,7 @@ export class FirebaseAuthStrategy extends PassportStrategy(Strategy, 'firebase')
     })
   }
 
-  validate = (user?: DecodedIdToken & { role: string; name: string }): User => {
+  validate = (user?: DecodedIdToken & { role: UserRole; name: string }): User => {
     if (!user?.sub) {
       throw new UnauthorizedException(user)
     }

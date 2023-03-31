@@ -14,17 +14,18 @@ import {
   FileParentEntity,
   PersonEventInfo,
 } from '@app/scheduler-module'
+import { Person } from 'defs'
+import { IngressService } from '@app/rpc/microservices/ingress'
 import { PersonsIndexerService } from '../../indexer/services'
 import { QUEUE_PERSONS } from '../../constants'
 import { FileEventDispatcherService } from '../../producers/services/fileEventDispatcherService'
-import { PersonsService } from '@app/models/person/services/personsService'
 
 @Processor(QUEUE_PERSONS)
 export class PersonIndexEventsConsumer {
   private readonly logger = new Logger(PersonIndexEventsConsumer.name)
 
   constructor(
-    private readonly personsService: PersonsService,
+    private readonly ingressService: IngressService,
     private readonly personsIndexerService: PersonsIndexerService,
     private readonly fileEventDispatcherService: FileEventDispatcherService,
   ) {}
@@ -80,19 +81,29 @@ export class PersonIndexEventsConsumer {
   }
 
   private indexPersonInfo = async (personId: string) => {
-    const person = await this.personsService.find(personId, true)
-    const indexingSuccessful = await this.personsIndexerService.indexPerson(personId, person)
+    const person = (await this.ingressService.getEntity(
+      { entityId: personId, entityType: 'PERSON' },
+      true,
+      {
+        type: 'SERVICE',
+        sourceId: 'SERVICE_INDEXER',
+      },
+    )) as Person
 
-    if (indexingSuccessful) {
-      const filesIds = person.files.map(({ fileId }) => fileId)
+    if (person) {
+      const indexingSuccessful = await this.personsIndexerService.indexPerson(personId, person)
 
-      if (filesIds.length) {
-        await this.fileEventDispatcherService.dispatchFilesUpdated(filesIds, {
-          type: FileParentEntity.PERSON,
-          id: personId,
-        })
+      if (indexingSuccessful) {
+        const filesIds = person.files.map(({ fileId }) => fileId)
+
+        if (filesIds.length) {
+          await this.fileEventDispatcherService.dispatchFilesUpdated(filesIds, {
+            type: FileParentEntity.PERSON,
+            id: personId,
+          })
+        }
+        return true
       }
-      return true
     }
   }
 }

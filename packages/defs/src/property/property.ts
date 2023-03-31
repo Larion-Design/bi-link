@@ -31,7 +31,7 @@ export const propertyAPIOutputSchema = propertySchema.merge(
   }),
 )
 
-export const propertyAPIInputSchema = propertySchema.merge(
+export const propertyAPIInputSchema = propertySchema.omit({ _id: true }).merge(
   z.object({
     files: fileInputSchema.array(),
     images: fileInputSchema.array(),
@@ -39,7 +39,11 @@ export const propertyAPIInputSchema = propertySchema.merge(
   }),
 )
 
-export const propertyListRecordSchema = propertySchema.pick({ _id: true, name: true, type: true })
+export const propertyListRecordSchema = propertyAPIOutputSchema.pick({
+  _id: true,
+  name: true,
+  type: true,
+})
 
 export type Property = z.infer<typeof propertySchema>
 export type PropertyAPIInput = z.infer<typeof propertyAPIInputSchema>

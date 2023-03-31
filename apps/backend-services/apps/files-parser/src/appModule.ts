@@ -1,7 +1,6 @@
-import { CacheModule, Module } from '@nestjs/common'
-import { MongooseModule } from '@nestjs/mongoose'
+import { Module } from '@nestjs/common'
 import { ServiceHealthModule } from '@app/service-health'
-import { ConfigModule, ConfigService } from '@nestjs/config'
+import { ConfigModule } from '@nestjs/config'
 import { ProcessFileController } from './rpc/processFileController'
 import { ParserService } from './services/parserService'
 import { FilesModule } from '@app/files'
@@ -14,17 +13,6 @@ import { FilesModule } from '@app/files'
       isGlobal: true,
       ignoreEnvVars: true,
       cache: true,
-    }),
-    CacheModule.register({
-      isGlobal: true,
-    }),
-    MongooseModule.forRootAsync({
-      imports: [ConfigModule],
-      inject: [ConfigService],
-      useFactory: async (configService: ConfigService) =>
-        Promise.resolve({
-          uri: configService.get<string>('MONGODB_URI'),
-        }),
     }),
   ],
   controllers: [ProcessFileController],

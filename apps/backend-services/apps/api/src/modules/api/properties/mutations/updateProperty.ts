@@ -1,14 +1,11 @@
-import { Args, ArgsType, Field, ID, Mutation, Resolver } from '@nestjs/graphql'
-import { EntityInfo, User, UserActions } from 'defs'
-import { UserActionsService } from '@app/rpc/services/userActionsService'
-import { EntityEventsService } from '@app/rpc/services/entityEventsService'
-import { CurrentUser } from '../../../users/decorators/currentUser'
 import { UseGuards } from '@nestjs/common'
+import { Args, ArgsType, Field, ID, Mutation, Resolver } from '@nestjs/graphql'
+import { EntityInfo, UpdateSource, User } from 'defs'
+import { IngressService } from '@app/rpc/microservices/ingress'
+import { CurrentUser } from '../../../users/decorators/currentUser'
 import { FirebaseAuthGuard } from '../../../users/guards/FirebaseAuthGuard'
 import { PropertyInput } from '../dto/propertyInput'
 import { Property } from '../dto/property'
-import { PropertyAPIService } from '../services/propertyAPIService'
-import { getUnixTime } from 'date-fns'
 
 @ArgsType()
 class Params {
@@ -21,32 +18,27 @@ class Params {
 
 @Resolver(() => Property)
 export class UpdateProperty {
-  constructor(
-    private readonly propertyAPIService: PropertyAPIService,
-    private readonly userActionsService: UserActionsService,
-    private readonly entityEventsService: EntityEventsService,
-  ) {}
+  constructor(private readonly ingressService: IngressService) {}
 
   @Mutation(() => Boolean)
   @UseGuards(FirebaseAuthGuard)
-  async updateProperty(@CurrentUser() { _id }: User, @Args() { propertyId, data }: Params) {
-    const propertyUpdated = await this.propertyAPIService.updateProperty(propertyId, data)
-
-    if (propertyUpdated) {
-      const entityInfo: EntityInfo = {
-        entityId: propertyId,
-        entityType: 'PROPERTY',
-      }
-
-      this.entityEventsService.emitEntityModified(entityInfo)
-
-      this.userActionsService.recordAction({
-        eventType: UserActions.ENTITY_UPDATED,
-        author: _id,
-        timestamp: getUnixTime(new Date()),
-        targetEntityInfo: entityInfo,
-      })
+  async updateProperty(@CurrentUser() { _id, role }: User, @Args() { propertyId, data }: Params) {
+    const entityInfo: EntityInfo = {
+      entityId: propertyId,
+      entityType: 'PROPERTY',
     }
-    return propertyUpdated
+
+    const author: UpdateSource = {
+      type: 'USER',
+      sourceId: _id,
+    }
+
+    if (role === 'ADMIN') {
+      await this.ingressService.createHistorySnapshot(entityInfo, author)
+      return this.ingressService.updateEntity(entityInfo, data, author)
+    } else {
+      await this.ingressService.createPendingSnapshot(entityInfo, data, author)
+      return true
+    }
   }
 }

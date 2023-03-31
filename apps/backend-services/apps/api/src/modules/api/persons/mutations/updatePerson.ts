@@ -1,14 +1,11 @@
+import { IngressService } from '@app/rpc/microservices/ingress'
 import { Args, ArgsType, Field, ID, Mutation, Resolver } from '@nestjs/graphql'
 import { Person } from '../dto/person'
 import { PersonInput } from '../dto/personInput'
-import { PersonAPIService } from '../services/personAPIService'
 import { UseGuards } from '@nestjs/common'
 import { FirebaseAuthGuard } from '../../../users/guards/FirebaseAuthGuard'
-import { UserActionsService } from '@app/rpc/services/userActionsService'
-import { EntityEventsService } from '@app/rpc/services/entityEventsService'
 import { CurrentUser } from '../../../users/decorators/currentUser'
-import { EntityInfo, Role, User, UserActions } from 'defs'
-import { getUnixTime } from 'date-fns'
+import { EntityInfo, UpdateSource, User } from 'defs'
 
 @ArgsType()
 class Params {
@@ -21,44 +18,26 @@ class Params {
 
 @Resolver(() => Person)
 export class UpdatePerson {
-  constructor(
-    private readonly personsService: PersonAPIService,
-    private readonly userActionsService: UserActionsService,
-    private readonly entityEventsService: EntityEventsService,
-  ) {}
+  constructor(private readonly ingressService: IngressService) {}
 
   @Mutation(() => Boolean)
   @UseGuards(FirebaseAuthGuard)
   async updatePerson(@CurrentUser() { _id, role }: User, @Args() { personId, personInfo }: Params) {
-    if (role === Role.ADMIN) {
-      await this.personsService.createHistorySnapshot(personId, {
-        type: 'USER',
-        sourceId: _id,
-      })
+    const entityInfo: EntityInfo = {
+      entityId: personId,
+      entityType: 'PERSON',
+    }
 
-      const updated = await this.personsService.update(personId, personInfo)
+    const author: UpdateSource = {
+      type: 'USER',
+      sourceId: _id,
+    }
 
-      if (updated) {
-        const entityInfo: EntityInfo = {
-          entityId: personId,
-          entityType: 'PERSON',
-        }
-
-        this.entityEventsService.emitEntityModified(entityInfo)
-
-        this.userActionsService.recordAction({
-          eventType: UserActions.ENTITY_UPDATED,
-          author: _id,
-          timestamp: getUnixTime(new Date()),
-          targetEntityInfo: entityInfo,
-        })
-      }
-      return updated
+    if (role === 'ADMIN') {
+      await this.ingressService.createHistorySnapshot(entityInfo, author)
+      return this.ingressService.updateEntity(entityInfo, personInfo, author)
     } else {
-      await this.personsService.createPendingSnapshot(personId, personInfo, {
-        type: 'USER',
-        sourceId: _id,
-      })
+      await this.ingressService.createPendingSnapshot(entityInfo, personInfo, author)
       return true
     }
   }

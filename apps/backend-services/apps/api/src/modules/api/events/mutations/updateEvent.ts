@@ -20,7 +20,7 @@ class UpdateEventArgs {
 export class UpdateEvent {
   constructor(private readonly ingressService: IngressService) {}
 
-  @Mutation(() => String)
+  @Mutation(() => Boolean)
   @UseGuards(FirebaseAuthGuard)
   async updateEvent(
     @CurrentUser() { _id, role }: User,

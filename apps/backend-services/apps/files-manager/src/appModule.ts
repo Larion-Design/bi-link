@@ -1,11 +1,13 @@
+import { RpcModule } from '@app/rpc'
 import { CacheModule, Module } from '@nestjs/common'
 import { MinioModule } from 'nestjs-minio-client'
 import { ConfigModule, ConfigService } from '@nestjs/config'
-import { FileStorageService } from '@app/files/services/fileStorageService'
-import { FileImporterService } from '@app/files/services/fileImporterService'
+import { FileImporterService } from './services/fileImporterService'
+import { FileStorageService } from './services/fileStorageService'
 
 @Module({
   imports: [
+    RpcModule,
     CacheModule.register({
       isGlobal: true,
     }),
@@ -26,4 +28,4 @@ import { FileImporterService } from '@app/files/services/fileImporterService'
   providers: [FileImporterService, FileStorageService],
   exports: [FileImporterService, FileStorageService],
 })
-export class FilesModule {}
+export class AppModule {}

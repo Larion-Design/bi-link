@@ -1,3 +1,4 @@
+import { IngressService } from '@app/rpc/microservices/ingress'
 import {
   EVENT_CREATED,
   EventEventInfo,
@@ -6,9 +7,9 @@ import {
 } from '@app/scheduler-module'
 import { OnQueueActive, OnQueueCompleted, OnQueueFailed, Process, Processor } from '@nestjs/bull'
 import { Logger } from '@nestjs/common'
+import { Event } from 'defs'
 import { FileEventDispatcherService } from '../../producers/services/fileEventDispatcherService'
 import { Job } from 'bull'
-import { EventsService } from '@app/models/event/services/eventsService'
 import { EventsIndexerService } from '../../indexer/services'
 import { QUEUE_EVENTS } from '../../constants'
 
@@ -17,7 +18,7 @@ export class EventIndexEventsConsumer {
   private readonly logger = new Logger(EventIndexEventsConsumer.name)
 
   constructor(
-    private readonly eventsService: EventsService,
+    private readonly ingressService: IngressService,
     private readonly eventsIndexerService: EventsIndexerService,
     private readonly fileEventDispatcherService: FileEventDispatcherService,
   ) {}
@@ -70,19 +71,29 @@ export class EventIndexEventsConsumer {
   }
 
   private indexEventInfo = async (eventId: string) => {
-    const event = await this.eventsService.getEvent(eventId, true)
-    const indexingSuccessful = await this.eventsIndexerService.indexEvent(eventId, event)
+    const event = (await this.ingressService.getEntity(
+      { entityId: eventId, entityType: 'EVENT' },
+      true,
+      {
+        type: 'SERVICE',
+        sourceId: 'SERVICE_INDEXER',
+      },
+    )) as Event
 
-    if (indexingSuccessful) {
-      const filesIds = event.files.map(({ fileId }) => fileId)
+    if (event) {
+      const indexingSuccessful = await this.eventsIndexerService.indexEvent(eventId, event)
 
-      if (filesIds.length) {
-        await this.fileEventDispatcherService.dispatchFilesUpdated(filesIds, {
-          type: FileParentEntity.EVENT,
-          id: eventId,
-        })
+      if (indexingSuccessful) {
+        const filesIds = event.files.map(({ fileId }) => fileId)
+
+        if (filesIds.length) {
+          await this.fileEventDispatcherService.dispatchFilesUpdated(filesIds, {
+            type: FileParentEntity.EVENT,
+            id: eventId,
+          })
+        }
+        return true
       }
-      return true
     }
   }
 }

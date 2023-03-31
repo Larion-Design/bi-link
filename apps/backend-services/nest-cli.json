@@ -132,6 +132,15 @@
       "compilerOptions": {
         "tsConfigPath": "apps/ingress/tsconfig.app.json"
       }
+    },
+    "files-manager": {
+      "type": "application",
+      "root": "apps/files-manager",
+      "entryFile": "main",
+      "sourceRoot": "apps/files-manager/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/files-manager/tsconfig.app.json"
+      }
     }
   }
 }

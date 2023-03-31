@@ -1,13 +1,14 @@
 import { Global, Module } from '@nestjs/common'
 import { ClientsModule, Transport } from '@nestjs/microservices'
+import { ConfigModule, ConfigService } from '@nestjs/config'
+import { MICROSERVICES } from '@app/rpc/constants'
 import { ActivityHistoryService } from '@app/rpc/microservices/activityHistory/activityHistoryService'
 import { GlobalEventsService } from '@app/rpc/microservices/globalEvents/globalEventsService'
 import { GraphService } from '@app/rpc/microservices/graph/graphService'
 import { IndexerService } from '@app/rpc/microservices/indexer/indexerService'
 import { IngressService } from '@app/rpc/microservices/ingress'
-import { MICROSERVICES } from '@app/rpc/constants'
-import { ConfigModule, ConfigService } from '@nestjs/config'
 import { FileParserService } from '@app/rpc/microservices/filesParser/fileParserService'
+import { FilesManagerService } from '@app/rpc/microservices/filesManager/filesManagerService'
 
 @Global()
 @Module({
@@ -44,6 +45,7 @@ import { FileParserService } from '@app/rpc/microservices/filesParser/fileParser
     ActivityHistoryService,
     FileParserService,
     GraphService,
+    FilesManagerService,
   ],
   exports: [
     GlobalEventsService,
@@ -52,6 +54,7 @@ import { FileParserService } from '@app/rpc/microservices/filesParser/fileParser
     ActivityHistoryService,
     FileParserService,
     GraphService,
+    FilesManagerService,
   ],
 })
 export class RpcModule {}

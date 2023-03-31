@@ -59,5 +59,11 @@ export const MICROSERVICES = {
     refreshNodes: 'refreshNodes',
     getEntityRelationships: 'getEntityRelationships',
   },
+  FILES_MANAGER: {
+    id: 'FILES_MANAGER',
+    uploadFile: 'uploadFile',
+    getFileDownloadUrl: 'getFileDownloadUrl',
+    getFilesDownloadUrls: 'getFilesDownloadUrls',
+  },
   OSINT: {},
 }
