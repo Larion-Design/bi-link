@@ -2,7 +2,7 @@ import { z } from 'zod'
 import { customFieldSchema } from '../customField'
 import { optionalDateWithMetadataSchema, textWithMetadataSchema } from '../generic'
 import { nodesRelationshipSchema } from '../graphRelationships'
-import { fileOutputSchema, fileSchema } from '../file'
+import { fileInputSchema, fileOutputSchema, fileSchema } from '../file'
 import { locationSchema } from '../geolocation'
 import { withMetadataSchema } from '../metadata'
 import { withTimestamps } from '../modelTimestamps'
@@ -16,9 +16,9 @@ export const eventSchema = z
     date: optionalDateWithMetadataSchema,
     location: locationSchema.nullable(),
     description: z.string(),
-    parties: z.array(eventParticipantSchema),
-    customFields: z.array(customFieldSchema),
-    files: z.array(fileSchema),
+    parties: eventParticipantSchema.array(),
+    customFields: customFieldSchema.array(),
+    files: fileSchema.array(),
   })
   .merge(withMetadataSchema)
   .merge(withTimestamps)
@@ -27,14 +27,15 @@ export const eventAPIInputSchema = eventSchema
   .omit({ _id: true, createdAt: true, updatedAt: true })
   .merge(
     z.object({
-      parties: z.array(eventParticipantAPISchema),
+      files: fileInputSchema.array(),
+      parties: eventParticipantAPISchema.array(),
     }),
   )
 
 export const eventAPIOutputSchema = eventSchema.merge(
   z.object({
-    files: z.array(fileOutputSchema),
-    parties: z.array(eventParticipantAPISchema),
+    files: fileOutputSchema.array(),
+    parties: eventParticipantAPISchema.array(),
   }),
 )
 

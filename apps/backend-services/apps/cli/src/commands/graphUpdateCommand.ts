@@ -1,8 +1,8 @@
-import { GraphService } from '@app/rpc/services/graphService'
+import { GraphService } from '@app/rpc/microservices/graph/graphService'
 import { Command, CommandRunner, Option } from 'nest-commander'
 
 type CommandOptions = {
-  type: 'persons' | 'companies' | 'properties' | 'events'
+  type: 'persons' | 'companies' | 'properties' | 'events' | 'proceedings'
 }
 
 @Command({
@@ -21,16 +21,19 @@ export class GraphUpdateCommand extends CommandRunner {
 
     switch (type) {
       case 'persons': {
-        return this.graphService.emitEntitiesRefresh('PERSON')
+        return this.graphService.refreshNodes('PERSON')
       }
       case 'companies': {
-        return this.graphService.emitEntitiesRefresh('COMPANY')
+        return this.graphService.refreshNodes('COMPANY')
       }
       case 'properties': {
-        return this.graphService.emitEntitiesRefresh('PROPERTY')
+        return this.graphService.refreshNodes('PROPERTY')
+      }
+      case 'proceedings': {
+        return this.graphService.refreshNodes('PROCEEDING')
       }
       case 'events': {
-        return this.graphService.emitEntitiesRefresh('EVENT')
+        return this.graphService.refreshNodes('EVENT')
       }
     }
     return Promise.reject(

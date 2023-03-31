@@ -1,4 +1,6 @@
 import { EmbeddedFileIndex, ProcessedFileIndex } from '@app/definitions'
+import { FileParserService } from '@app/rpc/microservices/filesParser/fileParserService'
+import { IngressService } from '@app/rpc/microservices/ingress'
 import { FileEventInfo, FileParentEntity } from '@app/scheduler-module'
 import { Injectable, Logger } from '@nestjs/common'
 import { ElasticsearchService } from '@nestjs/elasticsearch'
@@ -10,8 +12,7 @@ import {
   INDEX_PERSONS,
   INDEX_PROPERTIES,
 } from '@app/definitions'
-import { FilesService } from '@app/models'
-import { FileParserService } from '@app/rpc'
+import { File } from 'defs'
 
 @Injectable()
 export class FilesIndexerService {
@@ -21,7 +22,7 @@ export class FilesIndexerService {
   constructor(
     private readonly fileParserService: FileParserService,
     private readonly elasticsearchService: ElasticsearchService,
-    private readonly filesService: FilesService,
+    private readonly ingressService: IngressService,
   ) {}
 
   appendFileContent = async ({ fileId, linkedEntity }: FileEventInfo) => {
@@ -30,34 +31,51 @@ export class FilesIndexerService {
 
       if (!indexedFileContent) {
         const textContent = await this.fileParserService.extractText(fileId)
-        await this.indexFileContent(fileId, textContent)
-        indexedFileContent = textContent
+
+        if (textContent) {
+          await this.indexFileContent(fileId, textContent)
+          indexedFileContent = textContent
+        }
       }
 
       if (linkedEntity) {
         const { id, type } = linkedEntity
-        const { name, description } = await this.filesService.getFile(fileId)
-
-        const docFileContent: EmbeddedFileIndex = {
-          name,
-          description,
-          content: indexedFileContent ?? '',
-        }
-
-        const { result } = await this.elasticsearchService.update({
-          id,
-          index: this.getIndexByEntityType(type),
-          refresh: true,
-          retry_on_conflict: 10,
-          script: {
-            source: 'ctx._source.files.addAll(params.files)',
-            lang: 'painless',
-            params: {
-              files: [docFileContent],
-            },
+        const fileModel = await this.ingressService.getEntity(
+          {
+            entityId: fileId,
+            entityType: 'FILE',
           },
-        })
-        return result === 'updated'
+          false,
+          {
+            type: 'SERVICE',
+            sourceId: 'SERVICE_INDEXER',
+          },
+        )
+
+        if (fileModel) {
+          const { name, description } = fileModel as File
+
+          const docFileContent: EmbeddedFileIndex = {
+            name,
+            description,
+            content: indexedFileContent ?? '',
+          }
+
+          const { result } = await this.elasticsearchService.update({
+            id,
+            index: this.getIndexByEntityType(type),
+            refresh: true,
+            retry_on_conflict: 10,
+            script: {
+              source: 'ctx._source.files.addAll(params.files)',
+              lang: 'painless',
+              params: {
+                files: [docFileContent],
+              },
+            },
+          })
+          return result === 'updated'
+        }
       }
       return true
     } catch (error) {
@@ -88,17 +106,14 @@ export class FilesIndexerService {
       })
 
       if (indexedContentExists) {
-        const {
-          found,
-          _source: { content },
-        } = await this.elasticsearchService.get<ProcessedFileIndex>({
+        const { found, _source } = await this.elasticsearchService.get<ProcessedFileIndex>({
           index: this.index,
           id: fileId,
           _source: ['content'] as Array<keyof ProcessedFileIndex>,
         })
 
-        if (found) {
-          return content
+        if (found && _source?.content) {
+          return _source.content
         }
       }
     } catch (error) {

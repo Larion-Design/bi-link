@@ -1,3 +1,5 @@
-import { ActivityEvent } from 'defs'
+import { z } from 'zod'
+import { activityEventSchema } from 'defs'
 
-export type ActivityEventIndex = Omit<ActivityEvent, '_id'>
+export const activityEventIndexSchema = activityEventSchema.omit({ _id: true })
+export type ActivityEventIndex = z.infer<typeof activityEventIndexSchema>

@@ -23,6 +23,7 @@ export const MICROSERVICES = {
     createHistorySnapshot: 'createHistorySnapshot',
     applyPendingSnapshot: 'applyPendingSnapshot',
     revertHistorySnapshot: 'revertHistorySnapshot',
+    getFileByHash: 'getFileByHash',
   },
   FILES_PARSER: {
     id: 'FILES_PARSER',
@@ -46,6 +47,12 @@ export const MICROSERVICES = {
     reindexEntities: 'reindexEntities',
     createMapping: 'createMapping',
     recordHistoryEvent: 'addHistoryEvent',
+    getFileContent: 'getFileContent',
+    personCNPExists: 'personCNPExists',
+    personIdDocumentExists: 'personIdDocumentExists',
+    companyCUIExists: 'companyCUIExists',
+    companyRegistrationNumberExists: 'companyRegistrationNumberExists',
+    vehicleVINExists: 'vehicleVINExists',
   },
   GRAPH: {
     id: 'GRAPH',

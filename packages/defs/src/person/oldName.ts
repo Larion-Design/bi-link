@@ -9,4 +9,3 @@ export const oldNameSchema = z
   .merge(withMetadataSchema)
 
 export type OldName = z.infer<typeof oldNameSchema>
-export type OldNameAPI = OldName

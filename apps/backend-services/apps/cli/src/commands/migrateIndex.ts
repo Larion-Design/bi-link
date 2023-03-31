@@ -1,10 +1,10 @@
-import { IndexerService } from '@app/rpc'
+import { Command, CommandRunner, Option } from 'nest-commander'
+import { IndexerService } from '@app/rpc/microservices/indexer/indexerService'
 import { Logger } from '@nestjs/common'
 import { EntityType } from 'defs'
-import { Command, CommandRunner, Option } from 'nest-commander'
 
 type CommandOptions = {
-  type: EntityType
+  type: EntityType | 'ACTIVITY_EVENT'
 }
 
 @Command({

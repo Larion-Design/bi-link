@@ -1,7 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common'
-import { ProceedingModel } from '@app/models'
 import { INDEX_PROCEEDINGS, ProceedingIndex } from '@app/definitions'
 import { ElasticsearchService } from '@nestjs/elasticsearch'
+import { Proceeding } from 'defs'
 import { ConnectedEntityIndexerService } from './connectedEntityIndexerService'
 
 @Injectable()
@@ -14,7 +14,7 @@ export class ProceedingsIndexerService {
     private readonly connectedEntityIndexerService: ConnectedEntityIndexerService,
   ) {}
 
-  indexProceeding = async (proceedingId: string, proceedingModel: ProceedingModel) => {
+  indexProceeding = async (proceedingId: string, proceedingModel: Proceeding) => {
     try {
       const { _id } = await this.elasticsearchService.index<ProceedingIndex>({
         index: this.index,
@@ -30,7 +30,7 @@ export class ProceedingsIndexerService {
     }
   }
 
-  private createIndexData = (proceedingModel: ProceedingModel) => ({
+  private createIndexData = (proceedingModel: Proceeding) => ({
     name: proceedingModel.name,
     type: proceedingModel.type,
     fileNumber: proceedingModel.fileNumber,

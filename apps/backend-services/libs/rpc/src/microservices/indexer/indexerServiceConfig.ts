@@ -1,11 +1,12 @@
 import { z } from 'zod'
 import {
+  activityEventInputSchema,
   activityEventSchema,
   companyListRecordSchema,
   entityInfoSchema,
   entityTypeSchema,
   eventListRecordSchema,
-  personListRecord,
+  personListRecordSchema,
   proceedingListRecord,
   propertyListRecordSchema,
 } from 'defs'
@@ -25,7 +26,7 @@ export const indexerInterfaceSchema = z.object({
       z.object({
         total: z.number(),
         records: z.union([
-          personListRecord,
+          personListRecordSchema,
           companyListRecordSchema,
           propertyListRecordSchema,
           proceedingListRecord,
@@ -37,7 +38,7 @@ export const indexerInterfaceSchema = z.object({
   indexEntity: z.function().args(entityInfoSchema),
   reindexEntities: z.function().args(entityTypeSchema),
   createMapping: z.function().args(z.union([entityTypeSchema, z.literal('ACTIVITY_EVENT')])),
-  recordHistoryEvent: z.function().args(activityEventSchema),
+  recordHistoryEvent: z.function().args(activityEventInputSchema),
 
   personCNPExists: z
     .function()
@@ -98,6 +99,8 @@ export const indexerInterfaceSchema = z.object({
       }),
     )
     .returns(activityEventSchema.array()),
+
+  getFileContent: z.function().args(z.string().nonempty()).returns(z.string()),
 })
 
 export type IndexerServiceMethods = z.infer<typeof indexerInterfaceSchema>

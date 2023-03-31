@@ -1,7 +1,7 @@
 import { PropertyEventInfo, PropertyEventSchedulerService } from '@app/scheduler-module'
 import { Injectable } from '@nestjs/common'
 import { InjectQueue } from '@nestjs/bull'
-import { QUEUE_PROPERTIES } from '../constants'
+import { QUEUE_PROPERTIES } from '../../constants'
 import { Queue } from 'bull'
 
 @Injectable()

@@ -1,25 +1,40 @@
-import { Property, PropertyListRecord, RealEstateInfo, VehicleInfo } from 'defs'
+import { z } from 'zod'
+import { propertySchema, realEstateSchema, vehicleOwnerSchema, vehicleSchema } from 'defs'
 import {
-  ConnectedCompanyIndex,
-  ConnectedPersonIndex,
-  EmbeddedFileIndex,
-  LocationIndex,
+  connectedCompanyIndexSchema,
+  connectedPersonIndexSchema,
+  customFieldIndexSchema,
+  embeddedFileIndexSchema,
+  locationIndexSchema,
 } from '@app/definitions'
 
-export interface PropertyIndex extends Pick<Property, 'name' | 'type' | 'customFields'> {
-  personsOwners: ConnectedPersonIndex[]
-  companiesOwners: ConnectedCompanyIndex[]
-  files: EmbeddedFileIndex[]
-  vehicleInfo?: VehicleInfoIndex
-  realEstateInfo?: RealEstateInfoIndex
-}
+export const vehicleIndexSchema = z.object({
+  vin: vehicleSchema.shape.vin.shape.value,
+  model: vehicleSchema.shape.model.shape.value,
+  maker: vehicleSchema.shape.maker.shape.value,
+  plateNumbers: vehicleOwnerSchema.shape.plateNumbers,
+})
 
-export interface VehicleInfoIndex extends VehicleInfo {
-  plateNumbers: string[]
-}
+export const realEstateIndex = z.object({
+  surface: realEstateSchema.shape.surface.shape.value,
+  townArea: realEstateSchema.shape.townArea.shape.value,
+  location: locationIndexSchema,
+})
 
-export interface RealEstateInfoIndex extends Omit<RealEstateInfo, 'location' | 'townArea'> {
-  location: LocationIndex
-}
+export const propertyIndexSchema = propertySchema.pick({ name: true, type: true }).merge(
+  z.object({
+    files: embeddedFileIndexSchema.array(),
+    vehicleInfo: vehicleIndexSchema.optional(),
+    realEstateInfo: realEstateIndex.optional(),
+    personsOwners: connectedPersonIndexSchema.array(),
+    companiesOwners: connectedCompanyIndexSchema.array(),
+    customFields: customFieldIndexSchema.array(),
+  }),
+)
 
-export interface PropertySearchIndex extends Pick<PropertyListRecord, 'name' | 'type'> {}
+export const propertySearchIndexSchema = propertyIndexSchema.pick({ name: true, type: true })
+
+export type VehicleInfoIndex = z.infer<typeof vehicleIndexSchema>
+export type RealEstateInfoIndex = z.infer<typeof realEstateIndex>
+export type PropertyIndex = z.infer<typeof propertyIndexSchema>
+export type PropertySearchIndex = z.infer<typeof propertySearchIndexSchema>

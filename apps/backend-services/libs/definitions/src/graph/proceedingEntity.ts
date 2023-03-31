@@ -1,6 +1,10 @@
-import { RelationshipMetadata } from 'defs'
-import { ProceedingEntity } from '../../../../apps/api/src/modules/api/proceedings/dto/proceedingEntity'
+import { z } from 'zod'
+import { nodesRelationshipSchema } from 'defs'
 
-export interface ProceedingEntityRelationship
-  extends RelationshipMetadata,
-    Pick<ProceedingEntity, 'involvedAs'> {}
+export const proceedingEntityRelationshipSchema = z
+  .object({
+    involvedAs: z.string(),
+  })
+  .merge(nodesRelationshipSchema)
+
+export type ProceedingEntityRelationship = z.infer<typeof proceedingEntityRelationshipSchema>

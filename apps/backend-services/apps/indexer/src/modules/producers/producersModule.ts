@@ -17,7 +17,7 @@ import {
   QUEUE_PROPERTIES,
   QUEUE_REPORTS,
   QUEUE_PROCEEDINGS,
-} from './constants'
+} from '../constants'
 import { PropertyEventDispatcherService } from './services/propertyEventDispatcherService'
 import { ReportEventDispatcherService } from './services/reportEventDispatcherService'
 

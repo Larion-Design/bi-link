@@ -8,25 +8,26 @@ import {
 } from '@nestjs/bull'
 import { Job } from 'bull'
 import { Logger } from '@nestjs/common'
+import { Company } from 'defs'
+import { IngressService } from '@app/rpc/microservices/ingress'
 import {
   CompanyEventInfo,
   EVENT_CREATED,
   EVENT_UPDATED,
   FileParentEntity,
 } from '@app/scheduler-module'
-import { QUEUE_COMPANIES } from '../../producers/constants'
+import { QUEUE_COMPANIES } from '../../constants'
 import { FileEventDispatcherService } from '../../producers/services/fileEventDispatcherService'
 import { CompaniesIndexerService } from '../../indexer/services'
-import { CompaniesService } from '@app/models/company/services/companiesService'
 
 @Processor(QUEUE_COMPANIES)
 export class CompanyIndexEventsConsumer {
   private readonly logger = new Logger(CompanyIndexEventsConsumer.name)
 
   constructor(
-    private readonly companiesService: CompaniesService,
     private readonly companiesIndexerService: CompaniesIndexerService,
     private readonly fileEventDispatcherService: FileEventDispatcherService,
+    private readonly ingressService: IngressService,
   ) {}
 
   @OnQueueActive()
@@ -80,19 +81,29 @@ export class CompanyIndexEventsConsumer {
   }
 
   private indexCompanyInfo = async (companyId: string) => {
-    const company = await this.companiesService.getCompany(companyId, false)
-    const indexingSuccessful = await this.companiesIndexerService.indexCompany(companyId, company)
+    const company = (await this.ingressService.getEntity(
+      { entityId: companyId, entityType: 'COMPANY' },
+      true,
+      {
+        type: 'SERVICE',
+        sourceId: 'SERVICE_INDEXER',
+      },
+    )) as Company
 
-    if (indexingSuccessful) {
-      const filesIds = company.files.map(({ fileId }) => fileId)
+    if (company) {
+      const indexingSuccessful = await this.companiesIndexerService.indexCompany(companyId, company)
 
-      if (filesIds.length) {
-        await this.fileEventDispatcherService.dispatchFilesUpdated(filesIds, {
-          type: FileParentEntity.COMPANY,
-          id: companyId,
-        })
+      if (indexingSuccessful) {
+        const filesIds = company.files.map(({ fileId }) => fileId)
+
+        if (filesIds.length) {
+          await this.fileEventDispatcherService.dispatchFilesUpdated(filesIds, {
+            type: FileParentEntity.COMPANY,
+            id: companyId,
+          })
+        }
+        return true
       }
-      return true
     }
   }
 }

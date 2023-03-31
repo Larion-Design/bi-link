@@ -4,7 +4,7 @@ import { CompaniesService } from '@app/models/company/services/companiesService'
 import { OnQueueActive, OnQueueCompleted, OnQueueFailed, Process, Processor } from '@nestjs/bull'
 import { QUEUE_GRAPH_COMPANIES } from '../producers/constants'
 import { CompanyEventInfo, EVENT_CREATED, EVENT_UPDATED } from '@app/scheduler-module'
-import { CompanyGraphService } from './services/companyGraphService'
+import { CompanyGraphService } from '../graph/services/companyGraphService'
 
 @Processor(QUEUE_GRAPH_COMPANIES)
 export class CompanyEventConsumer {

@@ -1,7 +1,7 @@
 import { Args, ArgsType, Field, ID, Query, Resolver } from '@nestjs/graphql'
-import { SearchCompaniesService } from '../../../search/services/searchCompaniesService'
-import { Company } from '../dto/company'
 import { UseGuards } from '@nestjs/common'
+import { IndexerService } from '@app/rpc/microservices/indexer/indexerService'
+import { Company } from '../dto/company'
 import { FirebaseAuthGuard } from '../../../users/guards/FirebaseAuthGuard'
 
 @ArgsType()
@@ -15,11 +15,11 @@ class Params {
 
 @Resolver(() => Company)
 export class CompanyCUIExists {
-  constructor(private readonly searchCompaniesService: SearchCompaniesService) {}
+  constructor(private readonly indexerService: IndexerService) {}
 
   @Query(() => Boolean)
   @UseGuards(FirebaseAuthGuard)
   async companyCUIExists(@Args() { companyId, cui }: Params) {
-    return this.searchCompaniesService.cuiExists(cui, companyId)
+    return this.indexerService.companyCUIExists(cui, companyId)
   }
 }

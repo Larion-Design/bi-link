@@ -1,6 +1,6 @@
 import { z } from 'zod'
 import { companyListRecordSchema, graphCompanyAssociateSchema } from './company'
-import { entityInfoSchema, entityTypeSchema } from './entity'
+import { entityInfoSchema } from './entity'
 import { eventListRecordSchema, graphEventParticipantSchema } from './event'
 import { locationSchema } from './geolocation'
 import { graphPersonalRelationship, personListRecordWithImage } from './person'
@@ -72,7 +72,7 @@ export const graphSchema = z.object({
   entities: graphEntitiesSchema,
 })
 
-export type GraphNode = z.infer<typeof entityTypeSchema>
+export type GraphNode = z.infer<typeof entityInfoSchema>
 export type Graph = z.infer<typeof graphSchema>
 export type GraphRelationships = z.infer<typeof graphRelationshipsSchema>
 export type GraphEntities = z.infer<typeof graphEntitiesSchema>

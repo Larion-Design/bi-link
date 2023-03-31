@@ -1,4 +1,4 @@
-import { EntityInfo, MICROSERVICES } from '@app/rpc'
+import { MICROSERVICES } from '@app/rpc'
 import { Controller } from '@nestjs/common'
 import {
   INDEX_COMPANIES,

@@ -1,6 +1,8 @@
-import { RelationshipMetadata } from 'defs'
+import { z } from 'zod'
+import { relationshipSchema, nodesRelationshipSchema } from 'defs'
 
-export interface PersonalRelationshipGraph extends RelationshipMetadata {
-  type: string
-  proximity: number
-}
+export const personalRelationshipSchema = relationshipSchema
+  .pick({ type: true, proximity: true })
+  .merge(nodesRelationshipSchema)
+
+export type PersonalRelationshipGraph = z.infer<typeof personalRelationshipSchema>

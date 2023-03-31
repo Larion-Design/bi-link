@@ -4,7 +4,7 @@ import { Job } from 'bull'
 import { OnQueueActive, OnQueueCompleted, OnQueueFailed, Process, Processor } from '@nestjs/bull'
 import { QUEUE_GRAPH_EVENTS } from '../producers/constants'
 import { EVENT_CREATED, EVENT_UPDATED, EventEventInfo } from '@app/scheduler-module'
-import { EventGraphService } from './services/eventGraphService'
+import { EventGraphService } from '../graph/services/eventGraphService'
 
 @Processor(QUEUE_GRAPH_EVENTS)
 export class EventConsumer {

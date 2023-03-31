@@ -1,7 +1,14 @@
-import { EntityMetadata, Person } from 'defs'
+import { z } from 'zod'
+import { graphRelationshipMetadataSchema, personSchema } from 'defs'
 
-export interface PersonGraphNode extends EntityMetadata, Required<Pick<Person, '_id' | 'cnp'>> {
-  firstName: string
-  lastName: string
-  documents: string[]
-}
+export const personGraphSchema = z
+  .object({
+    cnp: personSchema.shape.cnp.shape.value,
+    firstName: personSchema.shape.firstName.shape.value,
+    lastName: personSchema.shape.lastName.shape.value,
+    documents: z.string().array(),
+  })
+  .merge(graphRelationshipMetadataSchema)
+  .merge(personSchema.pick({ _id: true }))
+
+export type PersonGraphNode = z.infer<typeof personGraphSchema>

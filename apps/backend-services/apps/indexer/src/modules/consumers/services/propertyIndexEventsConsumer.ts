@@ -7,7 +7,7 @@ import {
   FileParentEntity,
   PropertyEventInfo,
 } from '@app/scheduler-module'
-import { QUEUE_PROPERTIES } from '../../producers/constants'
+import { QUEUE_PROPERTIES } from '../../constants'
 import { FileEventDispatcherService } from '../../producers/services/fileEventDispatcherService'
 import { PropertiesService } from '@app/models/property/services/propertiesService'
 import { PropertiesIndexerService } from '../../indexer/services'

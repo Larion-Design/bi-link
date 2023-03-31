@@ -1,6 +1,8 @@
 import { Args, ArgsType, Field, Query, Resolver } from '@nestjs/graphql'
 import { UseGuards } from '@nestjs/common'
-import { FilesService } from '@app/models/file/services/filesService'
+import { User } from 'defs'
+import { IngressService } from '@app/rpc/microservices/ingress'
+import { CurrentUser } from '../../../users/decorators/currentUser'
 import { FirebaseAuthGuard } from '../../../users/guards/FirebaseAuthGuard'
 import { File } from '../dto/file'
 
@@ -12,11 +14,21 @@ class Params {
 
 @Resolver(() => File)
 export class GetFileInfo {
-  constructor(private readonly filesService: FilesService) {}
+  constructor(private readonly ingressService: IngressService) {}
 
   @Query(() => File)
   @UseGuards(FirebaseAuthGuard)
-  async getFileInfo(@Args() { fileId }: Params) {
-    return this.filesService.getFile(fileId)
+  async getFileInfo(@CurrentUser() { _id }: User, @Args() { fileId }: Params) {
+    return this.ingressService.getEntity(
+      {
+        entityId: fileId,
+        entityType: 'FILE',
+      },
+      false,
+      {
+        sourceId: _id,
+        type: 'USER',
+      },
+    )
   }
 }

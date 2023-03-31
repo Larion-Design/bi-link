@@ -4,7 +4,7 @@ import { OnQueueActive, OnQueueCompleted, OnQueueFailed, Process, Processor } fr
 import { QUEUE_GRAPH_PROPERTIES } from '../producers/constants'
 import { EVENT_CREATED, EVENT_UPDATED, PropertyEventInfo } from '@app/scheduler-module'
 import { PropertiesService } from '@app/models/property/services/propertiesService'
-import { PropertyGraphService } from './services/propertyGraphService'
+import { PropertyGraphService } from '../graph/services/propertyGraphService'
 
 @Processor(QUEUE_GRAPH_PROPERTIES)
 export class PropertyEventConsumer {

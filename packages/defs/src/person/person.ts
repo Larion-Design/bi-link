@@ -1,6 +1,6 @@
 import { z } from 'zod'
 import { customFieldSchema } from '../customField'
-import { fileOutputSchema, fileSchema } from '../file'
+import { fileInputSchema, fileOutputSchema, fileSchema } from '../file'
 import { optionalDateWithMetadataSchema, textWithMetadataSchema } from '../generic'
 import { locationSchema } from '../geolocation'
 import { withMetadataSchema } from '../metadata'
@@ -39,26 +39,36 @@ export const personAPIOutputSchema = personSchema.merge(
   }),
 )
 
-export const personAPIInputSchema = personSchema.omit({
-  _id: true,
-  createdAt: true,
-  updatedAt: true,
-})
+export const personAPIInputSchema = personSchema
+  .omit({
+    _id: true,
+    createdAt: true,
+    updatedAt: true,
+  })
+  .merge(
+    z.object({
+      files: fileInputSchema.array(),
+      images: fileInputSchema.array(),
+    }),
+  )
 
-export const personListRecordSchema = personSchema.pick({
-  _id: true,
-  firstName: true,
-  lastName: true,
-  cnp: true,
-})
+export const personListRecordSchema = personSchema
+  .pick({
+    _id: true,
+  })
+  .merge(
+    z.object({
+      firstName: personSchema.shape.firstName.shape.value,
+      lastName: personSchema.shape.lastName.shape.value,
+      cnp: personSchema.shape.cnp.shape.value,
+    }),
+  )
 
-export const personListRecordWithImage = personSchema.pick({
-  _id: true,
-  firstName: true,
-  lastName: true,
-  cnp: true,
-  images: true,
-})
+export const personListRecordWithImage = personListRecordSchema.merge(
+  z.object({
+    images: personAPIOutputSchema.shape.images,
+  }),
+)
 
 export type Person = z.infer<typeof personSchema>
 export type PersonListRecord = z.infer<typeof personListRecordSchema>

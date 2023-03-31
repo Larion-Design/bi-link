@@ -1,5 +1,7 @@
+import { IngressService } from '@app/rpc/microservices/ingress'
 import { Args, ArgsType, Field, ID, Query, Resolver } from '@nestjs/graphql'
-import { EventsService } from '@app/models/event/services/eventsService'
+import { User } from 'defs'
+import { CurrentUser } from '../../../users/decorators/currentUser'
 import { Event } from '../dto/event'
 import { UseGuards } from '@nestjs/common'
 import { FirebaseAuthGuard } from '../../../users/guards/FirebaseAuthGuard'
@@ -12,11 +14,14 @@ class Params {
 
 @Resolver(() => Event)
 export class GetEvent {
-  constructor(private readonly eventsService: EventsService) {}
+  constructor(private readonly ingressService: IngressService) {}
 
   @Query(() => Event)
   @UseGuards(FirebaseAuthGuard)
-  async getEvent(@Args() { eventId }: Params) {
-    return this.eventsService.getEvent(eventId, true)
+  async getEvent(@CurrentUser() { _id }: User, @Args() { eventId }: Params) {
+    return this.ingressService.getEntity({ entityId: eventId, entityType: 'EVENT' }, true, {
+      type: 'USER',
+      sourceId: _id,
+    })
   }
 }

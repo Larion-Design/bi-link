@@ -1,17 +1,28 @@
-import { MappingHelperService, MappingInterface } from './index'
 import { Injectable } from '@nestjs/common'
 import { MappingProperty } from '@elastic/elasticsearch/lib/api/types'
-import { ActivityEventIndex } from 'defs'
+import { ActivityEvent } from 'defs'
+import { MappingHelperService, MappingInterface } from './index'
 
 @Injectable()
-export class HistoryMappingService implements MappingInterface<ActivityEventIndex> {
+export class HistoryMappingService implements MappingInterface<ActivityEvent> {
   constructor(private readonly mappingHelperService: MappingHelperService) {}
 
-  getMapping = (): Record<keyof ActivityEventIndex, MappingProperty> => ({
+  getMapping = (): Record<keyof ActivityEvent | string, MappingProperty> => ({
     timestamp: this.mappingHelperService.timestamp,
     eventType: this.mappingHelperService.keywordField,
-    author: this.mappingHelperService.keywordField,
-    target: this.mappingHelperService.keywordField,
-    targetType: this.mappingHelperService.keywordField,
+    targetEntityInfo: {
+      type: 'nested',
+      properties: {
+        entityId: this.mappingHelperService.keywordField,
+        entityType: this.mappingHelperService.keywordField,
+      },
+    },
+    author: {
+      type: 'nested',
+      properties: {
+        type: this.mappingHelperService.keywordField,
+        sourceId: this.mappingHelperService.keywordField,
+      },
+    },
   })
 }

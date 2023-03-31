@@ -1,5 +1,4 @@
 import { z } from 'zod'
-import { dateSchema } from '../date'
 import {
   booleanWithMetadataSchema,
   numberWithMetadataSchema,
@@ -33,7 +32,10 @@ export const associateAPISchema = associateSchema.merge(
 )
 
 export const graphCompanyAssociateSchema = nodesRelationshipSchema.merge(
-  associateSchema.pick({ role: true, equity: true }),
+  z.object({
+    role: associateSchema.shape.role.shape.value,
+    equity: associateSchema.shape.equity.shape.value,
+  }),
 )
 
 export type Associate = z.infer<typeof associateSchema>

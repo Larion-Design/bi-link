@@ -1,5 +1,11 @@
-import { Coordinates, EntityMetadata } from 'defs'
+import { z } from 'zod'
+import { coordinatesSchema, nodeMetadataSchema } from 'defs'
 
-export interface LocationGraphNode extends EntityMetadata, Partial<Coordinates> {
-  address: string
-}
+export const locationGraphSchema = z
+  .object({
+    address: z.string(),
+  })
+  .merge(coordinatesSchema.partial())
+  .merge(nodeMetadataSchema)
+
+export type LocationGraphNode = z.infer<typeof locationGraphSchema>

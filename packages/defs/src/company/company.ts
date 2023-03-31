@@ -1,6 +1,6 @@
 import { z } from 'zod'
 import { customFieldSchema } from '../customField'
-import { fileOutputSchema, fileSchema } from '../file'
+import { fileInputSchema, fileOutputSchema, fileSchema } from '../file'
 import { textWithMetadataSchema } from '../generic'
 import { locationSchema } from '../geolocation'
 import { withMetadataSchema } from '../metadata'
@@ -15,32 +15,38 @@ export const companySchema = z
     name: textWithMetadataSchema,
     headquarters: locationSchema.nullable(),
     registrationNumber: textWithMetadataSchema,
-    contactDetails: z.array(customFieldSchema),
-    locations: z.array(locationSchema),
-    associates: z.array(associateSchema),
-    customFields: z.array(customFieldSchema),
-    files: z.array(fileSchema),
+    contactDetails: customFieldSchema.array(),
+    locations: locationSchema.array(),
+    associates: associateSchema.array(),
+    customFields: customFieldSchema.array(),
+    files: fileSchema.array(),
   })
   .merge(withMetadataSchema)
   .merge(withTimestamps)
 
-export const companyListRecordSchema = companySchema.pick({
-  _id: true,
-  name: true,
-  registrationNumber: true,
-  cui: true,
-})
+export const companyListRecordSchema = companySchema
+  .pick({
+    _id: true,
+  })
+  .merge(
+    z.object({
+      name: companySchema.shape.name.shape.value,
+      registrationNumber: companySchema.shape.registrationNumber.shape.value,
+      cui: companySchema.shape.cui.shape.value,
+    }),
+  )
 
 const companyAPIOutputSchema = companySchema.merge(
   z.object({
-    associates: z.array(associateAPISchema),
-    files: z.array(fileOutputSchema),
+    associates: associateAPISchema.array(),
+    files: fileOutputSchema.array(),
   }),
 )
 
 export const companyAPIInputSchema = companySchema.omit({ _id: true }).merge(
   z.object({
-    associates: z.array(associateAPISchema),
+    associates: associateAPISchema.array(),
+    files: fileInputSchema.array(),
   }),
 )
 

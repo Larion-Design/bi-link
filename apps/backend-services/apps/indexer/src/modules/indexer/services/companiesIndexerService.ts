@@ -1,10 +1,8 @@
 import { CompanyIndex, ConnectedCompanyIndex, ConnectedPersonIndex } from '@app/definitions'
 import { Injectable, Logger } from '@nestjs/common'
 import { ElasticsearchService } from '@nestjs/elasticsearch'
-import { CompanyModel } from '@app/models'
-import { AssociateModel } from '@app/models'
 import { INDEX_COMPANIES } from '@app/definitions'
-import { CompaniesService } from '@app/models'
+import { Associate, Company } from 'defs'
 import { ConnectedEntityIndexerService } from './connectedEntityIndexerService'
 import { LocationIndexerService } from './locationIndexerService'
 
@@ -15,12 +13,11 @@ export class CompaniesIndexerService {
 
   constructor(
     private readonly elasticsearchService: ElasticsearchService,
-    private readonly companiesService: CompaniesService,
     private readonly connectedEntityIndexerService: ConnectedEntityIndexerService,
     private readonly locationIndexerService: LocationIndexerService,
   ) {}
 
-  indexCompany = async (companyId: string, companyModel: CompanyModel) => {
+  indexCompany = async (companyId: string, companyModel: Company) => {
     try {
       const { _id } = await this.elasticsearchService.index<CompanyIndex>({
         index: this.index,
@@ -35,13 +32,13 @@ export class CompaniesIndexerService {
     }
   }
 
-  private createIndexData = (company: CompanyModel): CompanyIndex => ({
+  private createIndexData = (company: Company): CompanyIndex => ({
     name: company.name,
     cui: company.cui,
     registrationNumber: company.registrationNumber,
     headquarters: company.headquarters
       ? this.locationIndexerService.createLocationIndexData(company.headquarters)
-      : null,
+      : undefined,
     customFields: company.customFields,
     contactDetails: company.contactDetails,
     locations: this.locationIndexerService.createLocationsIndexData(company.locations),
@@ -50,14 +47,12 @@ export class CompaniesIndexerService {
     files: [],
   })
 
-  private createAssociatedPersonsIndex = (associates: AssociateModel[]): ConnectedPersonIndex[] =>
+  private createAssociatedPersonsIndex = (associates: Associate[]): ConnectedPersonIndex[] =>
     associates
       .filter(({ person }) => !!person)
       .map(({ person }) => this.connectedEntityIndexerService.createConnectedPersonIndex(person))
 
-  private createAssociatedCompaniesIndex = (
-    associates: AssociateModel[],
-  ): ConnectedCompanyIndex[] =>
+  private createAssociatedCompaniesIndex = (associates: Associate[]): ConnectedCompanyIndex[] =>
     associates
       .filter(({ company }) => !!company)
       .map(({ company }) => this.connectedEntityIndexerService.createConnectedCompanyIndex(company))

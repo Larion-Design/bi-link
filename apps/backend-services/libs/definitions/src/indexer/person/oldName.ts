@@ -1,3 +1,5 @@
-import { OldName } from 'defs'
+import { z } from 'zod'
+import { oldNameSchema } from 'defs'
 
-export interface OldNameIndex extends OldName {}
+export const oldNameIndexSchema = oldNameSchema.omit({ metadata: true })
+export type OldNameIndex = z.infer<typeof oldNameIndexSchema>

@@ -12,12 +12,14 @@ import { ProducersModule } from './modules/producers/producersModule'
 import { RpcModule } from '@app/rpc'
 import { EntityEventsRPCController } from './modules/rpc/entityEventsRPCController'
 import { MappingRPCController } from './modules/rpc/mappingRPCController'
+import { SearchModule } from './modules/search/searchModule'
 
 @Module({
   imports: [
     EntitiesModule,
     MappingModule,
     IndexerModule,
+    SearchModule,
     ProducersModule,
     ConsumersModule,
     ServiceHealthModule,

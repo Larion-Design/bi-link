@@ -4,9 +4,7 @@ import {
   ConnectedPropertyIndex,
 } from '@app/definitions'
 import { Injectable } from '@nestjs/common'
-import { PersonDocument } from '@app/models'
-import { CompanyDocument } from '@app/models'
-import { PropertyDocument } from '@app/models'
+import { Company, Person, Property } from 'defs'
 
 @Injectable()
 export class ConnectedEntityIndexerService {
@@ -16,7 +14,7 @@ export class ConnectedEntityIndexerService {
     lastName,
     cnp,
     documents,
-  }: PersonDocument): ConnectedPersonIndex => ({
+  }: Person): ConnectedPersonIndex => ({
     _id: String(_id),
     firstName: firstName,
     lastName: lastName,
@@ -29,7 +27,7 @@ export class ConnectedEntityIndexerService {
     name,
     cui,
     registrationNumber,
-  }: CompanyDocument): ConnectedCompanyIndex => ({
+  }: Company): ConnectedCompanyIndex => ({
     _id: String(_id),
     name,
     cui,
@@ -41,7 +39,7 @@ export class ConnectedEntityIndexerService {
     type,
     vehicleInfo,
     owners,
-  }: PropertyDocument): ConnectedPropertyIndex => {
+  }: Property): ConnectedPropertyIndex => {
     const propertyIndex: ConnectedPropertyIndex = {
       _id: String(_id),
       type,

@@ -1,8 +1,16 @@
-import { EntityMetadata, Property } from 'defs'
+import { z } from 'zod'
+import { nodeMetadataSchema, propertySchema, vehicleOwnerSchema, vehicleSchema } from 'defs'
 
-export interface PropertyGraphNode
-  extends Required<Pick<Property, 'type' | 'name'>>,
-    EntityMetadata {
-  vin?: string
-  plateNumbers?: string[]
-}
+const propertyGraphSchema = propertySchema
+  .pick({ type: true, name: true })
+  .merge(
+    z.object({
+      type: propertySchema.shape.type,
+      name: propertySchema.shape.name,
+      vin: vehicleSchema.shape.vin.shape.value,
+      plateNumbers: vehicleOwnerSchema.shape.plateNumbers,
+    }),
+  )
+  .merge(nodeMetadataSchema)
+
+export type PropertyGraphNode = z.infer<typeof propertyGraphSchema>

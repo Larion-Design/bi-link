@@ -1,7 +1,9 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "declaration": true,
+    "declaration": false,
+    "strict": true,
+    "strictNullChecks": true,
     "outDir": "../../dist/libs/scheduler-module"
   },
   "include": ["src/**/*"],

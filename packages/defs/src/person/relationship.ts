@@ -15,7 +15,7 @@ export const relationshipSchema = z
 
 export const graphPersonalRelationship = nodesRelationshipSchema.merge(
   z.object({
-    type: z.string(),
+    type: relationshipSchema.shape.type,
   }),
 )
 

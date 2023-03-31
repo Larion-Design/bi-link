@@ -1,5 +1,10 @@
-import { EntityMetadata } from 'defs'
+import { z } from 'zod'
+import { eventSchema, nodeMetadataSchema } from 'defs'
 
-export interface EventGraphNode extends EntityMetadata {
-  date: string
-}
+export const eventGraphSchema = z
+  .object({
+    date: eventSchema.shape.date.shape.value,
+  })
+  .merge(nodeMetadataSchema)
+
+export type EventGraphNode = z.infer<typeof eventGraphSchema>

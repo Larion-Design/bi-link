@@ -35,33 +35,150 @@ export class IndexerService {
     }
   }
 
-  indexEntity(entityEventInfo: EntityInfo) {
+  indexEntity = (entityEventInfo: EntityInfo) => {
     try {
-      this.client.emit(MICROSERVICES.INDEXER.indexEntity, entityEventInfo)
+      type Params = Parameters<IndexerServiceMethods['indexEntity']>[0]
+      type Result = ReturnType<IndexerServiceMethods['indexEntity']>
+
+      this.client.emit<Result, Params>(MICROSERVICES.INDEXER.indexEntity, entityEventInfo)
     } catch (e) {
       this.logger.error(e)
     }
   }
 
-  reindexEntities(entityType: EntityType) {
+  reindexEntities = (entityType: EntityType) => {
     try {
-      this.client.emit(MICROSERVICES.INDEXER.reindexEntities, entityType)
+      type Params = Parameters<IndexerServiceMethods['reindexEntities']>[0]
+      type Result = ReturnType<IndexerServiceMethods['reindexEntities']>
+
+      this.client.emit<Result, Params>(MICROSERVICES.INDEXER.reindexEntities, entityType)
     } catch (e) {
       this.logger.error(e)
     }
   }
 
-  createMapping(entityType: EntityType) {
+  createMapping = (indexMapping: EntityType | 'ACTIVITY_EVENT') => {
     try {
-      this.client.emit(MICROSERVICES.INDEXER.createMapping, entityType)
+      type Params = Parameters<IndexerServiceMethods['createMapping']>[0]
+      type Result = ReturnType<IndexerServiceMethods['createMapping']>
+
+      this.client.emit<Result, Params>(MICROSERVICES.INDEXER.createMapping, indexMapping)
     } catch (e) {
       this.logger.error(e)
     }
   }
 
-  recordHistoryEvent(activityEvent: ActivityEventIndex) {
+  recordHistoryEvent = (activityEvent: ActivityEventIndex) => {
     try {
-      this.client.emit(MICROSERVICES.INDEXER.recordHistoryEvent, activityEvent)
+      type Params = Parameters<IndexerServiceMethods['recordHistoryEvent']>[0]
+      type Result = ReturnType<IndexerServiceMethods['recordHistoryEvent']>
+
+      this.client.emit<Result, Params>(MICROSERVICES.INDEXER.recordHistoryEvent, activityEvent)
+    } catch (e) {
+      this.logger.error(e)
+    }
+  }
+
+  getFileContent = (fileId: string) => {
+    try {
+      type Params = Parameters<IndexerServiceMethods['getFileContent']>[0]
+      type Result = ReturnType<IndexerServiceMethods['getFileContent']>
+
+      return lastValueFrom(
+        this.client
+          .send<Result, Params>(MICROSERVICES.INDEXER.getFileContent, fileId)
+          .pipe(timeout(1000)),
+      )
+    } catch (e) {
+      this.logger.error(e)
+    }
+  }
+
+  personCNPExists = (cnp: string, personId?: string) => {
+    try {
+      type Params = Parameters<IndexerServiceMethods['personCNPExists']>[0]
+      type Result = ReturnType<IndexerServiceMethods['personCNPExists']>
+
+      return lastValueFrom(
+        this.client
+          .send<Result, Params>(MICROSERVICES.INDEXER.personCNPExists, {
+            cnp,
+            personId,
+          })
+          .pipe(timeout(1000)),
+      )
+    } catch (e) {
+      this.logger.error(e)
+    }
+  }
+
+  personIdDocumentExists = (documentNumber: string, personId?: string) => {
+    try {
+      type Params = Parameters<IndexerServiceMethods['personIdDocumentExists']>[0]
+      type Result = ReturnType<IndexerServiceMethods['personIdDocumentExists']>
+
+      return lastValueFrom(
+        this.client
+          .send<Result, Params>(MICROSERVICES.INDEXER.personIdDocumentExists, {
+            documentNumber,
+            personId,
+          })
+          .pipe(timeout(1000)),
+      )
+    } catch (e) {
+      this.logger.error(e)
+    }
+  }
+
+  companyCUIExists = (cui: string, companyId?: string) => {
+    try {
+      type Params = Parameters<IndexerServiceMethods['companyCUIExists']>[0]
+      type Result = ReturnType<IndexerServiceMethods['companyCUIExists']>
+
+      return lastValueFrom(
+        this.client
+          .send<Result, Params>(MICROSERVICES.INDEXER.companyCUIExists, {
+            cui,
+            companyId,
+          })
+          .pipe(timeout(1000)),
+      )
+    } catch (e) {
+      this.logger.error(e)
+    }
+  }
+
+  companyRegistrationNumberExists = (registrationNumber: string, companyId?: string) => {
+    try {
+      type Params = Parameters<IndexerServiceMethods['companyRegistrationNumberExists']>[0]
+      type Result = ReturnType<IndexerServiceMethods['companyRegistrationNumberExists']>
+
+      return lastValueFrom(
+        this.client
+          .send<Result, Params>(MICROSERVICES.INDEXER.companyRegistrationNumberExists, {
+            registrationNumber,
+            companyId,
+          })
+          .pipe(timeout(1000)),
+      )
+    } catch (e) {
+      this.logger.error(e)
+    }
+  }
+
+  vehicleVINExists = (vin: string, propertyId?: string) => {
+    try {
+      type Params = Parameters<IndexerServiceMethods['vehicleVINExists']>[0]
+      type Result = ReturnType<IndexerServiceMethods['vehicleVINExists']>
+
+      return lastValueFrom(
+        this.client
+          .send<Result, Params>(MICROSERVICES.INDEXER.vehicleVINExists, {
+            vin,
+            propertyId,
+          })
+          .pipe(timeout(1000)),
+      )
     } catch (e) {
       this.logger.error(e)
     }

@@ -1,19 +1,34 @@
-import { Person } from 'defs'
-import { EmbeddedFileIndex } from '@app/definitions'
-import { LocationIndex } from '@app/definitions'
-import { EducationIndex } from '@app/definitions'
-import { OldNameIndex } from '@app/definitions'
-import { IdDocumentIndex } from '@app/definitions'
+import { z } from 'zod'
+import { personSchema } from 'defs'
+import {
+  customFieldIndexSchema,
+  educationIndexSchema,
+  embeddedFileIndexSchema,
+  idDocumentIndexSchema,
+  locationIndexSchema,
+  oldNameIndexSchema,
+} from '@app/definitions'
 
-export type PersonIndex = Pick<
-  Person,
-  'firstName' | 'lastName' | 'cnp' | 'birthdate' | 'contactDetails' | 'customFields'
-> & {
-  documents: IdDocumentIndex[]
-  oldNames: OldNameIndex[]
-  files: EmbeddedFileIndex[]
-  birthPlace: LocationIndex
-  homeAddress: LocationIndex
-  education: EducationIndex[]
-}
-export type PersonSearchIndex = Pick<PersonIndex, 'firstName' | 'lastName' | 'cnp'>
+export const personIndexSchema = z.object({
+  firstName: personSchema.shape.firstName.shape.value,
+  lastName: personSchema.shape.firstName.shape.value,
+  cnp: personSchema.shape.firstName.shape.value,
+  contactDetails: customFieldIndexSchema.array(),
+  customFields: customFieldIndexSchema.array(),
+  documents: idDocumentIndexSchema.array(),
+  birthdate: z.string().optional(),
+  oldNames: oldNameIndexSchema.array(),
+  files: embeddedFileIndexSchema.array(),
+  birthPlace: locationIndexSchema,
+  homeAddress: locationIndexSchema,
+  education: educationIndexSchema.array(),
+})
+
+export const personSearchIndex = personIndexSchema.pick({
+  firstName: true,
+  lastName: true,
+  cnp: true,
+})
+
+export type PersonIndex = z.infer<typeof personIndexSchema>
+export type PersonSearchIndex = z.infer<typeof personSearchIndex>

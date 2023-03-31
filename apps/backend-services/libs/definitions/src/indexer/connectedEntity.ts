@@ -1,20 +1,39 @@
-import { LocationIndex } from '@app/definitions'
-import { Company, IdDocument, Person, Property, RealEstateInfo, VehicleInfo } from 'defs'
+import { z } from 'zod'
+import { personIndexSchema, realEstateIndex, vehicleIndexSchema } from '@app/definitions'
+import { companySchema, personSchema, propertySchema } from 'defs'
 
-export interface ConnectedPersonIndex
-  extends NonNullable<Required<Pick<Person, '_id' | 'firstName' | 'lastName' | 'cnp'>>> {
-  documents: IdDocument['documentNumber'][]
-}
+export const connectedPersonIndexSchema = z
+  .object({
+    _id: personSchema.shape._id,
+  })
+  .merge(personIndexSchema.pick({ firstName: true, lastName: true, cnp: true }))
+  .merge(
+    z.object({
+      documents: z.string().nonempty().array(),
+    }),
+  )
 
-export interface ConnectedCompanyIndex
-  extends NonNullable<Pick<Company, '_id' | 'name' | 'cui' | 'registrationNumber'>> {}
+export const connectedCompanyIndexSchema = companySchema.pick({ _id: true }).merge(
+  z.object({
+    name: companySchema.shape.name.shape.value,
+    cui: companySchema.shape.cui.shape.value,
+    registrationNumber: companySchema.shape.registrationNumber.shape.value,
+  }),
+)
 
-export interface ConnectedPropertyIndex
-  extends NonNullable<Required<Pick<Property, '_id' | 'type'>>> {
-  vehicleInfo?: Pick<VehicleInfo, 'vin' | 'maker' | 'model' | 'color'> & {
-    plateNumbers: string[]
-  }
-  realEstateInfo?: Pick<RealEstateInfo, 'surface' | 'townArea'> & {
-    location: LocationIndex
-  }
-}
+export const connectedPropertyIndexSchema = propertySchema
+  .pick({
+    _id: true,
+    type: true,
+    name: true,
+  })
+  .merge(
+    z.object({
+      vehicleInfo: vehicleIndexSchema.optional(),
+      realEstateInfo: realEstateIndex.optional(),
+    }),
+  )
+
+export type ConnectedPersonIndex = z.infer<typeof connectedPersonIndexSchema>
+export type ConnectedCompanyIndex = z.infer<typeof connectedCompanyIndexSchema>
+export type ConnectedPropertyIndex = z.infer<typeof connectedPropertyIndexSchema>

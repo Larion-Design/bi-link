@@ -1,3 +1,10 @@
-import { Party, RelationshipMetadata } from 'defs'
+import { z } from 'zod'
+import { eventParticipantSchema, graphRelationshipMetadataSchema } from 'defs'
 
-export interface PartyGraphRelationship extends RelationshipMetadata, Pick<Party, 'name'> {}
+export const eventParticipantGraphSchema = z
+  .object({
+    type: eventParticipantSchema.shape.type,
+  })
+  .merge(graphRelationshipMetadataSchema)
+
+export type PartyGraphRelationship = z.infer<typeof eventParticipantGraphSchema>

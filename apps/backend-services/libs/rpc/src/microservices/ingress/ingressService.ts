@@ -14,7 +14,7 @@ export class IngressService {
 
   constructor(@Inject(MICROSERVICES.INGRESS.id) private client: ClientProxy) {}
 
-  getEntity = async (
+  getEntity = async <T>(
     entityInfo: EntityInfo,
     fetchLinkedEntities: boolean,
     source: UpdateSource,
@@ -391,6 +391,24 @@ export class IngressService {
             snapshotId,
             source,
           })
+          .pipe(timeout(1000)),
+      )
+    } catch (e) {
+      this.logger.error(e)
+      this.logger.debug(
+        'No valid response received from the ingress service. Make sure the service is running properly.',
+      )
+    }
+  }
+
+  getFileByHash = async (hash: string) => {
+    type Params = Parameters<IngressServiceMethods['getFileByHash']>[0]
+    type Result = ReturnType<IngressServiceMethods['getFileByHash']>
+
+    try {
+      return lastValueFrom(
+        this.client
+          .send<Result, Params>(MICROSERVICES.INGRESS.getFileByHash, hash)
           .pipe(timeout(1000)),
       )
     } catch (e) {

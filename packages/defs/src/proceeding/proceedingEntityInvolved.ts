@@ -23,7 +23,7 @@ export const proceedingEntityInvolvedAPISchema = proceedingEntityInvolvedSchema.
 
 export const graphProceedingEntitySchema = nodesRelationshipSchema.merge(
   z.object({
-    involvedAs: z.string(),
+    involvedAs: proceedingEntityInvolvedSchema.shape.involvedAs,
   }),
 )
 

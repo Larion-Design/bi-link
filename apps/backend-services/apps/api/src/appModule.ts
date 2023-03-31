@@ -1,27 +1,18 @@
 import { CacheModule, Module } from '@nestjs/common'
 import { GraphQLModule } from '@nestjs/graphql'
-import { Neo4jModule, Neo4jScheme } from 'nest-neo4j/dist'
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo'
 import { ConfigModule, ConfigService } from '@nestjs/config'
 import { APP_INTERCEPTOR } from '@nestjs/core'
-import { MongooseModule } from '@nestjs/mongoose'
-import { Neo4jConfig } from 'nest-neo4j/src/interfaces/neo4j-config.interface'
-import { SearchModule } from './modules/search/searchModule'
 import { GraphqlInterceptor, SentryModule } from '@ntegral/nestjs-sentry'
 import { ApiModule } from './modules/api/apiModule'
 import { UsersModule } from './modules/users/UsersModule'
-import { EntitiesModule } from '@app/models/entitiesModule'
 import { RpcModule } from '@app/rpc'
-import { GraphModule } from '@app/graph-module'
 
 @Module({
   imports: [
-    EntitiesModule,
     RpcModule,
     ApiModule,
-    SearchModule,
     UsersModule,
-    GraphModule,
     CacheModule.register({
       isGlobal: true,
     }),
@@ -67,26 +58,6 @@ import { GraphModule } from '@app/graph-module'
           logLevel: 'debug',
         })
       },
-    }),
-    MongooseModule.forRootAsync({
-      imports: [ConfigModule],
-      inject: [ConfigService],
-      useFactory: async (configService: ConfigService) =>
-        Promise.resolve({
-          uri: configService.getOrThrow<string>('MONGODB_URI'),
-        }),
-    }),
-    Neo4jModule.forRootAsync({
-      imports: [ConfigModule],
-      inject: [ConfigService],
-      useFactory: async (configService: ConfigService) =>
-        Promise.resolve<Partial<Neo4jConfig>>({
-          scheme: configService.getOrThrow<Neo4jScheme>('NEO4J_SCHEME'),
-          host: configService.getOrThrow<string>('NEO4J_HOST'),
-          port: +configService.getOrThrow<number>('NEO4J_PORT'),
-          username: configService.getOrThrow<string>('NEO4J_USER'),
-          password: configService.getOrThrow<string>('NEO4J_PASSWORD'),
-        }),
     }),
   ],
   providers: [

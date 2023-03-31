@@ -1,7 +1,12 @@
-import { RelationshipMetadata } from 'defs'
+import { z } from 'zod'
+import { graphRelationshipMetadataSchema, vehicleOwnerSchema } from 'defs'
 
-export interface PropertyOwnerGraphRelationship extends RelationshipMetadata {
-  startDate?: Date | string
-  endDate?: Date | string
-  plateNumbers?: string[]
-}
+export const propertyOwnerRelationshipSchema = z
+  .object({
+    startDate: z.string().optional(),
+    endDate: z.string().optional(),
+    plateNumbers: vehicleOwnerSchema.shape.plateNumbers,
+  })
+  .merge(graphRelationshipMetadataSchema)
+
+export type PropertyOwnerGraphRelationship = z.infer<typeof propertyOwnerRelationshipSchema>

@@ -15,7 +15,7 @@ import {
   PersonEventInfo,
 } from '@app/scheduler-module'
 import { PersonsIndexerService } from '../../indexer/services'
-import { QUEUE_PERSONS } from '../../producers/constants'
+import { QUEUE_PERSONS } from '../../constants'
 import { FileEventDispatcherService } from '../../producers/services/fileEventDispatcherService'
 import { PersonsService } from '@app/models/person/services/personsService'
 

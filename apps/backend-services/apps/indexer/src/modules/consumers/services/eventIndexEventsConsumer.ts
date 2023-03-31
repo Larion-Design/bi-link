@@ -10,7 +10,7 @@ import { FileEventDispatcherService } from '../../producers/services/fileEventDi
 import { Job } from 'bull'
 import { EventsService } from '@app/models/event/services/eventsService'
 import { EventsIndexerService } from '../../indexer/services'
-import { QUEUE_EVENTS } from '../../producers/constants'
+import { QUEUE_EVENTS } from '../../constants'
 
 @Processor(QUEUE_EVENTS)
 export class EventIndexEventsConsumer {

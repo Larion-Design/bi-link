@@ -1,3 +1,3 @@
 import { RelationshipMetadata } from 'defs'
 
-export interface ReportTargetEntityRelationship extends RelationshipMetadata {}
+export type ReportTargetEntityRelationship = RelationshipMetadata

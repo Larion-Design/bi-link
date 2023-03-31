@@ -1,10 +1,10 @@
 import { z } from 'zod'
 import { withSnapshotSchema } from '../snapshot'
-import { proceedingSchema } from './proceeding'
+import { proceedingAPIInputSchema } from './proceeding'
 
 export const proceedingSnapshotSchema = withSnapshotSchema.merge(
   z.object({
-    entityInfo: proceedingSchema.omit({ _id: true }),
+    entityInfo: proceedingAPIInputSchema,
   }),
 )
 

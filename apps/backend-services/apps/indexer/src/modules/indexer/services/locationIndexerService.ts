@@ -1,11 +1,11 @@
 import { Injectable } from '@nestjs/common'
+import { Location } from 'defs'
 import { formatAddress } from 'tools'
 import { LocationIndex } from '@app/definitions'
-import { LocationDocument } from '@app/models'
 
 @Injectable()
 export class LocationIndexerService {
-  createLocationIndexData = (locationInfo: LocationDocument): LocationIndex => ({
+  createLocationIndexData = (locationInfo: Location): LocationIndex => ({
     address: formatAddress(locationInfo),
     coordinates: {
       lat: locationInfo.coordinates.lat,
@@ -13,6 +13,5 @@ export class LocationIndexerService {
     },
   })
 
-  createLocationsIndexData = (locations: LocationDocument[]) =>
-    locations?.map(this.createLocationIndexData)
+  createLocationsIndexData = (locations: Location[]) => locations?.map(this.createLocationIndexData)
 }

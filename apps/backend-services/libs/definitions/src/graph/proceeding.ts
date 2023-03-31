@@ -1,5 +1,12 @@
-import { EntityMetadata, Proceeding } from 'defs'
+import { z } from 'zod'
+import { nodeMetadataSchema, proceedingSchema } from 'defs'
 
-export interface ProceedingGraphNode
-  extends EntityMetadata,
-    Pick<Proceeding, 'fileNumber' | 'type' | 'name'> {}
+export const proceedingGraphSchema = proceedingSchema.pick({ name: true, type: true }).merge(
+  z
+    .object({
+      fileNumber: proceedingSchema.shape.fileNumber.shape.value,
+    })
+    .merge(nodeMetadataSchema),
+)
+
+export type ProceedingGraphNode = z.infer<typeof proceedingGraphSchema>

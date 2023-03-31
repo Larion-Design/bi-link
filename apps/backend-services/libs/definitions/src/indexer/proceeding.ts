@@ -1,5 +1,22 @@
-import { Proceeding } from 'defs'
-import { ConnectedCompanyIndex, ConnectedPersonIndex, EmbeddedFileIndex } from '@app/definitions'
+import { z } from 'zod'
+
+export const proceedingIndexSchema = proceedingSchema
+  .pick({ name: true, type: true, description: true })
+  .merge(
+    z.object({
+      fileNumber: proceedingSchema.shape.fileNumber.shape.value,
+      year: proceedingSchema.shape.year.shape.value,
+      customFields: customFieldIndexSchema.array(),
+    }),
+  )
+
+import { Proceeding, proceedingSchema } from 'defs'
+import {
+  ConnectedCompanyIndex,
+  ConnectedPersonIndex,
+  customFieldIndexSchema,
+  EmbeddedFileIndex,
+} from '@app/definitions'
 
 export interface ProceedingIndex
   extends Pick<

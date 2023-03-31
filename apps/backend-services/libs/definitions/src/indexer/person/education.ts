@@ -1,9 +1,19 @@
-import { Education } from 'defs'
+import { z } from 'zod'
+import { educationSchema } from 'defs'
 
-export interface EducationIndex
-  extends Pick<Education, 'type' | 'school' | 'specialization' | 'customFields'> {
-  period: {
-    gte: string | null
-    lte: string | null
-  }
-}
+export const educationIndexSchema = educationSchema
+  .pick({
+    type: true,
+    school: true,
+    specialization: true,
+  })
+  .merge(
+    z.object({
+      period: z.object({
+        gte: z.string().optional(),
+        lte: z.string().optional(),
+      }),
+    }),
+  )
+
+export type EducationIndex = z.infer<typeof educationIndexSchema>

@@ -4,9 +4,9 @@ import {
   INDEX_PROPERTIES,
   PropertyIndex,
 } from '@app/definitions'
-import { PropertiesService, PropertyModel, PropertyOwnerModel } from '@app/models'
 import { Injectable, Logger } from '@nestjs/common'
 import { ElasticsearchService } from '@nestjs/elasticsearch'
+import { Property, PropertyOwner } from 'defs'
 import { ConnectedEntityIndexerService } from './connectedEntityIndexerService'
 import { LocationIndexerService } from './locationIndexerService'
 
@@ -17,12 +17,11 @@ export class PropertiesIndexerService {
 
   constructor(
     private readonly elasticsearchService: ElasticsearchService,
-    private readonly propertiesService: PropertiesService,
     private readonly connectedEntityIndexerService: ConnectedEntityIndexerService,
     private readonly locationIndexerService: LocationIndexerService,
   ) {}
 
-  indexProperty = async (propertyId: string, propertyModel: PropertyModel) => {
+  indexProperty = async (propertyId: string, propertyModel: Property) => {
     try {
       const { _id } = await this.elasticsearchService.index<PropertyIndex>({
         index: this.index,
@@ -38,7 +37,7 @@ export class PropertiesIndexerService {
     }
   }
 
-  private createIndexData = (propertyModel: PropertyModel): PropertyIndex => {
+  private createIndexData = (propertyModel: Property): PropertyIndex => {
     const propertyIndex: PropertyIndex = {
       name: propertyModel.name,
       type: propertyModel.type,
@@ -49,45 +48,47 @@ export class PropertiesIndexerService {
     }
 
     if (propertyModel.vehicleInfo) {
+      const plateNumbers = new Set<string>()
+
+      propertyModel.owners.forEach(({ vehicleOwnerInfo }) =>
+        vehicleOwnerInfo?.plateNumbers.forEach((plateNumber) => plateNumbers.add(plateNumber)),
+      )
+
       propertyIndex.vehicleInfo = {
         vin: propertyModel.vehicleInfo.vin,
         maker: propertyModel.vehicleInfo.maker,
         model: propertyModel.vehicleInfo.model,
         color: propertyModel.vehicleInfo.color,
-        plateNumbers: Array.from(
-          new Set<string>(
-            [].concat(
-              ...propertyModel.owners.map(({ vehicleOwnerInfo: { plateNumbers } }) => plateNumbers),
-            ),
-          ),
-        ),
+        plateNumbers: Array.from(plateNumbers),
       }
     }
 
     if (propertyModel.realEstateInfo) {
       propertyIndex.realEstateInfo = {
         surface: propertyModel.realEstateInfo.surface,
-        location: this.locationIndexerService.createLocationIndexData(
-          propertyModel.realEstateInfo.location,
-        ),
+        location: propertyModel.realEstateInfo.location
+          ? this.locationIndexerService.createLocationIndexData(
+              propertyModel.realEstateInfo.location,
+            )
+          : undefined,
       }
     }
     return propertyIndex
   }
 
-  private createPersonOwnersIndex = (owners: PropertyOwnerModel[]): ConnectedPersonIndex[] =>
+  private createPersonOwnersIndex = (owners: PropertyOwner[]): ConnectedPersonIndex[] =>
     owners
       .filter(({ person }) => !!person)
       .map(({ person, customFields }) => ({
-        ...this.connectedEntityIndexerService.createConnectedPersonIndex(person),
+        ...this.connectedEntityIndexerService.createConnectedPersonIndex(person!),
         customFields,
       }))
 
-  private createCompanyOwnersIndex = (owners: PropertyOwnerModel[]): ConnectedCompanyIndex[] =>
+  private createCompanyOwnersIndex = (owners: PropertyOwner[]): ConnectedCompanyIndex[] =>
     owners
       .filter(({ company }) => !!company)
       .map(({ company, customFields }) => ({
-        ...this.connectedEntityIndexerService.createConnectedCompanyIndex(company),
+        ...this.connectedEntityIndexerService.createConnectedCompanyIndex(company!),
         customFields,
       }))
 }

@@ -1,5 +1,14 @@
-import { Associate, RelationshipMetadata } from 'defs'
+import { z } from 'zod'
+import { associateSchema, graphRelationshipMetadataSchema } from 'defs'
 
-export interface AssociateGraphRelationship
-  extends RelationshipMetadata,
-    Required<Pick<Associate, 'role' | 'startDate' | 'endDate' | 'isActive' | 'equity'>> {}
+export const associateGraphSchema = z
+  .object({
+    role: associateSchema.shape.role.shape.value,
+    startDate: associateSchema.shape.startDate.shape.value,
+    endDate: associateSchema.shape.endDate.shape.value,
+    isActive: associateSchema.shape.isActive.shape.value,
+    equity: associateSchema.shape.equity.shape.value,
+  })
+  .merge(graphRelationshipMetadataSchema)
+
+export type AssociateGraphRelationship = z.infer<typeof associateGraphSchema>

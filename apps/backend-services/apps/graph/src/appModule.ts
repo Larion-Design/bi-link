@@ -1,23 +1,18 @@
-import { EntitiesModule } from '@app/models'
 import { RpcModule } from '@app/rpc'
 import { BullModule } from '@nestjs/bull'
 import { Module } from '@nestjs/common'
-import { GraphModule } from '@app/graph-module'
 import { Neo4jConfig } from 'nest-neo4j/src/interfaces/neo4j-config.interface'
 import { ConsumersModule } from './consumers/consumersModule'
 import { ProducersModule } from './producers/producersModule'
 import { EntityEventsController } from './rpc/entityEventsController'
 import { ConfigModule, ConfigService } from '@nestjs/config'
 import { SentryModule } from '@ntegral/nestjs-sentry'
-import { MongooseModule } from '@nestjs/mongoose'
 import { Neo4jModule, Neo4jScheme } from 'nest-neo4j/dist'
 import { ServiceHealthModule } from '@app/service-health'
 
 @Module({
   imports: [
-    EntitiesModule,
     RpcModule,
-    GraphModule,
     ServiceHealthModule,
     ProducersModule,
     ConsumersModule,
@@ -58,14 +53,6 @@ import { ServiceHealthModule } from '@app/service-health'
           logLevel: 'debug',
         })
       },
-    }),
-    MongooseModule.forRootAsync({
-      imports: [ConfigModule],
-      inject: [ConfigService],
-      useFactory: async (configService: ConfigService) =>
-        Promise.resolve({
-          uri: configService.getOrThrow<string>('MONGODB_URI_READ'),
-        }),
     }),
     Neo4jModule.forRootAsync({
       imports: [ConfigModule],

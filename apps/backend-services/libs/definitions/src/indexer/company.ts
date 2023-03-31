@@ -7,7 +7,7 @@ export type CompanyIndex = Pick<
   Company,
   'name' | 'cui' | 'registrationNumber' | 'contactDetails' | 'customFields'
 > & {
-  headquarters: LocationIndex
+  headquarters?: LocationIndex
   locations: LocationIndex[]
   files: EmbeddedFileIndex[]
   associatedCompanies: ConnectedCompanyIndex[]

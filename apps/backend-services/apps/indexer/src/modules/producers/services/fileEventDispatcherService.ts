@@ -7,7 +7,7 @@ import {
 import { Injectable, Logger } from '@nestjs/common'
 import { InjectQueue } from '@nestjs/bull'
 import { Queue } from 'bull'
-import { QUEUE_FILES } from '../constants'
+import { QUEUE_FILES } from '../../constants'
 
 @Injectable()
 export class FileEventDispatcherService {

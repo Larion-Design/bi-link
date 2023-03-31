@@ -9,7 +9,7 @@ import {
   ProceedingEventInfo,
 } from '@app/scheduler-module'
 import { ProceedingsIndexerService } from '../../indexer/services/proceedingsIndexerService'
-import { QUEUE_PROCEEDINGS } from '../../producers/constants'
+import { QUEUE_PROCEEDINGS } from '../../constants'
 import { FileEventDispatcherService } from '../../producers/services/fileEventDispatcherService'
 
 @Processor(QUEUE_PROCEEDINGS)

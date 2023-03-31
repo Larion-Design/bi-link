@@ -1,14 +1,11 @@
+import { IngressService } from '@app/rpc/microservices/ingress'
 import { Args, ArgsType, Field, ID, Mutation, Resolver } from '@nestjs/graphql'
 import { UseGuards } from '@nestjs/common'
-import { EntityEventsService } from '@app/rpc/services/entityEventsService'
 import { CompanyInput } from '../dto/companyInput'
 import { Company } from '../dto/company'
-import { CompanyAPIService } from '../services/companyAPIService'
 import { FirebaseAuthGuard } from '../../../users/guards/FirebaseAuthGuard'
 import { CurrentUser } from '../../../users/decorators/currentUser'
-import { UserActionsService } from '@app/rpc/services/userActionsService'
-import { EntityInfo, User, UserActions } from 'defs'
-import { getUnixTime } from 'date-fns'
+import { User } from 'defs'
 
 @ArgsType()
 class CreateCompanyArgs {
@@ -18,30 +15,14 @@ class CreateCompanyArgs {
 
 @Resolver(() => Company)
 export class CreateCompany {
-  constructor(
-    private readonly companyService: CompanyAPIService,
-    private readonly userActionsService: UserActionsService,
-    private readonly entityEventsService: EntityEventsService,
-  ) {}
+  constructor(private readonly ingressService: IngressService) {}
 
   @Mutation(() => ID)
   @UseGuards(FirebaseAuthGuard)
   async createCompany(@CurrentUser() { _id }: User, @Args() { data }: CreateCompanyArgs) {
-    const companyId = await this.companyService.create(data)
-
-    const entityInfo: EntityInfo = {
-      entityId: companyId,
-      entityType: 'COMPANY',
-    }
-
-    this.entityEventsService.emitEntityCreated(entityInfo)
-
-    this.userActionsService.recordAction({
-      eventType: UserActions.ENTITY_CREATED,
-      author: _id,
-      timestamp: getUnixTime(new Date()),
-      targetEntityInfo: entityInfo,
+    return this.ingressService.createEntity('COMPANY', data, {
+      sourceId: _id,
+      type: 'USER',
     })
-    return companyId
   }
 }
