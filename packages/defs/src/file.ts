@@ -19,17 +19,17 @@ export const fileSchema = z
   .merge(withTimestamps)
   .merge(withMetadataSchema)
 
-export const fileInputSchema = fileSchema.pick({
-  metadata: true,
-  fileId: true,
-  name: true,
-  description: true,
-  isHidden: true,
-})
+export const fileInputSchema = fileSchema
+  .omit({
+    createdAt: true,
+    updatedAt: true,
+    hash: true,
+    mimeType: true,
+  })
+  .merge(z.object({}))
 
 export const fileOutputSchema = fileSchema.omit({ hash: true }).merge(
   z.object({
-    mimeType: z.string(),
     url: downloadUrlSchema.optional(),
   }),
 )

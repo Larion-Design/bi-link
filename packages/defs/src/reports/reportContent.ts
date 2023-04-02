@@ -4,7 +4,7 @@ import { titleSchema } from './title'
 import { tableSchema } from './table'
 import { linkSchema } from './link'
 import { reportTextSchema } from './text'
-import { fileOutputSchema, fileSchema } from '../file'
+import { fileInputSchema, fileOutputSchema, fileSchema } from '../file'
 
 export const reportContentSchema = z.object({
   order: z.number().positive(),
@@ -25,6 +25,13 @@ export const reportContentAPIOutputSchema = reportContentSchema.merge(
   }),
 )
 
+export const reportContentAPIInputSchema = reportContentSchema.merge(
+  z.object({
+    file: fileInputSchema.nullish(),
+    images: fileInputSchema.array().nullish(),
+  }),
+)
+
 export type ReportContent = z.infer<typeof reportContentSchema>
-export type ReportContentAPIInput = ReportContent
+export type ReportContentAPIInput = z.infer<typeof reportContentAPIInputSchema>
 export type ReportContentAPIOutput = z.infer<typeof reportContentAPIOutputSchema>

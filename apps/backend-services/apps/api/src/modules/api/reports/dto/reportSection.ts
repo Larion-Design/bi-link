@@ -1,9 +1,9 @@
 import { Field, ObjectType } from '@nestjs/graphql'
-import { ReportSection as ReportSectionType } from 'defs'
+import { ReportSectionAPIOutput } from 'defs'
 import { ReportContent } from './reportContent'
 
 @ObjectType()
-export class ReportSection implements ReportSectionType {
+export class ReportSection implements ReportSectionAPIOutput {
   @Field()
   name: string
 
