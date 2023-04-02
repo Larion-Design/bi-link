@@ -3,7 +3,11 @@ import { dateSchema } from '../date'
 import { nodesRelationshipSchema } from '../graphRelationships'
 import { withTimestamps } from '../modelTimestamps'
 import { dataRefAPISchema, dataRefSchema } from './dataRef'
-import { reportSectionAPIOutputSchema, reportSectionSchema } from './reportSection'
+import {
+  reportSectionAPIInputSchema,
+  reportSectionAPIOutputSchema,
+  reportSectionSchema,
+} from './reportSection'
 import { connectedEntitySchema } from '../connectedEntity'
 
 export const reportSchema = z
@@ -37,13 +41,21 @@ const reportAPISchema = reportSchema.merge(
 
 export const reportAPIOutputSchema = reportAPISchema.merge(
   z.object({
-    sections: z.array(reportSectionAPIOutputSchema),
+    sections: reportSectionAPIOutputSchema.array(),
   }),
 )
 
-export const reportAPIInputSchema = reportAPISchema.omit({
-  _id: true,
-})
+export const reportAPIInputSchema = reportAPISchema
+  .omit({
+    _id: true,
+    createdAt: true,
+    updatedAt: true,
+  })
+  .merge(
+    z.object({
+      sections: reportSectionAPIInputSchema.array(),
+    }),
+  )
 
 export const reportListRecordSchema = reportAPISchema.pick({ _id: true, name: true, type: true })
 

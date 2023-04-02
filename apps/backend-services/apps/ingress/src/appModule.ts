@@ -3,7 +3,7 @@ import { RpcModule } from '@app/rpc'
 import { ServiceHealthModule } from '@app/service-health'
 import { ConfigModule, ConfigService } from '@nestjs/config'
 import { MongooseModule } from '@nestjs/mongoose'
-import { EntitiesModule } from './models'
+import { EntitiesModule } from './entities'
 
 @Module({
   imports: [
