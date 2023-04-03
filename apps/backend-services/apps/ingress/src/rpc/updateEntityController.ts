@@ -44,7 +44,7 @@ export class UpdateEntityController {
     { entityInfo, entityData, source }: Parameters<IngressServiceMethods['updateEntity']>[0],
   ) {
     const { entityId, entityType } = entityInfo
-    let updated = false
+    let updated: boolean | undefined = false
 
     switch (entityType) {
       case 'PERSON': {
@@ -106,7 +106,7 @@ export class UpdateEntityController {
       }
     }
 
-    if (entityId) {
+    if (updated) {
       this.globalEventsService.dispatchEntityUpdated(entityInfo)
       this.activityHistoryService.recordAction({
         timestamp: getUnixTime(new Date()),

@@ -31,10 +31,10 @@ export class DataRefModel implements DataRef {
   field: string
 
   @Prop({ isRequired: false })
-  path?: string
+  path?: string | null | undefined
 
   @Prop({ isRequired: false })
-  targetId?: string
+  targetId?: string | null | undefined
 }
 
 export type DataRefDocument = DataRefModel & Document

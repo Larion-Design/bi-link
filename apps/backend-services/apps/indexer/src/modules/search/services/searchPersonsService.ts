@@ -24,7 +24,7 @@ export class SearchPersonsService {
     searchTerm: string,
     skip: number,
     limit: number,
-  ): Promise<PersonsSuggestions<PersonListRecord>> => {
+  ): Promise<PersonsSuggestions<PersonListRecord> | undefined> => {
     try {
       const request: SearchRequest = {
         index: this.index,
@@ -77,7 +77,7 @@ export class SearchPersonsService {
 
       return {
         total: (total as SearchTotalHits).value,
-        records: hits.map(({ _id, _source }) => this.transformRecord(_id, _source)),
+        records: hits.map(({ _id, _source }) => this.transformRecord(_id, _source!)),
       }
     } catch (error) {
       this.logger.error(error)

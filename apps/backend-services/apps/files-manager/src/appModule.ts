@@ -2,6 +2,7 @@ import { RpcModule } from '@app/rpc'
 import { CacheModule, Module } from '@nestjs/common'
 import { MinioModule } from 'nestjs-minio-client'
 import { ConfigModule, ConfigService } from '@nestjs/config'
+import { FileRPCController } from './rpc/fileRPCController'
 import { FileImporterService } from './services/fileImporterService'
 import { FileStorageService } from './services/fileStorageService'
 
@@ -25,6 +26,7 @@ import { FileStorageService } from './services/fileStorageService'
       }),
     }),
   ],
+  controllers: [FileRPCController],
   providers: [FileImporterService, FileStorageService],
   exports: [FileImporterService, FileStorageService],
 })

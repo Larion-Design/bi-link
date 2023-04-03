@@ -18,35 +18,34 @@ export class RelationshipsAPIService {
   ) {}
 
   getRelationshipsModelsFromInputData = async (relationships: RelationshipAPI[]) => {
-    const personsModels = await this.personsService.getPersons(
-      Array.from(
-        new Set(
-          [].concat(
-            ...relationships.map(({ person: { _id: personId }, relatedPersons }) => [
-              ...relatedPersons.map(({ _id }) => _id),
-              personId,
-            ]),
-          ),
-        ),
-      ),
-      false,
+    const relationshipsMap = new Map<string, RelationshipAPI>()
+    const personsIds = new Set<string>()
+
+    relationships.forEach((relationshipInfo) => {
+      const {
+        person: { _id },
+        relatedPersons,
+      } = relationshipInfo
+
+      personsIds.add(_id)
+      relatedPersons.forEach(({ _id }) => personsIds.add(_id))
+      relationshipsMap.set(_id, relationshipInfo)
+    })
+
+    const personsDocuments = await this.personsService.getPersons(Array.from(personsIds), false)
+    const personsDocumentsMap = new Map<string, PersonDocument>()
+    personsDocuments.forEach((personDocument) =>
+      personsDocumentsMap.set(String(personDocument._id), personDocument),
     )
 
-    return relationships.map(
-      ({ person: { _id }, relatedPersons, proximity, type, description }) => {
-        const personModel = personsModels.find(({ _id: personId }) => _id === String(personId))
-
-        const relationshipModel = new RelationshipModel()
-        relationshipModel.proximity = proximity
-        relationshipModel.type = type
-        relationshipModel.person = personModel
-        relationshipModel.description = description
-        relationshipModel.relatedPersons = relatedPersons.map(({ _id }) =>
-          personsModels.find(({ _id: personId }) => String(personId) === _id),
-        )
-        return relationshipModel
-      },
-    )
+    return Array.from(relationshipsMap.entries()).map(([personId, relationshipInfo]) => {
+      const relationshipModel = this.createRelationshipModel(relationshipInfo)
+      relationshipModel.person = personsDocumentsMap.get(personId)!
+      relationshipModel.relatedPersons = relationshipInfo.relatedPersons.map(
+        ({ _id }) => personsDocumentsMap.get(_id)!,
+      )
+      return relationshipModel
+    })
   }
 
   addRelationshipToConnectedPersons = async (
@@ -55,7 +54,6 @@ export class RelationshipsAPIService {
   ) => {
     try {
       const session = await this.personModel.startSession()
-
       const relatedPersons = await this.personModel
         .find({ _id: personsRelations.map(({ person: { _id } }) => _id) }, null, { session })
         .exec()
@@ -103,5 +101,15 @@ export class RelationshipsAPIService {
       { $set: { relationships } },
       { session },
     )
+  }
+
+  private createRelationshipModel = (relationshipInfo: RelationshipAPI) => {
+    const { proximity, type, description, metadata } = relationshipInfo
+    const relationshipModel = new RelationshipModel()
+    relationshipModel.metadata = metadata
+    relationshipModel.proximity = proximity
+    relationshipModel.type = type
+    relationshipModel.description = description
+    return relationshipModel
   }
 }

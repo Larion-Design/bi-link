@@ -1,7 +1,7 @@
 import { Field, ObjectType, PickType } from '@nestjs/graphql'
+import { AssociateAPI } from 'defs'
 import { CustomField } from '../../customFields/dto/customField'
 import { ConnectedEntity } from '../../entityInfo/dto/connectedEntity'
-import { AssociateAPI } from 'defs'
 import { BooleanValue } from '../../generic/dto/booleanValue'
 import { NumberValue } from '../../generic/dto/numberValue'
 import { OptionalDateValue } from '../../generic/dto/optionalDateValue'

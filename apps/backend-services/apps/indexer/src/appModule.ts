@@ -1,5 +1,4 @@
 import { ConfigModule, ConfigService } from '@nestjs/config'
-import { MongooseModule } from '@nestjs/mongoose'
 import { BullModule } from '@nestjs/bull'
 import { Module } from '@nestjs/common'
 import { ConsumersModule } from './modules/consumers/consumersModule'
@@ -9,8 +8,8 @@ import { IndexerModule } from './modules/indexer/indexerModule'
 import { MappingModule } from './modules/mapping/mappingModule'
 import { ProducersModule } from './modules/producers/producersModule'
 import { RpcModule } from '@app/rpc'
-import { EntityEventsRPCController } from './modules/rpc/entityEventsRPCController'
-import { MappingRPCController } from './modules/rpc/mappingRPCController'
+import { IndexerController } from './modules/rpc/indexerController'
+import { MappingController } from './modules/rpc/mappingController'
 import { SearchModule } from './modules/search/searchModule'
 
 @Module({
@@ -45,14 +44,6 @@ import { SearchModule } from './modules/search/searchModule'
       ignoreEnvVars: true,
       cache: true,
     }),
-    MongooseModule.forRootAsync({
-      imports: [ConfigModule],
-      useFactory: async (configService: ConfigService) =>
-        Promise.resolve({
-          uri: configService.getOrThrow<string>('MONGODB_URI_READ'),
-        }),
-      inject: [ConfigService],
-    }),
     SentryModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
@@ -69,6 +60,6 @@ import { SearchModule } from './modules/search/searchModule'
       },
     }),
   ],
-  controllers: [EntityEventsRPCController, MappingRPCController],
+  controllers: [IndexerController, MappingController],
 })
 export class AppModule {}

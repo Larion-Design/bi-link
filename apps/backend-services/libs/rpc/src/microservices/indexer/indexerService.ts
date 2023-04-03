@@ -12,7 +12,7 @@ export class IndexerService {
 
   constructor(@Inject(MICROSERVICES.INDEXER.id) private client: ClientProxy) {}
 
-  search = async (searchTerm: string, entityTypes: EntityType[], limit: number, skip: number) => {
+  search = async (searchTerm: string, entityType: EntityType, limit: number, skip: number) => {
     type Params = Parameters<IndexerServiceMethods['search']>[0]
     type Result = ReturnType<IndexerServiceMethods['search']>
 
@@ -20,8 +20,8 @@ export class IndexerService {
       return lastValueFrom(
         this.client
           .send<Result, Params>(MICROSERVICES.INDEXER.search, {
+            entityType,
             searchTerm,
-            entityTypes,
             limit,
             skip,
           })

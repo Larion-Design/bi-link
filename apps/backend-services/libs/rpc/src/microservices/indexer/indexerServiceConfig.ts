@@ -16,7 +16,7 @@ export const indexerInterfaceSchema = z.object({
     .function()
     .args(
       z.object({
-        entityTypes: entityTypeSchema.array(),
+        entityType: entityTypeSchema,
         searchTerm: z.string(),
         limit: z.number(),
         skip: z.number(),

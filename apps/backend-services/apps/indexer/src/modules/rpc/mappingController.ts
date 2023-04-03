@@ -1,9 +1,12 @@
-import { MICROSERVICES } from '@app/rpc'
 import { Controller } from '@nestjs/common'
+import { EventPattern, Payload } from '@nestjs/microservices'
+import { MICROSERVICES } from '@app/rpc'
+import { IndexerServiceMethods } from '@app/rpc/microservices/indexer/indexerServiceConfig'
 import {
   INDEX_COMPANIES,
   INDEX_EVENTS,
   INDEX_FILES,
+  INDEX_HISTORY,
   INDEX_PERSONS,
   INDEX_PROCEEDINGS,
   INDEX_PROPERTIES,
@@ -12,16 +15,15 @@ import {
   CompaniesMappingService,
   EventsMappingService,
   FilesMappingService,
+  HistoryMappingService,
   MappingValidatorService,
   PersonsMappingService,
   ProceedingsMappingService,
   PropertiesMappingService,
 } from '../mapping/services'
-import { EventPattern, Payload } from '@nestjs/microservices'
-import { EntityType } from 'defs'
 
 @Controller()
-export class MappingRPCController {
+export class MappingController {
   constructor(
     private readonly personsMappingService: PersonsMappingService,
     private readonly companiesMappingService: CompaniesMappingService,
@@ -29,12 +31,15 @@ export class MappingRPCController {
     private readonly eventsMappingService: EventsMappingService,
     private readonly filesMappingService: FilesMappingService,
     private readonly proceedingsMappingService: ProceedingsMappingService,
+    private readonly historyMappingService: HistoryMappingService,
     private readonly mappingValidatorService: MappingValidatorService,
   ) {}
 
   @EventPattern(MICROSERVICES.INDEXER.createMapping)
-  async createMapping(@Payload() entityType: EntityType) {
-    switch (entityType) {
+  async createMapping(
+    @Payload() entityOrIndex: Parameters<IndexerServiceMethods['createMapping']>[0],
+  ) {
+    switch (entityOrIndex) {
       case 'PERSON': {
         await this.mappingValidatorService.initIndex(
           INDEX_PERSONS,
@@ -75,6 +80,14 @@ export class MappingRPCController {
           INDEX_PROCEEDINGS,
           this.proceedingsMappingService.getMapping(),
         )
+        break
+      }
+      case 'ACTIVITY_EVENT': {
+        await this.mappingValidatorService.initIndex(
+          INDEX_HISTORY,
+          this.historyMappingService.getMapping(),
+        )
+        break
       }
     }
   }

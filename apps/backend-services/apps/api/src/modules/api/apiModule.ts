@@ -2,7 +2,6 @@ import { Module } from '@nestjs/common'
 import { MulterModule } from '@nestjs/platform-express'
 import { memoryStorage } from 'multer'
 import { RpcModule } from '@app/rpc'
-import { FilesModule } from '@app/files'
 import { UsersModule } from '../users/UsersModule'
 import { GetEntitiesGraph } from './graph/queries/getEntitiesGraph'
 import { GetLocations } from './geolocation/queries/getLocations'
@@ -74,7 +73,6 @@ import { GetUsers } from './users/queries/getUsers'
   imports: [
     RpcModule,
     UsersModule,
-    FilesModule,
     MulterModule.register({
       storage: memoryStorage(),
       limits: {

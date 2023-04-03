@@ -3,6 +3,7 @@ import {
   companySchema,
   connectedEntitySchema,
   eventSchema,
+  locationSchema,
   personSchema,
   proceedingSchema,
   propertySchema,
@@ -15,6 +16,7 @@ export const dataRefSchema = z.object({
   property: propertySchema.nullish(),
   event: eventSchema.nullish(),
   proceeding: proceedingSchema.nullish(),
+  location: locationSchema.nullish(),
   path: z.string().nullish(),
   targetId: z.string().nullish(),
   field: z.string(),
@@ -27,6 +29,7 @@ export const dataRefAPISchema = dataRefSchema.merge(
     property: connectedEntitySchema.nullish(),
     proceeding: connectedEntitySchema.nullish(),
     event: connectedEntitySchema.nullish(),
+    location: connectedEntitySchema.nullish(),
   }),
 )
 

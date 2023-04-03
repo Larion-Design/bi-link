@@ -52,7 +52,6 @@ export class LocationAPIService {
     if (this.locationsService.isValidLocation(locationModel)) {
       locationModel.locationId = this.locationsService.getLocationId(locationModel)
       return locationModel
-    }
-    return null
+    } else throw new Error('Location is invalid')
   }
 }

@@ -3,10 +3,13 @@ import { EventListRecord as EventListRecordType } from 'defs'
 import { Event } from './event'
 
 @ObjectType()
-export class EventListRecord
-  extends PickType(Event, ['_id', 'type', 'date'])
-  implements EventListRecordType
-{
+export class EventListRecord extends PickType(Event, ['_id']) implements EventListRecordType {
   @Field()
-  location: string
+  readonly location: string
+
+  @Field()
+  readonly type: string
+
+  @Field()
+  readonly date: string
 }

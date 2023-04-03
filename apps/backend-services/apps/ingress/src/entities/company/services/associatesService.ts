@@ -19,6 +19,7 @@ export class AssociatesService {
         Array.from(associates.keys()),
         false,
       )
+
       return personsModels.map((personModel) => {
         const associateInfo = associates.get(String(personModel._id))
 

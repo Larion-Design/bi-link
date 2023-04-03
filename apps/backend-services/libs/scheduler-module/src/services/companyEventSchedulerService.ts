@@ -6,7 +6,7 @@ import { CompanyEventInfo } from '../types'
 @Injectable()
 export class CompanyEventSchedulerService {
   private readonly logger = new Logger(CompanyEventSchedulerService.name)
-  protected readonly queue: Queue<CompanyEventInfo>
+  protected readonly queue: Queue<CompanyEventInfo> | undefined
 
   dispatchCompanyCreated = async (companyId: string) =>
     this.publishJob(EVENT_CREATED, { companyId })
@@ -26,8 +26,13 @@ export class CompanyEventSchedulerService {
 
   private publishJob = async (eventType: string, eventInfo: CompanyEventInfo) => {
     try {
-      const { id } = await this.queue.add(eventType, eventInfo)
-      this.logger.debug(`Created job ${id} for event "${eventType}", ID "${eventInfo.companyId}"`)
+      const job = await this.queue?.add(eventType, eventInfo)
+
+      if (job) {
+        this.logger.debug(
+          `Created job ${job.id} for event "${eventType}", ID "${eventInfo.companyId}"`,
+        )
+      }
     } catch (error) {
       this.logger.error(error)
     }

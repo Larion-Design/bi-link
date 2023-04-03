@@ -11,6 +11,8 @@ export const filesManagerInterfaceSchema = z.object({
       }),
     ),
 
+  getFileContent: z.function().args(z.string().nonempty()).returns(z.instanceof(Buffer)),
+
   getFileDownloadUrl: z
     .function()
     .args(

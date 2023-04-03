@@ -13,8 +13,8 @@ import { PropertyEventDispatcherService } from '../producers/services/propertyEv
 import { ReportEventDispatcherService } from '../producers/services/reportEventDispatcherService'
 
 @Controller()
-export class EntityEventsRPCController {
-  private readonly logger = new Logger(EntityEventsRPCController.name)
+export class IndexerController {
+  private readonly logger = new Logger(IndexerController.name)
 
   constructor(
     private readonly ingressService: IngressService,
@@ -76,9 +76,9 @@ export class EntityEventsRPCController {
   }
 
   private indexEntityAndRelatedEntities = async ({ entityId, entityType }: EntityInfo) => {
-    let relatedCompaniesIds: string[]
-    let relatedEventsIds: string[]
-    let relatedPropertiesIds: string[]
+    let relatedCompaniesIds: string[] | undefined
+    let relatedEventsIds: string[] | undefined
+    let relatedPropertiesIds: string[] | undefined
 
     switch (entityType) {
       case 'PERSON': {
@@ -125,26 +125,14 @@ export class EntityEventsRPCController {
       }
     }
 
-    const dispatchedEvents = []
-
     if (relatedCompaniesIds?.length) {
-      dispatchedEvents.push(
-        this.companyEventDispatcherService.dispatchCompaniesUpdated(relatedCompaniesIds),
-      )
+      void this.companyEventDispatcherService.dispatchCompaniesUpdated(relatedCompaniesIds)
     }
     if (relatedEventsIds?.length) {
-      dispatchedEvents.push(
-        this.eventEventDispatcherService.dispatchEventsUpdated(relatedEventsIds),
-      )
+      void this.eventEventDispatcherService.dispatchEventsUpdated(relatedEventsIds)
     }
-    if (relatedPropertiesIds.length) {
-      dispatchedEvents.push(
-        this.propertyEventDispatcherService.dispatchPropertiesUpdated(relatedPropertiesIds),
-      )
-    }
-
-    if (dispatchedEvents.length) {
-      await Promise.all(dispatchedEvents)
+    if (relatedPropertiesIds?.length) {
+      void this.propertyEventDispatcherService.dispatchPropertiesUpdated(relatedPropertiesIds)
     }
   }
 

@@ -44,7 +44,7 @@ export class CreateEntityController {
     @Payload()
     { entityType, entityData, source }: Parameters<IngressServiceMethods['createEntity']>[0],
   ) {
-    let entityId: string
+    let entityId: string | undefined
 
     switch (entityType) {
       case 'PERSON': {

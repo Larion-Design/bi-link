@@ -20,7 +20,7 @@ export class SearchEventsService {
     searchTerm: string,
     skip: number,
     limit: number,
-  ): Promise<EventsSuggestions> => {
+  ): Promise<EventsSuggestions | undefined> => {
     try {
       const request: SearchRequest = {
         index: this.index,
@@ -70,7 +70,7 @@ export class SearchEventsService {
 
       return {
         total: (total as SearchTotalHits).value,
-        records: hits.map(({ _id, _source }) => this.transformRecord(_id, _source)),
+        records: hits.map(({ _id, _source }) => this.transformRecord(_id, _source!)),
       }
     } catch (error) {
       this.logger.error(error)
@@ -79,11 +79,11 @@ export class SearchEventsService {
 
   protected transformRecord = (
     _id: string,
-    { location: { address }, date, type }: EventSearchIndex,
+    { location, date, type }: EventSearchIndex,
   ): EventListRecord => ({
     _id,
     type,
-    location: address,
+    location: location?.address ?? null,
     date: date ? new Date(date) : null,
   })
 }

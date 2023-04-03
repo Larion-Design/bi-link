@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common'
-import { ReportInput } from '../../../../../api/src/modules/api/reports/dto/reportInput'
+import { ReportAPIInput } from 'defs'
 import { ReportSectionInput } from '../../../../../api/src/modules/api/reports/dto/reportSectionInput'
 import { CompaniesService } from '../../company/services/companiesService'
 import { EventsService } from '../../event/services/eventsService'
@@ -23,19 +23,19 @@ export class ReportAPIService {
     private readonly reportRefsAPIService: ReportRefsAPIService,
   ) {}
 
-  createReport = async (reportInput: ReportInput) => {
+  createReport = async (reportInput: ReportAPIInput) => {
     const reportModel = await this.createReportDocument(reportInput)
     const reportDocument = await this.reportsService.createReport(reportModel)
     return String(reportDocument._id)
   }
 
-  updateReport = async (reportId: string, reportInput: ReportInput) => {
+  updateReport = async (reportId: string, reportInput: ReportAPIInput) => {
     const reportModel = await this.createReportDocument(reportInput)
     await this.reportsService.updateReport(reportId, reportModel)
     return true
   }
 
-  private createReportDocument = async (reportInput: ReportInput) => {
+  private createReportDocument = async (reportInput: ReportAPIInput) => {
     const reportModel = new ReportModel()
     reportModel.name = reportInput.name
     reportModel.type = reportInput.type

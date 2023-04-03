@@ -12,8 +12,8 @@ import { PropertiesService } from '../entities/property/services/propertiesServi
 import { ReportsService } from '../entities/report/services/reportsService'
 
 @Controller()
-export class GetEntityController {
-  private readonly logger = new Logger(GetEntityController.name)
+export class GetEntitiesController {
+  private readonly logger = new Logger(GetEntitiesController.name)
 
   constructor(
     private readonly personsService: PersonsService,
@@ -26,37 +26,40 @@ export class GetEntityController {
     private readonly locationsService: LocationsService,
   ) {}
 
-  @MessagePattern(MICROSERVICES.INGRESS.getEntity)
+  @MessagePattern(MICROSERVICES.INGRESS.getEntities)
   async createEntity(
     @Payload()
-    { entityInfo, fetchLinkedEntities, source }: Parameters<IngressServiceMethods['getEntity']>[0],
+    {
+      entitiesIds,
+      entitiesType,
+      fetchLinkedEntities,
+      source,
+    }: Parameters<IngressServiceMethods['getEntities']>[0],
   ) {
-    const { entityId, entityType } = entityInfo
-
-    switch (entityType) {
+    switch (entitiesType) {
       case 'PERSON': {
-        return this.personsService.find(entityId, fetchLinkedEntities)
+        return this.personsService.getPersons(entitiesIds, fetchLinkedEntities)
       }
       case 'COMPANY': {
-        return this.companiesService.getCompany(entityId, fetchLinkedEntities)
+        return this.companiesService.getCompanies(entitiesIds, fetchLinkedEntities)
       }
       case 'PROPERTY': {
-        return this.propertiesService.getProperty(entityId, fetchLinkedEntities)
+        return this.propertiesService.getProperties(entitiesIds, fetchLinkedEntities)
       }
       case 'EVENT': {
-        return this.eventsService.getEvent(entityId, fetchLinkedEntities)
+        return this.eventsService.getEvents(entitiesIds, fetchLinkedEntities)
       }
       case 'PROCEEDING': {
-        return this.proceedingsService.getProceeding(entityId, fetchLinkedEntities)
+        return this.proceedingsService.getProceedings(entitiesIds, fetchLinkedEntities)
       }
       case 'FILE': {
-        return this.filesService.getFile(entityId)
+        return this.filesService.getFiles(entitiesIds)
       }
       case 'REPORT': {
-        return this.reportsService.getReport(entityId, fetchLinkedEntities)
+        return this.reportsService.getReports(entitiesIds, fetchLinkedEntities)
       }
       case 'LOCATION': {
-        return this.locationsService.getLocation(entityId)
+        return this.locationsService.getLocations(entitiesIds)
       }
     }
   }

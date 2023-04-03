@@ -63,4 +63,22 @@ export class FilesManagerService {
       )
     }
   }
+
+  getFileContent = async (fileId: string) => {
+    type Params = Parameters<FilesManagerServiceMethods['getFileContent']>[0]
+    type Result = ReturnType<FilesManagerServiceMethods['getFileContent']>
+
+    try {
+      return lastValueFrom(
+        this.client
+          .send<Result, Params>(MICROSERVICES.FILES_MANAGER.getFilesDownloadUrls, fileId)
+          .pipe(timeout(1000)),
+      )
+    } catch (e) {
+      this.logger.error(e)
+      this.logger.debug(
+        'No valid response received from the ingress service. Make sure the service is running properly.',
+      )
+    }
+  }
 }

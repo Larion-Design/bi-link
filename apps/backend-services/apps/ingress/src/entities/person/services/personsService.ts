@@ -31,7 +31,7 @@ export class PersonsService {
     }
   }
 
-  find = async (personId: string, fetchLinkedEntities: boolean): Promise<PersonDocument> => {
+  find = async (personId: string, fetchLinkedEntities: boolean): Promise<PersonDocument | void> => {
     try {
       const query = this.personModel.findById(personId)
       return (fetchLinkedEntities ? this.getLinkedEntities(query) : query).exec()
@@ -49,10 +49,10 @@ export class PersonsService {
         const query = this.personModel.find({ _id: personsIds })
         return (fetchLinkedEntities ? this.getLinkedEntities(query) : query).exec()
       }
-      return []
     } catch (error) {
       this.logger.error(error)
     }
+    return []
   }
 
   async *getAllPersons(fields: ProjectionFields<PersonDocument> = { _id: 1 }) {

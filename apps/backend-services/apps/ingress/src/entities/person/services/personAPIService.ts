@@ -31,13 +31,15 @@ export class PersonAPIService {
       const personModel = await this.createPersonDocument(personInfo)
       const personDocument = await this.personsService.create(personModel)
 
-      if (personInfo.relationships?.length) {
-        await this.relationshipsService.addRelationshipToConnectedPersons(
-          personDocument,
-          personInfo.relationships,
-        )
+      if (personDocument) {
+        if (personInfo.relationships.length) {
+          await this.relationshipsService.addRelationshipToConnectedPersons(
+            personDocument,
+            personInfo.relationships,
+          )
+        }
+        return String(personDocument._id)
       }
-      return String(personDocument._id)
     } catch (error) {
       this.logger.error(error)
     }
@@ -48,7 +50,7 @@ export class PersonAPIService {
       const model = await this.createPersonDocument(personInfo)
       const personDocument = await this.personsService.update(personId, model)
 
-      if (personInfo.relationships.length) {
+      if (personDocument && personInfo.relationships.length) {
         await this.relationshipsService.addRelationshipToConnectedPersons(
           personDocument,
           personInfo.relationships,
@@ -72,7 +74,10 @@ export class PersonAPIService {
   createHistorySnapshot = async (personId: string, source: UpdateSource) => {
     try {
       const personDocument = await this.personsService.find(personId, false)
-      return this.personHistorySnapshotService.create(personId, personDocument, source)
+
+      if (personDocument) {
+        return this.personHistorySnapshotService.create(personId, personDocument, source)
+      }
     } catch (e) {
       this.logger.error(e)
     }
@@ -85,8 +90,12 @@ export class PersonAPIService {
     personModel.cnp = personInfo.cnp
     personModel.birthdate = personInfo.birthdate
     personModel.oldNames = this.createOldNamesModels(personInfo.oldNames)
-    personModel.homeAddress = await this.locationAPIService.getLocationModel(personInfo.homeAddress)
-    personModel.birthPlace = await this.locationAPIService.getLocationModel(personInfo.birthPlace)
+    personModel.homeAddress = personInfo.homeAddress
+      ? await this.locationAPIService.getLocationModel(personInfo.homeAddress)
+      : null
+    personModel.birthPlace = personInfo.birthPlace
+      ? await this.locationAPIService.getLocationModel(personInfo.birthPlace)
+      : null
     personModel.education = this.createEducationModels(personInfo.education)
 
     personModel.contactDetails = personInfo.contactDetails.length
@@ -125,10 +134,11 @@ export class PersonAPIService {
     })
 
   private createEducationModels = (educationsInfo: EducationAPIInput[]) =>
-    educationsInfo.map(({ startDate, endDate, type, specialization, school }) => {
+    educationsInfo.map(({ startDate, endDate, type, specialization, school, metadata }) => {
       const educationModel = new EducationModel()
-      educationModel.startDate = startDate
-      educationModel.endDate = endDate
+      educationModel.metadata = metadata
+      educationModel.startDate = startDate ?? null
+      educationModel.endDate = endDate ?? null
       educationModel.type = type
       educationModel.specialization = specialization
       educationModel.school = school
@@ -136,13 +146,15 @@ export class PersonAPIService {
     })
 
   private createIdDocumentsModels = (idDocuments: IdDocument[]) =>
-    idDocuments.map((idDocument) => {
-      const idDocumentModel = new IdDocumentModel()
-      idDocumentModel.metadata = idDocument.metadata
-      idDocumentModel.documentType = idDocument.documentType
-      idDocumentModel.documentNumber = idDocument.documentNumber
-      idDocumentModel.expirationDate = idDocument.expirationDate
-      idDocumentModel.issueDate = idDocument.issueDate
-      return idDocumentModel
-    })
+    idDocuments.map(
+      ({ metadata, documentNumber, documentType, expirationDate, issueDate, status }) => {
+        const idDocumentModel = new IdDocumentModel()
+        idDocumentModel.metadata = metadata
+        idDocumentModel.documentType = documentType
+        idDocumentModel.documentNumber = documentNumber
+        idDocumentModel.expirationDate = expirationDate ?? null
+        idDocumentModel.issueDate = issueDate ?? null
+        return idDocumentModel
+      },
+    )
 }

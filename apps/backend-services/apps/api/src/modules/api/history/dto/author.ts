@@ -2,7 +2,7 @@ import { Field, ObjectType } from '@nestjs/graphql'
 import { UpdateSource } from 'defs'
 
 @ObjectType()
-export class ActivityEventAuthor implements UpdateSource {
+export class ActivityEventAuthor {
   @Field()
   sourceId: string
 

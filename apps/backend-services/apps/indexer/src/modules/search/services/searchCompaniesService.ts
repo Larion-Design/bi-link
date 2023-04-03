@@ -2,8 +2,8 @@ import { CompanySearchIndex } from '@app/definitions'
 import { Injectable, Logger } from '@nestjs/common'
 import { ElasticsearchService } from '@nestjs/elasticsearch'
 import { SearchRequest, SearchTotalHits } from '@elastic/elasticsearch/lib/api/types'
-import { CompaniesSuggestions } from '../../api/companies/dto/companiesSuggestions'
 import { INDEX_COMPANIES } from '@app/definitions'
+import { CompaniesSuggestions } from 'defs'
 import { SearchHelperService } from './searchHelperService'
 
 @Injectable()
@@ -16,7 +16,11 @@ export class SearchCompaniesService {
     private readonly searchHelperService: SearchHelperService,
   ) {}
 
-  searchBasicSuggestions = async (searchTerm: string, skip: number, limit: number) => {
+  searchBasicSuggestions = async (
+    searchTerm: string,
+    skip: number,
+    limit: number,
+  ): Promise<CompaniesSuggestions | undefined> => {
     try {
       const request: SearchRequest = {
         index: this.index,
@@ -62,11 +66,10 @@ export class SearchCompaniesService {
         hits: { total, hits },
       } = await this.elasticsearchService.search<CompanySearchIndex>(request)
 
-      const suggestions = new CompaniesSuggestions()
-      suggestions.records =
-        hits.map(({ _id, _source }) => this.transformRecord(_id, _source!)) ?? []
-      suggestions.total = (total as SearchTotalHits).value
-      return suggestions
+      return {
+        total: (total as SearchTotalHits).value,
+        records: hits.map(({ _id, _source }) => this.transformRecord(_id, _source!)),
+      }
     } catch (error) {
       this.logger.error(error)
     }

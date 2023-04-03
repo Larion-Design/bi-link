@@ -16,7 +16,7 @@ export class FileAPIService {
       fileModel.fileId = fileInfo.fileId
       fileModel.name = fileInfo.name
       fileModel.description = fileInfo.description
-      fileModel.isHidden = !!fileInfo.isHidden
+      fileModel.isHidden = fileInfo.isHidden
       fileModel.metadata = fileInfo.metadata
 
       return this.fileModel.findOneAndUpdate<FileModel>({ fileId: fileInfo.fileId }, fileModel, {
@@ -36,9 +36,10 @@ export class FileAPIService {
         files.map(async (fileInfo) => this.getUploadedFileModel(fileInfo, transactionSession)),
       )
       await transactionSession.endSession()
-      return fileModels.filter((fileModel) => !!fileModel)
+      return fileModels as FileModel[]
     } catch (error) {
       this.logger.error(error)
     }
+    return []
   }
 }

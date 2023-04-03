@@ -2,7 +2,7 @@ import { Injectable, Logger } from '@nestjs/common'
 import { InjectModel } from '@nestjs/mongoose'
 import { createHash } from 'crypto'
 import { ClientSession, Model } from 'mongoose'
-import { LocationDocument, LocationModel } from 'src/location/models/locationModel'
+import { LocationDocument, LocationModel } from '../models/locationModel'
 
 @Injectable()
 export class LocationsService {
@@ -18,6 +18,14 @@ export class LocationsService {
         return this.locationModel.find({ locationId: locationsIds }).exec()
       }
       return []
+    } catch (e) {
+      this.logger.error(e)
+    }
+  }
+
+  getLocation = async (locationId: string) => {
+    try {
+      return this.locationModel.findOne({ locationId }).exec()
     } catch (e) {
       this.logger.error(e)
     }
