@@ -15,6 +15,7 @@ export class GetPropertiesByPerson {
 
   @Query(() => [PropertyListRecord])
   async getPropertiesByPerson(@Args() { personId }: Params) {
+    const graph = await this.graphService.getEntityRelationships(personId, 1)
     return []
   }
 }

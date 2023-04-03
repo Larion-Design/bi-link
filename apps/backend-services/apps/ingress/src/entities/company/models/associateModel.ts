@@ -1,22 +1,26 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
 import { Document, Types } from 'mongoose'
 import { Associate } from 'defs'
+import { CustomFieldModel, CustomFieldSchema } from '../../customField/models/customFieldModel'
 import {
   BooleanValueWithMetadataModel,
   BooleanValueWithMetadataSchema,
-  MetadataModel,
-  MetadataSchema,
+} from '../../metadata/models/booleanValueWithMetadataModel'
+import { MetadataModel, MetadataSchema } from '../../metadata/models/metadataModel'
+import {
   NumberValueWithMetadataModel,
   NumberValueWithMetadataSchema,
+} from '../../metadata/models/numberValueWithMetadataModel'
+import {
   OptionalDateValueWithMetadataModel,
   OptionalDateValueWithMetadataSchema,
-  PersonDocument,
-  PersonModel,
+} from '../../metadata/models/optionalDateValueWithMetadataModel'
+import {
   TextValueWithMetadataModel,
   TextValueWithMetadataSchema,
-} from '@app/models/models'
-import { CustomFieldModel, CustomFieldSchema } from '@app/models/models'
-import { CompanyDocument } from 'src/company/models/companyModel'
+} from '../../metadata/models/textValueWithMetadataModel'
+import { PersonDocument, PersonModel } from '../../person/models/personModel'
+import { CompanyDocument } from './companyModel'
 
 @Schema({ _id: false, timestamps: false })
 export class AssociateModel implements Associate {

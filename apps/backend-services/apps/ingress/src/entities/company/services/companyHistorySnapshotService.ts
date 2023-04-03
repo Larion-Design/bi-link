@@ -2,8 +2,8 @@ import { Injectable, Logger } from '@nestjs/common'
 import { InjectModel } from '@nestjs/mongoose'
 import { Model } from 'mongoose'
 import { UpdateSource } from 'defs'
-import { CompanyHistorySnapshotModel } from 'src/company/models/companyHistorySnapshotModel'
-import { CompanyModel } from 'src/company/models/companyModel'
+import { CompanyHistorySnapshotModel } from '../models/companyHistorySnapshotModel'
+import { CompanyModel } from '../models/companyModel'
 
 @Injectable()
 export class CompanyHistorySnapshotService {

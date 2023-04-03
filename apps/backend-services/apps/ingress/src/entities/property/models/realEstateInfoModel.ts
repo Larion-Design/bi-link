@@ -1,11 +1,11 @@
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
+import { Types } from 'mongoose'
+import { RealEstateInfo } from 'defs'
+import { LocationDocument, LocationModel } from '../../location/models/locationModel'
 import {
   BooleanValueWithMetadataModel,
   BooleanValueWithMetadataSchema,
-} from 'src/metadata/models/booleanValueWithMetadataModel'
-import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
-import { Types } from 'mongoose'
-import { LocationDocument, LocationModel } from 'src/location/models/locationModel'
-import { RealEstateInfo } from 'defs'
+} from '../../metadata/models/booleanValueWithMetadataModel'
 import {
   NumberValueWithMetadataModel,
   NumberValueWithMetadataSchema,

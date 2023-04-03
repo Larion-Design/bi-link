@@ -1,7 +1,7 @@
-import { ProceedingModel, ProceedingSchema } from 'src/proceeding/models/proceedingModel'
-import { UpdateSourceModel, UpdateSourceSchema } from 'src/shared/models/updateSourceModel'
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
 import { ProceedingSnapshot } from 'defs'
+import { UpdateSourceModel, UpdateSourceSchema } from '../../shared/models/updateSourceModel'
+import { ProceedingModel, ProceedingSchema } from './proceedingModel'
 
 @Schema({ _id: true, timestamps: true })
 export class ProceedingPendingSnapshotModel implements ProceedingSnapshot {

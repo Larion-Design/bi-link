@@ -1,6 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common'
+import { UserRole } from 'defs'
 import { FirebaseService } from './firebaseService'
-import { Role } from 'defs'
 
 @Injectable()
 export class UserService {
@@ -20,7 +20,7 @@ export class UserService {
   setUserActiveState = async (uid: string, disabled: boolean) =>
     this.firebaseService.admin().auth().updateUser(uid, { disabled })
 
-  setUserRole = async (uid: string, role: Role) =>
+  setUserRole = async (uid: string, role: UserRole) =>
     this.firebaseService.admin().auth().setCustomUserClaims(uid, { role })
 
   getUser = async (userId: string) => this.firebaseService.admin().auth().getUser(userId)

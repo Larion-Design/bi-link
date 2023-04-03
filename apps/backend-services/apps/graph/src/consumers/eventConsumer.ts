@@ -1,7 +1,8 @@
-import { EventsService } from '@app/models/event/services/eventsService'
+import { IngressService } from '@app/rpc/microservices/ingress'
 import { Logger } from '@nestjs/common'
 import { Job } from 'bull'
 import { OnQueueActive, OnQueueCompleted, OnQueueFailed, Process, Processor } from '@nestjs/bull'
+import { eventSchema } from 'defs'
 import { QUEUE_GRAPH_EVENTS } from '../producers/constants'
 import { EVENT_CREATED, EVENT_UPDATED, EventEventInfo } from '@app/scheduler-module'
 import { EventGraphService } from '../graph/services/eventGraphService'
@@ -11,7 +12,7 @@ export class EventConsumer {
   private readonly logger = new Logger(EventConsumer.name)
 
   constructor(
-    private readonly eventsService: EventsService,
+    private readonly ingressService: IngressService,
     private readonly eventGraphService: EventGraphService,
   ) {}
 
@@ -37,7 +38,8 @@ export class EventConsumer {
     } = job
 
     try {
-      await this.eventGraphService.upsertEventNode(eventId)
+      const eventModel = await this.getEventInfo(eventId)
+      await this.eventGraphService.upsertEventNode(eventId, eventModel)
       return {}
     } catch (error) {
       this.logger.error(error)
@@ -52,11 +54,20 @@ export class EventConsumer {
     } = job
 
     try {
-      await this.eventGraphService.upsertEventNode(eventId)
+      const eventModel = await this.getEventInfo(eventId)
+      await this.eventGraphService.upsertEventNode(eventId, eventModel)
       return {}
     } catch (error) {
       this.logger.error(error)
       await job.moveToFailed(error as { message: string })
     }
   }
+
+  private getEventInfo = async (eventId) =>
+    eventSchema.parse(
+      await this.ingressService.getEntity({ entityId: eventId, entityType: 'EVENT' }, true, {
+        type: 'SERVICE',
+        sourceId: 'SERVICE_INDEXER',
+      }),
+    )
 }

@@ -1,6 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
 import { Metadata } from 'defs'
-import { TrustModel, TrustSchema } from 'src/metadata/models/trustModel'
+import { TrustModel, TrustSchema } from './trustModel'
 
 @Schema({ _id: false, timestamps: true })
 export class MetadataModel implements Metadata {

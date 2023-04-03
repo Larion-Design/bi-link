@@ -1,12 +1,12 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
 import { Document, Types } from 'mongoose'
 import { Report } from 'defs'
-import { CompanyDocument, CompanyModel } from 'src/company/models/companyModel'
-import { EventDocument, EventModel } from 'src/event/models/eventModel'
-import { PersonDocument, PersonModel } from 'src/person/models/personModel'
-import { PropertyDocument, PropertyModel } from 'src/property/models/propertyModel'
-import { DataRefModel, DataRefSchema } from 'src/report/models/dataRefModel'
-import { ReportSectionModel, ReportSectionSchema } from 'src/report/models/reportSectionModel'
+import { CompanyDocument, CompanyModel } from '../../company/models/companyModel'
+import { EventDocument, EventModel } from '../../event/models/eventModel'
+import { PersonDocument, PersonModel } from '../../person/models/personModel'
+import { PropertyDocument, PropertyModel } from '../../property/models/propertyModel'
+import { DataRefModel, DataRefSchema } from './dataRefModel'
+import { ReportSectionModel, ReportSectionSchema } from './reportSectionModel'
 
 @Schema({ _id: true, timestamps: true })
 export class ReportModel implements Report {

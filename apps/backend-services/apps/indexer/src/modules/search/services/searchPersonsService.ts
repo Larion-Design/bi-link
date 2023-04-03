@@ -2,8 +2,8 @@ import { PersonIndex, PersonSearchIndex } from '@app/definitions'
 import { Injectable, Logger } from '@nestjs/common'
 import { SearchRequest, SearchTotalHits } from '@elastic/elasticsearch/lib/api/types'
 import { ElasticsearchService } from '@nestjs/elasticsearch'
-import { PersonsSuggestions } from '../../api/persons/dto/personsSuggestions'
 import { INDEX_PERSONS } from '@app/definitions'
+import { PersonListRecord, PersonsSuggestions } from 'defs'
 import { SearchHelperService } from './searchHelperService'
 
 @Injectable()
@@ -20,7 +20,11 @@ export class SearchPersonsService {
    * todo: see https://stackoverflow.com/questions/68127892/how-does-search-after-work-in-elastic-search
    * todo: see https://stackoverflow.com/a/69878184/4837517
    */
-  searchBasicSuggestions = async (searchTerm: string, skip: number, limit: number) => {
+  searchBasicSuggestions = async (
+    searchTerm: string,
+    skip: number,
+    limit: number,
+  ): Promise<PersonsSuggestions<PersonListRecord>> => {
     try {
       const request: SearchRequest = {
         index: this.index,
@@ -71,10 +75,10 @@ export class SearchPersonsService {
         hits: { total, hits },
       } = await this.elasticsearchService.search<PersonSearchIndex>(request)
 
-      const suggestions = new PersonsSuggestions()
-      suggestions.records = hits.map(({ _id, _source }) => this.transformRecord(_id, _source)) ?? []
-      suggestions.total = (total as SearchTotalHits).value
-      return suggestions
+      return {
+        total: (total as SearchTotalHits).value,
+        records: hits.map(({ _id, _source }) => this.transformRecord(_id, _source)),
+      }
     } catch (error) {
       this.logger.error(error)
     }

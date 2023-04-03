@@ -1,11 +1,11 @@
-import { MetadataModel, MetadataSchema } from 'src/metadata/models/metadataModel'
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
 import { Document, Types } from 'mongoose'
 import { EventParticipant } from 'defs'
-import { PersonDocument, PersonModel } from 'src/person/models/personModel'
-import { CompanyDocument, CompanyModel } from 'src/company/models/companyModel'
-import { CustomFieldModel, CustomFieldSchema } from '../../cusotmField/models/customFieldModel'
-import { PropertyDocument, PropertyModel } from 'src/property/models/propertyModel'
+import { CompanyDocument, CompanyModel } from '../../company/models/companyModel'
+import { CustomFieldModel, CustomFieldSchema } from '../../customField/models/customFieldModel'
+import { MetadataModel, MetadataSchema } from '../../metadata/models/metadataModel'
+import { PersonDocument, PersonModel } from '../../person/models/personModel'
+import { PropertyDocument, PropertyModel } from '../../property/models/propertyModel'
 
 @Schema({ _id: false, timestamps: false })
 export class PartyModel implements EventParticipant {

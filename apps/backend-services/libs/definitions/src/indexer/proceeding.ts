@@ -1,4 +1,11 @@
 import { z } from 'zod'
+import { proceedingSchema } from 'defs'
+import {
+  connectedCompanyIndexSchema,
+  connectedPersonIndexSchema,
+  customFieldIndexSchema,
+  embeddedFileIndexSchema,
+} from '@app/definitions'
 
 export const proceedingIndexSchema = proceedingSchema
   .pick({ name: true, type: true, description: true })
@@ -7,26 +14,20 @@ export const proceedingIndexSchema = proceedingSchema
       fileNumber: proceedingSchema.shape.fileNumber.shape.value,
       year: proceedingSchema.shape.year.shape.value,
       customFields: customFieldIndexSchema.array(),
+      files: embeddedFileIndexSchema.array(),
+      companies: connectedCompanyIndexSchema.array(),
+      persons: connectedPersonIndexSchema.array(),
     }),
   )
 
-import { Proceeding, proceedingSchema } from 'defs'
-import {
-  ConnectedCompanyIndex,
-  ConnectedPersonIndex,
-  customFieldIndexSchema,
-  EmbeddedFileIndex,
-} from '@app/definitions'
+export const embeddedProceedingSchema = proceedingSchema.pick({ _id: true }).merge(
+  proceedingIndexSchema.pick({
+    name: true,
+    fileNumber: true,
+    description: true,
+    year: true,
+  }),
+)
 
-export interface ProceedingIndex
-  extends Pick<
-    Proceeding,
-    'name' | 'type' | 'fileNumber' | 'description' | 'year' | 'customFields'
-  > {
-  persons: ConnectedPersonIndex[]
-  companies: ConnectedCompanyIndex[]
-  files: EmbeddedFileIndex[]
-}
-
-export interface EmbeddedProceedingIndex
-  extends Pick<Proceeding, '_id' | 'name' | 'fileNumber' | 'description' | 'year'> {}
+export type ProceedingIndex = z.infer<typeof proceedingIndexSchema>
+export type EmbeddedProceedingIndex = z.infer<typeof embeddedProceedingSchema>

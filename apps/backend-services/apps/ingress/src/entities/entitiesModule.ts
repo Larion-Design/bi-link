@@ -1,120 +1,134 @@
-import { AssociateModel, AssociateSchema } from 'src/company/models/associateModel'
+import { Global, Module } from '@nestjs/common'
+import { MongooseModule } from '@nestjs/mongoose'
+import { AssociateModel, AssociateSchema } from './company/models/associateModel'
 import {
   CompanyHistorySnapshotModel,
   CompanyHistorySnapshotSchema,
-} from 'src/company/models/companyHistorySnapshotModel'
-import { CompanyModel, CompanySchema } from 'src/company/models/companyModel'
+} from './company/models/companyHistorySnapshotModel'
+import { CompanyModel, CompanySchema } from './company/models/companyModel'
 import {
   CompanyPendingSnapshotModel,
   CompanyPendingSnapshotSchema,
-} from 'src/company/models/companyPendingSnapshotModel'
-import { CompaniesService } from 'src/company/services/companiesService'
-import { CompanyHistorySnapshotService } from 'src/company/services/companyHistorySnapshotService'
-import { CompanyPendingSnapshotService } from 'src/company/services/companyPendingSnapshotService'
+} from './company/models/companyPendingSnapshotModel'
+import { AssociatesService } from './company/services/associatesService'
+import { CompaniesService } from './company/services/companiesService'
+import { CompanyAPIService } from './company/services/companyAPIService'
+import { CompanyHistorySnapshotService } from './company/services/companyHistorySnapshotService'
+import { CompanyPendingSnapshotService } from './company/services/companyPendingSnapshotService'
+import { CustomFieldModel, CustomFieldSchema } from './customField/models/customFieldModel'
+import { CustomFieldsService } from './customField/services/customFieldsService'
 import {
   EventHistorySnapshotModel,
   EventHistorySnapshotSchema,
-} from 'src/event/models/eventHistorySnapshotModel'
-import { EventModel, EventSchema } from 'src/event/models/eventModel'
+} from './event/models/eventHistorySnapshotModel'
+import { EventModel, EventSchema } from './event/models/eventModel'
 import {
   EventPendingSnapshotModel,
   EventPendingSnapshotSchema,
-} from 'src/event/models/eventPendingSnapshotModel'
-import { PartyModel, PartySchema } from 'src/event/models/partyModel'
-import { EventHistorySnapshotService } from 'src/event/services/eventHistorySnapshotService'
-import { EventPendingSnapshotService } from 'src/event/services/eventPendingSnapshotService'
-import { EventsService } from 'src/event/services/eventsService'
-import { FileModel, FileSchema } from 'src/file/models/fileModel'
-import { FilesService } from 'src/file/services/filesService'
-import { CoordinatesModel, CoordinatesSchema } from 'src/location/models/coordinatesModel'
-import { LocationsService } from 'src/location/services/locationsService'
+} from './event/models/eventPendingSnapshotModel'
+import { PartyModel, PartySchema } from './event/models/partyModel'
+import { EventAPIService } from './event/services/eventAPIService'
+import { EventHistorySnapshotService } from './event/services/eventHistorySnapshotService'
+import { EventPendingSnapshotService } from './event/services/eventPendingSnapshotService'
+import { EventsService } from './event/services/eventsService'
+import { PartyAPIService } from './event/services/partyAPIService'
+import { FileModel, FileSchema } from './file/models/fileModel'
+import { FileAPIService } from './file/services/fileAPIService'
+import { FilesService } from './file/services/filesService'
+import { CoordinatesModel, CoordinatesSchema } from './location/models/coordinatesModel'
+import { LocationModel, LocationSchema } from './location/models/locationModel'
+import { LocationAPIService } from './location/services/locationAPIService'
+import { LocationsService } from './location/services/locationsService'
 import {
   DateValueWithMetadataModel,
   DateValueWithMetadataSchema,
-} from 'src/metadata/models/dateValueWithMetadataModel'
-import { MetadataModel, MetadataSchema } from 'src/metadata/models/metadataModel'
+} from './metadata/models/dateValueWithMetadataModel'
+import { MetadataModel, MetadataSchema } from './metadata/models/metadataModel'
 import {
   NumberValueWithMetadataModel,
   NumberValueWithMetadataSchema,
-} from 'src/metadata/models/numberValueWithMetadataModel'
+} from './metadata/models/numberValueWithMetadataModel'
 import {
   OptionalDateValueWithMetadataModel,
   OptionalDateValueWithMetadataSchema,
-} from 'src/metadata/models/optionalDateValueWithMetadataModel'
+} from './metadata/models/optionalDateValueWithMetadataModel'
 import {
   TextValueWithMetadataModel,
   TextValueWithMetadataSchema,
-} from 'src/metadata/models/textValueWithMetadataModel'
-import { TrustModel, TrustSchema } from 'src/metadata/models/trustModel'
-import { EducationModel, EducationSchema } from 'src/person/models/educationModel'
-import { IdDocumentModel, IdDocumentSchema } from 'src/person/models/idDocumentModel'
-import { PersonModel, PersonSchema } from 'src/person/models/personModel'
-import { RelationshipModel, RelationshipSchema } from 'src/person/models/relationshipModel'
-import { PersonHistorySnapshotService } from 'src/person/services/personHistorySnapshotService'
-import { PersonPendingSnapshotService } from 'src/person/services/personPendingSnapshotService'
-import { PersonsService } from 'src/person/services/personsService'
-import {
-  ProceedingEntityModel,
-  ProceedingEntitySchema,
-} from 'src/proceeding/models/proceedingEntityModel'
-import {
-  ProceedingHistorySnapshotModel,
-  ProceedingHistorySnapshotSchema,
-} from 'src/proceeding/models/proceedingHistorySnapshotModel'
-import { ProceedingModel, ProceedingSchema } from 'src/proceeding/models/proceedingModel'
-import {
-  ProceedingPendingSnapshotModel,
-  ProceedingPendingSnapshotSchema,
-} from 'src/proceeding/models/proceedingPendingSnapshotModel'
-import { ProceedingHistorySnapshotService } from 'src/proceeding/services/proceedingHistorySnapshotService'
-import { ProceedingPendingSnapshotService } from 'src/proceeding/services/proceedingPendingSnapshotService'
-import { ProceedingsService } from 'src/proceeding/services/proceedingsService'
-import {
-  PropertyHistorySnapshotModel,
-  PropertyHistorySnapshotSchema,
-} from 'src/property/models/propertyHistorySnapshotModel'
-import { PropertyModel, PropertySchema } from 'src/property/models/propertyModel'
-import { PropertyOwnerModel, PropertyOwnerSchema } from 'src/property/models/propertyOwnerModel'
-import {
-  PropertyPendingSnapshotModel,
-  PropertyPendingSnapshotSchema,
-} from 'src/property/models/propertyPendingSnapshotModel'
-import { PropertiesService } from 'src/property/services/propertiesService'
-import { PropertyHistorySnapshotService } from 'src/property/services/propertyHistorySnapshotService'
-import { PropertyPendingSnapshotService } from 'src/property/services/propertyPendingSnapshotService'
-import { LinkModel, LinkSchema } from 'src/report/models/content/linkModel'
-import { TableModel, TableSchema } from 'src/report/models/content/tableModel'
-import { TextModel, TextSchema } from 'src/report/models/content/textModel'
-import { TitleModel, TitleSchema } from 'src/report/models/content/titleModel'
-import { DataRefModel, DataRefSchema } from 'src/report/models/dataRefModel'
-import { ReportContentModel, ReportContentSchema } from 'src/report/models/reportContentModel'
-import {
-  ReportHistorySnapshotModel,
-  ReportHistorySnapshotSchema,
-} from 'src/report/models/reportHistorySnapshotModel'
-import { ReportModel, ReportSchema } from 'src/report/models/reportModel'
-import {
-  ReportPendingSnapshotModel,
-  ReportPendingSnapshotSchema,
-} from 'src/report/models/reportPendingSnapshotModel'
-import { ReportSectionModel, ReportSectionSchema } from 'src/report/models/reportSectionModel'
-import { ReportHistorySnapshotService } from 'src/report/services/reportHistorySnapshotService'
-import { ReportPendingSnapshotService } from 'src/report/services/reportPendingSnapshotService'
-import { ReportsService } from 'src/report/services/reportsService'
-import { CustomFieldModel, CustomFieldSchema } from 'src/shared/models/customFieldModel'
-
-import { Global, Module } from '@nestjs/common'
-import { MongooseModule } from '@nestjs/mongoose'
-import { LocationModel, LocationSchema } from 'src/location/models/locationModel'
-import {
-  PersonPendingSnapshotModel,
-  PersonPendingSnapshotSchema,
-} from 'src/person/models/personPendingSnapshotModel'
+} from './metadata/models/textValueWithMetadataModel'
+import { TrustModel, TrustSchema } from './metadata/models/trustModel'
+import { EducationModel, EducationSchema } from './person/models/educationModel'
+import { IdDocumentModel, IdDocumentSchema } from './person/models/idDocumentModel'
+import { OldNameModel, OldNameSchema } from './person/models/oldNameModel'
 import {
   PersonHistorySnapshotModel,
   PersonHistorySnapshotSchema,
-} from 'src/person/models/personHistorySnapshotModel'
-import { OldNameModel, OldNameSchema } from 'src/person/models/oldNameModel'
+} from './person/models/personHistorySnapshotModel'
+import { PersonModel, PersonSchema } from './person/models/personModel'
+import {
+  PersonPendingSnapshotModel,
+  PersonPendingSnapshotSchema,
+} from './person/models/personPendingSnapshotModel'
+import { RelationshipModel, RelationshipSchema } from './person/models/relationshipModel'
+import { PersonAPIService } from './person/services/personAPIService'
+import { PersonHistorySnapshotService } from './person/services/personHistorySnapshotService'
+import { PersonPendingSnapshotService } from './person/services/personPendingSnapshotService'
+import { PersonsService } from './person/services/personsService'
+import { RelationshipsAPIService } from './person/services/relationshipsAPIService'
+import {
+  ProceedingEntityModel,
+  ProceedingEntitySchema,
+} from './proceeding/models/proceedingEntityModel'
+import {
+  ProceedingHistorySnapshotModel,
+  ProceedingHistorySnapshotSchema,
+} from './proceeding/models/proceedingHistorySnapshotModel'
+import { ProceedingModel, ProceedingSchema } from './proceeding/models/proceedingModel'
+import {
+  ProceedingPendingSnapshotModel,
+  ProceedingPendingSnapshotSchema,
+} from './proceeding/models/proceedingPendingSnapshotModel'
+import { ProceedingAPIService } from './proceeding/services/proceedingAPIService'
+import { ProceedingHistorySnapshotService } from './proceeding/services/proceedingHistorySnapshotService'
+import { ProceedingPendingSnapshotService } from './proceeding/services/proceedingPendingSnapshotService'
+import { ProceedingsService } from './proceeding/services/proceedingsService'
+import {
+  PropertyHistorySnapshotModel,
+  PropertyHistorySnapshotSchema,
+} from './property/models/propertyHistorySnapshotModel'
+import { PropertyModel, PropertySchema } from './property/models/propertyModel'
+import { PropertyOwnerModel, PropertyOwnerSchema } from './property/models/propertyOwnerModel'
+import {
+  PropertyPendingSnapshotModel,
+  PropertyPendingSnapshotSchema,
+} from './property/models/propertyPendingSnapshotModel'
+import { PropertiesService } from './property/services/propertiesService'
+import { PropertyAPIService } from './property/services/propertyAPIService'
+import { PropertyHistorySnapshotService } from './property/services/propertyHistorySnapshotService'
+import { PropertyOwnerAPIService } from './property/services/propertyOwnerAPIService'
+import { PropertyPendingSnapshotService } from './property/services/propertyPendingSnapshotService'
+import { LinkModel, LinkSchema } from './report/models/content/linkModel'
+import { TableModel, TableSchema } from './report/models/content/tableModel'
+import { TextModel, TextSchema } from './report/models/content/textModel'
+import { TitleModel, TitleSchema } from './report/models/content/titleModel'
+import { DataRefModel, DataRefSchema } from './report/models/dataRefModel'
+import { ReportContentModel, ReportContentSchema } from './report/models/reportContentModel'
+import {
+  ReportHistorySnapshotModel,
+  ReportHistorySnapshotSchema,
+} from './report/models/reportHistorySnapshotModel'
+import { ReportModel, ReportSchema } from './report/models/reportModel'
+import {
+  ReportPendingSnapshotModel,
+  ReportPendingSnapshotSchema,
+} from './report/models/reportPendingSnapshotModel'
+import { ReportSectionModel, ReportSectionSchema } from './report/models/reportSectionModel'
+import { ReportAPIService } from './report/services/reportAPIService'
+import { ReportContentAPIService } from './report/services/reportContentAPIService'
+import { ReportHistorySnapshotService } from './report/services/reportHistorySnapshotService'
+import { ReportPendingSnapshotService } from './report/services/reportPendingSnapshotService'
+import { ReportRefsAPIService } from './report/services/reportRefsAPIService'
+import { ReportsService } from './report/services/reportsService'
 
 @Global()
 @Module({
@@ -172,29 +186,46 @@ import { OldNameModel, OldNameSchema } from 'src/person/models/oldNameModel'
     PersonsService,
     PersonHistorySnapshotService,
     PersonPendingSnapshotService,
+    PersonAPIService,
+    RelationshipsAPIService,
 
     CompaniesService,
     CompanyHistorySnapshotService,
     CompanyPendingSnapshotService,
+    CompanyAPIService,
+    AssociatesService,
 
     EventsService,
     EventHistorySnapshotService,
     EventPendingSnapshotService,
+    EventAPIService,
+    PartyAPIService,
 
     ProceedingsService,
     ProceedingHistorySnapshotService,
     ProceedingPendingSnapshotService,
+    ProceedingAPIService,
 
     PropertiesService,
     PropertyPendingSnapshotService,
     PropertyHistorySnapshotService,
+    PropertyAPIService,
+    PropertyOwnerAPIService,
 
     ReportsService,
     ReportPendingSnapshotService,
     ReportHistorySnapshotService,
+    ReportAPIService,
+    ReportRefsAPIService,
+    ReportContentAPIService,
 
     LocationsService,
+    LocationAPIService,
+
     FilesService,
+    FileAPIService,
+
+    CustomFieldsService,
   ],
   exports: [
     MongooseModule,
@@ -202,29 +233,46 @@ import { OldNameModel, OldNameSchema } from 'src/person/models/oldNameModel'
     PersonsService,
     PersonHistorySnapshotService,
     PersonPendingSnapshotService,
+    PersonAPIService,
+    RelationshipsAPIService,
 
     CompaniesService,
     CompanyHistorySnapshotService,
     CompanyPendingSnapshotService,
+    CompanyAPIService,
+    AssociatesService,
 
     EventsService,
     EventHistorySnapshotService,
     EventPendingSnapshotService,
+    EventAPIService,
+    PartyAPIService,
 
     ProceedingsService,
     ProceedingHistorySnapshotService,
     ProceedingPendingSnapshotService,
+    ProceedingAPIService,
 
     PropertiesService,
     PropertyPendingSnapshotService,
     PropertyHistorySnapshotService,
+    PropertyAPIService,
+    PropertyOwnerAPIService,
 
     ReportsService,
     ReportPendingSnapshotService,
     ReportHistorySnapshotService,
+    ReportAPIService,
+    ReportRefsAPIService,
+    ReportContentAPIService,
 
     LocationsService,
+    LocationAPIService,
+
     FilesService,
+    FileAPIService,
+
+    CustomFieldsService,
   ],
 })
 export class EntitiesModule {}

@@ -1,7 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
 import { PropertySnapshot } from 'defs'
-import { UpdateSourceModel, UpdateSourceSchema } from 'src/shared/models/updateSourceModel'
-import { PropertyModel, PropertySchema } from 'src/property/models/propertyModel'
+import { UpdateSourceModel, UpdateSourceSchema } from '../../shared/models/updateSourceModel'
+import { PropertyModel, PropertySchema } from './propertyModel'
 
 @Schema({ _id: true, timestamps: true })
 export class PropertyHistorySnapshotModel implements PropertySnapshot {

@@ -22,19 +22,12 @@ export const reportSchema = z
     property: connectedEntitySchema.nullish(),
     proceeding: connectedEntitySchema.nullish(),
     sections: reportSectionSchema.array(),
-    createdAt: dateSchema,
-    updatedAt: dateSchema,
     refs: dataRefSchema.array(),
   })
   .merge(withTimestamps)
 
 const reportAPISchema = reportSchema.merge(
   z.object({
-    person: connectedEntitySchema.nullish(),
-    company: connectedEntitySchema.nullish(),
-    event: connectedEntitySchema.nullish(),
-    property: connectedEntitySchema.nullish(),
-    proceeding: connectedEntitySchema.nullish(),
     refs: dataRefAPISchema.array(),
   }),
 )

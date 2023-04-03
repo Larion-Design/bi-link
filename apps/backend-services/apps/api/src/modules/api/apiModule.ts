@@ -13,11 +13,10 @@ import { CompanyCUIExists } from './companies/queries/companyCUIExists'
 import { CompanyRegistrationNumberExists } from './companies/queries/companyRegistrationNumberExists'
 import { GetCompanies } from './companies/queries/getCompanies'
 import { GetCompany } from './companies/queries/getCompany'
-import { GetCompanyFrequentCustomFields } from './companies/queries/getCompanyFrequentCustomFields'
 import { SearchCompanies } from './companies/queries/searchCompanies'
 import { AssociatesService } from '../../../../ingress/src/entities/company/services/associatesService'
 import { CompanyAPIService } from '../../../../ingress/src/entities/company/services/companyAPIService'
-import { CustomFieldsService } from '../../../../ingress/src/entities/cusotmField/services/customFieldsService'
+import { CustomFieldsService } from '../../../../ingress/src/entities/customField/services/customFieldsService'
 import { FileUploadController } from './files/controllers/fileUploadController'
 import { FileUrl } from './files/fieldResolvers'
 import { GetFileContent } from './files/queries/getFileContent'
@@ -27,7 +26,6 @@ import { FileAPIService } from '../../../../ingress/src/entities/file/services/f
 import { CreateEvent } from './events/mutations/createEvent'
 import { UpdateEvent } from './events/mutations/updateEvent'
 import { GetEvent } from './events/queries/getEvent'
-import { GetEventFrequentCustomFields } from './events/queries/getEventFrequentCustomFields'
 import { GetEvents } from './events/queries/getEvents'
 import { SearchEvents } from './events/queries/searchEvents'
 import { EventAPIService } from '../../../../ingress/src/entities/event/services/eventAPIService'
@@ -35,7 +33,6 @@ import { PartyAPIService } from '../../../../ingress/src/entities/event/services
 import { CreatePerson } from './persons/mutations/createPerson'
 import { UpdatePerson } from './persons/mutations/updatePerson'
 import { GetPerson } from './persons/queries/getPerson'
-import { GetPersonFrequentCustomFields } from './persons/queries/getPersonFrequentCustomFields'
 import { GetPersons } from './persons/queries/getPersons'
 import { PersonCNPExists } from './persons/queries/personCNPExists'
 import { PersonIdDocumentExists } from './persons/queries/personIdDocumentExists'
@@ -112,7 +109,6 @@ import { GetUsers } from './users/queries/getUsers'
     SearchCompanies,
     CompanyCUIExists,
     CompanyRegistrationNumberExists,
-    GetCompanyFrequentCustomFields,
     GetPerson,
     GetPersons,
     SearchPersons,
@@ -120,7 +116,6 @@ import { GetUsers } from './users/queries/getUsers'
     UpdatePerson,
     PersonCNPExists,
     PersonIdDocumentExists,
-    GetPersonFrequentCustomFields,
     FileUrl,
     GetMakers,
     GetModels,
@@ -137,7 +132,6 @@ import { GetUsers } from './users/queries/getUsers'
     SearchEvents,
     CreateEvent,
     UpdateEvent,
-    GetEventFrequentCustomFields,
     GetEvents,
     GetUsers,
     ChangeUserRole,

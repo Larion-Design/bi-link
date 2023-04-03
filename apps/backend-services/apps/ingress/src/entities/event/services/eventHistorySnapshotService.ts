@@ -1,9 +1,9 @@
-import { EventHistorySnapshotModel } from 'src/event/models/eventHistorySnapshotModel'
-import { EventModel } from 'src/event/models/eventModel'
 import { Injectable, Logger } from '@nestjs/common'
 import { InjectModel } from '@nestjs/mongoose'
 import { Model } from 'mongoose'
 import { UpdateSource } from 'defs'
+import { EventHistorySnapshotModel } from '../models/eventHistorySnapshotModel'
+import { EventModel } from '../models/eventModel'
 
 @Injectable()
 export class EventHistorySnapshotService {

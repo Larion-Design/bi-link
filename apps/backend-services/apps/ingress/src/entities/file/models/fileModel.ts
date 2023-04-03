@@ -1,7 +1,7 @@
 import { Document } from 'mongoose'
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
 import { File } from 'defs'
-import { MetadataModel, MetadataSchema } from 'src/metadata/models/metadataModel'
+import { MetadataModel, MetadataSchema } from '../../metadata/models/metadataModel'
 
 @Schema({ timestamps: true })
 export class FileModel implements File {

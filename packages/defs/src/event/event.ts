@@ -39,9 +39,11 @@ export const eventAPIOutputSchema = eventSchema.merge(
   }),
 )
 
-export const eventListRecordSchema = eventSchema.pick({ _id: true, type: true, date: true }).merge(
+export const eventListRecordSchema = eventSchema.pick({ _id: true }).merge(
   z.object({
     location: z.string().nullish(),
+    type: eventSchema.shape.type.shape.value,
+    date: eventSchema.shape.date.shape.value,
   }),
 )
 

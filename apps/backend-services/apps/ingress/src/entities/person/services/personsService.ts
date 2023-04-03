@@ -1,9 +1,9 @@
-import { LocationDocument, LocationModel } from 'src/location/models/locationModel'
 import { Model, ProjectionFields, Query } from 'mongoose'
 import { Injectable, Logger } from '@nestjs/common'
 import { InjectModel } from '@nestjs/mongoose'
-import { PersonDocument, PersonModel } from 'src/person/models/personModel'
-import { FileDocument, FileModel } from 'src/file/models/fileModel'
+import { PersonDocument, PersonModel } from '../models/personModel'
+import { FileDocument, FileModel } from '../../file/models/fileModel'
+import { LocationModel, LocationDocument } from '../../location/models/locationModel'
 
 @Injectable()
 export class PersonsService {

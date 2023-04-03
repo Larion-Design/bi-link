@@ -1,7 +1,7 @@
-import { UpdateSourceModel, UpdateSourceSchema } from 'src/shared/models/updateSourceModel'
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
 import { EventSnapshot } from 'defs'
 import { Document } from 'mongoose'
+import { UpdateSourceModel, UpdateSourceSchema } from '../../shared/models/updateSourceModel'
 import { EventModel, EventSchema } from './eventModel'
 
 @Schema({ _id: true, timestamps: true })

@@ -1,18 +1,18 @@
-import { MetadataModel, MetadataSchema } from 'src/metadata/models/metadataModel'
-import {
-  OptionalDateValueWithMetadataModel,
-  OptionalDateValueWithMetadataSchema,
-} from 'src/metadata/models/optionalDateValueWithMetadataModel'
-import {
-  TextValueWithMetadataModel,
-  TextValueWithMetadataSchema,
-} from 'src/metadata/models/textValueWithMetadataModel'
-import { LocationDocument, LocationModel } from 'src/location/models/locationModel'
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
 import { Document, Types } from 'mongoose'
 import { Event } from 'defs'
-import { CustomFieldModel, CustomFieldSchema } from '../../cusotmField/models/customFieldModel'
+import { CustomFieldModel, CustomFieldSchema } from '../../customField/models/customFieldModel'
 import { FileModel } from '../../file/models/fileModel'
+import { LocationDocument, LocationModel } from '../../location/models/locationModel'
+import { MetadataModel, MetadataSchema } from '../../metadata/models/metadataModel'
+import {
+  OptionalDateValueWithMetadataModel,
+  OptionalDateValueWithMetadataSchema,
+} from '../../metadata/models/optionalDateValueWithMetadataModel'
+import {
+  TextValueWithMetadataModel,
+  TextValueWithMetadataSchema,
+} from '../../metadata/models/textValueWithMetadataModel'
 import { PartyModel, PartySchema } from './partyModel'
 
 @Schema({ timestamps: true })

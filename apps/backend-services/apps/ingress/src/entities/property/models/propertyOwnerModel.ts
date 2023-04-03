@@ -1,18 +1,15 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
 import { Document, Types } from 'mongoose'
 import { PropertyOwner } from 'defs'
-import { MetadataModel, MetadataSchema } from 'src/metadata/models/metadataModel'
+import { CompanyDocument, CompanyModel } from '../../company/models/companyModel'
+import { CustomFieldModel, CustomFieldSchema } from '../../customField/models/customFieldModel'
+import { MetadataModel, MetadataSchema } from '../../metadata/models/metadataModel'
 import {
   OptionalDateValueWithMetadataModel,
   OptionalDateValueWithMetadataSchema,
-} from 'src/metadata/models/optionalDateValueWithMetadataModel'
-import { PersonDocument, PersonModel } from 'src/person/models/personModel'
-import { CompanyDocument, CompanyModel } from 'src/company/models/companyModel'
-import { CustomFieldModel, CustomFieldSchema } from 'src/shared/models/customFieldModel'
-import {
-  VehicleOwnerInfoModel,
-  VehicleOwnerInfoSchema,
-} from 'src/property/models/vehicleOwnerInfoModel'
+} from '../../metadata/models/optionalDateValueWithMetadataModel'
+import { PersonDocument, PersonModel } from '../../person/models/personModel'
+import { VehicleOwnerInfoModel, VehicleOwnerInfoSchema } from './vehicleOwnerInfoModel'
 
 @Schema({ timestamps: false, _id: false })
 export class PropertyOwnerModel implements PropertyOwner {

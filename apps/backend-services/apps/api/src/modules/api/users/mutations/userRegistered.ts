@@ -4,7 +4,6 @@ import { User } from '../dto/user'
 import { FirebaseAuthGuard } from '../../../users/guards/FirebaseAuthGuard'
 import { CurrentUser } from '../../../users/decorators/currentUser'
 import { UserService } from '../../../users/services/UserService'
-import { Role } from 'defs'
 
 @Resolver(() => User)
 export class UserRegistered {
@@ -13,7 +12,7 @@ export class UserRegistered {
   @Mutation(() => Boolean)
   @UseGuards(FirebaseAuthGuard)
   async userRegistered(@CurrentUser() { _id }: User) {
-    await this.userService.setUserRole(_id, Role.OPERATOR)
+    await this.userService.setUserRole(_id, 'OPERATOR')
     return true
   }
 }

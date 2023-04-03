@@ -30,12 +30,12 @@ export class ProceedingsIndexerService {
     }
   }
 
-  private createIndexData = (proceedingModel: Proceeding) => ({
+  private createIndexData = (proceedingModel: Proceeding): ProceedingIndex => ({
     name: proceedingModel.name,
     type: proceedingModel.type,
-    fileNumber: proceedingModel.fileNumber,
+    fileNumber: proceedingModel.fileNumber.value,
     description: proceedingModel.description,
-    year: proceedingModel.year,
+    year: proceedingModel.year.value,
     customFields: proceedingModel.customFields,
     files: [],
     persons: proceedingModel.entitiesInvolved

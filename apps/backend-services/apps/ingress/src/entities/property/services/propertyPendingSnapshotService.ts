@@ -2,8 +2,8 @@ import { Injectable, Logger } from '@nestjs/common'
 import { InjectModel } from '@nestjs/mongoose'
 import { Model } from 'mongoose'
 import { UpdateSource } from 'defs'
-import { PropertyPendingSnapshotModel } from 'src/property/models/propertyPendingSnapshotModel'
-import { PropertyModel } from 'src/property/models/propertyModel'
+import { PropertyModel } from '../models/propertyModel'
+import { PropertyPendingSnapshotModel } from '../models/propertyPendingSnapshotModel'
 
 @Injectable()
 export class PropertyPendingSnapshotService {

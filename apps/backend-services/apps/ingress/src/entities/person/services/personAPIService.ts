@@ -1,7 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common'
 import { EducationAPIInput, IdDocument, OldName, PersonAPIInput, UpdateSource } from 'defs'
 import { LocationAPIService } from '../../location/services/locationAPIService'
-import { CustomFieldsService } from '../../cusotmField/services/customFieldsService'
+import { CustomFieldsService } from '../../customField/services/customFieldsService'
 import { FileAPIService } from '../../file/services/fileAPIService'
 import { EducationModel } from '../models/educationModel'
 import { IdDocumentModel } from '../models/idDocumentModel'

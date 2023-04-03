@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common'
 import { AssociateAPI } from 'defs'
-import { CustomFieldsService } from '../../cusotmField/services/customFieldsService'
+import { CustomFieldsService } from '../../customField/services/customFieldsService'
 import { PersonsService } from '../../person/services/personsService'
 import { AssociateModel } from '../models/associateModel'
 import { CompaniesService } from './companiesService'

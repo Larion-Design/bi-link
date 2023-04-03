@@ -1,12 +1,12 @@
 import { InjectModel } from '@nestjs/mongoose'
 import { Model } from 'mongoose'
-import { CompanyDocument, CompanyModel } from '@app/models/company/models/companyModel'
-import { EventDocument, EventModel } from '@app/models/event/models/eventModel'
-import { PersonDocument, PersonModel } from '@app/models/person/models/personModel'
-import { PropertyDocument, PropertyModel } from '@app/models/property/models/propertyModel'
 import { Injectable } from '@nestjs/common'
-import { DataRefModel } from '@app/models/report/models/dataRefModel'
 import { DataRefInput } from '../../../../../api/src/modules/api/reports/dto/refs/dataRefInput'
+import { CompanyDocument, CompanyModel } from '../../company/models/companyModel'
+import { EventDocument, EventModel } from '../../event/models/eventModel'
+import { PersonDocument, PersonModel } from '../../person/models/personModel'
+import { PropertyDocument, PropertyModel } from '../../property/models/propertyModel'
+import { DataRefModel } from '../models/dataRefModel'
 
 @Injectable()
 export class ReportRefsAPIService {

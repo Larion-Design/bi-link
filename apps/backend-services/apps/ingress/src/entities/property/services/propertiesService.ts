@@ -1,12 +1,12 @@
 import { Injectable, Logger } from '@nestjs/common'
 import { InjectModel } from '@nestjs/mongoose'
 import { Model, ProjectionFields, Query } from 'mongoose'
-import { CompanyDocument, CompanyModel } from 'src/company/models/companyModel'
-import { FileDocument, FileModel } from 'src/file/models/fileModel'
-import { LocationDocument, LocationModel } from 'src/location/models/locationModel'
-import { PersonDocument, PersonModel } from 'src/person/models/personModel'
-import { PropertyDocument, PropertyModel } from 'src/property/models/propertyModel'
-import { PropertyOwnerDocument, PropertyOwnerModel } from 'src/property/models/propertyOwnerModel'
+import { CompanyDocument, CompanyModel } from '../../company/models/companyModel'
+import { FileDocument, FileModel } from '../../file/models/fileModel'
+import { LocationDocument, LocationModel } from '../../location/models/locationModel'
+import { PersonDocument, PersonModel } from '../../person/models/personModel'
+import { PropertyDocument, PropertyModel } from '../models/propertyModel'
+import { PropertyOwnerDocument, PropertyOwnerModel } from '../models/propertyOwnerModel'
 
 @Injectable()
 export class PropertiesService {

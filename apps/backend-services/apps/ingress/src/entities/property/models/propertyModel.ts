@@ -1,12 +1,12 @@
-import { MetadataModel, MetadataSchema } from 'src/metadata/models/metadataModel'
-import { RealEstateInfoModel, RealEstateSchema } from 'src/property/models/realEstateInfoModel'
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
 import { Document, Types } from 'mongoose'
 import { Property } from 'defs'
-import { CustomFieldModel, CustomFieldSchema } from 'src/shared/models/customFieldModel'
-import { FileModel } from 'src/file/models/fileModel'
-import { PropertyOwnerModel, PropertyOwnerSchema } from 'src/property/models/propertyOwnerModel'
-import { VehicleInfoModel, VehicleSchema } from 'src/property/models/vehicleInfoModel'
+import { CustomFieldModel, CustomFieldSchema } from '../../customField/models/customFieldModel'
+import { FileModel } from '../../file/models/fileModel'
+import { MetadataModel, MetadataSchema } from '../../metadata/models/metadataModel'
+import { PropertyOwnerModel, PropertyOwnerSchema } from './propertyOwnerModel'
+import { RealEstateInfoModel, RealEstateSchema } from './realEstateInfoModel'
+import { VehicleInfoModel, VehicleSchema } from './vehicleInfoModel'
 
 @Schema({ timestamps: true })
 export class PropertyModel implements Property {

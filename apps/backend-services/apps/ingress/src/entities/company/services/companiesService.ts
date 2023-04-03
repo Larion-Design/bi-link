@@ -2,10 +2,10 @@ import { Model, ProjectionFields, Query } from 'mongoose'
 import { Injectable, Logger } from '@nestjs/common'
 import { InjectModel } from '@nestjs/mongoose'
 import { Company } from 'defs'
-import { LocationDocument, LocationModel } from 'src/location/models/locationModel'
-import { CompanyDocument, CompanyModel } from 'src/company/models/companyModel'
-import { FileDocument, FileModel } from 'src/file/models/fileModel'
-import { PersonDocument, PersonModel } from 'src/person/models/personModel'
+import { FileDocument, FileModel } from '../../file/models/fileModel'
+import { LocationDocument, LocationModel } from '../../location/models/locationModel'
+import { PersonDocument, PersonModel } from '../../person/models/personModel'
+import { CompanyDocument, CompanyModel } from '../models/companyModel'
 
 @Injectable()
 export class CompaniesService {

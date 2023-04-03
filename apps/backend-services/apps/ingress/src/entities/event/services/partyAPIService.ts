@@ -4,7 +4,7 @@ import { PersonsService } from '@app/models/person/services/personsService'
 import { PropertiesService } from '@app/models/property/services/propertiesService'
 import { PartyAPI } from 'defs'
 import { PartyModel } from '@app/models/event/models/partyModel'
-import { CustomFieldsService } from '../../cusotmField/services/customFieldsService'
+import { CustomFieldsService } from '../../customField/services/customFieldsService'
 
 @Injectable()
 export class PartyAPIService {

@@ -2,7 +2,7 @@ import { Injectable, Logger } from '@nestjs/common'
 import { ElasticsearchService } from '@nestjs/elasticsearch'
 import { INDEX_PROCEEDINGS, ProceedingIndex } from '@app/definitions'
 import { SearchRequest, SearchTotalHits } from '@elastic/elasticsearch/lib/api/types'
-import { ProceedingsSuggestions } from '../../api/proceedings/dto/proceedingsSuggestions'
+import { ProceedingSuggestions } from 'defs'
 import { SearchHelperService } from './searchHelperService'
 
 @Injectable()
@@ -15,7 +15,11 @@ export class SearchProceedingsService {
     private readonly searchHelperService: SearchHelperService,
   ) {}
 
-  searchProceedings = async (searchTerm: string, skip: number, limit: number) => {
+  searchProceedings = async (
+    searchTerm: string,
+    skip: number,
+    limit: number,
+  ): Promise<ProceedingSuggestions> => {
     try {
       const request: SearchRequest = {
         index: this.index,
@@ -50,10 +54,10 @@ export class SearchProceedingsService {
         hits: { total, hits },
       } = await this.elasticsearchService.search<ProceedingIndex>(request)
 
-      const suggestions = new ProceedingsSuggestions()
-      suggestions.records = hits.map(({ _id, _source }) => this.transformRecord(_id, _source)) ?? []
-      suggestions.total = (total as SearchTotalHits).value
-      return suggestions
+      return {
+        total: (total as SearchTotalHits).value,
+        records: hits.map(({ _id, _source }) => this.transformRecord(_id, _source)),
+      }
     } catch (e) {
       this.logger.error(e)
     }

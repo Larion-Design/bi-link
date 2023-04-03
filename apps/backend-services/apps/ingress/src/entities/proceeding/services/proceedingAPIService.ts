@@ -1,7 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common'
 import { ProceedingAPIInput, ProceedingEntityInvolvedAPI } from 'defs'
 import { CompaniesService } from '../../company/services/companiesService'
-import { CustomFieldsService } from '../../cusotmField/services/customFieldsService'
+import { CustomFieldsService } from '../../customField/services/customFieldsService'
 import { FileAPIService } from '../../file/services/fileAPIService'
 import { PersonsService } from '../../person/services/personsService'
 import { ProceedingEntityModel } from '../models/proceedingEntityModel'

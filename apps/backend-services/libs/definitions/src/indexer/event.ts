@@ -1,23 +1,30 @@
-import { Event, EventParticipant } from 'defs'
+import { z } from 'zod'
+import { eventSchema } from 'defs'
 import {
-  ConnectedCompanyIndex,
-  ConnectedPersonIndex,
-  ConnectedPropertyIndex,
+  connectedCompanyIndexSchema,
+  connectedPersonIndexSchema,
+  connectedPropertyIndexSchema,
+  embeddedFileIndexSchema,
+  locationIndexSchema,
 } from '@app/definitions'
-import { EmbeddedFileIndex } from '@app/definitions'
-import { LocationIndex } from '@app/definitions'
 
-export interface EventIndex extends Pick<Event, 'type' | 'description' | 'customFields'> {
-  date?: string
-  location?: LocationIndex
-  files: EmbeddedFileIndex[]
-  parties: PartyIndex[]
-  persons: ConnectedPersonIndex[]
-  companies: ConnectedCompanyIndex[]
-  properties: ConnectedPropertyIndex[]
-}
+export const eventIndexSchema = eventSchema.pick({ location: true, description: true }).merge(
+  z.object({
+    type: eventSchema.shape.type.shape.value,
+    date: eventSchema.shape.date.shape.value,
+    location: locationIndexSchema.nullish(),
+    files: embeddedFileIndexSchema.array(),
+    persons: connectedPersonIndexSchema.array(),
+    companies: connectedCompanyIndexSchema.array(),
+    properties: connectedPropertyIndexSchema.array(),
+  }),
+)
 
-export interface EventSearchIndex extends Pick<EventIndex, 'date' | 'location' | 'type'> {}
+export const eventSearchIndexSchema = eventIndexSchema.pick({
+  date: true,
+  location: true,
+  type: true,
+})
 
-export interface PartyIndex
-  extends Omit<EventParticipant, 'persons' | 'companies' | 'properties' | '_confirmed'> {}
+export type EventIndex = z.infer<typeof eventIndexSchema>
+export type EventSearchIndex = z.infer<typeof eventSearchIndexSchema>

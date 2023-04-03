@@ -1,8 +1,8 @@
-import { UpdateSourceModel, UpdateSourceSchema } from 'src/shared/models/updateSourceModel'
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
 import { Document } from 'mongoose'
 import { CompanySnapshot } from 'defs'
-import { CompanyModel, CompanySchema } from 'src/index'
+import { UpdateSourceModel, UpdateSourceSchema } from '../../shared/models/updateSourceModel'
+import { CompanyModel, CompanySchema } from './companyModel'
 
 @Schema({ _id: true, timestamps: true })
 export class CompanyHistorySnapshotModel implements CompanySnapshot {

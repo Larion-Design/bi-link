@@ -4,7 +4,6 @@ import { BullModule } from '@nestjs/bull'
 import { Module } from '@nestjs/common'
 import { ConsumersModule } from './modules/consumers/consumersModule'
 import { SentryModule } from '@ntegral/nestjs-sentry'
-import { EntitiesModule } from '@app/models/entitiesModule'
 import { ServiceHealthModule } from '@app/service-health/serviceHealthModule'
 import { IndexerModule } from './modules/indexer/indexerModule'
 import { MappingModule } from './modules/mapping/mappingModule'
@@ -16,7 +15,6 @@ import { SearchModule } from './modules/search/searchModule'
 
 @Module({
   imports: [
-    EntitiesModule,
     MappingModule,
     IndexerModule,
     SearchModule,

@@ -1,9 +1,9 @@
-import { ReportModel } from 'src/report/models/reportModel'
-import { ReportPendingSnapshotModel } from 'src/report/models/reportPendingSnapshotModel'
 import { Injectable, Logger } from '@nestjs/common'
 import { InjectModel } from '@nestjs/mongoose'
 import { Model } from 'mongoose'
 import { UpdateSource } from 'defs'
+import { ReportModel } from '../models/reportModel'
+import { ReportPendingSnapshotModel } from '../models/reportPendingSnapshotModel'
 
 @Injectable()
 export class ReportPendingSnapshotService {

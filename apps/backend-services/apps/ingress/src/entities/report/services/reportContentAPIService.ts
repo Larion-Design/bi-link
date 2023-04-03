@@ -1,8 +1,3 @@
-import { ReportContentModel } from '@app/models/report/models/reportContentModel'
-import { LinkModel } from '@app/models/report/models/content/linkModel'
-import { TableModel } from '@app/models/report/models/content/tableModel'
-import { TextModel } from '@app/models/report/models/content/textModel'
-import { TitleModel } from '@app/models/report/models/content/titleModel'
 import { Injectable } from '@nestjs/common'
 import { FileAPIService } from '../../file/services/fileAPIService'
 import { LinkInput } from '../../../../../api/src/modules/api/reports/dto/content/linkInput'
@@ -10,6 +5,11 @@ import { ReportContentInput } from '../../../../../api/src/modules/api/reports/d
 import { TableInput } from '../../../../../api/src/modules/api/reports/dto/content/tableInput'
 import { TextInput } from '../../../../../api/src/modules/api/reports/dto/content/textInput'
 import { TitleInput } from '../../../../../api/src/modules/api/reports/dto/content/titleInput'
+import { LinkModel } from '../models/content/linkModel'
+import { TableModel } from '../models/content/tableModel'
+import { TextModel } from '../models/content/textModel'
+import { TitleModel } from '../models/content/titleModel'
+import { ReportContentModel } from '../models/reportContentModel'
 
 @Injectable()
 export class ReportContentAPIService {

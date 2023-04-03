@@ -1,23 +1,23 @@
+import { IngressService } from '@app/rpc/microservices/ingress'
 import { Injectable, Logger } from '@nestjs/common'
 import { ProceedingGraphNode } from '@app/definitions/graph/proceeding'
 import { ProceedingEntityRelationship } from '@app/definitions/graph/proceedingEntity'
-import { GraphService } from '@app/graph-module'
-import { ProceedingDocument } from '@app/models'
-import { ProceedingsService } from '@app/models/proceeding/services/proceedingsService'
-import { EntityLabel, RelationshipLabel } from 'defs'
+import { Proceeding, proceedingSchema } from 'defs'
+import { ProceedingDocument } from '../../../../ingress/src/entities/proceeding/models/proceedingModel'
+import { GraphService } from './graphService'
 
 @Injectable()
 export class ProceedingGraphService {
   private readonly logger = new Logger(ProceedingGraphService.name)
 
   constructor(
-    private readonly proceedingsService: ProceedingsService,
+    private readonly ingressService: IngressService,
     private readonly graphService: GraphService,
   ) {}
 
   upsertProceedingNode = async (proceedingId: string) => {
     try {
-      const proceedingDocument = await this.proceedingsService.getProceeding(proceedingId, true)
+      const proceedingDocument = await this.getProceedingInfo(proceedingId)
 
       await this.graphService.upsertEntity<ProceedingGraphNode>(
         {
@@ -27,7 +27,7 @@ export class ProceedingGraphService {
           fileNumber: proceedingDocument.fileNumber,
           year: proceedingDocument.year,
         },
-        EntityLabel.PROCEEDING,
+        'PROCEEDING',
       )
       return this.upsertProceedingParties(proceedingDocument)
     } catch (e) {
@@ -35,7 +35,7 @@ export class ProceedingGraphService {
     }
   }
 
-  private upsertProceedingParties = async (proceedingDocument: ProceedingDocument) => {
+  private upsertProceedingParties = async (proceedingDocument: Proceeding) => {
     const map = new Map<string, ProceedingEntityRelationship>()
 
     proceedingDocument.entitiesInvolved.forEach(({ person, company, involvedAs }) =>
@@ -48,7 +48,22 @@ export class ProceedingGraphService {
     return this.graphService.replaceRelationships(
       String(proceedingDocument._id),
       map,
-      RelationshipLabel.INVOLVED_AS,
+      'INVOLVED_AS',
     )
   }
+
+  private getProceedingInfo = async (proceedingId: string) =>
+    proceedingSchema.parse(
+      await this.ingressService.getEntity(
+        {
+          entityId: proceedingId,
+          entityType: 'PROCEEDING',
+        },
+        true,
+        {
+          type: 'SERVICE',
+          sourceId: 'SERVICE_GRAPH',
+        },
+      ),
+    )
 }

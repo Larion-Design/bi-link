@@ -1,7 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common'
 import { Model } from 'mongoose'
 import { InjectModel } from '@nestjs/mongoose'
-import { CustomFieldsService } from '../../cusotmField/services/customFieldsService'
+import { CustomFieldsService } from '../../customField/services/customFieldsService'
 import { PropertyOwnerAPI } from 'defs'
 import { CompanyDocument, CompanyModel } from '@app/models/company/models/companyModel'
 import { PersonDocument, PersonModel } from '@app/models/person/models/personModel'

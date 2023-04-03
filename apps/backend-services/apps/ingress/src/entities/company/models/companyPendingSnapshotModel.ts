@@ -1,7 +1,7 @@
-import { UpdateSourceModel, UpdateSourceSchema } from 'src/shared/models/updateSourceModel'
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
 import { CompanySnapshot } from 'defs'
 import { Document } from 'mongoose'
+import { UpdateSourceModel, UpdateSourceSchema } from '../../shared/models/updateSourceModel'
 import { CompanyModel, CompanySchema } from './companyModel'
 
 @Schema({ _id: true, timestamps: true })

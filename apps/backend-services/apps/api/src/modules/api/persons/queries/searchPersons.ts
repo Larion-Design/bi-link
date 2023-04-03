@@ -4,7 +4,6 @@ import { Args, Query, Resolver } from '@nestjs/graphql'
 import { PersonsSuggestions } from '../dto/personsSuggestions'
 import { SearchPaginationArgs } from '../../search/dto/searchPaginationArgs'
 import { FirebaseAuthGuard } from '../../../users/guards/FirebaseAuthGuard'
-import { CurrentUser } from '../../../users/decorators/currentUser'
 
 @Resolver(PersonsSuggestions)
 export class SearchPersons {

@@ -1,9 +1,9 @@
 import { Model, ProjectionFields, Query } from 'mongoose'
 import { Injectable, Logger } from '@nestjs/common'
 import { InjectModel } from '@nestjs/mongoose'
-import { PersonDocument, PersonModel } from '@app/models/models/person'
-import { CompanyDocument, CompanyModel } from '@app/models/models/company'
-import { ProceedingDocument, ProceedingModel } from '@app/models/models/proceeding'
+import { CompanyDocument, CompanyModel } from '../../company/models/companyModel'
+import { PersonDocument, PersonModel } from '../../person/models/personModel'
+import { ProceedingDocument, ProceedingModel } from '../models/proceedingModel'
 
 @Injectable()
 export class ProceedingsService {

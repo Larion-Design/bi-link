@@ -1,7 +1,7 @@
-import { UpdateSourceModel, UpdateSourceSchema } from 'src/shared/models/updateSourceModel'
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
-import { ReportModel, ReportSchema } from './reportModel'
 import { ReportSnapshot } from 'defs'
+import { UpdateSourceModel, UpdateSourceSchema } from '../../shared/models/updateSourceModel'
+import { ReportModel, ReportSchema } from './reportModel'
 
 @Schema({ _id: true, timestamps: true })
 export class ReportHistorySnapshotModel implements ReportSnapshot {

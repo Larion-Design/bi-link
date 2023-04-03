@@ -2,7 +2,9 @@ import { Injectable, Logger } from '@nestjs/common'
 import { EventAPIInput } from 'defs'
 import { LocationAPIService } from '../../location/services/locationAPIService'
 import { FileAPIService } from '../../file/services/fileAPIService'
-import { CustomFieldsService } from '../../cusotmField/services/customFieldsService'
+import { CustomFieldsService } from '../../customField/services/customFieldsService'
+import { EventModel } from '../models/eventModel'
+import { EventsService } from './eventsService'
 import { PartyAPIService } from './partyAPIService'
 
 @Injectable()

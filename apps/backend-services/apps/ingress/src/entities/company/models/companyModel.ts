@@ -1,12 +1,12 @@
-import { MetadataModel, MetadataSchema } from 'src/metadata/models/metadataModel'
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
+import { Document, Types } from 'mongoose'
+import { CustomFieldModel, CustomFieldSchema } from '../../customField/models/customFieldModel'
+import { FileModel } from '../../file/models/fileModel'
+import { MetadataModel, MetadataSchema } from '../../metadata/models/metadataModel'
 import {
   TextValueWithMetadataModel,
   TextValueWithMetadataSchema,
-} from 'src/metadata/models/textValueWithMetadataModel'
-import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
-import { Document, Types } from 'mongoose'
-import { CustomFieldModel, CustomFieldSchema } from '../../cusotmField/models/customFieldModel'
-import { FileModel } from '../../file/models/fileModel'
+} from '../../metadata/models/textValueWithMetadataModel'
 import { AssociateModel, AssociateSchema } from './associateModel'
 import { LocationDocument, LocationModel } from '../../location/models/locationModel'
 import { Company } from 'defs'

@@ -13,7 +13,7 @@ import { LocationDocument, LocationModel } from 'src/location/models/locationMod
 import { EducationModel, EducationSchema } from 'src/person/models/educationModel'
 import { OldNameModel, OldNameSchema } from 'src/person/models/oldNameModel'
 import { Person } from 'defs'
-import { CustomFieldModel, CustomFieldSchema } from '../../cusotmField/models/customFieldModel'
+import { CustomFieldModel, CustomFieldSchema } from '../../customField/models/customFieldModel'
 import { FileModel } from '../../file/models/fileModel'
 import { IdDocumentModel, IdDocumentSchema } from './idDocumentModel'
 import { RelationshipModel, RelationshipSchema } from './relationshipModel'

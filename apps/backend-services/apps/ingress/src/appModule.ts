@@ -4,6 +4,7 @@ import { ServiceHealthModule } from '@app/service-health'
 import { ConfigModule, ConfigService } from '@nestjs/config'
 import { MongooseModule } from '@nestjs/mongoose'
 import { EntitiesModule } from './entities'
+import { CreateEntityController } from './rpc/createEntityController'
 
 @Module({
   imports: [
@@ -20,6 +21,6 @@ import { EntitiesModule } from './entities'
     }),
   ],
   providers: [],
-  controllers: [],
+  controllers: [CreateEntityController],
 })
 export class AppModule {}

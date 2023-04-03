@@ -3,9 +3,8 @@ import { Injectable, Logger } from '@nestjs/common'
 import { ElasticsearchService } from '@nestjs/elasticsearch'
 import { SearchRequest, SearchTotalHits } from '@elastic/elasticsearch/lib/api/types'
 import { INDEX_EVENTS } from '@app/definitions'
-import { EventListRecord } from 'defs'
+import { EventListRecord, EventsSuggestions } from 'defs'
 import { SearchHelperService } from './searchHelperService'
-import { EventsSuggestions } from '../../api/events/dto/eventsSuggestions'
 
 @Injectable()
 export class SearchEventsService {
@@ -17,7 +16,11 @@ export class SearchEventsService {
     private readonly searchHelperService: SearchHelperService,
   ) {}
 
-  searchBasicSuggestions = async (searchTerm: string, skip: number, limit: number) => {
+  searchBasicSuggestions = async (
+    searchTerm: string,
+    skip: number,
+    limit: number,
+  ): Promise<EventsSuggestions> => {
     try {
       const request: SearchRequest = {
         index: this.index,
@@ -65,10 +68,10 @@ export class SearchEventsService {
         hits: { total, hits },
       } = await this.elasticsearchService.search<EventSearchIndex>(request)
 
-      const suggestions = new EventsSuggestions()
-      suggestions.records = hits.map(({ _id, _source }) => this.transformRecord(_id, _source)) ?? []
-      suggestions.total = (total as SearchTotalHits).value
-      return suggestions
+      return {
+        total: (total as SearchTotalHits).value,
+        records: hits.map(({ _id, _source }) => this.transformRecord(_id, _source)),
+      }
     } catch (error) {
       this.logger.error(error)
     }

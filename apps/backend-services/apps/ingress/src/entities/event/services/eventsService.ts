@@ -1,13 +1,13 @@
 import { Injectable, Logger } from '@nestjs/common'
 import { InjectModel } from '@nestjs/mongoose'
 import { Model, ProjectionFields, Query } from 'mongoose'
-import { LocationDocument, LocationModel } from 'src/location/models/locationModel'
-import { FileDocument, FileModel } from 'src/file/models/fileModel'
-import { EventDocument, EventModel } from 'src/event/models/eventModel'
-import { PersonDocument, PersonModel } from 'src/person/models/personModel'
-import { PartyDocument, PartyModel } from 'src/event/models/partyModel'
-import { CompanyDocument, CompanyModel } from 'src/company/models/companyModel'
-import { PropertyDocument, PropertyModel } from 'src/property/models/propertyModel'
+import { CompanyDocument, CompanyModel } from '../../company/models/companyModel'
+import { FileDocument, FileModel } from '../../file/models/fileModel'
+import { LocationDocument, LocationModel } from '../../location/models/locationModel'
+import { PersonDocument, PersonModel } from '../../person/models/personModel'
+import { PropertyDocument, PropertyModel } from '../../property/models/propertyModel'
+import { EventDocument, EventModel } from '../models/eventModel'
+import { PartyDocument, PartyModel } from '../models/partyModel'
 
 @Injectable()
 export class EventsService {

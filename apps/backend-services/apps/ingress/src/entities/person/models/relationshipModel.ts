@@ -1,6 +1,6 @@
-import { MetadataModel, MetadataSchema } from 'src/metadata/models/metadataModel'
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
 import { Document, Types } from 'mongoose'
+import { MetadataModel, MetadataSchema } from '../../metadata/models/metadataModel'
 import { PersonDocument } from './personModel'
 import { Relationship } from 'defs'
 

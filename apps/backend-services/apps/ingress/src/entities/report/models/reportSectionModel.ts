@@ -1,6 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
 import { ReportSection } from 'defs'
-import { ReportContentModel, ReportContentSchema } from 'src/report/models/reportContentModel'
+import { ReportContentModel, ReportContentSchema } from './reportContentModel'
 
 @Schema({ timestamps: false, _id: false })
 export class ReportSectionModel implements ReportSection {

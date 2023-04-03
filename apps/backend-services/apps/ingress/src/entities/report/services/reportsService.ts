@@ -1,12 +1,12 @@
 import { Injectable, Logger } from '@nestjs/common'
 import { InjectModel } from '@nestjs/mongoose'
+import { EntityInfo } from 'defs'
 import { Model, ProjectionFields, ProjectionType, Query } from 'mongoose'
-import { EventDocument, EventModel } from 'src/event/models/eventModel'
-import { PersonDocument, PersonModel } from 'src/person/models/personModel'
-import { CompanyDocument, CompanyModel } from 'src/company/models/companyModel'
-import { PropertyDocument, PropertyModel } from 'src/property/models/propertyModel'
-import { ReportDocument, ReportModel } from 'src/report/models/reportModel'
-import { EntityInfo } from 'apps/backend-services/libs/rpc/src/constants'
+import { CompanyDocument, CompanyModel } from '../../company/models/companyModel'
+import { EventDocument, EventModel } from '../../event/models/eventModel'
+import { PersonDocument, PersonModel } from '../../person/models/personModel'
+import { PropertyDocument, PropertyModel } from '../../property/models/propertyModel'
+import { ReportDocument, ReportModel } from '../models/reportModel'
 
 @Injectable()
 export class ReportsService {
@@ -73,6 +73,9 @@ export class ReportsService {
         }
         case 'EVENT': {
           return this.reportModel.find({ event: entityId, isTemplate: false }, projection)
+        }
+        case 'PROCEEDING': {
+          return this.reportModel.find({ proceeding: entityId, isTemplate: false }, projection)
         }
       }
     } catch (e) {

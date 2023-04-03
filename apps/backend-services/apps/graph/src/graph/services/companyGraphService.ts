@@ -1,7 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common'
-import { GraphService } from '@app/graph-module/graphService'
 import { AssociateGraphRelationship, CompanyGraphNode } from '@app/definitions/graph'
 import { Company } from 'defs'
+import { GraphService } from './graphService'
 import { LocationGraphService } from './locationGraphService'
 
 @Injectable()

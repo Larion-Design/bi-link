@@ -6,7 +6,7 @@ import { RealEstateInfoModel } from '../models/realEstateInfoModel'
 import { VehicleInfoModel } from '../models/vehicleInfoModel'
 import { PropertiesService } from './propertiesService'
 import { PropertyOwnerAPIService } from './propertyOwnerAPIService'
-import { CustomFieldsService } from '../../cusotmField/services/customFieldsService'
+import { CustomFieldsService } from '../../customField/services/customFieldsService'
 import { FileAPIService } from '../../file/services/fileAPIService'
 
 @Injectable()

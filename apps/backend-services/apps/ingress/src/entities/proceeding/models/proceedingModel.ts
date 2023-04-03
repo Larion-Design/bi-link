@@ -1,21 +1,18 @@
 import { Document, Types } from 'mongoose'
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
 import { Proceeding } from 'defs'
+import { CustomFieldModel, CustomFieldSchema } from '../../customField/models/customFieldModel'
+import { FileModel } from '../../file/models/fileModel'
+import { MetadataModel, MetadataSchema } from '../../metadata/models/metadataModel'
 import {
   NumberValueWithMetadataModel,
   NumberValueWithMetadataSchema,
-} from 'src/metadata/models/numberValueWithMetadataModel'
+} from '../../metadata/models/numberValueWithMetadataModel'
 import {
   TextValueWithMetadataModel,
   TextValueWithMetadataSchema,
-} from 'src/metadata/models/textValueWithMetadataModel'
-import {
-  ProceedingEntityModel,
-  ProceedingEntitySchema,
-} from 'src/proceeding/models/proceedingEntityModel'
-
-import { FileModel } from 'src/file/models/fileModel'
-import { CustomFieldModel, CustomFieldSchema, MetadataModel, MetadataSchema } from 'src/index'
+} from '../../metadata/models/textValueWithMetadataModel'
+import { ProceedingEntityModel, ProceedingEntitySchema } from './proceedingEntityModel'
 
 @Schema({ timestamps: true })
 export class ProceedingModel implements Proceeding {

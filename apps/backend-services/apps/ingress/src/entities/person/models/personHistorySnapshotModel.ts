@@ -1,8 +1,8 @@
-import { UpdateSourceModel, UpdateSourceSchema } from 'src/shared/models/updateSourceModel'
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
 import { Document } from 'mongoose'
 import { PersonSnapshot } from 'defs'
-import { PersonModel, PersonSchema } from 'src/person/models/personModel'
+import { UpdateSourceModel, UpdateSourceSchema } from '../../shared/models/updateSourceModel'
+import { PersonModel, PersonSchema } from './personModel'
 
 @Schema({ _id: true, timestamps: true })
 export class PersonHistorySnapshotModel implements PersonSnapshot {

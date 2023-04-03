@@ -1,12 +1,12 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
 import { Types } from 'mongoose'
 import { ReportContent } from 'defs'
-import { FileModel } from 'src/file/models/fileModel'
-import { TitleModel, TitleSchema } from 'src/report/models/content/titleModel'
-import { TextModel, TextSchema } from 'src/report/models/content/textModel'
-import { LinkModel, LinkSchema } from 'src/report/models/content/linkModel'
-import { TableModel, TableSchema } from 'src/report/models/content/tableModel'
-import { GraphModel, GraphSchema } from 'src/report/models/content/graphModel'
+import { GraphModel, GraphSchema } from './content/graphModel'
+import { LinkModel, LinkSchema } from './content/linkModel'
+import { TableModel, TableSchema } from './content/tableModel'
+import { TextModel, TextSchema } from './content/textModel'
+import { TitleModel, TitleSchema } from './content/titleModel'
+import { FileModel } from '../../file/models/fileModel'
 
 @Schema({ timestamps: false, _id: false })
 export class ReportContentModel implements ReportContent {

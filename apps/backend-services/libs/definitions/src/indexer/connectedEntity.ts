@@ -2,16 +2,14 @@ import { z } from 'zod'
 import { personIndexSchema, realEstateIndex, vehicleIndexSchema } from '@app/definitions'
 import { companySchema, personSchema, propertySchema } from 'defs'
 
-export const connectedPersonIndexSchema = z
-  .object({
-    _id: personSchema.shape._id,
-  })
-  .merge(personIndexSchema.pick({ firstName: true, lastName: true, cnp: true }))
+export const connectedPersonIndexSchema = personIndexSchema
+  .pick({ firstName: true, lastName: true, cnp: true })
   .merge(
     z.object({
       documents: z.string().nonempty().array(),
     }),
   )
+  .merge(personSchema.pick({ _id: true }))
 
 export const connectedCompanyIndexSchema = companySchema.pick({ _id: true }).merge(
   z.object({

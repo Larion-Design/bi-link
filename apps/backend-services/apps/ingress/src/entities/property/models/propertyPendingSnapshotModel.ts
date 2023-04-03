@@ -1,5 +1,5 @@
-import { UpdateSourceModel, UpdateSourceSchema } from 'src/shared/models/updateSourceModel'
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
+import { UpdateSourceModel, UpdateSourceSchema } from '../../shared/models/updateSourceModel'
 import { PropertyModel, PropertySchema } from './propertyModel'
 import { PropertySnapshot } from 'defs'
 

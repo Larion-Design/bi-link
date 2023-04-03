@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "module": "CommonJS",
-    "strict": false,
+    "strict": true,
     "declaration": false,
     "removeComments": true,
     "moduleResolution": "Node",
@@ -14,7 +14,7 @@
     "baseUrl": "./",
     "incremental": true,
     "skipLibCheck": true,
-    "strictNullChecks": false,
+    "strictNullChecks": true,
     "noImplicitAny": false,
     "noUncheckedIndexedAccess": true,
     "strictBindCallApply": false,
