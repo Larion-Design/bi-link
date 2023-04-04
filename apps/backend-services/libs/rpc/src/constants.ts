@@ -47,7 +47,6 @@ export const MICROSERVICES = {
     reindexEntities: 'reindexEntities',
     createMapping: 'createMapping',
     recordHistoryEvent: 'addHistoryEvent',
-    getFileContent: 'getFileContent',
     personCNPExists: 'personCNPExists',
     personIdDocumentExists: 'personIdDocumentExists',
     companyCUIExists: 'companyCUIExists',
@@ -64,6 +63,7 @@ export const MICROSERVICES = {
     uploadFile: 'uploadFile',
     getFileDownloadUrl: 'getFileDownloadUrl',
     getFilesDownloadUrls: 'getFilesDownloadUrls',
+    getFileContent: 'getFileContent',
   },
   OSINT: {},
 }

@@ -2,7 +2,6 @@ import { CACHE_MANAGER, Inject, Injectable, Logger } from '@nestjs/common'
 import { Cache } from 'cache-manager'
 import { MinioService } from 'nestjs-minio-client'
 import { ConfigService } from '@nestjs/config'
-import { extension as mimeTypeToExtension } from 'mime-types'
 import { BUCKET_FILES } from '@app/definitions'
 
 @Injectable()
@@ -33,7 +32,7 @@ export class FileStorageService {
       this.logger.debug(`Bucket ${this.bucketName} will be created`)
       await this.minioService.client.makeBucket(
         this.bucketName,
-        this.configService.get('MINIO_REGION'),
+        this.configService.getOrThrow('MINIO_REGION'),
       )
       this.logger.debug(`Bucket ${this.bucketName} was created`)
     } else this.logger.debug(`Bucket ${this.bucketName} is online`)
@@ -68,18 +67,18 @@ export class FileStorageService {
     }
   }
 
-  getDownloadUrl = async (objectId: string, ttl = 120) => {
+  getDownloadUrl = async (fileId: string, ttl = 120) => {
     try {
-      const key = `/files/download/${objectId}}`
-      let url = await this.cacheManager.get<string>(key)
+      let cachedUrl = await this.getCachedUrl(fileId)
 
-      if (!url) {
-        url = this.transformUrl(
-          await this.minioService.client.presignedGetObject(this.bucketName, objectId, ttl),
+      if (!cachedUrl) {
+        const newUrl = this.transformUrl(
+          await this.minioService.client.presignedGetObject(this.bucketName, fileId, ttl),
         )
-        await this.cacheManager.set(key, url, { ttl })
+        await this.cacheFileUrl(fileId, newUrl, ttl)
+        return { url: newUrl, ttl }
       }
-      return { url, ttl }
+      return { url: cachedUrl, ttl }
     } catch (error) {
       this.logger.error(error)
     }
@@ -87,20 +86,7 @@ export class FileStorageService {
 
   getDownloadUrls = async (filesIds: string[], ttl = 300) => {
     try {
-      return Promise.all(
-        filesIds.map(async (fileId) => {
-          const key = `/files/download/${fileId}}`
-          let url = await this.cacheManager.get<string>(key)
-
-          if (!url) {
-            url = this.transformUrl(
-              await this.minioService.client.presignedGetObject(this.bucketName, fileId, ttl),
-            )
-            await this.cacheManager.set(key, url, { ttl })
-          }
-          return url
-        }),
-      )
+      return Promise.allSettled(filesIds.map((fileId) => this.getDownloadUrl(fileId, ttl)))
     } catch (error) {
       this.logger.error(error)
     }
@@ -109,8 +95,11 @@ export class FileStorageService {
   private transformUrl = (privateUrl: string) =>
     privateUrl.replace(this.minioInternalUrl, this.minioPublicUrl)
 
-  getFileId = (mimeType: string, hash: string) => {
-    const extension = mimeTypeToExtension(mimeType)
-    return `${hash}${!extension ? '' : `.${extension}`}`
-  }
+  private getCachedUrl = (fileId: string) =>
+    this.cacheManager.get<string>(this.getFileUrlCacheKey(fileId))
+
+  private getFileUrlCacheKey = (fileId: string) => `/files/download/${fileId}}`
+
+  private cacheFileUrl = (fileId: string, url: string, ttl: number) =>
+    this.cacheManager.set(this.getFileUrlCacheKey(fileId), url, { ttl })
 }

@@ -1,13 +1,20 @@
+import { downloadUrlSchema } from 'defs'
 import { z } from 'zod'
 
 export const filesManagerInterfaceSchema = z.object({
   uploadFile: z
     .function()
-    .args(z.instanceof(Buffer))
+    .args(
+      z.object({
+        mimeType: z.string().nonempty(),
+        content: z.string().nonempty(),
+      }),
+    )
     .returns(
       z.object({
         fileId: z.string().nonempty(),
         hash: z.string().nonempty(),
+        created: z.boolean(),
       }),
     ),
 
@@ -21,7 +28,7 @@ export const filesManagerInterfaceSchema = z.object({
         ttl: z.number().int(),
       }),
     )
-    .returns(z.string().url()),
+    .returns(downloadUrlSchema),
 
   getFilesDownloadUrls: z
     .function()
@@ -31,7 +38,7 @@ export const filesManagerInterfaceSchema = z.object({
         ttl: z.number().int(),
       }),
     )
-    .returns(z.record(z.string().nonempty(), z.string().url())),
+    .returns(downloadUrlSchema.array()),
 })
 
 export type FilesManagerServiceMethods = z.infer<typeof filesManagerInterfaceSchema>

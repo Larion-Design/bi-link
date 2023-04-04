@@ -8,6 +8,7 @@ import {
   SearchPersonsService,
   SearchProceedingsService,
   SearchPropertiesService,
+  SearchVehiclesService,
 } from '../search/services'
 
 @Controller()
@@ -18,6 +19,7 @@ export class SearchController {
     private readonly searchPropertiesService: SearchPropertiesService,
     private readonly searchEventsService: SearchEventsService,
     private readonly searchProceedingsService: SearchProceedingsService,
+    private readonly searchVehiclesService: SearchVehiclesService,
   ) {}
 
   @MessagePattern(MICROSERVICES.INDEXER.search)
@@ -42,5 +44,48 @@ export class SearchController {
         return this.searchProceedingsService.searchProceedings(searchTerm, skip, limit)
       }
     }
+  }
+
+  @MessagePattern(MICROSERVICES.INDEXER.companyCUIExists)
+  async companyCUIExists(
+    @Payload()
+    { cui, companyId }: Parameters<IndexerServiceMethods['companyCUIExists']>[0],
+  ) {
+    return this.searchCompaniesService.cuiExists(cui, companyId)
+  }
+
+  @MessagePattern(MICROSERVICES.INDEXER.companyRegistrationNumberExists)
+  async companyRegistrationNumberExists(
+    @Payload()
+    {
+      registrationNumber,
+      companyId,
+    }: Parameters<IndexerServiceMethods['companyRegistrationNumberExists']>[0],
+  ) {
+    return this.searchCompaniesService.registrationNumberExists(registrationNumber, companyId)
+  }
+
+  @MessagePattern(MICROSERVICES.INDEXER.personCNPExists)
+  async personCNPExists(
+    @Payload()
+    { cnp, personId }: Parameters<IndexerServiceMethods['personCNPExists']>[0],
+  ) {
+    return this.searchPersonsService.cnpExists(cnp, personId)
+  }
+
+  @MessagePattern(MICROSERVICES.INDEXER.personIdDocumentExists)
+  async personIdDocumentExists(
+    @Payload()
+    { documentNumber, personId }: Parameters<IndexerServiceMethods['personIdDocumentExists']>[0],
+  ) {
+    return this.searchPersonsService.idDocumentExists(documentNumber, personId)
+  }
+
+  @MessagePattern(MICROSERVICES.INDEXER.vehicleVINExists)
+  async vehicleVINExists(
+    @Payload()
+    { vin, propertyId }: Parameters<IndexerServiceMethods['vehicleVINExists']>[0],
+  ) {
+    return this.searchVehiclesService.vinExists(vin, propertyId)
   }
 }

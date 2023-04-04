@@ -33,9 +33,9 @@ export class CompaniesIndexerService {
   }
 
   private createIndexData = (company: Company): CompanyIndex => ({
-    name: company.name,
-    cui: company.cui,
-    registrationNumber: company.registrationNumber,
+    name: company.name.value,
+    cui: company.cui.value,
+    registrationNumber: company.registrationNumber.value,
     headquarters: company.headquarters
       ? this.locationIndexerService.createLocationIndexData(company.headquarters)
       : undefined,
@@ -50,10 +50,12 @@ export class CompaniesIndexerService {
   private createAssociatedPersonsIndex = (associates: Associate[]): ConnectedPersonIndex[] =>
     associates
       .filter(({ person }) => !!person)
-      .map(({ person }) => this.connectedEntityIndexerService.createConnectedPersonIndex(person))
+      .map(({ person }) => this.connectedEntityIndexerService.createConnectedPersonIndex(person!))
 
   private createAssociatedCompaniesIndex = (associates: Associate[]): ConnectedCompanyIndex[] =>
     associates
       .filter(({ company }) => !!company)
-      .map(({ company }) => this.connectedEntityIndexerService.createConnectedCompanyIndex(company))
+      .map(({ company }) =>
+        this.connectedEntityIndexerService.createConnectedCompanyIndex(company as Company),
+      )
 }

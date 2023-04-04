@@ -1,10 +1,10 @@
+import { Injectable } from '@nestjs/common'
+import { Company, Person, Property } from 'defs'
 import {
   ConnectedCompanyIndex,
   ConnectedPersonIndex,
   ConnectedPropertyIndex,
 } from '@app/definitions'
-import { Injectable } from '@nestjs/common'
-import { Company, Person, Property } from 'defs'
 
 @Injectable()
 export class ConnectedEntityIndexerService {
@@ -16,9 +16,9 @@ export class ConnectedEntityIndexerService {
     documents,
   }: Person): ConnectedPersonIndex => ({
     _id: String(_id),
-    firstName: firstName,
-    lastName: lastName,
-    cnp: cnp,
+    firstName: firstName.value,
+    lastName: lastName.value,
+    cnp: cnp.value,
     documents: documents?.map(({ documentNumber }) => documentNumber) ?? [],
   })
 
@@ -29,20 +29,22 @@ export class ConnectedEntityIndexerService {
     registrationNumber,
   }: Company): ConnectedCompanyIndex => ({
     _id: String(_id),
-    name,
-    cui,
-    registrationNumber,
+    name: name.value,
+    cui: cui.value,
+    registrationNumber: registrationNumber.value,
   })
 
   createConnectedPropertyIndex = ({
     _id,
     type,
+    name,
     vehicleInfo,
     owners,
   }: Property): ConnectedPropertyIndex => {
     const propertyIndex: ConnectedPropertyIndex = {
       _id: String(_id),
       type,
+      name,
     }
 
     if (vehicleInfo) {
@@ -52,10 +54,10 @@ export class ConnectedEntityIndexerService {
       })
 
       propertyIndex.vehicleInfo = {
-        vin: vehicleInfo.vin,
-        maker: vehicleInfo.maker,
-        model: vehicleInfo.model,
-        color: vehicleInfo.color,
+        vin: vehicleInfo.vin.value,
+        maker: vehicleInfo.maker.value,
+        model: vehicleInfo.model.value,
+        color: vehicleInfo.color.value,
         plateNumbers: Array.from(plateNumbers),
       }
     }

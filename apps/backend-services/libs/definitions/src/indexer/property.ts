@@ -12,6 +12,7 @@ export const vehicleIndexSchema = z.object({
   vin: vehicleSchema.shape.vin.shape.value,
   model: vehicleSchema.shape.model.shape.value,
   maker: vehicleSchema.shape.maker.shape.value,
+  color: vehicleSchema.shape.color.shape.value,
   plateNumbers: vehicleOwnerSchema.shape.plateNumbers,
 })
 

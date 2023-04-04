@@ -10,20 +10,23 @@ export class FilesManagerService {
 
   constructor(@Inject(MICROSERVICES.FILES_MANAGER.id) private client: ClientProxy) {}
 
-  uploadFile = async (fileContent: Buffer) => {
+  uploadFile = async (fileContent: Buffer, mimeType: string) => {
     type Params = Parameters<FilesManagerServiceMethods['uploadFile']>[0]
     type Result = ReturnType<FilesManagerServiceMethods['uploadFile']>
 
     try {
       return lastValueFrom(
         this.client
-          .send<Result, Params>(MICROSERVICES.FILES_MANAGER.uploadFile, fileContent)
+          .send<Result, Params>(MICROSERVICES.FILES_MANAGER.uploadFile, {
+            mimeType,
+            content: fileContent.toString('base64'),
+          })
           .pipe(timeout(1000)),
       )
     } catch (e) {
       this.logger.error(e)
       this.logger.debug(
-        'No valid response received from the ingress service. Make sure the service is running properly.',
+        'No valid response received from the files manager service. Make sure the service is running properly.',
       )
     }
   }
@@ -41,7 +44,7 @@ export class FilesManagerService {
     } catch (e) {
       this.logger.error(e)
       this.logger.debug(
-        'No valid response received from the ingress service. Make sure the service is running properly.',
+        'No valid response received from the files manager service. Make sure the service is running properly.',
       )
     }
   }
@@ -59,7 +62,7 @@ export class FilesManagerService {
     } catch (e) {
       this.logger.error(e)
       this.logger.debug(
-        'No valid response received from the ingress service. Make sure the service is running properly.',
+        'No valid response received from the files manager service. Make sure the service is running properly.',
       )
     }
   }
@@ -77,7 +80,7 @@ export class FilesManagerService {
     } catch (e) {
       this.logger.error(e)
       this.logger.debug(
-        'No valid response received from the ingress service. Make sure the service is running properly.',
+        'No valid response received from the files manager service. Make sure the service is running properly.',
       )
     }
   }

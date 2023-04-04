@@ -14,16 +14,17 @@ export class FileUploadController {
   @Post('fileUpload')
   @UseInterceptors(FileInterceptor('file'))
   async uploadFile(@UploadedFile() file: Express.Multer.File): Promise<FileAPIInput | void> {
-    if (file) {
-      const uploadedFile = await this.filesManagerService.uploadFile(file.buffer)
+    if (file?.size) {
+      const { originalname, buffer, mimetype } = file
+      const uploadedFile = await this.filesManagerService.uploadFile(buffer, mimetype)
 
       if (uploadedFile) {
         const fileModel: File = {
           fileId: uploadedFile.fileId,
           hash: uploadedFile.hash,
-          name: '',
+          name: originalname,
           description: '',
-          mimeType: file.mimetype,
+          mimeType: mimetype,
           isHidden: false,
           metadata: {
             access: '',

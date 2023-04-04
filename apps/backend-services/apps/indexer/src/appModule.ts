@@ -10,6 +10,7 @@ import { ProducersModule } from './modules/producers/producersModule'
 import { RpcModule } from '@app/rpc'
 import { IndexerController } from './modules/rpc/indexerController'
 import { MappingController } from './modules/rpc/mappingController'
+import { SearchController } from './modules/rpc/searchController'
 import { SearchModule } from './modules/search/searchModule'
 
 @Module({
@@ -60,6 +61,6 @@ import { SearchModule } from './modules/search/searchModule'
       },
     }),
   ],
-  controllers: [IndexerController, MappingController],
+  controllers: [IndexerController, MappingController, SearchController],
 })
 export class AppModule {}

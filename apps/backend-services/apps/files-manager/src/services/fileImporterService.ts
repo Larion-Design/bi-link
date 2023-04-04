@@ -1,8 +1,9 @@
+import { FilesManagerServiceMethods } from '@app/rpc/microservices/filesManager/filesManagerServiceConfig'
 import { Injectable } from '@nestjs/common'
-import { FileAPIInput } from 'defs'
+import { extension as mimeTypeToExtension } from 'mime-types'
 import { createHash } from 'node:crypto'
 import { IngressService } from '@app/rpc/microservices/ingress'
-import { FileStorageService } from '@app/files/services/fileStorageService'
+import { FileStorageService } from './fileStorageService'
 
 @Injectable()
 export class FileImporterService {
@@ -11,30 +12,29 @@ export class FileImporterService {
     private readonly fileStorageService: FileStorageService,
   ) {}
 
-  getFileDocumentFromBuffer = async (buffer: Buffer, mimeType: string) => {
+  upsertFile = async (
+    buffer: Buffer,
+    mimeType: string,
+  ): Promise<ReturnType<FilesManagerServiceMethods['uploadFile']> | undefined> => {
     const hash = this.getFileContentHash(buffer)
-    const fileDocument = (await this.getFileDocumentByHash(hash)) as FileAPIInput
+    const fileDocument = await this.getFileDocumentByHash(hash)
 
     if (fileDocument) {
-      return { fileDocument, created: false }
+      return { fileId: fileDocument.fileId, created: false, hash }
     }
 
-    const fileId = this.fileStorageService.getFileId(mimeType, hash)
+    const newFileId = await this.uploadNewFile(buffer, mimeType, hash)
 
-    if (await this.fileStorageService.uploadFile(fileId, buffer)) {
-      const newFileDocument = await this.createNewFileDocument(fileId, mimeType, hash)
+    if (newFileId) {
+      return { fileId: newFileId, created: true, hash }
+    }
+  }
 
-      if (newFileDocument) {
-        const fileDocument = await this.ingressService.getEntity(
-          { entityType: 'FILE', entityId: newFileDocument },
-          false,
-          {
-            sourceId: '',
-            type: 'SERVICE',
-          },
-        )
-        return { fileDocument, created: true }
-      }
+  private uploadNewFile = async (content: Buffer, mimeType: string, hash: string) => {
+    const fileId = this.getFileId(mimeType, hash)
+
+    if (await this.fileStorageService.uploadFile(fileId, content)) {
+      return fileId
     }
   }
 
@@ -42,28 +42,8 @@ export class FileImporterService {
 
   private getFileContentHash = (buffer: Buffer) => createHash('sha256').update(buffer).digest('hex')
 
-  private createNewFileDocument = async (fileId: string, mimeType: string, hash: string) =>
-    this.ingressService.createEntity(
-      'FILE',
-      {
-        metadata: {
-          access: '',
-          confirmed: false,
-          trustworthiness: {
-            source: '',
-            level: 0,
-          },
-        },
-        fileId,
-        hash,
-        mimeType,
-        name: '',
-        description: '',
-        isHidden: false,
-      },
-      {
-        sourceId: '',
-        type: 'SERVICE',
-      },
-    )
+  private getFileId = (mimeType: string, hash: string) => {
+    const extension = mimeTypeToExtension(mimeType)
+    return `${hash}${!extension ? '' : `.${extension}`}`
+  }
 }
