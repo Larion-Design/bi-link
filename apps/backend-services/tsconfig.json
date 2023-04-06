@@ -40,24 +40,6 @@
       "@app/definitions/*": [
         "libs/definitions/src/*"
       ],
-      "@app/graph": [
-        "libs/graph/src"
-      ],
-      "@app/graph/*": [
-        "libs/graph/src/*"
-      ],
-      "@app/files": [
-        "libs/files/src"
-      ],
-      "@app/files/*": [
-        "libs/files/src/*"
-      ],
-      "@app/graph-module": [
-        "libs/graph-module/src"
-      ],
-      "@app/graph-module/*": [
-        "libs/graph-module/src/*"
-      ],
       "@app/scheduler-module": [
         "libs/scheduler-module/src"
       ],

@@ -14,8 +14,7 @@
   },
   "scripts": {
     "build": "tsc",
-    "postinstall": "pnpm build",
-    "prebuild": "rimraf dist"
+    "postinstall": "pnpm build"
   },
   "dependencies": {
     "date-fns": "^2.29.3",

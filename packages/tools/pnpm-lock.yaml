@@ -37,15 +37,15 @@ packages:
     hasBin: true
     dev: true
 
-  /zod@3.21.0:
-    resolution: {integrity: sha512-UYdykTcVxB6lfdyLzAqLyyYAlOcpoluECvjsdoaqfQmz9p+3LRaIqYcNiL/J2kFYp66fBM8wwBvIGVEjq7KtZw==}
+  /zod@3.21.4:
+    resolution: {integrity: sha512-m46AKbrzKVzOzs/DZgVnG5H55N1sv1M8qZU3A8RIKbs3mrACDNeIOeilDymVb2HdmP8uwshOCF4uJ8uM9rCqJw==}
     dev: false
 
   file:../defs:
     resolution: {directory: ../defs, type: directory}
     name: defs
-    version: 1.0.4
+    version: 1.0.2
     requiresBuild: true
     dependencies:
-      zod: 3.21.0
+      zod: 3.21.4
     dev: false

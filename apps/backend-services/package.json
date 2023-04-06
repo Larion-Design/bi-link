@@ -7,6 +7,8 @@
   "license": "UNLICENSED",
   "scripts": {
     "prebuild": "rimraf dist",
+    "ingress": "nest start ingress --watch",
+    "build:ingress": "nest build ingress",
     "build": "pnpm build:api && pnpm build:indexer && pnpm build:graph && pnpm build:files-parser && pnpm build:user-actions-recorder && pnpm build:cli",
     "api": "nest start api --watch",
     "build:api": "nest build api",
@@ -71,7 +73,7 @@
     "uuid": "^8.3.2",
     "word-extractor": "^1.0.4",
     "xlsx": "^0.18.5",
-    "zod": "^3.21.0"
+    "zod": "^3.21.4"
   },
   "devDependencies": {
     "@faker-js/faker": "^7.6.0",
@@ -133,8 +135,6 @@
       "^@app/rpc(|/.*)$": "<rootDir>/libs/rpc/src/$1",
       "^@app/service-health(|/.*)$": "<rootDir>/libs/service-health/src/$1",
       "^@app/definitions(|/.*)$": "<rootDir>/libs/definitions/src/$1",
-      "^@app/files(|/.*)$": "<rootDir>/libs/files/src/$1",
-      "^@app/graph-module(|/.*)$": "<rootDir>/libs/graph-module/src/$1",
       "^@app/scheduler-module(|/.*)$": "<rootDir>/libs/scheduler-module/src/$1"
     }
   },

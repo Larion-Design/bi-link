@@ -2,7 +2,7 @@ lockfileVersion: '6.0'
 
 dependencies:
   zod:
-    specifier: ^3.21.0
+    specifier: ^3.21.4
     version: 3.21.4
 
 devDependencies:
@@ -10,8 +10,8 @@ devDependencies:
     specifier: ^2.5.0
     version: 2.5.0
   typescript:
-    specifier: ^4.9.4
-    version: 4.9.4
+    specifier: ^4.9.5
+    version: 4.9.5
 
 packages:
 
@@ -19,9 +19,10 @@ packages:
     resolution: {integrity: sha512-336iVw3rtn2BUK7ORdIAHTyxHGRIHVReokCR3XjbckJMK7ms8FysBfhLR8IXnAgy7T0PTPNBWKiH514FOW/WSg==}
     dev: true
 
-  /typescript@4.9.4:
-    resolution: {integrity: sha512-Uz+dTXYzxXXbsFpM86Wh3dKCxrQqUcVMxwU54orwlJjOpO3ao8L7j5lH+dWfTwgCwIuM9GQ2kvVotzYJMXTBZg==}
+  /typescript@4.9.5:
+    resolution: {integrity: sha512-1FXk9E2Hm+QzZQ7z+McJiHL4NW1F2EzMu9Nq9i3zAaGqibafqYwCVU6WyWAuyQRRzOlxou8xZSyXLEN8oKj24g==}
     engines: {node: '>=4.2.0'}
+    hasBin: true
     dev: true
 
   /zod@3.21.4:
