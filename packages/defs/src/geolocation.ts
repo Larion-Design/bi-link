@@ -1,5 +1,4 @@
 import { z } from 'zod'
-import { nodesRelationshipSchema } from './graph/graphRelationships'
 import { withMetadataSchema } from './metadata'
 
 export const coordinatesSchema = z.object({
@@ -29,5 +28,3 @@ export type CoordinatesAPI = Coordinates
 export type Location = z.infer<typeof locationSchema>
 export type LocationAPIInput = Location
 export type LocationAPIOutput = Location
-
-export type EntityLocationRelationship = z.infer<typeof nodesRelationshipSchema>

@@ -1,7 +1,6 @@
 import { z } from 'zod'
 import { customFieldSchema } from '../customField'
 import { optionalDateWithMetadataSchema, textWithMetadataSchema } from '../generic'
-import { nodesRelationshipSchema } from '../graph/graphRelationships'
 import { fileInputSchema, fileOutputSchema, fileSchema } from '../file'
 import { locationSchema } from '../geolocation'
 import { withMetadataSchema } from '../metadata'

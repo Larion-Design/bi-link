@@ -1,6 +1,6 @@
 import { z } from 'zod'
 import { proceedingEntityInvolvedSchema } from '../proceeding'
-import { nodesRelationshipSchema } from './graphRelationships'
+import { nodesRelationshipSchema } from './graphBaseRelationship'
 
 export const graphProceedingEntitySchema = z
   .object({

@@ -1,6 +1,4 @@
 import { z } from 'zod'
-import { dateSchema } from '../date'
-import { nodesRelationshipSchema } from '../graph/graphRelationships'
 import { withTimestamps } from '../modelTimestamps'
 import { dataRefAPISchema, dataRefSchema } from './dataRef'
 import {
@@ -56,5 +54,3 @@ export type Report = z.infer<typeof reportSchema>
 export type ReportAPIInput = z.infer<typeof reportAPIInputSchema>
 export type ReportAPIOutput = z.infer<typeof reportAPIOutputSchema>
 export type ReportListRecord = z.infer<typeof reportListRecordSchema>
-
-export type ReportedEntityRelationship = z.infer<typeof nodesRelationshipSchema>

@@ -5,7 +5,6 @@ import { personSchema } from '../person'
 import { companySchema } from '../company'
 import { customFieldSchema } from '../customField'
 import { connectedEntitySchema } from '../connectedEntity'
-import { nodesRelationshipSchema } from '../graph/graphRelationships'
 
 export const vehicleOwnerSchema = z.object({
   plateNumbers: z.string().nonempty().array(),

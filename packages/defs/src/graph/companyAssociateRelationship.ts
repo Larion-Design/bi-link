@@ -1,6 +1,7 @@
 import { z } from 'zod'
 import { associateSchema } from '../company'
-import { nodesRelationshipSchema } from './graphRelationships'
+import { nodesRelationshipSchema } from './graphBaseRelationship'
+
 
 export const graphCompanyAssociateSchema = z
   .object({

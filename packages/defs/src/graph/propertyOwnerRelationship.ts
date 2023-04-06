@@ -1,6 +1,6 @@
 import { z } from 'zod'
 import { propertyOwnerSchema } from '../property'
-import { nodesRelationshipSchema } from './graphRelationships'
+import { nodesRelationshipSchema } from './graphBaseRelationship'
 
 export const graphPropertyOwnerSchema = z
   .object({

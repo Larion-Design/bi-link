@@ -1,6 +1,6 @@
 import { z } from 'zod'
 import { eventSchema } from '../event'
-import { nodesRelationshipSchema } from './graphRelationships'
+import { nodesRelationshipSchema } from './graphBaseRelationship'
 
 export const graphEventParticipantSchema = z
   .object({
