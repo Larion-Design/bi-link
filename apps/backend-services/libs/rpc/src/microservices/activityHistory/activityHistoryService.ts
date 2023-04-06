@@ -1,7 +1,7 @@
 import { Inject, Injectable, Logger } from '@nestjs/common'
 import { ClientProxy } from '@nestjs/microservices'
 import { ActivityEventIndex } from '@app/definitions/indexer/activityEvent'
-import { MICROSERVICES } from '@app/rpc'
+import { MICROSERVICES } from '@app/rpc/constants'
 import { ActivityHistoryServiceMethods } from '@app/rpc/microservices/activityHistory/activityHistoryServiceConfig'
 import { lastValueFrom, timeout } from 'rxjs'
 

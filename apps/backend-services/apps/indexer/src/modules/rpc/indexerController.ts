@@ -30,12 +30,12 @@ export class IndexerController {
     private readonly historyIndexerService: HistoryIndexerService,
   ) {}
 
-  @EventPattern(MICROSERVICES.ENTITY_EVENTS.entityModified)
+  @EventPattern(MICROSERVICES.GLOBAL.entityModified)
   async entityModified(@Payload() entityInfo: EntityInfo) {
     return this.indexEntityAndRelatedEntities(entityInfo)
   }
 
-  @EventPattern(MICROSERVICES.ENTITY_EVENTS.entityCreated)
+  @EventPattern(MICROSERVICES.GLOBAL.entityCreated)
   async entityCreated(@Payload() { entityId, entityType }: EntityInfo) {
     switch (entityType) {
       case 'PERSON': {
@@ -72,7 +72,7 @@ export class IndexerController {
     return this.refreshAllIndexEntitiesByType(entityType)
   }
 
-  @EventPattern(MICROSERVICES.ENTITY_EVENTS.entitiesRefresh)
+  @EventPattern(MICROSERVICES.GLOBAL.entitiesRefreshed)
   async entitiesRefresh(@Payload() entityType: EntityType) {
     return this.refreshAllIndexEntitiesByType(entityType)
   }

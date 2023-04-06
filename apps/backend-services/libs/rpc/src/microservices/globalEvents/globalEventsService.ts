@@ -1,6 +1,6 @@
-import { MICROSERVICES } from '@app/rpc'
 import { GlobalEventsServiceMethods } from '@app/rpc/microservices/globalEvents/globalEventsServiceConfig'
 import { Inject, Injectable, Logger } from '@nestjs/common'
+import { MICROSERVICES } from '@app/rpc/constants'
 import { ClientProxy } from '@nestjs/microservices'
 import { EntityInfo } from 'defs'
 

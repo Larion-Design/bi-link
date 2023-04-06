@@ -1,7 +1,7 @@
 import { Inject, Injectable, Logger } from '@nestjs/common'
 import { ClientProxy } from '@nestjs/microservices'
 import { lastValueFrom, timeout } from 'rxjs'
-import { MICROSERVICES } from '@app/rpc'
+import { MICROSERVICES } from '@app/rpc/constants'
 import { FilesManagerServiceMethods } from '@app/rpc/microservices/filesManager/filesManagerServiceConfig'
 
 @Injectable()

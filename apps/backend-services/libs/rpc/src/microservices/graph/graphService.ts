@@ -2,7 +2,7 @@ import { Inject, Injectable, Logger } from '@nestjs/common'
 import { ClientProxy } from '@nestjs/microservices'
 import { lastValueFrom, timeout } from 'rxjs'
 import { EntityType } from 'defs'
-import { MICROSERVICES } from '@app/rpc'
+import { MICROSERVICES } from '@app/rpc/constants'
 import { GraphServiceMethods } from '@app/rpc/microservices/graph/graphServiceConfig'
 
 @Injectable()
