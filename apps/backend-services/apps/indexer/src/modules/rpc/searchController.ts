@@ -5,6 +5,7 @@ import { IndexerServiceMethods } from '@app/rpc/microservices/indexer/indexerSer
 import {
   SearchCompaniesService,
   SearchEventsService,
+  SearchFilesService,
   SearchPersonsService,
   SearchProceedingsService,
   SearchPropertiesService,
@@ -20,6 +21,7 @@ export class SearchController {
     private readonly searchEventsService: SearchEventsService,
     private readonly searchProceedingsService: SearchProceedingsService,
     private readonly searchVehiclesService: SearchVehiclesService,
+    private readonly searchFilesService: SearchFilesService,
   ) {}
 
   @MessagePattern(MICROSERVICES.INDEXER.search)
@@ -87,5 +89,20 @@ export class SearchController {
     { vin, propertyId }: Parameters<IndexerServiceMethods['vehicleVINExists']>[0],
   ) {
     return this.searchVehiclesService.vinExists(vin, propertyId)
+  }
+
+  @MessagePattern(MICROSERVICES.INDEXER.getFileContent)
+  async getFileContent(@Payload() fileId: string) {
+    return this.searchFilesService.getFileContent(fileId)
+  }
+
+  @MessagePattern(MICROSERVICES.INDEXER.getVehiclesMakers)
+  async getVehiclesMakers(@Payload() model?: string) {
+    return this.searchVehiclesService.getMakers(model)
+  }
+
+  @MessagePattern(MICROSERVICES.INDEXER.getVehiclesModels)
+  async getVehiclesModels(@Payload() maker?: string) {
+    return this.searchVehiclesService.getModels(maker)
   }
 }

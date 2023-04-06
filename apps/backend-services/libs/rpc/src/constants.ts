@@ -44,6 +44,7 @@ export const MICROSERVICES = {
     id: 'INDEXER',
     search: 'search',
     indexEntity: 'indexEntity',
+    getFileContent: 'getFileContent',
     reindexEntities: 'reindexEntities',
     createMapping: 'createMapping',
     recordHistoryEvent: 'addHistoryEvent',
@@ -52,6 +53,8 @@ export const MICROSERVICES = {
     companyCUIExists: 'companyCUIExists',
     companyRegistrationNumberExists: 'companyRegistrationNumberExists',
     vehicleVINExists: 'vehicleVINExists',
+    getVehiclesModels: 'getVehiclesModels',
+    getVehiclesMakers: 'getVehiclesMakers',
   },
   GRAPH: {
     id: 'GRAPH',

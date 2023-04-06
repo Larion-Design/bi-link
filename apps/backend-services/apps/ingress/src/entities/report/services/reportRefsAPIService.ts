@@ -1,18 +1,10 @@
-import { InjectModel } from '@nestjs/mongoose'
 import { DataRefAPI } from 'defs'
-import { Model } from 'mongoose'
 import { Injectable } from '@nestjs/common'
-import { CompanyDocument, CompanyModel } from '../../company/models/companyModel'
 import { CompaniesService } from '../../company/services/companiesService'
-import { EventDocument, EventModel } from '../../event/models/eventModel'
 import { EventsService } from '../../event/services/eventsService'
-import { LocationDocument, LocationModel } from '../../location/models/locationModel'
 import { LocationsService } from '../../location/services/locationsService'
-import { PersonDocument, PersonModel } from '../../person/models/personModel'
 import { PersonsService } from '../../person/services/personsService'
-import { ProceedingDocument, ProceedingModel } from '../../proceeding/models/proceedingModel'
 import { ProceedingsService } from '../../proceeding/services/proceedingsService'
-import { PropertyDocument, PropertyModel } from '../../property/models/propertyModel'
 import { PropertiesService } from '../../property/services/propertiesService'
 import { DataRefModel } from '../models/dataRefModel'
 
@@ -48,8 +40,8 @@ export class ReportRefsAPIService {
         companiesDataRefs.set(event._id, dataRef)
       } else if (proceeding?._id) {
         companiesDataRefs.set(proceeding._id, dataRef)
-      } else if (location?._id) {
-        locationsDataRefs.set(location._id, dataRef)
+      } else if (location?.locationId) {
+        locationsDataRefs.set(location?.locationId, dataRef)
       }
     })
 

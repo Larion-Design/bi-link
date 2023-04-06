@@ -86,7 +86,7 @@ export class IndexerService {
 
       return lastValueFrom(
         this.client
-          .send<Result, Params>(MICROSERVICES.FILES_MANAGER.getFileContent, fileId)
+          .send<Result, Params>(MICROSERVICES.INDEXER.getFileContent, fileId)
           .pipe(timeout(1000)),
       )
     } catch (e) {
@@ -177,6 +177,36 @@ export class IndexerService {
             vin,
             propertyId,
           })
+          .pipe(timeout(1000)),
+      )
+    } catch (e) {
+      this.logger.error(e)
+    }
+  }
+
+  getVehiclesMakers = (model?: string) => {
+    try {
+      type Params = Parameters<IndexerServiceMethods['getVehiclesMakers']>[0]
+      type Result = ReturnType<IndexerServiceMethods['getVehiclesMakers']>
+
+      return lastValueFrom(
+        this.client
+          .send<Result, Params>(MICROSERVICES.INDEXER.getVehiclesMakers, model)
+          .pipe(timeout(1000)),
+      )
+    } catch (e) {
+      this.logger.error(e)
+    }
+  }
+
+  getVehiclesModels = (maker?: string) => {
+    try {
+      type Params = Parameters<IndexerServiceMethods['getVehiclesModels']>[0]
+      type Result = ReturnType<IndexerServiceMethods['getVehiclesModels']>
+
+      return lastValueFrom(
+        this.client
+          .send<Result, Params>(MICROSERVICES.INDEXER.getVehiclesModels, maker)
           .pipe(timeout(1000)),
       )
     } catch (e) {

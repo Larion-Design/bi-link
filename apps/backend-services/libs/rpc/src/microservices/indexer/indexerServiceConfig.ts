@@ -101,6 +101,16 @@ export const indexerInterfaceSchema = z.object({
     .returns(activityEventSchema.array()),
 
   getFileContent: z.function().args(z.string().nonempty()).returns(z.string()),
+
+  getVehiclesModels: z
+    .function()
+    .args(z.string().optional())
+    .returns(z.string().nonempty().array()),
+
+  getVehiclesMakers: z
+    .function()
+    .args(z.string().optional())
+    .returns(z.string().nonempty().array()),
 })
 
 export type IndexerServiceMethods = z.infer<typeof indexerInterfaceSchema>

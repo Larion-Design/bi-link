@@ -17,6 +17,6 @@ export class GetModels {
   @Query(() => [String])
   @UseGuards(FirebaseAuthGuard)
   async getModels(@Args() { maker }: Params) {
-    return []
+    return this.indexerService.getVehiclesModels(maker)
   }
 }
