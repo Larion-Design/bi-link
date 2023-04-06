@@ -1,7 +1,6 @@
 import { z } from 'zod'
 import { companySchema } from '../company'
 import { connectedEntitySchema } from '../connectedEntity'
-import { nodesRelationshipSchema } from '../graphRelationships'
 import { withMetadataSchema } from '../metadata'
 import { personSchema } from '../person'
 
@@ -21,12 +20,5 @@ export const proceedingEntityInvolvedAPISchema = proceedingEntityInvolvedSchema.
   }),
 )
 
-export const graphProceedingEntitySchema = nodesRelationshipSchema.merge(
-  z.object({
-    involvedAs: proceedingEntityInvolvedSchema.shape.involvedAs,
-  }),
-)
-
 export type ProceedingEntityInvolved = z.infer<typeof proceedingEntityInvolvedSchema>
 export type ProceedingEntityInvolvedAPI = z.infer<typeof proceedingEntityInvolvedAPISchema>
-export type ProceedingEntityRelationship = z.infer<typeof graphProceedingEntitySchema>

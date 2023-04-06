@@ -1,7 +1,7 @@
 import { z } from 'zod'
 import { customFieldSchema } from '../customField'
 import { optionalDateWithMetadataSchema, textWithMetadataSchema } from '../generic'
-import { nodesRelationshipSchema } from '../graphRelationships'
+import { nodesRelationshipSchema } from '../graph/graphRelationships'
 import { fileInputSchema, fileOutputSchema, fileSchema } from '../file'
 import { locationSchema } from '../geolocation'
 import { withMetadataSchema } from '../metadata'
@@ -47,16 +47,9 @@ export const eventListRecordSchema = eventSchema.pick({ _id: true }).merge(
   }),
 )
 
-export const graphEventParticipantSchema = nodesRelationshipSchema.merge(
-  z.object({
-    type: z.string(),
-  }),
-)
-
 export type Event = z.infer<typeof eventSchema>
 export type EventAPIInput = z.infer<typeof eventAPIInputSchema>
 export type EventAPIOutput = z.infer<typeof eventAPIOutputSchema>
 export type EventListRecord = z.infer<typeof eventListRecordSchema>
-export type EventParticipantRelationship = z.infer<typeof graphEventParticipantSchema>
 
 export interface EventsSuggestions extends SearchSuggestions<EventListRecord> {}

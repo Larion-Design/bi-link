@@ -13,4 +13,7 @@ export class PersonalRelationship implements NodesRelationship, PersonalRelation
 
   @Field()
   type: string
+
+  @Field()
+  proximity: string
 }

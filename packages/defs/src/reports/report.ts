@@ -1,6 +1,6 @@
 import { z } from 'zod'
 import { dateSchema } from '../date'
-import { nodesRelationshipSchema } from '../graphRelationships'
+import { nodesRelationshipSchema } from '../graph/graphRelationships'
 import { withTimestamps } from '../modelTimestamps'
 import { dataRefAPISchema, dataRefSchema } from './dataRef'
 import {

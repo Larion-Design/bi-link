@@ -2,10 +2,10 @@ import { Injectable, Logger } from '@nestjs/common'
 import {
   EntityMetadata,
   EntityType,
-  GraphNode,
   GraphRelationships,
   GraphRelationship,
   RelationshipMetadata,
+  EntityInfo,
 } from 'defs'
 import { Path } from 'neo4j-driver'
 import { Neo4jService } from 'nest-neo4j/dist'
@@ -202,12 +202,12 @@ export class GraphService {
         const startEntityId = String(start.properties._id)
         const endEntityId = String(end.properties._id)
 
-        const startNode: GraphNode = {
+        const startNode: EntityInfo = {
           entityId: startEntityId,
           entityType: start.labels[0] as EntityType,
         }
 
-        const endNode: GraphNode = {
+        const endNode: EntityInfo = {
           entityId: endEntityId,
           entityType: end.labels[0] as EntityType,
         }
@@ -233,6 +233,7 @@ export class GraphService {
               _confirmed: Boolean(properties._confirmed),
               _trustworthiness: parseInt(properties._trustworthiness),
               type: String(properties.type),
+              proximity: String(properties.proximity),
             })
             break
           }

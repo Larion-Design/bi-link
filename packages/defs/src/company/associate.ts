@@ -9,7 +9,6 @@ import { withMetadataSchema } from '../metadata'
 import { customFieldSchema } from '../customField'
 import { personSchema } from '../person'
 import { connectedEntitySchema } from '../connectedEntity'
-import { nodesRelationshipSchema } from '../graphRelationships'
 
 export const associateSchema = z
   .object({
@@ -31,14 +30,5 @@ export const associateAPISchema = associateSchema.merge(
   }),
 )
 
-export const graphCompanyAssociateSchema = nodesRelationshipSchema.merge(
-  z.object({
-    role: associateSchema.shape.role.shape.value,
-    equity: associateSchema.shape.equity.shape.value,
-  }),
-)
-
 export type Associate = z.infer<typeof associateSchema>
 export type AssociateAPI = z.infer<typeof associateAPISchema>
-
-export type CompanyAssociateRelationship = z.infer<typeof graphCompanyAssociateSchema>

@@ -1,14 +1,12 @@
 import { z } from 'zod'
-import { companyAPIOutputSchema, graphCompanyAssociateSchema } from './company'
-import { entityInfoSchema } from './entity'
-import { eventAPIOutputSchema, graphEventParticipantSchema } from './event'
-import { locationSchema } from './geolocation'
-import { graphPersonalRelationship, personAPIOutputSchema } from './person'
-import { graphProceedingEntitySchema, proceedingAPIOutputSchema } from './proceeding'
-import { graphPropertyOwnerSchema, propertyAPIOutputSchema } from './property'
-import { reportAPIOutputSchema } from './reports'
+import { entityInfoSchema } from '../entity'
+import { graphCompanyAssociateSchema } from './companyAssociateRelationship'
+import { graphEventParticipantSchema } from './eventParticipantRelationship'
+import { graphPersonalRelationship } from './personalRelationship'
+import { graphProceedingEntitySchema } from './proceedingEntityRelationship'
+import { graphPropertyOwnerSchema } from './propertyOwnerRelationship'
 
-export const graphRelationshipSchema = z.enum([
+export const graphRelationshipTypeSchema = z.enum([
   'RELATED',
   'BORN_IN',
   'LIVES_AT',
@@ -30,15 +28,11 @@ export const graphRelationshipMetadataSchema = z.object({
   _trustworthiness: z.number().default(3),
 })
 
-export const nodeMetadataSchema = z.object({
-  _id: z.string(),
-})
-
 export const nodesRelationshipSchema = graphRelationshipMetadataSchema.merge(
   z.object({
     startNode: entityInfoSchema,
     endNode: entityInfoSchema,
-    _type: graphRelationshipSchema,
+    _type: graphRelationshipTypeSchema,
   }),
 )
 
@@ -57,27 +51,7 @@ export const graphRelationshipsSchema = z.object({
   entitiesInvolvedInProceeding: graphProceedingEntitySchema.array(),
 })
 
-export const graphEntitiesSchema = z.object({
-  companies: companyAPIOutputSchema.array(),
-  persons: personAPIOutputSchema.array(),
-  properties: propertyAPIOutputSchema.array(),
-  events: eventAPIOutputSchema.array(),
-  locations: locationSchema.array(),
-  proceedings: proceedingAPIOutputSchema.array(),
-  reports: reportAPIOutputSchema.array(),
-})
-
-export const graphSchema = z.object({
-  relationships: graphRelationshipsSchema,
-  entities: graphEntitiesSchema,
-})
-
-export type GraphNode = z.infer<typeof entityInfoSchema>
-export type Graph = z.infer<typeof graphSchema>
 export type GraphRelationships = z.infer<typeof graphRelationshipsSchema>
-export type GraphEntities = z.infer<typeof graphEntitiesSchema>
-
-export type GraphRelationship = z.infer<typeof graphRelationshipSchema>
-export type EntityMetadata = z.infer<typeof nodeMetadataSchema>
+export type GraphRelationship = z.infer<typeof graphRelationshipTypeSchema>
 export type RelationshipMetadata = z.infer<typeof graphRelationshipMetadataSchema>
 export type NodesRelationship = z.infer<typeof nodesRelationshipSchema>
