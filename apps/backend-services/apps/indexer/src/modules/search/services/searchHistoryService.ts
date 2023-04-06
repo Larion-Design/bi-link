@@ -14,7 +14,7 @@ export class SearchHistoryService {
     searchTerm: string,
     skip: number,
     take: number,
-  ): Promise<ActivityEventIndex[]> => {
+  ): Promise<ActivityEventIndex[] | undefined> => {
     try {
       const {
         hits: { hits },
@@ -26,7 +26,7 @@ export class SearchHistoryService {
           match_all: {},
         },
       })
-      return hits.map(({ _id, _source }) => this.transformRecord(_id, _source))
+      return hits.map(({ _id, _source }) => this.transformRecord(_id, _source!))
     } catch (error) {
       this.logger.error(error)
     }

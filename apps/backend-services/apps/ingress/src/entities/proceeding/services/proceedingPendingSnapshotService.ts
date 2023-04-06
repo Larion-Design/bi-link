@@ -1,9 +1,9 @@
-import { ProceedingModel } from 'src/proceeding/models/proceedingModel'
-import { ProceedingPendingSnapshotModel } from 'src/proceeding/models/proceedingPendingSnapshotModel'
 import { Injectable, Logger } from '@nestjs/common'
 import { InjectModel } from '@nestjs/mongoose'
 import { Model } from 'mongoose'
 import { UpdateSource } from 'defs'
+import { ProceedingModel } from '../models/proceedingModel'
+import { ProceedingPendingSnapshotModel } from '../models/proceedingPendingSnapshotModel'
 
 @Injectable()
 export class ProceedingPendingSnapshotService {

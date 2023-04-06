@@ -12,6 +12,6 @@ export class SearchPersons {
   @Query(() => PersonsSuggestions)
   @UseGuards(FirebaseAuthGuard)
   async searchPersons(@Args() { searchTerm, skip, limit }: SearchPaginationArgs) {
-    return this.indexerService.search(searchTerm.toLowerCase(), ['PERSON'], skip, limit)
+    return this.indexerService.search(searchTerm.toLowerCase(), 'PERSON', skip, limit)
   }
 }

@@ -20,7 +20,7 @@ export class ReportContentModel implements ReportContent {
   title?: TitleModel
 
   @Prop({ type: Types.ObjectId, ref: FileModel.name, isRequired: false })
-  file: FileModel
+  file?: FileModel
 
   @Prop({ type: [TextSchema], isRequired: false })
   text?: TextModel

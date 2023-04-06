@@ -13,3 +13,4 @@ export const activityEventSchema = z.object({
 export const activityEventInputSchema = activityEventSchema.omit({ _id: true })
 
 export type ActivityEvent = z.infer<typeof activityEventSchema>
+export type ActivityEventInput = z.infer<typeof activityEventInputSchema>

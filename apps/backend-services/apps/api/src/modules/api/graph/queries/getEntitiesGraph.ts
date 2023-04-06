@@ -1,7 +1,21 @@
 import { IngressService } from '@app/rpc/microservices/ingress'
 import { Args, ArgsType, Field, Int, Query, Resolver } from '@nestjs/graphql'
 import { UseGuards } from '@nestjs/common'
-import { EntityInfo, EntityType, Graph, GraphEntities, GraphRelationships, User } from 'defs'
+import {
+  Company,
+  EntityInfo,
+  EntityType,
+  Event,
+  Graph,
+  GraphEntities,
+  GraphRelationships,
+  Location,
+  Person,
+  Proceeding,
+  Property,
+  Report,
+  User,
+} from 'defs'
 import { CurrentUser } from '../../../users/decorators/currentUser'
 import { FirebaseAuthGuard } from '../../../users/guards/FirebaseAuthGuard'
 import { EntitiesGraph } from '../dto/entitiesGraph'
@@ -46,13 +60,13 @@ export class GetEntitiesGraph {
     userId: string,
   ): Promise<GraphEntities> => {
     const entities: Record<keyof GraphEntities, Set<string>> = {
-      persons: new Set(),
-      companies: new Set(),
-      properties: new Set(),
-      events: new Set(),
-      locations: new Set(),
-      proceedings: new Set(),
-      reports: new Set(),
+      persons: new Set<string>(),
+      companies: new Set<string>(),
+      properties: new Set<string>(),
+      events: new Set<string>(),
+      locations: new Set<string>(),
+      proceedings: new Set<string>(),
+      reports: new Set<string>(),
     }
 
     const registerEntity = ({ entityId, entityType }: EntityInfo) => {
@@ -96,13 +110,37 @@ export class GetEntitiesGraph {
     )
 
     return {
-      persons: await this.fetchEntities(Array.from(entities.persons), 'PERSON', userId),
-      companies: await this.fetchEntities(Array.from(entities.companies), 'COMPANY', userId),
-      properties: await this.fetchEntities(Array.from(entities.properties), 'PROPERTY', userId),
-      events: await this.fetchEntities(Array.from(entities.events), 'EVENT', userId),
-      proceedings: await this.fetchEntities(Array.from(entities.proceedings), 'PROCEEDING', userId),
-      locations: await this.fetchEntities(Array.from(entities.locations), 'LOCATION', userId),
-      reports: await this.fetchEntities(Array.from(entities.reports), 'REPORT', userId),
+      persons: (await this.fetchEntities(
+        Array.from(entities.persons),
+        'PERSON',
+        userId,
+      )) as Person[],
+      companies: (await this.fetchEntities(
+        Array.from(entities.companies),
+        'COMPANY',
+        userId,
+      )) as Company[],
+      properties: (await this.fetchEntities(
+        Array.from(entities.properties),
+        'PROPERTY',
+        userId,
+      )) as Property[],
+      events: (await this.fetchEntities(Array.from(entities.events), 'EVENT', userId)) as Event[],
+      proceedings: (await this.fetchEntities(
+        Array.from(entities.proceedings),
+        'PROCEEDING',
+        userId,
+      )) as Proceeding[],
+      locations: (await this.fetchEntities(
+        Array.from(entities.locations),
+        'LOCATION',
+        userId,
+      )) as Location[],
+      reports: (await this.fetchEntities(
+        Array.from(entities.reports),
+        'REPORT',
+        userId,
+      )) as Report[],
     }
   }
 

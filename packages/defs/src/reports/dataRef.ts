@@ -29,7 +29,6 @@ export const dataRefAPISchema = dataRefSchema.merge(
     property: connectedEntitySchema.nullish(),
     proceeding: connectedEntitySchema.nullish(),
     event: connectedEntitySchema.nullish(),
-    location: connectedEntitySchema.nullish(),
   }),
 )
 

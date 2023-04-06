@@ -130,12 +130,15 @@ export class ReportRefsAPIService {
         Array.from(dataRefs.keys()),
         false,
       )
-      return proceedingsDocuments?.map((proceedingDocument) => {
-        const dataRef = dataRefs.get(String(proceedingDocument._id))!
-        const ref = this.createRefModel(dataRef)
-        ref.proceeding = proceedingDocument
-        return ref
-      })
+
+      return (
+        proceedingsDocuments?.map((proceedingDocument) => {
+          const dataRef = dataRefs.get(String(proceedingDocument._id))!
+          const ref = this.createRefModel(dataRef)
+          ref.proceeding = proceedingDocument
+          return ref
+        }) ?? []
+      )
     }
     return []
   }

@@ -32,7 +32,7 @@ export class EventModel implements Event {
   date: OptionalDateValueWithMetadataModel
 
   @Prop({ type: Types.ObjectId, ref: LocationModel.name, isRequired: false, default: null })
-  location: LocationDocument | null
+  location?: LocationDocument | null
 
   @Prop({ type: [PartySchema] })
   parties: PartyModel[]

@@ -8,7 +8,7 @@ import { PersonDocument, PersonModel } from '../../person/models/personModel'
 import { ProceedingDocument, ProceedingModel } from '../../proceeding/models/proceedingModel'
 import { PropertyDocument, PropertyModel } from '../../property/models/propertyModel'
 
-@Schema({ timestamps: false })
+@Schema({ _id: true, timestamps: false })
 export class DataRefModel implements DataRef {
   @Prop()
   _id: string

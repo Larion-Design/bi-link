@@ -36,7 +36,7 @@ export const companyListRecordSchema = companySchema
     }),
   )
 
-const companyAPIOutputSchema = companySchema.merge(
+export const companyAPIOutputSchema = companySchema.merge(
   z.object({
     associates: associateAPISchema.array(),
     files: fileOutputSchema.array(),

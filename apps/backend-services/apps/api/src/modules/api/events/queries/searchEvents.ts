@@ -13,6 +13,6 @@ export class SearchEvents {
   @Query(() => EventsSuggestions)
   @UseGuards(FirebaseAuthGuard)
   async searchEvents(@Args() { searchTerm, skip, limit }: SearchPaginationArgs) {
-    return this.indexerService.search(searchTerm.toLowerCase(), ['EVENT'], limit, skip)
+    return this.indexerService.search(searchTerm.toLowerCase(), 'EVENT', limit, skip)
   }
 }

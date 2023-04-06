@@ -1,5 +1,4 @@
 import { z } from 'zod'
-import { dateSchema } from '../date'
 import { optionalDateWithMetadataSchema } from '../generic'
 import { withMetadataSchema } from '../metadata'
 import { personSchema } from '../person'
@@ -9,7 +8,7 @@ import { connectedEntitySchema } from '../connectedEntity'
 import { nodesRelationshipSchema } from '../graphRelationships'
 
 export const vehicleOwnerSchema = z.object({
-  plateNumbers: z.array(z.string()),
+  plateNumbers: z.string().nonempty().array(),
 })
 
 export const propertyOwnerSchema = z
@@ -32,8 +31,8 @@ export const propertyOwnerAPISchema = propertyOwnerSchema.merge(
 
 export const graphPropertyOwnerSchema = nodesRelationshipSchema.merge(
   z.object({
-    startDate: dateSchema,
-    endDate: dateSchema,
+    startDate: propertyOwnerSchema.shape.startDate.shape.value,
+    endDate: propertyOwnerSchema.shape.endDate.shape.value,
   }),
 )
 

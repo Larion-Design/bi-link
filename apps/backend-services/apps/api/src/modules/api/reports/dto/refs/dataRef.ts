@@ -1,6 +1,7 @@
 import { Field, ObjectType } from '@nestjs/graphql'
 import { DataRefAPI } from 'defs'
 import { ConnectedEntity } from '../../../entityInfo/dto/connectedEntity'
+import { Location } from '../../../geolocation/dto/location'
 
 @ObjectType()
 export class DataRef implements DataRefAPI {
@@ -22,8 +23,8 @@ export class DataRef implements DataRefAPI {
   @Field(() => ConnectedEntity, { nullable: true })
   proceeding?: ConnectedEntity
 
-  @Field(() => ConnectedEntity, { nullable: true })
-  location?: ConnectedEntity
+  @Field(() => Location, { nullable: true })
+  location?: Location
 
   @Field({ nullable: true })
   targetId?: string

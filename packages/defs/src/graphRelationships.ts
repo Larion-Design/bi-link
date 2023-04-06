@@ -1,12 +1,12 @@
 import { z } from 'zod'
-import { companyListRecordSchema, graphCompanyAssociateSchema } from './company'
+import { companyAPIOutputSchema, graphCompanyAssociateSchema } from './company'
 import { entityInfoSchema } from './entity'
-import { eventListRecordSchema, graphEventParticipantSchema } from './event'
+import { eventAPIOutputSchema, graphEventParticipantSchema } from './event'
 import { locationSchema } from './geolocation'
-import { graphPersonalRelationship, personListRecordWithImage } from './person'
-import { graphProceedingEntitySchema, proceedingListRecord } from './proceeding'
-import { graphPropertyOwnerSchema, propertyListRecordSchema } from './property'
-import { reportListRecordSchema } from './reports'
+import { graphPersonalRelationship, personAPIOutputSchema } from './person'
+import { graphProceedingEntitySchema, proceedingAPIOutputSchema } from './proceeding'
+import { graphPropertyOwnerSchema, propertyAPIOutputSchema } from './property'
+import { reportAPIOutputSchema } from './reports'
 
 export const graphRelationshipSchema = z.enum([
   'RELATED',
@@ -43,28 +43,28 @@ export const nodesRelationshipSchema = graphRelationshipMetadataSchema.merge(
 )
 
 export const graphRelationshipsSchema = z.object({
-  companiesAssociates: z.array(graphCompanyAssociateSchema),
-  eventsParties: z.array(graphEventParticipantSchema),
-  personalRelationships: z.array(graphPersonalRelationship),
-  propertiesLocation: z.array(nodesRelationshipSchema),
-  companiesHeadquarters: z.array(nodesRelationshipSchema),
-  companiesBranches: z.array(nodesRelationshipSchema),
-  personsBirthPlace: z.array(nodesRelationshipSchema),
-  personsHomeAddress: z.array(nodesRelationshipSchema),
-  eventsOccurrencePlace: z.array(nodesRelationshipSchema),
-  propertiesRelationships: z.array(graphPropertyOwnerSchema),
-  entitiesReported: z.array(nodesRelationshipSchema),
-  entitiesInvolvedInProceeding: z.array(graphProceedingEntitySchema),
+  companiesAssociates: graphCompanyAssociateSchema.array(),
+  eventsParties: graphEventParticipantSchema.array(),
+  personalRelationships: graphPersonalRelationship.array(),
+  propertiesLocation: nodesRelationshipSchema.array(),
+  companiesHeadquarters: nodesRelationshipSchema.array(),
+  companiesBranches: nodesRelationshipSchema.array(),
+  personsBirthPlace: nodesRelationshipSchema.array(),
+  personsHomeAddress: nodesRelationshipSchema.array(),
+  eventsOccurrencePlace: nodesRelationshipSchema.array(),
+  propertiesRelationships: graphPropertyOwnerSchema.array(),
+  entitiesReported: nodesRelationshipSchema.array(),
+  entitiesInvolvedInProceeding: graphProceedingEntitySchema.array(),
 })
 
 export const graphEntitiesSchema = z.object({
-  companies: z.array(companyListRecordSchema),
-  persons: z.array(personListRecordWithImage),
-  properties: z.array(propertyListRecordSchema),
-  events: z.array(eventListRecordSchema),
-  locations: z.array(locationSchema),
-  proceedings: z.array(proceedingListRecord),
-  reports: reportListRecordSchema.array(),
+  companies: companyAPIOutputSchema.array(),
+  persons: personAPIOutputSchema.array(),
+  properties: propertyAPIOutputSchema.array(),
+  events: eventAPIOutputSchema.array(),
+  locations: locationSchema.array(),
+  proceedings: proceedingAPIOutputSchema.array(),
+  reports: reportAPIOutputSchema.array(),
 })
 
 export const graphSchema = z.object({

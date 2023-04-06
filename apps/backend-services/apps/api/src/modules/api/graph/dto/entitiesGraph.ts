@@ -4,12 +4,12 @@ import {
   GraphRelationships as GraphRelationshipsType,
   GraphEntities as GraphEntitiesType,
 } from 'defs'
-import { CompanyListRecord } from '../../companies/dto/companyListRecord'
-import { EventListRecord } from '../../events/dto/eventListRecord'
+import { Company } from '../../companies/dto/company'
+import { Event } from '../../events/dto/event'
 import { Person } from '../../persons/dto/person'
-import { ProceedingListRecord } from '../../proceedings/dto/proceedingListRecord'
-import { PropertyListRecord } from '../../properties/dto/propertyListRecord'
-import { ReportListRecord } from '../../reports/dto/reportListRecord'
+import { Proceeding } from '../../proceedings/dto/proceeding'
+import { Property } from '../../properties/dto/property'
+import { Report } from '../../reports/dto/report'
 import { Location } from '../../geolocation/dto/location'
 import { CompanyAssociateRelationship } from './companyAssociateRelationship'
 import { EntityLocationRelationship } from './entityLocationRelationship'
@@ -60,11 +60,11 @@ export class GraphRelationships implements GraphRelationshipsType {
 
 @ObjectType()
 export class GraphEntities implements GraphEntitiesType {
-  @Field(() => [CompanyListRecord])
-  companies: CompanyListRecord[]
+  @Field(() => [Company])
+  companies: Company[]
 
-  @Field(() => [EventListRecord])
-  events: EventListRecord[]
+  @Field(() => [Event])
+  events: Event[]
 
   @Field(() => [Location])
   locations: Location[]
@@ -72,14 +72,14 @@ export class GraphEntities implements GraphEntitiesType {
   @Field(() => [Person])
   persons: Person[]
 
-  @Field(() => [PropertyListRecord])
-  properties: PropertyListRecord[]
+  @Field(() => [Property])
+  properties: Property[]
 
-  @Field(() => [ReportListRecord])
-  reports: ReportListRecord[]
+  @Field(() => [Report])
+  reports: Report[]
 
-  @Field(() => [ProceedingListRecord])
-  proceedings: ProceedingListRecord[]
+  @Field(() => [Proceeding])
+  proceedings: Proceeding[]
 }
 
 @ObjectType()

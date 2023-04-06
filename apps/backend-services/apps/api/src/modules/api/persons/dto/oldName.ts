@@ -1,5 +1,5 @@
 import { Field, ObjectType, PickType } from '@nestjs/graphql'
-import { OldNameAPI } from 'defs'
+import { OldName as OldNameAPI } from 'defs'
 import { WithMetadata } from '../../metadata/dto/withMetadata'
 
 @ObjectType()

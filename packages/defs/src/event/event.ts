@@ -14,7 +14,7 @@ export const eventSchema = z
     _id: z.string(),
     type: textWithMetadataSchema,
     date: optionalDateWithMetadataSchema,
-    location: locationSchema.nullable(),
+    location: locationSchema.nullish(),
     description: z.string(),
     parties: eventParticipantSchema.array(),
     customFields: customFieldSchema.array(),
