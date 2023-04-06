@@ -3,6 +3,7 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
 import { DataRef } from 'defs'
 import { CompanyDocument, CompanyModel } from '../../company/models/companyModel'
 import { EventDocument, EventModel } from '../../event/models/eventModel'
+import { LocationDocument, LocationModel } from '../../location/models/locationModel'
 import { PersonDocument, PersonModel } from '../../person/models/personModel'
 import { ProceedingDocument, ProceedingModel } from '../../proceeding/models/proceedingModel'
 import { PropertyDocument, PropertyModel } from '../../property/models/propertyModel'
@@ -26,6 +27,9 @@ export class DataRefModel implements DataRef {
 
   @Prop({ type: Types.ObjectId, ref: ProceedingModel.name, isRequired: false })
   proceeding?: ProceedingDocument
+
+  @Prop({ type: Types.ObjectId, ref: LocationModel.name, isRequired: false })
+  location?: LocationDocument
 
   @Prop()
   field: string

@@ -1,8 +1,10 @@
+import { GraphServiceMethods } from '@app/rpc/microservices/graph/graphServiceConfig'
 import { Controller, Logger } from '@nestjs/common'
-import { EventPattern, Payload } from '@nestjs/microservices'
+import { EventPattern, MessagePattern, Payload } from '@nestjs/microservices'
 import { EntityInfo, EntityType } from 'defs'
 import { IngressService } from '@app/rpc/microservices/ingress'
 import { MICROSERVICES } from '@app/rpc/constants'
+import { GraphService } from '../graph'
 import { CompanyDispatcherService } from '../producers/services/companyDispatcherService'
 import { EventDispatcherService } from '../producers/services/eventDispatcherService'
 import { PersonDispatcherService } from '../producers/services/personDispatcherService'
@@ -22,7 +24,15 @@ export class EntityEventsController {
     private readonly reportDispatcherService: ReportDispatcherService,
     private readonly proceedingDispatcherService: ProceedingDispatcherService,
     private readonly ingressService: IngressService,
+    private readonly graphService: GraphService,
   ) {}
+
+  @MessagePattern(MICROSERVICES.GRAPH.getEntityRelationships)
+  async getEntityRelationships(
+    @Payload() { entityId, depth }: Parameters<GraphServiceMethods['getEntityRelationships']>[0],
+  ) {
+    return this.graphService.getEntitiesGraph(entityId, depth)
+  }
 
   @EventPattern(MICROSERVICES.GLOBAL.entityCreated)
   async entityCreated(@Payload() entityInfo: EntityInfo) {

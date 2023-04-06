@@ -12,6 +12,6 @@ export class SearchCompanies {
   @Query(() => CompaniesSuggestions)
   @UseGuards(FirebaseAuthGuard)
   async searchCompanies(@Args() { searchTerm, skip, limit }: SearchPaginationArgs) {
-    return this.indexerService.search(searchTerm, ['COMPANY'], limit, skip)
+    return this.indexerService.search(searchTerm, 'COMPANY', limit, skip)
   }
 }

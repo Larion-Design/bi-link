@@ -1,5 +1,8 @@
+import { IngressService } from '@app/rpc/microservices/ingress'
 import { Args, ArgsType, Field, Int, Query, Resolver } from '@nestjs/graphql'
 import { UseGuards } from '@nestjs/common'
+import { EntityInfo, EntityType, Graph, GraphEntities, GraphRelationships, User } from 'defs'
+import { CurrentUser } from '../../../users/decorators/currentUser'
 import { FirebaseAuthGuard } from '../../../users/guards/FirebaseAuthGuard'
 import { EntitiesGraph } from '../dto/entitiesGraph'
 import { GraphService } from '@app/rpc/microservices/graph/graphService'
@@ -15,11 +18,99 @@ class Params {
 
 @Resolver(() => EntitiesGraph)
 export class GetEntitiesGraph {
-  constructor(private readonly graphService: GraphService) {}
+  constructor(
+    private readonly graphService: GraphService,
+    private readonly ingressService: IngressService,
+  ) {}
 
   @Query(() => EntitiesGraph)
   @UseGuards(FirebaseAuthGuard)
-  async getEntitiesGraph(@Args() { id, depth }: Params): Promise<EntitiesGraph> {
-    return this.graphService.getEntityRelationships(id, depth)
+  async getEntitiesGraph(
+    @CurrentUser() { _id }: User,
+    @Args() { id, depth }: Params,
+  ): Promise<Graph | undefined> {
+    const relationships = await this.graphService.getEntityRelationships(id, depth)
+
+    if (relationships) {
+      const entities = await this.fetchEntitiesInfo(relationships, _id)
+
+      return {
+        relationships,
+        entities,
+      }
+    }
   }
+
+  private fetchEntitiesInfo = async (
+    relationships: GraphRelationships,
+    userId: string,
+  ): Promise<GraphEntities> => {
+    const entities: Record<keyof GraphEntities, Set<string>> = {
+      persons: new Set(),
+      companies: new Set(),
+      properties: new Set(),
+      events: new Set(),
+      locations: new Set(),
+      proceedings: new Set(),
+      reports: new Set(),
+    }
+
+    const registerEntity = ({ entityId, entityType }: EntityInfo) => {
+      switch (entityType) {
+        case 'PERSON': {
+          entities.persons.add(entityId)
+          break
+        }
+        case 'COMPANY': {
+          entities.companies.add(entityId)
+          break
+        }
+        case 'PROPERTY': {
+          entities.properties.add(entityId)
+          break
+        }
+        case 'EVENT': {
+          entities.events.add(entityId)
+          break
+        }
+        case 'LOCATION': {
+          entities.locations.add(entityId)
+          break
+        }
+        case 'PROCEEDING': {
+          entities.proceedings.add(entityId)
+          break
+        }
+        case 'REPORT': {
+          entities.reports.add(entityId)
+          break
+        }
+      }
+    }
+
+    Object.values(relationships).forEach((relationshipsSet) =>
+      relationshipsSet.forEach(({ startNode, endNode }) => {
+        registerEntity(startNode)
+        registerEntity(endNode)
+      }),
+    )
+
+    return {
+      persons: await this.fetchEntities(Array.from(entities.persons), 'PERSON', userId),
+      companies: await this.fetchEntities(Array.from(entities.companies), 'COMPANY', userId),
+      properties: await this.fetchEntities(Array.from(entities.properties), 'PROPERTY', userId),
+      events: await this.fetchEntities(Array.from(entities.events), 'EVENT', userId),
+      proceedings: await this.fetchEntities(Array.from(entities.proceedings), 'PROCEEDING', userId),
+      locations: await this.fetchEntities(Array.from(entities.locations), 'LOCATION', userId),
+      reports: await this.fetchEntities(Array.from(entities.reports), 'REPORT', userId),
+    }
+  }
+
+  private fetchEntities = async (entitiesIds: string[], entityType: EntityType, userId: string) =>
+    entitiesIds.length
+      ? (await this.ingressService.getEntities(entitiesIds, entityType, false, {
+          type: 'USER',
+          sourceId: userId,
+        })) ?? []
+      : []
 }

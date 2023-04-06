@@ -17,23 +17,25 @@ export class GraphUpdateCommand extends CommandRunner {
   }
 
   async run(inputs: string[], options?: CommandOptions) {
-    const { type } = options
+    if (options?.type) {
+      const { type } = options
 
-    switch (type) {
-      case 'persons': {
-        return this.graphService.refreshNodes('PERSON')
-      }
-      case 'companies': {
-        return this.graphService.refreshNodes('COMPANY')
-      }
-      case 'properties': {
-        return this.graphService.refreshNodes('PROPERTY')
-      }
-      case 'proceedings': {
-        return this.graphService.refreshNodes('PROCEEDING')
-      }
-      case 'events': {
-        return this.graphService.refreshNodes('EVENT')
+      switch (type) {
+        case 'persons': {
+          return this.graphService.refreshNodes('PERSON')
+        }
+        case 'companies': {
+          return this.graphService.refreshNodes('COMPANY')
+        }
+        case 'properties': {
+          return this.graphService.refreshNodes('PROPERTY')
+        }
+        case 'proceedings': {
+          return this.graphService.refreshNodes('PROCEEDING')
+        }
+        case 'events': {
+          return this.graphService.refreshNodes('EVENT')
+        }
       }
     }
     return Promise.reject(

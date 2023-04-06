@@ -43,7 +43,7 @@ export class EventAPIService {
     const eventModel = new EventModel()
     eventModel.date = eventInfo.date
     eventModel.location = eventInfo.location
-      ? await this.locationService.getLocationModel(eventInfo.location)
+      ? (await this.locationService.getLocationModel(eventInfo.location)) ?? null
       : null
     eventModel.parties = await this.partyService.createPartiesModels(eventInfo.parties)
 

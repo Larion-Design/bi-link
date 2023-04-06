@@ -1,4 +1,3 @@
-import { ProceedingsService } from '@app/models/proceeding/services/proceedingsService'
 import { Logger } from '@nestjs/common'
 import { Job } from 'bull'
 import { OnQueueActive, OnQueueCompleted, OnQueueFailed, Process, Processor } from '@nestjs/bull'
@@ -10,10 +9,7 @@ import { ProceedingGraphService } from '../graph/services/proceedingGraphService
 export class ProceedingEventConsumer {
   private readonly logger = new Logger(ProceedingEventConsumer.name)
 
-  constructor(
-    private readonly proceedingsService: ProceedingsService,
-    private readonly proceedingGraphService: ProceedingGraphService,
-  ) {}
+  constructor(private readonly proceedingGraphService: ProceedingGraphService) {}
 
   @OnQueueActive()
   onQueueActive({ id, name }: Job) {

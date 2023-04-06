@@ -1,12 +1,6 @@
 import { Logger } from '@nestjs/common'
 import { Job } from 'bull'
-import { ReportsService } from '@app/models'
-import {
-  EVENT_CREATED,
-  EVENT_UPDATED,
-  PropertyEventInfo,
-  ReportEventInfo,
-} from '@app/scheduler-module'
+import { EVENT_CREATED, EVENT_UPDATED, ReportEventInfo } from '@app/scheduler-module'
 import { OnQueueActive, OnQueueCompleted, OnQueueFailed, Process, Processor } from '@nestjs/bull'
 import { QUEUE_GRAPH_REPORTS } from '../producers/constants'
 import { ReportGraphService } from '../graph/services/reportGraphService'
@@ -15,10 +9,7 @@ import { ReportGraphService } from '../graph/services/reportGraphService'
 export class ReportEventConsumer {
   private readonly logger = new Logger(ReportEventConsumer.name)
 
-  constructor(
-    private readonly reportsService: ReportsService,
-    private readonly reportGraphService: ReportGraphService,
-  ) {}
+  constructor(private readonly reportGraphService: ReportGraphService) {}
 
   @OnQueueActive()
   onQueueActive({ id, name }: Job) {
@@ -50,7 +41,7 @@ export class ReportEventConsumer {
   }
 
   @Process(EVENT_UPDATED)
-  async propertyUpdated(job: Job<ReportEventInfo>) {
+  async reportUpdated(job: Job<ReportEventInfo>) {
     const {
       data: { reportId },
     } = job

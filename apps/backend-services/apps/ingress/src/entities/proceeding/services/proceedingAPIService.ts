@@ -24,7 +24,10 @@ export class ProceedingAPIService {
     try {
       const proceedingModel = await this.createProceedingModel(proceedingInfo)
       const proceedingDocument = await this.proceedingsService.create(proceedingModel)
-      return String(proceedingDocument._id)
+
+      if (proceedingDocument) {
+        return String(proceedingDocument._id)
+      }
     } catch (e) {
       this.logger.error(e)
     }
@@ -83,7 +86,7 @@ export class ProceedingAPIService {
       )
 
       personsDocuments.forEach((personDocument) => {
-        const proceedingEntityInfo = persons.get(String(personDocument._id))
+        const proceedingEntityInfo = persons.get(String(personDocument._id))!
         const proceedingEntityModel = new ProceedingEntityModel()
         proceedingEntityModel.involvedAs = proceedingEntityInfo.involvedAs
         proceedingEntityModel.description = proceedingEntityInfo.description
@@ -100,7 +103,7 @@ export class ProceedingAPIService {
       )
 
       companiesDocuments.forEach((companyDocument) => {
-        const proceedingEntityInfo = companies.get(String(companyDocument._id))
+        const proceedingEntityInfo = companies.get(String(companyDocument._id))!
         const proceedingEntityModel = new ProceedingEntityModel()
         proceedingEntityModel.involvedAs = proceedingEntityInfo.involvedAs
         proceedingEntityModel.description = proceedingEntityInfo.description

@@ -5,9 +5,12 @@ import {
   ConnectedPersonIndex,
   ConnectedPropertyIndex,
 } from '@app/definitions'
+import { LocationIndexerService } from './locationIndexerService'
 
 @Injectable()
 export class ConnectedEntityIndexerService {
+  constructor(private readonly locationIndexerService: LocationIndexerService) {}
+
   createConnectedPersonIndex = ({
     _id,
     firstName,
@@ -39,6 +42,7 @@ export class ConnectedEntityIndexerService {
     type,
     name,
     vehicleInfo,
+    realEstateInfo,
     owners,
   }: Property): ConnectedPropertyIndex => {
     const propertyIndex: ConnectedPropertyIndex = {
@@ -59,6 +63,16 @@ export class ConnectedEntityIndexerService {
         model: vehicleInfo.model.value,
         color: vehicleInfo.color.value,
         plateNumbers: Array.from(plateNumbers),
+      }
+    }
+
+    if (realEstateInfo) {
+      propertyIndex.realEstateInfo = {
+        surface: realEstateInfo.surface.value,
+        townArea: realEstateInfo.townArea.value,
+        location: realEstateInfo.location
+          ? this.locationIndexerService.createLocationIndexData(realEstateInfo.location)
+          : undefined,
       }
     }
     return propertyIndex

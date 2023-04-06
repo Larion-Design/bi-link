@@ -1,51 +1,60 @@
 import { ReportGraphNode } from '@app/definitions/graph/report'
 import { ReportTargetEntityRelationship } from '@app/definitions/graph/reportTargetEntityRelationship'
-import { GraphService } from '@app/graph-module'
-import { ReportDocument, ReportsService } from '@app/models'
+import { IngressService } from '@app/rpc/microservices/ingress'
 import { Injectable, Logger } from '@nestjs/common'
-import { EntityLabel, RelationshipLabel } from 'defs'
+import { Report, reportSchema } from 'defs'
+import { GraphService } from './graphService'
 
 @Injectable()
 export class ReportGraphService {
   private readonly logger = new Logger(ReportGraphService.name)
 
   constructor(
-    private readonly reportsService: ReportsService,
+    private readonly ingressService: IngressService,
     private readonly graphService: GraphService,
   ) {}
 
   upsertReportNode = async (reportId: string) => {
     try {
-      const reportDocument = await this.reportsService.getReport(reportId, true)
+      const reportDocument = await this.getReport(reportId)
 
       if (!reportDocument.isTemplate) {
-        return this.graphService.upsertEntity<ReportGraphNode>(
+        await this.graphService.upsertEntity<ReportGraphNode>(
           {
             _id: reportId,
             name: reportDocument.name,
             type: reportDocument.type,
           },
-          EntityLabel.REPORT,
+          'REPORT',
         )
+
+        await this.upsertReportTargetEntity(reportDocument)
       }
     } catch (e) {
       this.logger.error(e)
     }
   }
 
-  private upsertReportTargetEntity = async ({
-    _id,
-    company,
-    event,
-    person,
-    property,
-  }: ReportDocument) => {
+  private upsertReportTargetEntity = async ({ _id, company, event, person, property }: Report) => {
     try {
       const map = new Map<string, ReportTargetEntityRelationship>()
-      map.set(company?._id ?? event?._id ?? person?._id ?? property?._id, { _confirmed: true })
-      return this.graphService.replaceRelationships(String(_id), map, RelationshipLabel.REPORTED)
+      const entityId = company?._id ?? event?._id ?? person?._id ?? (property?._id as string)
+
+      map.set(entityId, {
+        _confirmed: true,
+        _trustworthiness: 0,
+      })
+      return this.graphService.replaceRelationships(String(_id), map, 'REPORTED')
     } catch (e) {
       this.logger.error(e)
     }
   }
+
+  private getReport = async (reportId: string) =>
+    reportSchema.parse(
+      await this.ingressService.getEntity({ entityId: reportId, entityType: 'REPORT' }, true, {
+        type: 'SERVICE',
+        sourceId: 'SERVICE_GRAPH',
+      }),
+    )
 }

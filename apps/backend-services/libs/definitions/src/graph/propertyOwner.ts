@@ -5,7 +5,7 @@ export const propertyOwnerRelationshipSchema = z
   .object({
     startDate: z.string().optional(),
     endDate: z.string().optional(),
-    plateNumbers: vehicleOwnerSchema.shape.plateNumbers,
+    plateNumbers: vehicleOwnerSchema.shape.plateNumbers.optional(),
   })
   .merge(graphRelationshipMetadataSchema)
 

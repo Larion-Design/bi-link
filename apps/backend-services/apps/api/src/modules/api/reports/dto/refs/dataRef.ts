@@ -19,6 +19,12 @@ export class DataRef implements DataRefAPI {
   @Field(() => ConnectedEntity, { nullable: true })
   event?: ConnectedEntity
 
+  @Field(() => ConnectedEntity, { nullable: true })
+  proceeding?: ConnectedEntity
+
+  @Field(() => ConnectedEntity, { nullable: true })
+  location?: ConnectedEntity
+
   @Field({ nullable: true })
   targetId?: string
 

@@ -19,7 +19,7 @@ export const vehicleIndexSchema = z.object({
 export const realEstateIndex = z.object({
   surface: realEstateSchema.shape.surface.shape.value,
   townArea: realEstateSchema.shape.townArea.shape.value,
-  location: locationIndexSchema,
+  location: locationIndexSchema.optional(),
 })
 
 export const propertyIndexSchema = propertySchema.pick({ name: true, type: true }).merge(

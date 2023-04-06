@@ -26,7 +26,10 @@ export class ReportAPIService {
   createReport = async (reportInput: ReportAPIInput) => {
     const reportModel = await this.createReportDocument(reportInput)
     const reportDocument = await this.reportsService.createReport(reportModel)
-    return String(reportDocument._id)
+
+    if (reportDocument) {
+      return String(reportDocument._id)
+    }
   }
 
   updateReport = async (reportId: string, reportInput: ReportAPIInput) => {

@@ -1,7 +1,8 @@
+import { IngressService } from '@app/rpc/microservices/ingress'
 import { UseGuards } from '@nestjs/common'
 import { Args, ArgsType, Field, ID, Query, Resolver } from '@nestjs/graphql'
-import { ReportsService } from '@app/models/report/services/reportsService'
-import { EntityType } from 'defs'
+import { EntityType, User } from 'defs'
+import { CurrentUser } from '../../../users/decorators/currentUser'
 import { FirebaseAuthGuard } from '../../../users/guards/FirebaseAuthGuard'
 import { Report } from '../dto/report'
 
@@ -16,11 +17,14 @@ class Params {
 
 @Resolver(() => Report)
 export class GetReports {
-  constructor(private readonly reportsService: ReportsService) {}
+  constructor(private readonly ingressService: IngressService) {}
 
   @Query(() => [Report])
   @UseGuards(FirebaseAuthGuard)
-  async getReports(@Args() { entityId, entityType }: Params) {
-    return this.reportsService.getEntityReports({ entityId, entityType })
+  async getReports(@CurrentUser() { _id }: User, @Args() { entityId, entityType }: Params) {
+    return this.ingressService.getEntity({ entityId, entityType }, true, {
+      sourceId: _id,
+      type: 'USER',
+    })
   }
 }

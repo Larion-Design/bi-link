@@ -22,8 +22,14 @@ export class CompanyAPIService {
   create = async (companyInfo: CompanyAPIInput) => {
     try {
       const companyModel = await this.createCompanyDocument(companyInfo)
-      const companyDocument = await this.companiesService.create(companyModel)
-      return String(companyDocument._id)
+
+      if (companyModel) {
+        const companyDocument = await this.companiesService.create(companyModel)
+
+        if (companyDocument) {
+          return String(companyDocument._id)
+        }
+      }
     } catch (error) {
       this.logger.error(error)
     }
@@ -32,8 +38,11 @@ export class CompanyAPIService {
   update = async (companyId: string, companyInfo: CompanyAPIInput) => {
     try {
       const companyModel = await this.createCompanyDocument(companyInfo)
-      await this.companiesService.update(companyId, companyModel)
-      return true
+
+      if (companyModel) {
+        await this.companiesService.update(companyId, companyModel)
+        return true
+      }
     } catch (error) {
       this.logger.error(error)
     }
@@ -47,11 +56,11 @@ export class CompanyAPIService {
       companyModel.registrationNumber = companyInfo.registrationNumber
 
       companyModel.headquarters = companyInfo.headquarters
-        ? await this.locationAPIService.getLocationModel(companyInfo.headquarters)
+        ? (await this.locationAPIService.getLocationModel(companyInfo.headquarters)) ?? null
         : null
 
       companyModel.locations = companyInfo.locations.length
-        ? await this.locationAPIService.getLocationsModels(companyInfo.locations)
+        ? (await this.locationAPIService.getLocationsModels(companyInfo.locations)) ?? []
         : []
 
       companyModel.contactDetails = companyInfo.contactDetails.length

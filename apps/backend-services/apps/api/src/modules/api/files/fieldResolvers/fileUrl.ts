@@ -1,15 +1,15 @@
+import { FilesManagerService } from '@app/rpc/microservices/filesManager/filesManagerService'
 import { Parent, ResolveField, Resolver } from '@nestjs/graphql'
 import { FileAPIOutput } from 'defs'
 import { File } from '../dto/file'
 import { DownloadUrl } from '../dto/downloadUrl'
-import { FileStorageService } from '@app/files/services/fileStorageService'
 
 @Resolver(() => File)
 export class FileUrl {
-  constructor(protected fileStorageService: FileStorageService) {}
+  constructor(protected filesManagerService: FilesManagerService) {}
 
   @ResolveField(() => DownloadUrl)
   async url(@Parent() { fileId }: FileAPIOutput) {
-    return this.fileStorageService.getDownloadUrl(fileId, 120)
+    return this.filesManagerService.getFileDownloadUrl(fileId, 120)
   }
 }

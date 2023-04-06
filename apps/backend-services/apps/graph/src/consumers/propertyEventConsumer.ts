@@ -3,17 +3,13 @@ import { Job } from 'bull'
 import { OnQueueActive, OnQueueCompleted, OnQueueFailed, Process, Processor } from '@nestjs/bull'
 import { QUEUE_GRAPH_PROPERTIES } from '../producers/constants'
 import { EVENT_CREATED, EVENT_UPDATED, PropertyEventInfo } from '@app/scheduler-module'
-import { PropertiesService } from '@app/models/property/services/propertiesService'
 import { PropertyGraphService } from '../graph/services/propertyGraphService'
 
 @Processor(QUEUE_GRAPH_PROPERTIES)
 export class PropertyEventConsumer {
   private readonly logger = new Logger(PropertyEventConsumer.name)
 
-  constructor(
-    private readonly propertiesService: PropertiesService,
-    private readonly propertyGraphService: PropertyGraphService,
-  ) {}
+  constructor(private readonly propertyGraphService: PropertyGraphService) {}
 
   @OnQueueActive()
   onQueueActive({ id, name }: Job) {

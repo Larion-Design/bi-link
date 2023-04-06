@@ -4,6 +4,7 @@ import { ElasticsearchModule } from '@nestjs/elasticsearch'
 import {
   CompaniesIndexerService,
   ConnectedEntityIndexerService,
+  CustomFieldsIndexerService,
   EventsIndexerService,
   FilesIndexerService,
   HistoryIndexerService,
@@ -25,6 +26,7 @@ import { ProceedingsIndexerService } from './services/proceedingsIndexerService'
     }),
   ],
   providers: [
+    CustomFieldsIndexerService,
     ConnectedEntityIndexerService,
     LocationIndexerService,
     PersonsIndexerService,
@@ -36,6 +38,7 @@ import { ProceedingsIndexerService } from './services/proceedingsIndexerService'
     ProceedingsIndexerService,
   ],
   exports: [
+    CustomFieldsIndexerService,
     ConnectedEntityIndexerService,
     LocationIndexerService,
     PersonsIndexerService,

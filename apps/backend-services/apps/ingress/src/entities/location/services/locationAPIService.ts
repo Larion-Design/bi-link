@@ -13,7 +13,10 @@ export class LocationAPIService {
   getLocationModel = async (location: LocationAPIInput) => {
     try {
       const locationModel = this.createLocationModel(location)
-      return locationModel ? this.locationsService.upsertLocation(locationModel) : null
+
+      if (locationModel) {
+        return this.locationsService.upsertLocation(locationModel)
+      }
     } catch (e) {
       this.logger.error(e)
     }

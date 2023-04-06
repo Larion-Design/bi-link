@@ -1,9 +1,9 @@
 import { Injectable, Logger } from '@nestjs/common'
 import { Event } from 'defs'
 import { formatDateTime } from 'tools'
-import { GraphService } from '@app/graph-module/graphService'
 import { EventGraphNode } from '@app/definitions/graph/event'
 import { PartyGraphRelationship } from '@app/definitions/graph/party'
+import { GraphService } from './graphService'
 import { LocationGraphService } from './locationGraphService'
 
 @Injectable()

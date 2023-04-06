@@ -17,28 +17,30 @@ export class IndexEntityCommand extends CommandRunner {
   }
 
   async run(inputs: string[], options?: CommandOptions) {
-    const { type } = options
+    if (options?.type) {
+      const { type } = options
 
-    switch (type) {
-      case 'persons': {
-        await this.entitiesIndexerService.indexAllPersons()
-        return
-      }
-      case 'companies': {
-        await this.entitiesIndexerService.indexAllCompanies()
-        return
-      }
-      case 'properties': {
-        await this.entitiesIndexerService.indexAllProperties()
-        return
-      }
-      case 'events': {
-        await this.entitiesIndexerService.indexAllEvents()
-        return
-      }
-      case 'files': {
-        await this.entitiesIndexerService.indexAllFiles()
-        return
+      switch (type) {
+        case 'persons': {
+          await this.entitiesIndexerService.indexAllPersons()
+          return
+        }
+        case 'companies': {
+          await this.entitiesIndexerService.indexAllCompanies()
+          return
+        }
+        case 'properties': {
+          await this.entitiesIndexerService.indexAllProperties()
+          return
+        }
+        case 'events': {
+          await this.entitiesIndexerService.indexAllEvents()
+          return
+        }
+        case 'files': {
+          await this.entitiesIndexerService.indexAllFiles()
+          return
+        }
       }
     }
     return Promise.reject(

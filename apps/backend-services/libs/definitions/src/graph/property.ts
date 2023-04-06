@@ -7,8 +7,8 @@ const propertyGraphSchema = propertySchema
     z.object({
       type: propertySchema.shape.type,
       name: propertySchema.shape.name,
-      vin: vehicleSchema.shape.vin.shape.value,
-      plateNumbers: vehicleOwnerSchema.shape.plateNumbers,
+      vin: vehicleSchema.shape.vin.shape.value.optional(),
+      plateNumbers: vehicleOwnerSchema.shape.plateNumbers.optional(),
     }),
   )
   .merge(nodeMetadataSchema)

@@ -1,7 +1,8 @@
-import { PersonsService } from '@app/models/person/services/personsService'
+import { IngressService } from '@app/rpc/microservices/ingress'
 import { OnQueueActive, OnQueueCompleted, OnQueueFailed, Process, Processor } from '@nestjs/bull'
 import { Logger } from '@nestjs/common'
 import { Job } from 'bull'
+import { personSchema } from 'defs'
 import { QUEUE_GRAPH_PERSONS } from '../producers/constants'
 import { EVENT_CREATED, EVENT_UPDATED, PersonEventInfo } from '@app/scheduler-module'
 import { PersonGraphService } from '../graph/services/personGraphService'
@@ -11,7 +12,7 @@ export class PersonEventConsumer {
   private readonly logger = new Logger(PersonEventConsumer.name)
 
   constructor(
-    private readonly personsService: PersonsService,
+    private readonly ingressService: IngressService,
     private readonly personGraphService: PersonGraphService,
   ) {}
 
@@ -37,7 +38,8 @@ export class PersonEventConsumer {
     } = job
 
     try {
-      await this.personGraphService.upsertPersonNode(personId)
+      const personModel = await this.getPersonInfo(personId)
+      await this.personGraphService.upsertPersonNode(personId, personModel)
       return {}
     } catch (error) {
       this.logger.error(error)
@@ -52,11 +54,27 @@ export class PersonEventConsumer {
     } = job
 
     try {
-      await this.personGraphService.upsertPersonNode(personId)
+      const personModel = await this.getPersonInfo(personId)
+      await this.personGraphService.upsertPersonNode(personId, personModel)
       return {}
     } catch (error) {
       this.logger.error(error)
       await job.moveToFailed(error as { message: string })
     }
   }
+
+  private getPersonInfo = async (personId: string) =>
+    personSchema.parse(
+      await this.ingressService.getEntity(
+        {
+          entityId: personId,
+          entityType: 'PERSON',
+        },
+        true,
+        {
+          type: 'SERVICE',
+          sourceId: 'SERVICE_GRAPH',
+        },
+      ),
+    )
 }

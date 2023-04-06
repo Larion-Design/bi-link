@@ -17,10 +17,10 @@ export class LocationsService {
       if (locationsIds.length) {
         return this.locationModel.find({ locationId: locationsIds }).exec()
       }
-      return []
     } catch (e) {
       this.logger.error(e)
     }
+    return []
   }
 
   getLocation = async (locationId: string) => {
@@ -31,7 +31,10 @@ export class LocationsService {
     }
   }
 
-  upsertLocation = async (locationModel: LocationModel, session?: ClientSession) => {
+  upsertLocation = async (
+    locationModel: LocationModel,
+    session?: ClientSession,
+  ): Promise<LocationDocument | null> => {
     try {
       return this.locationModel.findOneAndUpdate(
         { locationId: this.getLocationId(locationModel) },
@@ -41,6 +44,7 @@ export class LocationsService {
     } catch (e) {
       this.logger.error(e)
     }
+    return null
   }
 
   upsertLocations = async (locations: LocationModel[]) => {
@@ -50,7 +54,10 @@ export class LocationsService {
         locations.map(async (location) => this.upsertLocation(location, transactionSession)),
       )
       await transactionSession.endSession()
-      return locationsModels.filter((location) => !!location)
+
+      if (locationsModels) {
+        return locationsModels.filter((location) => !!location) as LocationDocument[]
+      }
     } catch (error) {
       this.logger.error(error)
     }

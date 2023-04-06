@@ -19,7 +19,7 @@ export class SearchProceedingsService {
     searchTerm: string,
     skip: number,
     limit: number,
-  ): Promise<ProceedingSuggestions> => {
+  ): Promise<ProceedingSuggestions | undefined> => {
     try {
       const request: SearchRequest = {
         index: this.index,
@@ -56,7 +56,7 @@ export class SearchProceedingsService {
 
       return {
         total: (total as SearchTotalHits).value,
-        records: hits.map(({ _id, _source }) => this.transformRecord(_id, _source)),
+        records: hits.map(({ _id, _source }) => this.transformRecord(_id, _source!)),
       }
     } catch (e) {
       this.logger.error(e)

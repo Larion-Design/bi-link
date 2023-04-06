@@ -6,7 +6,7 @@ import { CoordinatesModel, CoordinatesSchema } from './coordinatesModel'
 
 @Schema({ timestamps: false })
 export class LocationModel implements Location {
-  _id: string
+  _id?: string
 
   @Prop({ type: MetadataSchema })
   metadata: MetadataModel

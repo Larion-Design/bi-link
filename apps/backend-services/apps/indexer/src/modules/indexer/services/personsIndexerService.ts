@@ -2,7 +2,7 @@ import { Injectable, Logger } from '@nestjs/common'
 import { ElasticsearchService } from '@nestjs/elasticsearch'
 import { format } from 'date-fns'
 import { INDEX_PERSONS } from '@app/definitions'
-import { Education, IdDocument, Person } from 'defs'
+import { Education, IdDocument, OldName, Person } from 'defs'
 import { LocationIndexerService } from './locationIndexerService'
 import { PersonIndex } from '@app/definitions'
 
@@ -32,10 +32,10 @@ export class PersonsIndexerService {
   }
 
   private createIndexData = (person: Person): PersonIndex => ({
-    firstName: person.firstName,
-    lastName: person.lastName,
-    oldNames: person.oldNames,
-    cnp: person.cnp,
+    firstName: person.firstName.value,
+    lastName: person.lastName.value,
+    oldNames: this.createOldNamesIndex(person.oldNames),
+    cnp: person.cnp.value,
     homeAddress: person.homeAddress
       ? this.locationIndexerService.createLocationIndexData(person.homeAddress)
       : undefined,
@@ -68,8 +68,14 @@ export class PersonsIndexerService {
       type,
       specialization,
       period: {
-        gte: startDate ? format(new Date(startDate), 'yyyy') : null,
-        lte: endDate ? format(new Date(endDate), 'yyyy') : null,
+        gte: startDate ? format(new Date(startDate), 'yyyy') : undefined,
+        lte: endDate ? format(new Date(endDate), 'yyyy') : undefined,
       },
+    }))
+
+  private createOldNamesIndex = (oldNames: OldName[]): PersonIndex['oldNames'] =>
+    oldNames.map(({ name, changeReason }) => ({
+      name,
+      changeReason,
     }))
 }

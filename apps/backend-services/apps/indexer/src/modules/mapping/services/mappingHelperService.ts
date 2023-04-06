@@ -76,6 +76,7 @@ export class MappingHelperService {
     type: 'nested',
     properties: {
       _id: this.keywordField,
+      name: this.keywordField,
       type: this.keywordField,
       vehicleInfo: {
         type: 'nested',

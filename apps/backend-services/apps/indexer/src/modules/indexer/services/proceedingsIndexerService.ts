@@ -3,6 +3,7 @@ import { INDEX_PROCEEDINGS, ProceedingIndex } from '@app/definitions'
 import { ElasticsearchService } from '@nestjs/elasticsearch'
 import { Proceeding } from 'defs'
 import { ConnectedEntityIndexerService } from './connectedEntityIndexerService'
+import { CustomFieldsIndexerService } from './customFieldsIndexerService'
 
 @Injectable()
 export class ProceedingsIndexerService {
@@ -12,6 +13,7 @@ export class ProceedingsIndexerService {
   constructor(
     private readonly elasticsearchService: ElasticsearchService,
     private readonly connectedEntityIndexerService: ConnectedEntityIndexerService,
+    private readonly customFieldsIndexerService: CustomFieldsIndexerService,
   ) {}
 
   indexProceeding = async (proceedingId: string, proceedingModel: Proceeding) => {
@@ -36,15 +38,17 @@ export class ProceedingsIndexerService {
     fileNumber: proceedingModel.fileNumber.value,
     description: proceedingModel.description,
     year: proceedingModel.year.value,
-    customFields: proceedingModel.customFields,
+    customFields: this.customFieldsIndexerService.createCustomFieldsIndex(
+      proceedingModel.customFields,
+    ),
     files: [],
     persons: proceedingModel.entitiesInvolved
       .filter(({ person }) => !!person)
-      .map(({ person }) => this.connectedEntityIndexerService.createConnectedPersonIndex(person)),
+      .map(({ person }) => this.connectedEntityIndexerService.createConnectedPersonIndex(person!)),
     companies: proceedingModel.entitiesInvolved
       .filter(({ company }) => !!company)
       .map(({ company }) =>
-        this.connectedEntityIndexerService.createConnectedCompanyIndex(company),
+        this.connectedEntityIndexerService.createConnectedCompanyIndex(company!),
       ),
   })
 }

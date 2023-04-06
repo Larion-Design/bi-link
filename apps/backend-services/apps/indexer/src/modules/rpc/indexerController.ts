@@ -2,7 +2,8 @@ import { Controller, Logger } from '@nestjs/common'
 import { EventPattern, Payload } from '@nestjs/microservices'
 import { IngressService } from '@app/rpc/microservices/ingress'
 import { MICROSERVICES } from '@app/rpc/constants'
-import { EntityInfo, EntityType } from 'defs'
+import { ActivityEventInput, EntityInfo, EntityType } from 'defs'
+import { HistoryIndexerService } from '../indexer/services'
 import { CompanyEventDispatcherService } from '../producers/services/companyEventDispatcherService'
 import { PersonEventDispatcherService } from '../producers/services/personEventDispatcherService'
 import { EventDispatcherService } from '../producers/services/eventDispatcherService'
@@ -26,6 +27,7 @@ export class IndexerController {
     private readonly reportEventDispatcherService: ReportEventDispatcherService,
     private readonly proceedingEventDispatcherService: ProceedingEventDispatcherService,
     private readonly relatedEntitiesSearchService: RelatedEntitiesSearchService,
+    private readonly historyIndexerService: HistoryIndexerService,
   ) {}
 
   @EventPattern(MICROSERVICES.ENTITY_EVENTS.entityModified)
@@ -73,6 +75,10 @@ export class IndexerController {
   @EventPattern(MICROSERVICES.ENTITY_EVENTS.entitiesRefresh)
   async entitiesRefresh(@Payload() entityType: EntityType) {
     return this.refreshAllIndexEntitiesByType(entityType)
+  }
+
+  async recordHistoryEvent(@Payload() data: ActivityEventInput) {
+    return this.historyIndexerService.indexEvent(data)
   }
 
   private indexEntityAndRelatedEntities = async ({ entityId, entityType }: EntityInfo) => {

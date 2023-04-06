@@ -2,12 +2,10 @@ import { Injectable, Logger } from '@nestjs/common'
 import {
   EntityMetadata,
   EntityType,
-  GraphEntities,
   GraphNode,
   GraphRelationships,
   GraphRelationship,
   RelationshipMetadata,
-  EntityInfo,
 } from 'defs'
 import { Path } from 'neo4j-driver'
 import { Neo4jService } from 'nest-neo4j/dist'
@@ -197,49 +195,6 @@ export class GraphService {
       entitiesInvolvedInProceeding: [],
     }
 
-    const entities: Record<keyof GraphEntities, Set<string>> = {
-      persons: new Set(),
-      companies: new Set(),
-      properties: new Set(),
-      events: new Set(),
-      locations: new Set(),
-      proceedings: new Set(),
-      reports: new Set(),
-    }
-
-    const registerEntity = ({ entityId, entityType }: EntityInfo) => {
-      switch (entityType) {
-        case 'PERSON': {
-          entities.persons.add(entityId)
-          break
-        }
-        case 'COMPANY': {
-          entities.companies.add(entityId)
-          break
-        }
-        case 'PROPERTY': {
-          entities.properties.add(entityId)
-          break
-        }
-        case 'EVENT': {
-          entities.events.add(entityId)
-          break
-        }
-        case 'LOCATION': {
-          entities.locations.add(entityId)
-          break
-        }
-        case 'PROCEEDING': {
-          entities.proceedings.add(entityId)
-          break
-        }
-        case 'REPORT': {
-          entities.reports.add(entityId)
-          break
-        }
-      }
-    }
-
     result.records.forEach((record) => {
       const path = record.get('p') as Path | null
 
@@ -256,9 +211,6 @@ export class GraphService {
           entityId: endEntityId,
           entityType: end.labels[0] as EntityType,
         }
-
-        registerEntity(startNode)
-        registerEntity(endNode)
 
         switch (type as GraphRelationship) {
           case 'ASSOCIATE': {
@@ -392,17 +344,6 @@ export class GraphService {
       })
     })
 
-    return {
-      relationships,
-      entities: {
-        persons: Array.from(entities.persons),
-        companies: Array.from(entities.companies),
-        properties: Array.from(entities.properties),
-        events: Array.from(entities.events),
-        locations: Array.from(entities.locations),
-        proceedings: Array.from(entities.proceedings),
-        reports: Array.from(entities.reports),
-      },
-    }
+    return relationships
   }
 }

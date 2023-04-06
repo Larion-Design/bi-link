@@ -9,6 +9,6 @@ export class SearchProperties {
 
   @Query(() => PropertiesSuggestions)
   async searchProperties(@Args() { searchTerm, skip, limit }: SearchPaginationArgs) {
-    return this.indexerService.search(searchTerm.toLowerCase(), ['PROPERTY'], skip, limit)
+    return this.indexerService.search(searchTerm.toLowerCase(), 'PROPERTY', skip, limit)
   }
 }

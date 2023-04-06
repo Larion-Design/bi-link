@@ -4,6 +4,7 @@ import { ElasticsearchService } from '@nestjs/elasticsearch'
 import { INDEX_COMPANIES } from '@app/definitions'
 import { Associate, Company } from 'defs'
 import { ConnectedEntityIndexerService } from './connectedEntityIndexerService'
+import { CustomFieldsIndexerService } from './customFieldsIndexerService'
 import { LocationIndexerService } from './locationIndexerService'
 
 @Injectable()
@@ -15,6 +16,7 @@ export class CompaniesIndexerService {
     private readonly elasticsearchService: ElasticsearchService,
     private readonly connectedEntityIndexerService: ConnectedEntityIndexerService,
     private readonly locationIndexerService: LocationIndexerService,
+    private readonly customFieldsIndexerService: CustomFieldsIndexerService,
   ) {}
 
   indexCompany = async (companyId: string, companyModel: Company) => {
@@ -39,8 +41,8 @@ export class CompaniesIndexerService {
     headquarters: company.headquarters
       ? this.locationIndexerService.createLocationIndexData(company.headquarters)
       : undefined,
-    customFields: company.customFields,
-    contactDetails: company.contactDetails,
+    customFields: this.customFieldsIndexerService.createCustomFieldsIndex(company.customFields),
+    contactDetails: this.customFieldsIndexerService.createCustomFieldsIndex(company.contactDetails),
     locations: this.locationIndexerService.createLocationsIndexData(company.locations),
     associatedPersons: this.createAssociatedPersonsIndex(company.associates),
     associatedCompanies: this.createAssociatedCompaniesIndex(company.associates),

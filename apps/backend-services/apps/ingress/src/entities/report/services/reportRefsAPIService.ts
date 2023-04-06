@@ -3,22 +3,28 @@ import { DataRefAPI } from 'defs'
 import { Model } from 'mongoose'
 import { Injectable } from '@nestjs/common'
 import { CompanyDocument, CompanyModel } from '../../company/models/companyModel'
+import { CompaniesService } from '../../company/services/companiesService'
 import { EventDocument, EventModel } from '../../event/models/eventModel'
+import { EventsService } from '../../event/services/eventsService'
 import { LocationDocument, LocationModel } from '../../location/models/locationModel'
+import { LocationsService } from '../../location/services/locationsService'
 import { PersonDocument, PersonModel } from '../../person/models/personModel'
+import { PersonsService } from '../../person/services/personsService'
 import { ProceedingDocument, ProceedingModel } from '../../proceeding/models/proceedingModel'
+import { ProceedingsService } from '../../proceeding/services/proceedingsService'
 import { PropertyDocument, PropertyModel } from '../../property/models/propertyModel'
+import { PropertiesService } from '../../property/services/propertiesService'
 import { DataRefModel } from '../models/dataRefModel'
 
 @Injectable()
 export class ReportRefsAPIService {
   constructor(
-    @InjectModel(CompanyModel.name) private readonly companyModel: Model<CompanyDocument>,
-    @InjectModel(PersonModel.name) private readonly personModel: Model<PersonDocument>,
-    @InjectModel(PropertyModel.name) private readonly propertyModel: Model<PropertyDocument>,
-    @InjectModel(EventModel.name) private readonly eventModel: Model<EventDocument>,
-    @InjectModel(ProceedingModel.name) private readonly proceedingModel: Model<ProceedingDocument>,
-    @InjectModel(LocationModel.name) private readonly locationModel: Model<LocationDocument>,
+    private readonly companiesService: CompaniesService,
+    private readonly personsService: PersonsService,
+    private readonly propertiesService: PropertiesService,
+    private readonly eventsService: EventsService,
+    private readonly proceedingsService: ProceedingsService,
+    private readonly locationsService: LocationsService,
   ) {}
 
   createRefsModels = async (dataRefs: DataRefAPI[]): Promise<DataRefModel[]> => {
@@ -59,7 +65,10 @@ export class ReportRefsAPIService {
 
   private createRefsForPersons = async (dataRefs: Map<string, DataRefAPI>) => {
     if (dataRefs.size) {
-      const personsDocuments = await this.personModel.find({ _id: Array.from(dataRefs.keys()) })
+      const personsDocuments = await this.personsService.getPersons(
+        Array.from(dataRefs.keys()),
+        false,
+      )
       return personsDocuments.map((personDocument) => {
         const dataRef = dataRefs.get(String(personDocument._id))!
         const ref = this.createRefModel(dataRef)
@@ -72,8 +81,11 @@ export class ReportRefsAPIService {
 
   private createRefsForCompanies = async (dataRefs: Map<string, DataRefAPI>) => {
     if (dataRefs.size) {
-      const companiesDocuments = await this.companyModel.find({ _id: Array.from(dataRefs.keys()) })
-      return companiesDocuments.map((companyDocument) => {
+      const companiesDocuments = await this.companiesService.getCompanies(
+        Array.from(dataRefs.keys()),
+        false,
+      )
+      return companiesDocuments?.map((companyDocument) => {
         const dataRef = dataRefs.get(String(companyDocument._id))!
         const ref = this.createRefModel(dataRef)
         ref.company = companyDocument
@@ -85,9 +97,10 @@ export class ReportRefsAPIService {
 
   private createRefsForProperties = async (dataRefs: Map<string, DataRefAPI>) => {
     if (dataRefs.size) {
-      const propertiesDocuments = await this.propertyModel.find({
-        _id: Array.from(dataRefs.keys()),
-      })
+      const propertiesDocuments = await this.propertiesService.getProperties(
+        Array.from(dataRefs.keys()),
+        false,
+      )
       return propertiesDocuments.map((propertyDocument) => {
         const dataRef = dataRefs.get(String(propertyDocument._id))!
         const ref = this.createRefModel(dataRef)
@@ -100,10 +113,8 @@ export class ReportRefsAPIService {
 
   private createRefsForEvents = async (dataRefs: Map<string, DataRefAPI>) => {
     if (dataRefs.size) {
-      const eventsDocuments = await this.eventModel.find({
-        _id: Array.from(dataRefs.keys()),
-      })
-      return eventsDocuments.map((eventDocument) => {
+      const eventsDocuments = await this.eventsService.getEvents(Array.from(dataRefs.keys()), false)
+      return eventsDocuments?.map((eventDocument) => {
         const dataRef = dataRefs.get(String(eventDocument._id))!
         const ref = this.createRefModel(dataRef)
         ref.event = eventDocument
@@ -115,10 +126,11 @@ export class ReportRefsAPIService {
 
   private createRefsForProceedings = async (dataRefs: Map<string, DataRefAPI>) => {
     if (dataRefs.size) {
-      const proceedingsDocuments = await this.proceedingModel.find({
-        _id: Array.from(dataRefs.keys()),
-      })
-      return proceedingsDocuments.map((proceedingDocument) => {
+      const proceedingsDocuments = await this.proceedingsService.getProceedings(
+        Array.from(dataRefs.keys()),
+        false,
+      )
+      return proceedingsDocuments?.map((proceedingDocument) => {
         const dataRef = dataRefs.get(String(proceedingDocument._id))!
         const ref = this.createRefModel(dataRef)
         ref.proceeding = proceedingDocument
@@ -130,9 +142,10 @@ export class ReportRefsAPIService {
 
   private createRefsForLocations = async (dataRefs: Map<string, DataRefAPI>) => {
     if (dataRefs.size) {
-      const locationsDocuments = await this.proceedingModel.find({
-        _id: Array.from(dataRefs.keys()),
-      })
+      const locationsDocuments = await this.locationsService.getLocations(
+        Array.from(dataRefs.keys()),
+      )
+
       return locationsDocuments.map((locationDocument) => {
         const dataRef = dataRefs.get(String(locationDocument._id))!
         const ref = this.createRefModel(dataRef)

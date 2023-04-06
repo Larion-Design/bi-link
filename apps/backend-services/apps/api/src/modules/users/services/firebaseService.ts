@@ -12,7 +12,7 @@ export class FirebaseService {
         projectId: configService.get<string>('FIREBASE_PROJECT_ID'),
         clientEmail: configService.get<string>('FIREBASE_CLIENT_EMAIL'),
         privateKey: Buffer.from(
-          configService.get<string>('FIREBASE_SECRET_KEY'),
+          configService.getOrThrow<string>('FIREBASE_SECRET_KEY'),
           'base64',
         ).toString('utf8'),
       }),

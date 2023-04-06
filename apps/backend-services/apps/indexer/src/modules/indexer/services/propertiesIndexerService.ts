@@ -1,8 +1,8 @@
 import {
   ConnectedCompanyIndex,
   ConnectedPersonIndex,
-  INDEX_PROPERTIES,
   PropertyIndex,
+  INDEX_PROPERTIES,
 } from '@app/definitions'
 import { Injectable, Logger } from '@nestjs/common'
 import { ElasticsearchService } from '@nestjs/elasticsearch'
@@ -55,17 +55,18 @@ export class PropertiesIndexerService {
       )
 
       propertyIndex.vehicleInfo = {
-        vin: propertyModel.vehicleInfo.vin,
-        maker: propertyModel.vehicleInfo.maker,
-        model: propertyModel.vehicleInfo.model,
-        color: propertyModel.vehicleInfo.color,
+        vin: propertyModel.vehicleInfo.vin.value,
+        maker: propertyModel.vehicleInfo.maker.value,
+        model: propertyModel.vehicleInfo.model.value,
+        color: propertyModel.vehicleInfo.color.value,
         plateNumbers: Array.from(plateNumbers),
       }
     }
 
     if (propertyModel.realEstateInfo) {
       propertyIndex.realEstateInfo = {
-        surface: propertyModel.realEstateInfo.surface,
+        surface: propertyModel.realEstateInfo.surface.value,
+        townArea: propertyModel.realEstateInfo.townArea.value,
         location: propertyModel.realEstateInfo.location
           ? this.locationIndexerService.createLocationIndexData(
               propertyModel.realEstateInfo.location,

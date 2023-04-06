@@ -13,6 +13,6 @@ export class SearchProceedings {
   @Query(() => [ProceedingListRecord])
   @UseGuards(FirebaseAuthGuard)
   async searchProceedings(@Args() { searchTerm, skip, limit }: SearchPaginationArgs) {
-    return this.indexerService.search(searchTerm.toLowerCase(), ['PROCEEDING'], skip, limit)
+    return this.indexerService.search(searchTerm.toLowerCase(), 'PROCEEDING', skip, limit)
   }
 }

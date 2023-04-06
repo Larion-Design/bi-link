@@ -29,7 +29,7 @@ export class SearchVehiclesService {
     }
   }
 
-  getMakers = async (model?: string): Promise<string[]> => {
+  getMakers = async (model?: string): Promise<string[] | undefined> => {
     try {
       const query: QueryDslQueryContainer = model
         ? { bool: { filter: { term: { model } } } }
@@ -56,7 +56,7 @@ export class SearchVehiclesService {
     }
   }
 
-  getModels = async (maker?: string): Promise<string[]> => {
+  getModels = async (maker?: string): Promise<string[] | undefined> => {
     try {
       const query: QueryDslQueryContainer = maker
         ? { bool: { filter: { term: { maker } } } }

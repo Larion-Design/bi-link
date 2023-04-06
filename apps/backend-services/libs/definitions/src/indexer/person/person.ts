@@ -19,8 +19,8 @@ export const personIndexSchema = z.object({
   birthdate: z.string().optional(),
   oldNames: oldNameIndexSchema.array(),
   files: embeddedFileIndexSchema.array(),
-  birthPlace: locationIndexSchema,
-  homeAddress: locationIndexSchema,
+  birthPlace: locationIndexSchema.optional(),
+  homeAddress: locationIndexSchema.optional(),
   education: educationIndexSchema.array(),
 })
 

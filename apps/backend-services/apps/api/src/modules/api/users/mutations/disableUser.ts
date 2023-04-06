@@ -1,5 +1,4 @@
 import { Args, ArgsType, Field, Mutation, Resolver } from '@nestjs/graphql'
-import { UserRole } from 'defs'
 import { User } from '../dto/user'
 import { UserService } from '../../../users/services/UserService'
 import { UseGuards } from '@nestjs/common'

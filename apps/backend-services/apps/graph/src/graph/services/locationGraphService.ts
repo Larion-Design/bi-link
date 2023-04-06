@@ -1,18 +1,14 @@
 import { Injectable, Logger } from '@nestjs/common'
 import { GraphRelationship, Location, RelationshipMetadata } from 'defs'
 import { formatAddress } from 'tools'
-import { LocationsService } from '@app/models/location/services/locationsService'
-import { GraphService } from '@app/graph-module/graphService'
 import { LocationGraphNode } from '@app/definitions/graph/location'
+import { GraphService } from './graphService'
 
 @Injectable()
 export class LocationGraphService {
   private readonly logger = new Logger(LocationGraphService.name)
 
-  constructor(
-    private readonly locationsService: LocationsService,
-    private readonly graphService: GraphService,
-  ) {}
+  constructor(private readonly graphService: GraphService) {}
 
   upsertLocationNodes = async (locationDocuments: Location[]) => {
     try {

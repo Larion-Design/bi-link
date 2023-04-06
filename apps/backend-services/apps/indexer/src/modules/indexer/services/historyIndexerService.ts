@@ -2,6 +2,7 @@ import { Injectable, Logger } from '@nestjs/common'
 import { ElasticsearchService } from '@nestjs/elasticsearch'
 import { INDEX_HISTORY } from '@app/definitions'
 import { ActivityEventIndex } from '@app/definitions/indexer/activityEvent'
+import { ActivityEventInput } from 'defs'
 
 @Injectable()
 export class HistoryIndexerService {
@@ -10,7 +11,7 @@ export class HistoryIndexerService {
 
   constructor(private elasticsearchService: ElasticsearchService) {}
 
-  indexEvent = async (eventInfo: ActivityEventIndex) => {
+  indexEvent = async (eventInfo: ActivityEventInput) => {
     try {
       const { result } = await this.elasticsearchService.index<ActivityEventIndex>({
         index: this.index,

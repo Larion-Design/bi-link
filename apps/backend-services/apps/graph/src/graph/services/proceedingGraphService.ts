@@ -3,7 +3,6 @@ import { Injectable, Logger } from '@nestjs/common'
 import { ProceedingGraphNode } from '@app/definitions/graph/proceeding'
 import { ProceedingEntityRelationship } from '@app/definitions/graph/proceedingEntity'
 import { Proceeding, proceedingSchema } from 'defs'
-import { ProceedingDocument } from '../../../../ingress/src/entities/proceeding/models/proceedingModel'
 import { GraphService } from './graphService'
 
 @Injectable()
@@ -24,8 +23,8 @@ export class ProceedingGraphService {
           _id: proceedingId,
           type: proceedingDocument.type,
           name: proceedingDocument.name,
-          fileNumber: proceedingDocument.fileNumber,
-          year: proceedingDocument.year,
+          fileNumber: proceedingDocument.fileNumber.value,
+          year: proceedingDocument.year.value,
         },
         'PROCEEDING',
       )
@@ -38,11 +37,21 @@ export class ProceedingGraphService {
   private upsertProceedingParties = async (proceedingDocument: Proceeding) => {
     const map = new Map<string, ProceedingEntityRelationship>()
 
-    proceedingDocument.entitiesInvolved.forEach(({ person, company, involvedAs }) =>
-      map.set(person?._id ?? company?._id, {
-        _confirmed: true,
+    proceedingDocument.entitiesInvolved.forEach(
+      ({
+        person,
+        company,
         involvedAs,
-      }),
+        metadata: {
+          confirmed,
+          trustworthiness: { level },
+        },
+      }) =>
+        map.set(person?._id ?? (company?._id as string), {
+          _confirmed: confirmed,
+          _trustworthiness: level,
+          involvedAs,
+        }),
     )
 
     return this.graphService.replaceRelationships(

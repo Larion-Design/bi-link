@@ -1,5 +1,5 @@
 import { Field, ObjectType } from '@nestjs/graphql'
-import { User as UserType } from 'defs'
+import { User as UserType, UserRole } from 'defs'
 
 @ObjectType()
 export class User implements UserType {
@@ -16,5 +16,5 @@ export class User implements UserType {
   active: boolean
 
   @Field()
-  role: string
+  role: UserRole
 }

@@ -86,7 +86,7 @@ export class IndexerService {
 
       return lastValueFrom(
         this.client
-          .send<Result, Params>(MICROSERVICES.INDEXER.getFileContent, fileId)
+          .send<Result, Params>(MICROSERVICES.FILES_MANAGER.getFileContent, fileId)
           .pipe(timeout(1000)),
       )
     } catch (e) {

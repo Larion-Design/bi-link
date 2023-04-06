@@ -8,7 +8,7 @@ import { MappingProperty } from '@elastic/elasticsearch/lib/api/types'
 export class CompaniesMappingService implements MappingInterface<CompanyIndex> {
   constructor(private readonly mappingHelperService: MappingHelperService) {}
 
-  getMapping = (): Record<string | keyof CompanyIndex, MappingProperty> => ({
+  getMapping = (): Record<keyof CompanyIndex, MappingProperty> => ({
     name: this.mappingHelperService.textField,
     cui: this.mappingHelperService.keywordField,
     registrationNumber: this.mappingHelperService.keywordField,

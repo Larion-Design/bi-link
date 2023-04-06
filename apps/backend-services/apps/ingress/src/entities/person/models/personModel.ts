@@ -1,22 +1,22 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
 import { Document, Types } from 'mongoose'
-import { MetadataModel, MetadataSchema } from 'src/metadata/models/metadataModel'
-import {
-  OptionalDateValueWithMetadataModel,
-  OptionalDateValueWithMetadataSchema,
-} from 'src/metadata/models/optionalDateValueWithMetadataModel'
-import {
-  TextValueWithMetadataModel,
-  TextValueWithMetadataSchema,
-} from 'src/metadata/models/textValueWithMetadataModel'
-import { LocationDocument, LocationModel } from 'src/location/models/locationModel'
-import { EducationModel, EducationSchema } from 'src/person/models/educationModel'
-import { OldNameModel, OldNameSchema } from 'src/person/models/oldNameModel'
 import { Person } from 'defs'
 import { CustomFieldModel, CustomFieldSchema } from '../../customField/models/customFieldModel'
 import { FileModel } from '../../file/models/fileModel'
+import { LocationDocument, LocationModel } from '../../location/models/locationModel'
+import { MetadataModel, MetadataSchema } from '../../metadata/models/metadataModel'
+import {
+  OptionalDateValueWithMetadataModel,
+  OptionalDateValueWithMetadataSchema,
+} from '../../metadata/models/optionalDateValueWithMetadataModel'
+import { EducationModel, EducationSchema } from './educationModel'
 import { IdDocumentModel, IdDocumentSchema } from './idDocumentModel'
 import { RelationshipModel, RelationshipSchema } from './relationshipModel'
+import {
+  TextValueWithMetadataModel,
+  TextValueWithMetadataSchema,
+} from '../../metadata/models/textValueWithMetadataModel'
+import { OldNameModel, OldNameSchema } from './oldNameModel'
 
 @Schema({ timestamps: true })
 export class PersonModel implements Person {

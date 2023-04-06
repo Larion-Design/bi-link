@@ -22,7 +22,10 @@ export class PropertyAPIService {
   createProperty = async (propertyInfo: PropertyAPIInput) => {
     const propertyModel = await this.createPropertyModel(propertyInfo)
     const propertyDocument = await this.propertiesService.create(propertyModel)
-    return String(propertyDocument._id)
+
+    if (propertyDocument) {
+      return String(propertyDocument._id)
+    }
   }
 
   updateProperty = async (propertyId: string, propertyInfo: PropertyAPIInput) => {
@@ -72,7 +75,7 @@ export class PropertyAPIService {
       realEstateInfoModel.surface = surface
       realEstateInfoModel.townArea = townArea
       realEstateInfoModel.location = location
-        ? await this.locationAPIService.getLocationModel(location)
+        ? (await this.locationAPIService.getLocationModel(location)) ?? null
         : null
       propertyModel.realEstateInfo = realEstateInfoModel
     }

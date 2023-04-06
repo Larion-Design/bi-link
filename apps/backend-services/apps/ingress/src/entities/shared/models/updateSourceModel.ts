@@ -5,7 +5,7 @@ import { UpdateSource } from 'defs'
 @Schema({ _id: false, timestamps: false })
 export class UpdateSourceModel implements UpdateSource {
   @Prop({ type: SchemaTypes.String })
-  type: 'USER' | 'SERVICE'
+  type: string | 'USER' | 'SERVICE'
 
   @Prop()
   sourceId: string

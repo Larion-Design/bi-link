@@ -1,16 +1,17 @@
-import { EmbeddedFileIndex, ProcessedFileIndex } from '@app/definitions'
-import { FileParserService } from '@app/rpc/microservices/filesParser/fileParserService'
-import { IngressService } from '@app/rpc/microservices/ingress'
-import { FileEventInfo, FileParentEntity } from '@app/scheduler-module'
 import { Injectable, Logger } from '@nestjs/common'
 import { ElasticsearchService } from '@nestjs/elasticsearch'
 import { format } from 'date-fns'
+import { FileParserService } from '@app/rpc/microservices/filesParser/fileParserService'
+import { IngressService } from '@app/rpc/microservices/ingress'
+import { FileEventInfo, FileParentEntity } from '@app/scheduler-module'
 import {
   INDEX_COMPANIES,
   INDEX_FILES,
   INDEX_EVENTS,
   INDEX_PERSONS,
   INDEX_PROPERTIES,
+  EmbeddedFileIndex,
+  ProcessedFileIndex,
 } from '@app/definitions'
 import { File } from 'defs'
 

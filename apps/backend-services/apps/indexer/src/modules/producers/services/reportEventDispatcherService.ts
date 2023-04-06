@@ -1,6 +1,6 @@
 import { ReportEventInfo, ReportEventSchedulerService } from '@app/scheduler-module'
 import { InjectQueue } from '@nestjs/bull'
-import { Injectable, Logger } from '@nestjs/common'
+import { Injectable } from '@nestjs/common'
 import { Queue } from 'bull'
 import { QUEUE_REPORTS } from '../../constants'
 

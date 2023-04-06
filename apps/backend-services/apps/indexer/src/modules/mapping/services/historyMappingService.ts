@@ -1,3 +1,4 @@
+import { ActivityEventIndex } from '@app/definitions/indexer/activityEvent'
 import { Injectable } from '@nestjs/common'
 import { MappingProperty } from '@elastic/elasticsearch/lib/api/types'
 import { ActivityEvent } from 'defs'
@@ -7,7 +8,7 @@ import { MappingHelperService, MappingInterface } from './index'
 export class HistoryMappingService implements MappingInterface<ActivityEvent> {
   constructor(private readonly mappingHelperService: MappingHelperService) {}
 
-  getMapping = (): Record<keyof ActivityEvent | string, MappingProperty> => ({
+  getMapping = (): Record<keyof ActivityEventIndex, MappingProperty> => ({
     timestamp: this.mappingHelperService.timestamp,
     eventType: this.mappingHelperService.keywordField,
     targetEntityInfo: {

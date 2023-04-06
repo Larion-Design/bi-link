@@ -1,5 +1,5 @@
 import { Global, Module } from '@nestjs/common'
-import { GraphService } from '@app/graph-module/graphService'
+import { GraphService } from './services/graphService'
 
 @Global()
 @Module({

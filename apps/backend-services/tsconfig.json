@@ -22,12 +22,6 @@
     "noFallthroughCasesInSwitch": true,
     "importHelpers": true,
     "paths": {
-      "@app/models": [
-        "libs/models/src"
-      ],
-      "@app/models/*": [
-        "libs/models/src/*"
-      ],
       "@app/rpc": [
         "libs/rpc/src"
       ],

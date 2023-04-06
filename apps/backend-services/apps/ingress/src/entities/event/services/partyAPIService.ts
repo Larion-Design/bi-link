@@ -1,10 +1,11 @@
 import { Injectable, Logger } from '@nestjs/common'
-import { CompaniesService } from '@app/models/company/services/companiesService'
-import { PersonsService } from '@app/models/person/services/personsService'
-import { PropertiesService } from '@app/models/property/services/propertiesService'
-import { PartyAPI } from 'defs'
-import { PartyModel } from '@app/models/event/models/partyModel'
+import { ConnectedEntity, EventParticipantAPI, Person } from 'defs'
+import { CompaniesService } from '../../company/services/companiesService'
 import { CustomFieldsService } from '../../customField/services/customFieldsService'
+import { PersonDocument } from '../../person/models/personModel'
+import { PersonsService } from '../../person/services/personsService'
+import { PropertiesService } from '../../property/services/propertiesService'
+import { PartyModel } from '../models/partyModel'
 
 @Injectable()
 export class PartyAPIService {
@@ -17,24 +18,24 @@ export class PartyAPIService {
     private readonly companiesService: CompaniesService,
   ) {}
 
-  createPartiesModels = async (parties: PartyAPI[]) => {
-    const personsModels = await this.getPersonsModels(parties)
+  createPartiesModels = async (parties: EventParticipantAPI[]) => {
+    const personsMap = await this.getPersonsModels(parties)
     const companiesModels = await this.getCompaniesModels(parties)
     const propertiesModels = await this.getPropertiesModels(parties)
 
     return parties.map((partyInfo) => {
       const partyModel = new PartyModel()
-      partyModel.name = partyInfo.name
+      partyModel.type = partyInfo.type
       partyModel.description = partyInfo.description
-      partyModel._confirmed = partyInfo._confirmed
+      partyModel.metadata = partyInfo.metadata
 
       partyModel.customFields = this.customFieldsService.createCustomFieldsModels(
         partyInfo.customFields,
       )
 
-      partyModel.persons = partyInfo.persons.map(({ _id }) =>
-        personsModels.find((personDocument) => String(personDocument._id) === _id),
-      )
+      if (personsMap) {
+        partyModel.persons = partyInfo.persons.map(({ _id }) => personsMap.get(_id)!)
+      }
 
       partyModel.properties = partyInfo.properties.map(({ _id }) =>
         propertiesModels.find((propertyDocument) => String(propertyDocument._id) === _id),
@@ -47,18 +48,22 @@ export class PartyAPIService {
     })
   }
 
-  private getPersonsModels = async (parties: PartyAPI[]) => {
+  private getPersonsModels = async (parties: EventParticipantAPI[]) => {
     try {
       const personsIds = Array.from(
         new Set(...parties.map(({ persons }) => persons.map(({ _id }) => _id))),
       )
-      return personsIds.length ? this.personsService.getPersons(personsIds, false) : []
+
+      const personsMap = new Map<string, PersonDocument>()
+      const persons = await this.personsService.getPersons(personsIds, false)
+      persons.forEach((person) => personsMap.set(String(person._id), person))
+      return personsMap
     } catch (error) {
       this.logger.error(error)
     }
   }
 
-  private getPropertiesModels = async (parties: PartyAPI[]) => {
+  private getPropertiesModels = async (parties: EventParticipantAPI[]) => {
     try {
       const propertiesIds = Array.from(
         new Set(...parties.map(({ properties }) => properties.map(({ _id }) => _id))),
@@ -69,7 +74,7 @@ export class PartyAPIService {
     }
   }
 
-  private getCompaniesModels = async (parties: PartyAPI[]) => {
+  private getCompaniesModels = async (parties: EventParticipantAPI[]) => {
     try {
       const companiesIds = Array.from(
         new Set(...parties.map(({ companies }) => companies.map(({ _id }) => _id))),

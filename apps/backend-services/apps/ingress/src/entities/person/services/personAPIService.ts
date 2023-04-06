@@ -91,10 +91,10 @@ export class PersonAPIService {
     personModel.birthdate = personInfo.birthdate
     personModel.oldNames = this.createOldNamesModels(personInfo.oldNames)
     personModel.homeAddress = personInfo.homeAddress
-      ? await this.locationAPIService.getLocationModel(personInfo.homeAddress)
+      ? (await this.locationAPIService.getLocationModel(personInfo.homeAddress)) ?? null
       : null
     personModel.birthPlace = personInfo.birthPlace
-      ? await this.locationAPIService.getLocationModel(personInfo.birthPlace)
+      ? (await this.locationAPIService.getLocationModel(personInfo.birthPlace)) ?? null
       : null
     personModel.education = this.createEducationModels(personInfo.education)
 
@@ -152,6 +152,7 @@ export class PersonAPIService {
         idDocumentModel.metadata = metadata
         idDocumentModel.documentType = documentType
         idDocumentModel.documentNumber = documentNumber
+        idDocumentModel.status = status
         idDocumentModel.expirationDate = expirationDate ?? null
         idDocumentModel.issueDate = issueDate ?? null
         return idDocumentModel

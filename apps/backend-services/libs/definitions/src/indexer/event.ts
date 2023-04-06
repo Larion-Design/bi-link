@@ -4,6 +4,7 @@ import {
   connectedCompanyIndexSchema,
   connectedPersonIndexSchema,
   connectedPropertyIndexSchema,
+  customFieldIndexSchema,
   embeddedFileIndexSchema,
   locationIndexSchema,
 } from '@app/definitions'
@@ -17,6 +18,7 @@ export const eventIndexSchema = eventSchema.pick({ location: true, description: 
     persons: connectedPersonIndexSchema.array(),
     companies: connectedCompanyIndexSchema.array(),
     properties: connectedPropertyIndexSchema.array(),
+    customFields: customFieldIndexSchema.array(),
   }),
 )
 

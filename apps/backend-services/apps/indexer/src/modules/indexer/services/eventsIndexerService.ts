@@ -1,15 +1,16 @@
+import { Injectable, Logger } from '@nestjs/common'
+import { format } from 'date-fns'
+import { ElasticsearchService } from '@nestjs/elasticsearch'
 import {
+  INDEX_EVENTS,
+  EventIndex,
   ConnectedCompanyIndex,
   ConnectedPersonIndex,
   ConnectedPropertyIndex,
 } from '@app/definitions'
-import { EventIndex, PartyIndex } from '@app/definitions'
 import { Event, EventParticipant } from 'defs'
+import { CustomFieldsIndexerService } from './customFieldsIndexerService'
 import { LocationIndexerService } from './locationIndexerService'
-import { Injectable, Logger } from '@nestjs/common'
-import { format } from 'date-fns'
-import { INDEX_EVENTS } from '@app/definitions'
-import { ElasticsearchService } from '@nestjs/elasticsearch'
 import { ConnectedEntityIndexerService } from './connectedEntityIndexerService'
 
 @Injectable()
@@ -21,6 +22,7 @@ export class EventsIndexerService {
     private readonly elasticsearchService: ElasticsearchService,
     private readonly connectedEntityIndexerService: ConnectedEntityIndexerService,
     private readonly locationIndexerService: LocationIndexerService,
+    private readonly customFieldsIndexerService: CustomFieldsIndexerService,
   ) {}
 
   indexEvent = async (eventId: string, eventModel: Event) => {
@@ -40,24 +42,18 @@ export class EventsIndexerService {
   }
 
   private createIndexData = (event: Event): EventIndex => ({
-    type: event.type,
+    type: event.type.value,
     date: event.date.value ? format(new Date(event.date.value), 'yyyy-MM-dd HH:mm:ss') : undefined,
-    location: this.locationIndexerService.createLocationIndexData(event.location),
+    location: event.location
+      ? this.locationIndexerService.createLocationIndexData(event.location)
+      : undefined,
     description: event.description,
-    parties: this.createPartiesIndex(event.parties),
-    customFields: event.customFields,
+    customFields: this.customFieldsIndexerService.createCustomFieldsIndex(event.customFields),
     files: [],
     persons: this.createPartyPersonsIndex(event.parties),
     companies: this.createPartyCompaniesIndex(event.parties),
     properties: this.createPartyPropertiesIndex(event.parties),
   })
-
-  private createPartiesIndex = (parties: EventParticipant[]): PartyIndex[] =>
-    parties.map((partyModel) => ({
-      type: partyModel.type,
-      description: partyModel.description,
-      customFields: partyModel.customFields,
-    }))
 
   private createPartyCompaniesIndex = (parties: EventParticipant[]): ConnectedCompanyIndex[] => {
     const companiesMap = new Map<string, ConnectedCompanyIndex>()
