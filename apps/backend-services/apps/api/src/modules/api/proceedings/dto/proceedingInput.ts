@@ -2,8 +2,8 @@ import { Field, InputType, PickType } from '@nestjs/graphql'
 import { ProceedingAPIInput } from 'defs'
 import { CustomFieldInput } from '../../customFields/dto/customFieldInput'
 import { FileInput } from '../../files/dto/fileInput'
-import { NumberValue } from '../../generic/dto/numberValue'
-import { TextValue } from '../../generic/dto/textValue'
+import { NumberValueInput } from '../../generic/dto/numberValueInput'
+import { TextValueInput } from '../../generic/dto/textValueInput'
 import { WithMetadataInput } from '../../metadata/dto/withMetadataInput'
 import { ProceedingEntityInput } from './proceedingEntityInput'
 
@@ -12,8 +12,8 @@ export class ProceedingInput
   extends PickType(WithMetadataInput, ['metadata'] as const)
   implements ProceedingAPIInput
 {
-  @Field(() => TextValue)
-  fileNumber: TextValue
+  @Field(() => TextValueInput)
+  fileNumber: TextValueInput
 
   @Field()
   name: string
@@ -24,14 +24,14 @@ export class ProceedingInput
   @Field(() => [ProceedingEntityInput])
   entitiesInvolved: ProceedingEntityInput[]
 
-  @Field(() => TextValue)
-  reason: TextValue
+  @Field(() => TextValueInput)
+  reason: TextValueInput
 
   @Field()
   type: string
 
-  @Field(() => NumberValue)
-  year: NumberValue
+  @Field(() => NumberValueInput)
+  year: NumberValueInput
 
   @Field(() => [FileInput])
   files: FileInput[]

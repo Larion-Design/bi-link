@@ -11,9 +11,9 @@ export class PropertyOwnerRelationship implements NodesRelationship, PropertyOwn
   _type: GraphRelationship
   _trustworthiness: number
 
-  @Field({ nullable: true, defaultValue: null })
+  @Field(() => Date, { nullable: true, defaultValue: null })
   startDate: Date | null
 
-  @Field({ nullable: true, defaultValue: null })
+  @Field(() => Date, { nullable: true, defaultValue: null })
   endDate: Date | null
 }

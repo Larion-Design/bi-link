@@ -7,6 +7,6 @@ export class OptionalDateValue
   extends PickType(WithMetadata, ['metadata'] as const)
   implements OptionalDateWithMetadata
 {
-  @Field({ nullable: true })
-  value: Date
+  @Field(() => Date, { nullable: true })
+  value?: Date | null
 }

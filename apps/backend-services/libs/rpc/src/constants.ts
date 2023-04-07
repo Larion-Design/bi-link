@@ -34,12 +34,6 @@ export const MICROSERVICES = {
     recordAction: 'recordAction',
     getActivityEvents: 'getActivityEvents',
   },
-  ENTITY_EVENTS: {
-    id: 'ENTITY_EVENTS',
-    entityCreated: 'entityCreated',
-    entityModified: 'entityModified',
-    entitiesRefresh: 'entitiesRefresh',
-  },
   INDEXER: {
     id: 'INDEXER',
     search: 'search',

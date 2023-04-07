@@ -20,6 +20,7 @@ import { FilesManagerService } from '@app/rpc/microservices/filesManager/filesMa
         MICROSERVICES.GRAPH.id,
         MICROSERVICES.ACTIVITY_HISTORY.id,
         MICROSERVICES.FILES_PARSER.id,
+        MICROSERVICES.FILES_MANAGER.id,
         MICROSERVICES.INDEXER.id,
       ].map((name) => ({
         name,

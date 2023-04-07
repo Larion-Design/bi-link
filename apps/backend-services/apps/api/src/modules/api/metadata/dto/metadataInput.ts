@@ -1,6 +1,6 @@
 import { Field, InputType } from '@nestjs/graphql'
 import { Metadata as MetadataAPI } from 'defs'
-import { Trustworthiness } from './trustworthiness'
+import { TrustworthinessInput } from './trustworthinessInput'
 
 @InputType()
 export class MetadataInput implements MetadataAPI {
@@ -10,6 +10,6 @@ export class MetadataInput implements MetadataAPI {
   @Field()
   confirmed: boolean
 
-  @Field(() => Trustworthiness)
-  trustworthiness: Trustworthiness
+  @Field(() => TrustworthinessInput)
+  trustworthiness: TrustworthinessInput
 }

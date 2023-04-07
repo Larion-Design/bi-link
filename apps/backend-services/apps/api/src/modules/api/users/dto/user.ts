@@ -15,6 +15,6 @@ export class User implements UserType {
   @Field()
   active: boolean
 
-  @Field()
+  @Field(() => String)
   role: UserRole
 }

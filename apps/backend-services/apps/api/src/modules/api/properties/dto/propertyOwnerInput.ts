@@ -2,7 +2,7 @@ import { PropertyOwnerAPI } from 'defs'
 import { Field, InputType, PickType } from '@nestjs/graphql'
 import { ConnectedEntityInput } from '../../entityInfo/dto/connectedEntityInput'
 import { CustomFieldInput } from '../../customFields/dto/customFieldInput'
-import { OptionalDateValue } from '../../generic/dto/optionalDateValue'
+import { OptionalDateValueInput } from '../../generic/dto/optionalDateValueInput'
 import { WithMetadataInput } from '../../metadata/dto/withMetadataInput'
 import { VehicleOwnerInfoInput } from './vehicleOwnerInfoInput'
 
@@ -20,11 +20,11 @@ export class PropertyOwnerInput
   @Field(() => [CustomFieldInput])
   readonly customFields: CustomFieldInput[]
 
-  @Field(() => OptionalDateValue)
-  readonly startDate: OptionalDateValue
+  @Field(() => OptionalDateValueInput)
+  readonly startDate: OptionalDateValueInput
 
-  @Field(() => OptionalDateValue)
-  readonly endDate: OptionalDateValue
+  @Field(() => OptionalDateValueInput)
+  readonly endDate: OptionalDateValueInput
 
   @Field(() => VehicleOwnerInfoInput, { nullable: true })
   readonly vehicleOwnerInfo: VehicleOwnerInfoInput
