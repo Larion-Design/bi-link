@@ -16,6 +16,11 @@ import { RpcModule } from '@app/rpc'
     CacheModule.register({
       isGlobal: true,
     }),
+    ConfigModule.forRoot({
+      isGlobal: true,
+      ignoreEnvVars: true,
+      cache: true,
+    }),
     GraphQLModule.forRootAsync<ApolloDriverConfig>({
       imports: [ConfigModule],
       inject: [ConfigService],
@@ -38,11 +43,6 @@ import { RpcModule } from '@app/rpc'
           context: ({ req }) => ({ req }),
         })
       },
-    }),
-    ConfigModule.forRoot({
-      isGlobal: true,
-      ignoreEnvVars: true,
-      cache: true,
     }),
     SentryModule.forRootAsync({
       imports: [ConfigModule],
