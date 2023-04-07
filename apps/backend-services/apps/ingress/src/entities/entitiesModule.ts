@@ -40,6 +40,10 @@ import { LocationModel, LocationSchema } from './location/models/locationModel'
 import { LocationAPIService } from './location/services/locationAPIService'
 import { LocationsService } from './location/services/locationsService'
 import {
+  BooleanValueWithMetadataModel,
+  BooleanValueWithMetadataSchema,
+} from './metadata/models/booleanValueWithMetadataModel'
+import {
   DateValueWithMetadataModel,
   DateValueWithMetadataSchema,
 } from './metadata/models/dateValueWithMetadataModel'
@@ -142,6 +146,10 @@ import { ReportsService } from './report/services/reportsService'
       {
         name: OptionalDateValueWithMetadataModel.name,
         schema: OptionalDateValueWithMetadataSchema,
+      },
+      {
+        name: BooleanValueWithMetadataModel.name,
+        schema: BooleanValueWithMetadataSchema,
       },
       { name: FileModel.name, schema: FileSchema },
       { name: LocationModel.name, schema: LocationSchema },

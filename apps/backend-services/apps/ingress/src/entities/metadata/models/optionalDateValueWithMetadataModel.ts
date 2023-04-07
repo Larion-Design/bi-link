@@ -12,4 +12,6 @@ export class OptionalDateValueWithMetadataModel implements OptionalDateWithMetad
   value?: Date | string | null
 }
 
-export const OptionalDateValueWithMetadataSchema = SchemaFactory.createForClass(Text)
+export const OptionalDateValueWithMetadataSchema = SchemaFactory.createForClass(
+  OptionalDateValueWithMetadataModel,
+)

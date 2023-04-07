@@ -11,4 +11,6 @@ export class NumberValueWithMetadataModel implements NumberWithMetadata {
   value: number
 }
 
-export const NumberValueWithMetadataSchema = SchemaFactory.createForClass(Text)
+export const NumberValueWithMetadataSchema = SchemaFactory.createForClass(
+  NumberValueWithMetadataModel,
+)

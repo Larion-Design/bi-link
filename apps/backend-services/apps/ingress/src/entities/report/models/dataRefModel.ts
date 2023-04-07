@@ -1,4 +1,4 @@
-import { Document, Types } from 'mongoose'
+import { Document, SchemaTypes, Types } from 'mongoose'
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
 import { DataRef } from 'defs'
 import { CompanyDocument, CompanyModel } from '../../company/models/companyModel'
@@ -34,10 +34,10 @@ export class DataRefModel implements DataRef {
   @Prop()
   field: string
 
-  @Prop({ isRequired: false })
+  @Prop({ type: SchemaTypes.String, isRequired: false })
   path?: string | null | undefined
 
-  @Prop({ isRequired: false })
+  @Prop({ type: SchemaTypes.String, isRequired: false })
   targetId?: string | null | undefined
 }
 

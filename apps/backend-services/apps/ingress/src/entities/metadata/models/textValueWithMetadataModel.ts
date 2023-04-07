@@ -11,4 +11,4 @@ export class TextValueWithMetadataModel implements TextWithMetadata {
   value: string
 }
 
-export const TextValueWithMetadataSchema = SchemaFactory.createForClass(Text)
+export const TextValueWithMetadataSchema = SchemaFactory.createForClass(TextValueWithMetadataModel)

@@ -12,4 +12,4 @@ export class DateValueWithMetadataModel implements DateWithMetadata {
   value: Date
 }
 
-export const DateValueWithMetadataSchema = SchemaFactory.createForClass(Text)
+export const DateValueWithMetadataSchema = SchemaFactory.createForClass(DateValueWithMetadataModel)

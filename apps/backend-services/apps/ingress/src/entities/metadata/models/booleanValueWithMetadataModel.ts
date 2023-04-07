@@ -11,4 +11,6 @@ export class BooleanValueWithMetadataModel implements BooleanWithMetadata {
   value: boolean
 }
 
-export const BooleanValueWithMetadataSchema = SchemaFactory.createForClass(Text)
+export const BooleanValueWithMetadataSchema = SchemaFactory.createForClass(
+  BooleanValueWithMetadataModel,
+)

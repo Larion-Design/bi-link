@@ -1,13 +1,11 @@
 import { z } from 'zod'
-import {
-  companySchema,
-  connectedEntitySchema,
-  eventSchema,
-  locationSchema,
-  personSchema,
-  proceedingSchema,
-  propertySchema,
-} from '../index'
+import { personSchema } from '../person'
+import { companySchema } from '../company'
+import { propertySchema } from '../property'
+import { eventSchema } from '../event'
+import { proceedingSchema } from '../proceeding'
+import { locationSchema } from '../geolocation'
+import { connectedEntitySchema } from '../connectedEntity'
 
 export const dataRefSchema = z.object({
   _id: z.string(),
