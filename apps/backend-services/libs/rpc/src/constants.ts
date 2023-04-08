@@ -24,6 +24,7 @@ export const MICROSERVICES = {
     applyPendingSnapshot: 'applyPendingSnapshot',
     revertHistorySnapshot: 'revertHistorySnapshot',
     getFileByHash: 'getFileByHash',
+    getReportsTemplates: 'getReportsTemplates',
   },
   FILES_PARSER: {
     id: 'FILES_PARSER',

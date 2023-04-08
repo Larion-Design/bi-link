@@ -20,7 +20,7 @@ export class EventGraphService {
       await this.graphService.upsertEntity<EventGraphNode>(
         {
           _id: eventId,
-          date: formatDateTime(eventDocument.date),
+          date: eventDocument.date.value ? formatDateTime(eventDocument.date.value) : undefined,
         },
         'EVENT',
       )

@@ -31,5 +31,8 @@
   },
   "optionalDependencies": {
     "turbo": "^1.8.5"
+  },
+  "pnpm": {
+    "requiredScripts": ["build"]
   }
 }
