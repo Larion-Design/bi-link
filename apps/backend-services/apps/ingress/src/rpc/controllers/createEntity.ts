@@ -15,17 +15,20 @@ import { MICROSERVICES } from '@app/rpc/constants'
 import { ActivityHistoryService } from '@app/rpc/microservices/activityHistory/activityHistoryService'
 import { GlobalEventsService } from '@app/rpc/microservices/globalEvents/globalEventsService'
 import { IngressServiceMethods } from '@app/rpc/microservices/ingress'
-import { CompanyAPIService } from '../entities/company/services/companyAPIService'
-import { EventAPIService } from '../entities/event/services/eventAPIService'
-import { FileAPIService } from '../entities/file/services/fileAPIService'
-import { PersonAPIService } from '../entities/person/services/personAPIService'
-import { ProceedingAPIService } from '../entities/proceeding/services/proceedingAPIService'
-import { PropertyAPIService } from '../entities/property/services/propertyAPIService'
-import { ReportAPIService } from '../entities/report/services/reportAPIService'
+import { CompanyAPIService } from '../../entities/company/services/companyAPIService'
+import { EventAPIService } from '../../entities/event/services/eventAPIService'
+import { FileAPIService } from '../../entities/file/services/fileAPIService'
+import { PersonAPIService } from '../../entities/person/services/personAPIService'
+import { ProceedingAPIService } from '../../entities/proceeding/services/proceedingAPIService'
+import { PropertyAPIService } from '../../entities/property/services/propertyAPIService'
+import { ReportAPIService } from '../../entities/report/services/reportAPIService'
+
+type Params = Parameters<IngressServiceMethods['createEntity']>[0]
+type Result = ReturnType<IngressServiceMethods['createEntity']> | undefined
 
 @Controller()
-export class CreateEntityController {
-  private readonly logger = new Logger(CreateEntityController.name)
+export class CreateEntity {
+  private readonly logger = new Logger(CreateEntity.name)
 
   constructor(
     private readonly personsAPIService: PersonAPIService,
@@ -40,10 +43,7 @@ export class CreateEntityController {
   ) {}
 
   @MessagePattern(MICROSERVICES.INGRESS.createEntity)
-  async createEntity(
-    @Payload()
-    { entityType, entityData, source }: Parameters<IngressServiceMethods['createEntity']>[0],
-  ) {
+  async createEntity(@Payload() { entityType, entityData, source }: Params): Promise<Result> {
     let entityId: string | undefined
 
     switch (entityType) {
@@ -119,6 +119,8 @@ export class CreateEntityController {
         author: source,
         targetEntityInfo: entityInfo,
       })
+
+      return entityId
     }
   }
 }

@@ -218,6 +218,8 @@ export const ingressInterfaceSchema = z.object({
     .returns(z.boolean()),
 
   getFileByHash: z.function().args(z.string().nonempty()).returns(fileSchema),
+
+  getReportsTemplates: z.function().returns(reportSchema.array()),
 })
 
 export type IngressServiceMethods = z.infer<typeof ingressInterfaceSchema>

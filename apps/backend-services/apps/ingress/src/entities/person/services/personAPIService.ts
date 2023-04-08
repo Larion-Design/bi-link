@@ -65,7 +65,15 @@ export class PersonAPIService {
   createPendingSnapshot = async (personId: string, data: PersonAPIInput, source: UpdateSource) => {
     try {
       const personModel = await this.createPersonDocument(data)
-      return this.personPendingSnapshotService.create(personId, personModel, source)
+      const snapshotModel = await this.personPendingSnapshotService.create(
+        personId,
+        personModel,
+        source,
+      )
+
+      if (snapshotModel) {
+        return String(snapshotModel._id)
+      }
     } catch (e) {
       this.logger.error(e)
     }

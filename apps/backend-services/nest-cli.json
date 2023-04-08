@@ -25,15 +25,6 @@
         "tsConfigPath": "apps/indexer/tsconfig.app.json"
       }
     },
-    "models": {
-      "type": "library",
-      "root": "libs/models",
-      "entryFile": "index",
-      "sourceRoot": "libs/models/src",
-      "compilerOptions": {
-        "tsConfigPath": "libs/models/tsconfig.lib.json"
-      }
-    },
     "rpc": {
       "type": "library",
       "root": "libs/rpc",
@@ -86,15 +77,6 @@
       "sourceRoot": "libs/files/src",
       "compilerOptions": {
         "tsConfigPath": "libs/files/tsconfig.lib.json"
-      }
-    },
-    "graph-module": {
-      "type": "library",
-      "root": "libs/graph-module",
-      "entryFile": "index",
-      "sourceRoot": "libs/graph-module/src",
-      "compilerOptions": {
-        "tsConfigPath": "libs/graph-module/tsconfig.lib.json"
       }
     },
     "graph": {

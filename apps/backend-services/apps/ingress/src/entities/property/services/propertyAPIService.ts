@@ -1,22 +1,28 @@
-import { Injectable } from '@nestjs/common'
-import { PropertyAPIInput } from 'defs'
+import { Injectable, Logger } from '@nestjs/common'
+import { PropertyAPIInput, UpdateSource } from 'defs'
 import { LocationAPIService } from '../../location/services/locationAPIService'
 import { PropertyModel } from '../models/propertyModel'
 import { RealEstateInfoModel } from '../models/realEstateInfoModel'
 import { VehicleInfoModel } from '../models/vehicleInfoModel'
 import { PropertiesService } from './propertiesService'
+import { PropertyHistorySnapshotService } from './propertyHistorySnapshotService'
 import { PropertyOwnerAPIService } from './propertyOwnerAPIService'
 import { CustomFieldsService } from '../../customField/services/customFieldsService'
 import { FileAPIService } from '../../file/services/fileAPIService'
+import { PropertyPendingSnapshotService } from './propertyPendingSnapshotService'
 
 @Injectable()
 export class PropertyAPIService {
+  private readonly logger = new Logger(PropertyAPIService.name)
+
   constructor(
     private readonly propertiesService: PropertiesService,
     private readonly propertyOwnerAPIService: PropertyOwnerAPIService,
     private readonly customFieldsService: CustomFieldsService,
     private readonly fileAPIService: FileAPIService,
     private readonly locationAPIService: LocationAPIService,
+    private readonly propertyPendingSnapshotService: PropertyPendingSnapshotService,
+    private readonly propertyHistorySnapshotService: PropertyHistorySnapshotService,
   ) {}
 
   createProperty = async (propertyInfo: PropertyAPIInput) => {
@@ -32,6 +38,48 @@ export class PropertyAPIService {
     const propertyModel = await this.createPropertyModel(propertyInfo)
     await this.propertiesService.update(propertyId, propertyModel)
     return true
+  }
+
+  createPendingSnapshot = async (
+    entityId: string,
+    data: PropertyAPIInput,
+    source: UpdateSource,
+  ) => {
+    try {
+      const propertyModel = await this.createPropertyModel(data)
+      const snapshotModel = await this.propertyPendingSnapshotService.create(
+        entityId,
+        propertyModel,
+        source,
+      )
+
+      if (snapshotModel) {
+        return String(snapshotModel._id)
+      }
+    } catch (e) {
+      this.logger.error(e)
+    }
+  }
+
+  createHistorySnapshot = async (
+    entityId: string,
+    data: PropertyAPIInput,
+    source: UpdateSource,
+  ) => {
+    try {
+      const propertyModel = await this.createPropertyModel(data)
+      const snapshotModel = await this.propertyHistorySnapshotService.create(
+        entityId,
+        propertyModel,
+        source,
+      )
+
+      if (snapshotModel) {
+        return String(snapshotModel._id)
+      }
+    } catch (e) {
+      this.logger.error(e)
+    }
   }
 
   private createPropertyModel = async (propertyInfo: PropertyAPIInput) => {

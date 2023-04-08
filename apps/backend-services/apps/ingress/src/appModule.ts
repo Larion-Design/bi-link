@@ -4,12 +4,13 @@ import { ServiceHealthModule } from '@app/service-health'
 import { ConfigModule, ConfigService } from '@nestjs/config'
 import { MongooseModule } from '@nestjs/mongoose'
 import { EntitiesModule } from './entities'
-import { CreateEntityController } from './rpc/createEntityController'
+import { IngressRPCModule } from './rpc/ingressRPCModule'
 
 @Module({
   imports: [
     RpcModule,
     EntitiesModule,
+    IngressRPCModule,
     ServiceHealthModule,
     CacheModule.register({
       isGlobal: true,
@@ -28,7 +29,5 @@ import { CreateEntityController } from './rpc/createEntityController'
         }),
     }),
   ],
-  providers: [],
-  controllers: [CreateEntityController],
 })
 export class AppModule {}

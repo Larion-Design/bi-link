@@ -14,17 +14,17 @@ import { MICROSERVICES } from '@app/rpc/constants'
 import { ActivityHistoryService } from '@app/rpc/microservices/activityHistory/activityHistoryService'
 import { GlobalEventsService } from '@app/rpc/microservices/globalEvents/globalEventsService'
 import { IngressServiceMethods } from '@app/rpc/microservices/ingress'
-import { CompanyAPIService } from '../entities/company/services/companyAPIService'
-import { EventAPIService } from '../entities/event/services/eventAPIService'
-import { FileAPIService } from '../entities/file/services/fileAPIService'
-import { PersonAPIService } from '../entities/person/services/personAPIService'
-import { ProceedingAPIService } from '../entities/proceeding/services/proceedingAPIService'
-import { PropertyAPIService } from '../entities/property/services/propertyAPIService'
-import { ReportAPIService } from '../entities/report/services/reportAPIService'
+import { CompanyAPIService } from '../../entities/company/services/companyAPIService'
+import { EventAPIService } from '../../entities/event/services/eventAPIService'
+import { FileAPIService } from '../../entities/file/services/fileAPIService'
+import { PersonAPIService } from '../../entities/person/services/personAPIService'
+import { ProceedingAPIService } from '../../entities/proceeding/services/proceedingAPIService'
+import { PropertyAPIService } from '../../entities/property/services/propertyAPIService'
+import { ReportAPIService } from '../../entities/report/services/reportAPIService'
 
 @Controller()
-export class UpdateEntityController {
-  private readonly logger = new Logger(UpdateEntityController.name)
+export class UpdateEntity {
+  private readonly logger = new Logger(UpdateEntity.name)
 
   constructor(
     private readonly personsAPIService: PersonAPIService,

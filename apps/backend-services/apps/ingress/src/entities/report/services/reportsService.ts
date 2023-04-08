@@ -1,10 +1,12 @@
 import { Injectable, Logger } from '@nestjs/common'
 import { InjectModel } from '@nestjs/mongoose'
 import { EntityInfo } from 'defs'
-import { Model, ProjectionFields, ProjectionType, Query } from 'mongoose'
+import { Model, ProjectionFields, Query } from 'mongoose'
 import { CompanyDocument, CompanyModel } from '../../company/models/companyModel'
 import { EventDocument, EventModel } from '../../event/models/eventModel'
+import { LocationDocument, LocationModel } from '../../location/models/locationModel'
 import { PersonDocument, PersonModel } from '../../person/models/personModel'
+import { ProceedingDocument, ProceedingModel } from '../../proceeding/models/proceedingModel'
 import { PropertyDocument, PropertyModel } from '../../property/models/propertyModel'
 import { ReportDocument, ReportModel } from '../models/reportModel'
 
@@ -18,6 +20,8 @@ export class ReportsService {
     @InjectModel(PersonModel.name) private readonly personModel: Model<PersonDocument>,
     @InjectModel(PropertyModel.name) private readonly propertyModel: Model<PropertyDocument>,
     @InjectModel(CompanyModel.name) private readonly companyModel: Model<CompanyDocument>,
+    @InjectModel(ProceedingModel.name) private readonly proceedingModel: Model<ProceedingDocument>,
+    @InjectModel(LocationModel.name) private readonly locationModel: Model<LocationDocument>,
   ) {}
 
   createReport = async (reportModel: ReportModel) => {
@@ -56,26 +60,18 @@ export class ReportsService {
 
   getEntityReports = async ({ entityId, entityType }: EntityInfo) => {
     try {
-      const projection: ProjectionType<ReportDocument> = {
-        _id: 1,
-        name: 1,
-      }
-
       switch (entityType) {
         case 'PERSON': {
-          return this.reportModel.find({ person: entityId, isTemplate: false }, projection)
+          return this.reportModel.find({ person: entityId, isTemplate: false })
         }
         case 'COMPANY': {
-          return this.reportModel.find({ company: entityId, isTemplate: false }, projection)
+          return this.reportModel.find({ company: entityId, isTemplate: false })
         }
         case 'PROPERTY': {
-          return this.reportModel.find({ property: entityId, isTemplate: false }, projection)
+          return this.reportModel.find({ property: entityId, isTemplate: false })
         }
         case 'EVENT': {
-          return this.reportModel.find({ event: entityId, isTemplate: false }, projection)
-        }
-        case 'PROCEEDING': {
-          return this.reportModel.find({ proceeding: entityId, isTemplate: false }, projection)
+          return this.reportModel.find({ event: entityId, isTemplate: false })
         }
       }
     } catch (e) {
@@ -85,13 +81,7 @@ export class ReportsService {
 
   getReportTemplates = async () => {
     try {
-      return this.reportModel.find(
-        { isTemplate: true },
-        {
-          _id: 1,
-          name: 1,
-        },
-      )
+      return this.reportModel.find({ isTemplate: true })
     } catch (e) {
       this.logger.error(e)
     }

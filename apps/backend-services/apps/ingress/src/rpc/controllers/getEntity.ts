@@ -2,18 +2,18 @@ import { Controller, Logger } from '@nestjs/common'
 import { MessagePattern, Payload } from '@nestjs/microservices'
 import { MICROSERVICES } from '@app/rpc'
 import { IngressServiceMethods } from '@app/rpc/microservices/ingress'
-import { CompaniesService } from '../entities/company/services/companiesService'
-import { EventsService } from '../entities/event/services/eventsService'
-import { FilesService } from '../entities/file/services/filesService'
-import { LocationsService } from '../entities/location/services/locationsService'
-import { PersonsService } from '../entities/person/services/personsService'
-import { ProceedingsService } from '../entities/proceeding/services/proceedingsService'
-import { PropertiesService } from '../entities/property/services/propertiesService'
-import { ReportsService } from '../entities/report/services/reportsService'
+import { CompaniesService } from '../../entities/company/services/companiesService'
+import { EventsService } from '../../entities/event/services/eventsService'
+import { FilesService } from '../../entities/file/services/filesService'
+import { LocationsService } from '../../entities/location/services/locationsService'
+import { PersonsService } from '../../entities/person/services/personsService'
+import { ProceedingsService } from '../../entities/proceeding/services/proceedingsService'
+import { PropertiesService } from '../../entities/property/services/propertiesService'
+import { ReportsService } from '../../entities/report/services/reportsService'
 
 @Controller()
-export class GetEntityController {
-  private readonly logger = new Logger(GetEntityController.name)
+export class GetEntity {
+  private readonly logger = new Logger(GetEntity.name)
 
   constructor(
     private readonly personsService: PersonsService,

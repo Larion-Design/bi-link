@@ -67,6 +67,9 @@ dependencies:
   date-fns:
     specifier: ^2.29.3
     version: 2.29.3
+  defs:
+    specifier: workspace:*
+    version: file:../../packages/defs
   firebase-admin:
     specifier: ^11.4.1
     version: 11.4.1(@firebase/app-types@0.8.1)
@@ -201,9 +204,6 @@ devDependencies:
   '@types/word-extractor':
     specifier: ^1.0.1
     version: 1.0.1
-  defs:
-    specifier: workspace:*
-    version: file:../../packages/defs
   express:
     specifier: ^4.18.2
     version: 4.18.2
@@ -9193,7 +9193,6 @@ packages:
     requiresBuild: true
     dependencies:
       zod: 3.21.4
-    dev: true
 
   file:../../packages/tools:
     resolution: {directory: ../../packages/tools, type: directory}

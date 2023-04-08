@@ -1,11 +1,13 @@
 import { Injectable, Logger } from '@nestjs/common'
-import { CompanyAPIInput } from 'defs'
+import { CompanyAPIInput, UpdateSource } from 'defs'
 import { FileAPIService } from '../../file/services/fileAPIService'
 import { CustomFieldsService } from '../../customField/services/customFieldsService'
 import { LocationAPIService } from '../../location/services/locationAPIService'
 import { AssociatesService } from './associatesService'
 import { CompaniesService } from './companiesService'
 import { CompanyModel } from '../models/companyModel'
+import { CompanyHistorySnapshotService } from './companyHistorySnapshotService'
+import { CompanyPendingSnapshotService } from './companyPendingSnapshotService'
 
 @Injectable()
 export class CompanyAPIService {
@@ -17,6 +19,8 @@ export class CompanyAPIService {
     private readonly customFieldsService: CustomFieldsService,
     private readonly companiesService: CompaniesService,
     private readonly associatesService: AssociatesService,
+    private readonly companyPendingSnapshotService: CompanyPendingSnapshotService,
+    private readonly companyHistorySnapshotService: CompanyHistorySnapshotService,
   ) {}
 
   create = async (companyInfo: CompanyAPIInput) => {
@@ -45,6 +49,38 @@ export class CompanyAPIService {
       }
     } catch (error) {
       this.logger.error(error)
+    }
+  }
+
+  createPendingSnapshot = async (entityId: string, data: CompanyAPIInput, source: UpdateSource) => {
+    try {
+      const model = await this.createCompanyDocument(data)
+
+      if (model) {
+        const snapshotModel = await this.companyPendingSnapshotService.create(
+          entityId,
+          model,
+          source,
+        )
+
+        if (snapshotModel) {
+          return String(snapshotModel._id)
+        }
+      }
+    } catch (e) {
+      this.logger.error(e)
+    }
+  }
+
+  createHistorySnapshot = async (entityId: string, data: CompanyAPIInput, source: UpdateSource) => {
+    try {
+      const model = await this.createCompanyDocument(data)
+
+      if (model) {
+        return this.companyHistorySnapshotService.create(entityId, model, source)
+      }
+    } catch (e) {
+      this.logger.error(e)
     }
   }
 

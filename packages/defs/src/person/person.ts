@@ -47,6 +47,7 @@ export const personAPIInputSchema = personSchema
   })
   .merge(
     z.object({
+      _id: z.string().optional(),
       files: fileInputSchema.array(),
       images: fileInputSchema.array(),
     }),

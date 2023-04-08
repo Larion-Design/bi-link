@@ -418,4 +418,21 @@ export class IngressService {
       )
     }
   }
+
+  getReportsTemplates = async () => {
+    type Result = ReturnType<IngressServiceMethods['getReportsTemplates']>
+
+    try {
+      return lastValueFrom(
+        this.client
+          .send<Result>(MICROSERVICES.INGRESS.getReportsTemplates, null)
+          .pipe(timeout(1000)),
+      )
+    } catch (e) {
+      this.logger.error(e)
+      this.logger.debug(
+        'No valid response received from the ingress service. Make sure the service is running properly.',
+      )
+    }
+  }
 }
