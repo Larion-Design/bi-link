@@ -1,5 +1,5 @@
 {
-  "name": "link",
+  "name": "bi-link",
   "version": "0.0.9",
   "private": true,
   "description": "BI Link Monorepo",
@@ -11,28 +11,28 @@
     "test": "turbo run test --parallel --stream --concurency=4",
     "lint": "eslint --ext=.tsx,.ts --quiet ."
   },
-  "keywords": [],
   "author": "alextudor@duck.com",
   "license": "proprietary",
   "devDependencies": {
-    "@typescript-eslint/eslint-plugin": "^5.56.0",
-    "@typescript-eslint/parser": "^5.56.0",
-    "babel-loader": "^8.3.0",
-    "babel-plugin-formatjs": "^10.4.0",
-    "eslint": "^8.36.0",
-    "eslint-config-prettier": "^8.8.0",
-    "eslint-plugin-mui-unused-classes": "^1.0.3",
-    "eslint-plugin-prettier": "^4.2.1",
-    "eslint-plugin-react-hooks": "^4.6.0",
-    "eslint-plugin-simple-import-sort": "^7.0.0",
-    "prettier": "^2.8.6",
     "rimraf": "^3.0.2",
+    "turbo": "^1.8.8",
     "typescript": "^4.9.5"
   },
   "optionalDependencies": {
-    "turbo": "^1.8.5"
+    "@typescript-eslint/eslint-plugin": "^5.57.1",
+    "@typescript-eslint/parser": "^5.57.1",
+    "babel-loader": "^8.3.0",
+    "babel-plugin-formatjs": "^10.4.0",
+    "eslint": "^8.38.0",
+    "eslint-config-prettier": "^8.8.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "eslint-plugin-simple-import-sort": "^7.0.0",
+    "prettier": "^2.8.7"
   },
   "pnpm": {
-    "requiredScripts": ["build"]
+    "requiredScripts": [
+      "build"
+    ]
   }
 }

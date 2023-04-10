@@ -233,7 +233,7 @@ export class GraphService {
               _confirmed: Boolean(properties._confirmed),
               _trustworthiness: parseInt(properties._trustworthiness),
               type: String(properties.type),
-              proximity: String(properties.proximity),
+              proximity: parseInt(properties.proximity) ?? 0,
             })
             break
           }

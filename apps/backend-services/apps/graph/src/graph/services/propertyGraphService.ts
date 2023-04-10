@@ -86,11 +86,11 @@ export class PropertyGraphService {
             plateNumbers: vehicleOwnerInfo?.plateNumbers,
           }
 
-          if (startDate) {
-            owner.startDate = formatDate(startDate)
+          if (startDate?.value) {
+            owner.startDate = formatDate(startDate.value)
           }
-          if (endDate) {
-            owner.endDate = formatDate(endDate)
+          if (endDate?.value) {
+            owner.endDate = formatDate(endDate.value)
           }
           if (vehicleOwnerInfo) {
             owner.plateNumbers = vehicleOwnerInfo.plateNumbers
