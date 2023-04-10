@@ -93,8 +93,8 @@ export class CreateEntity {
         if (fileInfo) {
           const fileDocument = await this.fileAPIService.getUploadedFileModel(fileInfo)
 
-          if (fileDocument) {
-            entityId = fileDocument._id
+          if (fileDocument?.fileId) {
+            entityId = String(fileDocument.fileId)
           }
         }
         break

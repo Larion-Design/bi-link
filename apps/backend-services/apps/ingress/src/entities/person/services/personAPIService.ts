@@ -79,6 +79,9 @@ export class PersonAPIService {
     }
   }
 
+  removePendingSnapshot = async (snapshotId: string) =>
+    this.personPendingSnapshotService.remove(snapshotId)
+
   createHistorySnapshot = async (personId: string, source: UpdateSource) => {
     try {
       const personDocument = await this.personsService.find(personId, false)
@@ -89,6 +92,23 @@ export class PersonAPIService {
     } catch (e) {
       this.logger.error(e)
     }
+  }
+
+  applyPendingSnapshot = async (snapshotId: string, source: UpdateSource) => {
+    try {
+      const snapshotDocument = await this.personPendingSnapshotService.getSnapshot(snapshotId)
+
+      if (snapshotDocument) {
+        const personId = String(snapshotDocument.entityId)
+        await this.createHistorySnapshot(personId, source)
+        await this.personsService.update(personId, snapshotDocument.entityInfo)
+        await this.removePendingSnapshot(snapshotId)
+        return true
+      }
+    } catch (e) {
+      this.logger.error(e)
+    }
+    return false
   }
 
   private createPersonDocument = async (personInfo: PersonAPIInput) => {
