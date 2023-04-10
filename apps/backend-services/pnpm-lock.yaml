@@ -224,13 +224,13 @@ devDependencies:
     version: file:../../packages/tools
   ts-jest:
     specifier: 28.0.1
-    version: 28.0.1(@babel/core@7.20.7)(@types/jest@27.5.0)(jest@28.0.3)(typescript@4.9.4)
+    version: 28.0.1(@babel/core@7.20.7)(@types/jest@27.5.0)(jest@28.0.3)(typescript@5.0.4)
   ts-loader:
     specifier: ^9.4.2
-    version: 9.4.2(typescript@4.9.4)(webpack@5.75.0)
+    version: 9.4.2(typescript@5.0.4)(webpack@5.75.0)
   ts-node:
     specifier: ^10.9.1
-    version: 10.9.1(@types/node@16.18.11)(typescript@4.9.4)
+    version: 10.9.1(@types/node@16.18.11)(typescript@5.0.4)
   tsconfig-paths:
     specifier: 4.0.0
     version: 4.0.0
@@ -238,8 +238,8 @@ devDependencies:
     specifier: ^2.5.0
     version: 2.5.0
   typescript:
-    specifier: ^4.9.4
-    version: 4.9.4
+    specifier: ^5.0.4
+    version: 5.0.4
   webpack:
     specifier: ^5.75.0
     version: 5.75.0
@@ -6092,7 +6092,7 @@ packages:
       pretty-format: 28.1.3
       slash: 3.0.0
       strip-json-comments: 3.1.1
-      ts-node: 10.9.1(@types/node@16.18.11)(typescript@4.9.4)
+      ts-node: 10.9.1(@types/node@16.18.11)(typescript@5.0.4)
     transitivePeerDependencies:
       - supports-color
     dev: true
@@ -8491,7 +8491,7 @@ packages:
     hasBin: true
     dev: true
 
-  /ts-jest@28.0.1(@babel/core@7.20.7)(@types/jest@27.5.0)(jest@28.0.3)(typescript@4.9.4):
+  /ts-jest@28.0.1(@babel/core@7.20.7)(@types/jest@27.5.0)(jest@28.0.3)(typescript@5.0.4):
     resolution: {integrity: sha512-PbkbitaT/9ZYAqqzk3UYTvCq080Seo46T3m/AdwcZ0D8WH2uBhG6PvA8oOAWsZIknzPQU66fYobvFCL8IqIhmg==}
     engines: {node: ^12.13.0 || ^14.15.0 || ^16.10.0 || >=17.0.0}
     hasBin: true
@@ -8522,11 +8522,11 @@ packages:
       lodash.memoize: 4.1.2
       make-error: 1.3.6
       semver: 7.3.8
-      typescript: 4.9.4
+      typescript: 5.0.4
       yargs-parser: 20.2.9
     dev: true
 
-  /ts-loader@9.4.2(typescript@4.9.4)(webpack@5.75.0):
+  /ts-loader@9.4.2(typescript@5.0.4)(webpack@5.75.0):
     resolution: {integrity: sha512-OmlC4WVmFv5I0PpaxYb+qGeGOdm5giHU7HwDDUjw59emP2UYMHy9fFSDcYgSNoH8sXcj4hGCSEhlDZ9ULeDraA==}
     engines: {node: '>=12.0.0'}
     peerDependencies:
@@ -8537,11 +8537,11 @@ packages:
       enhanced-resolve: 5.12.0
       micromatch: 4.0.5
       semver: 7.3.8
-      typescript: 4.9.4
+      typescript: 5.0.4
       webpack: 5.75.0
     dev: true
 
-  /ts-node@10.9.1(@types/node@16.18.11)(typescript@4.9.4):
+  /ts-node@10.9.1(@types/node@16.18.11)(typescript@5.0.4):
     resolution: {integrity: sha512-NtVysVPkxxrwFGUUxGYhfux8k78pQB3JqYBXlLRZgdGUqTO5wU/UyHop5p70iEbGhB7q5KmiZiU0Y3KlJrScEw==}
     hasBin: true
     peerDependencies:
@@ -8567,7 +8567,7 @@ packages:
       create-require: 1.1.1
       diff: 4.0.2
       make-error: 1.3.6
-      typescript: 4.9.4
+      typescript: 5.0.4
       v8-compile-cache-lib: 3.0.1
       yn: 3.1.1
     dev: true
@@ -8669,9 +8669,9 @@ packages:
     hasBin: true
     dev: true
 
-  /typescript@4.9.4:
-    resolution: {integrity: sha512-Uz+dTXYzxXXbsFpM86Wh3dKCxrQqUcVMxwU54orwlJjOpO3ao8L7j5lH+dWfTwgCwIuM9GQ2kvVotzYJMXTBZg==}
-    engines: {node: '>=4.2.0'}
+  /typescript@5.0.4:
+    resolution: {integrity: sha512-cW9T5W9xY37cc+jfEnaUvX91foxtHkza3Nw3wkoF4sSlKn0MONdkdEndig/qPBWXNkmplh3NzayQzCiHM4/hqw==}
+    engines: {node: '>=12.20'}
     hasBin: true
     dev: true
 
