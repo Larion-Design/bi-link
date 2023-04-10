@@ -15,9 +15,11 @@
   },
   "dependencies": {
     "date-fns": "^2.29.3",
-    "defs": "workspace:*"
+    "defs": "workspace:*",
+    "uuid": "^8.3.2"
   },
   "devDependencies": {
+    "@types/uuid": "^8.3.4",
     "tslib": "^2.5.0",
     "typescript": "^5.0.4"
   },
