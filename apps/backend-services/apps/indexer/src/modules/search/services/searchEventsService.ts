@@ -2,7 +2,7 @@ import { EventIndex, EventSearchIndex } from '@app/definitions'
 import { Injectable, Logger } from '@nestjs/common'
 import { ElasticsearchService } from '@nestjs/elasticsearch'
 import { SearchRequest, SearchTotalHits } from '@elastic/elasticsearch/lib/api/types'
-import { INDEX_EVENTS } from '@app/definitions'
+import { INDEX_EVENTS } from '../../../constants'
 import { EventListRecord, EventsSuggestions } from 'defs'
 import { SearchHelperService } from './searchHelperService'
 

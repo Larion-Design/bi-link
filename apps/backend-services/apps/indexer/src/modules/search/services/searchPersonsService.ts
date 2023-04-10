@@ -2,7 +2,7 @@ import { PersonIndex, PersonSearchIndex } from '@app/definitions'
 import { Injectable, Logger } from '@nestjs/common'
 import { SearchRequest, SearchTotalHits } from '@elastic/elasticsearch/lib/api/types'
 import { ElasticsearchService } from '@nestjs/elasticsearch'
-import { INDEX_PERSONS } from '@app/definitions'
+import { INDEX_PERSONS } from '../../../constants'
 import { PersonListRecord, PersonsSuggestions } from 'defs'
 import { SearchHelperService } from './searchHelperService'
 

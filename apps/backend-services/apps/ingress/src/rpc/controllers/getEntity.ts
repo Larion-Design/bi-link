@@ -11,6 +11,9 @@ import { ProceedingsService } from '../../entities/proceeding/services/proceedin
 import { PropertiesService } from '../../entities/property/services/propertiesService'
 import { ReportsService } from '../../entities/report/services/reportsService'
 
+type Params = Parameters<IngressServiceMethods['getEntity']>[0]
+type Result = ReturnType<IngressServiceMethods['getEntity']> | undefined | null
+
 @Controller()
 export class GetEntity {
   private readonly logger = new Logger(GetEntity.name)
@@ -28,9 +31,8 @@ export class GetEntity {
 
   @MessagePattern(MICROSERVICES.INGRESS.getEntity)
   async createEntity(
-    @Payload()
-    { entityInfo, fetchLinkedEntities, source }: Parameters<IngressServiceMethods['getEntity']>[0],
-  ) {
+    @Payload() { entityInfo, fetchLinkedEntities, source }: Params,
+  ): Promise<Result> {
     const { entityId, entityType } = entityInfo
 
     switch (entityType) {

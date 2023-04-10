@@ -2,13 +2,13 @@ import { Injectable, Logger } from '@nestjs/common'
 import { format } from 'date-fns'
 import { ElasticsearchService } from '@nestjs/elasticsearch'
 import {
-  INDEX_EVENTS,
   EventIndex,
   ConnectedCompanyIndex,
   ConnectedPersonIndex,
   ConnectedPropertyIndex,
 } from '@app/definitions'
 import { Event, EventParticipant } from 'defs'
+import { INDEX_EVENTS } from '../../../constants'
 import { CustomFieldsIndexerService } from './customFieldsIndexerService'
 import { LocationIndexerService } from './locationIndexerService'
 import { ConnectedEntityIndexerService } from './connectedEntityIndexerService'

@@ -2,7 +2,7 @@ import { CompanySearchIndex } from '@app/definitions'
 import { Injectable, Logger } from '@nestjs/common'
 import { ElasticsearchService } from '@nestjs/elasticsearch'
 import { SearchRequest, SearchTotalHits } from '@elastic/elasticsearch/lib/api/types'
-import { INDEX_COMPANIES } from '@app/definitions'
+import { INDEX_COMPANIES } from '../../../constants'
 import { CompaniesSuggestions } from 'defs'
 import { SearchHelperService } from './searchHelperService'
 

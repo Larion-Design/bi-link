@@ -4,10 +4,10 @@ import {
   connectedCompanyIndexSchema,
   connectedPersonIndexSchema,
   connectedPropertyIndexSchema,
-  customFieldIndexSchema,
-  embeddedFileIndexSchema,
-  locationIndexSchema,
-} from '@app/definitions'
+} from './connectedEntity'
+import { locationIndexSchema } from './location'
+import { embeddedFileIndexSchema } from './file'
+import { customFieldIndexSchema } from './customField'
 
 export const eventIndexSchema = eventSchema.pick({ location: true, description: true }).merge(
   z.object({

@@ -1,6 +1,8 @@
 import { z } from 'zod'
-import { personIndexSchema, realEstateIndex, vehicleIndexSchema } from '@app/definitions'
 import { companySchema, personSchema, propertySchema } from 'defs'
+import { personIndexSchema } from './person'
+import { realEstateIndex } from './property'
+import { vehicleIndexSchema } from './property'
 
 export const connectedPersonIndexSchema = personIndexSchema
   .pick({ firstName: true, lastName: true, cnp: true })

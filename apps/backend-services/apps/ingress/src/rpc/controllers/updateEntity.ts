@@ -22,6 +22,9 @@ import { ProceedingAPIService } from '../../entities/proceeding/services/proceed
 import { PropertyAPIService } from '../../entities/property/services/propertyAPIService'
 import { ReportAPIService } from '../../entities/report/services/reportAPIService'
 
+type Params = Parameters<IngressServiceMethods['updateEntity']>[0]
+type Result = ReturnType<IngressServiceMethods['updateEntity']>
+
 @Controller()
 export class UpdateEntity {
   private readonly logger = new Logger(UpdateEntity.name)
@@ -39,19 +42,16 @@ export class UpdateEntity {
   ) {}
 
   @MessagePattern(MICROSERVICES.INGRESS.updateEntity)
-  async updateEntity(
-    @Payload()
-    { entityInfo, entityData, source }: Parameters<IngressServiceMethods['updateEntity']>[0],
-  ) {
+  async updateEntity(@Payload() { entityInfo, entityData, source }: Params): Promise<Result> {
     const { entityId, entityType } = entityInfo
-    let updated: boolean | undefined = false
+    let updated: boolean = false
 
     switch (entityType) {
       case 'PERSON': {
         const personInfo = personAPIInputSchema.parse(entityData)
 
         if (personInfo) {
-          updated = await this.personsAPIService.update(entityId, personInfo)
+          updated = (await this.personsAPIService.update(entityId, personInfo)) ?? false
         }
         break
       }
@@ -59,7 +59,7 @@ export class UpdateEntity {
         const companyInfo = companyAPIInputSchema.parse(entityData)
 
         if (companyInfo) {
-          updated = await this.companyAPIService.update(entityId, companyInfo)
+          updated = (await this.companyAPIService.update(entityId, companyInfo)) ?? false
         }
         break
       }
@@ -67,7 +67,7 @@ export class UpdateEntity {
         const propertyInfo = propertyAPIInputSchema.parse(entityData)
 
         if (propertyInfo) {
-          updated = await this.propertyAPIService.updateProperty(entityId, propertyInfo)
+          updated = (await this.propertyAPIService.updateProperty(entityId, propertyInfo)) ?? false
         }
         break
       }
@@ -75,7 +75,7 @@ export class UpdateEntity {
         const eventInfo = eventAPIInputSchema.parse(entityData)
 
         if (eventInfo) {
-          updated = await this.eventAPIService.update(entityId, eventInfo)
+          updated = (await this.eventAPIService.update(entityId, eventInfo)) ?? false
         }
         break
       }
@@ -83,7 +83,7 @@ export class UpdateEntity {
         const proceedingInfo = proceedingAPIInputSchema.parse(entityData)
 
         if (proceedingInfo) {
-          updated = await this.proceedingAPIService.update(entityId, proceedingInfo)
+          updated = (await this.proceedingAPIService.update(entityId, proceedingInfo)) ?? false
         }
         break
       }
@@ -100,7 +100,7 @@ export class UpdateEntity {
         const reportInfo = reportAPIInputSchema.parse(entityData)
 
         if (reportInfo) {
-          updated = await this.reportAPIService.updateReport(entityId, reportInfo)
+          updated = (await this.reportAPIService.updateReport(entityId, reportInfo)) ?? false
         }
         break
       }
@@ -115,5 +115,6 @@ export class UpdateEntity {
         targetEntityInfo: entityInfo,
       })
     }
+    return updated
   }
 }

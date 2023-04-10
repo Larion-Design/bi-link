@@ -1,12 +1,8 @@
-import {
-  ConnectedCompanyIndex,
-  ConnectedPersonIndex,
-  PropertyIndex,
-  INDEX_PROPERTIES,
-} from '@app/definitions'
+import { ConnectedCompanyIndex, ConnectedPersonIndex, PropertyIndex } from '@app/definitions'
 import { Injectable, Logger } from '@nestjs/common'
 import { ElasticsearchService } from '@nestjs/elasticsearch'
 import { Property, PropertyOwner } from 'defs'
+import { INDEX_PROPERTIES } from '../../../constants'
 import { ConnectedEntityIndexerService } from './connectedEntityIndexerService'
 import { LocationIndexerService } from './locationIndexerService'
 

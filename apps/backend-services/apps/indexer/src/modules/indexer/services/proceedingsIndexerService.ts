@@ -1,7 +1,8 @@
 import { Injectable, Logger } from '@nestjs/common'
-import { INDEX_PROCEEDINGS, ProceedingIndex } from '@app/definitions'
+import { ProceedingIndex } from '@app/definitions'
 import { ElasticsearchService } from '@nestjs/elasticsearch'
 import { Proceeding } from 'defs'
+import { INDEX_PROCEEDINGS } from '../../../constants'
 import { ConnectedEntityIndexerService } from './connectedEntityIndexerService'
 import { CustomFieldsIndexerService } from './customFieldsIndexerService'
 

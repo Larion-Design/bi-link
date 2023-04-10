@@ -1,7 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common'
 import { ElasticsearchService } from '@nestjs/elasticsearch'
 import { format } from 'date-fns'
-import { INDEX_PERSONS } from '@app/definitions'
+import { INDEX_PERSONS } from '../../../constants'
 import { Education, IdDocument, OldName, Person } from 'defs'
 import { LocationIndexerService } from './locationIndexerService'
 import { PersonIndex } from '@app/definitions'

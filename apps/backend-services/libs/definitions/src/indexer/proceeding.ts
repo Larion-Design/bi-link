@@ -1,11 +1,8 @@
 import { z } from 'zod'
 import { proceedingSchema } from 'defs'
-import {
-  connectedCompanyIndexSchema,
-  connectedPersonIndexSchema,
-  customFieldIndexSchema,
-  embeddedFileIndexSchema,
-} from '@app/definitions'
+import { connectedCompanyIndexSchema, connectedPersonIndexSchema } from './connectedEntity'
+import { embeddedFileIndexSchema } from './file'
+import { customFieldIndexSchema } from './customField'
 
 export const proceedingIndexSchema = proceedingSchema
   .pick({ name: true, type: true, description: true })

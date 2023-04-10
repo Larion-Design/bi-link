@@ -10,7 +10,7 @@ import {
   INDEX_PERSONS,
   INDEX_PROCEEDINGS,
   INDEX_PROPERTIES,
-} from '@app/definitions'
+} from '../../../constants'
 import {
   CompaniesMappingService,
   EventsMappingService,

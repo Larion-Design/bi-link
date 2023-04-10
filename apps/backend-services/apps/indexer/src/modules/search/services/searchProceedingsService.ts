@@ -1,8 +1,9 @@
 import { Injectable, Logger } from '@nestjs/common'
 import { ElasticsearchService } from '@nestjs/elasticsearch'
-import { INDEX_PROCEEDINGS, ProceedingIndex } from '@app/definitions'
+import { ProceedingIndex } from '@app/definitions'
 import { SearchRequest, SearchTotalHits } from '@elastic/elasticsearch/lib/api/types'
 import { ProceedingSuggestions } from 'defs'
+import { INDEX_PROCEEDINGS } from '../../../constants'
 import { SearchHelperService } from './searchHelperService'
 
 @Injectable()

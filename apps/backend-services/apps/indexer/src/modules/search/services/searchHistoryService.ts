@@ -1,6 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common'
 import { ElasticsearchService } from '@nestjs/elasticsearch'
-import { INDEX_HISTORY } from '@app/definitions'
+import { INDEX_HISTORY } from '../../../constants'
 import { ActivityEventIndex } from '@app/definitions/indexer/activityEvent'
 
 @Injectable()

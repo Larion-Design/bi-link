@@ -1,13 +1,11 @@
 import { z } from 'zod'
 import { personSchema } from 'defs'
-import {
-  customFieldIndexSchema,
-  educationIndexSchema,
-  embeddedFileIndexSchema,
-  idDocumentIndexSchema,
-  locationIndexSchema,
-  oldNameIndexSchema,
-} from '@app/definitions'
+import { educationIndexSchema } from './education'
+import { idDocumentIndexSchema } from './idDocument'
+import { oldNameIndexSchema } from './oldName'
+import { locationIndexSchema } from '../location'
+import { embeddedFileIndexSchema } from '../file'
+import { customFieldIndexSchema } from '../customField'
 
 export const personIndexSchema = z.object({
   firstName: personSchema.shape.firstName.shape.value,

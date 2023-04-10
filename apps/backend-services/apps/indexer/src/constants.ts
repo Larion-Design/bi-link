@@ -5,5 +5,3 @@ export const INDEX_FILES = 'processed-files'
 export const INDEX_EVENTS = 'events'
 export const INDEX_PROPERTIES = 'properties'
 export const INDEX_PROCEEDINGS = 'proceedings'
-
-export const BUCKET_FILES = 'files'

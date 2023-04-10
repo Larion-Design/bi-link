@@ -1,12 +1,9 @@
 import { z } from 'zod'
 import { companySchema } from 'defs'
-import {
-  connectedCompanyIndexSchema,
-  connectedPersonIndexSchema,
-  customFieldIndexSchema,
-  embeddedFileIndexSchema,
-  locationIndexSchema,
-} from '@app/definitions'
+import { connectedCompanyIndexSchema, connectedPersonIndexSchema } from './connectedEntity'
+import { locationIndexSchema } from './location'
+import { embeddedFileIndexSchema } from './file'
+import { customFieldIndexSchema } from './customField'
 
 export const companyIndexSchema = z.object({
   name: companySchema.shape.name.shape.value,

@@ -1,7 +1,7 @@
 import { PropertySearchIndex } from '@app/definitions'
 import { Injectable, Logger } from '@nestjs/common'
 import { ElasticsearchService } from '@nestjs/elasticsearch'
-import { INDEX_PROPERTIES } from '@app/definitions'
+import { INDEX_PROPERTIES } from '../../../constants'
 import { QueryDslQueryContainer } from '@elastic/elasticsearch/lib/api/types'
 import { PropertyListRecord } from 'defs'
 

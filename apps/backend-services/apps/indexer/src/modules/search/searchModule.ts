@@ -1,4 +1,6 @@
 import { Module } from '@nestjs/common'
+import { ConfigModule, ConfigService } from '@nestjs/config'
+import { ElasticsearchModule } from '@nestjs/elasticsearch'
 import {
   SearchCompaniesService,
   SearchEventsService,
@@ -12,7 +14,16 @@ import {
 } from './services'
 
 @Module({
-  imports: [],
+  imports: [
+    ElasticsearchModule.registerAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: async (configService: ConfigService) =>
+        Promise.resolve({
+          node: configService.getOrThrow<string>('ELASTICSEARCH_URI'),
+        }),
+    }),
+  ],
   providers: [
     SearchCompaniesService,
     SearchEventsService,

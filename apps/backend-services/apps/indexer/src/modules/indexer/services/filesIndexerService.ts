@@ -4,16 +4,15 @@ import { format } from 'date-fns'
 import { FileParserService } from '@app/rpc/microservices/filesParser/fileParserService'
 import { IngressService } from '@app/rpc/microservices/ingress'
 import { FileEventInfo, FileParentEntity } from '@app/scheduler-module'
+import { EmbeddedFileIndex, ProcessedFileIndex } from '@app/definitions'
+import { File } from 'defs'
 import {
+  INDEX_EVENTS,
   INDEX_COMPANIES,
   INDEX_FILES,
-  INDEX_EVENTS,
-  INDEX_PERSONS,
   INDEX_PROPERTIES,
-  EmbeddedFileIndex,
-  ProcessedFileIndex,
-} from '@app/definitions'
-import { File } from 'defs'
+  INDEX_PERSONS,
+} from '../../../constants'
 
 @Injectable()
 export class FilesIndexerService {
