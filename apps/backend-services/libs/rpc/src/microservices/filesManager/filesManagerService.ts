@@ -67,14 +67,14 @@ export class FilesManagerService {
     }
   }
 
-  getFileContent = async (fileId: string) => {
-    type Params = Parameters<FilesManagerServiceMethods['getFileContent']>[0]
-    type Result = ReturnType<FilesManagerServiceMethods['getFileContent']>
+  extractTextFromFile = async (fileId: string) => {
+    type Params = Parameters<FilesManagerServiceMethods['extractTextFromFile']>[0]
+    type Result = ReturnType<FilesManagerServiceMethods['extractTextFromFile']>
 
     try {
       return lastValueFrom(
         this.client
-          .send<Result, Params>(MICROSERVICES.FILES_MANAGER.getFilesDownloadUrls, fileId)
+          .send<Result, Params>(MICROSERVICES.FILES_MANAGER.extractTextFromFile, fileId)
           .pipe(timeout(1000)),
       )
     } catch (e) {

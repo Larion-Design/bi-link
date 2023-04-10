@@ -8,7 +8,7 @@
     },
     "backend": {
       "cache": false,
-      "dependsOn": ["api", "graph", "indexer", "files-parser", "user-actions-recorder"],
+      "dependsOn": ["api", "graph", "indexer", "files-manager", "user-actions-recorder"],
       "outputs": ["dist/**"]
     },
     "frontend": {
@@ -31,9 +31,9 @@
       "dependsOn": ["^indexer"],
       "outputs": ["dist/**"]
     },
-    "files-parser": {
+    "files-manager": {
       "cache": false,
-      "dependsOn": ["^files-parser"],
+      "dependsOn": ["^files-manager"],
       "outputs": ["dist/**"]
     },
     "graph": {

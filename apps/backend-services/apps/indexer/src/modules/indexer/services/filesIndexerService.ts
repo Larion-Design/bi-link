@@ -1,7 +1,7 @@
+import { FilesManagerService } from '@app/rpc/microservices/filesManager/filesManagerService'
 import { Injectable, Logger } from '@nestjs/common'
 import { ElasticsearchService } from '@nestjs/elasticsearch'
 import { format } from 'date-fns'
-import { FileParserService } from '@app/rpc/microservices/filesParser/fileParserService'
 import { IngressService } from '@app/rpc/microservices/ingress'
 import { FileEventInfo, FileParentEntity } from '@app/scheduler-module'
 import { EmbeddedFileIndex, ProcessedFileIndex } from '@app/definitions'
@@ -20,7 +20,7 @@ export class FilesIndexerService {
   private readonly logger = new Logger(FilesIndexerService.name)
 
   constructor(
-    private readonly fileParserService: FileParserService,
+    private readonly filesManagerService: FilesManagerService,
     private readonly elasticsearchService: ElasticsearchService,
     private readonly ingressService: IngressService,
   ) {}
@@ -29,10 +29,10 @@ export class FilesIndexerService {
     try {
       let indexedFileContent = await this.getFileContent(fileId)
 
-      if (!indexedFileContent) {
-        const textContent = await this.fileParserService.extractText(fileId)
+      if (!indexedFileContent?.length) {
+        const textContent = await this.filesManagerService.extractTextFromFile(fileId)
 
-        if (textContent) {
+        if (textContent?.length) {
           await this.indexFileContent(fileId, textContent)
           indexedFileContent = textContent
         }

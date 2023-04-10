@@ -1,33 +1,40 @@
 import { RpcModule } from '@app/rpc'
+import { ServiceHealthModule } from '@app/service-health'
 import { CacheModule, Module } from '@nestjs/common'
-import { MinioModule } from 'nestjs-minio-client'
 import { ConfigModule, ConfigService } from '@nestjs/config'
-import { FileRPCController } from './rpc/fileRPCController'
-import { FileImporterService } from './services/fileImporterService'
-import { FileStorageService } from './services/fileStorageService'
+import { SentryModule } from '@ntegral/nestjs-sentry'
+import { FilesModule } from './files/filesModule'
+import { FilesManagerRPCModule } from './rpc/filesManagerRPCModule'
 
 @Module({
   imports: [
     RpcModule,
+    FilesModule,
+    FilesManagerRPCModule,
+    ServiceHealthModule,
     CacheModule.register({
       isGlobal: true,
     }),
-    MinioModule.registerAsync({
+    ConfigModule.forRoot({
+      isGlobal: true,
+      ignoreEnvVars: true,
+      cache: true,
+    }),
+    SentryModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
-      useFactory: (config: ConfigService) => ({
-        endPoint: config.getOrThrow('MINIO_ENDPOINT'),
-        port: parseInt(config.getOrThrow('MINIO_PORT')),
-        useSSL: false,
-        accessKey: config.getOrThrow('MINIO_ACCESS_KEY'),
-        secretKey: config.getOrThrow('MINIO_SECRET_KEY'),
-        region: config.getOrThrow('MINIO_REGION'),
-        pathStyle: true,
-      }),
+      useFactory: async (configService: ConfigService) => {
+        const environment = configService.get<string>('NODE_ENV', 'development')
+        return Promise.resolve({
+          dsn: configService.getOrThrow<string>('SENTRY_DSN'),
+          debug: false,
+          enabled: environment === 'production',
+          environment: environment,
+          release: configService.getOrThrow<string>('APP_VERSION'),
+          logLevel: 'debug',
+        })
+      },
     }),
   ],
-  controllers: [FileRPCController],
-  providers: [FileImporterService, FileStorageService],
-  exports: [FileImporterService, FileStorageService],
 })
 export class AppModule {}

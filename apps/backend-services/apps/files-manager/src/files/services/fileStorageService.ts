@@ -2,7 +2,7 @@ import { CACHE_MANAGER, Inject, Injectable, Logger } from '@nestjs/common'
 import { Cache } from 'cache-manager'
 import { MinioService } from 'nestjs-minio-client'
 import { ConfigService } from '@nestjs/config'
-import { BUCKET_FILES } from '../constants'
+import { BUCKET_FILES } from '../../constants'
 
 @Injectable()
 export class FileStorageService {

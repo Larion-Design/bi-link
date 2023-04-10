@@ -7,7 +7,6 @@ import { GlobalEventsService } from '@app/rpc/microservices/globalEvents/globalE
 import { GraphService } from '@app/rpc/microservices/graph/graphService'
 import { IndexerService } from '@app/rpc/microservices/indexer/indexerService'
 import { IngressService } from '@app/rpc/microservices/ingress'
-import { FileParserService } from '@app/rpc/microservices/filesParser/fileParserService'
 import { FilesManagerService } from '@app/rpc/microservices/filesManager/filesManagerService'
 
 @Global()
@@ -19,7 +18,6 @@ import { FilesManagerService } from '@app/rpc/microservices/filesManager/filesMa
         MICROSERVICES.INGRESS.id,
         MICROSERVICES.GRAPH.id,
         MICROSERVICES.ACTIVITY_HISTORY.id,
-        MICROSERVICES.FILES_PARSER.id,
         MICROSERVICES.FILES_MANAGER.id,
         MICROSERVICES.INDEXER.id,
       ].map((name) => ({
@@ -44,7 +42,6 @@ import { FilesManagerService } from '@app/rpc/microservices/filesManager/filesMa
     IngressService,
     IndexerService,
     ActivityHistoryService,
-    FileParserService,
     GraphService,
     FilesManagerService,
   ],
@@ -53,7 +50,6 @@ import { FilesManagerService } from '@app/rpc/microservices/filesManager/filesMa
     IngressService,
     IndexerService,
     ActivityHistoryService,
-    FileParserService,
     GraphService,
     FilesManagerService,
   ],

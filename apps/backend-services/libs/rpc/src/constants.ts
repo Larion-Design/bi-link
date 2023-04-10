@@ -26,10 +26,6 @@ export const MICROSERVICES = {
     getFileByHash: 'getFileByHash',
     getReportsTemplates: 'getReportsTemplates',
   },
-  FILES_PARSER: {
-    id: 'FILES_PARSER',
-    extractText: 'extractText',
-  },
   ACTIVITY_HISTORY: {
     id: 'ACTIVITY_HISTORY',
     recordAction: 'recordAction',
@@ -62,6 +58,7 @@ export const MICROSERVICES = {
     getFileDownloadUrl: 'getFileDownloadUrl',
     getFilesDownloadUrls: 'getFilesDownloadUrls',
     getFileContent: 'getFileContent',
+    extractTextFromFile: 'extractTextFromFile',
   },
   OSINT: {},
 }

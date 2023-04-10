@@ -5,8 +5,8 @@ import WordExtractor from 'word-extractor'
 import { recognize } from 'tesseract.js'
 
 @Injectable()
-export class ParserService {
-  private readonly logger = new Logger(ParserService.name)
+export class TextExtractorService {
+  private readonly logger = new Logger(TextExtractorService.name)
 
   private getFileExtension = (fileName: string) => {
     const dotIndex = fileName.lastIndexOf('.')

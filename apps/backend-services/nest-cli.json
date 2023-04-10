@@ -43,15 +43,6 @@
         "tsConfigPath": "libs/service-health/tsconfig.lib.json"
       }
     },
-    "files-parser": {
-      "type": "application",
-      "root": "apps/files-parser",
-      "entryFile": "main",
-      "sourceRoot": "apps/files-parser/src",
-      "compilerOptions": {
-        "tsConfigPath": "apps/files-parser/tsconfig.app.json"
-      }
-    },
     "definitions": {
       "type": "library",
       "root": "libs/definitions",
