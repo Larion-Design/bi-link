@@ -9,9 +9,9 @@ import { lastValueFrom, timeout } from 'rxjs'
 export class ActivityHistoryService {
   private readonly logger = new Logger(ActivityHistoryService.name)
 
-  constructor(@Inject(MICROSERVICES.ACTIVITY_HISTORY.id) private client: ClientProxy) {}
+  constructor(@Inject(MICROSERVICES.ACTIVITY_HISTORY.id) private readonly client: ClientProxy) {}
 
-  recordAction = (actionInfo: ActivityEventIndex) => {
+  recordAction = (actionInfo: Required<ActivityEventIndex>) => {
     try {
       type Params = Parameters<ActivityHistoryServiceMethods['recordAction']>[0]
       type Result = ReturnType<ActivityHistoryServiceMethods['recordAction']>

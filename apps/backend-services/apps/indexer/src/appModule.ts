@@ -8,13 +8,12 @@ import { IndexerModule } from './modules/indexer/indexerModule'
 import { MappingModule } from './modules/mapping/mappingModule'
 import { ProducersModule } from './modules/producers/producersModule'
 import { RpcModule } from '@app/rpc'
-import { IndexerController } from './modules/rpc/indexerController'
-import { MappingController } from './modules/rpc/mappingController'
-import { SearchController } from './modules/rpc/searchController'
+import { IndexerRPCModule } from './modules/rpc/indexerRPCModule'
 import { SearchModule } from './modules/search/searchModule'
 
 @Module({
   imports: [
+    IndexerRPCModule,
     MappingModule,
     IndexerModule,
     SearchModule,
@@ -61,6 +60,5 @@ import { SearchModule } from './modules/search/searchModule'
       },
     }),
   ],
-  controllers: [IndexerController, MappingController, SearchController],
 })
 export class AppModule {}

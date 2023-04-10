@@ -10,7 +10,7 @@ import {
   SearchProceedingsService,
   SearchPropertiesService,
   SearchVehiclesService,
-} from '../search/services'
+} from '../../search/services'
 
 @Controller()
 export class SearchController {

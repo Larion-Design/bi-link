@@ -20,7 +20,7 @@ import {
   PersonsMappingService,
   ProceedingsMappingService,
   PropertiesMappingService,
-} from '../mapping/services'
+} from '../../mapping/services'
 
 @Controller()
 export class MappingController {
