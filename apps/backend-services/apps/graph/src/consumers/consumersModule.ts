@@ -1,22 +1,16 @@
-import { RpcModule } from '@app/rpc'
 import { Module } from '@nestjs/common'
+import { RpcModule } from '@app/rpc'
+import { GraphModule } from '../graph'
 import { ProducersModule } from '../producers/producersModule'
-import { CompanyEventConsumer } from './companyEventConsumer'
-import { EventConsumer } from './eventConsumer'
-import { PersonEventConsumer } from './personEventConsumer'
-import { ProceedingEventConsumer } from './proceedingEventConsumer'
-import { PropertyEventConsumer } from './propertyEventConsumer'
-import { ReportEventConsumer } from './reportEventConsumer'
-import { CompanyGraphService } from '../graph/services/companyGraphService'
-import { EventGraphService } from '../graph/services/eventGraphService'
-import { LocationGraphService } from '../graph/services/locationGraphService'
-import { PersonGraphService } from '../graph/services/personGraphService'
-import { ProceedingGraphService } from '../graph/services/proceedingGraphService'
-import { PropertyGraphService } from '../graph/services/propertyGraphService'
-import { ReportGraphService } from '../graph/services/reportGraphService'
+import { CompanyEventConsumer } from './services/companyEventConsumer'
+import { EventConsumer } from './services/eventConsumer'
+import { PersonEventConsumer } from './services/personEventConsumer'
+import { ProceedingEventConsumer } from './services/proceedingEventConsumer'
+import { PropertyEventConsumer } from './services/propertyEventConsumer'
+import { ReportEventConsumer } from './services/reportEventConsumer'
 
 @Module({
-  imports: [RpcModule, ProducersModule],
+  imports: [RpcModule, ProducersModule, GraphModule],
   providers: [
     PersonEventConsumer,
     PropertyEventConsumer,
@@ -24,14 +18,6 @@ import { ReportGraphService } from '../graph/services/reportGraphService'
     CompanyEventConsumer,
     ProceedingEventConsumer,
     ReportEventConsumer,
-
-    PersonGraphService,
-    CompanyGraphService,
-    EventGraphService,
-    PropertyGraphService,
-    LocationGraphService,
-    ProceedingGraphService,
-    ReportGraphService,
   ],
 })
 export class ConsumersModule {}

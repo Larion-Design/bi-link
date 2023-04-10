@@ -4,8 +4,8 @@ import { OnQueueActive, OnQueueCompleted, OnQueueFailed, Process, Processor } fr
 import { companySchema } from 'defs'
 import { IngressService } from '@app/rpc/microservices/ingress'
 import { CompanyEventInfo, EVENT_CREATED, EVENT_UPDATED } from '@app/scheduler-module'
-import { QUEUE_GRAPH_COMPANIES } from '../producers/constants'
-import { CompanyGraphService } from '../graph/services/companyGraphService'
+import { QUEUE_GRAPH_COMPANIES } from '../../producers/constants'
+import { CompanyGraphService } from '../../graph/services/companyGraphService'
 
 @Processor(QUEUE_GRAPH_COMPANIES)
 export class CompanyEventConsumer {

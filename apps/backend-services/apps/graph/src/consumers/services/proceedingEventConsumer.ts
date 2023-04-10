@@ -1,9 +1,9 @@
 import { Logger } from '@nestjs/common'
 import { Job } from 'bull'
 import { OnQueueActive, OnQueueCompleted, OnQueueFailed, Process, Processor } from '@nestjs/bull'
-import { QUEUE_GRAPH_PROCEEDINGS } from '../producers/constants'
+import { QUEUE_GRAPH_PROCEEDINGS } from '../../producers/constants'
 import { EVENT_CREATED, EVENT_UPDATED, ProceedingEventInfo } from '@app/scheduler-module'
-import { ProceedingGraphService } from '../graph/services/proceedingGraphService'
+import { ProceedingGraphService } from '../../graph/services/proceedingGraphService'
 
 @Processor(QUEUE_GRAPH_PROCEEDINGS)
 export class ProceedingEventConsumer {

@@ -1,14 +1,12 @@
 import { RpcModule } from '@app/rpc'
 import { BullModule } from '@nestjs/bull'
 import { Module } from '@nestjs/common'
-import { Neo4jConfig } from 'nest-neo4j/src/interfaces/neo4j-config.interface'
 import { ConsumersModule } from './consumers/consumersModule'
 import { ProducersModule } from './producers/producersModule'
-import { EntityEventsController } from './rpc/entityEventsController'
 import { ConfigModule, ConfigService } from '@nestjs/config'
 import { SentryModule } from '@ntegral/nestjs-sentry'
-import { Neo4jModule, Neo4jScheme } from 'nest-neo4j/dist'
 import { ServiceHealthModule } from '@app/service-health'
+import { GraphRPCModule } from './rpc/graphRPCModule'
 
 @Module({
   imports: [
@@ -16,6 +14,7 @@ import { ServiceHealthModule } from '@app/service-health'
     ServiceHealthModule,
     ProducersModule,
     ConsumersModule,
+    GraphRPCModule,
     BullModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
@@ -54,19 +53,6 @@ import { ServiceHealthModule } from '@app/service-health'
         })
       },
     }),
-    Neo4jModule.forRootAsync({
-      imports: [ConfigModule],
-      inject: [ConfigService],
-      useFactory: async (configService: ConfigService) =>
-        Promise.resolve<Partial<Neo4jConfig>>({
-          scheme: configService.getOrThrow<Neo4jScheme>('NEO4J_SCHEME'),
-          host: configService.getOrThrow<string>('NEO4J_HOST'),
-          port: +configService.getOrThrow<number>('NEO4J_PORT'),
-          username: configService.getOrThrow<string>('NEO4J_USER'),
-          password: configService.getOrThrow<string>('NEO4J_PASSWORD'),
-        }),
-    }),
   ],
-  controllers: [EntityEventsController],
 })
 export class AppModule {}
