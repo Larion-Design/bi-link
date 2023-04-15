@@ -1,3 +1,4 @@
+import Stack from '@mui/material/Stack'
 import React, { useMemo, useState } from 'react'
 import Typography from '@mui/material/Typography'
 import AccordionSummary from '@mui/material/AccordionSummary'
@@ -6,19 +7,19 @@ import AccordionDetails from '@mui/material/AccordionDetails'
 import Accordion from '@mui/material/Accordion'
 import Box from '@mui/material/Box'
 import Divider from '@mui/material/Divider'
-import { AssociateAPIInput, CompanyListRecord, PersonListRecordWithImage } from 'defs'
+import { AssociateAPI, CompanyAPIOutput, PersonAPIOutput } from 'defs'
 import { PersonAssociateCard } from './personAssociateCard'
 import { CompanyAssociateCard } from './companyAssociateCard'
 import { countEntities } from '../helpers'
 
-type Props = {
+type Props<T = AssociateAPI> = {
+  associates: T[]
+  updateAssociate: (associateId: string, associateInfo: T) => void
   categoryName: string
-  personsInfo?: PersonListRecordWithImage[]
-  companiesInfo?: CompanyListRecord[]
-  associates: AssociateAPIInput[]
+  personsInfo?: PersonAPIOutput[]
+  companiesInfo?: CompanyAPIOutput[]
   removeAssociate: (associateId: string) => void
   allowRoleChange: boolean
-  updateAssociate: (associateId: string, associateInfo: AssociateAPIInput) => void
 }
 
 export const AssociatesCategory: React.FunctionComponent<Props> = ({
@@ -39,22 +40,19 @@ export const AssociatesCategory: React.FunctionComponent<Props> = ({
       onChange={() => setExpandedState((expanded) => (associates.length ? !expanded : expanded))}
     >
       <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-        <Box
-          sx={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            width: 0.5,
-          }}
+        <Stack
+          sx={{ width: 0.5 }}
+          direction={'row'}
+          spacing={2}
+          alignItems={'center'}
+          divider={<Divider orientation={'vertical'} flexItem />}
         >
-          <Box sx={{ width: 0.4 }}>
-            <Typography variant={'h6'}>{categoryName}</Typography>
-          </Box>
-          <Divider orientation={'vertical'} />
+          <Typography sx={{ width: 0.4 }} variant={'h6'}>
+            {categoryName}
+          </Typography>
           <Typography variant={'caption'}>{persons} persoane</Typography>
-          <Divider orientation={'vertical'} />
           <Typography variant={'caption'}>{companies} companii</Typography>
-        </Box>
+        </Stack>
       </AccordionSummary>
       <AccordionDetails>
         {associates.map((associate) => {

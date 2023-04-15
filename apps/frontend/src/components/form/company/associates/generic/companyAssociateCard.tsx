@@ -2,17 +2,17 @@ import React from 'react'
 import Grid from '@mui/material/Grid'
 import Card from '@mui/material/Card'
 import CardContent from '@mui/material/CardContent'
+import { AssociateAPI, CompanyAPIOutput } from 'defs'
 import { PersonCardActions } from '../../../../card/personCardActions'
 import { AssociateSwitchAction } from './associateSwitchAction'
 import { CompanyAssociateInformation } from './companyAssociateInformation'
-import { AssociateAPIInput, CompanyListRecord } from 'defs'
 import { LinkedEntityCustomFields } from '../../../linkedEntityCustomFields'
 
-type Props = {
-  associateInfo: AssociateAPIInput
-  companyInfo: CompanyListRecord
+type Props<T = AssociateAPI> = {
+  associateInfo: T
   removeAssociate: (companyId: string) => void
-  updateAssociate: (companyId: string, associateInfo: AssociateAPIInput) => void
+  updateAssociate: (companyId: string, associateInfo: T) => void
+  companyInfo: CompanyAPIOutput
   mandatoryFields?: string[]
   allowRoleChange: boolean
 }
@@ -50,10 +50,18 @@ export const CompanyAssociateCard: React.FunctionComponent<Props> = ({
           </Grid>
         </Grid>
       </CardContent>
-      <PersonCardActions personId={_id} name={name} onRemove={() => removeAssociate(_id)}>
+      <PersonCardActions personId={_id} name={name.value} onRemove={() => removeAssociate(_id)}>
         <AssociateSwitchAction
-          isActive={isActive}
-          onStateChange={(isActive) => updateAssociate(_id, { ...associateInfo, isActive })}
+          isActive={isActive.value}
+          onStateChange={(value) =>
+            updateAssociate(_id, {
+              ...associateInfo,
+              isActive: {
+                value,
+                metadata: isActive.metadata,
+              },
+            })
+          }
         />
       </PersonCardActions>
     </Card>

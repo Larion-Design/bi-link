@@ -30,3 +30,13 @@ export const getDefaultAssociate = (): AssociateAPI => ({
   isActive: getDefaultBooleanWithMetadata(),
   customFields: [],
 })
+
+export const getDefaultPersonAssociate = (_id: string): AssociateAPI => ({
+  ...getDefaultAssociate(),
+  person: { _id },
+})
+
+export const getDefaultCompanyAssociate = (_id: string): AssociateAPI => ({
+  ...getDefaultAssociate(),
+  company: { _id },
+})

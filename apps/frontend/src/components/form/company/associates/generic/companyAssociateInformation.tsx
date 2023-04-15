@@ -1,19 +1,19 @@
 import React from 'react'
+import Stack from '@mui/material/Stack'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
-import Grid from '@mui/material/Grid'
 import { AutocompleteField } from '../../../autocompleteField'
 import { DatePicker } from '../../../datePicker'
-import { AssociateAPIInput, CompanyListRecord } from 'defs'
+import { AssociateAPI, CompanyAPIOutput } from 'defs'
 import { ASSOCIATE_ROLES } from '@frontend/utils/constants'
 import TextField from '@mui/material/TextField'
 
-type Props = {
+type Props<T = AssociateAPI> = {
+  associateInfo: T
+  updateAssociate: (personId: string, associateInfo: T) => void
   companyId: string
-  companyInfo: CompanyListRecord
-  associateInfo: AssociateAPIInput
+  companyInfo: CompanyAPIOutput
   allowRoleChange: boolean
-  updateAssociate: (personId: string, associateInfo: AssociateAPIInput) => void
 }
 
 export const CompanyAssociateInformation: React.FunctionComponent<Props> = ({
@@ -28,69 +28,63 @@ export const CompanyAssociateInformation: React.FunctionComponent<Props> = ({
   return (
     <>
       <Box display={'flex'} alignItems={'center'} mt={2} mb={4}>
-        <Typography variant={'h6'}>{companyInfo.name}</Typography>
+        <Typography variant={'h6'}>{companyInfo.name.value}</Typography>
       </Box>
 
-      <Grid container spacing={2}>
+      <Stack spacing={2}>
         {allowRoleChange && (
-          <Grid item xs={12}>
-            <AutocompleteField
-              label={'Rol'}
-              value={role}
-              onValueChange={(value) =>
-                updateAssociate(companyId, {
-                  ...associateInfo,
-                  role: value,
-                })
-              }
-              suggestions={ASSOCIATE_ROLES}
-            />
-          </Grid>
+          <AutocompleteField
+            label={'Rol'}
+            value={role.value}
+            onValueChange={(value) =>
+              updateAssociate(companyId, {
+                ...associateInfo,
+                role: { ...role, value },
+              })
+            }
+            suggestions={ASSOCIATE_ROLES}
+          />
         )}
 
-        <Grid item xs={12}>
-          <DatePicker
-            label={'De la data'}
-            value={startDate ?? null}
-            onChange={(startDate) =>
-              updateAssociate(companyId, {
-                ...associateInfo,
-                startDate: startDate ? new Date(startDate) : null,
-              })
-            }
-          />
-        </Grid>
+        <DatePicker
+          label={'De la data'}
+          value={startDate.value}
+          onChange={(date) => {
+            const value = date ? new Date(date) : null
+            updateAssociate(companyId, {
+              ...associateInfo,
+              startDate: { ...startDate, value },
+            })
+          }}
+        />
 
-        <Grid item xs={12}>
-          <DatePicker
-            label={'Pana la data'}
-            value={endDate ?? null}
-            onChange={(endDate) =>
-              updateAssociate(companyId, {
-                ...associateInfo,
-                endDate: endDate ? new Date(endDate) : null,
-                isActive: endDate ? new Date(endDate) > new Date() : isActive,
-              })
-            }
-          />
-        </Grid>
+        <DatePicker
+          label={'Pana la data'}
+          value={endDate.value}
+          onChange={(date) => {
+            const value = date ? new Date(date) : null
+            updateAssociate(companyId, {
+              ...associateInfo,
+              endDate: { ...endDate, value },
+              isActive: { ...isActive, value: value ? value > new Date() : isActive.value },
+            })
+          }}
+        />
 
-        <Grid item xs={12}>
-          <TextField
-            fullWidth
-            label={'% Actiuni'}
-            type={'number'}
-            inputProps={{ step: 0.01 }}
-            value={equity.toFixed(2)}
-            onChange={({ target: { value } }) =>
-              updateAssociate(companyId, {
-                ...associateInfo,
-                equity: parseFloat(value),
-              })
-            }
-          />
-        </Grid>
-      </Grid>
+        <TextField
+          fullWidth
+          label={'% Actiuni'}
+          type={'number'}
+          inputProps={{ step: 0.01 }}
+          value={equity.value.toFixed(2)}
+          onChange={({ target: { value } }) =>
+            updateAssociate(companyId, {
+              ...associateInfo,
+              equity: { ...equity, value: parseFloat(value) },
+            })
+          }
+        />
+      </Stack>
     </>
   )
 }

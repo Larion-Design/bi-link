@@ -1,6 +1,6 @@
-import { AssociateAPIInput } from 'defs'
+import { AssociateAPI } from 'defs'
 
-export const countEntities = (associates: AssociateAPIInput[]) =>
+export const countEntities = (associates: AssociateAPI[]) =>
   associates.reduce(
     (entitiesCount, { person, company }) => {
       if (person?._id) {
@@ -16,8 +16,8 @@ export const countEntities = (associates: AssociateAPIInput[]) =>
     },
   )
 
-export const getShareholdersTotalEquity = (associates: AssociateAPIInput[]) => {
+export const getShareholdersTotalEquity = (associates: AssociateAPI[]) => {
   let totalEquity = 0.0
-  associates.forEach(({ equity }) => (totalEquity += equity))
+  associates.forEach(({ equity: { value } }) => (totalEquity += value))
   return totalEquity.toFixed(2)
 }

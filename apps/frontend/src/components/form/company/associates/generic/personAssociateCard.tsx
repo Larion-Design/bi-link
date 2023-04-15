@@ -6,14 +6,14 @@ import { getPersonFullName } from '@frontend/utils/person'
 import { PersonCardActions } from '../../../../card/personCardActions'
 import { AssociateSwitchAction } from './associateSwitchAction'
 import { PersonAssociateInformation } from './personAssociateInformation'
-import { AssociateAPIInput, PersonListRecordWithImage } from 'defs'
+import { AssociateAPI, PersonAPIOutput } from 'defs'
 import { LinkedEntityCustomFields } from '../../../linkedEntityCustomFields'
 
-type Props = {
-  associateInfo: AssociateAPIInput
-  personInfo: PersonListRecordWithImage
+type Props<T = AssociateAPI> = {
+  associateInfo: T
+  personInfo: PersonAPIOutput
   removeAssociate: (personId: string) => void
-  updateAssociate: (personId: string, associateInfo: AssociateAPIInput) => void
+  updateAssociate: (personId: string, associateInfo: T) => void
   mandatoryFields?: string[]
   allowRoleChange: boolean
 }
@@ -54,8 +54,16 @@ export const PersonAssociateCard: React.FunctionComponent<Props> = ({
       </CardContent>
       <PersonCardActions personId={_id} name={fullName} onRemove={() => removeAssociate(_id)}>
         <AssociateSwitchAction
-          isActive={isActive}
-          onStateChange={(isActive) => updateAssociate(_id, { ...associateInfo, isActive })}
+          isActive={isActive.value}
+          onStateChange={(value) =>
+            updateAssociate(_id, {
+              ...associateInfo,
+              isActive: {
+                value,
+                metadata: isActive.metadata,
+              },
+            })
+          }
         />
       </PersonCardActions>
     </Card>
