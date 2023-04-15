@@ -1,21 +1,9 @@
 import React, { useEffect, useState } from 'react'
-import TextField from '@mui/material/TextField'
 import { useDebounce } from 'usehooks-ts'
+import TextField from '@mui/material/TextField'
+import { InputFieldProps } from '@frontend/components/form/inputField/types'
 
-type Props = {
-  name?: string
-  label: string
-  value: string
-  error?: string
-  onChange: (value: string) => void | Promise<void>
-  readonly?: boolean
-  multiline?: boolean
-  rows?: number
-  disabled?: boolean
-  required?: boolean
-}
-
-export const InputField: React.FunctionComponent<Props> = ({
+export const InputField: React.FunctionComponent<InputFieldProps> = ({
   name,
   label,
   value,

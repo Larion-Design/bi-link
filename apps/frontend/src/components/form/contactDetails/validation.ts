@@ -1,5 +1,5 @@
+import { z } from 'zod'
 import { phone } from 'phone'
-import * as yup from 'yup'
 import {
   validateCustomFieldsFormat,
   validateDuplicateCustomFields,
@@ -22,10 +22,10 @@ export const validateContactDetails = async (contactDetails: CustomField[]) => {
 }
 
 export const validateEmailFields = (contactDetails: CustomField[]) => {
-  const emailValidationSchema = yup.string().email()
+  const emailValidationSchema = z.string().email()
 
   for (const { fieldName, fieldValue } of contactDetails) {
-    if (fieldName === 'Email' && !emailValidationSchema.isValidSync(fieldValue)) {
+    if (fieldName === 'Email' && !emailValidationSchema.parse(fieldValue)) {
       return 'Adresa de email este invalida.'
     }
   }

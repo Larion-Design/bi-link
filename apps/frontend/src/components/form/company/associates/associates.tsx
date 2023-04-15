@@ -10,7 +10,7 @@ import Grid from '@mui/material/Grid'
 import Tooltip from '@mui/material/Tooltip'
 import InsertChartOutlinedIcon from '@mui/icons-material/InsertChartOutlined'
 import { getPersonsBasicInfoRequest } from '@frontend/graphql/persons/queries/getPersonsBasicInfo'
-import { AssociateAPIInput } from 'defs'
+import { AssociateAPI } from 'defs'
 import { getCompaniesInfoRequest } from '@frontend/graphql/companies/queries/getCompanies'
 import { useDebouncedMap } from '@frontend/utils/hooks/useMap'
 import { useModal } from '../../../modal/modalProvider'
@@ -20,8 +20,8 @@ import { getShareholdersTotalEquity } from './helpers'
 type Props = {
   sectionTitle: string
   error?: string
-  associates: AssociateAPIInput[]
-  updateAssociatesField: (associates: AssociateAPIInput[]) => Promise<void> | void
+  associates: AssociateAPI[]
+  updateAssociatesField: (associates: AssociateAPI[]) => Promise<void> | void
 }
 
 type DefaultAssociateRole = 'Actionar' | 'Administrator' | ''
@@ -231,7 +231,7 @@ const createPersonsAssociatesByRole = (
 const createCompaniesAssociatesByRole = (
   companiesIds: string[],
   role: string | null,
-): AssociateAPIInput[] =>
+): AssociateAPI[] =>
   companiesIds.map((_id) => ({
     company: { _id },
     role: role ?? '',
@@ -243,8 +243,8 @@ const createCompaniesAssociatesByRole = (
     _confirmed: true,
   }))
 
-const getAssociatesByRole = (associates: AssociateAPIInput[], associateRole: string) =>
+const getAssociatesByRole = (associates: AssociateAPI[], associateRole: string) =>
   associates.filter(({ role }) => role === associateRole)
 
-const getAllAssociatesExceptRoles = (associates: AssociateAPIInput[], excludedRoles: string[]) =>
+const getAllAssociatesExceptRoles = (associates: AssociateAPI[], excludedRoles: string[]) =>
   associates.filter(({ role }) => !excludedRoles.includes(role))
