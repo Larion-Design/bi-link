@@ -133,6 +133,9 @@ dependencies:
   uuid:
     specifier: ^8.3.2
     version: 8.3.2
+  zod:
+    specifier: ^3.21.4
+    version: 3.21.4
   zustand:
     specifier: ^4.3.6
     version: 4.3.6(immer@9.0.19)(react@18.2.0)
@@ -8464,5 +8467,6 @@ packages:
     dependencies:
       date-fns: 2.29.3
       defs: file:../../packages/defs
+      uuid: 8.3.2
       zod: 3.21.0
     dev: false
