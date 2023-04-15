@@ -1,6 +1,6 @@
+import { Controller } from '@nestjs/common'
 import { MICROSERVICES } from '@app/rpc'
 import { FilesManagerServiceMethods } from '@app/rpc/microservices/filesManager/filesManagerServiceConfig'
-import { Controller } from '@nestjs/common'
 import { MessagePattern, Payload } from '@nestjs/microservices'
 import { FileStorageService } from '../../files/services/fileStorageService'
 import { TextExtractorService } from '../../files/services/textExtractorService'
