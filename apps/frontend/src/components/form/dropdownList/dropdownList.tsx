@@ -1,3 +1,4 @@
+import { BaseTextFieldProps } from '@mui/material'
 import React from 'react'
 import MenuItem from '@mui/material/MenuItem'
 import TextField from '@mui/material/TextField'
@@ -8,6 +9,7 @@ type Props = {
   value: string
   options: Record<string | number, string | number | null>
   onChange: (option: string) => void
+  size?: BaseTextFieldProps['size']
 }
 
 export const DropdownList: React.FunctionComponent<Props> = ({
@@ -16,8 +18,10 @@ export const DropdownList: React.FunctionComponent<Props> = ({
   options,
   onChange,
   disabled,
+  size,
 }) => (
   <TextField
+    size={size}
     select
     fullWidth
     required

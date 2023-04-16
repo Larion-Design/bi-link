@@ -1,11 +1,10 @@
 import { InputField } from '@frontend/components/form/inputField'
 import { InputFieldProps } from '@frontend/components/form/inputField/types'
 import { Metadata } from '@frontend/components/form/metadata'
-import Badge from '@mui/material/Badge'
-import ClickAwayListener from '@mui/material/ClickAwayListener'
-import React, { useRef, useState } from 'react'
+import { TrustLevelIcon } from '@frontend/components/form/metadata/trustLevelIcon'
+import IconButton from '@mui/material/IconButton'
+import React, { useCallback, useRef, useState } from 'react'
 import Stack from '@mui/material/Stack'
-import PsychologyAltOutlinedIcon from '@mui/icons-material/PsychologyAltOutlined'
 import { TextWithMetadata } from 'defs'
 
 type Props = Omit<InputFieldProps, 'value' | 'onChange'> & {
@@ -16,6 +15,7 @@ type Props = Omit<InputFieldProps, 'value' | 'onChange'> & {
 export const InputFieldWithMetadata: React.FunctionComponent<Props> = ({
   fieldInfo: { value, metadata },
   updateFieldInfo,
+  size,
   name,
   label,
   readonly,
@@ -27,6 +27,10 @@ export const InputFieldWithMetadata: React.FunctionComponent<Props> = ({
 }) => {
   const metadataElementRef = useRef<Element | null>(null)
   const [isMetadataViewOpen, setMetadataViewOpen] = useState(false)
+  const toggleMetadataView = useCallback(
+    () => setMetadataViewOpen((open) => !open),
+    [setMetadataViewOpen],
+  )
 
   return (
     <>
@@ -35,9 +39,10 @@ export const InputFieldWithMetadata: React.FunctionComponent<Props> = ({
           targetElement={metadataElementRef.current}
           metadataInfo={metadata}
           updateMetadataInfo={(metadata) => updateFieldInfo({ value, metadata })}
+          onClose={toggleMetadataView}
         />
       )}
-      <Stack direction={'row'} alignItems={'center'}>
+      <Stack direction={'row'} alignItems={'center'} spacing={2}>
         <InputField
           name={name}
           value={value}
@@ -49,16 +54,15 @@ export const InputFieldWithMetadata: React.FunctionComponent<Props> = ({
           readonly={readonly}
           disabled={disabled}
           error={error}
-        />
-
-        <ClickAwayListener onClickAway={() => setMetadataViewOpen(false)}>
-          <Badge>
-            <PsychologyAltOutlinedIcon
+          endIcon={
+            <IconButton
               ref={(ref) => (metadataElementRef.current = ref)}
-              onClick={() => setMetadataViewOpen(true)}
-            />
-          </Badge>
-        </ClickAwayListener>
+              onClick={toggleMetadataView}
+            >
+              <TrustLevelIcon level={metadata.trustworthiness.level} />
+            </IconButton>
+          }
+        />
       </Stack>
     </>
   )

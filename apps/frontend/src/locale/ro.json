@@ -52,5 +52,13 @@
   "LOCATION": "Locuri",
   "Have no location": "Nu cunosc detaliile locatiei",
   "Have location": "Cunosc detaliile locatiei",
-  "Related persons": "Persoane de legatura"
+  "Related persons": "Persoane de legatura",
+  "Information source": "Sursa",
+  "Information trust level": "Nivel credibilitate",
+  "Unknown trust level": "Nedefinit",
+  "Very weak trust level": "Informatie neverificata / speculativa",
+  "Weak trust level": "Informatie slab verificata / confirmata",
+  "Average trust level": "Informatie partial verificata",
+  "Slightly trustworthy": "Informatie verificata",
+  "Very trustworthy": "Informatie verificata la zi"
 }

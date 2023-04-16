@@ -1,3 +1,6 @@
+import { BaseTextFieldProps } from '@mui/material'
+import { ReactNode } from 'react'
+
 export type InputFieldProps = {
   name?: string
   label?: string
@@ -9,4 +12,7 @@ export type InputFieldProps = {
   rows?: number
   disabled?: boolean
   required?: boolean
+  size?: BaseTextFieldProps['size']
+  startIcon?: ReactNode
+  endIcon?: ReactNode
 }

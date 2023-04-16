@@ -4,6 +4,7 @@ import TextField from '@mui/material/TextField'
 import { InputFieldProps } from '@frontend/components/form/inputField/types'
 
 export const InputField: React.FunctionComponent<InputFieldProps> = ({
+  size,
   name,
   label,
   value,
@@ -14,6 +15,8 @@ export const InputField: React.FunctionComponent<InputFieldProps> = ({
   rows,
   disabled,
   required,
+  endIcon,
+  startIcon,
 }) => {
   const [currentValue, setCurrentValue] = useState(value)
   const debouncedValue = useDebounce(currentValue, 500)
@@ -30,6 +33,7 @@ export const InputField: React.FunctionComponent<InputFieldProps> = ({
 
   return (
     <TextField
+      size={size}
       required={required}
       data-cy={name}
       autoCapitalize={'on'}
@@ -46,6 +50,8 @@ export const InputField: React.FunctionComponent<InputFieldProps> = ({
       onBlur={({ target: { value } }) => setCurrentValue(value)}
       InputProps={{
         readOnly: !!readonly,
+        startAdornment: startIcon,
+        endAdornment: endIcon,
       }}
     />
   )

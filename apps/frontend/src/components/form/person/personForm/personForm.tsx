@@ -20,7 +20,7 @@ import { DatePicker } from '../../datePicker'
 import { FilesManager } from '../../fileField'
 import { IdDocuments } from '../idDocuments'
 import { Images } from '../../images'
-import { InputField } from '../../inputField'
+import { InputField, InputFieldWithMetadata } from '../../inputField'
 import { Relationships } from '../relationships'
 import { getBirthdateFromCnp } from './utils'
 import { personFormValidation, validatePersonForm } from './validation/validation'
@@ -119,44 +119,35 @@ const Form: React.FunctionComponent<Props & FormikProps<PersonAPIInput>> = ({
               </Grid>
               <Grid container item xs={9} spacing={3}>
                 <Grid item xs={4}>
-                  <InputField
+                  <InputFieldWithMetadata
+                    size={'small'}
                     name={'lastName'}
                     label={'Nume'}
-                    value={values.lastName.value}
                     error={errors.lastName?.value}
-                    onChange={async (value) => {
-                      // const error = await personFormValidation.lastName(value)
-                      // setFieldError('lastName', error)
-                      setFieldValue('lastName', { ...values.lastName, value })
-                    }}
+                    fieldInfo={values.lastName}
+                    updateFieldInfo={(fieldInfo) => setFieldValue('lastName', fieldInfo)}
                   />
                 </Grid>
 
                 <Grid item xs={4}>
-                  <InputField
+                  <InputFieldWithMetadata
+                    size={'small'}
                     name={'firstName'}
                     label={'Prenume'}
-                    value={values.firstName.value}
                     error={errors.firstName?.value}
-                    onChange={async (value) => {
-                      //const error = await personFormValidation.firstName(value)
-                      //setFieldError('firstName', error)
-                      setFieldValue('firstName', { ...values.firstName, value })
-                    }}
+                    fieldInfo={values.firstName}
+                    updateFieldInfo={(fieldInfo) => setFieldValue('firstName', fieldInfo)}
                   />
                 </Grid>
 
                 <Grid item xs={4}>
-                  <InputField
+                  <InputFieldWithMetadata
+                    size={'small'}
                     name={'cnp'}
                     label={'Cod numeric personal'}
-                    value={values.cnp.value}
                     error={errors.cnp?.value}
-                    onChange={async (value) => {
-                      //const error = await personFormValidation.cnp(value, personId)
-                      //setFieldError('cnp', error)
-                      setFieldValue('cnp', { ...values.cnp, value })
-                    }}
+                    fieldInfo={values.cnp}
+                    updateFieldInfo={(fieldInfo) => setFieldValue('cnp', fieldInfo)}
                   />
                 </Grid>
 
