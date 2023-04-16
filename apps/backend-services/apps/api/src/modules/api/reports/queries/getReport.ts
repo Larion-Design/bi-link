@@ -1,6 +1,6 @@
 import { IngressService } from '@app/rpc/microservices/ingress'
 import { UseGuards } from '@nestjs/common'
-import { Args, ArgsType, Field, Query, Resolver } from '@nestjs/graphql'
+import { Args, ArgsType, Field, ID, Query, Resolver } from '@nestjs/graphql'
 import { User } from 'defs'
 import { CurrentUser } from '../../../users/decorators/currentUser'
 import { FirebaseAuthGuard } from '../../../users/guards/FirebaseAuthGuard'
@@ -8,7 +8,7 @@ import { Report } from '../dto/report'
 
 @ArgsType()
 class Params {
-  @Field()
+  @Field(() => ID)
   id: string
 }
 

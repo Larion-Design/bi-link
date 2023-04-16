@@ -1,4 +1,4 @@
-import { Args, ArgsType, Field, Query, Resolver } from '@nestjs/graphql'
+import { Args, ArgsType, Field, ID, Query, Resolver } from '@nestjs/graphql'
 import { UseGuards } from '@nestjs/common'
 import { User } from 'defs'
 import { IngressService } from '@app/rpc/microservices/ingress'
@@ -8,7 +8,7 @@ import { File } from '../dto/file'
 
 @ArgsType()
 class Params {
-  @Field(() => [String])
+  @Field(() => [ID])
   filesIds: string[]
 }
 

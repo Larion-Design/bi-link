@@ -1,5 +1,4 @@
 import { Query, Resolver } from '@nestjs/graphql'
-import { UserRole } from 'defs'
 import { User } from '../dto/user'
 import { UseGuards } from '@nestjs/common'
 import { FirebaseAuthGuard } from '../../../users/guards/FirebaseAuthGuard'

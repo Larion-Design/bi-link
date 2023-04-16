@@ -1,4 +1,4 @@
-import { Field, InputType, PickType } from '@nestjs/graphql'
+import { Field, ID, InputType, PickType } from '@nestjs/graphql'
 import { FileAPIInput } from 'defs'
 import { WithMetadataInput } from '../../metadata/dto/withMetadataInput'
 
@@ -7,7 +7,7 @@ export class FileInput
   extends PickType(WithMetadataInput, ['metadata'] as const)
   implements FileAPIInput
 {
-  @Field()
+  @Field(() => ID)
   readonly fileId: string
 
   @Field({ nullable: true })

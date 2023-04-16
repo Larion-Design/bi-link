@@ -1,4 +1,4 @@
-import { Args, ArgsType, Field, Mutation, Resolver } from '@nestjs/graphql'
+import { Args, ArgsType, Field, ID, Mutation, Resolver } from '@nestjs/graphql'
 import { User } from '../dto/user'
 import { UserService } from '../../../users/services/UserService'
 import { UseGuards } from '@nestjs/common'
@@ -9,7 +9,7 @@ import { Roles } from '../../../users/decorators/roles'
 
 @ArgsType()
 class Params {
-  @Field()
+  @Field(() => ID)
   userId: string
 }
 

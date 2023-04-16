@@ -1,5 +1,5 @@
 import { IngressService } from '@app/rpc/microservices/ingress'
-import { Args, ArgsType, Field, Int, Query, Resolver } from '@nestjs/graphql'
+import { Args, ArgsType, Field, ID, Int, Query, Resolver } from '@nestjs/graphql'
 import { UseGuards } from '@nestjs/common'
 import {
   Company,
@@ -23,7 +23,7 @@ import { GraphService } from '@app/rpc/microservices/graph/graphService'
 
 @ArgsType()
 class Params {
-  @Field()
+  @Field(() => ID)
   readonly id: string
 
   @Field(() => Int)
