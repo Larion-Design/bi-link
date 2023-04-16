@@ -126,7 +126,7 @@ const Form: React.FunctionComponent<Props & FormikProps<PropertyAPIInput>> = ({
                     label={'Tip de proprietate sau bun'}
                     suggestions={propertyTypes}
                     value={values.type}
-                    onValueChange={(value) => {
+                    onChange={(value) => {
                       setFieldValue('type', value, false)
 
                       if (value === 'Vehicul') {

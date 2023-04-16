@@ -64,7 +64,7 @@ export const VehicleInfo: React.FunctionComponent<Props> = ({
           value={vehicleInfo.maker.value}
           error={error}
           suggestions={makers?.getMakers ?? []}
-          onValueChange={async (value) =>
+          onChange={async (value) =>
             updateVehicleInfo({
               ...vehicleInfo,
               maker: { value, metadata: vehicleInfo.maker.metadata },
@@ -78,7 +78,7 @@ export const VehicleInfo: React.FunctionComponent<Props> = ({
           value={vehicleInfo.model.value}
           error={error}
           suggestions={models?.getModels ?? []}
-          onValueChange={async (value) =>
+          onChange={async (value) =>
             updateVehicleInfo({
               ...vehicleInfo,
               model: { value, metadata: vehicleInfo.model.metadata },

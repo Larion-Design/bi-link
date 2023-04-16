@@ -78,7 +78,7 @@ const Form: React.FunctionComponent<Props & FormikProps<EventAPIInput>> = ({
                   label={'Tip de eveniment'}
                   value={values.type.value}
                   error={errors.type.value}
-                  onValueChange={(value) => setFieldValue('type', value)}
+                  onChange={(value) => setFieldValue('type', value)}
                   suggestions={eventTypes}
                 />
               </Grid>

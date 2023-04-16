@@ -105,7 +105,7 @@ const Form: React.FunctionComponent<Props & FormikProps<ReportAPIInput>> = ({
           <AutocompleteField
             label={'Tip de raport'}
             value={values.type}
-            onValueChange={(value) => setFieldValue('type', value)}
+            onChange={(value) => setFieldValue('type', value)}
             suggestions={['Raport de informare']}
           />
         </Grid>

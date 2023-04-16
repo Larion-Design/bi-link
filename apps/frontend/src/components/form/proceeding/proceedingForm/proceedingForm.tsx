@@ -86,7 +86,7 @@ const Form: React.FunctionComponent<Props & FormikProps<ProceedingAPIInput>> = (
                   label={'Nume'}
                   value={values.name}
                   error={errors.name}
-                  onValueChange={(value) => setFieldValue('name', value)}
+                  onChange={(value) => setFieldValue('name', value)}
                 />
               </Grid>
 
@@ -96,7 +96,7 @@ const Form: React.FunctionComponent<Props & FormikProps<ProceedingAPIInput>> = (
                   label={'Tip de dosar'}
                   value={values.type}
                   error={errors.type}
-                  onValueChange={(value) => setFieldValue('type', value)}
+                  onChange={(value) => setFieldValue('type', value)}
                 />
               </Grid>
 
@@ -106,7 +106,7 @@ const Form: React.FunctionComponent<Props & FormikProps<ProceedingAPIInput>> = (
                   label={'Numar dosar'}
                   value={values.type}
                   error={errors.type}
-                  onValueChange={(value) => setFieldValue('fileNumber', value)}
+                  onChange={(value) => setFieldValue('fileNumber', value)}
                 />
               </Grid>
 
@@ -116,7 +116,7 @@ const Form: React.FunctionComponent<Props & FormikProps<ProceedingAPIInput>> = (
                   label={'Motivul investigatiei'}
                   value={values.reason.value}
                   error={errors.reason.value}
-                  onValueChange={(value) => setFieldValue('reason', value)}
+                  onChange={(value) => setFieldValue('reason', value)}
                 />
               </Grid>
 
@@ -126,7 +126,7 @@ const Form: React.FunctionComponent<Props & FormikProps<ProceedingAPIInput>> = (
                   label={'Anul deschiderii dosarului'}
                   value={values.year ? values.year.toString() : ''}
                   error={errors.reason.value}
-                  onValueChange={(value) => setFieldValue('year', parseInt(value) ?? 0)}
+                  onChange={(value) => setFieldValue('year', parseInt(value) ?? 0)}
                   suggestions={proceedingYears}
                 />
               </Grid>

@@ -83,7 +83,7 @@ export const FastCreateProperty: React.FunctionComponent<Props> = ({
                 label={'Tip de proprietate sau bun'}
                 suggestions={['Vehicul']}
                 value={values.type}
-                onValueChange={(value) => {
+                onChange={(value) => {
                   setFieldValue('type', value, false)
 
                   setFieldValue(
@@ -116,7 +116,7 @@ export const FastCreateProperty: React.FunctionComponent<Props> = ({
                     label={'Marca'}
                     value={values.vehicleInfo.maker.value}
                     error={errors.vehicleInfo as string}
-                    onValueChange={async (value) => {
+                    onChange={async (value) => {
                       const error = await propertyFormValidation.maker(value)
                       setFieldError('maker', error)
                       void setFieldValue('maker', value)
@@ -129,7 +129,7 @@ export const FastCreateProperty: React.FunctionComponent<Props> = ({
                     readonly={false}
                     value={values.vehicleInfo.model.value}
                     error={errors.vehicleInfo as string}
-                    onValueChange={async (value) => {
+                    onChange={async (value) => {
                       const error = await propertyFormValidation.model(value)
                       setFieldError('model', error)
                       void setFieldValue('model', value)

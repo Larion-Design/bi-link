@@ -36,7 +36,7 @@ export const CompanyAssociateInformation: React.FunctionComponent<Props> = ({
           <AutocompleteField
             label={'Rol'}
             value={role.value}
-            onValueChange={(value) =>
+            onChange={(value) =>
               updateAssociate(companyId, {
                 ...associateInfo,
                 role: { ...role, value },
