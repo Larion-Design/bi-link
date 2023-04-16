@@ -1,21 +1,27 @@
 import { gql, useLazyQuery } from '@apollo/client'
-import { CompanyListRecord } from 'defs'
+import { CompanyAPIOutput } from 'defs'
 
 type Params = {
   companiesIds: string[]
 }
 
 type Response = {
-  getCompanies: CompanyListRecord[]
+  getCompanies: CompanyAPIOutput[]
 }
 
 const request = gql`
-  query GetCompanies($companiesIds: [String!]!) {
+  query GetCompanies($companiesIds: [ID!]!) {
     getCompanies(companiesIds: $companiesIds) {
       _id
-      name
-      cui
-      registrationNumber
+      name {
+        value
+      }
+      cui {
+        value
+      }
+      registrationNumber {
+        value
+      }
     }
   }
 `

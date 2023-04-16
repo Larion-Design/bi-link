@@ -33,7 +33,7 @@ export const InputPassword: React.FunctionComponent<Props> = ({
     <TextField
       fullWidth
       required
-      name={name}
+      name={name ?? label}
       type={showPassword ? 'text' : 'password'}
       value={value}
       label={label}
@@ -46,9 +46,7 @@ export const InputPassword: React.FunctionComponent<Props> = ({
         endAdornment: (
           <InputAdornment position={'end'}>
             <IconButton
-              onClick={() =>
-                setPasswordVisibility((showPassword) => !showPassword)
-              }
+              onClick={() => setPasswordVisibility((showPassword) => !showPassword)}
               edge={'end'}
             >
               {showPassword ? (

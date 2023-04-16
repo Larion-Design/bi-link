@@ -1,11 +1,11 @@
 import { GraphService } from '@app/rpc/microservices/graph/graphService'
-import { Args, ArgsType, Field, Query, Resolver } from '@nestjs/graphql'
+import { Args, ArgsType, Field, ID, Query, Resolver } from '@nestjs/graphql'
 import { Property } from '../dto/property'
 import { PropertyListRecord } from '../dto/propertyListRecord'
 
 @ArgsType()
 class Params {
-  @Field()
+  @Field(() => ID)
   personId: string
 }
 

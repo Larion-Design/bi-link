@@ -2,7 +2,7 @@ import React, { useCallback } from 'react'
 import PrintIcon from '@mui/icons-material/Print'
 import { ControlButton } from 'reactflow'
 import { toJpeg } from 'html-to-image'
-import { openResource } from '../../../../utils/resourceUrl'
+import { openResource } from '@frontend/utils/resourceUrl'
 
 type Props = {
   graphId: string

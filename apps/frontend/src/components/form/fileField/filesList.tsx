@@ -16,10 +16,10 @@ import { Textarea } from '../../dataGrid/textArea'
 import { RemoveRowsToolbarButton } from '../../dataGrid/removeRowsToolbarButton'
 import { FileAPIInput } from 'defs'
 
-type Props = {
-  files: FileAPIInput[]
+type Props<T = FileAPIInput> = {
+  files: T[]
+  updateFile: (id: string, file: T) => void | Promise<void>
   keepDeletedFiles: boolean
-  updateFile: (id: string, file: FileAPIInput) => void | Promise<void>
   removeFiles: (ids: string[]) => void
 }
 
@@ -108,6 +108,8 @@ export const FilesList: React.FunctionComponent<Props> = ({ files, updateFile, r
       disableColumnFilter
       disableIgnoreModificationsIfProcessingProps
       hideFooterPagination
+      hideFooterSelectedRowCount
+      hideFooter
       rows={files}
       columns={columns}
       experimentalFeatures={{ newEditingApi: true }}

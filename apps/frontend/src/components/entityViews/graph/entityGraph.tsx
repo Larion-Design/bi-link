@@ -18,7 +18,7 @@ import ReactFlow, {
   useNodesState,
   useEdgesState,
 } from 'reactflow'
-import { EntityLabel, EntityType } from 'defs'
+import { EntityType } from 'defs'
 import { PrintControl } from './controls/printControl'
 import { FilterPanel } from './filters/filterPanel'
 import { PersonNode } from './nodes/personNode'
@@ -167,7 +167,7 @@ export const EntityGraph: React.FunctionComponent<Props> = ({
   )
 }
 
-const nodeTypes: Record<Partial<EntityLabel>, FunctionComponent> = {
+const nodeTypes: Record<Partial<EntityType>, FunctionComponent> = {
   PERSON: PersonNode,
   COMPANY: CompanyNode,
   PROPERTY: PropertyNode,

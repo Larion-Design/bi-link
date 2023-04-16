@@ -1,15 +1,15 @@
+import { getDefaultMetadata } from 'tools'
 import { describe, expect, it } from 'vitest'
 import { faker } from '@faker-js/faker'
 import { getPersonFullName } from './person'
-import { PersonListRecord } from 'defs'
+import { PersonAPIOutput } from 'defs'
 
 describe('getPersonFullName', () => {
   it('should display full name correctly', () => {
-    const data: PersonListRecord = {
-      _id: faker.datatype.uuid(),
-      cnp: faker.random.numeric(13),
-      firstName: faker.name.firstName(),
-      lastName: faker.name.firstName(),
+    const metadata = getDefaultMetadata()
+    const data: Partial<PersonAPIOutput> = {
+      firstName: { value: faker.name.firstName(), metadata },
+      lastName: { value: faker.name.firstName(), metadata },
     }
 
     const fullName = getPersonFullName(data)

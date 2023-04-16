@@ -21,11 +21,7 @@ export const EditCompany: React.FunctionComponent = () => {
 
   useEffect(() => {
     if (!fetchLoading && companyId) {
-      void fetchCompanyInfo({
-        variables: {
-          id: companyId,
-        },
-      })
+      void fetchCompanyInfo({ variables: { id: companyId } })
     }
   }, [companyId])
 

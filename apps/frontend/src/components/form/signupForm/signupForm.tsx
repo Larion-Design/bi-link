@@ -22,9 +22,7 @@ type Props = {
   onSubmit: (signupInfo: SignupInfo) => void | Promise<void>
 }
 
-export const Signup: React.FunctionComponent<
-  Props & FormikProps<SignupInfo>
-> = ({
+export const Signup: React.FunctionComponent<Props & FormikProps<SignupInfo>> = ({
   error,
   disabled,
   values,
@@ -92,11 +90,7 @@ export const Signup: React.FunctionComponent<
           />
         </Box>
 
-        <Box
-          display={'flex'}
-          justifyContent={'flex-end'}
-          alignItems={'baseline'}
-        >
+        <Box display={'flex'} justifyContent={'flex-end'} alignItems={'baseline'}>
           <Button
             type={'submit'}
             variant={'contained'}
@@ -119,9 +113,9 @@ export const SignupForm = withFormik<Props, SignupInfo>({
     password: '',
     confirmPassword: '',
   }),
-  validationSchema: signupValidationSchema,
   validateOnChange: false,
   validateOnMount: false,
   validateOnBlur: false,
+  validate: (registrationInfo) => signupValidationSchema.parse(registrationInfo),
   handleSubmit: (values, { props: { onSubmit } }) => onSubmit(values),
 })(Signup)

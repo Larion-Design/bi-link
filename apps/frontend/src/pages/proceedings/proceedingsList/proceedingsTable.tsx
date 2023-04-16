@@ -81,6 +81,8 @@ export const ProceedingsTable: React.FunctionComponent<Props> = ({
         autoHeight
         rowCount={total}
         hideFooterPagination
+        hideFooter
+        hideFooterSelectedRowCount
         disableExtendRowFullWidth
         disableSelectionOnClick
         disableColumnMenu

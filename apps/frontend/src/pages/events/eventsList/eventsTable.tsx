@@ -78,6 +78,8 @@ export const EventsTable: React.FunctionComponent<Props> = ({ events: { records,
         autoHeight
         rowCount={total}
         hideFooterPagination
+        hideFooter
+        hideFooterSelectedRowCount
         disableExtendRowFullWidth
         disableSelectionOnClick
         disableColumnMenu

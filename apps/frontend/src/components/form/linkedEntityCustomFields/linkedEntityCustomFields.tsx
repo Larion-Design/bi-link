@@ -3,9 +3,9 @@ import Box from '@mui/material/Box'
 import { CustomFieldAPI } from 'defs'
 import { CustomInputFields } from '../customInputFields'
 
-type Props = {
-  customFields: CustomFieldAPI[]
-  updateCustomFields: (customFields: CustomFieldAPI[]) => void | Promise<void>
+type Props<T = CustomFieldAPI> = {
+  customFields: T[]
+  updateCustomFields: (customFields: T[]) => void | Promise<void>
 }
 
 export const LinkedEntityCustomFields: React.FunctionComponent<Props> = ({
@@ -13,6 +13,6 @@ export const LinkedEntityCustomFields: React.FunctionComponent<Props> = ({
   updateCustomFields,
 }) => (
   <Box sx={{ width: 1 }}>
-    <CustomInputFields readonly={false} fields={customFields} setFieldValue={updateCustomFields} />
+    <CustomInputFields fields={customFields} setFieldValue={updateCustomFields} />
   </Box>
 )

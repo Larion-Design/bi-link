@@ -1,5 +1,4 @@
 import React, { useMemo, useState } from 'react'
-import { getDefaultProceeding } from '@frontend/components/form/proceeding/constants'
 import { useCancelDialog } from '@frontend/utils/hooks/useCancelDialog'
 import { ApolloError } from '@apollo/client'
 import { FormikProps, withFormik } from 'formik'
@@ -11,6 +10,7 @@ import Step from '@mui/material/Step'
 import StepButton from '@mui/material/StepButton'
 import Stepper from '@mui/material/Stepper'
 import { ProceedingAPIInput } from 'defs'
+import { getDefaultProceeding } from 'tools'
 import { routes } from '../../../../router/routes'
 import { AutocompleteField } from '../../autocompleteField'
 import { CustomInputFields } from '../../customInputFields'
@@ -114,8 +114,8 @@ const Form: React.FunctionComponent<Props & FormikProps<ProceedingAPIInput>> = (
                 <AutocompleteField
                   name={'reason'}
                   label={'Motivul investigatiei'}
-                  value={values.reason}
-                  error={errors.reason}
+                  value={values.reason.value}
+                  error={errors.reason.value}
                   onValueChange={(value) => setFieldValue('reason', value)}
                 />
               </Grid>
@@ -125,7 +125,7 @@ const Form: React.FunctionComponent<Props & FormikProps<ProceedingAPIInput>> = (
                   name={'year'}
                   label={'Anul deschiderii dosarului'}
                   value={values.year ? values.year.toString() : ''}
-                  error={errors.reason}
+                  error={errors.reason.value}
                   onValueChange={(value) => setFieldValue('year', parseInt(value) ?? 0)}
                   suggestions={proceedingYears}
                 />

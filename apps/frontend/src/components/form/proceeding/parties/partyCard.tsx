@@ -19,11 +19,11 @@ import { PartyPersons } from './partyPersons'
 import { PartyCompanies } from './partyCompanies'
 import { getEntitiesIds } from '@frontend/utils/connectedEntityHelpers'
 
-type Props = {
+type Props<T = ProceedingEntityInvolvedAPI> = {
   partyId: string
-  partyInfo: ProceedingEntityInvolvedAPI
+  partyInfo: T
+  updateParty: (partyId: string, partyInfo: T) => void
   removeParty: (partyId: string) => void
-  updateParty: (partyId: string, partyInfo: ProceedingEntityInvolvedAPI) => void
 }
 
 export const PartyCard: React.FunctionComponent<Props> = ({

@@ -8,10 +8,10 @@ import { ActionButton } from '../../../button/actionButton'
 import { Graph } from '../../../entityViews/graph'
 import { InputField } from '../../inputField'
 
-type Props = {
+type Props<T = GraphAPI> = {
+  graphInfo: T
+  updateGraph: (graphInfo: T) => void
   entityId?: string
-  graphInfo: GraphAPI
-  updateGraph: (graphInfo: GraphAPI) => void
   removeContent: () => void
   graphCreated: (graphId: string) => void
   graphRemoved: (graphId: string) => void

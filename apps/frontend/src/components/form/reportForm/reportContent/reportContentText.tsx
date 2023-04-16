@@ -7,7 +7,7 @@ import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined'
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined'
 import { TextAPI } from 'defs'
 import { useIntl } from 'react-intl'
-import { GeneratePreviewHandler } from '../../../../utils/hooks/useDataRefProcessor'
+import { GeneratePreviewHandler } from '@frontend/utils/hooks/useDataRefProcessor'
 import { ActionButton } from '../../../button/actionButton'
 import { InputField } from '../../inputField'
 

@@ -81,6 +81,8 @@ export const CompaniesTable: React.FunctionComponent<Props> = ({
         autoHeight
         rowCount={total}
         hideFooterPagination
+        hideFooter
+        hideFooterSelectedRowCount
         disableExtendRowFullWidth
         disableSelectionOnClick
         disableColumnMenu

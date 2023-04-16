@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
-import { ConnectedEntity, PropertyListRecord } from 'defs'
+import { ConnectedEntity, PropertyAPIOutput } from 'defs'
 import { generatePath, useNavigate } from 'react-router-dom'
 import { routes } from '../../../../router/routes'
 import { PartyEntity } from './partyEntity'
@@ -10,7 +10,7 @@ import { PartyPropertyInfo } from './partyEntityInfo/partyPropertyInfo'
 
 type Props = {
   properties: ConnectedEntity[]
-  propertiesInfo?: PropertyListRecord[]
+  propertiesInfo?: PropertyAPIOutput[]
   removeProperty: (propertyId: string) => void
 }
 

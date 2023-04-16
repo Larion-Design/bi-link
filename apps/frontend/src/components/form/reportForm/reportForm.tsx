@@ -18,13 +18,13 @@ import { InputField } from '../inputField'
 import { ToggleButton } from '../toggleButton'
 import { ReportSections } from './reportSections'
 
-type Props = {
+type Props<T = ReportAPIInput> = {
+  reportInfo?: T
+  onSubmit: (reportInfo: T) => void | Promise<void>
   entityId?: string
   entityType?: EntityType
   reportId?: string
-  reportInfo?: ReportAPIInput
   reportType: string
-  onSubmit: (reportInfo: ReportAPIInput) => void | Promise<void>
   onCancel: () => void
 }
 

@@ -1,3 +1,4 @@
+import { getPersonFullName } from '@frontend/utils/person'
 import React, { PropsWithChildren } from 'react'
 import { RemovePerson } from '@frontend/components/actionButton/removePerson'
 import Avatar from '@mui/material/Avatar'
@@ -8,12 +9,12 @@ import ListItem from '@mui/material/ListItem'
 import ListItemAvatar from '@mui/material/ListItemAvatar'
 import ListItemText from '@mui/material/ListItemText'
 import Typography from '@mui/material/Typography'
-import { PersonListRecordWithImage } from 'defs'
+import { PersonAPIOutput } from 'defs'
 import { FormattedMessage } from 'react-intl'
 
 type Props = {
   label: string
-  personsInfo: PersonListRecordWithImage[]
+  personsInfo: PersonAPIOutput[]
   removePerson: (personId: string) => void
 }
 
@@ -31,9 +32,8 @@ export const PersonsList: React.FunctionComponent<PropsWithChildren<Props>> = ({
 
     <List>
       {personsInfo.map((personInfo) => {
-        const { _id, firstName, lastName } = personInfo
-        const fullName = `${lastName} ${firstName}`
-
+        const { _id } = personInfo
+        const fullName = getPersonFullName(personInfo)
         return (
           <ListItem
             key={_id}
@@ -46,12 +46,11 @@ export const PersonsList: React.FunctionComponent<PropsWithChildren<Props>> = ({
                 sx={{ height: 80, width: 80 }}
               />
             </ListItemAvatar>
-            <ListItemText primary={fullName} secondary={personInfo.cnp} />
+            <ListItemText primary={fullName} secondary={personInfo.cnp.value} />
           </ListItem>
         )
       })}
     </List>
-
     {children}
   </Box>
 )

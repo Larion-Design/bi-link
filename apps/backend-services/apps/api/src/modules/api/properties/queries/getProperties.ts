@@ -1,5 +1,5 @@
 import { IngressService } from '@app/rpc/microservices/ingress'
-import { Args, ArgsType, Field, Query, Resolver } from '@nestjs/graphql'
+import { Args, ArgsType, Field, ID, Query, Resolver } from '@nestjs/graphql'
 import { UseGuards } from '@nestjs/common'
 import { User } from 'defs'
 import { CurrentUser } from '../../../users/decorators/currentUser'
@@ -8,7 +8,7 @@ import { Property } from '../dto/property'
 
 @ArgsType()
 class Params {
-  @Field(() => [String])
+  @Field(() => [ID])
   propertiesIds: string[]
 }
 

@@ -1,11 +1,11 @@
 import { IndexerService } from '@app/rpc/microservices/indexer/indexerService'
-import { Args, ArgsType, Field, Query, Resolver } from '@nestjs/graphql'
+import { Args, ArgsType, Field, ID, Query, Resolver } from '@nestjs/graphql'
 import { Property } from '../dto/property'
 import { PropertyListRecord } from '../dto/propertyListRecord'
 
 @ArgsType()
 class Params {
-  @Field()
+  @Field(() => ID)
   companyId: string
 }
 

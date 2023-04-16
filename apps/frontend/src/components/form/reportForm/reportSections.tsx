@@ -1,3 +1,4 @@
+import Stack from '@mui/material/Stack'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import Grid from '@mui/material/Grid'
 import Tab from '@mui/material/Tab'
@@ -13,11 +14,11 @@ import { ActionButton } from '../../button/actionButton'
 import { ReportDrawer } from '../../entityViews/reports/reportDetails/reportDrawer'
 import { ReportSection } from './reportSection'
 
-type Props = {
+type Props<T = ReportSectionAPIInput> = {
+  sections: T[]
+  updateSections: (sections: T[]) => void | Promise<void>
   entityId?: string
   entityType?: EntityType
-  sections: ReportSectionAPIInput[]
-  updateSections: (sections: ReportSectionAPIInput[]) => void | Promise<void>
   generateTextPreview: (text: string) => string
   createDataRef: CreateDataRefHandler
   graphCreated: (graphId: string) => void
@@ -67,22 +68,25 @@ export const ReportSections: React.FunctionComponent<Props> = ({
           closeDrawer={closeDrawer}
         />
       )}
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 4 }}>
+      <Stack direction={'row'} justifyContent={'space-between'} alignItems={'center'}>
         <Typography variant={'h5'}>Capitole</Typography>
-        <Box sx={{ display: 'flex' }}>
+
+        <Stack direction={'row'} alignItems={'center'} spacing={2} mb={4}>
           <ActionButton
             label={'Creaza capitol'}
             icon={<AddOutlinedIcon color={'primary'} />}
             onClick={addSection}
           />
+
           <ActionButton
             disabled={!entityId && !entityType}
             label={'Cauta informatii'}
             icon={<CallToActionIcon />}
             onClick={openDrawer}
           />
-        </Box>
-      </Box>
+        </Stack>
+      </Stack>
+
       {!!size && !!activeSection && map.has(activeSection) && (
         <Grid container spacing={2}>
           <Grid item xs={2}>

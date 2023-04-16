@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { eventTypes, getDefaultEvent } from '@frontend/components/form/event/constants'
+import { eventTypes } from '@frontend/components/form/event/constants'
 import { useCancelDialog } from '@frontend/utils/hooks/useCancelDialog'
 import { ApolloError } from '@apollo/client'
 import { FormikProps, withFormik } from 'formik'
@@ -12,13 +12,14 @@ import StepButton from '@mui/material/StepButton'
 import Stepper from '@mui/material/Stepper'
 import { EventAPIInput } from 'defs'
 import { getEventFrequentCustomFieldsRequest } from '@frontend/graphql/events/queries/getEventFrequentCustomFields'
+import { getDefaultEvent, getDefaultLocation } from 'tools'
 import { routes } from '../../../../router/routes'
 import { AutocompleteField } from '../../autocompleteField'
 import { CustomInputFields } from '../../customInputFields'
 import { DateTimeSelector } from '../../dateTimeSelector'
 import { FilesManager } from '../../fileField'
 import { InputField } from '../../inputField'
-import { getDefaultLocation, Location } from '../../location'
+import { Location } from '../../location'
 import { Parties } from '../parties'
 import { personFormValidation } from '../../person/personForm/validation/validation'
 
@@ -77,8 +78,8 @@ const Form: React.FunctionComponent<Props & FormikProps<EventAPIInput>> = ({
                 <AutocompleteField
                   name={'type'}
                   label={'Tip de eveniment'}
-                  value={values.type}
-                  error={errors.type}
+                  value={values.type.value}
+                  error={errors.type.value}
                   onValueChange={(value) => setFieldValue('type', value)}
                   suggestions={eventTypes}
                 />
@@ -88,7 +89,7 @@ const Form: React.FunctionComponent<Props & FormikProps<EventAPIInput>> = ({
                 <DateTimeSelector
                   label={'Data si ora'}
                   disableFuture
-                  value={values.date}
+                  value={values.date.value ? new Date(values.date.value) : null}
                   error={errors.date as string}
                   onChange={(date) => setFieldValue('date', date)}
                 />

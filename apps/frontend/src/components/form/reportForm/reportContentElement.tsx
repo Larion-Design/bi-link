@@ -17,12 +17,12 @@ import { ReportContentTable } from './reportContent/reportContentTable'
 import { ReportContentText } from './reportContent/reportContentText'
 import { ReportContentTitle } from './reportContent/reportContentTitle'
 
-type Props = {
+type Props<T = ReportContentAPIInput> = {
+  contentInfo: T
+  updateContentInfo: (contentInfo: T) => void
   contentId: string
   entityId?: string
   entityType?: EntityType
-  contentInfo: ReportContentAPIInput
-  updateContentInfo: (contentInfo: ReportContentAPIInput) => void
   removeContent: () => void
   generateTextPreview: GeneratePreviewHandler
   graphCreated: (graphId: string) => void

@@ -1,7 +1,7 @@
 import React from 'react'
 import Autocomplete from '@mui/material/Autocomplete'
-import Box from '@mui/material/Box'
 import TextField from '@mui/material/TextField'
+import Stack from '@mui/material/Stack'
 import countries from './countries.json'
 
 type Props = {
@@ -26,19 +26,18 @@ export const CountrySelector: React.FunctionComponent<Props> = ({
     onChange={(event, { name }) => updateCountry(name)}
     getOptionLabel={({ name }) => name}
     renderOption={(props, { name, code }) => (
-      <Box key={code} component={'li'} sx={{ '& > img': { mr: 2, flexShrink: 0 } }} {...props}>
+      <Stack key={code} component={'li'} direction={'row'} spacing={2}>
         {showIcons && (
           <img
             loading={'lazy'}
             width={20}
-            src={`https://flagcdn.com/w20/${code.toLowerCase()}.png`}
-            srcSet={`https://flagcdn.com/w40/${code.toLowerCase()}.png 2x`}
+            src={`https://flagcdn.com/${code.toLowerCase()}.svg`}
             alt={country}
           />
         )}
-        {name} ({code})
-      </Box>
+        {name}
+      </Stack>
     )}
-    renderInput={(params) => <TextField {...params} label={'Selectează tara'} />}
+    renderInput={(params) => <TextField {...params} label={'Alege tara'} />}
   />
 )

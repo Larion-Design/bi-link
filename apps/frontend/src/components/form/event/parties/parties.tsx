@@ -1,17 +1,18 @@
 import React, { useCallback, useEffect } from 'react'
+import Stack from '@mui/material/Stack'
 import Box from '@mui/material/Box'
-import Grid from '@mui/material/Grid'
 import AddOutlinedIcon from '@mui/icons-material/AddOutlined'
 import Tooltip from '@mui/material/Tooltip'
 import Button from '@mui/material/Button'
 import Typography from '@mui/material/Typography'
-import { PartyAPI } from 'defs'
+import { EventParticipantAPI } from 'defs'
+import { getDefaultParticipant } from 'tools'
 import { PartyCard } from './partyCard'
 import { useMap } from '@frontend/utils/hooks/useMap'
 
-type Props = {
-  parties: PartyAPI[]
-  updateParties: (parties: PartyAPI[]) => void | Promise<void>
+type Props<T = EventParticipantAPI> = {
+  parties: T[]
+  updateParties: (parties: T[]) => void | Promise<void>
 }
 
 export const Parties: React.FunctionComponent<Props> = ({ parties, updateParties }) => {
@@ -21,7 +22,7 @@ export const Parties: React.FunctionComponent<Props> = ({ parties, updateParties
     void updateParties(values())
   }, [uid])
 
-  const createIncident = useCallback(() => add(createEventParty()), [])
+  const createIncident = useCallback(() => add(getDefaultParticipant()), [])
 
   return (
     <>
@@ -32,17 +33,16 @@ export const Parties: React.FunctionComponent<Props> = ({ parties, updateParties
           </Button>
         </Tooltip>
       </Box>
-      <Grid container spacing={2}>
+      <Stack spacing={2}>
         {parties.length ? (
           entries().map(([partyId, partyInfo]) => (
-            <Grid key={partyId} item xs={12}>
-              <PartyCard
-                partyId={partyId}
-                partyInfo={partyInfo}
-                updateParty={update}
-                removeParty={remove}
-              />
-            </Grid>
+            <PartyCard
+              key={partyId}
+              partyId={partyId}
+              partyInfo={partyInfo}
+              updateParty={update}
+              removeParty={remove}
+            />
           ))
         ) : (
           <Box
@@ -59,17 +59,7 @@ export const Parties: React.FunctionComponent<Props> = ({ parties, updateParties
             </Typography>
           </Box>
         )}
-      </Grid>
+      </Stack>
     </>
   )
 }
-
-const createEventParty = (): PartyAPI => ({
-  name: '',
-  description: '',
-  persons: [],
-  companies: [],
-  properties: [],
-  customFields: [],
-  _confirmed: true,
-})

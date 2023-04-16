@@ -30,11 +30,7 @@ export const CreateCompany: React.FunctionComponent = () => {
         readonly={false}
         onSubmit={(companyInfo) => {
           if (!loading) {
-            void createCompany({
-              variables: {
-                companyInfo,
-              },
-            })
+            void createCompany({ variables: { companyInfo } })
           }
         }}
       />

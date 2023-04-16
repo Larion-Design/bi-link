@@ -5,10 +5,10 @@ import { FilesList } from './filesList'
 import { FileUploadBox } from './FileUploadBox'
 import { useDebouncedMap } from '../../../utils/hooks/useMap'
 
-type Props = {
-  files: FileAPIInput[]
+type Props<T = FileAPIInput> = {
+  files: T[]
+  updateFiles: (files: T[]) => void | Promise<void>
   keepDeletedFiles: boolean
-  updateFiles: (files: FileAPIInput[]) => void | Promise<void>
 }
 
 export const FilesManager: React.FunctionComponent<Props> = ({

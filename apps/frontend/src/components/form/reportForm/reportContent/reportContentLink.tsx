@@ -25,7 +25,7 @@ export const ReportContentLink: React.FunctionComponent<Props> = ({
   generateTextPreview,
   removeContent,
 }) => {
-  const intl = useIntl()
+  const { formatMessage } = useIntl()
   const [preview, setPreview] = useState(false)
   const togglePreview = useCallback(() => setPreview((preview) => !preview), [setPreview])
   const contentPreview = useMemo(() => generateTextPreview(label), [label])
@@ -51,7 +51,7 @@ export const ReportContentLink: React.FunctionComponent<Props> = ({
         <ActionButton
           icon={preview ? <EditOutlinedIcon /> : <VisibilityOutlinedIcon />}
           onClick={togglePreview}
-          label={intl.formatMessage({ id: preview ? 'edit' : 'preview' })}
+          label={formatMessage({ id: preview ? 'edit' : 'preview' })}
           disabled={!contentPreview.length}
         />
         <ActionButton

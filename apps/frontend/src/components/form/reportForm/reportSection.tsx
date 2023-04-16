@@ -14,11 +14,11 @@ import { ToolbarMenu } from '../../menu/toolbarMenu'
 import { InputField } from '../inputField'
 import { ReportContentElement } from './reportContentElement'
 
-type Props = {
+type Props<T = ReportSectionAPIInput> = {
+  sectionInfo: T
+  updateSectionInfo: (sectionInfo: T) => void
   entityId?: string
   entityType?: EntityType
-  sectionInfo: ReportSectionAPIInput
-  updateSectionInfo: (sectionInfo: ReportSectionAPIInput) => void
   removeSection: () => void
   generateTextPreview: (text: string) => string
   graphCreated: (graphId: string) => void
@@ -40,13 +40,25 @@ export const ReportSection: React.FunctionComponent<Props> = ({
     useDebouncedMap(1000, sectionInfo.content)
   const [draggingElement, setDraggingElement] = useState<string | null>(null)
   const deps = [uid]
-  const addTitle = useCallback(() => add({ order: size, title: { content: '' } }), deps)
-  const addText = useCallback(() => add({ order: size, text: { content: '' } }), deps)
-  const addLink = useCallback(() => add({ order: size, link: { label: '', url: '' } }), deps)
-  const addTable = useCallback(() => add({ order: size, table: { id: '' } }), deps)
-  const addGraph = useCallback(() => add({ order: size, graph: { label: '' } }), deps)
-  const addImages = useCallback(() => add({ order: size, images: [] }), deps)
-  const addFile = useCallback(() => add({ order: size, file: null }), deps)
+  const addTitle = useCallback(
+    () => add({ isActive: true, order: size, title: { content: '' } }),
+    deps,
+  )
+  const addText = useCallback(
+    () => add({ isActive: true, order: size, text: { content: '' } }),
+    deps,
+  )
+  const addLink = useCallback(
+    () => add({ isActive: true, order: size, link: { label: '', url: '' } }),
+    deps,
+  )
+  const addTable = useCallback(() => add({ isActive: true, order: size, table: { id: '' } }), deps)
+  const addGraph = useCallback(
+    () => add({ isActive: true, order: size, graph: { label: '' } }),
+    deps,
+  )
+  const addImages = useCallback(() => add({ isActive: true, order: size, images: [] }), deps)
+  const addFile = useCallback(() => add({ isActive: true, order: size, file: null }), deps)
 
   useEffect(() => updateSectionInfo({ ...sectionInfo, content: values() }), deps)
 

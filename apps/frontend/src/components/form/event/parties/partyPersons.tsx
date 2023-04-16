@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react'
-import { ConnectedEntity, PersonListRecordWithImage } from 'defs'
+import { ConnectedEntity, PersonAPIOutput } from 'defs'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import { PartyEntity } from './partyEntity'
@@ -11,7 +11,7 @@ import { PartyEntitiesPlaceholder } from './partyEntitiesPlaceholder'
 
 type Props = {
   persons: ConnectedEntity[]
-  personsInfo?: PersonListRecordWithImage[]
+  personsInfo?: PersonAPIOutput[]
   removePerson: (personId: string) => void
 }
 
@@ -43,7 +43,11 @@ export const PartyPersons: React.FunctionComponent<Props> = ({
                 viewEntityDetails={viewPersonDetails}
                 removeEntity={removePerson}
               >
-                <PartyPersonInfo name={fullName} cnp={cnp} imageUrl={images[0]?.url?.url ?? ''} />
+                <PartyPersonInfo
+                  name={fullName}
+                  cnp={cnp.value}
+                  imageUrl={images[0]?.url?.url ?? ''}
+                />
               </PartyEntity>
             )
           }

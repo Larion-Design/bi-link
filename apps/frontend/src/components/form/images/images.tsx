@@ -1,21 +1,22 @@
+import Stack from '@mui/material/Stack'
 import React, { useCallback, useEffect } from 'react'
+import { FormikErrors } from 'formik'
 import Avatar from '@mui/material/Avatar'
 import Typography from '@mui/material/Typography'
 import Box from '@mui/material/Box'
+import Tooltip from '@mui/material/Tooltip'
+import IconButton from '@mui/material/IconButton'
 import CloudUploadOutlinedIcon from '@mui/icons-material/CloudUploadOutlined'
 import CollectionsOutlinedIcon from '@mui/icons-material/CollectionsOutlined'
-import IconButton from '@mui/material/IconButton'
-import { FormikErrors } from 'formik'
+import { FileAPIInput } from 'defs'
 import { getFileInfoRequest } from '../../../graphql/files/getFileInfo'
 import { imageTypeRegex } from '../../../utils/mimeTypes'
 import { FileUploadBox } from '../fileField/FileUploadBox'
-import { FileAPIInput } from 'defs'
 import { useModal } from '../../modal/modalProvider'
-import Tooltip from '@mui/material/Tooltip'
 
-type Props = {
-  images: FileAPIInput[]
-  updateImages: (fileInfo: FileAPIInput[]) => void | Promise<void>
+type Props<T = FileAPIInput> = {
+  images: T[]
+  updateImages: (fileInfo: T[]) => void | Promise<void>
   readonly?: boolean
   error?: string | string[] | FormikErrors<FileAPIInput>[]
 }
@@ -75,17 +76,8 @@ export const Images: React.FunctionComponent<Props> = ({ images, updateImages })
 }
 
 const Placeholder: React.FunctionComponent = () => (
-  <Box
-    sx={{
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'center',
-      justifyContent: 'center',
-      width: 1,
-      height: 1,
-    }}
-  >
+  <Stack sx={{ width: 1, height: 1 }} justifyContent={'center'} alignItems={'center'} spacing={1}>
     <CloudUploadOutlinedIcon fontSize={'large'} sx={{ mb: 1 }} />
     <Typography variant={'h6'}>Incarca o poza</Typography>
-  </Box>
+  </Stack>
 )

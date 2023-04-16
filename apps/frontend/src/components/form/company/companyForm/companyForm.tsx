@@ -12,13 +12,14 @@ import { CompanyAPIInput } from 'defs'
 import { FormikProps, withFormik } from 'formik'
 import { FormattedMessage } from 'react-intl'
 import { getCompanyFrequentCustomFieldsRequest } from '@frontend/graphql/companies/queries/getCompanyFrequentCustomFields'
+import { getDefaultLocation } from 'tools'
 import { routes } from '../../../../router/routes'
 import { CONTACT_METHODS } from '@frontend/utils/constants'
 import { Associates } from '../associates'
 import { CustomInputFields } from '../../customInputFields'
 import { FilesManager } from '../../fileField'
 import { InputField } from '../../inputField'
-import { getDefaultLocation, Location } from '../../location'
+import { Location } from '../../location'
 import { Locations } from '../../locations'
 import { personFormValidation } from '../../person/personForm/validation/validation'
 import { companyFormValidation, validateCompanyForm } from './validation/validation'
@@ -90,8 +91,8 @@ const Form: React.FunctionComponent<Props & FormikProps<CompanyAPIInput>> = ({
               <InputField
                 name={'name'}
                 label={'Nume'}
-                value={values.name}
-                error={errors.name}
+                value={values.name.value}
+                error={errors.name.value}
                 onChange={async (value) => {
                   const error = await companyFormValidation.name(value)
                   setFieldValue('name', value)
@@ -104,8 +105,8 @@ const Form: React.FunctionComponent<Props & FormikProps<CompanyAPIInput>> = ({
               <InputField
                 name={'cui'}
                 label={'CIF / CUI'}
-                value={values.cui}
-                error={errors.cui}
+                value={values.cui.value}
+                error={errors.cui.value}
                 onChange={async (value) => {
                   const error = await companyFormValidation.cui(value, companyId)
                   setFieldValue('cui', value)
@@ -118,8 +119,8 @@ const Form: React.FunctionComponent<Props & FormikProps<CompanyAPIInput>> = ({
               <InputField
                 name={'registrationNumber'}
                 label={'Numar de inregistrare'}
-                value={values.registrationNumber}
-                error={errors.registrationNumber}
+                value={values.registrationNumber.value}
+                error={errors.registrationNumber.value}
                 onChange={async (value) => {
                   const error = await companyFormValidation.registrationNumber(value, companyId)
                   setFieldValue('registrationNumber', value)

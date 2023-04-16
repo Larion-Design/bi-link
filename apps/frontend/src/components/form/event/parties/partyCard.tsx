@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect } from 'react'
-import Grid from '@mui/material/Grid'
+import { EventParticipantAPI } from 'defs'
 import CardContent from '@mui/material/CardContent'
 import Card from '@mui/material/Card'
 import Box from '@mui/material/Box'
@@ -9,7 +9,6 @@ import Divider from '@mui/material/Divider'
 import CardActions from '@mui/material/CardActions'
 import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined'
 import Stack from '@mui/material/Stack'
-import { PartyAPI } from 'defs'
 import { getPersonsBasicInfoRequest } from '@frontend/graphql/persons/queries/getPersonsBasicInfo'
 import { useModal } from '../../../modal/modalProvider'
 import { PartyCardGeneralInformation } from './partyCardGeneralInformation'
@@ -26,11 +25,11 @@ import {
 } from '@frontend/utils/connectedEntityHelpers'
 import { getPropertiesRequest } from '@frontend/graphql/properties/queries/getProperties'
 
-type Props = {
+type Props<T = EventParticipantAPI> = {
   partyId: string
-  partyInfo: PartyAPI
+  partyInfo: T
+  updateParty: (partyId: string, partyInfo: T) => void
   removeParty: (partyId: string) => void
-  updateParty: (partyId: string, partyInfo: PartyAPI) => void
 }
 
 export const PartyCard: React.FunctionComponent<Props> = ({
@@ -160,26 +159,23 @@ export const PartyCard: React.FunctionComponent<Props> = ({
   return (
     <Card sx={{ p: 1, mt: 4 }} variant={'outlined'}>
       <CardContent>
-        <Grid container spacing={5}>
-          <Grid item xs={6}>
-            <PartyCardGeneralInformation
-              partyId={partyId}
-              partyInfo={partyInfo}
-              updateParty={updateParty}
-            />
-          </Grid>
-          <Grid item xs={6}>
-            <LinkedEntityCustomFields
-              customFields={partyInfo.customFields}
-              updateCustomFields={(customFields) =>
-                updateParty(partyId, {
-                  ...partyInfo,
-                  customFields,
-                })
-              }
-            />
-          </Grid>
-        </Grid>
+        <Stack direction={'row'} spacing={5}>
+          <PartyCardGeneralInformation
+            partyId={partyId}
+            partyInfo={partyInfo}
+            updateParty={updateParty}
+          />
+
+          <LinkedEntityCustomFields
+            customFields={partyInfo.customFields}
+            updateCustomFields={(customFields) =>
+              updateParty(partyId, {
+                ...partyInfo,
+                customFields,
+              })
+            }
+          />
+        </Stack>
 
         <Stack spacing={2} direction={'row'} mt={2}>
           <Button

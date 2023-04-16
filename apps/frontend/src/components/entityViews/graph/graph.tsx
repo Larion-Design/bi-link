@@ -5,16 +5,15 @@ import { useIntl } from 'react-intl'
 import { ConnectionLineType, Edge, Node, Position, ReactFlowProvider } from 'reactflow'
 import { relationshipsTypes } from '@frontend/components/form/person/constants'
 import {
-  CompanyListRecord,
-  EntityLabel,
+  CompanyAPIOutput,
   EntityLocationRelationship,
   EntityType,
-  EventListRecord,
+  EventAPIOutput,
   LocationAPIOutput,
-  PersonListRecordWithImage,
-  ProceedingListRecord,
-  PropertyListRecord,
-  ReportListRecord,
+  PersonAPIOutput,
+  ProceedingAPIOutput,
+  PropertyAPIOutput,
+  ReportAPIOutput,
 } from 'defs'
 import { formatAddress } from 'tools'
 import { useElementSize } from 'usehooks-ts'
@@ -120,7 +119,7 @@ export const Graph: React.FunctionComponent<PropsWithRef<Props>> = ({
       }
     }
 
-    const createNode = (id: string, type: EntityLabel, data: any) => {
+    const createNode = (id: string, type: EntityType, data: any) => {
       if (!nodesMap.has(id)) {
         nodesMap.set(id, {
           id,
@@ -161,7 +160,7 @@ export const Graph: React.FunctionComponent<PropsWithRef<Props>> = ({
 
     const entitiesInfo = new Map<string, GraphEntityInfo>()
     const addEntityInfo = (entityInfo: GraphEntityInfo) =>
-      entitiesInfo.set(entityInfo._id, entityInfo)
+      entitiesInfo.set('_id' in entityInfo ? entityInfo._id : entityInfo.locationId, entityInfo)
 
     persons.forEach(addEntityInfo)
     companies.forEach(addEntityInfo)
@@ -172,10 +171,10 @@ export const Graph: React.FunctionComponent<PropsWithRef<Props>> = ({
     locations.forEach(addEntityInfo)
 
     const entityHandler = {
-      [EntityLabel.PERSON]: (personId: string) => {
+      PERSON: (personId: string) => {
         if (nodesMap.has(personId)) return true
 
-        const personInfo = entitiesInfo.get(personId) as PersonListRecordWithImage
+        const personInfo = entitiesInfo.get(personId) as PersonAPIOutput
 
         if (personInfo) {
           graphConfig.children.push({
@@ -185,86 +184,86 @@ export const Graph: React.FunctionComponent<PropsWithRef<Props>> = ({
             height: 250,
           })
 
-          createNode(personId, EntityLabel.PERSON, {
-            label: `${personInfo.lastName} ${personInfo.firstName}`,
+          createNode(personId, 'PERSON', {
+            label: `${personInfo.lastName.value} ${personInfo.firstName.value}`,
             image: personInfo.images?.[0]?.url.url,
             isRootNode: personId === entityId,
           })
           return true
         }
       },
-      [EntityLabel.COMPANY]: (companyId: string) => {
+      COMPANY: (companyId: string) => {
         if (nodesMap.has(companyId)) return true
 
-        const companyInfo = entitiesInfo.get(companyId) as CompanyListRecord
+        const companyInfo = entitiesInfo.get(companyId) as CompanyAPIOutput
 
         if (companyInfo) {
-          createNode(companyId, EntityLabel.COMPANY, {
+          createNode(companyId, 'COMPANY', {
             label: companyInfo.name,
             isRootNode: companyId === entityId,
           })
           return true
         }
       },
-      [EntityLabel.PROPERTY]: (propertyId: string) => {
+      PROPERTY: (propertyId: string) => {
         if (nodesMap.has(propertyId)) return true
 
-        const propertyInfo = entitiesInfo.get(propertyId) as PropertyListRecord
+        const propertyInfo = entitiesInfo.get(propertyId) as PropertyAPIOutput
 
         if (propertyInfo) {
-          createNode(propertyId, EntityLabel.PROPERTY, {
+          createNode(propertyId, 'PROPERTY', {
             label: propertyInfo.name,
             isRootNode: propertyId === entityId,
           })
           return true
         }
       },
-      [EntityLabel.EVENT]: (eventId: string) => {
+      EVENT: (eventId: string) => {
         if (nodesMap.has(eventId)) return true
 
-        const eventInfo = entitiesInfo.get(eventId) as EventListRecord
+        const eventInfo = entitiesInfo.get(eventId) as EventAPIOutput
 
         if (eventInfo) {
-          createNode(eventId, EntityLabel.EVENT, {
+          createNode(eventId, 'EVENT', {
             label: eventInfo.location,
             isRootNode: eventId === entityId,
           })
           return true
         }
       },
-      [EntityLabel.LOCATION]: (locationId: string) => {
+      LOCATION: (locationId: string) => {
         if (nodesMap.has(locationId)) return true
 
         const locationInfo = entitiesInfo.get(locationId) as LocationAPIOutput
 
         if (locationInfo) {
-          createNode(locationId, EntityLabel.LOCATION, {
+          createNode(locationId, 'LOCATION', {
             label: formatAddress(locationInfo),
             isRootNode: locationId === entityId,
           })
           return true
         }
       },
-      [EntityLabel.PROCEEDING]: (proceedingId: string) => {
+      PROCEEDING: (proceedingId: string) => {
         if (nodesMap.has(proceedingId)) return true
 
-        const proceedingInfo = entitiesInfo.get(proceedingId) as ProceedingListRecord
+        const proceedingInfo = entitiesInfo.get(proceedingId) as ProceedingAPIOutput
 
         if (proceedingInfo) {
-          createNode(proceedingId, EntityLabel.PROCEEDING, {
+          createNode(proceedingId, 'PROCEEDING', {
             label: proceedingInfo.name,
             isRootNode: proceedingId === entityId,
           })
           return true
         }
       },
-      [EntityLabel.REPORT]: (reportId: string) => {
+      REPORT: (reportId: string) => {
         if (nodesMap.has(reportId)) return true
 
-        const reportInfo = entitiesInfo.get(reportId) as ReportListRecord
+        const reportInfo = entitiesInfo.get(reportId) as ReportAPIOutput
 
         if (reportInfo) {
-          createNode(reportId, EntityLabel.REPORT, {
+          createNode(reportId, 'REPORT', {
             label: reportInfo.name,
             isRootNode: reportId === entityId,
           })
@@ -275,8 +274,8 @@ export const Graph: React.FunctionComponent<PropsWithRef<Props>> = ({
 
     personalRelationships.forEach(
       ({
-        startNode: { _id: startNodeId, _type: startNodeType },
-        endNode: { _id: endNodeId, _type: endNodeType },
+        startNode: { entityId: startNodeId, entityType: startNodeType },
+        endNode: { entityId: endNodeId, entityType: endNodeType },
         type,
         _confirmed,
         _type,
@@ -295,8 +294,8 @@ export const Graph: React.FunctionComponent<PropsWithRef<Props>> = ({
 
     companiesAssociates.forEach(
       ({
-        startNode: { _id: startNodeId, _type: startNodeType },
-        endNode: { _id: endNodeId, _type: endNodeType },
+        startNode: { entityId: startNodeId, entityType: startNodeType },
+        endNode: { entityId: endNodeId, entityType: endNodeType },
         role,
         _confirmed,
         equity,
@@ -315,8 +314,8 @@ export const Graph: React.FunctionComponent<PropsWithRef<Props>> = ({
     )
     propertiesRelationships.forEach(
       ({
-        startNode: { _id: startNodeId, _type: startNodeType },
-        endNode: { _id: endNodeId, _type: endNodeType },
+        startNode: { entityId: startNodeId, entityType: startNodeType },
+        endNode: { entityId: endNodeId, entityType: endNodeType },
         _confirmed,
         _type,
       }) => {
@@ -333,22 +332,22 @@ export const Graph: React.FunctionComponent<PropsWithRef<Props>> = ({
     )
     eventsParties.forEach(
       ({
-        startNode: { _id: startNodeId, _type: startNodeType },
-        endNode: { _id: endNodeId, _type: endNodeType },
-        name,
+        startNode: { entityId: startNodeId, entityType: startNodeType },
+        endNode: { entityId: endNodeId, entityType: endNodeType },
+        type,
         _confirmed,
         _type,
       }) => {
         if (entityHandler[startNodeType](startNodeId) && entityHandler[endNodeType](endNodeId)) {
-          createEdge(startNodeId, endNodeId, name, _confirmed, _type)
+          createEdge(startNodeId, endNodeId, type, _confirmed, _type)
         }
       },
     )
 
     entitiesReported.forEach(
       ({
-        startNode: { _id: startNodeId, _type: startNodeType },
-        endNode: { _id: endNodeId, _type: endNodeType },
+        startNode: { entityId: startNodeId, entityType: startNodeType },
+        endNode: { entityId: endNodeId, entityType: endNodeType },
         _confirmed,
         _type,
       }) => {
@@ -360,8 +359,8 @@ export const Graph: React.FunctionComponent<PropsWithRef<Props>> = ({
 
     entitiesInvolvedInProceeding.forEach(
       ({
-        startNode: { _id: startNodeId, _type: startNodeType },
-        endNode: { _id: endNodeId, _type: endNodeType },
+        startNode: { entityId: startNodeId, entityType: startNodeType },
+        endNode: { entityId: endNodeId, entityType: endNodeType },
         _confirmed,
         _type,
         involvedAs,
@@ -373,8 +372,8 @@ export const Graph: React.FunctionComponent<PropsWithRef<Props>> = ({
     )
 
     const entityLocationEdgeHandler = ({
-      startNode: { _id: startNodeId, _type: startNodeType },
-      endNode: { _id: endNodeId, _type: endNodeType },
+      startNode: { entityId: startNodeId, entityType: startNodeType },
+      endNode: { entityId: endNodeId, entityType: endNodeType },
       _confirmed,
       _type,
     }: EntityLocationRelationship) => {
