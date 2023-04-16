@@ -10,7 +10,7 @@ type Response = {
 }
 
 const request = gql`
-  mutation UpdateEvent($eventId: String!, $data: EventInput!) {
+  mutation UpdateEvent($eventId: ID!, $data: EventInput!) {
     updateEvent(eventId: $eventId, data: $data)
   }
 `

@@ -11,7 +11,7 @@ type Response = {
 }
 
 const request = gql`
-  query GetReports($entityId: String!, $entityType: String!) {
+  query GetReports($entityId: ID!, $entityType: String!) {
     getReports(entityId: $entityId, entityType: $entityType) {
       _id
       name
@@ -23,7 +23,7 @@ const request = gql`
 
 export const getReportsRequest = (entityId: string, entityType: EntityType) =>
   useQuery<Response, Params>(request, {
-    fetchPolicy: 'cache-and-network',
+    fetchPolicy: 'cache-first',
     variables: {
       entityId,
       entityType,

@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react'
+import { getDefaultProperty, getDefaultVehicle } from 'tools'
 import { PropertySelectorView } from './propertySelector'
 import { useFormik } from 'formik'
 import CardContent from '@mui/material/CardContent'
@@ -8,12 +9,11 @@ import Button from '@mui/material/Button'
 import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined'
 import Box from '@mui/material/Box'
 import { InputField } from '../../../form/inputField'
-import { createPropertyRequest } from '../../../../graphql/properties/mutations/createProperty'
+import { createPropertyRequest } from '@frontend/graphql/properties/mutations/createProperty'
 import {
   propertyFormValidation,
   validatePropertyForm,
 } from '../../../form/property/propertyForm/validation/validation'
-import { PropertyAPIInput, VehicleInfo } from 'defs'
 import { Images } from '../../../form/images'
 import { AutocompleteField } from '../../../form/autocompleteField'
 import { ColorPicker } from '../../../form/colorPicker'
@@ -32,7 +32,7 @@ export const FastCreateProperty: React.FunctionComponent<Props> = ({
 }) => {
   const [createProperty, { data }] = createPropertyRequest()
   const { values, errors, setFieldError, setFieldValue, submitForm, isSubmitting } = useFormik({
-    initialValues: propertyInitialValues,
+    initialValues: getDefaultProperty(),
     validateOnMount: false,
     validateOnBlur: false,
     validateOnChange: false,
@@ -88,7 +88,7 @@ export const FastCreateProperty: React.FunctionComponent<Props> = ({
 
                   setFieldValue(
                     'vehicleInfo',
-                    value === 'Vehicul' ? createVehicleInfo() : null,
+                    value === 'Vehicul' ? getDefaultVehicle() : null,
                     false,
                   )
                 }}
@@ -101,7 +101,7 @@ export const FastCreateProperty: React.FunctionComponent<Props> = ({
                     name={'vin'}
                     label={'VIN'}
                     readonly={false}
-                    value={values.vehicleInfo?.vin}
+                    value={values.vehicleInfo?.vin.value}
                     error={errors.vehicleInfo as string}
                     onChange={async (value) => {
                       const error = await propertyFormValidation.vin(value)
@@ -114,7 +114,7 @@ export const FastCreateProperty: React.FunctionComponent<Props> = ({
                   <AutocompleteField
                     readonly={false}
                     label={'Marca'}
-                    value={values.vehicleInfo.maker}
+                    value={values.vehicleInfo.maker.value}
                     error={errors.vehicleInfo as string}
                     onValueChange={async (value) => {
                       const error = await propertyFormValidation.maker(value)
@@ -127,7 +127,7 @@ export const FastCreateProperty: React.FunctionComponent<Props> = ({
                   <AutocompleteField
                     label={'Model'}
                     readonly={false}
-                    value={values.vehicleInfo.model}
+                    value={values.vehicleInfo.model.value}
                     error={errors.vehicleInfo as string}
                     onValueChange={async (value) => {
                       const error = await propertyFormValidation.model(value)
@@ -139,7 +139,7 @@ export const FastCreateProperty: React.FunctionComponent<Props> = ({
                 <Grid item xs={6}>
                   <ColorPicker
                     name={'color'}
-                    value={values.vehicleInfo?.color}
+                    value={values.vehicleInfo?.color.value}
                     label={'Culoare'}
                     error={errors.vehicleInfo as string}
                     onChange={async (value) => {
@@ -180,24 +180,4 @@ export const FastCreateProperty: React.FunctionComponent<Props> = ({
       </CardActions>
     </>
   )
-}
-
-const propertyInitialValues: PropertyAPIInput = {
-  name: '',
-  type: '',
-  images: [],
-  owners: [],
-  files: [],
-  customFields: [],
-  vehicleInfo: null,
-  realEstateInfo: null,
-}
-
-function createVehicleInfo(): VehicleInfo {
-  return {
-    vin: '',
-    maker: '',
-    model: '',
-    color: '',
-  }
 }

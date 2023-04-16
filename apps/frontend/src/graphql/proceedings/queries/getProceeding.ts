@@ -10,16 +10,21 @@ type Response = {
 }
 
 const request = gql`
-  query GetProceeding($proceedingId: String!) {
+  query GetProceeding($proceedingId: ID!) {
     getProceeding(proceedingId: $proceedingId) {
       name
       type
-      fileNumber
-      year
+      fileNumber {
+        value
+      }
+      year {
+        value
+      }
       description
-      reason
+      reason {
+        value
+      }
       customFields {
-        _id
         fieldName
         fieldValue
       }

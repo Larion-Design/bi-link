@@ -21,4 +21,4 @@ const request = gql`
 `
 
 export const searchEventsRequest = () =>
-  useLazyQuery<Response, SearchParams>(request, { fetchPolicy: 'cache-and-network' })
+  useLazyQuery<Response, SearchParams>(request, { fetchPolicy: 'cache-first' })

@@ -271,7 +271,7 @@ const getPersonInfoValue: EntityInfoHandler<PersonAPIOutput> = (
       }
       case 'birthdate': {
         const { birthdate } = personInfo
-        return birthdate ? formatDate(birthdate) : ''
+        return birthdate ? formatDate(birthdate.value) : ''
       }
       case 'age': {
         return getPersonAge(personInfo).toString()
@@ -380,7 +380,7 @@ const getEventInfoValue: EntityInfoHandler<EventAPIOutput> = (eventInfo, field, 
       case 'description':
       case 'date': {
         const { date } = eventInfo
-        return date ? formatDate(date) : ''
+        return date ? formatDate(date.value) : ''
       }
     }
   }

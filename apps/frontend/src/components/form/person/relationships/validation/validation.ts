@@ -1,8 +1,6 @@
-import * as yup from 'yup'
-import { RelationshipAPIInput } from 'defs'
-import { connectedEntityValidationSchema } from '../../../validation/connectedEntityValidationSchema'
+import { RelationshipAPI, relationshipSchema } from 'defs'
 
-export const validatePersonRelationships = async (relationships: RelationshipAPIInput[]) => {
+export const validatePersonRelationships = async (relationships: RelationshipAPI[]) => {
   let error = validatePersonRelationshipsFormat(relationships)
 
   if (!error) {
@@ -11,7 +9,7 @@ export const validatePersonRelationships = async (relationships: RelationshipAPI
   return Promise.resolve(error)
 }
 
-export const validateDuplicatePersonRelationships = (relationships: RelationshipAPIInput[]) => {
+export const validateDuplicatePersonRelationships = (relationships: RelationshipAPI[]) => {
   const set = new Set()
 
   for (const {
@@ -24,16 +22,8 @@ export const validateDuplicatePersonRelationships = (relationships: Relationship
   }
 }
 
-const personRelationshipsSchemaValidation = yup.array().of(
-  yup.object({
-    person: connectedEntityValidationSchema.required(),
-    type: yup.string(),
-    proximity: yup.number().required(),
-  }),
-)
-
 export const validatePersonRelationshipsFormat = (relationships: Array<unknown>) => {
-  if (!personRelationshipsSchemaValidation.isValidSync(relationships)) {
+  if (!relationshipSchema.array().parse(relationships)) {
     return 'Nu ai furnizat unele informatii obligatorii.'
   }
 }

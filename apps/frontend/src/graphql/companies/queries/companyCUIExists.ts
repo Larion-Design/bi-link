@@ -11,7 +11,7 @@ export type Params = {
 }
 
 const companyCUIExists = gql`
-  query CompanyCUIExists($cui: String!, $companyId: String) {
+  query CompanyCUIExists($cui: String!, $companyId: ID) {
     companyCUIExists(cui: $cui, companyId: $companyId)
   }
 `

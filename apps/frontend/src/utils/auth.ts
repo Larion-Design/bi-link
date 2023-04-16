@@ -1,3 +1,4 @@
+import { UserRole } from 'defs'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { initializeApp } from 'firebase/app'
 import { getAuth } from 'firebase/auth'
@@ -8,7 +9,6 @@ import {
   useUpdateProfile,
 } from 'react-firebase-hooks/auth'
 import { useIntl } from 'react-intl'
-import { Role } from 'defs'
 
 const firebaseApp = initializeApp({
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
@@ -58,17 +58,14 @@ export const getAccessToken = async () => userAuth.currentUser?.getIdToken()
 
 export const getUserRole = () => {
   const { user } = useAuth()
-  const [role, setRole] = useState<Role | null>(null)
+  const [role, setRole] = useState<UserRole | null>(null)
 
-  const hasPrivilegedAccess = useMemo(
-    () => !!role && [Role.CI, Role.DEV, Role.ADMIN].includes(role),
-    [role],
-  )
+  const hasPrivilegedAccess = useMemo(() => !!role && ['CI', 'DEV', 'ADMIN'].includes(role), [role])
 
-  const isAdmin = useMemo(() => role === Role.ADMIN, [role])
+  const isAdmin = useMemo(() => role === 'ADMIN', [role])
 
   useEffect(() => {
-    void user?.getIdTokenResult().then(({ claims }) => setRole((claims?.role as Role) ?? null))
+    void user?.getIdTokenResult().then(({ claims }) => setRole((claims?.role as UserRole) ?? null))
   }, [user])
 
   return { role, hasPrivilegedAccess, isAdmin }

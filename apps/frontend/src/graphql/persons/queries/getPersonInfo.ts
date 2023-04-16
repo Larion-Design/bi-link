@@ -10,15 +10,21 @@ type Response = {
 }
 
 const getPersonInfo = gql`
-  query GetPerson($personId: String!) {
+  query GetPerson($personId: ID!) {
     getPersonInfo(id: $personId) {
-      firstName
-      lastName
+      firstName {
+        value
+      }
+      lastName {
+        value
+      }
       oldNames {
         name
         changeReason
       }
-      cnp
+      cnp {
+        value
+      }
       birthPlace {
         locationId
         street
@@ -51,7 +57,9 @@ const getPersonInfo = gql`
           long
         }
       }
-      birthdate
+      birthdate {
+        value
+      }
       images {
         fileId
         name
@@ -75,7 +83,6 @@ const getPersonInfo = gql`
         relatedPersons {
           _id
         }
-        _confirmed
       }
       customFields {
         fieldName
@@ -97,10 +104,6 @@ const getPersonInfo = gql`
         type
         school
         specialization
-        customFields {
-          fieldName
-          fieldValue
-        }
         startDate
         endDate
       }

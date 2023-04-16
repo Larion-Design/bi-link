@@ -10,11 +10,17 @@ type Response = {
 }
 
 const getCompany = gql`
-  query GetCompany($id: String!) {
+  query GetCompany($id: ID!) {
     getCompany(id: $id) {
-      name
-      cui
-      registrationNumber
+      name {
+        value
+      }
+      cui {
+        value
+      }
+      registrationNumber {
+        value
+      }
       headquarters {
         locationId
         street
@@ -54,17 +60,25 @@ const getCompany = gql`
         company {
           _id
         }
-        role
-        startDate
-        endDate
-        isActive
-        equity
+        role {
+          value
+        }
+        startDate {
+          value
+        }
+        endDate {
+          value
+        }
+        isActive {
+          value
+        }
+        equity {
+          value
+        }
         customFields {
-          _id
           fieldName
           fieldValue
         }
-        _confirmed
       }
       contactDetails {
         fieldName

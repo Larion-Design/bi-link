@@ -1,5 +1,5 @@
 import { gql, useLazyQuery } from '@apollo/client'
-import { PropertyAPIOutput, PropertyListRecord } from 'defs'
+import { PropertyAPIOutput } from 'defs'
 
 type Params = {
   propertiesIds: string[]
@@ -10,7 +10,7 @@ type Response = {
 }
 
 const request = gql`
-  query GetProperties($propertiesIds: [String!]!) {
+  query GetProperties($propertiesIds: [ID!]!) {
     getProperties(propertiesIds: $propertiesIds) {
       _id
       name
@@ -20,13 +20,20 @@ const request = gql`
         isHidden
       }
       vehicleInfo {
-        vin
-        maker
-        model
-        color
+        vin {
+          value
+        }
+        maker {
+          value
+        }
+        model {
+          value
+        }
+        color {
+          value
+        }
       }
       customFields {
-        _id
         fieldName
         fieldValue
       }
@@ -37,17 +44,19 @@ const request = gql`
         company {
           _id
         }
-        startDate
-        endDate
+        startDate {
+          value
+        }
+        endDate {
+          value
+        }
         customFields {
-          _id
           fieldName
           fieldValue
         }
         vehicleOwnerInfo {
           plateNumbers
         }
-        _confirmed
       }
       files {
         fileId
@@ -61,5 +70,5 @@ const request = gql`
 
 export const getPropertiesInfoRequest = () =>
   useLazyQuery<Response, Params>(request, {
-    fetchPolicy: 'cache-and-network',
+    fetchPolicy: 'cache-first',
   })

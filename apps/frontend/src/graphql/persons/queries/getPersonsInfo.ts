@@ -10,16 +10,22 @@ type Params = {
 }
 
 const request = gql`
-  query PersonsInfo($personsIds: [String!]!) {
+  query PersonsInfo($personsIds: [ID!]!) {
     getPersonsInfo(personsIds: $personsIds) {
       _id
-      firstName
-      lastName
+      firstName {
+        value
+      }
+      lastName {
+        value
+      }
       oldNames {
         name
         changeReason
       }
-      cnp
+      cnp {
+        value
+      }
       homeAddress {
         locationId
         street
@@ -36,7 +42,9 @@ const request = gql`
           long
         }
       }
-      birthdate
+      birthdate {
+        value
+      }
       images {
         fileId
         name
@@ -53,7 +61,6 @@ const request = gql`
         }
         type
         proximity
-        _confirmed
       }
       customFields {
         fieldName
@@ -76,4 +83,4 @@ const request = gql`
 `
 
 export const getPersonsInfoRequest = () =>
-  useLazyQuery<Response, Params>(request, { fetchPolicy: 'cache-and-network' })
+  useLazyQuery<Response, Params>(request, { fetchPolicy: 'cache-first' })

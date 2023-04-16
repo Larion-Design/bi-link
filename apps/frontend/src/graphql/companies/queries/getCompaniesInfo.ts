@@ -10,12 +10,18 @@ type Response = {
 }
 
 const request = gql`
-  query GetCompanies($companiesIds: [String!]!) {
+  query GetCompanies($companiesIds: [ID!]!) {
     getCompanies(companiesIds: $companiesIds) {
       _id
-      name
-      cui
-      registrationNumber
+      name {
+        value
+      }
+      cui {
+        value
+      }
+      registrationNumber {
+        value
+      }
       headquarters {
         locationId
         street
@@ -55,17 +61,25 @@ const request = gql`
         company {
           _id
         }
-        role
-        startDate
-        endDate
-        isActive
-        equity
+        role {
+          value
+        }
+        startDate {
+          value
+        }
+        endDate {
+          value
+        }
+        isActive {
+          value
+        }
+        equity {
+          value
+        }
         customFields {
-          _id
           fieldName
           fieldValue
         }
-        _confirmed
       }
       contactDetails {
         fieldName
@@ -87,5 +101,5 @@ const request = gql`
 
 export const getCompaniesRequest = () =>
   useLazyQuery<Response, Params>(request, {
-    fetchPolicy: 'cache-and-network',
+    fetchPolicy: 'cache-first',
   })

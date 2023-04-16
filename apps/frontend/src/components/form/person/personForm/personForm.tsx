@@ -12,7 +12,6 @@ import Step from '@mui/material/Step'
 import StepButton from '@mui/material/StepButton'
 import Stepper from '@mui/material/Stepper'
 import { IdDocument, PersonAPIInput } from 'defs'
-import { getPersonFrequentCustomFieldsRequest } from '@frontend/graphql/persons/queries/getPersonFrequentCustomFields'
 import { getDefaultLocation, getDefaultPerson } from 'tools'
 import { routes } from '../../../../router/routes'
 import { CONTACT_METHODS, ID_DOCUMENT_TYPES } from '@frontend/utils/constants'
@@ -43,7 +42,6 @@ const Form: React.FunctionComponent<Props & FormikProps<PersonAPIInput>> = ({
   isValidating,
   submitForm,
 }) => {
-  const { data: frequentFields } = getPersonFrequentCustomFieldsRequest()
   const [step, setStep] = useState(0)
   const cancelChanges = useCancelDialog(routes.persons)
 
@@ -273,10 +271,8 @@ const Form: React.FunctionComponent<Props & FormikProps<PersonAPIInput>> = ({
             <Grid container spacing={2}>
               <CustomInputFields
                 fields={values.customFields}
-                suggestions={frequentFields?.getPersonFrequentCustomFields}
                 setFieldValue={async (customFields) => {
                   const error = await personFormValidation.customFields(customFields)
-
                   setFieldValue('customFields', customFields)
                   setFieldError('customFields', error)
                 }}

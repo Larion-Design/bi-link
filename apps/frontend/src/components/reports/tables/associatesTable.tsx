@@ -6,7 +6,7 @@ import TableContainer from '@mui/material/TableContainer'
 import TableHead from '@mui/material/TableHead'
 import TableRow from '@mui/material/TableRow'
 import Typography from '@mui/material/Typography'
-import { AssociateAPIInput } from 'defs'
+import { AssociateAPI } from 'defs'
 import { getCompaniesInfoRequest } from '../../../graphql/companies/queries/getCompanies'
 import { getCompanyInfoRequest } from '../../../graphql/companies/queries/getCompany'
 import { getPersonsBasicInfoRequest } from '../../../graphql/persons/queries/getPersonsBasicInfo'
@@ -16,7 +16,7 @@ type Props = {
   companyId: string
 }
 
-type AssociateInfo = { name: string } & Pick<AssociateAPIInput, 'role' | 'equity' | 'isActive'>
+type AssociateInfo = { name: string } & Pick<AssociateAPI, 'role' | 'equity' | 'isActive'>
 
 export const AssociatesTable: React.FunctionComponent<Props> = ({ companyId }) => {
   const [fetchCompany, { data: companyData }] = getCompanyInfoRequest()
@@ -49,7 +49,7 @@ export const AssociatesTable: React.FunctionComponent<Props> = ({ companyId }) =
   const associates: AssociateInfo[] = useMemo(
     () =>
       companyData?.getCompany?.associates.map(({ company, person, equity, role, isActive }) => {
-        if (person) {
+        if (person?._id) {
           const { _id: personId } = person
           const personInfo =
             personsInfo?.getPersonsInfo?.find(({ _id }) => _id === personId) ?? null
@@ -62,14 +62,14 @@ export const AssociatesTable: React.FunctionComponent<Props> = ({ companyId }) =
               isActive,
             }
           }
-        } else if (company) {
+        } else if (company?._id) {
           const { _id: companyId } = company
           const companyInfo =
             companiesInfo?.getCompanies?.find(({ _id }) => _id === companyId) ?? null
 
           if (companyInfo) {
             return {
-              name: companyInfo.name,
+              name: companyInfo.name.value,
               role,
               equity,
               isActive,
@@ -98,8 +98,8 @@ export const AssociatesTable: React.FunctionComponent<Props> = ({ companyId }) =
             <TableRow key={name}>
               <TableCell>{index}</TableCell>
               <TableCell>{name}</TableCell>
-              <TableCell>{role}</TableCell>
-              <TableCell>{equity > 0 ? `${equity}%` : ' - '}</TableCell>
+              <TableCell>{role.value}</TableCell>
+              <TableCell>{equity.value > 0 ? `${equity.value}%` : ' - '}</TableCell>
               <TableCell>{isActive ? 'Da' : 'Nu'}</TableCell>
             </TableRow>
           ))}

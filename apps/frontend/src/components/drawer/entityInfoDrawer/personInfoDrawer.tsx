@@ -23,12 +23,12 @@ export const PersonInfoDrawer: React.FunctionComponent<Props> = ({
 
   const generalInfo = useMemo(
     () => ({
-      firstName: personInfo.firstName,
-      lastName: personInfo.lastName,
+      firstName: personInfo.firstName.value,
+      lastName: personInfo.lastName.value,
       age: getPersonAge(personInfo),
       fullName: getPersonFullName(personInfo),
-      cnp: personInfo.cnp,
-      birthdate: personInfo.birthdate ? formatDate(personInfo.birthdate) : '',
+      cnp: personInfo.cnp.value,
+      birthdate: personInfo.birthdate ? formatDate(personInfo.birthdate.value) : '',
     }),
     [personInfo],
   )

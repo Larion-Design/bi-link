@@ -44,9 +44,7 @@ export const personState = create<PersonState>((set) => ({
   },
 
   setPersonInfo: (personInfo) => {
-    set({
-      personInfo: {},
-    })
+    set({})
   },
 
   setRelationships: (relationships) => {},

@@ -12,7 +12,7 @@ export type Params = {
 }
 
 const personCNPExists = gql`
-  query PersonCNPExists($cnp: String!, $personId: String) {
+  query PersonCNPExists($cnp: String!, $personId: ID) {
     personCNPExists(cnp: $cnp, personId: $personId)
   }
 `

@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import { ApolloError } from '@apollo/client'
-import { getDefaultCompany } from '@frontend/components/form/company/constants'
 import { useCancelDialog } from '@frontend/utils/hooks/useCancelDialog'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
@@ -11,8 +10,7 @@ import Stepper from '@mui/material/Stepper'
 import { CompanyAPIInput } from 'defs'
 import { FormikProps, withFormik } from 'formik'
 import { FormattedMessage } from 'react-intl'
-import { getCompanyFrequentCustomFieldsRequest } from '@frontend/graphql/companies/queries/getCompanyFrequentCustomFields'
-import { getDefaultLocation } from 'tools'
+import { getDefaultCompany, getDefaultLocation } from 'tools'
 import { routes } from '../../../../router/routes'
 import { CONTACT_METHODS } from '@frontend/utils/constants'
 import { Associates } from '../associates'
@@ -42,7 +40,6 @@ const Form: React.FunctionComponent<Props & FormikProps<CompanyAPIInput>> = ({
   isValidating,
   submitForm,
 }) => {
-  const { data: frequentFields } = getCompanyFrequentCustomFieldsRequest()
   const [step, setStep] = useState(0)
   const cancelChanges = useCancelDialog(routes.companies)
 
@@ -199,7 +196,6 @@ const Form: React.FunctionComponent<Props & FormikProps<CompanyAPIInput>> = ({
           <Grid container spacing={2}>
             <CustomInputFields
               fields={values.customFields}
-              suggestions={frequentFields?.getCompanyFrequentCustomFields}
               error={errors.customFields as string}
               setFieldValue={async (customFields) => {
                 const error = await personFormValidation.customFields(customFields)

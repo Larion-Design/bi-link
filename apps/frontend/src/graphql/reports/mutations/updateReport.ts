@@ -11,7 +11,7 @@ type Response = {
 }
 
 const request = gql`
-  mutation UpdateReport($reportId: String!, $data: ReportInput!) {
+  mutation UpdateReport($reportId: ID!, $data: ReportInput!) {
     updateReport(reportId: $reportId, data: $data)
   }
 `

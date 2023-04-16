@@ -10,10 +10,15 @@ type Response = {
 }
 
 const request = gql`
-  query GetEvents($eventsIds: [String!]!) {
+  query GetEvents($eventsIds: [ID!]!) {
     getEvents(eventsIds: $eventsIds) {
       _id
-      date
+      type {
+        value
+      }
+      date {
+        value
+      }
       location {
         locationId
         street

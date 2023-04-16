@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react'
-import { getDefaultPerson } from '@frontend/components/form/person/constants'
 import CardContent from '@mui/material/CardContent'
 import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined'
 import Grid from '@mui/material/Grid'
@@ -8,6 +7,7 @@ import Box from '@mui/material/Box'
 import CardActions from '@mui/material/CardActions'
 import { useFormik } from 'formik'
 import { FormattedMessage } from 'react-intl'
+import { getDefaultPerson } from 'tools'
 import { InputField } from '../../../form/inputField'
 import { OldNames } from '../../../form/person/oldNames'
 import {
@@ -54,8 +54,8 @@ export const FastCreatePerson: React.FunctionComponent<Props> = ({
           <Grid item xs={4}>
             <InputField
               label={'Nume'}
-              value={values.lastName}
-              error={errors.lastName}
+              value={values.lastName.value}
+              error={errors.lastName.value}
               onChange={async (value) => {
                 const error = await personFormValidation.lastName(value)
                 setFieldError('lastName', error)
@@ -66,8 +66,8 @@ export const FastCreatePerson: React.FunctionComponent<Props> = ({
           <Grid item xs={4}>
             <InputField
               label={'Prenume'}
-              value={values.firstName}
-              error={errors.firstName}
+              value={values.firstName.value}
+              error={errors.firstName.value}
               onChange={async (value) => {
                 const error = await personFormValidation.firstName(value)
                 setFieldError('firstName', error)
@@ -78,8 +78,8 @@ export const FastCreatePerson: React.FunctionComponent<Props> = ({
           <Grid item xs={4}>
             <InputField
               label={'CNP'}
-              value={values.cnp}
-              error={errors.cnp}
+              value={values.cnp.value}
+              error={errors.cnp.value}
               onChange={async (value) => {
                 const error = await personFormValidation.cnp(value)
                 setFieldError('cnp', error)

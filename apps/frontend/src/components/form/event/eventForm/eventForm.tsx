@@ -11,7 +11,6 @@ import Step from '@mui/material/Step'
 import StepButton from '@mui/material/StepButton'
 import Stepper from '@mui/material/Stepper'
 import { EventAPIInput } from 'defs'
-import { getEventFrequentCustomFieldsRequest } from '@frontend/graphql/events/queries/getEventFrequentCustomFields'
 import { getDefaultEvent, getDefaultLocation } from 'tools'
 import { routes } from '../../../../router/routes'
 import { AutocompleteField } from '../../autocompleteField'
@@ -40,7 +39,6 @@ const Form: React.FunctionComponent<Props & FormikProps<EventAPIInput>> = ({
   isValidating,
   submitForm,
 }) => {
-  const { data: frequentFields } = getEventFrequentCustomFieldsRequest()
   const [step, setStep] = useState(0)
   const cancelChanges = useCancelDialog(routes.events)
 
@@ -122,7 +120,6 @@ const Form: React.FunctionComponent<Props & FormikProps<EventAPIInput>> = ({
             <Grid item xs={12} container spacing={2}>
               <CustomInputFields
                 fields={values.customFields}
-                suggestions={frequentFields?.getEventFrequentCustomFields}
                 setFieldValue={async (customFields) => {
                   const error = await personFormValidation.customFields(customFields)
                   setFieldValue('customFields', customFields)

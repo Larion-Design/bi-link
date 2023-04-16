@@ -1,5 +1,4 @@
 import Box from '@mui/material/Box'
-import { format } from 'date-fns'
 import React, { useCallback, useMemo } from 'react'
 import { EventAPIInput } from 'defs'
 import { formatDate } from 'tools'
@@ -22,16 +21,14 @@ export const EventInfoDrawer: React.FunctionComponent<Props> = ({
 
   const generalInfo = useMemo(
     () => ({
-      type: eventInfo.type,
-      date: eventInfo.date ? formatDate(eventInfo.date) : '',
+      type: eventInfo.type.value,
+      date: eventInfo.date.value ? formatDate(eventInfo.date.value) : '',
       description: eventInfo.description,
     }),
     [eventInfo],
   )
 
-  const locationInfo = useMemo(() => {
-    return eventInfo.location
-  }, [eventInfo])
+  const locationInfo = eventInfo?.location
 
   const extraInfo = useMemo(() => {
     const map = new Map<string, string>()

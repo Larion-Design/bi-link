@@ -10,17 +10,22 @@ type Response = {
 }
 
 const request = gql`
-  query GetProceedings($proceedingsIds: [String!]!) {
+  query GetProceedings($proceedingsIds: [ID!]!) {
     getProceedings(proceedingsIds: $proceedingsIds) {
       _id
       name
       type
-      fileNumber
-      year
+      fileNumber {
+        value
+      }
+      year {
+        value
+      }
       description
-      reason
+      reason {
+        value
+      }
       customFields {
-        _id
         fieldName
         fieldValue
       }
@@ -46,5 +51,5 @@ const request = gql`
 
 export const getProceedingsRequest = () =>
   useLazyQuery<Response, Params>(request, {
-    fetchPolicy: 'cache-and-network',
+    fetchPolicy: 'cache-first',
   })

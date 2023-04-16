@@ -20,4 +20,4 @@ const request = gql`
 `
 
 export const getPropertiesByCompanyRequest = () =>
-  useLazyQuery<Response, Params>(request, { fetchPolicy: 'cache-and-network' })
+  useLazyQuery<Response, Params>(request, { fetchPolicy: 'cache-first' })

@@ -1,3 +1,4 @@
+import Stack from '@mui/material/Stack'
 import React, { useEffect, useMemo, useState } from 'react'
 import Button from '@mui/material/Button'
 import Card from '@mui/material/Card'
@@ -101,17 +102,20 @@ export const FileSelector: React.FunctionComponent<Props> = ({
         />
       </CardContent>
       <CardActions sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-        <Button
-          variant={'contained'}
-          color={'primary'}
-          disabled={!fileSelected}
-          onClick={() => selectFile(selectedFile)}
-        >
-          Selectează
-        </Button>
-        <Button variant={'outlined'} color={'error'} onClick={closeModal} sx={{ mr: 2 }}>
-          Inchide
-        </Button>
+        <Stack direction={'row'} spacing={2}>
+          <Button
+            variant={'contained'}
+            color={'primary'}
+            disabled={!fileSelected}
+            onClick={() => selectFile(selectedFile)}
+          >
+            Selectează
+          </Button>
+
+          <Button variant={'outlined'} color={'error'} onClick={closeModal}>
+            Inchide
+          </Button>
+        </Stack>
       </CardActions>
     </Card>
   )

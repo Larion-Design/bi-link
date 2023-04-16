@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
-import { getDefaultCompany } from '@frontend/components/form/company/constants'
 import { FormattedMessage } from 'react-intl'
+import { getDefaultCompany } from 'tools'
 import { CompanySelectorView } from './companySelector'
 import { useFormik } from 'formik'
 import { createCompanyRequest } from '@frontend/graphql/companies/mutations/createCompany'
@@ -53,8 +53,8 @@ export const FastCreateCompany: React.FunctionComponent<Props> = ({
           <Grid item xs={4}>
             <InputField
               label={'Nume'}
-              value={values.name}
-              error={errors.name}
+              value={values.name.value}
+              error={errors.name.value}
               onChange={async (value) => {
                 const error = await companyFormValidation.name(value)
                 setFieldError('name', error)
@@ -65,8 +65,8 @@ export const FastCreateCompany: React.FunctionComponent<Props> = ({
           <Grid item xs={4}>
             <InputField
               label={'CUI / CIF'}
-              value={values.cui}
-              error={errors.cui}
+              value={values.cui.value}
+              error={errors.cui.value}
               onChange={async (value) => {
                 const error = await companyFormValidation.cui(value)
                 setFieldError('cui', error)
@@ -77,8 +77,8 @@ export const FastCreateCompany: React.FunctionComponent<Props> = ({
           <Grid item xs={4}>
             <InputField
               label={'Numar de inregistrare'}
-              error={errors.registrationNumber}
-              value={values.registrationNumber}
+              error={errors.registrationNumber.value}
+              value={values.registrationNumber.value}
               onChange={async (value) => {
                 const error = await companyFormValidation.registrationNumber(value)
                 setFieldError('registrationNumber', error)
