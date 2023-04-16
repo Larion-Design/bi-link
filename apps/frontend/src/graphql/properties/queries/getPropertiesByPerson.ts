@@ -10,7 +10,7 @@ type Response = {
 }
 
 const request = gql`
-  query GetPropertiesByPerson($personId: String!) {
+  query GetPropertiesByPerson($personId: ID!) {
     getPropertiesByPerson(personId: $personId) {
       _id
       name

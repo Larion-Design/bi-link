@@ -11,7 +11,7 @@ type Params = {
 }
 
 const request = gql`
-  query GetEntitiesGraph($id: String!, $depth: Int!) {
+  query GetEntitiesGraph($id: ID!, $depth: Int!) {
     getEntitiesGraph(id: $id, depth: $depth) {
       relationships {
         companiesBranches {

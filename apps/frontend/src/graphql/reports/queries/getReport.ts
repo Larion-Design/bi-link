@@ -10,7 +10,7 @@ type Response = {
 }
 
 const request = gql`
-  query GetReport($id: String!) {
+  query GetReport($id: ID!) {
     getReport(id: $id) {
       _id
       name

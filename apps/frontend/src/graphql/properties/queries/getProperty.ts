@@ -10,7 +10,7 @@ type Response = {
 }
 
 const request = gql`
-  query GetProperty($propertyId: String!) {
+  query GetProperty($propertyId: ID!) {
     getProperty(propertyId: $propertyId) {
       name
       type

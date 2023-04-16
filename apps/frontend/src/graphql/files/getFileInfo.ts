@@ -10,7 +10,7 @@ type Params = {
 }
 
 const request = gql`
-  query GetFileInfo($fileId: String!) {
+  query GetFileInfo($fileId: ID!) {
     getFileInfo(fileId: $fileId) {
       fileId
       name

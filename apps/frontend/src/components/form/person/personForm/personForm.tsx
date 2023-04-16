@@ -123,11 +123,11 @@ const Form: React.FunctionComponent<Props & FormikProps<PersonAPIInput>> = ({
                     name={'lastName'}
                     label={'Nume'}
                     value={values.lastName.value}
-                    error={errors.lastName.value}
+                    error={errors.lastName?.value}
                     onChange={async (value) => {
-                      const error = await personFormValidation.lastName(value)
-                      setFieldValue('lastName', value)
-                      setFieldError('lastName', error)
+                      // const error = await personFormValidation.lastName(value)
+                      // setFieldError('lastName', error)
+                      setFieldValue('lastName', { ...values.lastName, value })
                     }}
                   />
                 </Grid>
@@ -137,11 +137,11 @@ const Form: React.FunctionComponent<Props & FormikProps<PersonAPIInput>> = ({
                     name={'firstName'}
                     label={'Prenume'}
                     value={values.firstName.value}
-                    error={errors.firstName.value}
+                    error={errors.firstName?.value}
                     onChange={async (value) => {
-                      const error = await personFormValidation.firstName(value)
-                      setFieldValue('firstName', value)
-                      setFieldError('firstName', error)
+                      //const error = await personFormValidation.firstName(value)
+                      //setFieldError('firstName', error)
+                      setFieldValue('firstName', { ...values.firstName, value })
                     }}
                   />
                 </Grid>
@@ -151,11 +151,11 @@ const Form: React.FunctionComponent<Props & FormikProps<PersonAPIInput>> = ({
                     name={'cnp'}
                     label={'Cod numeric personal'}
                     value={values.cnp.value}
-                    error={errors.cnp.value}
+                    error={errors.cnp?.value}
                     onChange={async (value) => {
-                      const error = await personFormValidation.cnp(value, personId)
-                      setFieldValue('cnp', value)
-                      setFieldError('cnp', error)
+                      //const error = await personFormValidation.cnp(value, personId)
+                      //setFieldError('cnp', error)
+                      setFieldValue('cnp', { ...values.cnp, value })
                     }}
                   />
                 </Grid>
@@ -167,7 +167,7 @@ const Form: React.FunctionComponent<Props & FormikProps<PersonAPIInput>> = ({
                     onChange={updateBirthdate}
                     disableFuture
                     disableHighlightToday
-                    error={errors.birthdate.value}
+                    error={errors.birthdate?.value}
                   />
                 </Grid>
 

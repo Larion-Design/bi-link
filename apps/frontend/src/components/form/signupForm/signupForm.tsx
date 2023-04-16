@@ -116,6 +116,8 @@ export const SignupForm = withFormik<Props, SignupInfo>({
   validateOnChange: false,
   validateOnMount: false,
   validateOnBlur: false,
-  validate: (registrationInfo) => signupValidationSchema.parse(registrationInfo),
+  validate: (registrationInfo) => {
+    signupValidationSchema.parse(registrationInfo)
+  },
   handleSubmit: (values, { props: { onSubmit } }) => onSubmit(values),
 })(Signup)

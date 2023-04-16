@@ -93,9 +93,11 @@ export const LoginForm = withFormik<Props, LoginInfo>({
     email: '',
     password: '',
   }),
-  validationSchema: loginValidationSchema,
   validateOnChange: false,
   validateOnMount: false,
   validateOnBlur: false,
+  validate: (data) => {
+    loginValidationSchema.parse(data)
+  },
   handleSubmit: (values, { props: { onSubmit } }) => void onSubmit(values),
 })(Login)
