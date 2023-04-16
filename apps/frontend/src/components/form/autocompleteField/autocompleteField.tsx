@@ -1,58 +1,39 @@
 import React from 'react'
-import TextField from '@mui/material/TextField'
-import Autocomplete from '@mui/material/Autocomplete'
-import { InputField } from '../inputField'
+import { AutocompleteInputField } from '@frontend/components/form/autocompleteField/autocompleteInputField'
+import { AutocompleteFieldProps } from '@frontend/components/form/autocompleteField/types'
+import { InputField } from '@frontend/components/form/inputField'
 
-type Props = {
-  label: string
-  value: string
-  suggestions?: string[]
-  onValueChange: (value: string) => void
-  readonly?: boolean
-  name?: string
-  error?: string
-}
-
-export const AutocompleteField: React.FunctionComponent<Props> = ({
+export const AutocompleteField: React.FunctionComponent<AutocompleteFieldProps> = ({
   name,
   label,
   value,
   suggestions,
-  onValueChange,
+  onChange,
   readonly,
   error,
+  startIcon,
+  endIcon,
 }) =>
   suggestions?.length ? (
-    <Autocomplete
-      freeSolo
-      fullWidth
-      disablePortal
+    <AutocompleteInputField
       value={value}
-      readOnly={readonly}
-      options={suggestions}
-      renderInput={(params) => (
-        <TextField
-          {...params}
-          name={name}
-          label={label}
-          required
-          fullWidth
-          value={value}
-          InputLabelProps={{ shrink: true }}
-          onChange={({ target: { value } }) => onValueChange(value)}
-          onBlur={({ target: { value } }) => onValueChange(value)}
-          error={!!error}
-          helperText={error}
-        />
-      )}
+      onChange={onChange}
+      label={label}
+      startIcon={startIcon}
+      endIcon={endIcon}
+      error={error}
+      name={name}
+      readonly={readonly}
     />
   ) : (
     <InputField
       name={name}
       label={label}
       value={value}
-      onChange={(value) => onValueChange(value)}
+      onChange={(value) => onChange(value)}
       error={error}
       readonly={readonly}
+      startIcon={startIcon}
+      endIcon={endIcon}
     />
   )

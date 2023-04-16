@@ -42,28 +42,26 @@ export const InputFieldWithMetadata: React.FunctionComponent<Props> = ({
           onClose={toggleMetadataView}
         />
       )}
-      <Stack direction={'row'} alignItems={'center'} spacing={2}>
-        <InputField
-          name={name}
-          value={value}
-          label={label}
-          multiline={multiline}
-          rows={rows}
-          onChange={(value) => updateFieldInfo({ metadata, value })}
-          required={required}
-          readonly={readonly}
-          disabled={disabled}
-          error={error}
-          endIcon={
-            <IconButton
-              ref={(ref) => (metadataElementRef.current = ref)}
-              onClick={toggleMetadataView}
-            >
-              <TrustLevelIcon level={metadata.trustworthiness.level} />
-            </IconButton>
-          }
-        />
-      </Stack>
+      <InputField
+        name={name}
+        value={value}
+        label={label}
+        multiline={multiline}
+        rows={rows}
+        onChange={(value) => updateFieldInfo({ metadata, value })}
+        required={required}
+        readonly={readonly}
+        disabled={disabled}
+        error={error}
+        endIcon={
+          <IconButton
+            ref={(ref) => (metadataElementRef.current = ref)}
+            onClick={toggleMetadataView}
+          >
+            <TrustLevelIcon level={metadata.trustworthiness.level} />
+          </IconButton>
+        }
+      />
     </>
   )
 }
