@@ -1,9 +1,5 @@
+import React, { useState } from 'react'
 import { ApolloError } from '@apollo/client'
-import {
-  createRealEstateInfo,
-  createVehicleInfo,
-  getDefaultProperty,
-} from '@frontend/components/form/property/constants'
 import {
   propertyTypes,
   realEstatePropertyTypes,
@@ -18,8 +14,8 @@ import StepButton from '@mui/material/StepButton'
 import Stepper from '@mui/material/Stepper'
 import { PropertyAPIInput } from 'defs'
 import { FormikProps, withFormik } from 'formik'
-import React, { useState } from 'react'
 import { FormattedMessage } from 'react-intl'
+import { getDefaultProperty, getDefaultRealEstate, getDefaultVehicle } from 'tools'
 import { routes } from '../../../../router/routes'
 import { AutocompleteField } from '../../autocompleteField'
 import { CustomInputFields } from '../../customInputFields'
@@ -55,7 +51,7 @@ const Form: React.FunctionComponent<Props & FormikProps<PropertyAPIInput>> = ({
     if (values.type === 'Vehicul') {
       return (
         <VehicleInfo
-          vehicleInfo={values.vehicleInfo ?? createVehicleInfo()}
+          vehicleInfo={values.vehicleInfo ?? getDefaultVehicle()}
           updateVehicleInfo={(vehicleInfo) => setFieldValue('vehicleInfo', vehicleInfo)}
           error={errors.vehicleInfo as string}
         />
@@ -63,7 +59,7 @@ const Form: React.FunctionComponent<Props & FormikProps<PropertyAPIInput>> = ({
     } else if (realEstatePropertyTypes.includes(values.type)) {
       return (
         <RealEstateInfo
-          realEstateInfo={values.realEstateInfo ?? createRealEstateInfo()}
+          realEstateInfo={values.realEstateInfo ?? getDefaultRealEstate()}
           updateRealEstateInfo={(realEstateInfo) => setFieldValue('realEstateInfo', realEstateInfo)}
         />
       )
@@ -134,11 +130,11 @@ const Form: React.FunctionComponent<Props & FormikProps<PropertyAPIInput>> = ({
                       setFieldValue('type', value, false)
 
                       if (value === 'Vehicul') {
-                        setFieldValue('vehicleInfo', createVehicleInfo(), false)
+                        setFieldValue('vehicleInfo', getDefaultVehicle(), false)
                         setFieldValue('realEstateInfo', null, false)
                       } else if (realEstatePropertyTypes.includes(value)) {
                         setFieldValue('vehicleInfo', null, false)
-                        setFieldValue('realEstateInfo', createRealEstateInfo(), false)
+                        setFieldValue('realEstateInfo', getDefaultRealEstate(), false)
                       }
                     }}
                   />

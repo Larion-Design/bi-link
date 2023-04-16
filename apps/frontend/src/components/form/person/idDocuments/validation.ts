@@ -1,7 +1,6 @@
-import * as yup from 'yup'
+import { IdDocument, idDocumentSchema } from 'defs'
 import { personIdDocumentRequest } from '@frontend/graphql/persons/queries/personIdDocumentExists'
 import { isDatesOrderValid } from '@frontend/utils/date'
-import { IdDocument } from 'defs'
 
 export const validateIdDocuments = async (documents: IdDocument[], personId?: string) => {
   let error = validateIdDocumentsFormat(documents)
@@ -63,17 +62,8 @@ export const validateDuplicateDocuments = (documents: IdDocument[]) => {
   }
 }
 
-const idDocumentsValidationSchema = yup.array().of(
-  yup.object().shape({
-    documentType: yup.string().required(),
-    documentNumber: yup.string().required(),
-    issueDate: yup.date().optional().nullable(),
-    expirationDate: yup.date().optional().nullable(),
-  }),
-)
-
 export const validateIdDocumentsFormat = (idDocuments: Array<unknown>) => {
-  if (!idDocumentsValidationSchema.isValidSync(idDocuments)) {
+  if (!idDocumentSchema.parse(idDocuments)) {
     return 'Nu ai furnizat unele informatii obligatorii.'
   }
 }

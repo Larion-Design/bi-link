@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react'
+import { FormikProps, withFormik } from 'formik'
+import { FormattedMessage } from 'react-intl'
 import { useCancelDialog } from '@frontend/utils/hooks/useCancelDialog'
-import { getDefaultPerson } from '@frontend/components/form/person/constants'
 import { Education } from '@frontend/components/form/person/education'
-import { getDefaultLocation, Location } from '@frontend/components/form/location'
+import { Location } from '@frontend/components/form/location'
 import { OldNames } from '@frontend/components/form/person/oldNames'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
@@ -11,9 +12,8 @@ import Step from '@mui/material/Step'
 import StepButton from '@mui/material/StepButton'
 import Stepper from '@mui/material/Stepper'
 import { IdDocument, PersonAPIInput } from 'defs'
-import { FormikProps, withFormik } from 'formik'
-import { FormattedMessage } from 'react-intl'
 import { getPersonFrequentCustomFieldsRequest } from '@frontend/graphql/persons/queries/getPersonFrequentCustomFields'
+import { getDefaultLocation, getDefaultPerson } from 'tools'
 import { routes } from '../../../../router/routes'
 import { CONTACT_METHODS, ID_DOCUMENT_TYPES } from '@frontend/utils/constants'
 import { CustomInputFields } from '../../customInputFields'
@@ -48,14 +48,14 @@ const Form: React.FunctionComponent<Props & FormikProps<PersonAPIInput>> = ({
   const cancelChanges = useCancelDialog(routes.persons)
 
   useEffect(() => {
-    if (!values.birthdate && values.cnp.length) {
-      const parsedBirthdate = getBirthdateFromCnp(values.cnp)
+    if (!values.birthdate && values.cnp.value.length) {
+      const parsedBirthdate = getBirthdateFromCnp(values.cnp.value)
 
       if (parsedBirthdate) {
         setFieldValue('birthdate', parsedBirthdate)
       }
     }
-  }, [values.cnp])
+  }, [values.cnp.value])
 
   const updateBirthdate = async (value: string | null) => {
     const error = await personFormValidation.birthdate(value)
@@ -124,8 +124,8 @@ const Form: React.FunctionComponent<Props & FormikProps<PersonAPIInput>> = ({
                   <InputField
                     name={'lastName'}
                     label={'Nume'}
-                    value={values.lastName}
-                    error={errors.lastName}
+                    value={values.lastName.value}
+                    error={errors.lastName.value}
                     onChange={async (value) => {
                       const error = await personFormValidation.lastName(value)
                       setFieldValue('lastName', value)
@@ -138,8 +138,8 @@ const Form: React.FunctionComponent<Props & FormikProps<PersonAPIInput>> = ({
                   <InputField
                     name={'firstName'}
                     label={'Prenume'}
-                    value={values.firstName}
-                    error={errors.firstName}
+                    value={values.firstName.value}
+                    error={errors.firstName.value}
                     onChange={async (value) => {
                       const error = await personFormValidation.firstName(value)
                       setFieldValue('firstName', value)
@@ -152,8 +152,8 @@ const Form: React.FunctionComponent<Props & FormikProps<PersonAPIInput>> = ({
                   <InputField
                     name={'cnp'}
                     label={'Cod numeric personal'}
-                    value={values.cnp}
-                    error={errors.cnp}
+                    value={values.cnp.value}
+                    error={errors.cnp.value}
                     onChange={async (value) => {
                       const error = await personFormValidation.cnp(value, personId)
                       setFieldValue('cnp', value)
@@ -165,11 +165,11 @@ const Form: React.FunctionComponent<Props & FormikProps<PersonAPIInput>> = ({
                 <Grid item xs={4}>
                   <DatePicker
                     label={'Data nasterii'}
-                    value={values.birthdate}
+                    value={values.birthdate.value}
                     onChange={updateBirthdate}
                     disableFuture
                     disableHighlightToday
-                    error={errors.birthdate}
+                    error={errors.birthdate.value}
                   />
                 </Grid>
 

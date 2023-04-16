@@ -1,4 +1,5 @@
-import { Typography } from '@mui/material'
+import React, { useCallback, useEffect, useState } from 'react'
+import Typography from '@mui/material/Typography'
 import Box from '@mui/material/Box'
 import {
   DataGrid,
@@ -7,18 +8,18 @@ import {
   GridSelectionModel,
   GridToolbarContainer,
 } from '@mui/x-data-grid'
-import React, { useCallback, useEffect, useState } from 'react'
-import { OldNameAPIInput } from 'defs'
+import { OldName } from 'defs'
 import { processGridCellValue } from '@frontend/utils/dataGrid'
 import { GridSetItem, useGridSet } from '@frontend/utils/hooks/useGridSet'
 import { FormattedMessage } from 'react-intl'
+import { getDefaultOldName } from 'tools'
 import { AddItemToolbarButton } from '../../../dataGrid/addItemToolbarButton'
 import { RemoveRowsToolbarButton } from '../../../dataGrid/removeRowsToolbarButton'
 import { Textarea } from '../../../dataGrid/textArea'
 
-type Props = {
-  oldNames: OldNameAPIInput[]
-  updateOldNames: (oldNames: OldNameAPIInput[]) => void | Promise<void>
+type Props<T = OldName> = {
+  oldNames: T[]
+  updateOldNames: (oldNames: T[]) => void | Promise<void>
 }
 
 export const OldNames: React.FunctionComponent<Props> = ({ oldNames, updateOldNames }) => {
@@ -28,19 +29,16 @@ export const OldNames: React.FunctionComponent<Props> = ({ oldNames, updateOldNa
     () => removeBulk(selectedRows as string[]),
     [uid, selectedRows],
   )
-  const addOldName = useCallback(() => create({ name: '', changeReason: '' }), [uid])
+  const addOldName = useCallback(() => create(getDefaultOldName()), [uid])
 
   useEffect(() => {
     void updateOldNames(rawValues())
   }, [uid])
 
-  const processRowUpdate = useCallback(
-    async (newRow: GridRowModel<GridSetItem<OldNameAPIInput>>) => {
-      update(newRow)
-      return Promise.resolve(newRow)
-    },
-    [],
-  )
+  const processRowUpdate = useCallback(async (newRow: GridRowModel<GridSetItem<OldName>>) => {
+    update(newRow)
+    return Promise.resolve(newRow)
+  }, [])
 
   return (
     <Box sx={{ minHeight: '50vh', maxHeight: '100vh', mt: 5 }}>
@@ -57,7 +55,9 @@ export const OldNames: React.FunctionComponent<Props> = ({ oldNames, updateOldNa
         disableVirtualization
         disableSelectionOnClick
         disableIgnoreModificationsIfProcessingProps
+        hideFooterSelectedRowCount
         hideFooterPagination
+        hideFooter
         rows={values()}
         columns={columns}
         experimentalFeatures={{ newEditingApi: true }}

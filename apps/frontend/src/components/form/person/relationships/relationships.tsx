@@ -1,21 +1,20 @@
-import Box from '@mui/material/Box'
-import Divider from '@mui/material/Divider'
 import React, { useCallback, useEffect } from 'react'
-import { FormattedMessage } from 'react-intl'
+import Divider from '@mui/material/Divider'
 import Typography from '@mui/material/Typography'
 import Stack from '@mui/material/Stack'
-import { RelationshipAPIInput } from 'defs'
-import { createRelationship } from '@frontend/components/form/person/constants'
+import { FormattedMessage } from 'react-intl'
+import { RelationshipAPI } from 'defs'
 import { getPersonsBasicInfoRequest } from '@frontend/graphql/persons/queries/getPersonsBasicInfo'
+import { getDefaultRelationship } from 'tools'
 import { RelationshipCard } from './relationshipCard'
 import { useModal } from '../../../modal/modalProvider'
 import { useDebouncedMap } from '@frontend/utils/hooks/useMap'
 import { AddItemButton } from '@frontend/components/button/addItemButton'
 
-type Props = {
+type Props<T = RelationshipAPI> = {
   personId?: string
-  relationships: RelationshipAPIInput[]
-  updateRelationships: (relationships: RelationshipAPIInput[]) => Promise<void>
+  relationships: T[]
+  updateRelationships: (relationships: T[]) => Promise<void>
   readonly?: boolean
 }
 
@@ -25,7 +24,7 @@ export const Relationships: React.FunctionComponent<Props> = ({
   personId,
 }) => {
   const modal = useModal()
-  const getPersonId = ({ person: { _id } }: RelationshipAPIInput) => _id
+  const getPersonId = ({ person: { _id } }: RelationshipAPI) => _id
   const [fetchPersonsInfo, { data }] = getPersonsBasicInfoRequest()
   const { entries, values, addBulk, update, remove, keys, uid } = useDebouncedMap(
     1000,
@@ -54,16 +53,14 @@ export const Relationships: React.FunctionComponent<Props> = ({
     }
 
     modal?.openPersonSelector(
-      (personsIds: string[]) => addBulk(personsIds.map(createRelationship), getPersonId),
+      (personsIds: string[]) => addBulk(personsIds.map(getDefaultRelationship), getPersonId),
       personsIds,
     )
   }, [uid])
 
   return (
-    <Stack sx={{ width: 1 }}>
-      <Box
-        sx={{ width: 1, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
-      >
+    <Stack divider={<Divider variant={'fullWidth'} flexItem />}>
+      <Stack direction={'row'} justifyContent={'space-between'} alignItems={'center'}>
         <Typography variant={'h5'}>
           <FormattedMessage
             id={'Personal relationships'}
@@ -71,14 +68,12 @@ export const Relationships: React.FunctionComponent<Props> = ({
           />
         </Typography>
 
-        <Box>
-          <AddItemButton
-            label={'Adauga persoana in cercul relational'}
-            onClick={openPersonSelector}
-          />
-        </Box>
-      </Box>
-      <Divider variant={'fullWidth'} sx={{ mb: 2, mt: 2 }} />
+        <AddItemButton
+          label={'Adauga persoana in cercul relational'}
+          onClick={openPersonSelector}
+        />
+      </Stack>
+
       <Stack spacing={6}>
         {!!data?.getPersonsInfo?.length &&
           entries().map(([personId, relationship]) => {

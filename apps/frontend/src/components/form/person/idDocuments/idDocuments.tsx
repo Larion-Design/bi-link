@@ -9,13 +9,14 @@ import {
 import Box from '@mui/material/Box'
 import { IdDocumentAPI, IdDocumentStatus } from 'defs'
 import { GridSetItem, useGridSet } from '@frontend/utils/hooks/useGridSet'
+import { getDefaultIdDocument } from 'tools'
 import { AddSuggestionsToolbarButton } from '../../../dataGrid/addSuggestionsToolbarButton'
 import { RemoveRowsToolbarButton } from '../../../dataGrid/removeRowsToolbarButton'
 
-type Props = {
-  documents: IdDocumentAPI[]
+type Props<T = IdDocumentAPI> = {
+  documents: T[]
+  setFieldValue: (documents: T[]) => Promise<void>
   suggestions: string[]
-  setFieldValue: (documents: IdDocumentAPI[]) => Promise<void>
   readonly?: boolean
   error?: string
 }
@@ -87,18 +88,9 @@ export const IdDocuments: React.FunctionComponent<Props> = ({
         editable: true,
         type: 'singleSelect',
         valueOptions: [
-          {
-            value: IdDocumentStatus.VALID,
-            label: DocumentStatusSelectOptions.VALID,
-          },
-          {
-            value: IdDocumentStatus.EXPIRED,
-            label: DocumentStatusSelectOptions.EXPIRED,
-          },
-          {
-            value: IdDocumentStatus.LOST_OR_STOLEN,
-            label: DocumentStatusSelectOptions.LOST_OR_STOLEN,
-          },
+          { value: 'VALID', label: DocumentStatusSelectOptions.VALID },
+          { value: 'EXPIRED', label: DocumentStatusSelectOptions.EXPIRED },
+          { value: 'LOST_OR_STOLEN', label: DocumentStatusSelectOptions.LOST_OR_STOLEN },
         ],
       },
     ],
@@ -113,6 +105,8 @@ export const IdDocuments: React.FunctionComponent<Props> = ({
         disableSelectionOnClick
         disableIgnoreModificationsIfProcessingProps
         hideFooterPagination
+        hideFooterSelectedRowCount
+        hideFooter
         rows={values()}
         columns={columns}
         experimentalFeatures={{ newEditingApi: true }}
@@ -127,9 +121,8 @@ export const IdDocuments: React.FunctionComponent<Props> = ({
                 options={suggestions}
                 optionSelected={(documentType) =>
                   create({
+                    ...getDefaultIdDocument(),
                     documentType,
-                    documentNumber: '',
-                    status: IdDocumentStatus.VALID,
                   })
                 }
               />
@@ -150,7 +143,7 @@ export const IdDocuments: React.FunctionComponent<Props> = ({
 }
 
 export const DocumentStatusSelectOptions: Record<IdDocumentStatus, string> = {
-  [IdDocumentStatus.VALID]: 'Valid',
-  [IdDocumentStatus.EXPIRED]: 'Expirat',
-  [IdDocumentStatus.LOST_OR_STOLEN]: 'Pierdut sau furat',
+  VALID: 'Valid',
+  EXPIRED: 'Expirat',
+  LOST_OR_STOLEN: 'Pierdut sau furat',
 }

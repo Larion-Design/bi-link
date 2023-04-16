@@ -1,25 +1,16 @@
-import { PersonsList } from '@frontend/components/list/personsList'
+import Stack from '@mui/material/Stack'
 import React, { useCallback, useEffect } from 'react'
-import { ConnectedEntity, PersonListRecordWithImage } from 'defs'
-import { RemovePerson } from '@frontend/components/actionButton/removePerson'
+import Box from '@mui/material/Box'
+import AddOutlinedIcon from '@mui/icons-material/AddOutlined'
+import { ConnectedEntity, PersonAPIOutput } from 'defs'
+import { PersonsList } from '@frontend/components/list/personsList'
 import { useModal } from '@frontend/components/modal/modalProvider'
 import { useMap } from '@frontend/utils/hooks/useMap'
-import { getPersonFullName } from '@frontend/utils/person'
-import Avatar from '@mui/material/Avatar'
-import Box from '@mui/material/Box'
-import Divider from '@mui/material/Divider'
-import Typography from '@mui/material/Typography'
-import AddOutlinedIcon from '@mui/icons-material/AddOutlined'
-import List from '@mui/material/List'
-import ListItem from '@mui/material/ListItem'
-import ListItemText from '@mui/material/ListItemText'
-import ListItemAvatar from '@mui/material/ListItemAvatar'
-import { FormattedMessage } from 'react-intl'
 
 type Props = {
   personId: string
   relatedPersons: ConnectedEntity[]
-  personsInfo: PersonListRecordWithImage[]
+  personsInfo: PersonAPIOutput[]
   updateRelatedPersons: (relatedPersons: ConnectedEntity[]) => void
 }
 
@@ -47,18 +38,9 @@ export const RelatedPersonsList: React.FunctionComponent<Props> = ({
 
   return (
     <PersonsList label={'Related persons'} personsInfo={[]} removePerson={remove}>
-      <Box
-        sx={{
-          width: 1,
-          height: 100,
-          display: 'flex',
-          flexWrap: 'nowrap',
-          justifyContent: 'center',
-          alignItems: 'center',
-        }}
-      >
+      <Stack direction={'row'} justifyContent={'center'} alignItems={'center'} width={1} height={1}>
         <AddOutlinedIcon fontSize={'large'} onClick={addPersons} />
-      </Box>
+      </Stack>
     </PersonsList>
   )
 }

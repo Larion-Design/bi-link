@@ -10,16 +10,16 @@ import TimelineDot from '@mui/lab/TimelineDot'
 import TimelineOppositeContent from '@mui/lab/TimelineOppositeContent'
 import Typography from '@mui/material/Typography'
 import Tooltip from '@mui/material/Tooltip'
-import { PersonListRecordWithImage, PropertyOwnerAPI } from 'defs'
+import { PersonAPIOutput, PropertyOwnerAPI } from 'defs'
 import { getPersonFullName } from '@frontend/utils/person'
 import { PersonCardActions } from '../../../card/personCardActions'
 import { PersonOwnerInformation } from './personOwnerInformation'
 import { LinkedEntityCustomFields } from '../../linkedEntityCustomFields'
 
-type Props = {
-  ownerInfo: PropertyOwnerAPI
-  personInfo: PersonListRecordWithImage
-  updateOwnerInfo: (ownerId: string, ownerInfo: PropertyOwnerAPI) => void
+type Props<T = PropertyOwnerAPI> = {
+  ownerInfo: T
+  updateOwnerInfo: (ownerId: string, ownerInfo: T) => void
+  personInfo: PersonAPIOutput
   removeOwner: (ownerId: string) => void
 }
 
@@ -37,8 +37,8 @@ export const PersonOwnerCard: React.FunctionComponent<Props> = ({
       <TimelineOppositeContent color={'textSecondary'}>
         <Tooltip title={`Data la care ${fullName} a achiziționat vehiculul`}>
           <Typography variant={'subtitle1'}>
-            {ownerInfo?.startDate
-              ? new Date(ownerInfo.startDate).toLocaleDateString()
+            {ownerInfo?.startDate.value
+              ? new Date(ownerInfo.startDate.value).toLocaleDateString()
               : 'Data nedefinita'}
           </Typography>
         </Tooltip>

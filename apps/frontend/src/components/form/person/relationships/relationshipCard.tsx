@@ -1,12 +1,12 @@
-import { InputField } from '@frontend/components/form/inputField'
 import React from 'react'
-import { PersonListRecordWithImage, RelationshipAPIInput } from 'defs'
+import { InputField } from '@frontend/components/form/inputField'
+import Stack from '@mui/material/Stack'
+import { PersonAPIOutput, RelationshipAPI } from 'defs'
 import CardHeader from '@mui/material/CardHeader'
 import Grid from '@mui/material/Grid'
 import Card from '@mui/material/Card'
 import CardContent from '@mui/material/CardContent'
 import Avatar from '@mui/material/Avatar'
-import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import { proximityLevels, relationshipsTypes } from '@frontend/components/form/person/constants'
 import { getPersonFullName } from '@frontend/utils/person'
@@ -14,11 +14,11 @@ import { PersonCardActions } from '../../../card/personCardActions'
 import { DropdownList } from '../../dropdownList'
 import { RelatedPersonsList } from '@frontend/components/form/person/relatedPersonsList'
 
-type Props = {
-  personInfo: PersonListRecordWithImage
-  relatedPersonsInfo: PersonListRecordWithImage[]
-  relationshipInfo: RelationshipAPIInput
-  updateRelationship: (personId: string, relationshipInfo: RelationshipAPIInput) => void
+type Props<T = RelationshipAPI> = {
+  personInfo: PersonAPIOutput
+  relatedPersonsInfo: PersonAPIOutput[]
+  relationshipInfo: T
+  updateRelationship: (personId: string, relationshipInfo: T) => void
   removeRelationship: (personId: string) => void
 }
 
@@ -47,28 +47,26 @@ export const RelationshipCard: React.FunctionComponent<Props> = ({
       <CardContent>
         <Grid container spacing={4}>
           <Grid item xs={6}>
-            <Box width={1} mb={4}>
+            <Stack spacing={4}>
               <DropdownList
                 label={'Tipul de relatie'}
                 value={relationshipInfo.type}
                 onChange={(type) => updateRelationship(personId, { ...relationshipInfo, type })}
                 options={relationshipsTypes}
               />
-            </Box>
 
-            <Box width={1} mb={2}>
               <DropdownList
                 label={'Nivelul de apropiere'}
                 value={relationshipInfo.proximity.toString()}
+                options={proximityLevels}
                 onChange={(proximity) =>
                   updateRelationship(personId, {
                     ...relationshipInfo,
                     proximity: parseInt(proximity),
                   })
                 }
-                options={proximityLevels}
               />
-            </Box>
+            </Stack>
           </Grid>
           <Grid item xs={6}>
             <RelatedPersonsList

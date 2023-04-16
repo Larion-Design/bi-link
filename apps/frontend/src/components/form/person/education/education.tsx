@@ -10,13 +10,14 @@ import React, { useCallback, useEffect, useState } from 'react'
 import { EducationAPIInput } from 'defs'
 import { processGridCellValue } from '@frontend/utils/dataGrid'
 import { GridSetItem, useGridSet } from '@frontend/utils/hooks/useGridSet'
+import { getDefaultEducation } from 'tools'
 import { AddItemToolbarButton } from '../../../dataGrid/addItemToolbarButton'
 import { RemoveRowsToolbarButton } from '../../../dataGrid/removeRowsToolbarButton'
 import { Textarea } from '../../../dataGrid/textArea'
 
-type Props = {
-  education: EducationAPIInput[]
-  updateEducation: (education: EducationAPIInput[]) => void | Promise<void>
+type Props<T = EducationAPIInput> = {
+  education: T[]
+  updateEducation: (education: T[]) => void | Promise<void>
 }
 
 export const Education: React.FunctionComponent<Props> = ({ education, updateEducation }) => {
@@ -26,18 +27,7 @@ export const Education: React.FunctionComponent<Props> = ({ education, updateEdu
     () => removeBulk(selectedRows as string[]),
     [uid, selectedRows],
   )
-  const addEducation = useCallback(
-    () =>
-      create({
-        customFields: [],
-        endDate: null,
-        specialization: '',
-        startDate: null,
-        type: '',
-        school: '',
-      }),
-    [uid],
-  )
+  const addEducation = useCallback(() => create(getDefaultEducation()), [uid])
 
   useEffect(() => {
     void updateEducation(rawValues())
@@ -64,6 +54,7 @@ export const Education: React.FunctionComponent<Props> = ({ education, updateEdu
         disableColumnSelector
         disableIgnoreModificationsIfProcessingProps
         hideFooterPagination
+        hideFooterSelectedRowCount
         hideFooter
         rows={values()}
         columns={columns}

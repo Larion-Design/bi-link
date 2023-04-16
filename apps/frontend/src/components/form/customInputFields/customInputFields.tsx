@@ -1,6 +1,7 @@
-import Box from '@mui/material/Box'
 import React, { useCallback, useEffect, useState } from 'react'
+import Container from '@mui/material/Container'
 import { CustomFieldAPI } from 'defs'
+import { getDefaultCustomField } from 'tools'
 import { GridSetItem, useGridSet } from '../../../utils/hooks/useGridSet'
 import {
   DataGrid,
@@ -27,10 +28,7 @@ export const CustomInputFields: React.FunctionComponent<Props> = ({
   setFieldValue,
   suggestions,
 }) => {
-  const { values, rawValues, create, update, removeBulk, uid } = useGridSet(
-    fields,
-    ({ _id }) => _id,
-  )
+  const { values, rawValues, create, update, removeBulk, uid } = useGridSet(fields)
   const [selectedRows, setSelectedRows] = useState<GridSelectionModel>([])
 
   const processRowUpdate = useCallback(
@@ -48,13 +46,14 @@ export const CustomInputFields: React.FunctionComponent<Props> = ({
   }, [uid])
 
   return (
-    <Box sx={{ height: 1, width: 1 }}>
+    <Container sx={{ height: 1, width: 1 }}>
       <DataGrid
         autoHeight
         checkboxSelection
         disableSelectionOnClick
         disableIgnoreModificationsIfProcessingProps
         hideFooterPagination
+        hideFooterSelectedRowCount
         rows={values()}
         columns={columns}
         experimentalFeatures={{ newEditingApi: true }}
@@ -69,8 +68,8 @@ export const CustomInputFields: React.FunctionComponent<Props> = ({
                 options={suggestions}
                 optionSelected={(fieldName) =>
                   create({
+                    ...getDefaultCustomField(),
                     fieldName,
-                    fieldValue: '',
                   })
                 }
               />
@@ -86,7 +85,7 @@ export const CustomInputFields: React.FunctionComponent<Props> = ({
           footerRowSelected: () => '',
         }}
       />
-    </Box>
+    </Container>
   )
 }
 

@@ -4,16 +4,17 @@ import Button from '@mui/material/Button'
 import Timeline from '@mui/lab/Timeline'
 import AddOutlinedIcon from '@mui/icons-material/AddOutlined'
 import Typography from '@mui/material/Typography'
-import { timelineOppositeContentClasses } from '@mui/lab/TimelineOppositeContent'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
+import { PropertyOwnerAPI } from 'defs'
+import { timelineOppositeContentClasses } from '@mui/lab/TimelineOppositeContent'
 import { getPersonsBasicInfoRequest } from '@frontend/graphql/persons/queries/getPersonsBasicInfo'
 import { getCompaniesInfoRequest } from '@frontend/graphql/companies/queries/getCompanies'
+import { getDefaultOwner } from 'tools'
 import { useModal } from '../../../modal/modalProvider'
 import { PersonOwnerCard } from './personOwnerCard'
 import { CompanyOwnerCard } from './companyOwnerCard'
 import { useDebouncedMap } from '@frontend/utils/hooks/useMap'
-import { PropertyOwnerAPI } from 'defs'
 
 type Props = {
   isVehicle: boolean
@@ -190,30 +191,26 @@ export const PropertyOwners: React.FunctionComponent<Props> = ({
   )
 }
 
-const createPersonsOwners = (personsIds: string[], isVehicle: boolean): PropertyOwnerAPI[] =>
-  personsIds.map((_id) => ({
-    person: {
-      _id,
-    },
-    customFields: [],
-    startDate: null,
-    endDate: null,
-    _confirmed: true,
-    vehicleOwnerInfo: isVehicle ? { plateNumbers: [] } : null,
-  }))
+const createPersonsOwners = (personsIds: string[], isVehicle: boolean) =>
+  personsIds.map(
+    (_id): PropertyOwnerAPI => ({
+      ...getDefaultOwner(),
+      person: { _id },
+      customFields: [],
+      startDate: null,
+      endDate: null,
+      vehicleOwnerInfo: isVehicle ? { plateNumbers: [] } : null,
+    }),
+  )
 
-const createCompaniesOwners = (companiesIds: string[], isVehicle: boolean): PropertyOwnerAPI[] =>
-  companiesIds.map((_id) => ({
-    company: {
-      _id,
-    },
-    registrationNumber: '',
-    customFields: [],
-    startDate: null,
-    endDate: null,
-    _confirmed: true,
-    vehicleOwnerInfo: isVehicle ? { plateNumbers: [] } : null,
-  }))
+const createCompaniesOwners = (companiesIds: string[], isVehicle: boolean) =>
+  companiesIds.map(
+    (_id): PropertyOwnerAPI => ({
+      ...getDefaultOwner(),
+      company: { _id },
+      vehicleOwnerInfo: isVehicle ? { plateNumbers: [] } : null,
+    }),
+  )
 
 const sortByOwnershipPeriod = (ownerA: PropertyOwnerAPI, ownerB: PropertyOwnerAPI) => {
   if (ownerA.startDate) {

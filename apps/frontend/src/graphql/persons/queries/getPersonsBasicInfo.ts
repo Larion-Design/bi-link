@@ -1,9 +1,8 @@
 import { gql, useLazyQuery } from '@apollo/client'
-
-import { PersonListRecordWithImage } from 'defs'
+import { PersonAPIOutput } from 'defs'
 
 type Response = {
-  getPersonsInfo: PersonListRecordWithImage[]
+  getPersonsInfo: PersonAPIOutput[]
 }
 
 type Params = {
@@ -11,11 +10,15 @@ type Params = {
 }
 
 const request = gql`
-  query PersonBasicInfo($personsIds: [String!]!) {
+  query PersonBasicInfo($personsIds: [ID!]!) {
     getPersonsInfo(personsIds: $personsIds) {
       _id
-      firstName
-      lastName
+      firstName {
+        value
+      }
+      lastName {
+        value
+      }
       images {
         fileId
         url {

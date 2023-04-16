@@ -1,7 +1,7 @@
-import * as yup from 'yup'
-import { CustomField } from 'defs'
+import { z } from 'zod'
+import { CustomFieldAPI, customFieldSchema } from 'defs'
 
-export const validateCustomFields = async (customFields: CustomField[]) => {
+export const validateCustomFields = async (customFields: CustomFieldAPI[]) => {
   let error = await validateCustomFieldsFormat(customFields)
 
   if (!error) {
@@ -10,7 +10,7 @@ export const validateCustomFields = async (customFields: CustomField[]) => {
   return Promise.resolve(error)
 }
 
-export const validateDuplicateCustomFields = (customFields: CustomField[]) => {
+export const validateDuplicateCustomFields = (customFields: CustomFieldAPI[]) => {
   const set: string[] = []
 
   for (const { fieldName, fieldValue } of customFields) {
@@ -23,15 +23,8 @@ export const validateDuplicateCustomFields = (customFields: CustomField[]) => {
   }
 }
 
-export const customFieldsValidationSchema = yup.array().of(
-  yup.object().shape({
-    fieldName: yup.string().required(),
-    fieldValue: yup.string().required(),
-  }),
-)
-
 export const validateCustomFieldsFormat = async (customFields: Array<unknown>) => {
-  const isValid = await customFieldsValidationSchema.isValid(customFields)
+  const isValid = await customFieldSchema.parseAsync(customFields)
 
   if (!isValid) {
     return 'Nu ai furnizat unele informatii obligatorii.'

@@ -1,5 +1,4 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
-import { getDefaultLocation } from '@frontend/components/form/location'
 import { useIntl } from 'react-intl'
 import MapOutlinedIcon from '@mui/icons-material/MapOutlined'
 import Box from '@mui/material/Box'
@@ -14,6 +13,7 @@ import {
   GridSelectionModel,
   GridToolbarContainer,
 } from '@mui/x-data-grid'
+import { getDefaultLocation } from 'tools'
 import { GridSetItem } from '../../../utils/hooks/useGridSet'
 import { useDebouncedMap } from '../../../utils/hooks/useMap'
 import { RemoveRowsToolbarButton } from '../../dataGrid/removeRowsToolbarButton'

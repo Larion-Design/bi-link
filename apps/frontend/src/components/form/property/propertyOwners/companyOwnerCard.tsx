@@ -2,7 +2,7 @@ import React from 'react'
 import Grid from '@mui/material/Grid'
 import CardContent from '@mui/material/CardContent'
 import Card from '@mui/material/Card'
-import { CompanyListRecord, PropertyOwnerAPI } from 'defs'
+import { CompanyAPIOutput, PropertyOwnerAPI } from 'defs'
 import { CompanyOwnerInformation } from './companyOwnerInformation'
 import TimelineItem from '@mui/lab/TimelineItem'
 import TimelineSeparator from '@mui/lab/TimelineSeparator'
@@ -15,10 +15,10 @@ import Typography from '@mui/material/Typography'
 import { CompanyCardActions } from '../../../card/companyCardActions'
 import { LinkedEntityCustomFields } from '../../linkedEntityCustomFields'
 
-type Props = {
-  ownerInfo: PropertyOwnerAPI
-  companyInfo: CompanyListRecord
-  updateOwnerInfo: (ownerId: string, ownerInfo: PropertyOwnerAPI) => void
+type Props<T = PropertyOwnerAPI> = {
+  ownerInfo: T
+  updateOwnerInfo: (ownerId: string, ownerInfo: T) => void
+  companyInfo: CompanyAPIOutput
   removeOwner: (ownerId: string) => void
 }
 
@@ -28,7 +28,10 @@ export const CompanyOwnerCard: React.FunctionComponent<Props> = ({
   updateOwnerInfo,
   removeOwner,
 }) => {
-  const { _id, name } = companyInfo
+  const {
+    _id,
+    name: { value: companyName },
+  } = companyInfo
   const { customFields } = ownerInfo
   return (
     <TimelineItem>
@@ -36,7 +39,7 @@ export const CompanyOwnerCard: React.FunctionComponent<Props> = ({
         <Tooltip title={`Data la care ${name} a achiziționat vehiculul`}>
           <Typography variant={'subtitle1'}>
             {ownerInfo?.startDate
-              ? new Date(ownerInfo.startDate).toLocaleDateString()
+              ? new Date(ownerInfo.startDate.value).toLocaleDateString()
               : 'Data nedefinita'}
           </Typography>
         </Tooltip>
@@ -69,7 +72,11 @@ export const CompanyOwnerCard: React.FunctionComponent<Props> = ({
               </Grid>
             </Grid>
           </CardContent>
-          <CompanyCardActions name={name} companyId={_id} onRemove={() => removeOwner(_id)} />
+          <CompanyCardActions
+            name={companyName}
+            companyId={_id}
+            onRemove={() => removeOwner(_id)}
+          />
         </Card>
       </TimelineContent>
     </TimelineItem>

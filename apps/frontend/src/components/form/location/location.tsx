@@ -7,11 +7,11 @@ import { useDebounce } from 'usehooks-ts'
 import { LocationAPIInput } from 'defs'
 import { InputField } from '../inputField'
 
-type Props = {
+type Props<T = LocationAPIInput> = {
   label: string
-  location: LocationAPIInput | null
-  updateLocation: (location: LocationAPIInput | null) => void | Promise<void>
-  includeFields?: Array<keyof Omit<LocationAPIInput, 'locationId'>>
+  location: T | null
+  updateLocation: (location: T | null) => void | Promise<void>
+  includeFields?: Array<keyof Omit<T, 'locationId' | 'metadata'>>
 }
 
 export const Location: React.FunctionComponent<Props> = ({
@@ -58,7 +58,7 @@ export const Location: React.FunctionComponent<Props> = ({
 
 type LocationFieldParams = {
   gridSize: number
-  field: keyof Omit<LocationAPIInput, '_id' | 'coordinates' | 'locationId'>
+  field: keyof Omit<LocationAPIInput, '_id' | 'coordinates' | 'locationId' | 'metadata'>
 }
 
 const locationFields: LocationFieldParams[] = [

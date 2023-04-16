@@ -1,6 +1,5 @@
 import React, { PropsWithChildren } from 'react'
 import { RemovePerson } from '@frontend/components/actionButton/removePerson'
-import { getPersonFullName } from '@frontend/utils/person'
 import Avatar from '@mui/material/Avatar'
 import Box from '@mui/material/Box'
 import Divider from '@mui/material/Divider'
@@ -32,8 +31,8 @@ export const PersonsList: React.FunctionComponent<PropsWithChildren<Props>> = ({
 
     <List>
       {personsInfo.map((personInfo) => {
-        const { _id } = personInfo
-        const fullName = getPersonFullName(personInfo)
+        const { _id, firstName, lastName } = personInfo
+        const fullName = `${lastName} ${firstName}`
 
         return (
           <ListItem
