@@ -7,10 +7,14 @@ type Props = {
   label: string
   error?: string
   value: string | Date | null
-  onChange: (value: string | null) => Promise<void> | void
+  minDate?: Date
+  maxDate?: Date
+  onChange: (value: Date | null) => Promise<void> | void
   readonly?: boolean
   disableHighlightToday?: boolean
   disableFuture?: boolean
+  disablePast?: boolean
+  disabled?: boolean
 }
 
 export const DatePicker: React.FunctionComponent<Props> = ({
@@ -22,16 +26,24 @@ export const DatePicker: React.FunctionComponent<Props> = ({
   readonly,
   disableHighlightToday,
   disableFuture,
+  disablePast,
+  minDate,
+  maxDate,
+  disabled,
 }) => (
   <MobileDatePicker
-    readOnly={!!readonly}
-    disableFuture={!!disableFuture}
+    readOnly={readonly}
+    disableFuture={disableFuture}
+    disablePast={disablePast}
     disableHighlightToday={!!disableHighlightToday}
     toolbarTitle={label}
     label={label}
     inputFormat={'dd/MM/yyyy'}
     value={value}
-    onChange={(newValue) => void onChange(newValue?.toString?.() ?? null)}
+    minDate={minDate}
+    maxDate={maxDate}
+    disabled={disabled}
+    onChange={onChange}
     renderInput={(params) => (
       <TextField
         {...params}
