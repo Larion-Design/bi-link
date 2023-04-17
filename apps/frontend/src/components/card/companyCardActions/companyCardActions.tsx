@@ -1,3 +1,4 @@
+import Stack from '@mui/material/Stack'
 import React, { PropsWithChildren } from 'react'
 import { CardActions } from '@mui/material'
 import { RemovePerson } from '../../actionButton/removePerson'
@@ -10,9 +11,12 @@ type Props = {
   onRemove: () => void
 }
 
-export const CompanyCardActions: React.FunctionComponent<
-  PropsWithChildren<Props>
-> = ({ companyId, name, onRemove, children }) => (
+export const CompanyCardActions: React.FunctionComponent<PropsWithChildren<Props>> = ({
+  companyId,
+  name,
+  onRemove,
+  children,
+}) => (
   <CardActions
     sx={{
       display: 'flex',
@@ -21,9 +25,9 @@ export const CompanyCardActions: React.FunctionComponent<
     }}
   >
     <Box display={'flex'}>{children}</Box>
-    <Box display={'flex'}>
+    <Stack direction={'row'} spacing={2}>
       <ViewCompanyPage companyId={companyId} name={name} />
       <RemovePerson name={name} onRemove={onRemove} />
-    </Box>
+    </Stack>
   </CardActions>
 )

@@ -1,5 +1,5 @@
-import TextField from '@mui/material/TextField'
 import React, { useEffect, useState } from 'react'
+import TextField from '@mui/material/TextField'
 import { useDebounce } from 'usehooks-ts'
 
 type Props = {
@@ -34,7 +34,7 @@ export const InputNumberField: React.FunctionComponent<Props> = ({
     <TextField
       type={'number'}
       required={required}
-      data-cy={name}
+      data-cy={name ?? label}
       fullWidth
       name={name}
       label={label}

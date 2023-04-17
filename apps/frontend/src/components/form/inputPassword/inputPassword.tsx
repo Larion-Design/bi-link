@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react'
-import TextField from '@mui/material/TextField'
+import React, { useCallback, useEffect, useState } from 'react'
 import { useDebounce } from 'usehooks-ts'
+import TextField from '@mui/material/TextField'
 import InputAdornment from '@mui/material/InputAdornment'
 import IconButton from '@mui/material/IconButton'
 import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined'
@@ -23,6 +23,10 @@ export const InputPassword: React.FunctionComponent<Props> = ({
 }) => {
   const [value, setValue] = useState<string>('')
   const [showPassword, setPasswordVisibility] = useState(false)
+  const togglePasswordVisibility = useCallback(
+    () => setPasswordVisibility((open) => !open),
+    [setPasswordVisibility],
+  )
   const debouncedValue = useDebounce(value, 100)
 
   useEffect(() => {
@@ -45,15 +49,8 @@ export const InputPassword: React.FunctionComponent<Props> = ({
       InputProps={{
         endAdornment: (
           <InputAdornment position={'end'}>
-            <IconButton
-              onClick={() => setPasswordVisibility((showPassword) => !showPassword)}
-              edge={'end'}
-            >
-              {showPassword ? (
-                <VisibilityOffOutlinedIcon fontSize={'small'} />
-              ) : (
-                <VisibilityOutlinedIcon fontSize={'small'} />
-              )}
+            <IconButton size={'small'} onClick={togglePasswordVisibility} edge={'end'}>
+              {showPassword ? <VisibilityOffOutlinedIcon /> : <VisibilityOutlinedIcon />}
             </IconButton>
           </InputAdornment>
         ),

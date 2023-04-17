@@ -11,19 +11,11 @@ type Props = {
   personId: string
 }
 
-export const ViewPersonPage: React.FunctionComponent<Props> = ({
-  name,
-  personId,
-}) => (
-  <Link
-    href={generatePath(routes.personDetails, {
-      personId,
-    })}
-    target={'_blank'}
-  >
-    <IconButton>
+export const ViewPersonPage: React.FunctionComponent<Props> = ({ name, personId }) => (
+  <Link href={generatePath(routes.personDetails, { personId })} target={'_blank'}>
+    <IconButton size={'small'}>
       <Tooltip title={`Vezi detalii despre ${name}`}>
-        <OpenInNewOutlinedIcon fontSize={'small'} color={'secondary'} />
+        <OpenInNewOutlinedIcon color={'secondary'} />
       </Tooltip>
     </IconButton>
   </Link>

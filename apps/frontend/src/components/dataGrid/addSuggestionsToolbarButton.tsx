@@ -4,6 +4,7 @@ import Button from '@mui/material/Button'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import Divider from '@mui/material/Divider'
+import { FormattedMessage } from 'react-intl'
 
 type Props = {
   defaultOption: string
@@ -45,11 +46,9 @@ export const AddSuggestionsToolbarButton: React.FunctionComponent<Props> = ({
         variant={'contained'}
         startIcon={<AddOutlinedIcon />}
         ref={(ref) => setMenuRef(ref)}
-        onClick={() =>
-          options?.length ? setMenuState(true) : optionSelected(defaultOption)
-        }
+        onClick={() => (options?.length ? setMenuState(true) : optionSelected(defaultOption))}
       >
-        Adaugă
+        <FormattedMessage id={'Add'} />
       </Button>
     </>
   )

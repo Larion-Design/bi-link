@@ -60,5 +60,7 @@
   "Weak trust level": "Informatie slab verificata / confirmata",
   "Average trust level": "Informatie partial verificata",
   "Slightly trustworthy": "Informatie verificata",
-  "Very trustworthy": "Informatie verificata la zi"
+  "Very trustworthy": "Informatie verificata la zi",
+  "Add": "Adaugă",
+  "Remove": "Sterge"
 }
