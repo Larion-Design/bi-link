@@ -1,23 +1,9 @@
+import { DatePickerProps } from '@frontend/components/form/datePicker/types'
 import React from 'react'
 import TextField from '@mui/material/TextField'
 import { MobileDatePicker } from '@mui/x-date-pickers/MobileDatePicker'
 
-type Props = {
-  name?: string
-  label: string
-  error?: string
-  value: string | Date | null
-  minDate?: Date
-  maxDate?: Date
-  onChange: (value: Date | null) => Promise<void> | void
-  readonly?: boolean
-  disableHighlightToday?: boolean
-  disableFuture?: boolean
-  disablePast?: boolean
-  disabled?: boolean
-}
-
-export const DatePicker: React.FunctionComponent<Props> = ({
+export const DatePicker: React.FunctionComponent<DatePickerProps> = ({
   name,
   label,
   error,
@@ -30,12 +16,15 @@ export const DatePicker: React.FunctionComponent<Props> = ({
   minDate,
   maxDate,
   disabled,
+  startIcon,
+  endIcon,
 }) => (
   <MobileDatePicker
     readOnly={readonly}
     disableFuture={disableFuture}
     disablePast={disablePast}
-    disableHighlightToday={!!disableHighlightToday}
+    disableHighlightToday={disableHighlightToday}
+    showDaysOutsideCurrentMonth={false}
     toolbarTitle={label}
     label={label}
     inputFormat={'dd/MM/yyyy'}
@@ -44,6 +33,10 @@ export const DatePicker: React.FunctionComponent<Props> = ({
     maxDate={maxDate}
     disabled={disabled}
     onChange={onChange}
+    InputProps={{
+      startAdornment: startIcon,
+      endAdornment: endIcon,
+    }}
     renderInput={(params) => (
       <TextField
         {...params}
