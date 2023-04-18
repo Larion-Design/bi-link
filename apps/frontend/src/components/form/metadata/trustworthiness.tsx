@@ -1,15 +1,15 @@
-import { useTrustLevelLocale } from '@frontend/components/form/metadata/hooks'
 import React, { useCallback } from 'react'
 import { FormattedMessage } from 'react-intl'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
+import { Trustworthiness as TrustworthinessType } from 'defs'
 import { DropdownList } from '@frontend/components/form/dropdownList'
 import { InputField } from '@frontend/components/form/inputField'
-import { Trustworthiness as TrustworthinessType } from 'defs'
+import { useTrustLevelLocale } from '@frontend/components/form/metadata/hooks'
 
-type Props = {
-  trustworthiness: TrustworthinessType
-  updateTrustworthiness: (trustworthiness: TrustworthinessType) => void
+type Props<T = TrustworthinessType> = {
+  trustworthiness: T
+  updateTrustworthiness: (trustworthiness: T) => void
 }
 
 export const Trustworthiness: React.FunctionComponent<Props> = ({

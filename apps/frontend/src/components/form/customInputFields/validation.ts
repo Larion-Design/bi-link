@@ -1,4 +1,3 @@
-import { z } from 'zod'
 import { CustomFieldAPI, customFieldSchema } from 'defs'
 
 export const validateCustomFields = async (customFields: CustomFieldAPI[]) => {
@@ -24,7 +23,7 @@ export const validateDuplicateCustomFields = (customFields: CustomFieldAPI[]) =>
 }
 
 export const validateCustomFieldsFormat = async (customFields: Array<unknown>) => {
-  const isValid = await customFieldSchema.parseAsync(customFields)
+  const isValid = await customFieldSchema.array().parseAsync(customFields)
 
   if (!isValid) {
     return 'Nu ai furnizat unele informatii obligatorii.'

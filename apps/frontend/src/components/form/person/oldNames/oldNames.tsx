@@ -1,4 +1,5 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import { createDatagridItems, getDatagridItemInfo, Unique } from '@frontend/utils/datagridHelpers'
+import React, { useCallback, useMemo, useState } from 'react'
 import Typography from '@mui/material/Typography'
 import Box from '@mui/material/Box'
 import {
@@ -10,33 +11,32 @@ import {
 } from '@mui/x-data-grid'
 import { OldName } from 'defs'
 import { processGridCellValue } from '@frontend/utils/dataGrid'
-import { GridSetItem, useGridSet } from '@frontend/utils/hooks/useGridSet'
 import { FormattedMessage } from 'react-intl'
-import { getDefaultOldName } from 'tools'
+import { usePersonState } from '../../../../state/personState'
 import { AddItemToolbarButton } from '../../../dataGrid/addItemToolbarButton'
 import { RemoveRowsToolbarButton } from '../../../dataGrid/removeRowsToolbarButton'
 import { Textarea } from '../../../dataGrid/textArea'
 
-type Props<T = OldName> = {
-  oldNames: T[]
-  updateOldNames: (oldNames: T[]) => void | Promise<void>
-}
-
-export const OldNames: React.FunctionComponent<Props> = ({ oldNames, updateOldNames }) => {
-  const { uid, values, rawValues, create, update, removeBulk } = useGridSet(oldNames)
+export const OldNames: React.FunctionComponent = () => {
+  const [oldNames, updateOldName, removeOldNames, addOldName] = usePersonState(
+    ({ oldNames, updateOldName, removeOldNames, addOldName }) => [
+      oldNames,
+      updateOldName,
+      removeOldNames,
+      addOldName,
+    ],
+  )
   const [selectedRows, setSelectedRows] = useState<GridSelectionModel>([])
   const removeSelectedRows = useCallback(
-    () => removeBulk(selectedRows as string[]),
-    [uid, selectedRows],
+    () => removeOldNames(selectedRows as string[]),
+    [selectedRows, removeOldNames],
   )
-  const addOldName = useCallback(() => create(getDefaultOldName()), [uid])
 
-  useEffect(() => {
-    void updateOldNames(rawValues())
-  }, [uid])
+  const datagridOldNames = useMemo(() => createDatagridItems(oldNames), [oldNames])
 
-  const processRowUpdate = useCallback(async (newRow: GridRowModel<GridSetItem<OldName>>) => {
-    update(newRow)
+  const processRowUpdate = useCallback(async (newRow: GridRowModel<Unique<OldName>>) => {
+    const { id, item } = getDatagridItemInfo(newRow)
+    updateOldName(id, item)
     return Promise.resolve(newRow)
   }, [])
 
@@ -58,10 +58,9 @@ export const OldNames: React.FunctionComponent<Props> = ({ oldNames, updateOldNa
         hideFooterSelectedRowCount
         hideFooterPagination
         hideFooter
-        rows={values()}
+        rows={datagridOldNames}
         columns={columns}
         experimentalFeatures={{ newEditingApi: true }}
-        getRowId={({ _id }) => _id}
         processRowUpdate={processRowUpdate}
         onSelectionModelChange={(selectedRows) => setSelectedRows(selectedRows)}
         components={{

@@ -1,3 +1,4 @@
+import { createDatagridItems, getDatagridItemInfo, Unique } from '@frontend/utils/datagridHelpers'
 import Box from '@mui/material/Box'
 import {
   DataGrid,
@@ -6,39 +7,37 @@ import {
   GridSelectionModel,
   GridToolbarContainer,
 } from '@mui/x-data-grid'
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useMemo, useState } from 'react'
 import { EducationAPIInput } from 'defs'
 import { processGridCellValue } from '@frontend/utils/dataGrid'
-import { GridSetItem, useGridSet } from '@frontend/utils/hooks/useGridSet'
-import { getDefaultEducation } from 'tools'
+import { usePersonState } from '../../../../state/personState'
 import { AddItemToolbarButton } from '../../../dataGrid/addItemToolbarButton'
 import { RemoveRowsToolbarButton } from '../../../dataGrid/removeRowsToolbarButton'
 import { Textarea } from '../../../dataGrid/textArea'
 
-type Props<T = EducationAPIInput> = {
-  education: T[]
-  updateEducation: (education: T[]) => void | Promise<void>
-}
-
-export const Education: React.FunctionComponent<Props> = ({ education, updateEducation }) => {
-  const { uid, values, rawValues, create, update, removeBulk } = useGridSet(education)
+export const Education: React.FunctionComponent = () => {
+  const [education, updateEducation, removeEducation, addEducation] = usePersonState(
+    ({ education, updateEducation, removeEducation, addEducation }) => [
+      education,
+      updateEducation,
+      removeEducation,
+      addEducation,
+    ],
+  )
   const [selectedRows, setSelectedRows] = useState<GridSelectionModel>([])
   const removeSelectedRows = useCallback(
-    () => removeBulk(selectedRows as string[]),
-    [uid, selectedRows],
+    () => removeEducation(selectedRows as string[]),
+    [removeEducation, selectedRows],
   )
-  const addEducation = useCallback(() => create(getDefaultEducation()), [uid])
-
-  useEffect(() => {
-    void updateEducation(rawValues())
-  }, [uid])
+  const datagridItems = useMemo(() => createDatagridItems(education), [education])
 
   const processRowUpdate = useCallback(
-    async (newRow: GridRowModel<GridSetItem<EducationAPIInput>>) => {
-      update(newRow)
+    async (newRow: GridRowModel<Unique<EducationAPIInput>>) => {
+      const { id, item } = getDatagridItemInfo(newRow)
+      updateEducation(id, item)
       return Promise.resolve(newRow)
     },
-    [],
+    [updateEducation],
   )
 
   return (
@@ -56,10 +55,9 @@ export const Education: React.FunctionComponent<Props> = ({ education, updateEdu
         hideFooterPagination
         hideFooterSelectedRowCount
         hideFooter
-        rows={values()}
+        rows={datagridItems}
         columns={columns}
         experimentalFeatures={{ newEditingApi: true }}
-        getRowId={({ _id }) => _id}
         processRowUpdate={processRowUpdate}
         onSelectionModelChange={(selectedRows) => setSelectedRows(selectedRows)}
         components={{

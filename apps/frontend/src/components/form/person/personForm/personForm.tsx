@@ -1,29 +1,29 @@
+import Stack from '@mui/material/Stack'
 import React, { useEffect, useState } from 'react'
-import { FormikProps, withFormik } from 'formik'
+import { useFormik } from 'formik'
 import { FormattedMessage } from 'react-intl'
-import { useCancelDialog } from '@frontend/utils/hooks/useCancelDialog'
-import { Education } from '@frontend/components/form/person/education'
-import { Location } from '@frontend/components/form/location'
-import { OldNames } from '@frontend/components/form/person/oldNames'
-import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import Grid from '@mui/material/Grid'
 import Step from '@mui/material/Step'
 import StepButton from '@mui/material/StepButton'
 import Stepper from '@mui/material/Stepper'
-import { IdDocument, PersonAPIInput } from 'defs'
-import { getDefaultLocation, getDefaultPerson } from 'tools'
+import { PersonAPIInput } from 'defs'
+import { useCancelDialog } from '@frontend/utils/hooks/useCancelDialog'
+import { Education } from '@frontend/components/form/person/education'
+import { Location } from '@frontend/components/form/location'
+import { OldNames } from '@frontend/components/form/person/oldNames'
+import { getDefaultPerson } from 'tools'
 import { routes } from '../../../../router/routes'
 import { CONTACT_METHODS, ID_DOCUMENT_TYPES } from '@frontend/utils/constants'
+import { usePersonState } from '../../../../state/personState'
 import { CustomInputFields } from '../../customInputFields'
-import { DatePicker } from '../../datePicker'
+import { DatePickerWithMetadata } from '../../datePicker'
 import { FilesManager } from '../../fileField'
 import { IdDocuments } from '../idDocuments'
 import { Images } from '../../images'
-import { InputField, InputFieldWithMetadata } from '../../inputField'
+import { InputFieldWithMetadata } from '../../inputField'
 import { Relationships } from '../relationships'
 import { getBirthdateFromCnp } from './utils'
-import { personFormValidation, validatePersonForm } from './validation/validation'
 
 type Props = {
   personId?: string
@@ -32,34 +32,115 @@ type Props = {
   onSubmit: (formData: PersonAPIInput) => void | Promise<void>
 }
 
-const Form: React.FunctionComponent<Props & FormikProps<PersonAPIInput>> = ({
-  personId,
-  setFieldError,
-  setFieldValue,
-  values,
-  errors,
-  isSubmitting,
-  isValidating,
-  submitForm,
-}) => {
+export const PersonForm: React.FunctionComponent<Props> = ({ personId, personInfo, onSubmit }) => {
   const [step, setStep] = useState(0)
   const cancelChanges = useCancelDialog(routes.persons)
+  const {
+    metadata,
+    firstName,
+    lastName,
+    oldNames,
+    cnp,
+    birthdate,
+    birthPlace,
+    homeAddress,
+    images,
+    files,
+    documents,
+    relationships,
+    customFields,
+    contactDetails,
+    education,
+
+    setPersonInfo,
+    setFiles,
+    addFile,
+    addImage,
+    addContactDetails,
+    addCustomField,
+
+    updateFile,
+    updateCustomField,
+    updateContactDetails,
+    updateFirstName,
+    updateBirthPlace,
+    updateCnp,
+    updateLastName,
+    updateHomeAddress,
+    updateBirthdate,
+    updateImage,
+
+    removeFiles,
+    removeCustomFields,
+    removeContactDetails,
+    removeImages,
+  } = usePersonState()
+
+  const { submitForm, setFieldValue, isSubmitting, isValidating } = useFormik<PersonAPIInput>({
+    enableReinitialize: true,
+    validateOnBlur: false,
+    validateOnChange: false,
+    validateOnMount: true,
+    validate: async (values) => ({}),
+    onSubmit,
+    initialValues: {
+      metadata,
+      firstName,
+      lastName,
+      cnp,
+      birthdate,
+      birthPlace,
+      homeAddress,
+      education: Array.from(education.values()),
+      oldNames: Array.from(oldNames.values()),
+      relationships: Array.from(relationships.values()),
+      files: Array.from(files.values()),
+      images: Array.from(images.values()),
+      customFields: Array.from(customFields.values()),
+      contactDetails: Array.from(contactDetails.values()),
+      documents: Array.from(documents.values()),
+    },
+  })
+
+  useEffect(() => setPersonInfo(personInfo ?? getDefaultPerson()), [personInfo])
 
   useEffect(() => {
-    if (!values.birthdate && values.cnp.value.length) {
-      const parsedBirthdate = getBirthdateFromCnp(values.cnp.value)
+    void setFieldValue('cnp', cnp)
+
+    if (!birthdate?.value) {
+      const parsedBirthdate = getBirthdateFromCnp(cnp.value)
 
       if (parsedBirthdate) {
-        setFieldValue('birthdate', parsedBirthdate)
+        updateBirthdate({ ...birthdate, value: parsedBirthdate })
       }
     }
-  }, [values.cnp.value])
+  }, [cnp])
 
-  const updateBirthdate = async (value: string | null) => {
-    const error = await personFormValidation.birthdate(value)
-    setFieldValue('birthdate', value?.toString?.() ?? null)
-    setFieldError('birthdate', error)
-  }
+  useEffect(() => setPersonInfo(personInfo ?? getDefaultPerson()), [personInfo])
+
+  useEffect(() => void setFieldValue('metadata', metadata), [metadata])
+  useEffect(() => void setFieldValue('firstName', firstName), [firstName])
+  useEffect(() => void setFieldValue('lastName', lastName), [lastName])
+  useEffect(() => void setFieldValue('birthdate', birthdate), [birthdate])
+  useEffect(() => void setFieldValue('birthPlace', birthPlace), [birthPlace])
+  useEffect(() => void setFieldValue('homeAddress', homeAddress), [homeAddress])
+  useEffect(() => void setFieldValue('education', Array.from(education.values())), [education])
+  useEffect(() => void setFieldValue('oldNames', Array.from(oldNames.values())), [oldNames])
+  useEffect(
+    () => void setFieldValue('relationships', Array.from(relationships.values())),
+    [relationships],
+  )
+  useEffect(() => void setFieldValue('files', Array.from(files.values())), [files])
+  useEffect(() => void setFieldValue('images', Array.from(images.values())), [images])
+  useEffect(
+    () => void setFieldValue('customFields', Array.from(customFields.values())),
+    [customFields],
+  )
+  useEffect(
+    () => void setFieldValue('contactDetails', Array.from(contactDetails.values())),
+    [contactDetails],
+  )
+  useEffect(() => void setFieldValue('documents', Array.from(documents.values())), [documents])
 
   return (
     <form data-cy={'personsForm'}>
@@ -108,67 +189,55 @@ const Form: React.FunctionComponent<Props & FormikProps<PersonAPIInput>> = ({
             <Grid container spacing={2}>
               <Grid item xs={3}>
                 <Images
-                  images={values.images}
-                  updateImages={async (images) => {
-                    const error = await personFormValidation.files(images)
-                    setFieldError('images', error)
-                    setFieldValue('images', images)
-                  }}
-                  error={errors.images}
+                  images={images}
+                  updateImage={updateImage}
+                  removeImages={removeImages}
+                  addImage={addImage}
                 />
               </Grid>
               <Grid container item xs={9} spacing={3}>
                 <Grid item xs={4}>
                   <InputFieldWithMetadata
-                    size={'small'}
                     name={'lastName'}
                     label={'Nume'}
-                    error={errors.lastName?.value}
-                    fieldInfo={values.lastName}
-                    updateFieldInfo={(fieldInfo) => setFieldValue('lastName', fieldInfo)}
+                    fieldInfo={lastName}
+                    updateFieldInfo={updateLastName}
                   />
                 </Grid>
 
                 <Grid item xs={4}>
                   <InputFieldWithMetadata
-                    size={'small'}
                     name={'firstName'}
                     label={'Prenume'}
-                    error={errors.firstName?.value}
-                    fieldInfo={values.firstName}
-                    updateFieldInfo={(fieldInfo) => setFieldValue('firstName', fieldInfo)}
+                    fieldInfo={firstName}
+                    updateFieldInfo={updateFirstName}
                   />
                 </Grid>
 
                 <Grid item xs={4}>
                   <InputFieldWithMetadata
-                    size={'small'}
                     name={'cnp'}
                     label={'Cod numeric personal'}
-                    error={errors.cnp?.value}
-                    fieldInfo={values.cnp}
-                    updateFieldInfo={(fieldInfo) => setFieldValue('cnp', fieldInfo)}
+                    fieldInfo={cnp}
+                    updateFieldInfo={updateCnp}
                   />
                 </Grid>
 
                 <Grid item xs={4}>
-                  <DatePicker
+                  <DatePickerWithMetadata
                     label={'Data nasterii'}
-                    value={values.birthdate.value}
-                    onChange={updateBirthdate}
+                    fieldInfo={birthdate}
+                    updateFieldInfo={updateBirthdate}
                     disableFuture
                     disableHighlightToday
-                    error={errors.birthdate?.value}
                   />
                 </Grid>
 
                 <Grid item xs={12} sx={{ mt: 2 }}>
                   <Location
                     label={'Locul nasterii'}
-                    location={values.birthPlace ?? getDefaultLocation()}
-                    updateLocation={(location) => {
-                      setFieldValue('birthPlace', location)
-                    }}
+                    location={birthPlace}
+                    updateLocation={updateBirthPlace}
                     includeFields={['locality', 'country']}
                   />
                 </Grid>
@@ -176,98 +245,62 @@ const Form: React.FunctionComponent<Props & FormikProps<PersonAPIInput>> = ({
                 <Grid item xs={12}>
                   <Location
                     label={'Domiciliu'}
-                    location={values.homeAddress ?? getDefaultLocation()}
-                    updateLocation={(location) => {
-                      setFieldValue('homeAddress', location)
-                    }}
+                    location={homeAddress}
+                    updateLocation={updateHomeAddress}
                   />
                 </Grid>
               </Grid>
 
               <Grid item xs={12}>
-                <OldNames
-                  oldNames={values.oldNames}
-                  updateOldNames={async (oldNames) => {
-                    setFieldValue('oldName', oldNames)
-                  }}
-                />
+                <OldNames />
               </Grid>
             </Grid>
           )}
           {step === 1 && (
             <Grid container spacing={2}>
               <CustomInputFields
+                customFields={contactDetails}
                 suggestions={CONTACT_METHODS}
-                fields={values.contactDetails}
-                setFieldValue={async (contactDetails) => {
-                  const error = await personFormValidation.contactDetails(contactDetails)
-                  setFieldValue('contactDetails', contactDetails)
-                  setFieldError('contactDetails', error)
-                }}
-                error={errors.contactDetails as string}
+                updateCustomField={updateContactDetails}
+                addCustomField={addContactDetails}
+                removeCustomFields={removeContactDetails}
               />
             </Grid>
           )}
           {step === 2 && (
             <Grid container spacing={2}>
-              <IdDocuments
-                suggestions={ID_DOCUMENT_TYPES}
-                documents={values.documents}
-                setFieldValue={async (documents: IdDocument[]) => {
-                  const error = await personFormValidation.documents(documents, personId)
-                  setFieldValue('documents', documents)
-                  setFieldError('documents', error)
-                }}
-                error={errors.documents as string}
-              />
+              <IdDocuments suggestions={ID_DOCUMENT_TYPES} />
             </Grid>
           )}
           {step === 3 && (
             <Grid container spacing={2}>
-              <Relationships
-                updateRelationships={async (relationships) => {
-                  const error = await personFormValidation.relationships(relationships)
-
-                  setFieldValue('relationships', relationships)
-                  setFieldError('relationships', error)
-                }}
-                relationships={values.relationships}
-              />
+              <Relationships personId={personId} />
             </Grid>
           )}
           {step === 4 && (
             <Grid container spacing={2}>
-              <Education
-                education={values.education}
-                updateEducation={async (education) => {
-                  setFieldValue('education', education)
-                }}
-              />
+              <Education />
             </Grid>
           )}
           {step === 5 && (
             <Grid container spacing={2}>
               <FilesManager
+                removeFiles={removeFiles}
                 keepDeletedFiles={!!personId}
-                files={values.files}
-                updateFiles={async (uploadedFiles) => {
-                  const error = await personFormValidation.files(uploadedFiles)
-                  setFieldValue('files', uploadedFiles)
-                  setFieldError('files', error)
-                }}
+                files={files}
+                updateFiles={setFiles}
+                updateFile={updateFile}
+                addFile={addFile}
               />
             </Grid>
           )}
           {step === 6 && (
             <Grid container spacing={2}>
               <CustomInputFields
-                fields={values.customFields}
-                setFieldValue={async (customFields) => {
-                  const error = await personFormValidation.customFields(customFields)
-                  setFieldValue('customFields', customFields)
-                  setFieldError('customFields', error)
-                }}
-                error={errors.customFields as string}
+                customFields={customFields}
+                updateCustomField={updateCustomField}
+                addCustomField={addCustomField}
+                removeCustomFields={removeCustomFields}
               />
             </Grid>
           )}
@@ -275,17 +308,17 @@ const Form: React.FunctionComponent<Props & FormikProps<PersonAPIInput>> = ({
       </Grid>
 
       <Grid item xs={12} justifyContent={'flex-end'} mt={4}>
-        <Box display={'flex'} justifyContent={'flex-end'}>
+        <Stack direction={'row'} justifyContent={'flex-end'} spacing={4}>
           <Button
             data-cy={'cancelForm'}
             color={'error'}
             disabled={isSubmitting || isValidating}
             variant={'text'}
             onClick={cancelChanges}
-            sx={{ mr: 4 }}
           >
             <FormattedMessage id={'cancel'} />
           </Button>
+
           <Button
             disabled={isSubmitting || isValidating}
             variant={'contained'}
@@ -294,18 +327,8 @@ const Form: React.FunctionComponent<Props & FormikProps<PersonAPIInput>> = ({
           >
             <FormattedMessage id={'save'} />
           </Button>
-        </Box>
+        </Stack>
       </Grid>
     </form>
   )
 }
-
-export const PersonForm = withFormik<Props, PersonAPIInput>({
-  mapPropsToValues: ({ personInfo }) => personInfo ?? getDefaultPerson(),
-  validate: async (values, { personId }) => validatePersonForm(values, personId),
-  validateOnChange: false,
-  validateOnMount: false,
-  validateOnBlur: false,
-  enableReinitialize: true,
-  handleSubmit: (values, { props: { onSubmit } }) => void onSubmit(values),
-})(Form)

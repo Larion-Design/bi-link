@@ -14,7 +14,7 @@ import { FormattedMessage } from 'react-intl'
 
 type Props = {
   label: string
-  personsInfo: PersonAPIOutput[]
+  personsInfo: Map<string, PersonAPIOutput>
   removePerson: (personId: string) => void
 }
 
@@ -25,13 +25,13 @@ export const PersonsList: React.FunctionComponent<PropsWithChildren<Props>> = ({
   removePerson,
 }) => (
   <Box sx={{ width: 1 }}>
-    <Typography variant={'h5'} gutterBottom>
-      <FormattedMessage id={label} defaultMessage={label} />
+    <Typography variant={'h6'} gutterBottom>
+      <FormattedMessage id={label} />
     </Typography>
     <Divider variant={'fullWidth'} />
 
     <List>
-      {personsInfo.map((personInfo) => {
+      {Array.from(personsInfo.values()).map((personInfo) => {
         const { _id } = personInfo
         const fullName = getPersonFullName(personInfo)
         return (

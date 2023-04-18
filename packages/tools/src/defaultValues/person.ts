@@ -3,9 +3,9 @@ import { getDefaultLocation } from './location'
 import { getDefaultMetadata } from './metadata'
 import { getDefaultOptionalDateWithMetadata, getDefaultTextWithMetadata } from './valueWithMetadata'
 
-export const getDefaultIdDocument = (): IdDocumentAPI => ({
+export const getDefaultIdDocument = (documentType = ''): IdDocumentAPI => ({
   metadata: getDefaultMetadata(),
-  documentType: '',
+  documentType,
   documentNumber: '',
   issueDate: null,
   expirationDate: null,

@@ -1,10 +1,12 @@
-import React, { useCallback, useEffect, useState } from 'react'
-import Typography from '@mui/material/Typography'
 import Box from '@mui/material/Box'
-import Grid from '@mui/material/Grid'
+import React from 'react'
 import { useIntl } from 'react-intl'
-import { useDebounce } from 'usehooks-ts'
 import { LocationAPIInput } from 'defs'
+import Stack from '@mui/material/Stack'
+import Typography from '@mui/material/Typography'
+import Grid from '@mui/material/Grid'
+import { TitleWithMetadata } from '@frontend/components/form/titleWithMetadata'
+
 import { InputField } from '../inputField'
 
 type Props<T = LocationAPIInput> = {
@@ -21,38 +23,38 @@ export const Location: React.FunctionComponent<Props> = ({
   includeFields,
 }) => {
   const { formatMessage } = useIntl()
-  const [locationInfo, setLocationInfo] = useState(location)
-  const debouncedLocationInfo = useDebounce(locationInfo, 1000)
-
-  const updateLocationInfo = useCallback(
-    (fieldName: keyof LocationAPIInput, value: string) =>
-      setLocationInfo((locationInfo) => ({ ...locationInfo, [fieldName]: value })),
-    [setLocationInfo],
-  )
-
-  useEffect(() => {
-    void updateLocation(debouncedLocationInfo)
-  }, [debouncedLocationInfo])
 
   return (
-    <Box>
-      <Typography variant={'h6'} sx={{ mb: 3 }}>
-        {label}
-      </Typography>
-      <Grid container spacing={4}>
+    <Grid container spacing={2}>
+      <Grid item xs={12}>
+        {location ? (
+          <TitleWithMetadata
+            variant={'h6'}
+            label={label}
+            metadata={location.metadata}
+            updateMetadata={(metadata) => updateLocation({ ...location, metadata })}
+          />
+        ) : (
+          <Typography variant={'h6'} gutterBottom>
+            {label}
+          </Typography>
+        )}
+      </Grid>
+
+      <Grid container item xs={12} spacing={4}>
         {locationFields
           .filter(({ field }) => !includeFields || includeFields.includes(field))
           .map(({ gridSize, field }) => (
             <Grid key={field} item xs={gridSize}>
               <InputField
                 label={formatMessage({ id: field, defaultMessage: field })}
-                value={locationInfo[field]}
-                onChange={(value) => updateLocationInfo(field, value)}
+                value={location?.[field] ?? ''}
+                onChange={(value) => updateLocation({ ...location, [field]: value })}
               />
             </Grid>
           ))}
       </Grid>
-    </Box>
+    </Grid>
   )
 }
 

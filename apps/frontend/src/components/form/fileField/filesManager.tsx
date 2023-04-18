@@ -1,46 +1,33 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import Box from '@mui/material/Box'
 import { FileAPIInput } from 'defs'
 import { FilesList } from './filesList'
 import { FileUploadBox } from './FileUploadBox'
-import { useDebouncedMap } from '../../../utils/hooks/useMap'
 
 type Props<T = FileAPIInput> = {
-  files: T[]
-  updateFiles: (files: T[]) => void | Promise<void>
+  files: Map<string, T>
+  updateFiles: (files: T[]) => void
+  updateFile: (file: T) => void
+  removeFiles: (uids: string[]) => void
+  addFile: (fileInfo: T) => void
   keepDeletedFiles: boolean
 }
 
 export const FilesManager: React.FunctionComponent<Props> = ({
   files,
   keepDeletedFiles,
-  updateFiles,
-}) => {
-  const { update, removeBulk, values, uid, add } = useDebouncedMap(
-    1000,
-    files,
-    ({ fileId }) => fileId,
-  )
-
-  useEffect(() => {
-    void updateFiles(values())
-  }, [uid])
-
-  return (
-    <Box
-      sx={{
-        width: 1,
-        minHeight: '50vh',
-      }}
-    >
-      <FileUploadBox addUploadedFile={(fileInfo) => add(fileInfo, ({ fileId }) => fileId)}>
-        <FilesList
-          files={files}
-          keepDeletedFiles={keepDeletedFiles}
-          updateFile={update}
-          removeFiles={removeBulk}
-        />
-      </FileUploadBox>
-    </Box>
-  )
-}
+  removeFiles,
+  updateFile,
+  addFile,
+}) => (
+  <Box sx={{ width: 1, minHeight: '50vh' }}>
+    <FileUploadBox addUploadedFile={addFile}>
+      <FilesList
+        files={files}
+        keepDeletedFiles={keepDeletedFiles}
+        updateFile={updateFile}
+        removeFiles={removeFiles}
+      />
+    </FileUploadBox>
+  </Box>
+)

@@ -1,6 +1,5 @@
-import Stack from '@mui/material/Stack'
 import React, { useCallback, useEffect } from 'react'
-import { FormikErrors } from 'formik'
+import Stack from '@mui/material/Stack'
 import Avatar from '@mui/material/Avatar'
 import Typography from '@mui/material/Typography'
 import Box from '@mui/material/Box'
@@ -15,13 +14,19 @@ import { FileUploadBox } from '../fileField/FileUploadBox'
 import { useModal } from '../../modal/modalProvider'
 
 type Props<T = FileAPIInput> = {
-  images: T[]
-  updateImages: (fileInfo: T[]) => void | Promise<void>
+  images: Map<string, T>
+  addImage: (fileInfo: T) => void
+  updateImage: (fileInfo: T) => void
+  removeImages: (uid: string[]) => void
   readonly?: boolean
-  error?: string | string[] | FormikErrors<FileAPIInput>[]
 }
 
-export const Images: React.FunctionComponent<Props> = ({ images, updateImages }) => {
+export const Images: React.FunctionComponent<Props> = ({
+  images,
+  updateImage,
+  addImage,
+  removeImages,
+}) => {
   const [fetchFileInfo, { data }] = getFileInfoRequest()
   const modal = useModal()
 
@@ -38,14 +43,14 @@ export const Images: React.FunctionComponent<Props> = ({ images, updateImages })
   }, [images[0]?.fileId])
 
   const openImageGallery = useCallback(
-    () => modal?.openImageGallery(images, updateImages),
-    [images, updateImages],
+    () => modal?.openImageGallery(Array.from(images.values()), (images) => {}),
+    [images, updateImage],
   )
 
   return (
     <Box sx={{ height: 250, width: 250, position: 'relative' }}>
-      {!!images.length && (
-        <Tooltip title={`Vezi toate cele ${images.length} imagini`}>
+      {!!images.size && (
+        <Tooltip title={`Vezi toate cele ${images.size} imagini`}>
           <IconButton
             onClick={openImageGallery}
             sx={{ position: 'absolute', bottom: 2, right: 2, zIndex: 1000 }}
@@ -58,7 +63,7 @@ export const Images: React.FunctionComponent<Props> = ({ images, updateImages })
         </Tooltip>
       )}
       <FileUploadBox
-        addUploadedFile={(image) => updateImages([...images, image])}
+        addUploadedFile={(image) => addImage(image)}
         acceptedFileTypes={imageTypeRegex}
       >
         {data?.getFileInfo.url.url ? (

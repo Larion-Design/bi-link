@@ -3,8 +3,8 @@ import { dateSchema } from '../date'
 import { withMetadataSchema } from '../metadata'
 
 export const idDocumentStatusSchema = z
-  .enum(['VALID', 'EXPIRED', 'LOST_OR_STOLEN'])
-  .default('VALID')
+  .enum(['VALID', 'EXPIRED', 'LOST_OR_STOLEN', 'UNKNOWN'])
+  .default('UNKNOWN')
 
 export const idDocumentSchema = z
   .object({

@@ -1,7 +1,7 @@
-import React from 'react'
+import React, { useMemo } from 'react'
+import { PersonAPIOutput, RelationshipAPI } from 'defs'
 import { InputField } from '@frontend/components/form/inputField'
 import Stack from '@mui/material/Stack'
-import { PersonAPIOutput, RelationshipAPI } from 'defs'
 import CardHeader from '@mui/material/CardHeader'
 import Grid from '@mui/material/Grid'
 import Card from '@mui/material/Card'
@@ -16,21 +16,26 @@ import { RelatedPersonsList } from '@frontend/components/form/person/relatedPers
 
 type Props<T = RelationshipAPI> = {
   personInfo: PersonAPIOutput
-  relatedPersonsInfo: PersonAPIOutput[]
+  personsInfo: Map<string, PersonAPIOutput>
   relationshipInfo: T
-  updateRelationship: (personId: string, relationshipInfo: T) => void
+  updateRelationship: (relationshipInfo: T) => void
   removeRelationship: (personId: string) => void
 }
 
 export const RelationshipCard: React.FunctionComponent<Props> = ({
   relationshipInfo,
   personInfo,
-  relatedPersonsInfo,
+  personsInfo,
   updateRelationship,
   removeRelationship,
 }) => {
   const { _id: personId, images } = personInfo
   const fullName = getPersonFullName(personInfo)
+
+  const relatedPersonsIds = useMemo(
+    () => new Set(relationshipInfo.relatedPersons.map(({ _id }) => _id)),
+    [relationshipInfo.relatedPersons],
+  )
 
   return (
     <Card sx={{ width: 1 }} variant={'outlined'}>
@@ -51,8 +56,8 @@ export const RelationshipCard: React.FunctionComponent<Props> = ({
               <DropdownList
                 label={'Tipul de relatie'}
                 value={relationshipInfo.type}
-                onChange={(type) => updateRelationship(personId, { ...relationshipInfo, type })}
                 options={relationshipsTypes}
+                onChange={(type) => updateRelationship({ ...relationshipInfo, type })}
               />
 
               <DropdownList
@@ -60,10 +65,7 @@ export const RelationshipCard: React.FunctionComponent<Props> = ({
                 value={relationshipInfo.proximity.toString()}
                 options={proximityLevels}
                 onChange={(proximity) =>
-                  updateRelationship(personId, {
-                    ...relationshipInfo,
-                    proximity: parseInt(proximity),
-                  })
+                  updateRelationship({ ...relationshipInfo, proximity: parseInt(proximity) })
                 }
               />
             </Stack>
@@ -71,10 +73,10 @@ export const RelationshipCard: React.FunctionComponent<Props> = ({
           <Grid item xs={6}>
             <RelatedPersonsList
               personId={personId}
-              relatedPersons={relationshipInfo.relatedPersons}
-              personsInfo={relatedPersonsInfo}
+              relatedPersons={relatedPersonsIds}
+              personsInfo={personsInfo}
               updateRelatedPersons={(relatedPersons) =>
-                updateRelationship(personId, { ...relationshipInfo, relatedPersons })
+                updateRelationship({ ...relationshipInfo, relatedPersons })
               }
             />
           </Grid>
@@ -82,9 +84,7 @@ export const RelationshipCard: React.FunctionComponent<Props> = ({
             <InputField
               label={'Descriere'}
               value={relationshipInfo.description}
-              onChange={(description) =>
-                updateRelationship(personId, { ...relationshipInfo, description })
-              }
+              onChange={(description) => updateRelationship({ ...relationshipInfo, description })}
               multiline={true}
               rows={5}
             />
