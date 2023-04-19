@@ -1,47 +1,95 @@
-import React, { useState } from 'react'
-import { ApolloError } from '@apollo/client'
-import { useCancelDialog } from '@frontend/utils/hooks/useCancelDialog'
+import Stack from '@mui/material/Stack'
+import React, { useEffect, useState } from 'react'
+import { CompanyAPIInput } from 'defs'
+import { useFormik } from 'formik'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import Grid from '@mui/material/Grid'
 import Step from '@mui/material/Step'
 import StepButton from '@mui/material/StepButton'
 import Stepper from '@mui/material/Stepper'
-import { CompanyAPIInput } from 'defs'
-import { FormikProps, withFormik } from 'formik'
 import { FormattedMessage } from 'react-intl'
-import { getDefaultCompany, getDefaultLocation } from 'tools'
+import { useCancelDialog } from '@frontend/utils/hooks/useCancelDialog'
 import { routes } from '../../../../router/routes'
 import { CONTACT_METHODS } from '@frontend/utils/constants'
+import { useCompanyState } from '../../../../state/companyState'
 import { Associates } from '../associates'
 import { CustomInputFields } from '../../customInputFields'
 import { FilesManager } from '../../fileField'
-import { InputField } from '../../inputField'
+import { InputFieldWithMetadata } from '../../inputField'
 import { Location } from '../../location'
 import { Locations } from '../../locations'
-import { personFormValidation } from '../../person/personForm/validation/validation'
-import { companyFormValidation, validateCompanyForm } from './validation/validation'
 
-type Props = {
+type Props<T = CompanyAPIInput> = {
   companyId?: string
-  companyInfo?: CompanyAPIInput
-  readonly?: boolean
-  onSubmit: (formData: CompanyAPIInput) => void | Promise<void>
-  error?: ApolloError
+  companyInfo?: T
+  onSubmit: (formData: T) => void
 }
 
-const Form: React.FunctionComponent<Props & FormikProps<CompanyAPIInput>> = ({
+export const CompanyForm: React.FunctionComponent<Props> = ({
   companyId,
-  setFieldError,
-  setFieldValue,
-  values,
-  errors,
-  isSubmitting,
-  isValidating,
-  submitForm,
+  companyInfo,
+  onSubmit,
 }) => {
+  const {
+    metadata,
+    name,
+    cui,
+    registrationNumber,
+    customFields,
+    contactDetails,
+    associates,
+    locations,
+    headquarters,
+    files,
+
+    setCompanyInfo,
+    setFiles,
+
+    updateName,
+    updateCui,
+    updateRegistrationNumber,
+    updateHeadquarters,
+    updateBranch,
+    updateFile,
+    updateCustomField,
+    updateContactDetails,
+
+    addBranch,
+    addFile,
+    addContactDetails,
+    addCustomField,
+
+    removeFiles,
+    removeCustomFields,
+    removeBranches,
+    removeContactDetails,
+  } = useCompanyState()
+
   const [step, setStep] = useState(0)
   const cancelChanges = useCancelDialog(routes.companies)
+  const { isSubmitting, isValidating, submitForm } = useFormik<CompanyAPIInput>({
+    validate: (values) => ({}),
+    validateOnChange: false,
+    validateOnMount: false,
+    validateOnBlur: false,
+    enableReinitialize: true,
+    onSubmit,
+    initialValues: {
+      metadata,
+      name,
+      cui,
+      registrationNumber,
+      headquarters,
+      locations: Array.from(locations.values()),
+      associates: Array.from(associates.values()),
+      customFields: Array.from(customFields.values()),
+      contactDetails: Array.from(contactDetails.values()),
+      files: Array.from(files.values()),
+    },
+  })
+
+  useEffect(() => setCompanyInfo(companyInfo), [companyInfo])
 
   return (
     <form data-cy={'companyForm'}>
@@ -85,56 +133,37 @@ const Form: React.FunctionComponent<Props & FormikProps<CompanyAPIInput>> = ({
         {step === 0 && (
           <Grid container spacing={2}>
             <Grid item xs={4}>
-              <InputField
+              <InputFieldWithMetadata
                 name={'name'}
                 label={'Nume'}
-                value={values.name.value}
-                error={errors.name.value}
-                onChange={async (value) => {
-                  const error = await companyFormValidation.name(value)
-                  setFieldValue('name', value)
-                  setFieldError('name', error)
-                }}
+                fieldInfo={name}
+                updateFieldInfo={updateName}
               />
             </Grid>
 
             <Grid item xs={4}>
-              <InputField
+              <InputFieldWithMetadata
                 name={'cui'}
                 label={'CIF / CUI'}
-                value={values.cui.value}
-                error={errors.cui.value}
-                onChange={async (value) => {
-                  const error = await companyFormValidation.cui(value, companyId)
-                  setFieldValue('cui', value)
-                  setFieldError('cui', error)
-                }}
+                fieldInfo={cui}
+                updateFieldInfo={updateCui}
               />
             </Grid>
 
             <Grid item xs={4}>
-              <InputField
+              <InputFieldWithMetadata
                 name={'registrationNumber'}
                 label={'Numar de inregistrare'}
-                value={values.registrationNumber.value}
-                error={errors.registrationNumber.value}
-                onChange={async (value) => {
-                  const error = await companyFormValidation.registrationNumber(value, companyId)
-                  setFieldValue('registrationNumber', value)
-                  setFieldError('registrationNumber', error)
-                }}
+                fieldInfo={registrationNumber}
+                updateFieldInfo={updateRegistrationNumber}
               />
             </Grid>
 
             <Grid item xs={12}>
               <Location
                 label={'Sediu social'}
-                location={values.headquarters ?? getDefaultLocation()}
-                updateLocation={async (value) => {
-                  const error = await companyFormValidation.headquarters(value)
-                  setFieldValue('headquarters', value)
-                  setFieldError('headquarters', error)
-                }}
+                location={headquarters}
+                updateLocation={updateHeadquarters}
               />
             </Grid>
           </Grid>
@@ -142,102 +171,73 @@ const Form: React.FunctionComponent<Props & FormikProps<CompanyAPIInput>> = ({
         {step === 1 && (
           <Grid container spacing={2}>
             <CustomInputFields
-              fields={values.contactDetails}
+              customFields={contactDetails}
               suggestions={CONTACT_METHODS}
-              setFieldValue={async (contactDetails) => {
-                const error = await personFormValidation.contactDetails(contactDetails)
-                setFieldValue('contactDetails', contactDetails)
-                setFieldError('contactDetails', error)
-              }}
-              error={errors.contactDetails as string}
+              updateCustomField={updateContactDetails}
+              addCustomField={addContactDetails}
+              removeCustomFields={removeContactDetails}
             />
           </Grid>
         )}
         {step === 2 && (
           <Grid container spacing={3}>
             <Locations
-              locations={values.locations}
-              updateLocations={async (locations) => {
-                const error = await companyFormValidation.locations(locations)
-                setFieldValue('locations', locations)
-                setFieldError('locations', error)
-              }}
+              locations={locations}
+              updateLocation={updateBranch}
+              addLocation={addBranch}
+              removeLocations={removeBranches}
             />
           </Grid>
         )}
         {step === 3 && (
           <Grid container spacing={2}>
-            <Associates
-              sectionTitle={'Entitati asociate'}
-              error={errors.associates as string}
-              associates={values.associates}
-              updateAssociatesField={async (associates) => {
-                const error = await companyFormValidation.associates(associates)
-                setFieldValue('associates', associates)
-                setFieldError('associates', error)
-              }}
-            />
+            <Associates sectionTitle={'Entitati asociate'} />
           </Grid>
         )}
         {step === 4 && (
           <Grid container spacing={2}>
             <FilesManager
+              removeFiles={removeFiles}
               keepDeletedFiles={!!companyId}
-              files={values.files}
-              updateFiles={async (uploadedFiles) => {
-                const error = await companyFormValidation.files(uploadedFiles)
-                setFieldValue('files', uploadedFiles)
-                setFieldError('files', error)
-              }}
+              files={files}
+              updateFiles={setFiles}
+              updateFile={updateFile}
+              addFile={addFile}
             />
           </Grid>
         )}
         {step === 5 && (
           <Grid container spacing={2}>
             <CustomInputFields
-              fields={values.customFields}
-              error={errors.customFields as string}
-              setFieldValue={async (customFields) => {
-                const error = await personFormValidation.customFields(customFields)
-                setFieldValue('customFields', customFields)
-                setFieldError('customFields', error)
-              }}
+              customFields={customFields}
+              updateCustomField={updateCustomField}
+              addCustomField={addCustomField}
+              removeCustomFields={removeCustomFields}
             />
           </Grid>
         )}
       </Grid>
       <Grid item xs={12} justifyContent={'flex-end'} mt={4}>
-        <Box display={'flex'} justifyContent={'flex-end'}>
+        <Stack direction={'row'} justifyContent={'flex-end'} spacing={4}>
           <Button
             data-cy={'cancelForm'}
             color={'error'}
             disabled={isSubmitting || isValidating}
             variant={'text'}
             onClick={cancelChanges}
-            sx={{ mr: 4 }}
           >
             <FormattedMessage id={'cancel'} />
           </Button>
           <Button
             disabled={isSubmitting || isValidating}
             variant={'contained'}
-            onClick={() => void submitForm()}
+            onClick={submitForm}
             data-cy={'submitForm'}
           >
             <FormattedMessage id={'save'} />
           </Button>
-        </Box>
+        </Stack>
       </Grid>
     </form>
   )
 }
-
-export const CompanyForm = withFormik<Props, CompanyAPIInput>({
-  mapPropsToValues: ({ companyInfo }) => companyInfo ?? getDefaultCompany(),
-  validate: async (values, { companyId }) => validateCompanyForm(values, companyId),
-  validateOnChange: false,
-  validateOnMount: false,
-  validateOnBlur: false,
-  enableReinitialize: true,
-  handleSubmit: (values, { props: { onSubmit } }) => onSubmit(values),
-})(Form)

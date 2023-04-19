@@ -1,7 +1,7 @@
 import { AssociateAPI } from 'defs'
 
-export const countEntities = (associates: AssociateAPI[]) =>
-  associates.reduce(
+export const countEntities = (associates: Map<string, AssociateAPI>) =>
+  Array.from(associates.values()).reduce(
     (entitiesCount, { person, company }) => {
       if (person?._id) {
         entitiesCount.persons += 1
@@ -16,7 +16,7 @@ export const countEntities = (associates: AssociateAPI[]) =>
     },
   )
 
-export const getShareholdersTotalEquity = (associates: AssociateAPI[]) => {
+export const getShareholdersTotalEquity = (associates: Map<string, AssociateAPI>) => {
   let totalEquity = 0.0
   associates.forEach(({ equity: { value } }) => (totalEquity += value))
   return totalEquity.toFixed(2)

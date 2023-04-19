@@ -1,8 +1,5 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import React, { useCallback, useMemo, useState } from 'react'
 import { useIntl } from 'react-intl'
-import MapOutlinedIcon from '@mui/icons-material/MapOutlined'
-import Box from '@mui/material/Box'
-import { GridActionsColDef } from '@mui/x-data-grid/models/colDef/gridColDef'
 import { LocationAPIInput } from 'defs'
 import {
   DataGrid,
@@ -13,40 +10,43 @@ import {
   GridSelectionModel,
   GridToolbarContainer,
 } from '@mui/x-data-grid'
-import { getDefaultLocation } from 'tools'
-import { GridSetItem } from '../../../utils/hooks/useGridSet'
-import { useDebouncedMap } from '../../../utils/hooks/useMap'
+import MapOutlinedIcon from '@mui/icons-material/MapOutlined'
+import Box from '@mui/material/Box'
+import { GridActionsColDef } from '@mui/x-data-grid/models/colDef/gridColDef'
+import { createDatagridItems, getDatagridItemInfo, Unique } from '@frontend/utils/datagridHelpers'
 import { RemoveRowsToolbarButton } from '../../dataGrid/removeRowsToolbarButton'
 import { AddItemToolbarButton } from '../../dataGrid/addItemToolbarButton'
 
-type Props = {
-  locations: LocationAPIInput[]
-  updateLocations: (locations: LocationAPIInput[]) => void | Promise<void>
+type Props<T = LocationAPIInput> = {
+  locations: Map<string, T>
+  updateLocation: (uid: string, locations: T) => void
+  addLocation: () => void
+  removeLocations: (ids: string[]) => void
 }
 
-const getLocationId = ({ locationId }: LocationAPIInput) => locationId
-
-export const Locations: React.FunctionComponent<Props> = ({ locations, updateLocations }) => {
+export const Locations: React.FunctionComponent<Props> = ({
+  locations,
+  updateLocation,
+  addLocation,
+  removeLocations,
+}) => {
   const intl = useIntl()
-  const { uid, values, update, removeBulk, add } = useDebouncedMap(1000, locations, getLocationId)
-
-  useEffect(() => {
-    void updateLocations(values())
-  }, [uid])
-
   const [selectedRows, setSelectedRows] = useState<GridSelectionModel>([])
+  const datagridItems = useMemo(() => createDatagridItems(locations), [locations])
 
   const processRowUpdate = useCallback(
-    async (newRow: GridRowModel<GridSetItem<LocationAPIInput>>) => {
-      update(newRow.locationId, newRow)
+    async (newRow: GridRowModel<Unique<LocationAPIInput>>) => {
+      const { id, item } = getDatagridItemInfo(newRow)
+      updateLocation(id, item)
       return Promise.resolve(newRow)
     },
-    [uid],
+    [updateLocation],
   )
 
-  const removeSelectedRows = useCallback(() => removeBulk(selectedRows as string[]), [selectedRows])
-
-  const addLocation = useCallback(() => add(getDefaultLocation(), getLocationId), [uid])
+  const removeSelectedRows = useCallback(
+    () => removeLocations(selectedRows as string[]),
+    [selectedRows, removeLocations],
+  )
 
   const columns: Array<GridColDef | GridActionsColDef> = useMemo(
     () => [
@@ -99,10 +99,9 @@ export const Locations: React.FunctionComponent<Props> = ({ locations, updateLoc
         disableSelectionOnClick
         disableIgnoreModificationsIfProcessingProps
         hideFooterPagination
-        rows={values()}
+        rows={datagridItems}
         columns={columns}
         experimentalFeatures={{ newEditingApi: true }}
-        getRowId={({ locationId }: LocationAPIInput) => locationId}
         processRowUpdate={processRowUpdate}
         onSelectionModelChange={(selectedRows) => setSelectedRows(selectedRows)}
         components={{

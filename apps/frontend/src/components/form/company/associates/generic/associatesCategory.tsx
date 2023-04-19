@@ -1,11 +1,10 @@
-import Stack from '@mui/material/Stack'
 import React, { useMemo, useState } from 'react'
+import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
 import AccordionSummary from '@mui/material/AccordionSummary'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import AccordionDetails from '@mui/material/AccordionDetails'
 import Accordion from '@mui/material/Accordion'
-import Box from '@mui/material/Box'
 import Divider from '@mui/material/Divider'
 import { AssociateAPI, CompanyAPIOutput, PersonAPIOutput } from 'defs'
 import { PersonAssociateCard } from './personAssociateCard'
@@ -13,12 +12,12 @@ import { CompanyAssociateCard } from './companyAssociateCard'
 import { countEntities } from '../helpers'
 
 type Props<T = AssociateAPI> = {
-  associates: T[]
-  updateAssociate: (associateId: string, associateInfo: T) => void
+  associates: Map<string, T>
+  updateAssociate: (uid: string, associateInfo: T) => void
+  removeAssociate: (uid: string) => void
   categoryName: string
-  personsInfo?: PersonAPIOutput[]
-  companiesInfo?: CompanyAPIOutput[]
-  removeAssociate: (associateId: string) => void
+  personsInfo?: Map<string, PersonAPIOutput>
+  companiesInfo?: Map<string, CompanyAPIOutput>
   allowRoleChange: boolean
 }
 
@@ -36,8 +35,8 @@ export const AssociatesCategory: React.FunctionComponent<Props> = ({
   return (
     <Accordion
       variant={'outlined'}
-      expanded={!!associates.length && expanded}
-      onChange={() => setExpandedState((expanded) => (associates.length ? !expanded : expanded))}
+      expanded={!!associates.size && expanded}
+      onChange={() => setExpandedState((expanded) => (associates.size ? !expanded : expanded))}
     >
       <AccordionSummary expandIcon={<ExpandMoreIcon />}>
         <Stack
@@ -55,38 +54,37 @@ export const AssociatesCategory: React.FunctionComponent<Props> = ({
         </Stack>
       </AccordionSummary>
       <AccordionDetails>
-        {associates.map((associate) => {
+        <Stack spacing={2} sx={{ width: 1 }}></Stack>
+        {Array.from(associates.entries()).map(([uid, associate]) => {
           const personId = associate.person?._id
 
           if (personId) {
-            const personInfo = personsInfo?.find(({ _id }) => _id === personId)
+            const personInfo = personsInfo?.get(personId)
             return personInfo ? (
-              <Box key={personId} sx={{ width: 1, mb: 1 }}>
-                <PersonAssociateCard
-                  associateInfo={associate}
-                  personInfo={personInfo}
-                  removeAssociate={removeAssociate}
-                  updateAssociate={updateAssociate}
-                  allowRoleChange={allowRoleChange}
-                />
-              </Box>
+              <PersonAssociateCard
+                key={uid}
+                associateInfo={associate}
+                personInfo={personInfo}
+                removeAssociate={removeAssociate}
+                updateAssociate={updateAssociate}
+                allowRoleChange={allowRoleChange}
+              />
             ) : null
           }
 
           const companyId = associate.company?._id
 
           if (companyId) {
-            const companyInfo = companiesInfo?.find(({ _id }) => _id === companyId)
+            const companyInfo = companiesInfo?.get(companyId)
             return companyInfo ? (
-              <Box key={personId} sx={{ width: 1, mb: 1 }}>
-                <CompanyAssociateCard
-                  associateInfo={associate}
-                  companyInfo={companyInfo}
-                  removeAssociate={removeAssociate}
-                  updateAssociate={updateAssociate}
-                  allowRoleChange={allowRoleChange}
-                />
-              </Box>
+              <CompanyAssociateCard
+                key={uid}
+                associateInfo={associate}
+                companyInfo={companyInfo}
+                removeAssociate={removeAssociate}
+                updateAssociate={updateAssociate}
+                allowRoleChange={allowRoleChange}
+              />
             ) : null
           }
         })}

@@ -5,13 +5,11 @@ import { getDefaultLocation, getDefaultTextWithMetadata } from 'tools'
 import { createContactDetailsStore, ContactDetailsState } from './contactDetailsState'
 import { createCustomFieldsStore, CustomFieldsState } from './customFieldsState'
 import { createFilesStore, FilesState } from './filesStore'
-import { createImagesStore, ImagesState } from './imagesStore'
 import { createMetadataStore, MetadataState } from './metadataStore'
-import { removeMapItems } from './utils'
+import { addMapItems, removeMapItems } from './utils'
 
 type CompanyState = MetadataState &
   FilesState &
-  ImagesState &
   CustomFieldsState &
   ContactDetailsState & {
     setCompanyInfo: (company: CompanyAPIInput) => void
@@ -30,17 +28,16 @@ type CompanyState = MetadataState &
     updateBranch: (uid: string, branch: LocationAPIInput) => void
     updateAssociate: (uid: string, associate: AssociateAPI) => void
 
-    addAssociate: (associate: AssociateAPI) => void
-    addBranch: (location: LocationAPIInput) => void
+    addAssociates: (associates: AssociateAPI[]) => void
+    addBranch: () => void
 
-    removeAssociates: (ids: string[]) => void
+    removeAssociate: (ids: string) => void
     removeBranches: (ids: string[]) => void
   }
 
 export const useCompanyState = create<CompanyState>((set, get, state) => ({
   ...createMetadataStore(set, get, state),
   ...createFilesStore(set, get, state),
-  ...createImagesStore(set, get, state),
   ...createCustomFieldsStore(set, get, state),
   ...createContactDetailsStore(set, get, state),
 
@@ -80,9 +77,9 @@ export const useCompanyState = create<CompanyState>((set, get, state) => ({
   updateAssociate: (uid, associate) =>
     set({ associates: new Map(get().associates).set(uid, associate) }),
 
-  addAssociate: (associate) => set({ associates: new Map(get().associates).set(v4(), associate) }),
-  addBranch: (location) => set({ locations: new Map(get().locations).set(v4(), location) }),
+  addAssociates: (associates) => set({ associates: addMapItems(get().associates, associates) }),
+  addBranch: () => set({ locations: new Map(get().locations).set(v4(), getDefaultLocation()) }),
 
-  removeAssociates: (ids) => set({ associates: removeMapItems(get().associates, ids) }),
+  removeAssociate: (uid) => set({ associates: removeMapItems(get().associates, [uid]) }),
   removeBranches: (ids) => set({ locations: removeMapItems(get().locations, ids) }),
 }))

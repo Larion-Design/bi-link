@@ -322,7 +322,7 @@ export const PersonForm: React.FunctionComponent<Props> = ({ personId, personInf
           <Button
             disabled={isSubmitting || isValidating}
             variant={'contained'}
-            onClick={() => void submitForm()}
+            onClick={submitForm}
             data-cy={'submitForm'}
           >
             <FormattedMessage id={'save'} />
