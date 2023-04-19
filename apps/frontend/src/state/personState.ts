@@ -164,12 +164,12 @@ export const usePersonState = create<PersonState>((set, getState) => ({
     }),
   updateFile: (fileInfo) =>
     set({ files: new Map(getState().files).set(fileInfo.fileId, fileInfo) }),
-  updateImage: (fileInfo) =>
-    set({ images: new Map(getState().images).set(fileInfo.fileId, fileInfo) }),
   updateCustomField: (uid, customField) =>
     set({ customFields: new Map(getState().customFields).set(uid, customField) }),
   updateContactDetails: (uid, customField) =>
     set({ contactDetails: new Map(getState().contactDetails).set(uid, customField) }),
+  updateImage: (fileInfo) =>
+    set({ images: new Map(getState().images).set(fileInfo.fileId, fileInfo) }),
   updateOldName: (uid, oldName) =>
     set({ oldNames: new Map(getState().oldNames).set(uid, oldName) }),
   updateDocument: (uid, document) =>
