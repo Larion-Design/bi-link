@@ -3,10 +3,8 @@ import { create } from 'zustand'
 import {
   CustomFieldAPI,
   EducationAPIInput,
-  FileAPIInput,
   IdDocumentAPI,
   LocationAPIInput,
-  Metadata,
   OldName,
   OptionalDateWithMetadata,
   PersonAPIInput,
@@ -14,75 +12,71 @@ import {
   TextWithMetadata,
 } from 'defs'
 import {
-  getDefaultCustomField,
   getDefaultEducation,
   getDefaultIdDocument,
   getDefaultLocation,
-  getDefaultMetadata,
   getDefaultOldName,
   getDefaultOptionalDateWithMetadata,
   getDefaultRelationship,
   getDefaultTextWithMetadata,
 } from 'tools'
+import { createContactDetailsStore, ContactDetailsState } from './contactDetailsState'
+import { createCustomFieldsStore, CustomFieldsState } from './customFieldsState'
+import { createFilesStore, FilesState } from './filesStore'
+import { createImagesStore, ImagesState } from './imagesStore'
+import { createMetadataStore, MetadataState } from './metadataStore'
 import { removeMapItems } from './utils'
 
-type PersonState = {
-  metadata: Metadata
-  firstName: TextWithMetadata
-  lastName: TextWithMetadata
-  cnp: TextWithMetadata
-  birthdate: OptionalDateWithMetadata
-  birthPlace: LocationAPIInput
-  homeAddress: LocationAPIInput
-  documents: Map<string, IdDocumentAPI>
-  files: Map<string, FileAPIInput>
-  images: Map<string, FileAPIInput>
-  oldNames: Map<string, OldName>
-  relationships: Map<string, RelationshipAPI>
-  customFields: Map<string, CustomFieldAPI>
-  contactDetails: Map<string, CustomFieldAPI>
-  education: Map<string, EducationAPIInput>
+type PersonState = MetadataState &
+  FilesState &
+  ImagesState &
+  CustomFieldsState &
+  ContactDetailsState & {
+    firstName: TextWithMetadata
+    lastName: TextWithMetadata
+    cnp: TextWithMetadata
+    birthdate: OptionalDateWithMetadata
+    birthPlace: LocationAPIInput
+    homeAddress: LocationAPIInput
+    documents: Map<string, IdDocumentAPI>
+    oldNames: Map<string, OldName>
+    relationships: Map<string, RelationshipAPI>
+    education: Map<string, EducationAPIInput>
 
-  setPersonInfo: (personInfo: PersonAPIInput) => void
-  setImages: (images: FileAPIInput[]) => void
-  setFiles: (images: FileAPIInput[]) => void
+    setPersonInfo: (personInfo: PersonAPIInput) => void
 
-  updateFirstName: (fieldInfo: TextWithMetadata) => void
-  updateLastName: (fieldInfo: TextWithMetadata) => void
-  updateCnp: (fieldInfo: TextWithMetadata) => void
-  updateBirthdate: (fieldInfo: OptionalDateWithMetadata) => void
-  updateBirthPlace: (fieldInfo: LocationAPIInput) => void
-  updateHomeAddress: (fieldInfo: LocationAPIInput) => void
-  updateRelationship: (relationshipInfo: RelationshipAPI) => void
-  updateCustomField: (uid: string, customField: CustomFieldAPI) => void
-  updateContactDetails: (uid: string, customField: CustomFieldAPI) => void
-  updateOldName: (uid: string, oldName: OldName) => void
-  updateDocument: (uid: string, documentInfo: IdDocumentAPI) => void
-  updateFile: (fileInfo: FileAPIInput) => void
-  updateImage: (fileInfo: FileAPIInput) => void
-  updateEducation: (uid: string, education: EducationAPIInput) => void
+    updateFirstName: (fieldInfo: TextWithMetadata) => void
+    updateLastName: (fieldInfo: TextWithMetadata) => void
+    updateCnp: (fieldInfo: TextWithMetadata) => void
+    updateBirthdate: (fieldInfo: OptionalDateWithMetadata) => void
+    updateBirthPlace: (fieldInfo: LocationAPIInput) => void
+    updateHomeAddress: (fieldInfo: LocationAPIInput) => void
+    updateRelationship: (relationshipInfo: RelationshipAPI) => void
+    updateContactDetails: (uid: string, customField: CustomFieldAPI) => void
+    updateOldName: (uid: string, oldName: OldName) => void
+    updateDocument: (uid: string, documentInfo: IdDocumentAPI) => void
+    updateEducation: (uid: string, education: EducationAPIInput) => void
 
-  addRelationships: (personsIds: string[]) => void
-  addCustomField: (fieldName: string) => void
-  addContactDetails: (fieldName: string) => void
-  addOldName: () => void
-  addDocument: (documentType: string) => void
-  addFile: (fileInfo: FileAPIInput) => void
-  addImage: (fileInfo: FileAPIInput) => void
-  addEducation: () => void
+    addRelationships: (personsIds: string[]) => void
+    addContactDetails: (fieldName: string) => void
+    addOldName: () => void
+    addDocument: (documentType: string) => void
+    addEducation: () => void
 
-  removeRelationships: (ids: string[]) => void
-  removeCustomFields: (ids: string[]) => void
-  removeContactDetails: (ids: string[]) => void
-  removeOldNames: (ids: string[]) => void
-  removeDocuments: (ids: string[]) => void
-  removeFiles: (ids: string[]) => void
-  removeImages: (ids: string[]) => void
-  removeEducation: (ids: string[]) => void
-}
+    removeRelationships: (ids: string[]) => void
+    removeContactDetails: (ids: string[]) => void
+    removeOldNames: (ids: string[]) => void
+    removeDocuments: (ids: string[]) => void
+    removeEducation: (ids: string[]) => void
+  }
 
-export const usePersonState = create<PersonState>((set, getState) => ({
-  metadata: getDefaultMetadata(),
+export const usePersonState = create<PersonState>((set, get, state) => ({
+  ...createMetadataStore(set, get, state),
+  ...createFilesStore(set, get, state),
+  ...createImagesStore(set, get, state),
+  ...createCustomFieldsStore(set, get, state),
+  ...createContactDetailsStore(set, get, state),
+
   firstName: getDefaultTextWithMetadata(),
   lastName: getDefaultTextWithMetadata(),
   cnp: getDefaultTextWithMetadata(),
@@ -91,11 +85,7 @@ export const usePersonState = create<PersonState>((set, getState) => ({
   homeAddress: getDefaultLocation(),
   oldNames: new Map(),
   documents: new Map(),
-  contactDetails: new Map(),
   relationships: new Map(),
-  customFields: new Map(),
-  files: new Map(),
-  images: new Map(),
   education: new Map(),
 
   setPersonInfo: (personInfo) => {
@@ -106,18 +96,6 @@ export const usePersonState = create<PersonState>((set, getState) => ({
 
     const oldNamesMap = new Map<string, OldName>()
     personInfo.oldNames.forEach((oldName) => oldNamesMap.set(v4(), oldName))
-
-    const filesMap = new Map<string, FileAPIInput>()
-    personInfo.files.forEach((fileInfo) => filesMap.set(fileInfo.fileId, fileInfo))
-
-    const imagesMap = new Map<string, FileAPIInput>()
-    personInfo.images.forEach((fileInfo) => imagesMap.set(fileInfo.fileId, fileInfo))
-
-    const customFieldsMap = new Map<string, CustomFieldAPI>()
-    personInfo.customFields.forEach((customField) => customFieldsMap.set(v4(), customField))
-
-    const contactDetailsMap = new Map<string, CustomFieldAPI>()
-    personInfo.contactDetails.forEach((customField) => contactDetailsMap.set(v4(), customField))
 
     const documentsMap = new Map<string, IdDocumentAPI>()
     personInfo.documents.forEach((documentInfo) => documentsMap.set(v4(), documentInfo))
@@ -134,22 +112,15 @@ export const usePersonState = create<PersonState>((set, getState) => ({
       homeAddress: personInfo.homeAddress,
       relationships: relationshipsMap,
       oldNames: oldNamesMap,
-      files: filesMap,
-      images: imagesMap,
-      customFields: customFieldsMap,
-      contactDetails: contactDetailsMap,
       documents: documentsMap,
       education: educationMap,
     })
-  },
-  setFiles: (files) => {
-    const filesMap = new Map<string, FileAPIInput>()
-    files.forEach((fileInfo) => filesMap.set(fileInfo.fileId, fileInfo))
-    set({ files: filesMap })
-  },
-  setImages: (images) => {
-    const imagesMap = new Map<string, FileAPIInput>()
-    images.forEach((fileInfo) => imagesMap.set(fileInfo.fileId, fileInfo))
+
+    get().updateMetadata(personInfo.metadata)
+    get().setContactDetails(personInfo.contactDetails)
+    get().setCustomFields(personInfo.customFields)
+    get().setFiles(personInfo.files)
+    get().setImages(personInfo.images)
   },
 
   updateFirstName: (firstName) => set({ firstName }),
@@ -160,73 +131,27 @@ export const usePersonState = create<PersonState>((set, getState) => ({
   updateHomeAddress: (homeAddress) => set({ homeAddress }),
   updateRelationship: (relationship) =>
     set({
-      relationships: new Map(getState().relationships).set(relationship.person._id, relationship),
+      relationships: new Map(get().relationships).set(relationship.person._id, relationship),
     }),
-  updateFile: (fileInfo) =>
-    set({ files: new Map(getState().files).set(fileInfo.fileId, fileInfo) }),
-  updateCustomField: (uid, customField) =>
-    set({ customFields: new Map(getState().customFields).set(uid, customField) }),
-  updateContactDetails: (uid, customField) =>
-    set({ contactDetails: new Map(getState().contactDetails).set(uid, customField) }),
-  updateImage: (fileInfo) =>
-    set({ images: new Map(getState().images).set(fileInfo.fileId, fileInfo) }),
-  updateOldName: (uid, oldName) =>
-    set({ oldNames: new Map(getState().oldNames).set(uid, oldName) }),
+  updateOldName: (uid, oldName) => set({ oldNames: new Map(get().oldNames).set(uid, oldName) }),
   updateDocument: (uid, document) =>
-    set({ documents: new Map(getState().documents).set(uid, document) }),
+    set({ documents: new Map(get().documents).set(uid, document) }),
   updateEducation: (uid, education) =>
-    set({ education: new Map(getState().education).set(uid, education) }),
+    set({ education: new Map(get().education).set(uid, education) }),
 
   addRelationships: (personsIds) => {
-    const relationshipsMap = getState().relationships
+    const relationshipsMap = get().relationships
     personsIds.forEach((personId) =>
       relationshipsMap.set(personId, getDefaultRelationship(personId)),
     )
     set({ relationships: new Map(relationshipsMap) })
   },
+  addOldName: () => set({ oldNames: new Map(get().oldNames).set(v4(), getDefaultOldName()) }),
+  addDocument: () => set({ documents: new Map(get().documents).set(v4(), getDefaultIdDocument()) }),
+  addEducation: () => set({ education: new Map(get().education).set(v4(), getDefaultEducation()) }),
 
-  addCustomField: (fieldName: string) =>
-    set({
-      customFields: new Map(getState().customFields).set(v4(), getDefaultCustomField(fieldName)),
-    }),
-  addContactDetails: (fieldName: string) =>
-    set({
-      contactDetails: new Map(getState().contactDetails).set(
-        v4(),
-        getDefaultCustomField(fieldName),
-      ),
-    }),
-  addOldName: () => set({ oldNames: new Map(getState().oldNames).set(v4(), getDefaultOldName()) }),
-
-  addFile: (fileInfo) => {
-    const filesMap = getState().files
-
-    if (!filesMap.has(fileInfo.fileId)) {
-      set({ files: new Map(filesMap).set(fileInfo.fileId, fileInfo) })
-    }
-  },
-
-  addImage: (fileInfo) => {
-    const imagesMap = getState().images
-
-    if (!imagesMap.has(fileInfo.fileId)) {
-      set({ files: new Map(imagesMap).set(fileInfo.fileId, fileInfo) })
-    }
-  },
-
-  addDocument: () =>
-    set({ documents: new Map(getState().documents).set(v4(), getDefaultIdDocument()) }),
-  addEducation: () =>
-    set({ education: new Map(getState().education).set(v4(), getDefaultEducation()) }),
-
-  removeRelationships: (ids) =>
-    set({ relationships: removeMapItems(getState().relationships, ids) }),
-  removeCustomFields: (ids) => set({ customFields: removeMapItems(getState().customFields, ids) }),
-  removeContactDetails: (ids) =>
-    set({ contactDetails: removeMapItems(getState().contactDetails, ids) }),
-  removeImages: (ids) => set({ images: removeMapItems(getState().images, ids) }),
-  removeFiles: (ids) => set({ files: removeMapItems(getState().files, ids) }),
-  removeDocuments: (ids) => set({ documents: removeMapItems(getState().documents, ids) }),
-  removeOldNames: (ids) => set({ oldNames: removeMapItems(getState().oldNames, ids) }),
-  removeEducation: (ids) => set({ education: removeMapItems(getState().education, ids) }),
+  removeRelationships: (ids) => set({ relationships: removeMapItems(get().relationships, ids) }),
+  removeDocuments: (ids) => set({ documents: removeMapItems(get().documents, ids) }),
+  removeOldNames: (ids) => set({ oldNames: removeMapItems(get().oldNames, ids) }),
+  removeEducation: (ids) => set({ education: removeMapItems(get().education, ids) }),
 }))
