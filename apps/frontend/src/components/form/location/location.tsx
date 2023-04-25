@@ -12,7 +12,7 @@ import { InputField } from '../inputField'
 type Props<T = LocationAPIInput> = {
   label: string
   location: T | null
-  updateLocation: (location: T | null) => void | Promise<void>
+  updateLocation: (location: T | null) => void
   includeFields?: Array<keyof Omit<T, 'locationId' | 'metadata'>>
 }
 
@@ -22,7 +22,7 @@ export const Location: React.FunctionComponent<Props> = ({
   updateLocation,
   includeFields,
 }) => {
-  const { formatMessage } = useIntl()
+  const intl = useIntl()
 
   return (
     <Grid container spacing={2}>
@@ -47,7 +47,7 @@ export const Location: React.FunctionComponent<Props> = ({
           .map(({ gridSize, field }) => (
             <Grid key={field} item xs={gridSize}>
               <InputField
-                label={formatMessage({ id: field, defaultMessage: field })}
+                label={intl.formatMessage({ id: field, defaultMessage: field })}
                 value={location?.[field] ?? ''}
                 onChange={(value) => updateLocation({ ...location, [field]: value })}
               />

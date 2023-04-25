@@ -1,8 +1,10 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
+import { AutocompleteFieldWithMetadata } from '@frontend/components/form/autocompleteField/autocompleteFieldWithMetadata'
+import { DateTimeSelectorWithMetadata } from '@frontend/components/form/dateTimeSelector/dateTimeSelectorWithMetadata'
 import { eventTypes } from '@frontend/components/form/event/constants'
 import { useCancelDialog } from '@frontend/utils/hooks/useCancelDialog'
 import { ApolloError } from '@apollo/client'
-import { FormikProps, withFormik } from 'formik'
+import { useFormik } from 'formik'
 import { FormattedMessage } from 'react-intl'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
@@ -11,16 +13,14 @@ import Step from '@mui/material/Step'
 import StepButton from '@mui/material/StepButton'
 import Stepper from '@mui/material/Stepper'
 import { EventAPIInput } from 'defs'
-import { getDefaultEvent, getDefaultLocation } from 'tools'
+import { getDefaultEvent } from 'tools'
 import { routes } from '../../../../router/routes'
-import { AutocompleteField } from '../../autocompleteField'
+import { useEventState } from '../../../../state/eventState'
 import { CustomInputFields } from '../../customInputFields'
-import { DateTimeSelector } from '../../dateTimeSelector'
 import { FilesManager } from '../../fileField'
 import { InputField } from '../../inputField'
 import { Location } from '../../location'
 import { Parties } from '../parties'
-import { personFormValidation } from '../../person/personForm/validation/validation'
 
 type Props = {
   eventId?: string
@@ -29,18 +29,71 @@ type Props = {
   error?: ApolloError
 }
 
-const Form: React.FunctionComponent<Props & FormikProps<EventAPIInput>> = ({
-  eventId,
-  setFieldError,
-  setFieldValue,
-  values,
-  errors,
-  isSubmitting,
-  isValidating,
-  submitForm,
-}) => {
+export const EventForm: React.FunctionComponent<Props> = ({ eventId, onSubmit, eventInfo }) => {
   const [step, setStep] = useState(0)
   const cancelChanges = useCancelDialog(routes.events)
+
+  const {
+    metadata,
+    type,
+    date,
+    location,
+    description,
+    customFields,
+    files,
+    parties,
+    participantsCustomFields,
+
+    setFiles,
+
+    updateType,
+    updateDate,
+    updateLocation,
+    updateDescription,
+    updateCustomField,
+    updateFile,
+
+    addFile,
+    addCustomField,
+
+    removeFiles,
+    removeCustomFields,
+  } = useEventState()
+
+  const { submitForm, isSubmitting, isValidating, setFieldValue } = useFormik<EventAPIInput>({
+    initialValues: eventInfo ?? getDefaultEvent(),
+    validate: (values) => void {},
+    validateOnChange: false,
+    validateOnMount: false,
+    validateOnBlur: false,
+    enableReinitialize: true,
+    onSubmit,
+  })
+
+  useEffect(() => void setFieldValue('metadata', metadata), [metadata])
+  useEffect(() => void setFieldValue('type', type), [type])
+  useEffect(() => void setFieldValue('date', date), [date])
+  useEffect(() => void setFieldValue('location', location), [location])
+  useEffect(() => void setFieldValue('description', description), [description])
+  useEffect(() => void setFieldValue('parties', Array.from(files)), [files])
+  useEffect(() => void setFieldValue('customFields', Array.from(customFields)), [customFields])
+
+  useEffect(() => {
+    void setFieldValue(
+      'parties',
+      Array.from(parties.values()).map((partyInfo) => ({
+        metadata: partyInfo.metadata,
+        type: partyInfo.type,
+        description: partyInfo.description,
+        customFields: Array.from(partyInfo.customFields).map((customFieldId) =>
+          participantsCustomFields.get(customFieldId),
+        ),
+        persons: Array.from(partyInfo.persons).map((_id) => ({ _id })),
+        companies: Array.from(partyInfo.companies).map((_id) => ({ _id })),
+        properties: Array.from(partyInfo.properties).map((_id) => ({ _id })),
+      })),
+    )
+  }, [parties, participantsCustomFields])
 
   return (
     <form data-cy={'eventForm'}>
@@ -73,34 +126,26 @@ const Form: React.FunctionComponent<Props & FormikProps<EventAPIInput>> = ({
           {step === 0 && (
             <Grid item xs={12} container spacing={2}>
               <Grid item xs={6}>
-                <AutocompleteField
+                <AutocompleteFieldWithMetadata
                   name={'type'}
                   label={'Tip de eveniment'}
-                  value={values.type.value}
-                  error={errors.type.value}
-                  onChange={(value) => setFieldValue('type', value)}
+                  fieldInfo={type}
+                  updateFieldInfo={updateType}
                   suggestions={eventTypes}
                 />
               </Grid>
 
               <Grid item xs={6}>
-                <DateTimeSelector
+                <DateTimeSelectorWithMetadata
                   label={'Data si ora'}
+                  fieldInfo={date}
+                  updateFieldInfo={updateDate}
                   disableFuture
-                  value={values.date.value ? new Date(values.date.value) : null}
-                  error={errors.date as string}
-                  onChange={(date) => setFieldValue('date', date)}
                 />
               </Grid>
 
               <Grid item xs={12}>
-                <Location
-                  label={'Locatie'}
-                  location={values.location ?? getDefaultLocation()}
-                  updateLocation={(location) => {
-                    setFieldValue('location', location)
-                  }}
-                />
+                <Location label={'Locatie'} location={location} updateLocation={updateLocation} />
               </Grid>
 
               <Grid item xs={12}>
@@ -109,9 +154,8 @@ const Form: React.FunctionComponent<Props & FormikProps<EventAPIInput>> = ({
                   label={'Descriere'}
                   multiline
                   rows={10}
-                  value={values.description}
-                  error={errors.description}
-                  onChange={(value) => setFieldValue('description', value)}
+                  value={description}
+                  onChange={updateDescription}
                 />
               </Grid>
             </Grid>
@@ -119,34 +163,27 @@ const Form: React.FunctionComponent<Props & FormikProps<EventAPIInput>> = ({
           {step === 1 && (
             <Grid item xs={12} container spacing={2}>
               <CustomInputFields
-                fields={values.customFields}
-                setFieldValue={async (customFields) => {
-                  const error = await personFormValidation.customFields(customFields)
-                  setFieldValue('customFields', customFields)
-                  setFieldError('customFields', error)
-                }}
-                error={errors.customFields as string}
+                customFields={customFields}
+                updateCustomField={updateCustomField}
+                addCustomField={addCustomField}
+                removeCustomFields={removeCustomFields}
               />
             </Grid>
           )}
           {step === 2 && (
             <Grid item xs={12} container spacing={2}>
-              <Parties
-                parties={values.parties}
-                updateParties={(parties) => setFieldValue('parties', parties)}
-              />
+              <Parties />
             </Grid>
           )}
           {step === 3 && (
             <Grid item xs={12} container spacing={2}>
               <FilesManager
-                files={values.files}
+                removeFiles={removeFiles}
                 keepDeletedFiles={!!eventId}
-                updateFiles={async (uploadedFiles) => {
-                  const error = await personFormValidation.files(uploadedFiles)
-                  setFieldValue('files', uploadedFiles)
-                  setFieldError('files', error)
-                }}
+                files={files}
+                updateFiles={setFiles}
+                updateFile={updateFile}
+                addFile={addFile}
               />
             </Grid>
           )}
@@ -178,13 +215,3 @@ const Form: React.FunctionComponent<Props & FormikProps<EventAPIInput>> = ({
     </form>
   )
 }
-
-export const EventForm = withFormik<Props, EventAPIInput>({
-  mapPropsToValues: ({ eventInfo }) => eventInfo ?? getDefaultEvent(),
-  validate: (values, { eventId }) => void {},
-  validateOnChange: false,
-  validateOnMount: false,
-  validateOnBlur: false,
-  enableReinitialize: true,
-  handleSubmit: (values, { props: { onSubmit } }) => void onSubmit(values),
-})(Form)

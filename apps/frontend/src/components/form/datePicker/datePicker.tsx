@@ -32,7 +32,7 @@ export const DatePicker: React.FunctionComponent<DatePickerProps> = ({
     minDate={minDate}
     maxDate={maxDate}
     disabled={disabled}
-    onChange={onChange}
+    onChange={(value) => void onChange(value)}
     InputProps={{
       startAdornment: startIcon,
       endAdornment: endIcon,

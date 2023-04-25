@@ -10,8 +10,8 @@ import { PartyPersonInfo } from './partyEntityInfo/partyPersonInfo'
 import { PartyEntitiesPlaceholder } from './partyEntitiesPlaceholder'
 
 type Props = {
-  persons: ConnectedEntity[]
-  personsInfo?: PersonAPIOutput[]
+  persons: Set<string>
+  personsInfo?: Map<string, PersonAPIOutput>
   removePerson: (personId: string) => void
 }
 
@@ -30,9 +30,9 @@ export const PartyPersons: React.FunctionComponent<Props> = ({
       <Box sx={{ width: 1, mb: 2 }}>
         <Typography variant={'h6'}>Persoane</Typography>
       </Box>
-      {persons.length > 0 ? (
-        persons.map(({ _id }) => {
-          const personInfo = personsInfo?.find(({ _id: personId }) => personId === _id)
+      {persons.size > 0 ? (
+        Array.from(persons).map((_id) => {
+          const personInfo = personsInfo?.get(_id)
           if (personInfo) {
             const fullName = getPersonFullName(personInfo)
             const { _id, images, cnp } = personInfo

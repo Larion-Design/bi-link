@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
-import { ConnectedEntity, PropertyAPIOutput } from 'defs'
+import { PropertyAPIOutput } from 'defs'
 import { generatePath, useNavigate } from 'react-router-dom'
 import { routes } from '../../../../router/routes'
 import { PartyEntity } from './partyEntity'
@@ -9,8 +9,8 @@ import { PartyEntitiesPlaceholder } from './partyEntitiesPlaceholder'
 import { PartyPropertyInfo } from './partyEntityInfo/partyPropertyInfo'
 
 type Props = {
-  properties: ConnectedEntity[]
-  propertiesInfo?: PropertyAPIOutput[]
+  properties: Set<string>
+  propertiesInfo?: Map<string, PropertyAPIOutput>
   removeProperty: (propertyId: string) => void
 }
 
@@ -29,9 +29,9 @@ export const PartyProperties: React.FunctionComponent<Props> = ({
       <Box sx={{ width: 1, mb: 2 }}>
         <Typography variant={'h6'}>Proprietati</Typography>
       </Box>
-      {properties.length > 0 ? (
-        properties.map(({ _id }) => {
-          const propertyInfo = propertiesInfo?.find(({ _id: propertyId }) => propertyId === _id)
+      {properties.size > 0 ? (
+        Array.from(properties).map((_id) => {
+          const propertyInfo = propertiesInfo?.get(_id)
           if (propertyInfo) {
             const { _id, name, type } = propertyInfo
             return (
