@@ -1,26 +1,28 @@
 import React, { useEffect } from 'react'
-import { FormattedMessage } from 'react-intl'
-import { getDefaultCompany } from 'tools'
-import { CompanySelectorView } from './companySelector'
-import { useFormik } from 'formik'
-import { createCompanyRequest } from '@frontend/graphql/companies/mutations/createCompany'
 import {
   companyFormValidation,
   validateCompanyForm,
-} from '../../../form/company/companyForm/validation/validation'
+} from '@frontend/components/form/company/companyForm/validation/validation'
+import { InputField } from '@frontend/components/form/inputField'
+import { CompanySelectorView } from '@frontend/components/modal/entitySelector'
+import { ModalHeader } from '@frontend/components/modal/modalHeader'
+import { FormattedMessage } from 'react-intl'
+import { getDefaultCompany } from 'tools'
+import { useFormik } from 'formik'
+import { createCompanyRequest } from '@frontend/graphql/companies/mutations/createCompany'
 import CardContent from '@mui/material/CardContent'
 import Grid from '@mui/material/Grid'
-import { InputField } from '../../../form/inputField'
 import CardActions from '@mui/material/CardActions'
 import Button from '@mui/material/Button'
 import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined'
 import Box from '@mui/material/Box'
-import { ModalHeader } from '../../modalHeader'
 
 type Props = {
   closeModal: () => void
   companiesSelected?: (companiesIds: string[]) => void
   changeView: (view: CompanySelectorView) => void
+  onSubmit: (companyId: string) => void
+  onCancel: () => void
 }
 
 export const FastCreateCompany: React.FunctionComponent<Props> = ({

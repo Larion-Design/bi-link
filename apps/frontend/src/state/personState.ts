@@ -31,13 +31,11 @@ type PersonState = MetadataState &
   FilesState &
   ImagesState &
   CustomFieldsState &
-  ContactDetailsState & {
-    firstName: TextWithMetadata
-    lastName: TextWithMetadata
-    cnp: TextWithMetadata
-    birthdate: OptionalDateWithMetadata
-    birthPlace: LocationAPIInput
-    homeAddress: LocationAPIInput
+  ContactDetailsState &
+  Pick<
+    PersonAPIInput,
+    'firstName' | 'lastName' | 'cnp' | 'birthPlace' | 'birthdate' | 'homeAddress'
+  > & {
     documents: Map<string, IdDocumentAPI>
     oldNames: Map<string, OldName>
     relationships: Map<string, RelationshipAPI>
