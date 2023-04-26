@@ -16,7 +16,7 @@ export const propertyOwnerSchema = z
     company: companySchema.nullish(),
     startDate: optionalDateWithMetadataSchema,
     endDate: optionalDateWithMetadataSchema,
-    customFields: z.array(customFieldSchema),
+    customFields: customFieldSchema.array(),
     vehicleOwnerInfo: vehicleOwnerSchema.nullish(),
   })
   .merge(withMetadataSchema)

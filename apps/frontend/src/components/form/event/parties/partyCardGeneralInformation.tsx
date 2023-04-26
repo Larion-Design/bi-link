@@ -1,8 +1,7 @@
-import React from 'react'
+import React, { useCallback } from 'react'
 import Stack from '@mui/material/Stack'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
-import { EventParticipantAPI } from 'defs'
 import { FormattedMessage } from 'react-intl'
 import { useEventState } from '../../../../state/eventState'
 import { InputField } from '../../inputField'
@@ -15,6 +14,12 @@ export const PartyCardGeneralInformation: React.FunctionComponent<Props> = ({ pa
   const { parties, updateParticipantType, updateParticipantDescription } = useEventState()
   const { type, description } = parties.get(partyId)
 
+  const updateType = useCallback((type: string) => updateParticipantType(partyId, type), [partyId])
+  const updateDescription = useCallback(
+    (description: string) => updateParticipantDescription(partyId, description),
+    [partyId],
+  )
+
   return (
     <Box sx={{ width: 1 }}>
       <Box>
@@ -23,18 +28,13 @@ export const PartyCardGeneralInformation: React.FunctionComponent<Props> = ({ pa
         </Typography>
       </Box>
       <Stack mt={1} spacing={2}>
-        <InputField
-          label={'Nume'}
-          value={type}
-          onChange={(type) => updateParticipantType(partyId, type)}
-        />
-
+        <InputField label={'Nume'} value={type} onChange={updateType} />
         <InputField
           label={'Descriere'}
           value={description}
           multiline
           rows={7}
-          onChange={(description) => updateParticipantDescription(partyId, description)}
+          onChange={updateDescription}
         />
       </Stack>
     </Box>

@@ -11,29 +11,16 @@ import { timelineOppositeContentClasses } from '@mui/lab/TimelineOppositeContent
 import { getPersonsBasicInfoRequest } from '@frontend/graphql/persons/queries/getPersonsBasicInfo'
 import { getCompaniesInfoRequest } from '@frontend/graphql/companies/queries/getCompanies'
 import { getDefaultOwner } from 'tools'
+import { usePropertyState } from '../../../../state/propertyState'
 import { useModal } from '../../../modal/modalProvider'
 import { PersonOwnerCard } from './personOwnerCard'
 import { CompanyOwnerCard } from './companyOwnerCard'
 import { useDebouncedMap } from '@frontend/utils/hooks/useMap'
 
-type Props = {
-  isVehicle: boolean
-  owners: PropertyOwnerAPI[]
-  updateOwners: (owners: PropertyOwnerAPI[]) => void | Promise<void>
-}
-
-export const PropertyOwners: React.FunctionComponent<Props> = ({
-  isVehicle,
-  owners,
-  updateOwners,
-}) => {
+export const PropertyOwners: React.FunctionComponent = () => {
+  const { owners, vehicleInfo, realEstateInfo, addOwner, updateOwner, removeOwner } =
+    usePropertyState()
   const modal = useModal()
-  const { uid, values, addBulk, remove, update } = useDebouncedMap(
-    1000,
-    owners,
-    ({ person, company }) => person?._id ?? company?._id,
-  )
-
   const menuButtonRef = useRef<Element | null>(null)
   const [isMenuOpen, setMenuOpenState] = useState(false)
 
@@ -41,40 +28,38 @@ export const PropertyOwners: React.FunctionComponent<Props> = ({
   const [fetchCompanies, { data: companiesInfo }] = getCompaniesInfoRequest()
 
   useEffect(() => {
-    const personsIds: string[] = []
-    const companiesIds: string[] = []
-    const updatedOwners = values()
+    const personsIds = new Set<string>()
+    const companiesIds = new Set<string>()
 
-    updatedOwners.forEach(({ person, company }) => {
+    owners.forEach(({ person, company }) => {
       if (person?._id) {
-        personsIds.push(person._id)
+        personsIds.add(person._id)
       } else if (company?._id) {
-        companiesIds.push(company._id)
+        companiesIds.add(company._id)
       }
     })
 
-    if (personsIds.length) {
-      void fetchPersons({ variables: { personsIds } })
+    if (personsIds.size) {
+      void fetchPersons({ variables: { personsIds: Array.from(personsIds) } })
     }
 
-    if (companiesIds.length) {
-      void fetchCompanies({ variables: { companiesIds } })
+    if (companiesIds.size) {
+      void fetchCompanies({ variables: { companiesIds: Array.from(companiesIds) } })
     }
-    updateOwners(updatedOwners)
-  }, [uid])
+  }, [owners])
 
   const openPersonsModal = useCallback(() => {
-    const personsIds: string[] = []
+    const personsIds = new Set<string>()
 
-    values().forEach(({ person }) => {
+    owners.forEach(({ person }) => {
       if (person?._id) {
-        personsIds.push(person._id)
+        personsIds.add(person._id)
       }
     })
 
     modal?.openPersonSelector((personsIds: string[]) => {
       if (personsIds.length) {
-        addBulk(createPersonsOwners(personsIds, isVehicle), ({ person }) => person?._id)
+        addOwner(createPersonsOwners(personsIds, !!vehicleInfo))
       }
     }, personsIds)
   }, [uid, isVehicle])

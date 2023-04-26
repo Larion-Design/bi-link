@@ -15,10 +15,10 @@ import { useModal } from '../../modal/modalProvider'
 
 type Props<T = FileAPIInput> = {
   images: Map<string, T>
+  setImages: (filesInfo: T[]) => void
   addImage: (fileInfo: T) => void
   updateImage: (fileInfo: T) => void
   removeImages: (uid: string[]) => void
-  readonly?: boolean
 }
 
 export const Images: React.FunctionComponent<Props> = ({
@@ -31,16 +31,12 @@ export const Images: React.FunctionComponent<Props> = ({
   const modal = useModal()
 
   useEffect(() => {
-    const firstImageId = images[0]?.fileId
+    const fileId = Array.from(images.values())[0]?.fileId
 
-    if (firstImageId) {
-      void fetchFileInfo({
-        variables: {
-          fileId: firstImageId,
-        },
-      })
+    if (fileId) {
+      void fetchFileInfo({ variables: { fileId } })
     }
-  }, [images[0]?.fileId])
+  }, [images])
 
   const openImageGallery = useCallback(
     () => modal?.openImageGallery(Array.from(images.values()), (images) => {}),

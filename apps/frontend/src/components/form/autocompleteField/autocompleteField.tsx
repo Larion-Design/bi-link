@@ -1,4 +1,5 @@
-import React from 'react'
+import React, { useMemo } from 'react'
+import { useIntl } from 'react-intl'
 import { AutocompleteInputField } from '@frontend/components/form/autocompleteField/autocompleteInputField'
 import { AutocompleteFieldProps } from '@frontend/components/form/autocompleteField/types'
 import { InputField } from '@frontend/components/form/inputField'
@@ -13,12 +14,19 @@ export const AutocompleteField: React.FunctionComponent<AutocompleteFieldProps> 
   error,
   startIcon,
   endIcon,
-}) =>
-  suggestions?.length ? (
+}) => {
+  const intl = useIntl()
+  const fieldLabel = useMemo(() => {
+    if (label) {
+      return intl.formatMessage({ id: label, defaultMessage: label })
+    }
+  }, [intl, label])
+
+  return suggestions?.length ? (
     <AutocompleteInputField
       value={value}
       onChange={onChange}
-      label={label}
+      label={fieldLabel}
       startIcon={startIcon}
       endIcon={endIcon}
       error={error}
@@ -28,7 +36,7 @@ export const AutocompleteField: React.FunctionComponent<AutocompleteFieldProps> 
   ) : (
     <InputField
       name={name}
-      label={label}
+      label={fieldLabel}
       value={value}
       onChange={(value) => onChange(value)}
       error={error}
@@ -37,3 +45,4 @@ export const AutocompleteField: React.FunctionComponent<AutocompleteFieldProps> 
       endIcon={endIcon}
     />
   )
+}

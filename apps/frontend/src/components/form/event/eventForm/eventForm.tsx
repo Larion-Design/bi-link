@@ -3,7 +3,6 @@ import { AutocompleteFieldWithMetadata } from '@frontend/components/form/autocom
 import { DateTimeSelectorWithMetadata } from '@frontend/components/form/dateTimeSelector/dateTimeSelectorWithMetadata'
 import { eventTypes } from '@frontend/components/form/event/constants'
 import { useCancelDialog } from '@frontend/utils/hooks/useCancelDialog'
-import { ApolloError } from '@apollo/client'
 import { useFormik } from 'formik'
 import { FormattedMessage } from 'react-intl'
 import Box from '@mui/material/Box'
@@ -22,11 +21,10 @@ import { InputField } from '../../inputField'
 import { Location } from '../../location'
 import { Parties } from '../parties'
 
-type Props = {
+type Props<T = EventAPIInput> = {
   eventId?: string
-  eventInfo?: EventAPIInput
-  onSubmit: (formData: EventAPIInput) => void | Promise<void>
-  error?: ApolloError
+  eventInfo?: T
+  onSubmit: (formData: T) => void | Promise<void>
 }
 
 export const EventForm: React.FunctionComponent<Props> = ({ eventId, onSubmit, eventInfo }) => {
