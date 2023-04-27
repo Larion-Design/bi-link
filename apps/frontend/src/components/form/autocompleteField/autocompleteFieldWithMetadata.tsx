@@ -1,5 +1,5 @@
 import React, { useCallback, useRef, useState } from 'react'
-import { TextWithMetadata } from 'defs'
+import { NumberWithMetadata, TextWithMetadata } from 'defs'
 import IconButton from '@mui/material/IconButton'
 import { AutocompleteInputField } from '@frontend/components/form/autocompleteField/autocompleteInputField'
 import { AutocompleteFieldProps } from '@frontend/components/form/autocompleteField/types'
@@ -7,7 +7,10 @@ import { InputFieldWithMetadata } from '@frontend/components/form/inputField'
 import { Metadata } from '@frontend/components/form/metadata'
 import { TrustLevelIcon } from '@frontend/components/form/metadata/trustLevelIcon'
 
-type Props<T = TextWithMetadata> = Omit<AutocompleteFieldProps, 'value' | 'onChange'> & {
+type Props<T = TextWithMetadata | NumberWithMetadata> = Omit<
+  AutocompleteFieldProps,
+  'value' | 'onChange'
+> & {
   fieldInfo: T
   updateFieldInfo: (fieldInfo: T) => void
 }
@@ -43,7 +46,7 @@ export const AutocompleteFieldWithMetadata: React.FunctionComponent<Props> = ({
         <AutocompleteInputField
           name={name}
           label={label}
-          value={fieldInfo.value}
+          value={String(fieldInfo.value)}
           onChange={(value) => updateFieldInfo({ ...fieldInfo, value })}
           readonly={readonly}
           error={error}

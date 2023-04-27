@@ -29,7 +29,7 @@ type ProceedingState = MetadataState &
 
     addInvolvedEntities: (entities: ProceedingEntityInvolvedAPI[]) => void
     updateInvolvedEntity: (uid: string, entity: ProceedingEntityInvolvedAPI) => void
-    removeInvolvedEntity: (ids: string[]) => void
+    removeInvolvedEntity: (uid: string) => void
   }
 
 export const useProceedingState = create<ProceedingState>((set, get, state) => ({
@@ -74,6 +74,6 @@ export const useProceedingState = create<ProceedingState>((set, get, state) => (
     set({ entitiesInvolved: addMapItems(get().entitiesInvolved, entities) }),
   updateInvolvedEntity: (uid, entity) =>
     set({ entitiesInvolved: new Map(get().entitiesInvolved).set(uid, entity) }),
-  removeInvolvedEntity: (ids) =>
-    set({ entitiesInvolved: removeMapItems(get().entitiesInvolved, ids) }),
+  removeInvolvedEntity: (uid) =>
+    set({ entitiesInvolved: removeMapItems(get().entitiesInvolved, [uid]) }),
 }))

@@ -20,3 +20,13 @@ export const getDefaultInvolvedEntity = (): ProceedingEntityInvolvedAPI => ({
   description: '',
   involvedAs: '',
 })
+
+export const getDefaultInvolvedPerson = (_id: string): ProceedingEntityInvolvedAPI => ({
+  ...getDefaultInvolvedEntity(),
+  person: { _id },
+})
+
+export const getDefaultInvolvedCompany = (_id: string): ProceedingEntityInvolvedAPI => ({
+  ...getDefaultInvolvedEntity(),
+  company: { _id },
+})
