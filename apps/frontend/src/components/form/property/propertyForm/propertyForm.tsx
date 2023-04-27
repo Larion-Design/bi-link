@@ -1,9 +1,6 @@
-import React, { useState } from 'react'
-import {
-  propertyTypes,
-  realEstatePropertyTypes,
-} from '@frontend/components/form/property/propertyForm/constants'
-import { RealEstateInfo } from '@frontend/components/form/property/realEstateInfo'
+import React, { useEffect, useState } from 'react'
+import { propertyTypes, realEstatePropertyTypes } from './constants'
+import { RealEstateInfo } from '../realEstateInfo'
 import { useCancelDialog } from '@frontend/utils/hooks/useCancelDialog'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
@@ -11,7 +8,7 @@ import Grid from '@mui/material/Grid'
 import Step from '@mui/material/Step'
 import StepButton from '@mui/material/StepButton'
 import Stepper from '@mui/material/Stepper'
-import { PropertyAPIInput } from 'defs'
+import { PropertyAPIInput, PropertyOwnerAPI } from 'defs'
 import { useFormik } from 'formik'
 import { FormattedMessage } from 'react-intl'
 import { getDefaultProperty, getDefaultRealEstate, getDefaultVehicle } from 'tools'
@@ -40,10 +37,13 @@ export const PropertyForm: React.FunctionComponent<Props> = ({
   const [step, setStep] = useState(0)
   const cancelChanges = useCancelDialog(routes.properties)
   const {
+    metadata,
     name,
     type,
     images,
     files,
+    owners,
+    ownersCustomFields,
     customFields,
     vehicleInfo,
     realEstateInfo,
@@ -76,6 +76,31 @@ export const PropertyForm: React.FunctionComponent<Props> = ({
     enableReinitialize: true,
     onSubmit,
   })
+
+  useEffect(() => void setFieldValue('metadata', metadata), [metadata])
+  useEffect(() => void setFieldValue('type', type), [type])
+  useEffect(() => void setFieldValue('name', name), [name])
+  useEffect(() => void setFieldValue('vehicleInfo', vehicleInfo), [vehicleInfo])
+  useEffect(() => void setFieldValue('realEstateInfo', realEstateInfo), [realEstateInfo])
+  useEffect(() => void setFieldValue('files', Array.from(files)), [files])
+  useEffect(() => void setFieldValue('images', Array.from(images)), [images])
+  useEffect(() => void setFieldValue('customFields', Array.from(customFields)), [customFields])
+  useEffect(() => {
+    const ownersList: PropertyOwnerAPI[] = []
+    owners.forEach(
+      ({ startDate, endDate, metadata, person, company, customFields, vehicleOwnerInfo }) =>
+        ownersList.push({
+          metadata,
+          startDate,
+          endDate,
+          person,
+          company,
+          vehicleOwnerInfo,
+          customFields: Array.from(customFields).map((uid) => ownersCustomFields.get(uid)),
+        }),
+    )
+    void setFieldValue('owners', ownersList)
+  }, [owners])
 
   const renderPropertyFieldsByType = () => {
     if (type === 'Vehicul') {
