@@ -16,7 +16,7 @@ import { useFormik } from 'formik'
 import { FormattedMessage } from 'react-intl'
 import { getDefaultProperty, getDefaultRealEstate, getDefaultVehicle } from 'tools'
 import { routes } from '../../../../router/routes'
-import { usePropertyState } from '../../../../state/propertyState'
+import { usePropertyState } from '../../../../state/property/propertyState'
 import { AutocompleteField } from '../../autocompleteField'
 import { CustomInputFields } from '../../customInputFields'
 import { FilesManager } from '../../fileField'
@@ -40,13 +40,11 @@ export const PropertyForm: React.FunctionComponent<Props> = ({
   const [step, setStep] = useState(0)
   const cancelChanges = useCancelDialog(routes.properties)
   const {
-    metadata,
     name,
     type,
     images,
     files,
     customFields,
-    owners,
     vehicleInfo,
     realEstateInfo,
     setFiles,
@@ -68,6 +66,7 @@ export const PropertyForm: React.FunctionComponent<Props> = ({
     removeFiles,
     removeCustomFields,
   } = usePropertyState()
+
   const { submitForm, isSubmitting, isValidating, setFieldValue } = useFormik<PropertyAPIInput>({
     initialValues: propertyInfo ?? getDefaultProperty(),
     validate: async (values) => validatePropertyForm(values, propertyId),
@@ -179,15 +178,7 @@ export const PropertyForm: React.FunctionComponent<Props> = ({
           {step === 2 && (
             <Grid container spacing={2}>
               <Grid item xs={12}>
-                <PropertyOwners
-                  isVehicle={!!values.vehicleInfo}
-                  owners={values.owners}
-                  updateOwners={async (owners) => {
-                    // const error = await propertyFormValidation.owners(owners)
-                    // setFieldError('owners', error)
-                    setFieldValue('owners', owners)
-                  }}
-                />
+                <PropertyOwners />
               </Grid>
             </Grid>
           )}

@@ -17,7 +17,7 @@ export const createContactDetailsStore: StateCreator<
   [],
   [],
   ContactDetailsState
-> = (set, get, store) => ({
+> = (set, get) => ({
   contactDetails: new Map(),
 
   setContactDetails: (customFields) => {

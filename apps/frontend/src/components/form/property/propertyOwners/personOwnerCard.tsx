@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 import Grid from '@mui/material/Grid'
 import CardContent from '@mui/material/CardContent'
 import Card from '@mui/material/Card'
@@ -10,36 +10,47 @@ import TimelineDot from '@mui/lab/TimelineDot'
 import TimelineOppositeContent from '@mui/lab/TimelineOppositeContent'
 import Typography from '@mui/material/Typography'
 import Tooltip from '@mui/material/Tooltip'
-import { PersonAPIOutput, PropertyOwnerAPI } from 'defs'
+import { CustomFieldAPI, PersonAPIOutput } from 'defs'
 import { getPersonFullName } from '@frontend/utils/person'
+import { formatDate } from 'tools'
+import { usePropertyState } from '../../../../state/property/propertyState'
 import { PersonCardActions } from '../../../card/personCardActions'
 import { PersonOwnerInformation } from './personOwnerInformation'
 import { LinkedEntityCustomFields } from '../../linkedEntityCustomFields'
 
-type Props<T = PropertyOwnerAPI> = {
-  ownerInfo: T
-  updateOwnerInfo: (ownerId: string, ownerInfo: T) => void
+type Props = {
+  ownerId: string
   personInfo: PersonAPIOutput
-  removeOwner: (ownerId: string) => void
 }
 
-export const PersonOwnerCard: React.FunctionComponent<Props> = ({
-  ownerInfo,
-  personInfo,
-  updateOwnerInfo,
-  removeOwner,
-}) => {
+export const PersonOwnerCard: React.FunctionComponent<Props> = ({ ownerId, personInfo }) => {
+  const {
+    owners,
+    ownersCustomFields,
+    removeOwner,
+    addOwnerCustomField,
+    updateOwnerCustomField,
+    removeOwnerCustomFields,
+  } = usePropertyState()
+
+  const ownerInfo = owners.get(ownerId)
   const fullName = getPersonFullName(personInfo)
   const { _id } = personInfo
-  const { customFields } = ownerInfo
+
+  const customFields = useMemo(() => {
+    if (ownerInfo.customFields.size) {
+      const map = new Map<string, CustomFieldAPI>()
+      ownerInfo.customFields.forEach((uid) => map.set(uid, ownersCustomFields.get(uid)))
+      return map
+    }
+  }, [ownerInfo.customFields, ownersCustomFields])
+
   return (
     <TimelineItem>
       <TimelineOppositeContent color={'textSecondary'}>
         <Tooltip title={`Data la care ${fullName} a achiziționat vehiculul`}>
           <Typography variant={'subtitle1'}>
-            {ownerInfo?.startDate.value
-              ? new Date(ownerInfo.startDate.value).toLocaleDateString()
-              : 'Data nedefinita'}
+            {ownerInfo.startDate.value ? formatDate(ownerInfo.startDate.value) : 'Data nedefinita'}
           </Typography>
         </Tooltip>
       </TimelineOppositeContent>
@@ -52,26 +63,19 @@ export const PersonOwnerCard: React.FunctionComponent<Props> = ({
           <CardContent>
             <Grid container spacing={4}>
               <Grid item xs={5}>
-                <PersonOwnerInformation
-                  personInfo={personInfo}
-                  ownerInfo={ownerInfo}
-                  updateOwner={updateOwnerInfo}
-                />
+                <PersonOwnerInformation ownerId={ownerId} personInfo={personInfo} />
               </Grid>
               <Grid item xs={7} container>
                 <LinkedEntityCustomFields
                   customFields={customFields}
-                  updateCustomFields={(customFields) =>
-                    updateOwnerInfo(_id, {
-                      ...ownerInfo,
-                      customFields,
-                    })
-                  }
+                  updateCustomField={updateOwnerCustomField}
+                  addCustomField={() => addOwnerCustomField(ownerId)}
+                  removeCustomFields={(ids) => removeOwnerCustomFields(ownerId, ids)}
                 />
               </Grid>
             </Grid>
           </CardContent>
-          <PersonCardActions name={fullName} personId={_id} onRemove={() => removeOwner(_id)} />
+          <PersonCardActions name={fullName} personId={_id} onRemove={() => removeOwner(ownerId)} />
         </Card>
       </TimelineContent>
     </TimelineItem>

@@ -1,8 +1,10 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 import Grid from '@mui/material/Grid'
 import CardContent from '@mui/material/CardContent'
 import Card from '@mui/material/Card'
-import { CompanyAPIOutput, PropertyOwnerAPI } from 'defs'
+import { CompanyAPIOutput, CustomFieldAPI } from 'defs'
+import { formatDate } from 'tools'
+import { usePropertyState } from '../../../../state/property/propertyState'
 import { CompanyOwnerInformation } from './companyOwnerInformation'
 import TimelineItem from '@mui/lab/TimelineItem'
 import TimelineSeparator from '@mui/lab/TimelineSeparator'
@@ -15,32 +17,40 @@ import Typography from '@mui/material/Typography'
 import { CompanyCardActions } from '../../../card/companyCardActions'
 import { LinkedEntityCustomFields } from '../../linkedEntityCustomFields'
 
-type Props<T = PropertyOwnerAPI> = {
-  ownerInfo: T
-  updateOwnerInfo: (ownerId: string, ownerInfo: T) => void
+type Props = {
+  ownerId: string
   companyInfo: CompanyAPIOutput
-  removeOwner: (ownerId: string) => void
 }
 
-export const CompanyOwnerCard: React.FunctionComponent<Props> = ({
-  ownerInfo,
-  companyInfo,
-  updateOwnerInfo,
-  removeOwner,
-}) => {
+export const CompanyOwnerCard: React.FunctionComponent<Props> = ({ ownerId, companyInfo }) => {
+  const {
+    owners,
+    ownersCustomFields,
+    removeOwnerCustomFields,
+    updateOwnerCustomField,
+    addOwnerCustomField,
+    removeOwner,
+  } = usePropertyState()
   const {
     _id,
     name: { value: companyName },
   } = companyInfo
-  const { customFields } = ownerInfo
+
+  const ownerInfo = owners.get(ownerId)
+  const customFields = useMemo(() => {
+    if (ownerInfo.customFields.size) {
+      const map = new Map<string, CustomFieldAPI>()
+      ownerInfo.customFields.forEach((uid) => map.set(uid, ownersCustomFields.get(uid)))
+      return map
+    }
+  }, [ownerInfo.customFields, ownersCustomFields])
+
   return (
     <TimelineItem>
       <TimelineOppositeContent color="textSecondary">
-        <Tooltip title={`Data la care ${name} a achiziționat vehiculul`}>
+        <Tooltip title={`Data la care ${companyName} a achiziționat vehiculul`}>
           <Typography variant={'subtitle1'}>
-            {ownerInfo?.startDate
-              ? new Date(ownerInfo.startDate.value).toLocaleDateString()
-              : 'Data nedefinita'}
+            {ownerInfo.startDate.value ? formatDate(ownerInfo.startDate.value) : 'Data nedefinita'}
           </Typography>
         </Tooltip>
       </TimelineOppositeContent>
@@ -53,21 +63,14 @@ export const CompanyOwnerCard: React.FunctionComponent<Props> = ({
           <CardContent>
             <Grid container spacing={3}>
               <Grid item xs={5}>
-                <CompanyOwnerInformation
-                  companyInfo={companyInfo}
-                  ownerInfo={ownerInfo}
-                  updateOwner={updateOwnerInfo}
-                />
+                <CompanyOwnerInformation ownerId={ownerId} companyInfo={companyInfo} />
               </Grid>
               <Grid item xs={7} container>
                 <LinkedEntityCustomFields
                   customFields={customFields}
-                  updateCustomFields={(customFields) =>
-                    updateOwnerInfo(_id, {
-                      ...ownerInfo,
-                      customFields,
-                    })
-                  }
+                  addCustomField={() => addOwnerCustomField(ownerId)}
+                  updateCustomField={updateOwnerCustomField}
+                  removeCustomFields={(ids) => removeOwnerCustomFields(ownerId, ids)}
                 />
               </Grid>
             </Grid>

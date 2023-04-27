@@ -1,13 +1,15 @@
-import { CustomFieldAPI, OptionalDateWithMetadata, PropertyOwnerAPI, VehicleOwnerInfo } from 'defs'
-import { getDefaultCustomField } from 'tools'
 import { v4 } from 'uuid'
 import { StateCreator } from 'zustand'
+import { CustomFieldAPI, OptionalDateWithMetadata, PropertyOwnerAPI, VehicleOwnerInfo } from 'defs'
+import { getDefaultCustomField } from 'tools'
 import { removeMapItems } from '../utils'
 
-type PropertyOwner = Omit<PropertyOwnerAPI, 'customFields'> & { customFields: Set<string> }
+export type PropertyOwnerInfoState = Omit<PropertyOwnerAPI, 'customFields'> & {
+  customFields: Set<string>
+}
 
 export type PropertyOwnersState = {
-  owners: Map<string, PropertyOwner>
+  owners: Map<string, PropertyOwnerInfoState>
   setPropertyOwners: (owners: PropertyOwnerAPI[]) => void
   addOwners: (ownersInfo: PropertyOwnerAPI[]) => void
   removeOwner: (uid: string) => void
@@ -32,7 +34,7 @@ export const createPropertyOwnersStore: StateCreator<
   ownersCustomFields: new Map(),
 
   setPropertyOwners: (owners) => {
-    const ownersMap = new Map<string, PropertyOwner>()
+    const ownersMap = new Map<string, PropertyOwnerInfoState>()
     const ownersCustomFields = new Map<string, CustomFieldAPI>()
 
     owners.forEach(

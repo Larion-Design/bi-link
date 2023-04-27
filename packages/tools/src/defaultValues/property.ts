@@ -36,3 +36,21 @@ export const getDefaultOwner = (): PropertyOwnerAPI => ({
   endDate: getDefaultOptionalDateWithMetadata(),
   customFields: [],
 })
+
+export const getDefaultPersonOwner = (_id: string, isVehicleOwner: boolean) => ({
+  ...getDefaultOwner(),
+  person: { _id },
+  customFields: [],
+  startDate: null,
+  endDate: null,
+  vehicleOwnerInfo: isVehicleOwner ? { plateNumbers: [] } : null,
+})
+
+const getDefaultCompanyOwner = (_id: string, isVehicleOwner: boolean) => ({
+  ...getDefaultOwner(),
+  person: { _id },
+  customFields: [],
+  startDate: null,
+  endDate: null,
+  vehicleOwnerInfo: isVehicleOwner ? { plateNumbers: [] } : null,
+})

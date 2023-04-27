@@ -2,28 +2,33 @@ import React from 'react'
 import Stack from '@mui/material/Stack'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
-import { useIntl } from 'react-intl'
-import { DatePicker } from '../../datePicker'
-import { CompanyAPIOutput, PropertyOwnerAPI } from 'defs'
+import { usePropertyState } from '../../../../state/property/propertyState'
+import { DatePickerWithMetadata } from '../../datePicker'
+import { CompanyAPIOutput } from 'defs'
 import { ItemListInput } from '../../itemListInput'
 
-type Props<T = PropertyOwnerAPI> = {
-  ownerInfo: T
-  updateOwner: (ownerId: string, ownerInfo: T) => void
+type Props = {
+  ownerId: string
   companyInfo: CompanyAPIOutput
 }
 
 export const CompanyOwnerInformation: React.FunctionComponent<Props> = ({
-  ownerInfo,
+  ownerId,
   companyInfo,
-  updateOwner,
 }) => {
-  const { formatMessage } = useIntl()
   const {
-    _id,
     name: { value: companyName },
   } = companyInfo
-  const { vehicleOwnerInfo, startDate, endDate } = ownerInfo
+
+  const {
+    owners,
+    updateOwnerStartDate,
+    updateOwnerEndDate,
+    setVehicleOwnerPlateNumbers,
+    vehicleInfo,
+  } = usePropertyState()
+
+  const { startDate, endDate, vehicleOwnerInfo } = owners.get(ownerId)
 
   return (
     <>
@@ -32,37 +37,24 @@ export const CompanyOwnerInformation: React.FunctionComponent<Props> = ({
       </Box>
 
       <Stack spacing={2}>
-        {!!vehicleOwnerInfo && (
+        {!!vehicleInfo && !!vehicleOwnerInfo?.plateNumbers && (
           <ItemListInput
             items={vehicleOwnerInfo.plateNumbers}
             label={'Numere de inmatriculare'}
-            onChange={(plateNumbers) =>
-              updateOwner(_id, {
-                ...ownerInfo,
-                vehicleOwnerInfo: { ...vehicleOwnerInfo, plateNumbers },
-              })
-            }
+            onChange={(plateNumbers) => setVehicleOwnerPlateNumbers(ownerId, plateNumbers)}
           />
         )}
 
-        <DatePicker
-          disableFuture
-          label={formatMessage({ id: 'fromDate' })}
-          value={startDate.value}
-          onChange={(date) => {
-            const value = date ? new Date(date) : null
-            updateOwner(_id, { ...ownerInfo, startDate: { ...startDate, value } })
-          }}
+        <DatePickerWithMetadata
+          label={'fromDate'}
+          fieldInfo={startDate}
+          updateFieldInfo={(startDate) => updateOwnerStartDate(ownerId, startDate)}
         />
 
-        <DatePicker
-          disableFuture
-          label={formatMessage({ id: 'untilDate' })}
-          value={endDate.value}
-          onChange={(date) => {
-            const value = date ? new Date(date) : null
-            updateOwner(_id, { ...ownerInfo, endDate: { ...endDate, value } })
-          }}
+        <DatePickerWithMetadata
+          label={'untilDate'}
+          fieldInfo={endDate}
+          updateFieldInfo={(endDate) => updateOwnerEndDate(ownerId, endDate)}
         />
       </Stack>
     </>

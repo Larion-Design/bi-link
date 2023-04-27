@@ -20,7 +20,7 @@ export const createRealEstateStore: StateCreator<
   [],
   [],
   RealEstateInfoState
-> = (set, get, state) => ({
+> = (set, get) => ({
   realEstateInfo: null,
 
   setRealEstateInfo: (realEstateInfo) => {

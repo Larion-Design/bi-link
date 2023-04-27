@@ -15,7 +15,6 @@ export type CustomFieldsState = {
 export const createCustomFieldsStore: StateCreator<CustomFieldsState, [], [], CustomFieldsState> = (
   set,
   get,
-  store,
 ) => ({
   customFields: new Map(),
 

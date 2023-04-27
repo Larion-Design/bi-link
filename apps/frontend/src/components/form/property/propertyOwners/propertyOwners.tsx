@@ -8,24 +8,23 @@ import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import { PropertyOwnerAPI } from 'defs'
 import { timelineOppositeContentClasses } from '@mui/lab/TimelineOppositeContent'
-import { getPersonsBasicInfoRequest } from '@frontend/graphql/persons/queries/getPersonsBasicInfo'
-import { getCompaniesInfoRequest } from '@frontend/graphql/companies/queries/getCompanies'
+import { getPersonsBasicInfoMap } from '@frontend/graphql/persons/queries/getPersonsBasicInfo'
+import { getCompaniesInfoMap } from '@frontend/graphql/companies/queries/getCompanies'
 import { getDefaultOwner } from 'tools'
-import { usePropertyState } from '../../../../state/propertyState'
+import { PropertyOwnerInfoState } from '../../../../state/property/propertyOwnerState'
+import { usePropertyState } from '../../../../state/property/propertyState'
 import { useModal } from '../../../modal/modalProvider'
 import { PersonOwnerCard } from './personOwnerCard'
 import { CompanyOwnerCard } from './companyOwnerCard'
-import { useDebouncedMap } from '@frontend/utils/hooks/useMap'
 
 export const PropertyOwners: React.FunctionComponent = () => {
-  const { owners, vehicleInfo, realEstateInfo, addOwner, updateOwner, removeOwner } =
-    usePropertyState()
+  const { owners, vehicleInfo, addOwners } = usePropertyState()
   const modal = useModal()
   const menuButtonRef = useRef<Element | null>(null)
   const [isMenuOpen, setMenuOpenState] = useState(false)
 
-  const [fetchPersons, { data: personsInfo }] = getPersonsBasicInfoRequest()
-  const [fetchCompanies, { data: companiesInfo }] = getCompaniesInfoRequest()
+  const { fetchPersons, personsMap } = getPersonsBasicInfoMap()
+  const { fetchCompanies, companiesMap } = getCompaniesInfoMap()
 
   useEffect(() => {
     const personsIds = new Set<string>()
@@ -59,26 +58,26 @@ export const PropertyOwners: React.FunctionComponent = () => {
 
     modal?.openPersonSelector((personsIds: string[]) => {
       if (personsIds.length) {
-        addOwner(createPersonsOwners(personsIds, !!vehicleInfo))
+        addOwners(createPersonsOwners(personsIds, !!vehicleInfo))
       }
-    }, personsIds)
-  }, [uid, isVehicle])
+    }, Array.from(personsIds))
+  }, [owners, vehicleInfo])
 
   const openCompaniesModal = useCallback(() => {
-    const companiesIds: string[] = []
+    const companiesIds = new Set<string>()
 
-    values().forEach(({ company }) => {
+    owners.forEach(({ company }) => {
       if (company?._id) {
-        companiesIds.push(company._id)
+        companiesIds.add(company._id)
       }
     })
 
     modal?.openCompanySelector((companiesIds: string[]) => {
       if (companiesIds.length) {
-        addBulk(createCompaniesOwners(companiesIds, isVehicle), ({ company }) => company?._id)
+        addOwners(createCompaniesOwners(companiesIds, !!vehicleInfo))
       }
-    }, companiesIds)
-  }, [uid, isVehicle])
+    }, Array.from(companiesIds))
+  }, [owners, vehicleInfo])
 
   const closeMenu = useCallback(() => setMenuOpenState(false), [setMenuOpenState])
 
@@ -108,7 +107,7 @@ export const PropertyOwners: React.FunctionComponent = () => {
           </Button>
         </Box>
       </Box>
-      {owners.length ? (
+      {owners.size ? (
         <Timeline
           sx={{
             [`& .${timelineOppositeContentClasses.root}`]: {
@@ -116,44 +115,29 @@ export const PropertyOwners: React.FunctionComponent = () => {
             },
           }}
         >
-          {values()
-            .sort(sortByOwnershipPeriod)
-            .map((owner) => {
+          {Array.from(owners.entries())
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
+            .sort(([uidA, ownerInfoA], [uidB, ownerInfoB]) =>
+              sortByOwnershipPeriod(ownerInfoA, ownerInfoB),
+            )
+            .map(([uid, owner]) => {
               const personId = owner.person?._id
 
               if (personId) {
-                const personInfo = personsInfo?.getPersonsInfo?.find(({ _id }) => _id === personId)
+                const personInfo = personsMap?.get(personId)
 
                 if (personInfo) {
-                  return (
-                    <PersonOwnerCard
-                      key={personId}
-                      ownerInfo={owner}
-                      personInfo={personInfo}
-                      updateOwnerInfo={update}
-                      removeOwner={remove}
-                    />
-                  )
+                  return <PersonOwnerCard key={uid} ownerId={uid} personInfo={personInfo} />
                 }
               }
 
               const companyId = owner.company?._id
 
               if (companyId) {
-                const companyInfo = companiesInfo?.getCompanies?.find(
-                  ({ _id }) => _id === companyId,
-                )
+                const companyInfo = companiesMap?.get(companyId)
 
                 if (companyInfo) {
-                  return (
-                    <CompanyOwnerCard
-                      key={companyId}
-                      ownerInfo={owner}
-                      companyInfo={companyInfo}
-                      updateOwnerInfo={update}
-                      removeOwner={remove}
-                    />
-                  )
+                  return <CompanyOwnerCard key={uid} ownerId={uid} companyInfo={companyInfo} />
                 }
               }
               return null
@@ -197,20 +181,20 @@ const createCompaniesOwners = (companiesIds: string[], isVehicle: boolean) =>
     }),
   )
 
-const sortByOwnershipPeriod = (ownerA: PropertyOwnerAPI, ownerB: PropertyOwnerAPI) => {
-  if (ownerA.startDate) {
-    if (ownerB.startDate) {
-      return ownerA.startDate <= ownerB.startDate ? -1 : 1
+const sortByOwnershipPeriod = (ownerA: PropertyOwnerInfoState, ownerB: PropertyOwnerInfoState) => {
+  if (ownerA.startDate?.value) {
+    if (ownerB.startDate?.value) {
+      return ownerA.startDate?.value <= ownerB.startDate?.value ? -1 : 1
     }
-    if (ownerB.endDate) {
-      return ownerA.startDate <= ownerB.endDate ? -1 : 1
+    if (ownerB.endDate?.value) {
+      return ownerA.startDate?.value <= ownerB.endDate?.value ? -1 : 1
     }
   }
-  if (ownerA.endDate) {
-    if (ownerB.startDate) {
-      return ownerA.endDate <= ownerB.startDate ? -1 : 1
+  if (ownerA.endDate?.value) {
+    if (ownerB.startDate?.value) {
+      return ownerA.endDate?.value <= ownerB.startDate?.value ? -1 : 1
     }
-    if (ownerB.endDate) {
+    if (ownerB.endDate?.value) {
       return ownerA.endDate <= ownerB.endDate ? -1 : 1
     }
   }

@@ -1,6 +1,6 @@
+import { StateCreator } from 'zustand'
 import { TextWithMetadata, VehicleInfoAPI } from 'defs'
 import { getDefaultVehicle } from 'tools'
-import { StateCreator } from 'zustand'
 
 export type VehicleInfoState = {
   vehicleInfo: VehicleInfoAPI | null

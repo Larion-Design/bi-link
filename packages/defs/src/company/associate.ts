@@ -16,7 +16,7 @@ export const associateSchema = z
     startDate: optionalDateWithMetadataSchema,
     endDate: optionalDateWithMetadataSchema,
     isActive: booleanWithMetadataSchema,
-    customFields: z.array(customFieldSchema),
+    customFields: customFieldSchema.array(),
     person: personSchema.nullish(),
     company: connectedEntitySchema.nullish(),
     equity: numberWithMetadataSchema,

@@ -8,7 +8,7 @@ export type DatePickerProps = {
   minDate?: Date
   maxDate?: Date
   onChange: (value: Date | null) => Promise<void> | void
-  onReset: () => void
+  onReset?: () => void
   readonly?: boolean
   disableHighlightToday?: boolean
   disableFuture?: boolean
