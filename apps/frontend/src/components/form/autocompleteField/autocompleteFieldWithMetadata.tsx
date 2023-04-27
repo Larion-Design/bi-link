@@ -7,10 +7,7 @@ import { InputFieldWithMetadata } from '@frontend/components/form/inputField'
 import { Metadata } from '@frontend/components/form/metadata'
 import { TrustLevelIcon } from '@frontend/components/form/metadata/trustLevelIcon'
 
-type Props<T = TextWithMetadata | NumberWithMetadata> = Omit<
-  AutocompleteFieldProps,
-  'value' | 'onChange'
-> & {
+type Props<T = TextWithMetadata> = Omit<AutocompleteFieldProps, 'value' | 'onChange'> & {
   fieldInfo: T
   updateFieldInfo: (fieldInfo: T) => void
 }
@@ -46,7 +43,7 @@ export const AutocompleteFieldWithMetadata: React.FunctionComponent<Props> = ({
         <AutocompleteInputField
           name={name}
           label={label}
-          value={String(fieldInfo.value)}
+          value={fieldInfo.value}
           onChange={(value) => updateFieldInfo({ ...fieldInfo, value })}
           readonly={readonly}
           error={error}

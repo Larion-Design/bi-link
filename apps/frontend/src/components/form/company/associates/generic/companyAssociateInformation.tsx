@@ -2,27 +2,45 @@ import React from 'react'
 import Stack from '@mui/material/Stack'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
-import { AutocompleteField } from '../../../autocompleteField'
-import { DatePicker } from '../../../datePicker'
-import { AssociateAPI, CompanyAPIOutput } from 'defs'
+import { CompanyAPIOutput } from 'defs'
+import { useCompanyState } from '../../../../../state/companyState'
+import { DatePickerWithMetadata } from '../../../datePicker'
 import { ASSOCIATE_ROLES } from '@frontend/utils/constants'
-import TextField from '@mui/material/TextField'
+import { AutocompleteFieldWithMetadata } from '@frontend/components/form/autocompleteField/autocompleteFieldWithMetadata'
+import { InputNumberFieldWithMetadata } from '@frontend/components/form/inputNumberField/inputNumberFieldWithMetadata'
 
-type Props<T = AssociateAPI> = {
-  associateInfo: T
-  updateAssociate: (personId: string, associateInfo: T) => void
-  companyId: string
+type Props = {
+  associateId: string
   companyInfo: CompanyAPIOutput
   allowRoleChange: boolean
 }
 
 export const CompanyAssociateInformation: React.FunctionComponent<Props> = ({
-  companyId,
-  associateInfo,
+  associateId,
   companyInfo,
   allowRoleChange,
-  updateAssociate,
 }) => {
+  const [
+    associateInfo,
+    updateAssociateRole,
+    updateAssociateStartDate,
+    updateAssociateEndDate,
+    updateAssociateEquity,
+  ] = useCompanyState(
+    ({
+      associates,
+      updateAssociateRole,
+      updateAssociateStartDate,
+      updateAssociateEndDate,
+      updateAssociateEquity,
+    }) => [
+      associates.get(associateId),
+      updateAssociateRole,
+      updateAssociateStartDate,
+      updateAssociateEndDate,
+      updateAssociateEquity,
+    ],
+  )
   const { role, startDate, endDate, isActive, equity } = associateInfo
 
   return (
@@ -33,56 +51,31 @@ export const CompanyAssociateInformation: React.FunctionComponent<Props> = ({
 
       <Stack spacing={2}>
         {allowRoleChange && (
-          <AutocompleteField
+          <AutocompleteFieldWithMetadata
             label={'Rol'}
-            value={role.value}
-            onChange={(value) =>
-              updateAssociate(companyId, {
-                ...associateInfo,
-                role: { ...role, value },
-              })
-            }
+            fieldInfo={role}
+            updateFieldInfo={(fieldInfo) => updateAssociateRole(associateId, fieldInfo)}
             suggestions={ASSOCIATE_ROLES}
           />
         )}
 
-        <DatePicker
-          label={'De la data'}
-          value={startDate.value}
-          onChange={(date) => {
-            const value = date ? new Date(date) : null
-            updateAssociate(companyId, {
-              ...associateInfo,
-              startDate: { ...startDate, value },
-            })
-          }}
+        <DatePickerWithMetadata
+          label={'fromDate'}
+          fieldInfo={startDate}
+          updateFieldInfo={(startDate) => updateAssociateStartDate(associateId, startDate)}
         />
 
-        <DatePicker
-          label={'Pana la data'}
-          value={endDate.value}
-          onChange={(date) => {
-            const value = date ? new Date(date) : null
-            updateAssociate(companyId, {
-              ...associateInfo,
-              endDate: { ...endDate, value },
-              isActive: { ...isActive, value: value ? value > new Date() : isActive.value },
-            })
-          }}
+        <DatePickerWithMetadata
+          label={'untilDate'}
+          fieldInfo={endDate}
+          updateFieldInfo={(endDate) => updateAssociateEndDate(associateId, endDate)}
         />
 
-        <TextField
-          fullWidth
+        <InputNumberFieldWithMetadata
           label={'% Actiuni'}
-          type={'number'}
           inputProps={{ step: 0.01 }}
-          value={equity.value.toFixed(2)}
-          onChange={({ target: { value } }) =>
-            updateAssociate(companyId, {
-              ...associateInfo,
-              equity: { ...equity, value: parseFloat(value) },
-            })
-          }
+          fieldInfo={equity}
+          updateFieldInfo={(fieldInfo) => updateAssociateEquity(associateId, fieldInfo)}
         />
       </Stack>
     </>

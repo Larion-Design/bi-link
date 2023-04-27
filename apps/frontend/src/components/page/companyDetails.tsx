@@ -18,7 +18,6 @@ type Props = {
 export const CompanyDetails: React.FunctionComponent<Props> = ({
   companyId,
   companyInfo,
-  readonly,
   onSubmit,
 }) => {
   const [mainTabIndex, setMainTabIndex] = useState(0)
@@ -37,7 +36,7 @@ export const CompanyDetails: React.FunctionComponent<Props> = ({
       >
         <Typography variant={'h5'} data-cy={'pageTitle'} gutterBottom>
           {!!companyId && !!companyInfo
-            ? `Detalii despre ${companyInfo.name}`
+            ? `Detalii despre ${companyInfo.name.value}`
             : 'Creaza o companie'}
         </Typography>
         {!!companyId && (
@@ -58,12 +57,7 @@ export const CompanyDetails: React.FunctionComponent<Props> = ({
       </Box>
       <Box sx={{ width: 1 }}>
         {mainTabIndex === 0 && (
-          <CompanyForm
-            companyId={companyId}
-            companyInfo={companyInfo}
-            readonly={readonly}
-            onSubmit={onSubmit}
-          />
+          <CompanyForm companyId={companyId} companyInfo={companyInfo} onSubmit={onSubmit} />
         )}
         {mainTabIndex === 1 && !!companyId && (
           <Box sx={{ height: '70vh' }}>

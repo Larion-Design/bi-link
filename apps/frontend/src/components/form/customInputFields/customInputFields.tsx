@@ -1,5 +1,5 @@
 import { createDatagridItems, getDatagridItemInfo, Unique } from '@frontend/utils/datagridHelpers'
-import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import React, { useCallback, useMemo, useState } from 'react'
 import Container from '@mui/material/Container'
 import { CustomFieldAPI } from 'defs'
 import {
@@ -57,7 +57,7 @@ export const CustomInputFields: React.FunctionComponent<Props> = ({
         hideFooterSelectedRowCount
         rows={datagridItems}
         columns={columns}
-        getRowId={({ id }) => id}
+        getRowId={({ id }: Unique<CustomFieldAPI>) => id}
         experimentalFeatures={{ newEditingApi: true }}
         processRowUpdate={processRowUpdate}
         onSelectionModelChange={(selectedRows) => setSelectedRows(selectedRows)}

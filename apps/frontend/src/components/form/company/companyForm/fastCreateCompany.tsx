@@ -1,9 +1,6 @@
 import React, { useEffect } from 'react'
-import {
-  companyFormValidation,
-  validateCompanyForm,
-} from '@frontend/components/form/company/companyForm/validation/validation'
-import { InputField } from '@frontend/components/form/inputField'
+import { validateCompanyForm } from '@frontend/components/form/company/companyForm/validation/validation'
+import { InputFieldWithMetadata } from '@frontend/components/form/inputField'
 import { CompanySelectorView } from '@frontend/components/modal/entitySelector'
 import { ModalHeader } from '@frontend/components/modal/modalHeader'
 import { FormattedMessage } from 'react-intl'
@@ -16,13 +13,12 @@ import CardActions from '@mui/material/CardActions'
 import Button from '@mui/material/Button'
 import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined'
 import Box from '@mui/material/Box'
+import { useCompanyState } from '../../../../state/companyState'
 
 type Props = {
   closeModal: () => void
   companiesSelected?: (companiesIds: string[]) => void
   changeView: (view: CompanySelectorView) => void
-  onSubmit: (companyId: string) => void
-  onCancel: () => void
 }
 
 export const FastCreateCompany: React.FunctionComponent<Props> = ({
@@ -31,7 +27,7 @@ export const FastCreateCompany: React.FunctionComponent<Props> = ({
   changeView,
 }) => {
   const [createCompany, { data }] = createCompanyRequest()
-  const { values, errors, setFieldError, setFieldValue, submitForm, isSubmitting } = useFormik({
+  const { setFieldValue, submitForm, isSubmitting, isValidating } = useFormik({
     initialValues: getDefaultCompany(),
     validateOnMount: false,
     validateOnBlur: false,
@@ -39,6 +35,16 @@ export const FastCreateCompany: React.FunctionComponent<Props> = ({
     validate: (values) => validateCompanyForm(values),
     onSubmit: (companyInfo) => createCompany({ variables: { companyInfo } }),
   })
+
+  const { name, cui, registrationNumber, updateName, updateCui, updateRegistrationNumber } =
+    useCompanyState()
+
+  useEffect(() => void setFieldValue('name', name), [name])
+  useEffect(() => void setFieldValue('cui', cui), [cui])
+  useEffect(
+    () => void setFieldValue('registrationNumber', registrationNumber),
+    [registrationNumber],
+  )
 
   useEffect(() => {
     if (data?.createCompany) {
@@ -53,39 +59,27 @@ export const FastCreateCompany: React.FunctionComponent<Props> = ({
       <CardContent sx={{ height: 0.8, mb: 2 }}>
         <Grid container spacing={4}>
           <Grid item xs={4}>
-            <InputField
+            <InputFieldWithMetadata
+              name={'name'}
               label={'Nume'}
-              value={values.name.value}
-              error={errors.name.value}
-              onChange={async (value) => {
-                const error = await companyFormValidation.name(value)
-                setFieldError('name', error)
-                await setFieldValue('name', value)
-              }}
+              fieldInfo={name}
+              updateFieldInfo={updateName}
             />
           </Grid>
           <Grid item xs={4}>
-            <InputField
-              label={'CUI / CIF'}
-              value={values.cui.value}
-              error={errors.cui.value}
-              onChange={async (value) => {
-                const error = await companyFormValidation.cui(value)
-                setFieldError('cui', error)
-                await setFieldValue('cui', value)
-              }}
+            <InputFieldWithMetadata
+              name={'cui'}
+              label={'CIF / CUI'}
+              fieldInfo={cui}
+              updateFieldInfo={updateCui}
             />
           </Grid>
           <Grid item xs={4}>
-            <InputField
+            <InputFieldWithMetadata
+              name={'registrationNumber'}
               label={'Numar de inregistrare'}
-              error={errors.registrationNumber.value}
-              value={values.registrationNumber.value}
-              onChange={async (value) => {
-                const error = await companyFormValidation.registrationNumber(value)
-                setFieldError('registrationNumber', error)
-                await setFieldValue('registrationNumber', value)
-              }}
+              fieldInfo={registrationNumber}
+              updateFieldInfo={updateRegistrationNumber}
             />
           </Grid>
         </Grid>
@@ -107,8 +101,8 @@ export const FastCreateCompany: React.FunctionComponent<Props> = ({
           <Button
             variant={'contained'}
             color={'primary'}
-            disabled={isSubmitting}
-            onClick={submitForm}
+            disabled={isSubmitting || isValidating}
+            onClick={() => void submitForm()}
           >
             <FormattedMessage id={'save'} />
           </Button>

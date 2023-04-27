@@ -3,7 +3,7 @@ import { ProceedingAPIOutput } from 'defs'
 import { Timestamps } from 'defs/dist/modelTimestamps'
 import { CustomField } from '../../customFields/dto/customField'
 import { File } from '../../files/dto/file'
-import { NumberValue } from '../../generic/dto/numberValue'
+import { OptionalDateValue } from '../../generic/dto/optionalDateValue'
 import { TextValue } from '../../generic/dto/textValue'
 import { WithMetadata } from '../../metadata/dto/withMetadata'
 import { ProceedingEntity } from './proceedingEntity'
@@ -34,8 +34,8 @@ export class Proceeding
   @Field()
   type: string
 
-  @Field(() => NumberValue)
-  year: NumberValue
+  @Field(() => OptionalDateValue)
+  year: OptionalDateValue
 
   @Field(() => [File])
   files: File[]

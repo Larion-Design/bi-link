@@ -1,8 +1,7 @@
-import Stack from '@mui/material/Stack'
 import React, { useEffect, useState } from 'react'
 import { CompanyAPIInput } from 'defs'
 import { useFormik } from 'formik'
-import Box from '@mui/material/Box'
+import Stack from '@mui/material/Stack'
 import Button from '@mui/material/Button'
 import Grid from '@mui/material/Grid'
 import Step from '@mui/material/Step'
@@ -10,6 +9,7 @@ import StepButton from '@mui/material/StepButton'
 import Stepper from '@mui/material/Stepper'
 import { FormattedMessage } from 'react-intl'
 import { useCancelDialog } from '@frontend/utils/hooks/useCancelDialog'
+import { getDefaultCompany } from 'tools'
 import { routes } from '../../../../router/routes'
 import { CONTACT_METHODS } from '@frontend/utils/constants'
 import { useCompanyState } from '../../../../state/companyState'
@@ -42,8 +42,8 @@ export const CompanyForm: React.FunctionComponent<Props> = ({
     locations,
     headquarters,
     files,
+    associatesCustomFields,
 
-    setCompanyInfo,
     setFiles,
 
     updateName,
@@ -68,28 +68,46 @@ export const CompanyForm: React.FunctionComponent<Props> = ({
 
   const [step, setStep] = useState(0)
   const cancelChanges = useCancelDialog(routes.companies)
-  const { isSubmitting, isValidating, submitForm } = useFormik<CompanyAPIInput>({
+  const { isSubmitting, isValidating, submitForm, setFieldValue } = useFormik<CompanyAPIInput>({
     validate: (values) => ({}),
     validateOnChange: false,
     validateOnMount: false,
     validateOnBlur: false,
     enableReinitialize: true,
     onSubmit,
-    initialValues: {
-      metadata,
-      name,
-      cui,
-      registrationNumber,
-      headquarters,
-      locations: Array.from(locations.values()),
-      associates: Array.from(associates.values()),
-      customFields: Array.from(customFields.values()),
-      contactDetails: Array.from(contactDetails.values()),
-      files: Array.from(files.values()),
-    },
+    initialValues: companyInfo ?? getDefaultCompany(),
   })
 
-  useEffect(() => setCompanyInfo(companyInfo), [companyInfo])
+  useEffect(() => void setFieldValue('metadata', metadata), [metadata])
+  useEffect(() => void setFieldValue('name', name), [name])
+  useEffect(() => void setFieldValue('cui', cui), [cui])
+  useEffect(
+    () => void setFieldValue('registrationNumber', registrationNumber),
+    [registrationNumber],
+  )
+  useEffect(() => void setFieldValue('files', Array.from(files)), [files])
+  useEffect(() => void setFieldValue('customFields', Array.from(customFields)), [customFields])
+  useEffect(
+    () => void setFieldValue('contactDetails', Array.from(contactDetails)),
+    [contactDetails],
+  )
+
+  useEffect(() => {
+    void setFieldValue(
+      'associates',
+      Array.from(associates.values()).map((associate) => ({
+        metadata: associate.metadata,
+        equity: associate.equity,
+        role: associate.role,
+        isActive: associate.isActive,
+        startDate: associate.startDate,
+        endDate: associate.endDate,
+        customFields: Array.from(associate.customFields).map((customFieldId) =>
+          associatesCustomFields.get(customFieldId),
+        ),
+      })),
+    )
+  }, [associates, associatesCustomFields])
 
   return (
     <form data-cy={'companyForm'}>
@@ -231,7 +249,7 @@ export const CompanyForm: React.FunctionComponent<Props> = ({
           <Button
             disabled={isSubmitting || isValidating}
             variant={'contained'}
-            onClick={submitForm}
+            onClick={() => void submitForm()}
             data-cy={'submitForm'}
           >
             <FormattedMessage id={'save'} />

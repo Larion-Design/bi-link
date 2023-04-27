@@ -73,7 +73,8 @@ export const EventForm: React.FunctionComponent<Props> = ({ eventId, onSubmit, e
   useEffect(() => void setFieldValue('date', date), [date])
   useEffect(() => void setFieldValue('location', location), [location])
   useEffect(() => void setFieldValue('description', description), [description])
-  useEffect(() => void setFieldValue('parties', Array.from(files)), [files])
+  useEffect(() => void setFieldValue('parties', Array.from(parties)), [parties])
+  useEffect(() => void setFieldValue('files', Array.from(files)), [files])
   useEffect(() => void setFieldValue('customFields', Array.from(customFields)), [customFields])
 
   useEffect(() => {

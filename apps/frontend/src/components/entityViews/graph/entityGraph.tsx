@@ -25,7 +25,7 @@ import { PersonNode } from './nodes/personNode'
 import { CompanyNode } from './nodes/companyNode'
 import { PropertyNode } from './nodes/propertyNode'
 import { EventNode } from './nodes/eventNode'
-import { nodeTypeToEntityType } from './nodes/type'
+import { NodeTypes, nodeTypeToEntityType } from './nodes/type'
 
 type Props = {
   id?: string
@@ -116,7 +116,7 @@ export const EntityGraph: React.FunctionComponent<Props> = ({
   )
 
   const onNodeClick: NodeMouseHandler = useCallback(
-    (event, node) => onEntitySelected?.(node.id, nodeTypeToEntityType[node.type]),
+    (event, node) => onEntitySelected?.(node.id, nodeTypeToEntityType[node.type as NodeTypes]),
     [onEntitySelected],
   )
 

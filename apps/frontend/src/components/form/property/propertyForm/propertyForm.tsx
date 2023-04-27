@@ -104,21 +104,9 @@ export const PropertyForm: React.FunctionComponent<Props> = ({
 
   const renderPropertyFieldsByType = () => {
     if (type === 'Vehicul') {
-      return (
-        <VehicleInfo
-          vehicleInfo={vehicleInfo ?? getDefaultVehicle()}
-          updateVehicleInfo={(vehicleInfo) => void setFieldValue('vehicleInfo', vehicleInfo)}
-        />
-      )
+      return <VehicleInfo />
     } else if (realEstatePropertyTypes.includes(type)) {
-      return (
-        <RealEstateInfo
-          realEstateInfo={realEstateInfo ?? getDefaultRealEstate()}
-          updateRealEstateInfo={(realEstateInfo) =>
-            void setFieldValue('realEstateInfo', realEstateInfo)
-          }
-        />
-      )
+      return <RealEstateInfo />
     }
     return null
   }

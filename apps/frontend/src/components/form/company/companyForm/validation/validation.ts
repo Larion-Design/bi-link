@@ -1,4 +1,5 @@
 import { FormikErrors } from 'formik'
+import { CompanyAssociateInfoState } from '../../../../../state/company/companyAssociatesState'
 import { validateContactDetails } from '../../../contactDetails/validation'
 import { validateCustomFields } from '../../../customInputFields/validation'
 import { validateFilesFormat } from '../../../fileField/validation'
@@ -54,8 +55,8 @@ export const companyFormValidation = {
       return validateFilesFormat(files)
     }
   },
-  associates: async (associates: AssociateAPI[]) => {
-    if (associates.length) {
+  associates: async (associates: Map<string, CompanyAssociateInfoState>) => {
+    if (associates.size) {
       return validateAssociates(associates)
     }
   },

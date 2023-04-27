@@ -1,31 +1,23 @@
-import React, { useCallback, useRef, useState } from 'react'
-import IconButton from '@mui/material/IconButton'
-import { NumberWithMetadata, TextWithMetadata } from 'defs'
-import { InputField } from '@frontend/components/form/inputField'
-import { InputFieldProps } from '@frontend/components/form/inputField/types'
+import { ColorPicker } from '@frontend/components/form/colorPicker/colorPicker'
+import { ColorPickerProps } from '@frontend/components/form/colorPicker/types'
 import { Metadata } from '@frontend/components/form/metadata'
 import { TrustLevelIcon } from '@frontend/components/form/metadata/trustLevelIcon'
+import IconButton from '@mui/material/IconButton'
+import { TextWithMetadata } from 'defs'
+import React, { useCallback, useRef, useState } from 'react'
 
-type Props<T = TextWithMetadata | NumberWithMetadata> = Omit<
-  InputFieldProps,
-  'value' | 'onChange'
-> & {
+type Props<T = TextWithMetadata> = Omit<ColorPickerProps, 'value' | 'onChange'> & {
   fieldInfo: T
-  updateFieldInfo?: (fieldInfo: T) => void
+  updateFieldInfo: (fieldInfo: T) => void
 }
 
-export const InputFieldWithMetadata: React.FunctionComponent<Props> = ({
+export const ColorPickerWithMetadata: React.FunctionComponent<Props> = ({
   fieldInfo: { value, metadata },
   updateFieldInfo,
+  error,
+  disabled,
   name,
   label,
-  readonly,
-  error,
-  required,
-  rows,
-  disabled,
-  multiline,
-  inputProps,
 }) => {
   const metadataElementRef = useRef<Element | null>(null)
   const [isMetadataViewOpen, setMetadataViewOpen] = useState(false)
@@ -40,24 +32,17 @@ export const InputFieldWithMetadata: React.FunctionComponent<Props> = ({
         <Metadata
           targetElement={metadataElementRef.current}
           metadataInfo={metadata}
-          updateMetadataInfo={(metadata) =>
-            updateFieldInfo({ value, metadata } as TextWithMetadata)
-          }
+          updateMetadataInfo={(metadata) => updateFieldInfo({ value, metadata })}
           onClose={toggleMetadataView}
         />
       )}
-      <InputField
+      <ColorPicker
         name={name}
-        value={String(value)}
+        value={value}
         label={label}
-        multiline={multiline}
-        rows={rows}
-        onChange={(value) => updateFieldInfo({ metadata, value })}
-        required={required}
-        readonly={readonly}
-        disabled={disabled}
-        inputProps={inputProps}
         error={error}
+        disabled={disabled}
+        onChange={(value) => updateFieldInfo({ value, metadata })}
         endIcon={
           <IconButton
             ref={(ref) => (metadataElementRef.current = ref)}

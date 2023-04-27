@@ -5,8 +5,13 @@ import {
   NumberWithMetadata,
   ProceedingAPIInput,
   ProceedingEntityInvolvedAPI,
+  OptionalDateWithMetadata,
 } from 'defs'
-import { getDefaultNumberWithMetadata, getDefaultTextWithMetadata } from 'tools'
+import {
+  getDefaultNumberWithMetadata,
+  getDefaultOptionalDateWithMetadata,
+  getDefaultTextWithMetadata,
+} from 'tools'
 import { createCustomFieldsStore, CustomFieldsState } from './customFieldsState'
 import { createFilesStore, FilesState } from './filesStore'
 import { createMetadataStore, MetadataState } from './metadataStore'
@@ -23,7 +28,7 @@ type ProceedingState = MetadataState &
     updateName: (name: string) => void
     updateType: (type: string) => void
     updateReason: (type: TextWithMetadata) => void
-    updateYear: (type: NumberWithMetadata) => void
+    updateYear: (type: OptionalDateWithMetadata) => void
     updateFileNumber: (type: TextWithMetadata) => void
     updateDescription: (description: string) => void
 
@@ -40,7 +45,7 @@ export const useProceedingState = create<ProceedingState>((set, get, state) => (
   name: '',
   type: '',
   description: '',
-  year: getDefaultNumberWithMetadata(),
+  year: getDefaultOptionalDateWithMetadata(),
   reason: getDefaultTextWithMetadata(),
   fileNumber: getDefaultTextWithMetadata(),
   entitiesInvolved: new Map(),

@@ -1,25 +1,26 @@
 import React, { useEffect } from 'react'
-import { VehicleInfo as VehicleInfoType } from 'defs'
 import Grid from '@mui/material/Grid'
-import { InputField } from '../../inputField'
-import { AutocompleteField } from '../../autocompleteField'
+import { usePropertyState } from '../../../../state/property/propertyState'
+import { InputFieldWithMetadata } from '../../inputField'
 import { getMakersRequest } from '@frontend/graphql/properties/queries/vehicles/getMakers'
 import { getModelsRequest } from '@frontend/graphql/properties/queries/vehicles/getModels'
-import { ColorPicker } from '../../colorPicker'
+import { ColorPickerWithMetadata } from '../../colorPicker'
+import { AutocompleteFieldWithMetadata } from '@frontend/components/form/autocompleteField/autocompleteFieldWithMetadata'
 
-type Props<T = VehicleInfoType> = {
-  vehicleInfo: T
-  updateVehicleInfo: (vehicleInfo: T) => void | Promise<void>
-  error?: string
-}
-
-export const VehicleInfo: React.FunctionComponent<Props> = ({
-  vehicleInfo,
-  updateVehicleInfo,
-  error,
-}) => {
+export const VehicleInfo: React.FunctionComponent = () => {
   const [fetchMakers, { data: makers }] = getMakersRequest()
   const [fetchModels, { data: models }] = getModelsRequest()
+
+  const [vehicleInfo, updateVehicleMaker, updateVehicleModel, updateVin, updateColor] =
+    usePropertyState(
+      ({ vehicleInfo, updateVehicleMaker, updateVehicleModel, updateVin, updateColor }) => [
+        vehicleInfo,
+        updateVehicleMaker,
+        updateVehicleModel,
+        updateVin,
+        updateColor,
+      ],
+    )
 
   useEffect(() => {
     if (vehicleInfo && !makers && !models) {
@@ -42,62 +43,42 @@ export const VehicleInfo: React.FunctionComponent<Props> = ({
     }
   }, [vehicleInfo?.model.value])
 
+  if (!vehicleInfo) {
+    return null
+  }
+
+  const { model, maker, vin, color } = vehicleInfo
+
   return (
     <>
       <Grid item xs={6}>
-        <InputField
-          name={'vin'}
-          label={'VIN'}
-          value={vehicleInfo?.vin.value}
-          error={error}
-          onChange={(value) =>
-            updateVehicleInfo({
-              ...vehicleInfo,
-              vin: { metadata: vehicleInfo.vin.metadata, value },
-            })
-          }
-        />
+        <InputFieldWithMetadata label={'VIN'} fieldInfo={vin} updateFieldInfo={updateVin} />
       </Grid>
+
       <Grid item xs={6}>
-        <AutocompleteField
+        <AutocompleteFieldWithMetadata
           label={'Marca'}
-          value={vehicleInfo.maker.value}
-          error={error}
+          fieldInfo={maker}
+          updateFieldInfo={updateVehicleMaker}
           suggestions={makers?.getMakers ?? []}
-          onChange={async (value) =>
-            updateVehicleInfo({
-              ...vehicleInfo,
-              maker: { value, metadata: vehicleInfo.maker.metadata },
-            })
-          }
         />
       </Grid>
+
       <Grid item xs={6}>
-        <AutocompleteField
+        <AutocompleteFieldWithMetadata
           label={'Model'}
-          value={vehicleInfo.model.value}
-          error={error}
-          suggestions={models?.getModels ?? []}
-          onChange={async (value) =>
-            updateVehicleInfo({
-              ...vehicleInfo,
-              model: { value, metadata: vehicleInfo.model.metadata },
-            })
-          }
+          fieldInfo={model}
+          updateFieldInfo={updateVehicleModel}
+          suggestions={makers?.getMakers ?? []}
         />
       </Grid>
+
       <Grid item xs={6}>
-        <ColorPicker
-          name={'color'}
-          value={vehicleInfo?.color.value}
+        <ColorPickerWithMetadata
           label={'Culoare'}
-          error={error}
-          onChange={async (value) =>
-            updateVehicleInfo({
-              ...vehicleInfo,
-              color: { value, metadata: vehicleInfo.color.metadata },
-            })
-          }
+          name={'color'}
+          fieldInfo={color}
+          updateFieldInfo={updateColor}
         />
       </Grid>
     </>

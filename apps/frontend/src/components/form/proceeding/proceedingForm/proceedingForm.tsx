@@ -1,3 +1,4 @@
+import { DatePickerWithMetadata } from '@frontend/components/form/datePicker'
 import React, { useEffect, useMemo, useState } from 'react'
 import { AutocompleteFieldWithMetadata } from '@frontend/components/form/autocompleteField/autocompleteFieldWithMetadata'
 import { useFormik } from 'formik'
@@ -164,12 +165,13 @@ export const ProceedingForm: React.FunctionComponent<Props> = ({
               </Grid>
 
               <Grid item xs={4}>
-                <AutocompleteFieldWithMetadata
-                  name={'year'}
+                <DatePickerWithMetadata
                   label={'Anul deschiderii dosarului'}
                   fieldInfo={year}
-                  updateFieldInfo={({ metadata, value }) => updateYear({ metadata, value: +value })}
-                  suggestions={proceedingYears}
+                  updateFieldInfo={updateYear}
+                  views={['year']}
+                  minDate={new Date(1970)}
+                  disableFuture
                 />
               </Grid>
 

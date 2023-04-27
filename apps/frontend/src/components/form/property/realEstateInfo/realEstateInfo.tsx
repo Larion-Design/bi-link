@@ -1,72 +1,57 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React from 'react'
 import Grid from '@mui/material/Grid'
-import { InputNumberField } from '@frontend/components/form/inputNumberField'
+import { InputNumberFieldWithMetadata } from '@frontend/components/form/inputNumberField/inputNumberFieldWithMetadata'
+import { ToggleButtonWithMetadata } from '@frontend/components/form/toggleButton/toggleButtonWithMetadata'
 import { Location } from '@frontend/components/form/location'
-import { ToggleButton } from '@frontend/components/form/toggleButton'
-import { LocationAPIInput, RealEstateInfo as RealEstateInfoType } from 'defs'
-import { useDebounce } from 'usehooks-ts'
+import { usePropertyState } from '../../../../state/property/propertyState'
 
-type Props<T = RealEstateInfoType> = {
-  realEstateInfo: T
-  updateRealEstateInfo: (realEstateInfo: T) => void | Promise<void>
-}
-
-export const RealEstateInfo: React.FunctionComponent<Props> = ({
-  realEstateInfo,
-  updateRealEstateInfo,
-}) => {
-  const [realEstate, setRealEstate] = useState(realEstateInfo)
-  const debouncedRealEstate = useDebounce(realEstate, 1000)
-
-  const updateSurface = useCallback(
-    (value: number) =>
-      setRealEstate((realEstate) => ({
-        ...realEstate,
-        surface: { ...realEstate.surface, value },
-      })),
-    [realEstate.surface],
+export const RealEstateInfo: React.FunctionComponent = () => {
+  const [
+    realEstateInfo,
+    updateRealEstateSurface,
+    updateRealEstateTownArea,
+    updateRealEstateLocation,
+  ] = usePropertyState(
+    ({
+      realEstateInfo,
+      updateRealEstateSurface,
+      updateRealEstateTownArea,
+      updateRealEstateLocation,
+    }) => [
+      realEstateInfo,
+      updateRealEstateSurface,
+      updateRealEstateTownArea,
+      updateRealEstateLocation,
+    ],
   )
 
-  const updateTownArea = useCallback(
-    (value: boolean) =>
-      setRealEstate((realEstate) => ({
-        ...realEstate,
-        townArea: { ...realEstate.townArea, value },
-      })),
-    [realEstate.townArea],
-  )
+  if (!realEstateInfo) {
+    return null
+  }
 
-  const updateLocation = useCallback(
-    (location: LocationAPIInput | null) =>
-      setRealEstate((realEstate) => ({ ...realEstate, location })),
-    [realEstate.location],
-  )
-
-  useEffect(() => {
-    updateRealEstateInfo(debouncedRealEstate)
-  }, [debouncedRealEstate])
+  const { surface, townArea, location } = realEstateInfo
 
   return (
     <>
       <Grid item xs={6}>
-        <InputNumberField
+        <InputNumberFieldWithMetadata
           name={'surface'}
           label={'Suprafata'}
-          value={realEstate.surface.value}
-          onChange={updateSurface}
+          fieldInfo={surface}
+          updateFieldInfo={updateRealEstateSurface}
         />
       </Grid>
 
       <Grid item xs={6}>
-        <ToggleButton
+        <ToggleButtonWithMetadata
           label={'Intravilan'}
-          checked={realEstate.townArea.value}
-          onChange={updateTownArea}
+          fieldInfo={townArea}
+          updateFieldInfo={updateRealEstateTownArea}
         />
       </Grid>
 
       <Grid item xs={12}>
-        <Location label={'Adresa'} location={realEstate.location} updateLocation={updateLocation} />
+        <Location label={'Adresa'} location={location} updateLocation={updateRealEstateLocation} />
       </Grid>
     </>
   )

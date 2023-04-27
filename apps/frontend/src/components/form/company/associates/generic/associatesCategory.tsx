@@ -7,14 +7,14 @@ import AccordionDetails from '@mui/material/AccordionDetails'
 import Accordion from '@mui/material/Accordion'
 import Divider from '@mui/material/Divider'
 import { AssociateAPI, CompanyAPIOutput, PersonAPIOutput } from 'defs'
+import { CompanyAssociateInfoState } from '../../../../../state/company/companyAssociatesState'
+import { useCompanyState } from '../../../../../state/companyState'
 import { PersonAssociateCard } from './personAssociateCard'
 import { CompanyAssociateCard } from './companyAssociateCard'
 import { countEntities } from '../helpers'
 
-type Props<T = AssociateAPI> = {
-  associates: Map<string, T>
-  updateAssociate: (uid: string, associateInfo: T) => void
-  removeAssociate: (uid: string) => void
+type Props = {
+  associatesIds: string[]
   categoryName: string
   personsInfo?: Map<string, PersonAPIOutput>
   companiesInfo?: Map<string, CompanyAPIOutput>
@@ -23,15 +23,33 @@ type Props<T = AssociateAPI> = {
 
 export const AssociatesCategory: React.FunctionComponent<Props> = ({
   categoryName,
-  associates,
+  associatesIds,
   personsInfo,
   companiesInfo,
-  removeAssociate,
-  updateAssociate,
   allowRoleChange,
 }) => {
   const [expanded, setExpandedState] = useState(false)
-  const { persons, companies } = useMemo(() => countEntities(associates), [associates])
+  const [associates] = useCompanyState(
+    ({
+      associates,
+      updateAssociateActive,
+      updateAssociateEquity,
+      updateAssociateRole,
+      updateAssociateStartDate,
+      updateAssociateEndDate,
+      updateAssociateCustomField,
+      addAssociateCustomField,
+      removeAssociateCustomFields,
+    }) => [associates],
+  )
+
+  const categoryAssociates = useMemo(() => {
+    const map = new Map<string, CompanyAssociateInfoState>()
+    associatesIds.forEach((associateId) => map.set(associateId, associates.get(associateId)))
+    return map
+  }, [associates])
+
+  const { persons, companies } = useMemo(() => countEntities(categoryAssociates), [associates])
   return (
     <Accordion
       variant={'outlined'}
@@ -55,7 +73,7 @@ export const AssociatesCategory: React.FunctionComponent<Props> = ({
       </AccordionSummary>
       <AccordionDetails>
         <Stack spacing={2} sx={{ width: 1 }}></Stack>
-        {Array.from(associates.entries()).map(([uid, associate]) => {
+        {Array.from(categoryAssociates.entries()).map(([uid, associate]) => {
           const personId = associate.person?._id
 
           if (personId) {
@@ -63,10 +81,8 @@ export const AssociatesCategory: React.FunctionComponent<Props> = ({
             return personInfo ? (
               <PersonAssociateCard
                 key={uid}
-                associateInfo={associate}
+                associateId={uid}
                 personInfo={personInfo}
-                removeAssociate={removeAssociate}
-                updateAssociate={updateAssociate}
                 allowRoleChange={allowRoleChange}
               />
             ) : null
@@ -79,10 +95,8 @@ export const AssociatesCategory: React.FunctionComponent<Props> = ({
             return companyInfo ? (
               <CompanyAssociateCard
                 key={uid}
-                associateInfo={associate}
+                associateId={uid}
                 companyInfo={companyInfo}
-                removeAssociate={removeAssociate}
-                updateAssociate={updateAssociate}
                 allowRoleChange={allowRoleChange}
               />
             ) : null

@@ -1,7 +1,11 @@
 import { z } from 'zod'
 import { customFieldSchema } from '../customField'
 import { fileInputSchema, fileOutputSchema, fileSchema } from '../file'
-import { numberWithMetadataSchema, textWithMetadataSchema } from '../generic'
+import {
+  numberWithMetadataSchema,
+  optionalDateWithMetadataSchema,
+  textWithMetadataSchema,
+} from '../generic'
 import { withMetadataSchema } from '../metadata'
 import { withTimestamps } from '../modelTimestamps'
 import { SearchSuggestions } from '../searchSuggestions'
@@ -16,7 +20,7 @@ export const proceedingSchema = z
     name: z.string(),
     type: z.string(),
     reason: textWithMetadataSchema,
-    year: numberWithMetadataSchema,
+    year: optionalDateWithMetadataSchema,
     fileNumber: textWithMetadataSchema,
     description: z.string(),
     entitiesInvolved: z.array(proceedingEntityInvolvedSchema),
@@ -28,7 +32,7 @@ export const proceedingSchema = z
 
 const proceedingAPISchema = proceedingSchema.merge(
   z.object({
-    entitiesInvolved: z.array(proceedingEntityInvolvedAPISchema),
+    entitiesInvolved: proceedingEntityInvolvedAPISchema.array(),
   }),
 )
 

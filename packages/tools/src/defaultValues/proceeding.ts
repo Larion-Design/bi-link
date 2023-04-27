@@ -1,6 +1,6 @@
 import { ProceedingAPIInput, ProceedingEntityInvolvedAPI } from 'defs'
 import { getDefaultMetadata } from './metadata'
-import { getDefaultNumberWithMetadata, getDefaultTextWithMetadata } from './valueWithMetadata'
+import { getDefaultOptionalDateWithMetadata, getDefaultTextWithMetadata } from './valueWithMetadata'
 
 export const getDefaultProceeding = (): ProceedingAPIInput => ({
   metadata: getDefaultMetadata(),
@@ -9,7 +9,7 @@ export const getDefaultProceeding = (): ProceedingAPIInput => ({
   description: '',
   reason: getDefaultTextWithMetadata(),
   fileNumber: getDefaultTextWithMetadata(),
-  year: getDefaultNumberWithMetadata(),
+  year: getDefaultOptionalDateWithMetadata(),
   entitiesInvolved: [],
   customFields: [],
   files: [],

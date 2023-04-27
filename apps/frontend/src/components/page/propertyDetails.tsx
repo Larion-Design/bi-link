@@ -18,7 +18,6 @@ type Props = {
 export const PropertyDetails: React.FunctionComponent<Props> = ({
   propertyId,
   propertyInfo,
-  readonly,
   onSubmit,
 }) => {
   const [mainTabIndex, setMainTabIndex] = useState(0)
@@ -60,8 +59,7 @@ export const PropertyDetails: React.FunctionComponent<Props> = ({
           <PropertyForm
             propertyId={propertyId}
             propertyInfo={propertyInfo}
-            readonly={readonly}
-            onSubmit={onSubmit}
+            onSubmit={(values) => void onSubmit(values)}
           />
         )}
         {mainTabIndex === 1 && !!propertyId && (

@@ -1,5 +1,5 @@
-import { TrustLevelIcon } from '@frontend/components/form/metadata/trustLevelIcon'
 import React, { PropsWithChildren, useCallback, useRef, useState } from 'react'
+import { TrustLevelIcon } from '@frontend/components/form/metadata/trustLevelIcon'
 import { Metadata as MetadataType } from 'defs'
 import { TypographyVariant } from '@mui/material'
 import IconButton from '@mui/material/IconButton'

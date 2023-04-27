@@ -1,3 +1,5 @@
+import { BaseDatePickerProps } from '@mui/x-date-pickers/DatePicker/shared'
+import { CalendarPickerView } from '@mui/x-date-pickers/internals/models/views'
 import { ReactNode } from 'react'
 
 export type DatePickerProps = {
@@ -7,7 +9,7 @@ export type DatePickerProps = {
   value: string | Date | null
   minDate?: Date
   maxDate?: Date
-  onChange: (value: Date | null) => Promise<void> | void
+  onChange: (value: Date | null) => void
   onReset?: () => void
   readonly?: boolean
   disableHighlightToday?: boolean
@@ -16,4 +18,5 @@ export type DatePickerProps = {
   disabled?: boolean
   startIcon?: ReactNode
   endIcon?: ReactNode
+  views?: CalendarPickerView[]
 }

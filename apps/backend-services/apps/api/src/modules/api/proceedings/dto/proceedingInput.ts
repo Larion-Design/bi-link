@@ -2,7 +2,7 @@ import { Field, InputType, PickType } from '@nestjs/graphql'
 import { ProceedingAPIInput } from 'defs'
 import { CustomFieldInput } from '../../customFields/dto/customFieldInput'
 import { FileInput } from '../../files/dto/fileInput'
-import { NumberValueInput } from '../../generic/dto/numberValueInput'
+import { OptionalDateValueInput } from '../../generic/dto/optionalDateValueInput'
 import { TextValueInput } from '../../generic/dto/textValueInput'
 import { WithMetadataInput } from '../../metadata/dto/withMetadataInput'
 import { ProceedingEntityInput } from './proceedingEntityInput'
@@ -30,8 +30,8 @@ export class ProceedingInput
   @Field()
   type: string
 
-  @Field(() => NumberValueInput)
-  year: NumberValueInput
+  @Field(() => OptionalDateValueInput)
+  year: OptionalDateValueInput
 
   @Field(() => [FileInput])
   files: FileInput[]

@@ -88,12 +88,7 @@ export const FastCreatePerson: React.FunctionComponent<Props> = ({
             />
           </Grid>
           <Grid item xs={12}>
-            <OldNames
-              oldNames={values.oldNames}
-              updateOldNames={async (value) => {
-                await setFieldValue('oldName', value)
-              }}
-            />
+            <OldNames />
           </Grid>
         </Grid>
       </CardContent>
@@ -115,7 +110,7 @@ export const FastCreatePerson: React.FunctionComponent<Props> = ({
             variant={'contained'}
             color={'primary'}
             disabled={isSubmitting}
-            onClick={submitForm}
+            onClick={() => void submitForm()}
           >
             <FormattedMessage id={'save'} />
           </Button>

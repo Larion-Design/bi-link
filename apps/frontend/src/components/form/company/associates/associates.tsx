@@ -9,16 +9,17 @@ import Typography from '@mui/material/Typography'
 import Grid from '@mui/material/Grid'
 import Tooltip from '@mui/material/Tooltip'
 import InsertChartOutlinedIcon from '@mui/icons-material/InsertChartOutlined'
-import { AssociateAPI, CompanyAPIOutput, EntityType, PersonAPIOutput } from 'defs'
+import { AssociateAPI, EntityType } from 'defs'
 import { getDefaultAssociate, getDefaultMetadata } from 'tools'
-import { getPersonsBasicInfoRequest } from '@frontend/graphql/persons/queries/getPersonsBasicInfo'
-import { getCompaniesInfoRequest } from '@frontend/graphql/companies/queries/getCompanies'
+import { getPersonsBasicInfoMap } from '@frontend/graphql/persons/queries/getPersonsBasicInfo'
+import { getCompaniesInfoMap } from '@frontend/graphql/companies/queries/getCompanies'
+import { CompanyAssociateInfoState } from '../../../../state/company/companyAssociatesState'
 import { useCompanyState } from '../../../../state/companyState'
 import { useModal } from '../../../modal/modalProvider'
 import { AssociatesCategory } from './generic/associatesCategory'
 import { getShareholdersTotalEquity } from './helpers'
 
-type Props<T = AssociateAPI> = {
+type Props = {
   sectionTitle: string
 }
 
@@ -26,8 +27,9 @@ type DefaultAssociateRole = 'Actionar' | 'Administrator' | ''
 
 export const Associates: React.FunctionComponent<Props> = ({ sectionTitle }) => {
   const modal = useModal()
-  const [fetchPersonsInfo, { data: personsInfo }] = getPersonsBasicInfoRequest()
-  const [fetchCompaniesInfo, { data: companiesInfo }] = getCompaniesInfoRequest()
+
+  const { fetchPersons, personsMap } = getPersonsBasicInfoMap()
+  const { fetchCompanies, companiesMap } = getCompaniesInfoMap()
 
   const [isMenuOpen, setMenuState] = useState<boolean>(false)
   const buttonRef = useRef<Element | null>()
@@ -36,10 +38,9 @@ export const Associates: React.FunctionComponent<Props> = ({ sectionTitle }) => 
   )
   const [role, setRole] = useState<DefaultAssociateRole | null>(null)
 
-  const [associates, updateAssociate, addAssociates, removeAssociate] = useCompanyState(
-    ({ associates, updateAssociate, addAssociates, removeAssociate }) => [
+  const [associates, addAssociates, removeAssociate] = useCompanyState(
+    ({ associates, addAssociates, removeAssociate }) => [
       associates,
-      updateAssociate,
       addAssociates,
       removeAssociate,
     ],
@@ -99,11 +100,11 @@ export const Associates: React.FunctionComponent<Props> = ({ sectionTitle }) => 
     })
 
     if (personsIds.size) {
-      void fetchPersonsInfo({ variables: { personsIds: Array.from(personsIds) } })
+      void fetchPersons({ variables: { personsIds: Array.from(personsIds) } })
     }
 
     if (companiesIds.size) {
-      void fetchCompaniesInfo({ variables: { companiesIds: Array.from(companiesIds) } })
+      void fetchCompanies({ variables: { companiesIds: Array.from(companiesIds) } })
     }
   }, [])
 
@@ -111,24 +112,6 @@ export const Associates: React.FunctionComponent<Props> = ({ sectionTitle }) => 
     () => parseFloat(getShareholdersTotalEquity(associates)),
     [associates],
   )
-
-  const personsInfoMap = useMemo(() => {
-    if (personsInfo?.getPersonsInfo) {
-      const personsMap = new Map<string, PersonAPIOutput>()
-      personsInfo?.getPersonsInfo.map((personInfo) => personsMap.set(personInfo._id, personInfo))
-      return personsMap
-    }
-  }, [personsInfo?.getPersonsInfo])
-
-  const companiesInfoMap = useMemo(() => {
-    if (companiesInfo?.getCompanies) {
-      const companiesMap = new Map<string, CompanyAPIOutput>()
-      companiesInfo?.getCompanies.map((companyInfo) =>
-        companiesMap.set(companyInfo._id, companyInfo),
-      )
-      return companiesMap
-    }
-  }, [personsInfo?.getPersonsInfo])
 
   return (
     <>
@@ -199,31 +182,25 @@ export const Associates: React.FunctionComponent<Props> = ({ sectionTitle }) => 
         <AssociatesCategory
           categoryName={'Administratori'}
           allowRoleChange={false}
-          personsInfo={personsInfoMap}
-          companiesInfo={companiesInfoMap}
-          associates={getAssociatesByRole(associates, 'Administrator')}
-          removeAssociate={removeAssociate}
-          updateAssociate={updateAssociate}
+          personsInfo={personsMap}
+          companiesInfo={companiesMap}
+          associatesIds={getAssociatesByRole(associates, 'Administrator')}
         />
 
         <AssociatesCategory
           categoryName={'Actionari'}
           allowRoleChange={false}
-          personsInfo={personsInfoMap}
-          companiesInfo={companiesInfoMap}
-          associates={getAssociatesByRole(associates, 'Actionar')}
-          removeAssociate={removeAssociate}
-          updateAssociate={updateAssociate}
+          personsInfo={personsMap}
+          companiesInfo={companiesMap}
+          associatesIds={getAssociatesByRole(associates, 'Actionar')}
         />
 
         <AssociatesCategory
           categoryName={'Alte entitati conexate'}
           allowRoleChange={true}
-          personsInfo={personsInfoMap}
-          companiesInfo={companiesInfoMap}
-          associates={getAllAssociatesExceptRoles(associates, ['Administrator', 'Actionar'])}
-          removeAssociate={removeAssociate}
-          updateAssociate={updateAssociate}
+          personsInfo={personsMap}
+          companiesInfo={companiesMap}
+          associatesIds={getAllAssociatesExceptRoles(associates, ['Administrator', 'Actionar'])}
         />
       </Stack>
     </>
@@ -258,25 +235,29 @@ const createCompaniesAssociatesByRole = (companiesIds: string[], role: string | 
     }),
   )
 
-const getAssociatesByRole = (associates: Map<string, AssociateAPI>, associateRole: string) => {
-  const associatesMap = new Map<string, AssociateAPI>()
+const getAssociatesByRole = (
+  associates: Map<string, CompanyAssociateInfoState>,
+  associateRole: string,
+) => {
+  const associatesIds: string[] = []
+
   associates.forEach((associate, uid) => {
     if (associate.role.value === associateRole) {
-      associatesMap.set(uid, associate)
+      associatesIds.push(uid)
     }
   })
-  return associatesMap
+  return associatesIds
 }
 
 const getAllAssociatesExceptRoles = (
-  associates: Map<string, AssociateAPI>,
+  associates: Map<string, CompanyAssociateInfoState>,
   excludedRoles: string[],
 ) => {
-  const associatesMap = new Map<string, AssociateAPI>()
+  const associatesIds: string[] = []
   associates.forEach((associate, uid) => {
     if (!excludedRoles.includes(associate.role.value)) {
-      associatesMap.set(uid, associate)
+      associatesIds.push(uid)
     }
   })
-  return associatesMap
+  return associatesIds
 }

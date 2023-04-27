@@ -235,7 +235,7 @@ const getPersonInfoValue: EntityInfoHandler<PersonAPIOutput> = (
             case 'expirationDate':
             case 'issueDate': {
               const date = idDocument?.[field]
-              return date ? formatDate(date) : ''
+              return date ? formatDate(date as Date) : ''
             }
           }
           break
@@ -244,19 +244,19 @@ const getPersonInfoValue: EntityInfoHandler<PersonAPIOutput> = (
           const customField = personInfo.customFields.find(
             ({ fieldName }) => fieldName === targetId,
           )
-          return customField?.[field] ?? ''
+          return customField?.[field] ? String(customField?.[field]) : ''
         }
         case 'contactDetails': {
           const contactInfo = personInfo.contactDetails.find(
             ({ fieldName }) => fieldName === targetId,
           )
-          return contactInfo?.[field] ?? ''
+          return contactInfo?.[field] ? String(contactInfo?.[field]) : ''
         }
         case 'relationships': {
           const relationship = personInfo.relationships.find(
             ({ person: { _id } }) => targetId === _id,
           )
-          return relationship?.[field] ?? ''
+          return relationship?.[field] ? String(relationship?.[field]) : ''
         }
       }
     }
@@ -265,9 +265,8 @@ const getPersonInfoValue: EntityInfoHandler<PersonAPIOutput> = (
       case 'cnp':
       case 'firstName':
       case 'lastName':
-      case 'oldName':
       case 'homeAddress': {
-        return personInfo[field] ?? ''
+        return personInfo[field] ? String(personInfo[field]) : ''
       }
       case 'birthdate': {
         const { birthdate } = personInfo
@@ -297,19 +296,19 @@ const getCompanyInfoValue: EntityInfoHandler<CompanyAPIOutput> = (
           const customField = companyInfo.customFields.find(
             ({ fieldName }) => fieldName === targetId,
           )
-          return customField?.[field] ?? ''
+          return customField?.[field] ? String(customField?.[field]) : ''
         }
         case 'contactDetails': {
           const contactInfo = companyInfo.contactDetails.find(
             ({ fieldName }) => fieldName === targetId,
           )
-          return contactInfo?.[field] ?? ''
+          return contactInfo?.[field] ? String(contactInfo?.[field]) : ''
         }
         case 'associates': {
-          const contactInfo = companyInfo.associates.find(
+          const associateInfo = companyInfo.associates.find(
             ({ person, company }) => person?._id === targetId || company?._id === targetId,
           )
-          return contactInfo?.[field] ?? ''
+          return associateInfo?.[field] ? String(associateInfo?.[field]) : ''
         }
       }
     }
@@ -318,7 +317,7 @@ const getCompanyInfoValue: EntityInfoHandler<CompanyAPIOutput> = (
       case 'name':
       case 'cui':
       case 'registrationNumber': {
-        return companyInfo[field] ?? ''
+        return String(companyInfo[field]) ?? ''
       }
     }
   }
@@ -338,19 +337,19 @@ const getPropertyInfoValue: EntityInfoHandler<PropertyAPIOutput> = (
           const customField = propertyInfo.customFields.find(
             ({ fieldName }) => fieldName === targetId,
           )
-          return customField?.[field] ?? ''
+          return customField?.[field] ? String(customField?.[field]) : ''
         }
         case 'owners': {
           const ownerInfo = propertyInfo.owners.find(
             ({ person, company }) => person?._id === targetId || company?._id === targetId,
           )
-          return ownerInfo?.[field] ?? ''
+          return ownerInfo?.[field] ? String(ownerInfo?.[field]) : ''
         }
       }
     } else {
       switch (path) {
         case 'vehicleInfo': {
-          return propertyInfo.vehicleInfo[field] ?? ''
+          return propertyInfo.vehicleInfo[field] ? String(propertyInfo.vehicleInfo[field]) : ''
         }
       }
     }
@@ -371,7 +370,7 @@ const getEventInfoValue: EntityInfoHandler<EventAPIOutput> = (eventInfo, field, 
       switch (path) {
         case 'customFields': {
           const customField = eventInfo.customFields.find(({ fieldName }) => fieldName === targetId)
-          return customField?.[field] ?? ''
+          return customField?.[field] ? String(customField?.[field]) : ''
         }
       }
     }

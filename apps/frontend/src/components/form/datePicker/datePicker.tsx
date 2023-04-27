@@ -19,12 +19,14 @@ export const DatePicker: React.FunctionComponent<DatePickerProps> = ({
   disabled,
   startIcon,
   endIcon,
+  views,
 }) => {
   const intl = useIntl()
   const fieldLabel = label?.length ? intl.formatMessage({ id: label, defaultMessage: label }) : ''
 
   return (
     <MobileDatePicker
+      views={views}
       readOnly={readonly}
       disableFuture={disableFuture}
       disablePast={disablePast}

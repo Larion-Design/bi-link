@@ -8,6 +8,7 @@ import {
   NumberValueWithMetadataModel,
   NumberValueWithMetadataSchema,
 } from '../../metadata/models/numberValueWithMetadataModel'
+import { OptionalDateValueWithMetadataModel } from '../../metadata/models/optionalDateValueWithMetadataModel'
 import {
   TextValueWithMetadataModel,
   TextValueWithMetadataSchema,
@@ -33,8 +34,8 @@ export class ProceedingModel implements Proceeding {
   @Prop({ type: TextValueWithMetadataSchema })
   reason: TextValueWithMetadataModel
 
-  @Prop({ type: NumberValueWithMetadataSchema })
-  year: NumberValueWithMetadataModel
+  @Prop({ type: OptionalDateValueWithMetadataModel })
+  year: OptionalDateValueWithMetadataModel
 
   @Prop()
   description: string

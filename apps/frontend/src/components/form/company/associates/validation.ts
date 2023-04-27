@@ -1,8 +1,9 @@
 import { AssociateAPI, associateAPISchema } from 'defs'
 import { isDatesOrderValid } from '@frontend/utils/date'
+import { CompanyAssociateInfoState } from '../../../../state/company/companyAssociatesState'
 import { getShareholdersTotalEquity } from './helpers'
 
-export const validateAssociates = async (associates: AssociateAPI[]) => {
+export const validateAssociates = async (associates: Map<string, CompanyAssociateInfoState>) => {
   let error = await validateAssociatesStructure(associates)
 
   if (!error) {
@@ -14,7 +15,9 @@ export const validateAssociates = async (associates: AssociateAPI[]) => {
   return error
 }
 
-export const validateAssociatesStructure = async (associates: AssociateAPI[]) => {
+export const validateAssociatesStructure = async (
+  associates: Map<string, CompanyAssociateInfoState>,
+) => {
   const isValid = await associateAPISchema.array().parseAsync(associates)
 
   if (!isValid) {
@@ -22,7 +25,7 @@ export const validateAssociatesStructure = async (associates: AssociateAPI[]) =>
   }
 }
 
-export const validateShareholdersEquity = (associates: AssociateAPI[]) => {
+export const validateShareholdersEquity = (associates: Map<string, CompanyAssociateInfoState>) => {
   const totalEquity = parseFloat(getShareholdersTotalEquity(associates))
 
   if (totalEquity > 100) {
@@ -30,8 +33,8 @@ export const validateShareholdersEquity = (associates: AssociateAPI[]) => {
   }
 }
 
-export const validateAssociatesDates = (associates: AssociateAPI[]) => {
-  const isValid = associates.every(({ startDate, endDate }) =>
+export const validateAssociatesDates = (associates: Map<string, CompanyAssociateInfoState>) => {
+  const isValid = Array.from(associates.values()).every(({ startDate, endDate }) =>
     startDate && endDate
       ? isDatesOrderValid(new Date(startDate.value), new Date(endDate.value))
       : true,

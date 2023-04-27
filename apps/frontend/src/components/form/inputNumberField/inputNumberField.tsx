@@ -1,19 +1,9 @@
+import { NumberInputProps } from '@frontend/components/form/inputNumberField/types'
 import React, { useEffect, useState } from 'react'
 import TextField from '@mui/material/TextField'
 import { useDebounce } from 'usehooks-ts'
 
-type Props = {
-  value: number
-  disabled?: boolean
-  name?: string
-  label: string
-  error?: string
-  required?: boolean
-  readonly?: boolean
-  onChange: (value: number) => void | Promise<void>
-}
-
-export const InputNumberField: React.FunctionComponent<Props> = ({
+export const InputNumberField: React.FunctionComponent<NumberInputProps> = ({
   readonly,
   value,
   disabled,
@@ -22,6 +12,7 @@ export const InputNumberField: React.FunctionComponent<Props> = ({
   error,
   onChange,
   required,
+  inputProps,
 }) => {
   const [currentValue, setCurrentValue] = useState(value)
   const debouncedValue = useDebounce(currentValue, 500)
@@ -47,6 +38,7 @@ export const InputNumberField: React.FunctionComponent<Props> = ({
       InputProps={{
         readOnly: !!readonly,
       }}
+      inputProps={inputProps}
     />
   )
 }

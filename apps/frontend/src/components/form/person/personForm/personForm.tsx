@@ -1,5 +1,5 @@
-import Stack from '@mui/material/Stack'
 import React, { useEffect, useState } from 'react'
+import Stack from '@mui/material/Stack'
 import { useFormik } from 'formik'
 import { FormattedMessage } from 'react-intl'
 import Button from '@mui/material/Button'
@@ -55,6 +55,7 @@ export const PersonForm: React.FunctionComponent<Props> = ({ personId, personInf
     setPersonInfo,
     setFiles,
     addFile,
+    setImages,
     addImage,
     addContactDetails,
     addCustomField,
@@ -81,7 +82,7 @@ export const PersonForm: React.FunctionComponent<Props> = ({ personId, personInf
     validateOnBlur: false,
     validateOnChange: false,
     validateOnMount: true,
-    validate: async (values) => ({}),
+    validate: (values) => ({}),
     onSubmit,
     initialValues: {
       metadata,
@@ -190,6 +191,7 @@ export const PersonForm: React.FunctionComponent<Props> = ({ personId, personInf
               <Grid item xs={3}>
                 <Images
                   images={images}
+                  setImages={setImages}
                   updateImage={updateImage}
                   removeImages={removeImages}
                   addImage={addImage}
@@ -322,7 +324,7 @@ export const PersonForm: React.FunctionComponent<Props> = ({ personId, personInf
           <Button
             disabled={isSubmitting || isValidating}
             variant={'contained'}
-            onClick={submitForm}
+            onClick={() => void submitForm()}
             data-cy={'submitForm'}
           >
             <FormattedMessage id={'save'} />
