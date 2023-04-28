@@ -1,5 +1,7 @@
 import { defineConfig } from 'cypress'
 
+declare var require: any
+
 export default defineConfig({
   video: false,
   videoCompression: 51,
@@ -9,7 +11,6 @@ export default defineConfig({
   e2e: {
     baseUrl: 'http://localhost:3000',
     setupNodeEvents(on, config) {
-      // eslint-disable-next-line @typescript-eslint/no-var-requires,@typescript-eslint/no-unsafe-call
       require('@cypress/code-coverage/task')?.(on, config)
       return config
     },
