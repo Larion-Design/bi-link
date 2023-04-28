@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react'
+import { PersonAPIInput } from 'defs'
 import CardContent from '@mui/material/CardContent'
 import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined'
 import Grid from '@mui/material/Grid'
@@ -8,12 +9,9 @@ import CardActions from '@mui/material/CardActions'
 import { useFormik } from 'formik'
 import { FormattedMessage } from 'react-intl'
 import { getDefaultPerson } from 'tools'
-import { InputField } from '../../../form/inputField'
+import { usePersonState } from '../../../../state/personState'
+import { InputFieldWithMetadata } from '../../../form/inputField'
 import { OldNames } from '../../../form/person/oldNames'
-import {
-  personFormValidation,
-  validatePersonForm,
-} from '../../../form/person/personForm/validation/validation'
 import { PersonSelectorView } from './personSelector'
 import { createPersonRequest } from '@frontend/graphql/persons/mutations/createPerson'
 import { ModalHeader } from '../../modalHeader'
@@ -30,14 +28,21 @@ export const FastCreatePerson: React.FunctionComponent<Props> = ({
   changeView,
 }) => {
   const [createPerson, { data }] = createPersonRequest()
-  const { values, errors, setFieldError, setFieldValue, submitForm, isSubmitting } = useFormik({
-    initialValues: getDefaultPerson(),
-    validateOnMount: false,
+  const { firstName, lastName, cnp, updateFirstName, updateCnp, updateLastName } = usePersonState()
+
+  const { submitForm, setFieldValue, isSubmitting, isValidating } = useFormik<PersonAPIInput>({
+    enableReinitialize: true,
     validateOnBlur: false,
     validateOnChange: false,
-    validate: (values) => validatePersonForm(values),
+    validateOnMount: true,
+    validate: (values) => ({}),
     onSubmit: (data) => createPerson({ variables: { data } }),
+    initialValues: getDefaultPerson(),
   })
+
+  useEffect(() => void setFieldValue('firstName', firstName), [firstName])
+  useEffect(() => void setFieldValue('lastName', lastName), [lastName])
+  useEffect(() => void setFieldValue('cnp', cnp), [cnp])
 
   useEffect(() => {
     if (data?.createPerson) {
@@ -52,39 +57,27 @@ export const FastCreatePerson: React.FunctionComponent<Props> = ({
       <CardContent sx={{ height: 0.8, mb: 2 }}>
         <Grid container spacing={4}>
           <Grid item xs={4}>
-            <InputField
+            <InputFieldWithMetadata
+              name={'lastName'}
               label={'Nume'}
-              value={values.lastName.value}
-              error={errors.lastName.value}
-              onChange={async (value) => {
-                const error = await personFormValidation.lastName(value)
-                setFieldError('lastName', error)
-                await setFieldValue('lastName', value)
-              }}
+              fieldInfo={lastName}
+              updateFieldInfo={updateLastName}
             />
           </Grid>
           <Grid item xs={4}>
-            <InputField
+            <InputFieldWithMetadata
+              name={'firstName'}
               label={'Prenume'}
-              value={values.firstName.value}
-              error={errors.firstName.value}
-              onChange={async (value) => {
-                const error = await personFormValidation.firstName(value)
-                setFieldError('firstName', error)
-                await setFieldValue('firstName', value)
-              }}
+              fieldInfo={firstName}
+              updateFieldInfo={updateFirstName}
             />
           </Grid>
           <Grid item xs={4}>
-            <InputField
-              label={'CNP'}
-              value={values.cnp.value}
-              error={errors.cnp.value}
-              onChange={async (value) => {
-                const error = await personFormValidation.cnp(value)
-                setFieldError('cnp', error)
-                await setFieldValue('cnp', value)
-              }}
+            <InputFieldWithMetadata
+              name={'cnp'}
+              label={'Cod numeric personal'}
+              fieldInfo={cnp}
+              updateFieldInfo={updateCnp}
             />
           </Grid>
           <Grid item xs={12}>
@@ -109,7 +102,7 @@ export const FastCreatePerson: React.FunctionComponent<Props> = ({
           <Button
             variant={'contained'}
             color={'primary'}
-            disabled={isSubmitting}
+            disabled={isSubmitting || isValidating}
             onClick={() => void submitForm()}
           >
             <FormattedMessage id={'save'} />

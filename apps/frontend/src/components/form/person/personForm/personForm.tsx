@@ -84,23 +84,7 @@ export const PersonForm: React.FunctionComponent<Props> = ({ personId, personInf
     validateOnMount: true,
     validate: (values) => ({}),
     onSubmit,
-    initialValues: {
-      metadata,
-      firstName,
-      lastName,
-      cnp,
-      birthdate,
-      birthPlace,
-      homeAddress,
-      education: Array.from(education.values()),
-      oldNames: Array.from(oldNames.values()),
-      relationships: Array.from(relationships.values()),
-      files: Array.from(files.values()),
-      images: Array.from(images.values()),
-      customFields: Array.from(customFields.values()),
-      contactDetails: Array.from(contactDetails.values()),
-      documents: Array.from(documents.values()),
-    },
+    initialValues: personInfo ?? getDefaultPerson(),
   })
 
   useEffect(() => setPersonInfo(personInfo ?? getDefaultPerson()), [personInfo])
@@ -116,8 +100,6 @@ export const PersonForm: React.FunctionComponent<Props> = ({ personId, personInf
       }
     }
   }, [cnp])
-
-  useEffect(() => setPersonInfo(personInfo ?? getDefaultPerson()), [personInfo])
 
   useEffect(() => void setFieldValue('metadata', metadata), [metadata])
   useEffect(() => void setFieldValue('firstName', firstName), [firstName])
