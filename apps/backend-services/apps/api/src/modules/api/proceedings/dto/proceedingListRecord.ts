@@ -10,6 +10,6 @@ export class ProceedingListRecord
   @Field()
   fileNumber: string
 
-  @Field()
-  year: number
+  @Field(() => Date, { nullable: true })
+  year: Date | null
 }

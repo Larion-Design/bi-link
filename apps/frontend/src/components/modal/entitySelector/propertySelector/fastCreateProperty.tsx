@@ -1,5 +1,13 @@
+import {
+  propertyTypes,
+  realEstatePropertyTypes,
+} from '@frontend/components/form/property/propertyForm/constants'
+import { RealEstateInfo } from '@frontend/components/form/property/realEstateInfo'
+import { VehicleInfo } from '@frontend/components/form/property/vehicleInfo'
+import { PropertyAPIInput } from 'defs'
 import React, { useEffect } from 'react'
-import { getDefaultProperty, getDefaultVehicle } from 'tools'
+import { getDefaultProperty } from 'tools'
+import { usePropertyState } from '../../../../state/property/propertyState'
 import { PropertySelectorView } from './propertySelector'
 import { useFormik } from 'formik'
 import CardContent from '@mui/material/CardContent'
@@ -10,13 +18,9 @@ import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined'
 import Box from '@mui/material/Box'
 import { InputField } from '../../../form/inputField'
 import { createPropertyRequest } from '@frontend/graphql/properties/mutations/createProperty'
-import {
-  propertyFormValidation,
-  validatePropertyForm,
-} from '../../../form/property/propertyForm/validation/validation'
+import { validatePropertyForm } from '../../../form/property/propertyForm/validation/validation'
 import { Images } from '../../../form/images'
 import { AutocompleteField } from '../../../form/autocompleteField'
-import { ColorPicker } from '../../../form/colorPicker'
 import { ModalHeader } from '../../modalHeader'
 
 type Props = {
@@ -31,12 +35,31 @@ export const FastCreateProperty: React.FunctionComponent<Props> = ({
   changeView,
 }) => {
   const [createProperty, { data }] = createPropertyRequest()
-  const { values, errors, setFieldError, setFieldValue, submitForm, isSubmitting } = useFormik({
+  const {
+    name,
+    type,
+    images,
+    vehicleInfo,
+    realEstateInfo,
+    setImages,
+    addImage,
+    updateName,
+    updateType,
+    updateImage,
+    disableRealEstateInfo,
+    enableRealEstateInfo,
+    enableVehicleInfo,
+    disableVehicleInfo,
+    removeImages,
+  } = usePropertyState()
+
+  const { submitForm, isSubmitting, isValidating, setFieldValue } = useFormik<PropertyAPIInput>({
     initialValues: getDefaultProperty(),
+    validate: async (values) => validatePropertyForm(values),
+    validateOnChange: false,
     validateOnMount: false,
     validateOnBlur: false,
-    validateOnChange: false,
-    validate: (values) => validatePropertyForm(values),
+    enableReinitialize: true,
     onSubmit: (data) => createProperty({ variables: { data } }),
   })
 
@@ -47,6 +70,21 @@ export const FastCreateProperty: React.FunctionComponent<Props> = ({
     }
   }, [data?.createProperty])
 
+  useEffect(() => void setFieldValue('name', name), [name])
+  useEffect(() => void setFieldValue('type', type), [type])
+  useEffect(() => void setFieldValue('vehicleInfo', vehicleInfo), [vehicleInfo])
+  useEffect(() => void setFieldValue('realEstateInfo', realEstateInfo), [realEstateInfo])
+  useEffect(() => void setFieldValue('images', Array.from(images)), [images])
+
+  const renderPropertyFieldsByType = () => {
+    if (type === 'Vehicul') {
+      return <VehicleInfo />
+    } else if (realEstatePropertyTypes.includes(type)) {
+      return <RealEstateInfo />
+    }
+    return null
+  }
+
   return (
     <>
       <ModalHeader title={'Creaza o proprietate rapid'} closeModal={closeModal} />
@@ -54,103 +92,36 @@ export const FastCreateProperty: React.FunctionComponent<Props> = ({
         <Grid container spacing={2}>
           <Grid item xs={3}>
             <Images
-              readonly={false}
-              images={values.images}
-              updateImages={async (images) => {
-                const error = await propertyFormValidation.files(images)
-                setFieldError('images', error)
-                void setFieldValue('images', images)
-              }}
-              error={errors.images as string}
+              images={images}
+              updateImage={updateImage}
+              removeImages={removeImages}
+              addImage={addImage}
+              setImages={setImages}
             />
           </Grid>
           <Grid container item xs={9} spacing={3}>
             <Grid item xs={6}>
-              <InputField
-                name={'name'}
-                label={'Nume'}
-                readonly={false}
-                value={values.name}
-                error={errors.name as string}
-                onChange={async (value) => {
-                  void setFieldValue('name', value)
-                }}
-              />
+              <InputField name={'name'} label={'Nume'} value={name} onChange={updateName} />
             </Grid>
 
             <Grid item xs={6}>
               <AutocompleteField
-                label={'Tip de proprietate sau bun'}
-                suggestions={['Vehicul']}
-                value={values.type}
-                onChange={(value) => {
-                  setFieldValue('type', value, false)
-
-                  setFieldValue(
-                    'vehicleInfo',
-                    value === 'Vehicul' ? getDefaultVehicle() : null,
-                    false,
-                  )
+                label={'Tip de bun / proprietate'}
+                suggestions={propertyTypes}
+                value={type}
+                onChange={(type) => {
+                  updateType(type)
+                  if (type === 'Vehicul') {
+                    enableVehicleInfo()
+                    disableRealEstateInfo()
+                  } else if (realEstatePropertyTypes.includes(type)) {
+                    disableVehicleInfo()
+                    enableRealEstateInfo()
+                  }
                 }}
               />
             </Grid>
-            {!!values.vehicleInfo && (
-              <>
-                <Grid item xs={6}>
-                  <InputField
-                    name={'vin'}
-                    label={'VIN'}
-                    readonly={false}
-                    value={values.vehicleInfo?.vin.value}
-                    error={errors.vehicleInfo as string}
-                    onChange={async (value) => {
-                      const error = await propertyFormValidation.vin(value)
-                      setFieldError('vin', error)
-                      void setFieldValue('vin', value)
-                    }}
-                  />
-                </Grid>
-                <Grid item xs={6}>
-                  <AutocompleteField
-                    readonly={false}
-                    label={'Marca'}
-                    value={values.vehicleInfo.maker.value}
-                    error={errors.vehicleInfo as string}
-                    onChange={async (value) => {
-                      const error = await propertyFormValidation.maker(value)
-                      setFieldError('maker', error)
-                      void setFieldValue('maker', value)
-                    }}
-                  />
-                </Grid>
-                <Grid item xs={6}>
-                  <AutocompleteField
-                    label={'Model'}
-                    readonly={false}
-                    value={values.vehicleInfo.model.value}
-                    error={errors.vehicleInfo as string}
-                    onChange={async (value) => {
-                      const error = await propertyFormValidation.model(value)
-                      setFieldError('model', error)
-                      void setFieldValue('model', value)
-                    }}
-                  />
-                </Grid>
-                <Grid item xs={6}>
-                  <ColorPicker
-                    name={'color'}
-                    value={values.vehicleInfo?.color.value}
-                    label={'Culoare'}
-                    error={errors.vehicleInfo as string}
-                    onChange={async (value) => {
-                      const error = await propertyFormValidation.color(value)
-                      setFieldError('color', error)
-                      void setFieldValue('color', value)
-                    }}
-                  />
-                </Grid>
-              </>
-            )}
+            {renderPropertyFieldsByType()}
           </Grid>
         </Grid>
       </CardContent>
@@ -172,7 +143,7 @@ export const FastCreateProperty: React.FunctionComponent<Props> = ({
             variant={'contained'}
             color={'primary'}
             disabled={isSubmitting}
-            onClick={submitForm}
+            onClick={() => void submitForm()}
           >
             Salvează
           </Button>
