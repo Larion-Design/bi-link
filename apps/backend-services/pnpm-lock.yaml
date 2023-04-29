@@ -33,7 +33,7 @@ dependencies:
     version: 9.0.0(@nestjs/common@8.4.7)
   '@nestjs/microservices':
     specifier: ^9.2.1
-    version: 9.2.1(@nestjs/common@8.4.7)(@nestjs/core@8.4.7)(cache-manager@4.1.0)(ioredis@5.2.4)(reflect-metadata@0.1.13)(rxjs@7.8.0)
+    version: 9.2.1(@nestjs/common@8.4.7)(@nestjs/core@8.4.7)(cache-manager@4.1.0)(ioredis@5.2.4)(nats@2.13.1)(reflect-metadata@0.1.13)(rxjs@7.8.0)
   '@nestjs/mongoose':
     specifier: ^9.2.1
     version: 9.2.1(@nestjs/common@8.4.7)(@nestjs/core@8.4.7)(mongoose@6.8.1)(reflect-metadata@0.1.13)(rxjs@7.8.0)
@@ -94,6 +94,9 @@ dependencies:
   multer:
     specifier: 1.4.5-lts.1
     version: 1.4.5-lts.1
+  nats:
+    specifier: ^2.13.1
+    version: 2.13.1
   neo4j-driver:
     specifier: ^5.3.0
     version: 5.3.0
@@ -2513,7 +2516,7 @@ packages:
         optional: true
     dependencies:
       '@nestjs/common': 8.4.7(cache-manager@4.1.0)(class-transformer@0.4.0)(class-validator@0.13.2)(reflect-metadata@0.1.13)(rxjs@7.8.0)
-      '@nestjs/microservices': 9.2.1(@nestjs/common@8.4.7)(@nestjs/core@8.4.7)(cache-manager@4.1.0)(ioredis@5.2.4)(reflect-metadata@0.1.13)(rxjs@7.8.0)
+      '@nestjs/microservices': 9.2.1(@nestjs/common@8.4.7)(@nestjs/core@8.4.7)(cache-manager@4.1.0)(ioredis@5.2.4)(nats@2.13.1)(reflect-metadata@0.1.13)(rxjs@7.8.0)
       '@nestjs/platform-express': 8.4.7(@nestjs/common@8.4.7)(@nestjs/core@8.4.7)
       '@nuxtjs/opencollective': 0.3.2
       fast-safe-stringify: 2.1.1
@@ -2688,7 +2691,7 @@ packages:
       reflect-metadata: 0.1.13
     dev: false
 
-  /@nestjs/microservices@9.2.1(@nestjs/common@8.4.7)(@nestjs/core@8.4.7)(cache-manager@4.1.0)(ioredis@5.2.4)(reflect-metadata@0.1.13)(rxjs@7.8.0):
+  /@nestjs/microservices@9.2.1(@nestjs/common@8.4.7)(@nestjs/core@8.4.7)(cache-manager@4.1.0)(ioredis@5.2.4)(nats@2.13.1)(reflect-metadata@0.1.13)(rxjs@7.8.0):
     resolution: {integrity: sha512-ve4dqgoIaUG9VtinHHGCvf6SvtPjd3I44Mj8z8mSkcB8BEPfJnf4FNOShFBgsedtxLaiZyjpv8NCLcNVv5KKGg==}
     peerDependencies:
       '@grpc/grpc-js': '*'
@@ -2729,6 +2732,7 @@ packages:
       cache-manager: 4.1.0
       ioredis: 5.2.4
       iterare: 1.2.1
+      nats: 2.13.1
       reflect-metadata: 0.1.13
       rxjs: 7.8.0
       tslib: 2.4.1
@@ -2805,7 +2809,7 @@ packages:
     dependencies:
       '@nestjs/common': 8.4.7(cache-manager@4.1.0)(class-transformer@0.4.0)(class-validator@0.13.2)(reflect-metadata@0.1.13)(rxjs@7.8.0)
       '@nestjs/core': 8.4.7(@nestjs/common@8.4.7)(@nestjs/microservices@9.2.1)(@nestjs/platform-express@8.4.7)(reflect-metadata@0.1.13)(rxjs@7.8.0)
-      '@nestjs/microservices': 9.2.1(@nestjs/common@8.4.7)(@nestjs/core@8.4.7)(cache-manager@4.1.0)(ioredis@5.2.4)(reflect-metadata@0.1.13)(rxjs@7.8.0)
+      '@nestjs/microservices': 9.2.1(@nestjs/common@8.4.7)(@nestjs/core@8.4.7)(cache-manager@4.1.0)(ioredis@5.2.4)(nats@2.13.1)(reflect-metadata@0.1.13)(rxjs@7.8.0)
       '@nestjs/platform-express': 8.4.7(@nestjs/common@8.4.7)(@nestjs/core@8.4.7)
       tslib: 2.4.0
     dev: true
@@ -7151,6 +7155,12 @@ packages:
   /mute-stream@0.0.8:
     resolution: {integrity: sha512-nnbWWOkoWyUsTjKrhgD0dcz22mdkSnpYqbEjIm2nhwhuxlSkpywJmBo8h0ZqJdkp73mb90SssHkN4rsRaBAfAA==}
 
+  /nats@2.13.1:
+    resolution: {integrity: sha512-lHV/DQREZVHXtavlAI5fFA7XDyN2/LNBtnNX76mPQV9BIKpTehzYrD1Hw7t/1mV4AGdrJj6U60JkQ8AMrVc6Mg==}
+    engines: {node: '>= 14.0.0'}
+    dependencies:
+      nkeys.js: 1.0.5
+
   /natural-compare@1.4.0:
     resolution: {integrity: sha512-OWND8ei3VtNC9h7V60qff3SVobHr996CTwgxubgyQYEpg290h9J0buyECNNJexkFm5sOajh5G116RYA1c8ZMSw==}
 
@@ -7226,6 +7236,12 @@ packages:
       reflect-metadata: 0.1.13
       rxjs: 7.8.0
     dev: false
+
+  /nkeys.js@1.0.5:
+    resolution: {integrity: sha512-u25YnRPHiGVsNzwyHnn+PT90sgAhnS8jUJ1nxmkHMFYCJ6+Ic0lv291w7uhRBpJVJ3PH2GWbYqA151lGCRrB5g==}
+    engines: {node: '>=10.0.0'}
+    dependencies:
+      tweetnacl: 1.0.3
 
   /no-case@3.0.4:
     resolution: {integrity: sha512-fgAN3jGAh+RoxUGZHTSOLJIqUc2wmoBwGR4tbpNAKmmovFoWq0OdRkb0VkldReO2a2iBT/OEulG9XSUc10r3zg==}
@@ -8624,6 +8640,9 @@ packages:
   /tslib@2.5.0:
     resolution: {integrity: sha512-336iVw3rtn2BUK7ORdIAHTyxHGRIHVReokCR3XjbckJMK7ms8FysBfhLR8IXnAgy7T0PTPNBWKiH514FOW/WSg==}
 
+  /tweetnacl@1.0.3:
+    resolution: {integrity: sha512-6rt+RN7aOi1nGMyC4Xa5DdYiukl2UWCbcJft7YhxReBGQD7OAM8Pbxw6YMo4r2diNEA8FEmu32YOn9rhaiE5yw==}
+
   /type-check@0.3.2:
     resolution: {integrity: sha512-ZCmOJdvOWDBYJlzAoFkC+Q0+bUyEOS1ltgp1MGU03fqHG+dbi9tBFU2Rd9QKiDZFAYrhPh2JUf7rZRIuHRKtOg==}
     engines: {node: '>= 0.8.0'}
@@ -9202,5 +9221,6 @@ packages:
     dependencies:
       date-fns: 2.29.3
       defs: file:../../packages/defs
+      uuid: 8.3.2
       zod: 3.21.2
     dev: true

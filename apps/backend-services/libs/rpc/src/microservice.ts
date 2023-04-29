@@ -1,5 +1,5 @@
 import { INestApplication, Logger } from '@nestjs/common'
-import { RedisOptions, Transport } from '@nestjs/microservices'
+import { NatsOptions, Transport } from '@nestjs/microservices'
 import { SentryService } from '@ntegral/nestjs-sentry'
 
 export const configureMicroservice = async (
@@ -7,13 +7,10 @@ export const configureMicroservice = async (
   serviceName: string,
   port?: number,
 ) => {
-  app.connectMicroservice<RedisOptions>({
-    transport: Transport.REDIS,
+  app.connectMicroservice<NatsOptions>({
+    transport: Transport.NATS,
     options: {
-      host: process.env.REDIS_HOST,
-      port: process.env.REDIS_PORT ? parseInt(process.env.REDIS_PORT) : 3769,
-      // password: process.env.REDIS_PASSWORD,
-      // tls: {},
+      servers: [process.env.NATS_URI as string],
       retryDelay: 2000,
       retryAttempts: 100,
     },

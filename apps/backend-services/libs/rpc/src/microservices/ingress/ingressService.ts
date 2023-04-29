@@ -14,7 +14,7 @@ export class IngressService {
 
   constructor(@Inject(MICROSERVICES.INGRESS.id) private client: ClientProxy) {}
 
-  getEntity = async <T>(
+  getEntity = async (
     entityInfo: EntityInfo,
     fetchLinkedEntities: boolean,
     source: UpdateSource,

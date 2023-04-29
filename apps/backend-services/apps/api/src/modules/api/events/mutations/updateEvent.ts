@@ -1,14 +1,14 @@
-import { IngressService } from '@app/rpc/microservices/ingress'
 import { Args, ArgsType, Field, ID, Mutation, Resolver } from '@nestjs/graphql'
+import { UseGuards } from '@nestjs/common'
+import { EntityInfo, UpdateSource, User } from 'defs'
+import { IngressService } from '@app/rpc/microservices/ingress'
 import { EventInput } from '../dto/eventInput'
 import { Event } from '../dto/event'
-import { UseGuards } from '@nestjs/common'
 import { FirebaseAuthGuard } from '../../../users/guards/FirebaseAuthGuard'
 import { CurrentUser } from '../../../users/decorators/currentUser'
-import { EntityInfo, UpdateSource, User } from 'defs'
 
 @ArgsType()
-class UpdateEventArgs {
+class Params {
   @Field(() => ID)
   eventId: string
 
@@ -22,10 +22,7 @@ export class UpdateEvent {
 
   @Mutation(() => Boolean)
   @UseGuards(FirebaseAuthGuard)
-  async updateEvent(
-    @CurrentUser() { _id, role }: User,
-    @Args() { eventId, data }: UpdateEventArgs,
-  ) {
+  async updateEvent(@CurrentUser() { _id, role }: User, @Args() { eventId, data }: Params) {
     const source: UpdateSource = {
       sourceId: _id,
       type: 'USER',

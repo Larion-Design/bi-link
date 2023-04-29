@@ -48,11 +48,7 @@ export class CreateEntity {
 
     switch (entityType) {
       case 'PERSON': {
-        const personInfo = personAPIInputSchema.parse(entityData)
-
-        if (personInfo) {
-          entityId = await this.personsAPIService.create(personInfo)
-        }
+        entityId = await this.createPerson(entityData)
         break
       }
       case 'COMPANY': {
@@ -121,6 +117,14 @@ export class CreateEntity {
       })
 
       return entityId
+    }
+  }
+
+  private createPerson = async (entityData: Params['entityData']) => {
+    const personInfo = personAPIInputSchema.parse(entityData)
+
+    if (personInfo) {
+      return this.personsAPIService.create(personInfo)
     }
   }
 }

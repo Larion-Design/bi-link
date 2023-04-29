@@ -16,7 +16,7 @@ import { EntityLocationRelationship } from './entityLocationRelationship'
 import { EntityReportedRelationship } from './entityReportedRelationship'
 import { EventPartyRelationship } from './eventPartyRelationship'
 import { PersonalRelationship } from './personalRelationship'
-import { ProceedingEntityRelationship } from './ProceedingEntityRelationship'
+import { ProceedingEntityRelationship } from './proceedingEntityRelationship'
 import { PropertyOwnerRelationship } from './propertyOwnerRelationship'
 
 @ObjectType()

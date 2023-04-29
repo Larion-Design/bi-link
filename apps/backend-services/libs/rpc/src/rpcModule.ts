@@ -26,12 +26,9 @@ import { FilesManagerService } from '@app/rpc/microservices/filesManager/filesMa
         inject: [ConfigService],
         useFactory: async (configService: ConfigService) =>
           Promise.resolve({
-            transport: Transport.REDIS,
+            transport: Transport.NATS,
             options: {
-              host: configService.getOrThrow('REDIS_HOST'),
-              port: configService.getOrThrow('REDIS_PORT'),
-              // password: configService.getOrThrow('REDIS_PASSWORD'),
-              // tls: {},
+              servers: [configService.getOrThrow<string>('NATS_URI')],
             },
           }),
       })),

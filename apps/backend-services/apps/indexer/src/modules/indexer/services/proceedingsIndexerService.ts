@@ -1,7 +1,8 @@
 import { Injectable, Logger } from '@nestjs/common'
-import { ProceedingIndex } from '@app/definitions'
+import { ConnectedCompanyIndex, ConnectedPersonIndex, ProceedingIndex } from '@app/definitions'
 import { ElasticsearchService } from '@nestjs/elasticsearch'
-import { Proceeding } from 'defs'
+import { Proceeding, ProceedingEntityInvolved } from 'defs'
+import { formatYear } from 'tools'
 import { INDEX_PROCEEDINGS } from '../../../constants'
 import { ConnectedEntityIndexerService } from './connectedEntityIndexerService'
 import { CustomFieldsIndexerService } from './customFieldsIndexerService'
@@ -33,23 +34,38 @@ export class ProceedingsIndexerService {
     }
   }
 
-  private createIndexData = (proceedingModel: Proceeding): ProceedingIndex => ({
-    name: proceedingModel.name,
-    type: proceedingModel.type,
-    fileNumber: proceedingModel.fileNumber.value,
-    description: proceedingModel.description,
-    year: proceedingModel.year.value,
-    customFields: this.customFieldsIndexerService.createCustomFieldsIndex(
-      proceedingModel.customFields,
-    ),
-    files: [],
-    persons: proceedingModel.entitiesInvolved
-      .filter(({ person }) => !!person)
-      .map(({ person }) => this.connectedEntityIndexerService.createConnectedPersonIndex(person!)),
-    companies: proceedingModel.entitiesInvolved
-      .filter(({ company }) => !!company)
-      .map(({ company }) =>
-        this.connectedEntityIndexerService.createConnectedCompanyIndex(company!),
+  private createIndexData = (proceedingModel: Proceeding): ProceedingIndex => {
+    const { persons, companies } = this.createConnectedEntitiesIndex(
+      proceedingModel.entitiesInvolved,
+    )
+
+    return {
+      name: proceedingModel.name,
+      type: proceedingModel.type,
+      fileNumber: proceedingModel.fileNumber.value,
+      description: proceedingModel.description,
+      year: proceedingModel.year.value ? formatYear(proceedingModel.year.value) : undefined,
+      customFields: this.customFieldsIndexerService.createCustomFieldsIndex(
+        proceedingModel.customFields,
       ),
-  })
+      files: [],
+      persons,
+      companies,
+    }
+  }
+
+  private createConnectedEntitiesIndex = (entities: ProceedingEntityInvolved[]) => {
+    const persons: ConnectedPersonIndex[] = []
+    const companies: ConnectedCompanyIndex[] = []
+
+    entities.forEach(({ person, company }) => {
+      if (person) {
+        persons.push(this.connectedEntityIndexerService.createConnectedPersonIndex(person))
+      } else if (company) {
+        companies.push(this.connectedEntityIndexerService.createConnectedCompanyIndex(company))
+      }
+    })
+
+    return { persons, companies }
+  }
 }

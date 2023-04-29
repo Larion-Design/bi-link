@@ -8,7 +8,7 @@ import { CurrentUser } from '../../../users/decorators/currentUser'
 import { User } from 'defs'
 
 @ArgsType()
-class CreateEventArgs {
+class Params {
   @Field(() => EventInput)
   data: EventInput
 }
@@ -19,7 +19,7 @@ export class CreateEvent {
 
   @Mutation(() => ID)
   @UseGuards(FirebaseAuthGuard)
-  async createEvent(@CurrentUser() { _id }: User, @Args() { data }: CreateEventArgs) {
+  async createEvent(@CurrentUser() { _id }: User, @Args() { data }: Params) {
     return this.ingressService.createEntity('EVENT', data, {
       sourceId: _id,
       type: 'USER',
