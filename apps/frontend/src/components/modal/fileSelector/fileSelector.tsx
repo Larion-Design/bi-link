@@ -83,7 +83,7 @@ export const FileSelector: React.FunctionComponent<Props> = ({
         <DataGrid
           columns={columns}
           rows={files}
-          getRowId={({ fileId }) => fileId}
+          getRowId={({ fileId }: FileAPIInput) => fileId}
           disableColumnFilter
           disableColumnMenu
           disableVirtualization

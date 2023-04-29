@@ -39,7 +39,7 @@ export class GraphUpdateCommand extends CommandRunner {
       }
     }
     return Promise.reject(
-      `Entity type is invalid or not specified (value provided: ${options?.type})`,
+      `Entity type is invalid or not specified (value provided: ${options?.type ?? ''})`,
     )
   }
 

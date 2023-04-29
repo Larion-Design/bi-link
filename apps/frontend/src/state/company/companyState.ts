@@ -2,15 +2,12 @@ import { v4 } from 'uuid'
 import { create } from 'zustand'
 import { AssociateAPI, CompanyAPIInput, LocationAPIInput, TextWithMetadata } from 'defs'
 import { getDefaultLocation, getDefaultTextWithMetadata } from 'tools'
-import {
-  CompanyAssociatesState,
-  createCompanyAssociatesStore,
-} from './company/companyAssociatesState'
-import { createContactDetailsStore, ContactDetailsState } from './contactDetailsState'
-import { createCustomFieldsStore, CustomFieldsState } from './customFieldsState'
-import { createFilesStore, FilesState } from './filesStore'
-import { createMetadataStore, MetadataState } from './metadataStore'
-import { removeMapItems } from './utils'
+import { CompanyAssociatesState, createCompanyAssociatesStore } from './companyAssociatesState'
+import { createContactDetailsStore, ContactDetailsState } from '../contactDetailsState'
+import { createCustomFieldsStore, CustomFieldsState } from '../customFieldsState'
+import { createFilesStore, FilesState } from '../filesStore'
+import { createMetadataStore, MetadataState } from '../metadataStore'
+import { removeMapItems } from '../utils'
 
 type CompanyState = MetadataState &
   FilesState &
@@ -33,6 +30,9 @@ type CompanyState = MetadataState &
 
     addBranch: () => void
     removeBranches: (ids: string[]) => void
+
+    getCompany: () => CompanyAPIInput
+    getBranches: () => LocationAPIInput[]
   }
 
 export const useCompanyState = create<CompanyState>((set, get, state) => ({
@@ -77,4 +77,35 @@ export const useCompanyState = create<CompanyState>((set, get, state) => ({
 
   addBranch: () => set({ locations: new Map(get().locations).set(v4(), getDefaultLocation()) }),
   removeBranches: (ids) => set({ locations: removeMapItems(get().locations, ids) }),
+
+  getBranches: () => Array.from(get().locations.values()),
+
+  getCompany: () => {
+    const {
+      metadata,
+      name,
+      cui,
+      registrationNumber,
+      headquarters,
+
+      getCustomFields,
+      getFiles,
+      getContactDetails,
+      getAssociates,
+      getBranches,
+    } = get()
+
+    return {
+      metadata,
+      name,
+      cui,
+      registrationNumber,
+      headquarters,
+      locations: getBranches(),
+      files: getFiles(),
+      customFields: getCustomFields(),
+      contactDetails: getContactDetails(),
+      associates: getAssociates(),
+    }
+  },
 }))

@@ -30,6 +30,8 @@ export type CompanyAssociatesState = {
   addAssociateCustomField: (associateId: string) => void
   updateAssociateCustomField: (uid: string, customField: CustomFieldAPI) => void
   removeAssociateCustomFields: (associateId: string, ids: string[]) => void
+
+  getAssociates: () => AssociateAPI[]
 }
 
 export const createCompanyAssociatesStore: StateCreator<
@@ -171,5 +173,20 @@ export const createCompanyAssociatesStore: StateCreator<
         associatesCustomFields: removeMapItems(get().associatesCustomFields, ids),
       })
     }
+  },
+
+  getAssociates: () => {
+    const { associates, associatesCustomFields } = get()
+    return Array.from(associates.values()).map((associate) => ({
+      metadata: associate.metadata,
+      equity: associate.equity,
+      role: associate.role,
+      isActive: associate.isActive,
+      startDate: associate.startDate,
+      endDate: associate.endDate,
+      customFields: Array.from(associate.customFields).map((customFieldId) =>
+        associatesCustomFields.get(customFieldId),
+      ),
+    }))
   },
 })

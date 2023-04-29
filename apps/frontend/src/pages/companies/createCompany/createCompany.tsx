@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { getDefaultCompany } from 'tools'
 import { DashboardPage } from '../../../components/page/DashboardPage'
 import { createCompanyRequest } from '../../../graphql/companies/mutations/createCompany'
 import { routes } from '../../../router/routes'
@@ -27,7 +28,7 @@ export const CreateCompany: React.FunctionComponent = () => {
   return (
     <DashboardPage title={'Creaza o companie'}>
       <CompanyDetails
-        readonly={false}
+        companyInfo={getDefaultCompany()}
         onSubmit={(companyInfo) => {
           if (!loading) {
             void createCompany({ variables: { companyInfo } })

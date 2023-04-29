@@ -2,16 +2,11 @@ import { v4 } from 'uuid'
 import { create } from 'zustand'
 import {
   TextWithMetadata,
-  NumberWithMetadata,
   ProceedingAPIInput,
   ProceedingEntityInvolvedAPI,
   OptionalDateWithMetadata,
 } from 'defs'
-import {
-  getDefaultNumberWithMetadata,
-  getDefaultOptionalDateWithMetadata,
-  getDefaultTextWithMetadata,
-} from 'tools'
+import { getDefaultOptionalDateWithMetadata, getDefaultTextWithMetadata } from 'tools'
 import { createCustomFieldsStore, CustomFieldsState } from './customFieldsState'
 import { createFilesStore, FilesState } from './filesStore'
 import { createMetadataStore, MetadataState } from './metadataStore'

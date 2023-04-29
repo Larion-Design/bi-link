@@ -2,7 +2,6 @@ import { ProceedingForm } from '@frontend/components/form/proceeding/proceedingF
 import React, { useState } from 'react'
 import { Graph } from '@frontend/components/entityViews/graph'
 import { Reports } from '@frontend/components/entityViews/reports'
-import { EventForm } from '@frontend/components/form/event/eventForm'
 import { InputFieldMenu } from '@frontend/components/menu/inputFieldMenu'
 import Box from '@mui/material/Box'
 import MenuItem from '@mui/material/MenuItem'

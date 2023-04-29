@@ -15,6 +15,6 @@ export class GetPropertiesByCompany {
 
   @Query(() => [PropertyListRecord])
   async getPropertiesByCompany(@Args() { companyId }: Params) {
-    return []
+    return Promise.resolve([])
   }
 }

@@ -19,7 +19,9 @@ export class HistoryIndexerService {
         refresh: 'wait_for',
       })
       if (result === 'created') {
-        this.logger.debug(`Recorded ${eventInfo.eventType} action performed by ${eventInfo.author}`)
+        this.logger.debug(
+          `Recorded ${eventInfo.eventType} action performed by ${eventInfo.author.sourceId}`,
+        )
       }
     } catch (error) {
       this.logger.error(error)

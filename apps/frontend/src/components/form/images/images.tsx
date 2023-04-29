@@ -21,12 +21,7 @@ type Props<T = FileAPIInput> = {
   removeImages: (uid: string[]) => void
 }
 
-export const Images: React.FunctionComponent<Props> = ({
-  images,
-  updateImage,
-  addImage,
-  removeImages,
-}) => {
+export const Images: React.FunctionComponent<Props> = ({ images, addImage, setImages }) => {
   const [fetchFileInfo, { data }] = getFileInfoRequest()
   const modal = useModal()
 
@@ -39,8 +34,8 @@ export const Images: React.FunctionComponent<Props> = ({
   }, [images])
 
   const openImageGallery = useCallback(
-    () => modal?.openImageGallery(Array.from(images.values()), (images) => {}),
-    [images, updateImage],
+    () => modal?.openImageGallery(Array.from(images.values()), setImages),
+    [images, setImages],
   )
 
   return (

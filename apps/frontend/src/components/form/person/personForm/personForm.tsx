@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
-import Stack from '@mui/material/Stack'
 import { useFormik } from 'formik'
 import { FormattedMessage } from 'react-intl'
+import Stack from '@mui/material/Stack'
 import Button from '@mui/material/Button'
 import Grid from '@mui/material/Grid'
 import Step from '@mui/material/Step'
@@ -12,7 +12,6 @@ import { useCancelDialog } from '@frontend/utils/hooks/useCancelDialog'
 import { Education } from '@frontend/components/form/person/education'
 import { Location } from '@frontend/components/form/location'
 import { OldNames } from '@frontend/components/form/person/oldNames'
-import { getDefaultPerson } from 'tools'
 import { routes } from '../../../../router/routes'
 import { CONTACT_METHODS, ID_DOCUMENT_TYPES } from '@frontend/utils/constants'
 import { usePersonState } from '../../../../state/personState'
@@ -27,12 +26,10 @@ import { getBirthdateFromCnp } from './utils'
 
 type Props = {
   personId?: string
-  personInfo?: PersonAPIInput
-  readonly?: boolean
-  onSubmit: (formData: PersonAPIInput) => void | Promise<void>
+  onSubmit: (formData: PersonAPIInput) => void
 }
 
-export const PersonForm: React.FunctionComponent<Props> = ({ personId, personInfo, onSubmit }) => {
+export const PersonForm: React.FunctionComponent<Props> = ({ personId, onSubmit }) => {
   const [step, setStep] = useState(0)
   const cancelChanges = useCancelDialog(routes.persons)
   const {
@@ -84,10 +81,24 @@ export const PersonForm: React.FunctionComponent<Props> = ({ personId, personInf
     validateOnMount: true,
     validate: (values) => ({}),
     onSubmit,
-    initialValues: personInfo ?? getDefaultPerson(),
+    initialValues: {
+      metadata,
+      firstName,
+      lastName,
+      oldNames: Array.from(oldNames.values()),
+      cnp,
+      birthdate,
+      birthPlace,
+      homeAddress,
+      images: Array.from(images.values()),
+      files: Array.from(files.values()),
+      documents: Array.from(documents.values()),
+      relationships: Array.from(relationships.values()),
+      customFields: Array.from(customFields.values()),
+      contactDetails: Array.from(contactDetails.values()),
+      education: Array.from(education.values()),
+    },
   })
-
-  useEffect(() => setPersonInfo(personInfo ?? getDefaultPerson()), [personInfo])
 
   useEffect(() => {
     void setFieldValue('cnp', cnp)

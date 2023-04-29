@@ -18,8 +18,10 @@ export class FirebaseAuthStrategy extends PassportStrategy(Strategy, 'firebase')
         jwksUri:
           'https://www.googleapis.com/service_accounts/v1/jwk/securetoken@system.gserviceaccount.com',
       }),
-      audience: configService.get<string>('FIREBASE_PROJECT_ID'),
-      issuer: `https://securetoken.google.com/${configService.get<string>('FIREBASE_PROJECT_ID')}`,
+      audience: configService.getOrThrow<string>('FIREBASE_PROJECT_ID'),
+      issuer: `https://securetoken.google.com/${configService.getOrThrow<string>(
+        'FIREBASE_PROJECT_ID',
+      )}`,
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       algorithms: ['RS256'],
     })

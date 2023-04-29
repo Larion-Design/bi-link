@@ -10,6 +10,7 @@ export type CustomFieldsState = {
   addCustomField: (fieldName: string) => void
   removeCustomFields: (ids: string[]) => void
   setCustomFields: (customFields: CustomFieldAPI[]) => void
+  getCustomFields: () => CustomFieldAPI[]
 }
 
 export const createCustomFieldsStore: StateCreator<CustomFieldsState, [], [], CustomFieldsState> = (
@@ -33,4 +34,6 @@ export const createCustomFieldsStore: StateCreator<CustomFieldsState, [], [], Cu
     }),
 
   removeCustomFields: (ids) => set({ customFields: removeMapItems(get().customFields, ids) }),
+
+  getCustomFields: () => Array.from(get().customFields.values()),
 })

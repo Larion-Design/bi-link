@@ -8,6 +8,8 @@ export type FilesState = {
   addFile: (fileInfo: FileAPIInput) => void
   updateFile: (fileInfo: FileAPIInput) => void
   removeFiles: (ids: string[]) => void
+
+  getFiles: () => FileAPIInput[]
 }
 
 export const createFilesStore: StateCreator<FilesState, [], [], FilesState> = (set, getState) => ({
@@ -31,4 +33,6 @@ export const createFilesStore: StateCreator<FilesState, [], [], FilesState> = (s
   },
 
   removeFiles: (ids) => set({ files: removeMapItems(getState().files, ids) }),
+
+  getFiles: () => Array.from(getState().files.values()),
 })

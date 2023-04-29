@@ -10,6 +10,7 @@ export type ContactDetailsState = {
   addContactDetails: (fieldName: string) => void
   removeContactDetails: (ids: string[]) => void
   setContactDetails: (customFields: CustomFieldAPI[]) => void
+  getContactDetails: () => CustomFieldAPI[]
 }
 
 export const createContactDetailsStore: StateCreator<
@@ -35,4 +36,6 @@ export const createContactDetailsStore: StateCreator<
     }),
 
   removeContactDetails: (ids) => set({ contactDetails: removeMapItems(get().contactDetails, ids) }),
+
+  getContactDetails: () => Array.from(get().contactDetails.values()),
 })

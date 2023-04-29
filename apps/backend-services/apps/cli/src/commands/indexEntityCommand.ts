@@ -22,29 +22,29 @@ export class IndexEntityCommand extends CommandRunner {
 
       switch (type) {
         case 'persons': {
-          await this.entitiesIndexerService.indexAllPersons()
+          this.entitiesIndexerService.indexAllPersons()
           return
         }
         case 'companies': {
-          await this.entitiesIndexerService.indexAllCompanies()
+          this.entitiesIndexerService.indexAllCompanies()
           return
         }
         case 'properties': {
-          await this.entitiesIndexerService.indexAllProperties()
+          this.entitiesIndexerService.indexAllProperties()
           return
         }
         case 'events': {
-          await this.entitiesIndexerService.indexAllEvents()
+          this.entitiesIndexerService.indexAllEvents()
           return
         }
         case 'files': {
-          await this.entitiesIndexerService.indexAllFiles()
+          this.entitiesIndexerService.indexAllFiles()
           return
         }
       }
     }
     return Promise.reject(
-      `Entity type is invalid or not specified (value provided: ${options?.type})`,
+      `Entity type is invalid or not specified (value provided: ${options?.type ?? ''})`,
     )
   }
 

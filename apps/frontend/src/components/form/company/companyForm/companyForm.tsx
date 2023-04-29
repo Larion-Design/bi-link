@@ -9,10 +9,9 @@ import StepButton from '@mui/material/StepButton'
 import Stepper from '@mui/material/Stepper'
 import { FormattedMessage } from 'react-intl'
 import { useCancelDialog } from '@frontend/utils/hooks/useCancelDialog'
-import { getDefaultCompany } from 'tools'
 import { routes } from '../../../../router/routes'
 import { CONTACT_METHODS } from '@frontend/utils/constants'
-import { useCompanyState } from '../../../../state/companyState'
+import { useCompanyState } from '../../../../state/company/companyState'
 import { Associates } from '../associates'
 import { CustomInputFields } from '../../customInputFields'
 import { FilesManager } from '../../fileField'
@@ -22,15 +21,10 @@ import { Locations } from '../../locations'
 
 type Props<T = CompanyAPIInput> = {
   companyId?: string
-  companyInfo?: T
   onSubmit: (formData: T) => void
 }
 
-export const CompanyForm: React.FunctionComponent<Props> = ({
-  companyId,
-  companyInfo,
-  onSubmit,
-}) => {
+export const CompanyForm: React.FunctionComponent<Props> = ({ companyId, onSubmit }) => {
   const {
     metadata,
     name,
@@ -42,7 +36,6 @@ export const CompanyForm: React.FunctionComponent<Props> = ({
     locations,
     headquarters,
     files,
-    associatesCustomFields,
 
     setFiles,
 
@@ -64,6 +57,13 @@ export const CompanyForm: React.FunctionComponent<Props> = ({
     removeCustomFields,
     removeBranches,
     removeContactDetails,
+
+    getCompany,
+    getAssociates,
+    getBranches,
+    getFiles,
+    getCustomFields,
+    getContactDetails,
   } = useCompanyState()
 
   const [step, setStep] = useState(0)
@@ -75,7 +75,7 @@ export const CompanyForm: React.FunctionComponent<Props> = ({
     validateOnBlur: false,
     enableReinitialize: true,
     onSubmit,
-    initialValues: companyInfo ?? getDefaultCompany(),
+    initialValues: getCompany(),
   })
 
   useEffect(() => void setFieldValue('metadata', metadata), [metadata])
@@ -85,29 +85,21 @@ export const CompanyForm: React.FunctionComponent<Props> = ({
     () => void setFieldValue('registrationNumber', registrationNumber),
     [registrationNumber],
   )
-  useEffect(() => void setFieldValue('files', Array.from(files)), [files])
-  useEffect(() => void setFieldValue('customFields', Array.from(customFields)), [customFields])
+  useEffect(() => void setFieldValue('files', getFiles()), [files, getFiles])
   useEffect(
-    () => void setFieldValue('contactDetails', Array.from(contactDetails)),
-    [contactDetails],
+    () => void setFieldValue('customFields', getCustomFields()),
+    [customFields, getCustomFields],
+  )
+  useEffect(
+    () => void setFieldValue('contactDetails', getContactDetails()),
+    [contactDetails, getContactDetails],
   )
 
+  useEffect(() => void setFieldValue('locations', getBranches()), [locations, getBranches])
+
   useEffect(() => {
-    void setFieldValue(
-      'associates',
-      Array.from(associates.values()).map((associate) => ({
-        metadata: associate.metadata,
-        equity: associate.equity,
-        role: associate.role,
-        isActive: associate.isActive,
-        startDate: associate.startDate,
-        endDate: associate.endDate,
-        customFields: Array.from(associate.customFields).map((customFieldId) =>
-          associatesCustomFields.get(customFieldId),
-        ),
-      })),
-    )
-  }, [associates, associatesCustomFields])
+    void setFieldValue('associates', getAssociates())
+  }, [associates, getAssociates])
 
   return (
     <form data-cy={'companyForm'}>
@@ -249,7 +241,7 @@ export const CompanyForm: React.FunctionComponent<Props> = ({
           <Button
             disabled={isSubmitting || isValidating}
             variant={'contained'}
-            onClick={() => void submitForm()}
+            onClick={submitForm}
             data-cy={'submitForm'}
           >
             <FormattedMessage id={'save'} />

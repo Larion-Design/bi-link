@@ -31,11 +31,13 @@ export const RelatedPersonsList: React.FunctionComponent<Props> = ({
     [relatedPersons, personId],
   )
 
-  const removePerson = (personId) =>
-    useCallback(() => {
+  const removePerson = useCallback(
+    (personId: string) => {
       relatedPersons.delete(personId)
       updateRelatedPersons(Array.from(relatedPersons).map((_id) => ({ _id: _id })))
-    }, [updateRelatedPersons])
+    },
+    [updateRelatedPersons],
+  )
 
   return (
     <PersonsList label={'Related persons'} personsInfo={personsInfo} removePerson={removePerson}>

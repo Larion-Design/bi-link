@@ -9,7 +9,7 @@ export class UserActionController {
   constructor(private readonly indexerService: IndexerService) {}
 
   @EventPattern(MICROSERVICES.ACTIVITY_HISTORY.recordAction)
-  async recordUserAction(@Payload() activityEvent: ActivityEvent) {
+  recordUserAction(@Payload() activityEvent: ActivityEvent) {
     return this.indexerService.recordHistoryEvent(activityEvent)
   }
 }

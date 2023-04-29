@@ -8,6 +8,7 @@ export type ImagesState = {
   addImage: (fileInfo: FileAPIInput) => void
   updateImage: (fileInfo: FileAPIInput) => void
   removeImages: (ids: string[]) => void
+  getImages: () => FileAPIInput[]
 }
 
 export const createImagesStore: StateCreator<ImagesState, [], [], ImagesState> = (
@@ -34,4 +35,6 @@ export const createImagesStore: StateCreator<ImagesState, [], [], ImagesState> =
   },
 
   removeImages: (ids) => set({ images: removeMapItems(get().images, ids) }),
+
+  getImages: () => Array.from(get().images.values()),
 })

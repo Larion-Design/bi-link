@@ -9,15 +9,12 @@ type Props = {
 }
 
 export const PrintControl: React.FunctionComponent<Props> = ({ graphId }) => {
-  const convertToImage = useCallback(
-    () =>
-      toJpeg(document.querySelector<HTMLElement>(`#${graphId}`), {
-        cacheBust: true,
-        filter: (node) =>
-          !/react-flow__(minimap|controls|filters|title)/.test(node?.className ?? ''),
-      }).then(openResource),
-    [],
-  )
+  const convertToImage = useCallback(() => {
+    toJpeg(document.querySelector<HTMLElement>(`#${graphId}`), {
+      cacheBust: true,
+      filter: (node) => !/react-flow__(minimap|controls|filters|title)/.test(node?.className ?? ''),
+    }).then(openResource)
+  }, [])
 
   return (
     <ControlButton onClick={convertToImage}>

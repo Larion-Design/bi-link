@@ -48,7 +48,7 @@ export const Graph: React.FunctionComponent<PropsWithRef<Props>> = ({
   disableMap,
   disableControls,
 }) => {
-  const { formatMessage } = useIntl()
+  const intl = useIntl()
   const showNotification = useNotification()
   const [fetchGraph, { data, error, loading }] = getEntitiesGraphRequest()
   const [graphDepth, updateDepth] = useState(depth ?? 2)
@@ -119,7 +119,7 @@ export const Graph: React.FunctionComponent<PropsWithRef<Props>> = ({
       }
     }
 
-    const createNode = (id: string, type: EntityType, data: any) => {
+    const createNode = (id: string, type: EntityType, data: unknown) => {
       if (!nodesMap.has(id)) {
         nodesMap.set(id, {
           id,
@@ -323,7 +323,7 @@ export const Graph: React.FunctionComponent<PropsWithRef<Props>> = ({
           createEdge(
             startNodeId,
             endNodeId,
-            formatMessage({ id: _type, defaultMessage: _type }),
+            intl.formatMessage({ id: _type, defaultMessage: _type }),
             _confirmed,
             _type,
           )

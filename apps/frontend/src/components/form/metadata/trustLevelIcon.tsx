@@ -15,13 +15,13 @@ type Props = {
 }
 
 export const TrustLevelIcon: React.FunctionComponent<Props> = ({ level }) => {
+  const intl = useIntl()
   const trustLevelLocale = useTrustLevelLocale()
-  const { formatMessage } = useIntl()
 
   const color = trustLevelColor[level]
-  const tooltipMessage = `${formatMessage({ id: 'Information trust level' })}: ${
-    trustLevelLocale[level]
-  }`
+  const tooltipMessage = `${intl.formatMessage({ id: 'Information trust level' })}: ${String(
+    trustLevelLocale[level],
+  )}`
 
   const icons = {
     0: <QuestionMarkOutlinedIcon fontSize={'small'} sx={{ color }} />,
