@@ -1,5 +1,5 @@
 import { DatePickerWithMetadata } from '@frontend/components/form/datePicker'
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { AutocompleteFieldWithMetadata } from '@frontend/components/form/autocompleteField/autocompleteFieldWithMetadata'
 import { useFormik } from 'formik'
 import { useCancelDialog } from '@frontend/utils/hooks/useCancelDialog'
@@ -11,7 +11,6 @@ import Step from '@mui/material/Step'
 import StepButton from '@mui/material/StepButton'
 import Stepper from '@mui/material/Stepper'
 import { ProceedingAPIInput } from 'defs'
-import { getDefaultProceeding } from 'tools'
 import { routes } from '../../../../router/routes'
 import { useProceedingState } from '../../../../state/proceedingState'
 import { AutocompleteField } from '../../autocompleteField'
@@ -22,15 +21,10 @@ import { Parties } from '../parties'
 
 type Props = {
   proceedingId?: string
-  proceedingInfo?: ProceedingAPIInput
   onSubmit: (formData: ProceedingAPIInput) => void
 }
 
-export const ProceedingForm: React.FunctionComponent<Props> = ({
-  proceedingId,
-  proceedingInfo,
-  onSubmit,
-}) => {
+export const ProceedingForm: React.FunctionComponent<Props> = ({ proceedingId, onSubmit }) => {
   const [step, setStep] = useState(0)
   const cancelChanges = useCancelDialog(routes.events)
 
@@ -45,6 +39,11 @@ export const ProceedingForm: React.FunctionComponent<Props> = ({
     fileNumber,
     files,
     customFields,
+
+    getProceeding,
+    getEntitiesInvolved,
+    getFiles,
+    getCustomFields,
 
     updateYear,
     updateName,
@@ -64,7 +63,7 @@ export const ProceedingForm: React.FunctionComponent<Props> = ({
   } = useProceedingState()
 
   const { isValidating, isSubmitting, submitForm, setFieldValue } = useFormik<ProceedingAPIInput>({
-    initialValues: proceedingInfo ?? getDefaultProceeding(),
+    initialValues: getProceeding(),
     validate: (values) => void {},
     validateOnChange: false,
     validateOnMount: false,
@@ -80,23 +79,9 @@ export const ProceedingForm: React.FunctionComponent<Props> = ({
   useEffect(() => void setFieldValue('description', description), [description])
   useEffect(() => void setFieldValue('reason', reason), [reason])
   useEffect(() => void setFieldValue('fileNumber', fileNumber), [fileNumber])
-  useEffect(
-    () => void setFieldValue('entitiesInvolved', Array.from(entitiesInvolved)),
-    [entitiesInvolved],
-  )
-  useEffect(() => void setFieldValue('files', Array.from(files)), [files])
-  useEffect(() => void setFieldValue('customFields', Array.from(customFields)), [customFields])
-
-  const proceedingYears = useMemo(() => {
-    const years: string[] = ['']
-    let year = 1970
-    const currentYear = new Date().getFullYear()
-
-    while (++year <= currentYear) {
-      years.push(year.toString())
-    }
-    return years
-  }, [])
+  useEffect(() => void setFieldValue('entitiesInvolved', getEntitiesInvolved()), [entitiesInvolved])
+  useEffect(() => void setFieldValue('files', getFiles()), [files])
+  useEffect(() => void setFieldValue('customFields', getCustomFields()), [customFields])
 
   return (
     <form data-cy={'proceedingForm'}>

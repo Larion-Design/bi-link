@@ -1,5 +1,5 @@
-import { ProceedingForm } from '@frontend/components/form/proceeding/proceedingForm/proceedingForm'
 import React, { useState } from 'react'
+import { ProceedingForm } from '@frontend/components/form/proceeding/proceedingForm/proceedingForm'
 import { Graph } from '@frontend/components/entityViews/graph'
 import { Reports } from '@frontend/components/entityViews/reports'
 import { InputFieldMenu } from '@frontend/components/menu/inputFieldMenu'
@@ -10,7 +10,7 @@ import { ProceedingAPIInput } from 'defs'
 
 type Props = {
   proceedingId?: string
-  proceedingInfo?: ProceedingAPIInput
+  proceedingInfo: ProceedingAPIInput
   onSubmit: (data: ProceedingAPIInput) => void | Promise<void>
 }
 

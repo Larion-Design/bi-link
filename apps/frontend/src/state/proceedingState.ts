@@ -19,6 +19,8 @@ type ProceedingState = MetadataState &
     entitiesInvolved: Map<string, ProceedingEntityInvolvedAPI>
 
     setProceedingInfo: (propertyInfo: ProceedingAPIInput) => void
+    getProceeding: () => ProceedingAPIInput
+    getEntitiesInvolved: () => ProceedingEntityInvolvedAPI[]
 
     updateName: (name: string) => void
     updateType: (type: string) => void
@@ -62,6 +64,36 @@ export const useProceedingState = create<ProceedingState>((set, get, state) => (
     get().setCustomFields(proceedingInfo.customFields)
     get().setFiles(proceedingInfo.files)
   },
+
+  getProceeding: () => {
+    const {
+      metadata,
+      name,
+      type,
+      description,
+      year,
+      reason,
+      fileNumber,
+      getEntitiesInvolved,
+      getFiles,
+      getCustomFields,
+    } = get()
+
+    return {
+      metadata,
+      name,
+      type,
+      description,
+      year,
+      reason,
+      fileNumber,
+      entitiesInvolved: getEntitiesInvolved(),
+      files: getFiles(),
+      customFields: getCustomFields(),
+    }
+  },
+
+  getEntitiesInvolved: () => Array.from(get().entitiesInvolved.values()),
 
   updateDescription: (description) => set({ description }),
   updateType: (type) => set({ type }),
