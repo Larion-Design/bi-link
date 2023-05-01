@@ -10,7 +10,7 @@ type Props = {
 
 export const PrintControl: React.FunctionComponent<Props> = ({ graphId }) => {
   const convertToImage = useCallback(() => {
-    toJpeg(document.querySelector<HTMLElement>(`#${graphId}`), {
+    void toJpeg(document.querySelector<HTMLElement>(`#${graphId}`), {
       cacheBust: true,
       filter: (node) => !/react-flow__(minimap|controls|filters|title)/.test(node?.className ?? ''),
     }).then(openResource)

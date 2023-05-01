@@ -241,7 +241,7 @@ export const CompanyForm: React.FunctionComponent<Props> = ({ companyId, onSubmi
           <Button
             disabled={isSubmitting || isValidating}
             variant={'contained'}
-            onClick={submitForm}
+            onClick={() => void submitForm()}
             data-cy={'submitForm'}
           >
             <FormattedMessage id={'save'} />

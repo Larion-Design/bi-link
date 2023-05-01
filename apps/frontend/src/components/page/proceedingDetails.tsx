@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { ProceedingForm } from '@frontend/components/form/proceeding/proceedingForm/proceedingForm'
 import { Graph } from '@frontend/components/entityViews/graph'
 import { Reports } from '@frontend/components/entityViews/reports'
@@ -7,11 +7,12 @@ import Box from '@mui/material/Box'
 import MenuItem from '@mui/material/MenuItem'
 import Typography from '@mui/material/Typography'
 import { ProceedingAPIInput } from 'defs'
+import { useProceedingState } from '../../state/proceedingState'
 
 type Props = {
   proceedingId?: string
   proceedingInfo: ProceedingAPIInput
-  onSubmit: (data: ProceedingAPIInput) => void | Promise<void>
+  onSubmit: (data: ProceedingAPIInput) => void
 }
 
 export const ProceedingDetails: React.FunctionComponent<Props> = ({
@@ -20,6 +21,9 @@ export const ProceedingDetails: React.FunctionComponent<Props> = ({
   onSubmit,
 }) => {
   const [mainTabIndex, setMainTabIndex] = useState(0)
+  const { setProceedingInfo } = useProceedingState()
+
+  useEffect(() => setProceedingInfo(proceedingInfo), [proceedingInfo])
 
   return (
     <Box sx={{ width: 1, p: 4, mt: 2 }}>
@@ -52,13 +56,7 @@ export const ProceedingDetails: React.FunctionComponent<Props> = ({
         )}
       </Box>
       <Box sx={{ width: 1 }}>
-        {mainTabIndex === 0 && (
-          <ProceedingForm
-            proceedingId={proceedingId}
-            proceedingInfo={proceedingInfo}
-            onSubmit={onSubmit}
-          />
-        )}
+        {mainTabIndex === 0 && <ProceedingForm proceedingId={proceedingId} onSubmit={onSubmit} />}
         {mainTabIndex === 1 && !!proceedingId && (
           <Box sx={{ height: '70vh' }}>
             <Graph entityId={proceedingId} />
