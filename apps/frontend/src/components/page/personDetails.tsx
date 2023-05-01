@@ -1,8 +1,9 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Box from '@mui/material/Box'
 import MenuItem from '@mui/material/MenuItem'
 import Typography from '@mui/material/Typography'
 import { PersonAPIInput } from 'defs'
+import { usePersonState } from '../../state/personState'
 import { getPersonFullName } from '../../utils/person'
 import { Graph } from '../entityViews/graph'
 import { Reports } from '../entityViews/reports'
@@ -12,8 +13,7 @@ import { InputFieldMenu } from '../menu/inputFieldMenu'
 type Props = {
   personId?: string
   personInfo?: PersonAPIInput
-  readonly: boolean
-  onSubmit: (data: PersonAPIInput) => void | Promise<void>
+  onSubmit: (data: PersonAPIInput) => void
 }
 
 export const PersonDetails: React.FunctionComponent<Props> = ({
@@ -21,8 +21,11 @@ export const PersonDetails: React.FunctionComponent<Props> = ({
   personInfo,
   onSubmit,
 }) => {
+  const setPersonInfo = usePersonState(({ setPersonInfo }) => setPersonInfo)
   const [mainTabIndex, setMainTabIndex] = useState(0)
   const canSwitchViews = !!personId
+
+  useEffect(() => setPersonInfo(personInfo), [personInfo])
 
   return (
     <Box sx={{ width: 1, p: 4, mt: 2 }}>
@@ -58,14 +61,7 @@ export const PersonDetails: React.FunctionComponent<Props> = ({
       </Box>
 
       <Box sx={{ width: 1 }}>
-        {mainTabIndex === 0 && (
-          <PersonForm
-            personId={personId}
-            personInfo={personInfo}
-            onSubmit={onSubmit}
-            readonly={false}
-          />
-        )}
+        {mainTabIndex === 0 && <PersonForm personId={personId} onSubmit={onSubmit} />}
         {mainTabIndex === 1 && !!personId && (
           <Box sx={{ height: '70vh' }}>
             <Graph entityId={personId} />

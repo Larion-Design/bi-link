@@ -15,6 +15,7 @@ type CompanyState = MetadataState &
   ContactDetailsState &
   CompanyAssociatesState & {
     setCompanyInfo: (company: CompanyAPIInput) => void
+    getCompany: () => CompanyAPIInput
 
     name: TextWithMetadata
     cui: TextWithMetadata
@@ -31,7 +32,6 @@ type CompanyState = MetadataState &
     addBranch: () => void
     removeBranches: (ids: string[]) => void
 
-    getCompany: () => CompanyAPIInput
     getBranches: () => LocationAPIInput[]
   }
 

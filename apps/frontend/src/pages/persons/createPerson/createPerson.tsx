@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { getDefaultPerson } from 'tools'
 import { DashboardPage } from '../../../components/page/DashboardPage'
 import { createPersonRequest } from '../../../graphql/persons/mutations/createPerson'
 import { routes } from '../../../router/routes'
@@ -28,7 +29,7 @@ export const CreatePerson: React.FunctionComponent = () => {
   return (
     <DashboardPage title={'Creaza o persoana'}>
       <PersonDetails
-        readonly={false}
+        personInfo={getDefaultPerson()}
         onSubmit={(data: PersonAPIInput) => {
           if (!loading) {
             void createPerson({ variables: { data } })

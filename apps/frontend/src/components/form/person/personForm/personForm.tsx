@@ -49,7 +49,16 @@ export const PersonForm: React.FunctionComponent<Props> = ({ personId, onSubmit 
     contactDetails,
     education,
 
-    setPersonInfo,
+    getPerson,
+    getRelationships,
+    getEducation,
+    getOldNames,
+    getDocuments,
+    getFiles,
+    getImages,
+    getCustomFields,
+    getContactDetails,
+
     setFiles,
     addFile,
     setImages,
@@ -81,23 +90,7 @@ export const PersonForm: React.FunctionComponent<Props> = ({ personId, onSubmit 
     validateOnMount: true,
     validate: (values) => ({}),
     onSubmit,
-    initialValues: {
-      metadata,
-      firstName,
-      lastName,
-      oldNames: Array.from(oldNames.values()),
-      cnp,
-      birthdate,
-      birthPlace,
-      homeAddress,
-      images: Array.from(images.values()),
-      files: Array.from(files.values()),
-      documents: Array.from(documents.values()),
-      relationships: Array.from(relationships.values()),
-      customFields: Array.from(customFields.values()),
-      contactDetails: Array.from(contactDetails.values()),
-      education: Array.from(education.values()),
-    },
+    initialValues: getPerson(),
   })
 
   useEffect(() => {
@@ -118,23 +111,14 @@ export const PersonForm: React.FunctionComponent<Props> = ({ personId, onSubmit 
   useEffect(() => void setFieldValue('birthdate', birthdate), [birthdate])
   useEffect(() => void setFieldValue('birthPlace', birthPlace), [birthPlace])
   useEffect(() => void setFieldValue('homeAddress', homeAddress), [homeAddress])
-  useEffect(() => void setFieldValue('education', Array.from(education.values())), [education])
-  useEffect(() => void setFieldValue('oldNames', Array.from(oldNames.values())), [oldNames])
-  useEffect(
-    () => void setFieldValue('relationships', Array.from(relationships.values())),
-    [relationships],
-  )
-  useEffect(() => void setFieldValue('files', Array.from(files.values())), [files])
-  useEffect(() => void setFieldValue('images', Array.from(images.values())), [images])
-  useEffect(
-    () => void setFieldValue('customFields', Array.from(customFields.values())),
-    [customFields],
-  )
-  useEffect(
-    () => void setFieldValue('contactDetails', Array.from(contactDetails.values())),
-    [contactDetails],
-  )
-  useEffect(() => void setFieldValue('documents', Array.from(documents.values())), [documents])
+  useEffect(() => void setFieldValue('education', getEducation()), [education])
+  useEffect(() => void setFieldValue('oldNames', getOldNames()), [oldNames])
+  useEffect(() => void setFieldValue('relationships', getRelationships()), [relationships])
+  useEffect(() => void setFieldValue('files', getFiles()), [files])
+  useEffect(() => void setFieldValue('images', getImages()), [images])
+  useEffect(() => void setFieldValue('customFields', getCustomFields()), [customFields])
+  useEffect(() => void setFieldValue('contactDetails', getContactDetails()), [contactDetails])
+  useEffect(() => void setFieldValue('documents', getDocuments()), [documents])
 
   return (
     <form data-cy={'personsForm'}>

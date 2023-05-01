@@ -42,6 +42,11 @@ type PersonState = MetadataState &
     education: Map<string, EducationAPIInput>
 
     setPersonInfo: (personInfo: PersonAPIInput) => void
+    getPerson: () => PersonAPIInput
+    getRelationships: () => RelationshipAPI[]
+    getEducation: () => EducationAPIInput[]
+    getDocuments: () => IdDocumentAPI[]
+    getOldNames: () => OldName[]
 
     updateFirstName: (fieldInfo: TextWithMetadata) => void
     updateLastName: (fieldInfo: TextWithMetadata) => void
@@ -120,6 +125,49 @@ export const usePersonState = create<PersonState>((set, get, state) => ({
     get().setFiles(personInfo.files)
     get().setImages(personInfo.images)
   },
+
+  getPerson: () => {
+    const {
+      metadata,
+      firstName,
+      lastName,
+      cnp,
+      birthdate,
+      birthPlace,
+      homeAddress,
+      getOldNames,
+      getDocuments,
+      getEducation,
+      getRelationships,
+      getCustomFields,
+      getContactDetails,
+      getFiles,
+      getImages,
+    } = get()
+
+    return {
+      metadata,
+      firstName,
+      lastName,
+      cnp,
+      birthdate,
+      birthPlace,
+      homeAddress,
+      documents: getDocuments(),
+      education: getEducation(),
+      oldNames: getOldNames(),
+      relationships: getRelationships(),
+      contactDetails: getContactDetails(),
+      customFields: getCustomFields(),
+      files: getFiles(),
+      images: getImages(),
+    }
+  },
+
+  getRelationships: () => Array.from(get().relationships.values()),
+  getEducation: () => Array.from(get().education.values()),
+  getDocuments: () => Array.from(get().documents.values()),
+  getOldNames: () => Array.from(get().oldNames.values()),
 
   updateFirstName: (firstName) => set({ firstName }),
   updateLastName: (lastName) => set({ lastName }),
