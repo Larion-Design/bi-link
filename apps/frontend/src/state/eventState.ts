@@ -39,6 +39,9 @@ type EventState = MetadataState &
 
     setEventInfo: (propertyInfo: EventAPIInput) => void
 
+    getEvent: () => EventAPIInput
+    getParticipants: () => EventParticipantAPI[]
+
     updateType: (type: TextWithMetadata) => void
     updateDescription: (description: string) => void
     updateDate: (type: OptionalDateWithMetadata) => void
@@ -94,7 +97,6 @@ export const useEventState = create<EventState>((set, get, state) => ({
     })
 
     set({
-      metadata: eventInfo.metadata,
       type: eventInfo.type,
       description: eventInfo.description,
       date: eventInfo.date,
@@ -106,6 +108,47 @@ export const useEventState = create<EventState>((set, get, state) => ({
     get().updateMetadata(eventInfo.metadata)
     get().setCustomFields(eventInfo.customFields)
     get().setFiles(eventInfo.files)
+  },
+
+  getEvent: () => {
+    const {
+      metadata,
+      type,
+      date,
+      location,
+      description,
+      getCustomFields,
+      getFiles,
+      getParticipants,
+    } = get()
+
+    return {
+      metadata,
+      type,
+      date,
+      location,
+      description,
+      parties: getParticipants(),
+      customFields: getCustomFields(),
+      files: getFiles(),
+    }
+  },
+
+  getParticipants: () => {
+    const eventParticipants = get().parties
+    const customFields = get().participantsCustomFields
+
+    return Array.from(eventParticipants.values()).map((participantInfo) => ({
+      metadata: participantInfo.metadata,
+      type: participantInfo.type,
+      description: participantInfo.description,
+      customFields: Array.from(participantInfo.customFields).map((customFieldId) =>
+        customFields.get(customFieldId),
+      ),
+      persons: Array.from(participantInfo.persons).map((_id) => ({ _id })),
+      companies: Array.from(participantInfo.companies).map((_id) => ({ _id })),
+      properties: Array.from(participantInfo.properties).map((_id) => ({ _id })),
+    }))
   },
 
   addParticipant: () =>

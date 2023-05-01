@@ -26,11 +26,7 @@ export const EditEvent: React.FunctionComponent = () => {
 
   useEffect(() => {
     if (eventId) {
-      void fetchEvent({
-        variables: {
-          eventId,
-        },
-      })
+      void fetchEvent({ variables: { eventId } })
     }
   }, [eventId])
 
@@ -40,14 +36,13 @@ export const EditEvent: React.FunctionComponent = () => {
     }
   }, [fetchError?.message, updateError?.message])
 
-  return fetchLoading ? (
+  return fetchLoading && !fetchData?.getEvent ? (
     <Loader visible={true} message={'Informatiile sunt incarcate...'} />
   ) : (
     <DashboardPage title={'Creaza un vehicul'}>
       <EventDetails
         eventId={eventId}
-        eventInfo={fetchData?.getEvent}
-        readonly={true}
+        eventInfo={fetchData.getEvent}
         onSubmit={(eventInfo) => {
           if (!updateLoading) {
             void updateEvent({ variables: { data: eventInfo } })

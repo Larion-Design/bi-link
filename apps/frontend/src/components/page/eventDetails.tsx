@@ -11,16 +11,10 @@ import { Graph } from '../entityViews/graph'
 type Props = {
   eventId?: string
   eventInfo?: EventAPIInput
-  readonly: boolean
-  onSubmit: (data: EventAPIInput) => void | Promise<void>
+  onSubmit: (data: EventAPIInput) => void
 }
 
-export const EventDetails: React.FunctionComponent<Props> = ({
-  eventId,
-  eventInfo,
-  readonly,
-  onSubmit,
-}) => {
+export const EventDetails: React.FunctionComponent<Props> = ({ eventId, eventInfo, onSubmit }) => {
   const [mainTabIndex, setMainTabIndex] = useState(0)
 
   return (
@@ -35,7 +29,7 @@ export const EventDetails: React.FunctionComponent<Props> = ({
         }}
       >
         <Typography variant={'h5'} data-cy={'pageTitle'} gutterBottom>
-          {!!eventId && !!eventInfo ? 'Detalii despre event' : 'Creaza un event'}
+          {!!eventId && !!eventInfo ? 'Detalii despre eveniment' : 'Creaza un eveniment'}
         </Typography>
         {!!eventId && (
           <InputFieldMenu label={'Optiuni'}>
@@ -44,9 +38,6 @@ export const EventDetails: React.FunctionComponent<Props> = ({
               Grafic relational
             </MenuItem>
             <MenuItem onClick={() => setMainTabIndex(3)}>Rapoarte</MenuItem>
-            <MenuItem disabled onClick={() => setMainTabIndex(2)}>
-              Evenimente
-            </MenuItem>
             <MenuItem disabled onClick={() => setMainTabIndex(4)}>
               Conflicte
             </MenuItem>

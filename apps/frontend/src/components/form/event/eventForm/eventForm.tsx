@@ -12,7 +12,6 @@ import Step from '@mui/material/Step'
 import StepButton from '@mui/material/StepButton'
 import Stepper from '@mui/material/Stepper'
 import { EventAPIInput } from 'defs'
-import { getDefaultEvent } from 'tools'
 import { routes } from '../../../../router/routes'
 import { useEventState } from '../../../../state/eventState'
 import { CustomInputFields } from '../../customInputFields'
@@ -23,11 +22,10 @@ import { Parties } from '../parties'
 
 type Props<T = EventAPIInput> = {
   eventId?: string
-  eventInfo?: T
   onSubmit: (formData: T) => void | Promise<void>
 }
 
-export const EventForm: React.FunctionComponent<Props> = ({ eventId, onSubmit, eventInfo }) => {
+export const EventForm: React.FunctionComponent<Props> = ({ eventId, onSubmit }) => {
   const [step, setStep] = useState(0)
   const cancelChanges = useCancelDialog(routes.events)
 
@@ -41,6 +39,11 @@ export const EventForm: React.FunctionComponent<Props> = ({ eventId, onSubmit, e
     files,
     parties,
     participantsCustomFields,
+
+    getEvent,
+    getParticipants,
+    getFiles,
+    getCustomFields,
 
     setFiles,
 
@@ -59,7 +62,7 @@ export const EventForm: React.FunctionComponent<Props> = ({ eventId, onSubmit, e
   } = useEventState()
 
   const { submitForm, isSubmitting, isValidating, setFieldValue } = useFormik<EventAPIInput>({
-    initialValues: eventInfo ?? getDefaultEvent(),
+    initialValues: getEvent(),
     validate: (values) => void {},
     validateOnChange: false,
     validateOnMount: false,
@@ -73,25 +76,10 @@ export const EventForm: React.FunctionComponent<Props> = ({ eventId, onSubmit, e
   useEffect(() => void setFieldValue('date', date), [date])
   useEffect(() => void setFieldValue('location', location), [location])
   useEffect(() => void setFieldValue('description', description), [description])
-  useEffect(() => void setFieldValue('parties', Array.from(parties)), [parties])
-  useEffect(() => void setFieldValue('files', Array.from(files)), [files])
-  useEffect(() => void setFieldValue('customFields', Array.from(customFields)), [customFields])
-
+  useEffect(() => void setFieldValue('files', getFiles()), [files])
+  useEffect(() => void setFieldValue('customFields', getCustomFields()), [customFields])
   useEffect(() => {
-    void setFieldValue(
-      'parties',
-      Array.from(parties.values()).map((partyInfo) => ({
-        metadata: partyInfo.metadata,
-        type: partyInfo.type,
-        description: partyInfo.description,
-        customFields: Array.from(partyInfo.customFields).map((customFieldId) =>
-          participantsCustomFields.get(customFieldId),
-        ),
-        persons: Array.from(partyInfo.persons).map((_id) => ({ _id })),
-        companies: Array.from(partyInfo.companies).map((_id) => ({ _id })),
-        properties: Array.from(partyInfo.properties).map((_id) => ({ _id })),
-      })),
-    )
+    void setFieldValue('parties', getParticipants())
   }, [parties, participantsCustomFields])
 
   return (
