@@ -136,6 +136,9 @@ dependencies:
   zod:
     specifier: ^3.21.4
     version: 3.21.4
+  zod-formik-adapter:
+    specifier: ^1.2.0
+    version: 1.2.0(formik@2.2.9)(zod@3.21.4)
   zustand:
     specifier: ^4.3.6
     version: 4.3.6(immer@9.0.19)(react@18.2.0)
@@ -8423,6 +8426,16 @@ packages:
 
   /zen-observable@0.8.15:
     resolution: {integrity: sha512-PQ2PC7R9rslx84ndNBZB/Dkv8V8fZEpk83RLgXtYd0fwUgEjseMn1Dgajh2x6S8QbZAFa9p2qVCEuYZNgve0dQ==}
+    dev: false
+
+  /zod-formik-adapter@1.2.0(formik@2.2.9)(zod@3.21.4):
+    resolution: {integrity: sha512-62U+Mf8U05pvLsIMUTC1H6d4K5SmsrXM+YgiZhCpPin5GNhnVuXCGySmJCs0FHuTJCBy7Et5Z1i8KF5ffuLttg==}
+    peerDependencies:
+      formik: ^2.2.9
+      zod: ^3.14.4
+    dependencies:
+      formik: 2.2.9(react@18.2.0)
+      zod: 3.21.4
     dev: false
 
   /zod@3.21.0:

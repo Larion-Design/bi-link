@@ -1,8 +1,7 @@
 import React, { useEffect } from 'react'
-import { ReportAPIInput } from 'defs'
 import { Document, Page } from '@react-pdf/renderer'
 import { getFilesInfoRequest } from '../../graphql/files/getFilesInfo'
-import { GeneratePreviewHandler, useDataRefs } from '../../utils/hooks/useDataRefProcessor'
+import { useReportState } from '../../state/report/reportState'
 import { CoverPage } from './coverPage'
 import { Header } from './header'
 import { ImagesList } from './imagesList'
@@ -10,21 +9,25 @@ import { Link } from './link'
 import { Paragraph } from './paragraph'
 import { Title } from './title'
 
-type Props = {
-  reportInfo: ReportAPIInput
-  transform: GeneratePreviewHandler
-}
-
-export const ReportDocument: React.FunctionComponent<Props> = ({ reportInfo }) => {
-  const { name, sections, type, person, company, property, event } = reportInfo
-  const { transform } = useDataRefs(reportInfo.refs)
+export const ReportDocument: React.FunctionComponent = () => {
+  const {
+    name,
+    sections,
+    type,
+    person,
+    company,
+    property,
+    event,
+    reportContent,
+    computeRefsValues,
+  } = useReportState()
   const [fetchFilesInfo, { data: filesInfo }] = getFilesInfoRequest()
 
   useEffect(() => {
-    const filesIds = new Set<string>()
+    if (reportContent.size) {
+      const filesIds = new Set<string>()
 
-    reportInfo.sections.forEach(({ content }) => {
-      content.map(({ file, images }) => {
+      reportContent.forEach(({ file, images }) => {
         if (file) {
           filesIds.add(file.fileId)
         }
@@ -32,12 +35,12 @@ export const ReportDocument: React.FunctionComponent<Props> = ({ reportInfo }) =
           images?.forEach(({ fileId }) => filesIds.add(fileId))
         }
       })
-    })
 
-    if (filesIds.size) {
-      void fetchFilesInfo({ variables: { filesIds: Array.from(filesIds) } })
+      if (filesIds.size) {
+        void fetchFilesInfo({ variables: { filesIds: Array.from(filesIds) } })
+      }
     }
-  }, [reportInfo])
+  }, [reportContent])
 
   return (
     <Document title={name} subject={type} language={'ro'}>
@@ -49,15 +52,15 @@ export const ReportDocument: React.FunctionComponent<Props> = ({ reportInfo }) =
           {content.map(({ order, text, title, table, graph, images, file, link }) => {
             if (text) {
               const { content } = text
-              return <Paragraph key={order} text={transform(content)} />
+              return <Paragraph key={order} text={computeRefsValues(content)} />
             }
             if (title) {
               const { content } = title
-              return <Title key={order} title={transform(content)} />
+              return <Title key={order} title={computeRefsValues(content)} />
             }
             if (link) {
               const { label, url } = link
-              return <Link key={order} url={url} label={transform(label)} />
+              return <Link key={order} url={url} label={computeRefsValues(label)} />
             }
             if (images) {
               const imagesInfo = filesInfo?.getFilesInfo.filter(

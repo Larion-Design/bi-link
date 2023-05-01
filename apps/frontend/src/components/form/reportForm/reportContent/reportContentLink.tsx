@@ -9,26 +9,26 @@ import AccordionDetails from '@mui/material/AccordionDetails'
 import { LinkAPI } from 'defs'
 import { useIntl } from 'react-intl'
 import { GeneratePreviewHandler } from '@frontend/utils/hooks/useDataRefProcessor'
+import { useReportState } from '../../../../state/report/reportState'
 import { ActionButton } from '../../../button/actionButton'
 import { InputField } from '../../inputField'
 
 type Props = {
   linkInfo: LinkAPI
   updateLink: (linkInfo: LinkAPI) => void
-  generateTextPreview: GeneratePreviewHandler
   removeContent: () => void
 }
 
 export const ReportContentLink: React.FunctionComponent<Props> = ({
   linkInfo: { label, url },
   updateLink,
-  generateTextPreview,
   removeContent,
 }) => {
-  const { formatMessage } = useIntl()
+  const intl = useIntl()
+  const { computeRefsValues } = useReportState()
   const [preview, setPreview] = useState(false)
   const togglePreview = useCallback(() => setPreview((preview) => !preview), [setPreview])
-  const contentPreview = useMemo(() => generateTextPreview(label), [label])
+  const contentPreview = useMemo(() => computeRefsValues(label), [label, computeRefsValues])
 
   return (
     <>
@@ -51,7 +51,7 @@ export const ReportContentLink: React.FunctionComponent<Props> = ({
         <ActionButton
           icon={preview ? <EditOutlinedIcon /> : <VisibilityOutlinedIcon />}
           onClick={togglePreview}
-          label={formatMessage({ id: preview ? 'edit' : 'preview' })}
+          label={intl.formatMessage({ id: preview ? 'edit' : 'preview' })}
           disabled={!contentPreview.length}
         />
         <ActionButton

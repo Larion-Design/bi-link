@@ -59,9 +59,7 @@ export const CompanyDetails: React.FunctionComponent<Props> = ({
       </Stack>
 
       <Box sx={{ width: 1 }}>
-        {mainTabIndex === 0 && (
-          <CompanyForm companyId={companyId} companyInfo={companyInfo} onSubmit={onSubmit} />
-        )}
+        {mainTabIndex === 0 && <CompanyForm companyId={companyId} onSubmit={onSubmit} />}
         {mainTabIndex === 1 && !!companyId && (
           <Box sx={{ height: '70vh' }}>
             <Graph entityId={companyId} />

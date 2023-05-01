@@ -1,6 +1,7 @@
 import { z } from 'zod'
 
 export const signupValidationSchema = z.object({
+  name: z.string().nonempty('Nu ai completat campul de nume.'),
   email: z
     .string()
     .email('Adresa de email este invalida.')
@@ -12,3 +13,5 @@ export const signupValidationSchema = z.object({
     .nonempty('Nu ai completat campul pentru parola.'),
   confirmPassword: z.string().nonempty(),
 })
+
+export type SignupInfo = z.infer<typeof signupValidationSchema>

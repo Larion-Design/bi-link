@@ -1,8 +1,8 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import Box from '@mui/material/Box'
 import { EntityInfo, EntityType, FileAPIInput } from 'defs'
-import { getPersonInfoRequest } from '../../../../../graphql/persons/queries/getPersonInfo'
-import { getPropertyRequest } from '../../../../../graphql/properties/queries/getProperty'
+import { getPersonInfoRequest } from '@frontend/graphql/persons/queries/getPersonInfo'
+import { getPropertyRequest } from '@frontend/graphql/properties/queries/getProperty'
 import { Graph } from '../../../../entityViews/graph'
 import { useModal } from '../../../../modal/modalProvider'
 

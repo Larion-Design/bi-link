@@ -3,7 +3,7 @@ import Box from '@mui/material/Box'
 import { PersonAPIInput } from 'defs'
 import { useCopyToClipboard } from 'usehooks-ts'
 import { formatDate } from 'tools'
-import { CreateDataRefHandler } from '../../../utils/hooks/useDataRefProcessor'
+import { useReportState } from '../../../state/report/reportState'
 import { getPersonAge, getPersonFullName } from '../../../utils/person'
 import { EntityInfoTable } from './entityInfoTable'
 import { DocumentsInfoTable } from './person/documentsInfoTable'
@@ -11,15 +11,11 @@ import { DocumentsInfoTable } from './person/documentsInfoTable'
 type Props = {
   personId: string
   personInfo: PersonAPIInput
-  createDataRef: CreateDataRefHandler
 }
 
-export const PersonInfoDrawer: React.FunctionComponent<Props> = ({
-  personId,
-  personInfo,
-  createDataRef,
-}) => {
+export const PersonInfoDrawer: React.FunctionComponent<Props> = ({ personId, personInfo }) => {
   const [_, copy] = useCopyToClipboard()
+  const { addDataRef } = useReportState()
 
   const generalInfo = useMemo(
     () => ({
@@ -47,14 +43,14 @@ export const PersonInfoDrawer: React.FunctionComponent<Props> = ({
 
   const copyGeneralInfo = useCallback(
     (key: string) =>
-      void copy(`{{${createDataRef({ entityType: 'PERSON', entityId: personId }, key)}}}`),
+      void copy(`{{${addDataRef({ entityType: 'PERSON', entityId: personId }, key)}}}`),
     [personId],
   )
 
   const copyCustomField = useCallback(
     (key: string) =>
       void copy(
-        `{{${createDataRef(
+        `{{${addDataRef(
           { entityType: 'PERSON', entityId: personId },
           'fieldName',
           'customFields',
@@ -67,7 +63,7 @@ export const PersonInfoDrawer: React.FunctionComponent<Props> = ({
   const copyContactInfo = useCallback(
     (key: string) =>
       void copy(
-        createDataRef(
+        addDataRef(
           { entityType: 'PERSON', entityId: personId },
           'fieldName',
           'contactDetails',
@@ -79,9 +75,7 @@ export const PersonInfoDrawer: React.FunctionComponent<Props> = ({
 
   const copyIdDocumentInfo = useCallback(
     (key: string, field: string) =>
-      void copy(
-        createDataRef({ entityType: 'PERSON', entityId: personId }, field, 'documents', key),
-      ),
+      void copy(addDataRef({ entityType: 'PERSON', entityId: personId }, field, 'documents', key)),
     [personId],
   )
 

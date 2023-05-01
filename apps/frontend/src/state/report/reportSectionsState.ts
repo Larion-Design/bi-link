@@ -1,45 +1,40 @@
-import { getDefaultReportSection } from 'tools'
 import { v4 } from 'uuid'
-import { create } from 'zustand'
-import { ReportAPIInput, ReportSectionAPIInput, DataRefAPI, ReportContentAPIInput } from 'defs'
-import { removeMapItems } from './utils'
+import { StateCreator } from 'zustand'
+import { ReportContentAPIInput, ReportSectionAPIInput } from 'defs'
+import { getDefaultReportSection } from 'tools'
+import { removeMapItems } from '../utils'
 
 type ReportSectionContent = Omit<ReportSectionAPIInput, 'content'> & { content: Set<string> }
 
-type ReportState = Pick<
-  ReportAPIInput,
-  'name' | 'type' | 'isTemplate' | 'person' | 'company' | 'property' | 'proceeding' | 'event'
-> & {
+export type ReportSectionsState = {
   sections: Map<string, ReportSectionContent>
-  refs: Map<string, DataRefAPI>
+  reportContent: Map<string, ReportContentAPIInput>
 
-  setReportInfo: (reportInfo: ReportAPIInput) => void
-  updateName: (name: string) => void
-  updateType: (type: string) => void
-  setTemplateMode: (isTemplate: boolean) => void
+  setSections: (sections: ReportSectionAPIInput[]) => void
 
   addSection: () => void
   updateSectionName: (uid: string, name: string) => void
   removeSection: (uid: string) => void
 
-  reportContent: Map<string, ReportContentAPIInput>
   addContent: (sectionId: string, content: ReportContentAPIInput) => void
   updateContent: (contentId: string, content: ReportContentAPIInput) => void
   removeContent: (sectionId: string, contentId: string) => void
 }
 
-export const useReportState = create<ReportState>((set, get, state) => ({
-  name: '',
-  type: '',
-  isTemplate: false,
+export const createReportSectionsStore: StateCreator<
+  ReportSectionsState,
+  [],
+  [],
+  ReportSectionsState
+> = (set, get, state) => ({
   sections: new Map(),
-  refs: new Map(),
   reportContent: new Map(),
 
-  setReportInfo: (reportInfo) => {
+  setSections: (sections) => {
     const contentMap = new Map<string, ReportContentAPIInput>()
     const sectionsMap = new Map<string, ReportSectionContent>()
-    reportInfo.sections.forEach((sectionInfo) => {
+
+    sections.forEach((sectionInfo) => {
       const contentList = new Set<string>()
       sectionInfo.content.forEach((contentInfo) => {
         const contentId = v4()
@@ -49,22 +44,8 @@ export const useReportState = create<ReportState>((set, get, state) => ({
       sectionsMap.set(v4(), { ...sectionInfo, content: contentList })
     })
 
-    const dataRefsMap = new Map<string, DataRefAPI>()
-    reportInfo.refs.forEach((dataRefInfo) => dataRefsMap.set(v4(), dataRefInfo))
-
-    set({
-      name: reportInfo.name,
-      type: reportInfo.type,
-      isTemplate: reportInfo.isTemplate,
-      sections: sectionsMap,
-      refs: dataRefsMap,
-      reportContent: contentMap,
-    })
+    set({ sections: sectionsMap, reportContent: contentMap })
   },
-
-  updateType: (type) => set({ type }),
-  updateName: (name) => set({ name }),
-  setTemplateMode: (isTemplate) => set({ isTemplate }),
 
   addSection: () =>
     set({
@@ -101,4 +82,4 @@ export const useReportState = create<ReportState>((set, get, state) => ({
       reportContent: removeMapItems(get().reportContent, [contentId]),
     })
   },
-}))
+})

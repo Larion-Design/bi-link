@@ -6,7 +6,6 @@ import { getCompanyInfoRequest } from '@frontend/graphql/companies/queries/getCo
 import { getEventRequest } from '@frontend/graphql/events/queries/getEvent'
 import { getPersonInfoRequest } from '@frontend/graphql/persons/queries/getPersonInfo'
 import { getPropertyRequest } from '@frontend/graphql/properties/queries/getProperty'
-import { CreateDataRefHandler } from '@frontend/utils/hooks/useDataRefProcessor'
 import { BasicDrawer } from '../../../drawer/basicDrawer'
 import { CompanyInfoDrawer } from '../../../drawer/entityInfoDrawer/companyInfoDrawer'
 import { EventInfoDrawer } from '../../../drawer/entityInfoDrawer/eventInfoDrawer'
@@ -17,14 +16,12 @@ import { Graph } from '../../graph'
 type Props = {
   entityId: string
   entityType: EntityType
-  createDataRef: CreateDataRefHandler
   closeDrawer: () => void
 }
 
 export const ReportDrawer: React.FunctionComponent<Props> = ({
   entityId,
   entityType,
-  createDataRef,
   closeDrawer,
 }) => {
   const [selectedEntity, setEntitySelected] = useState<EntityInfo>({ entityId, entityType })
@@ -77,29 +74,22 @@ export const ReportDrawer: React.FunctionComponent<Props> = ({
           <PersonInfoDrawer
             personId={selectedEntity.entityId}
             personInfo={personData?.getPersonInfo}
-            createDataRef={createDataRef}
           />
         )}
         {entityType === 'COMPANY' && !!companyData?.getCompany && (
           <CompanyInfoDrawer
             companyId={selectedEntity.entityId}
             companyInfo={companyData?.getCompany}
-            createDataRef={createDataRef}
           />
         )}
         {entityType === 'PROPERTY' && !!propertyData?.getProperty && (
           <PropertyInfoDrawer
             propertyId={selectedEntity.entityId}
             propertyInfo={propertyData?.getProperty}
-            createDataRef={createDataRef}
           />
         )}
         {entityType === 'EVENT' && !!eventData?.getEvent && (
-          <EventInfoDrawer
-            eventId={selectedEntity.entityId}
-            eventInfo={eventData?.getEvent}
-            createDataRef={createDataRef}
-          />
+          <EventInfoDrawer eventId={selectedEntity.entityId} eventInfo={eventData?.getEvent} />
         )}
       </Box>
     </BasicDrawer>

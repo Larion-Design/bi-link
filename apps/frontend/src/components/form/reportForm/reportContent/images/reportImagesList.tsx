@@ -3,8 +3,8 @@ import ImageList from '@mui/material/ImageList'
 import ImageListItem from '@mui/material/ImageListItem'
 import Image from 'mui-image'
 import { EntityType, FileAPIInput, FileAPIOutput } from 'defs'
-import { getFilesInfoRequest } from '../../../../../graphql/files/getFilesInfo'
-import { imageTypeRegex } from '../../../../../utils/mimeTypes'
+import { getFilesInfoRequest } from '@frontend/graphql/files/getFilesInfo'
+import { imageTypeRegex } from '@frontend/utils/mimeTypes'
 
 type Props = {
   entityId?: string
