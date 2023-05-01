@@ -11,6 +11,7 @@ export type PropertyOwnerInfoState = Omit<PropertyOwnerAPI, 'customFields'> & {
 export type PropertyOwnersState = {
   owners: Map<string, PropertyOwnerInfoState>
   setPropertyOwners: (owners: PropertyOwnerAPI[]) => void
+  getOwners: () => PropertyOwnerAPI[]
   addOwners: (ownersInfo: PropertyOwnerAPI[]) => void
   removeOwner: (uid: string) => void
   updateOwnerStartDate: (uid: string, startDate: OptionalDateWithMetadata) => void
@@ -62,6 +63,25 @@ export const createPropertyOwnersStore: StateCreator<
       owners: ownersMap,
       ownersCustomFields,
     })
+  },
+
+  getOwners: () => {
+    const owners = get().owners
+    const ownersCustomFields = get().ownersCustomFields
+
+    return Array.from(owners.values()).map(
+      ({ startDate, endDate, metadata, person, company, customFields, vehicleOwnerInfo }) => ({
+        metadata,
+        startDate,
+        endDate,
+        person,
+        company,
+        vehicleOwnerInfo,
+        customFields: Array.from(customFields).map((customFieldId) =>
+          ownersCustomFields.get(customFieldId),
+        ),
+      }),
+    )
   },
 
   addOwners: (ownersInfo) => {

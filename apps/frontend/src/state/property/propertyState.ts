@@ -8,10 +8,6 @@ import { createPropertyOwnersStore, PropertyOwnersState } from './propertyOwnerS
 import { createRealEstateStore, RealEstateInfoState } from './realEstateState'
 import { createVehicleInfoStore, VehicleInfoState } from './vehicleState'
 
-type PropertyOwner = Omit<PropertyOwnerAPI, 'customFields'> & {
-  customFields: Set<string>
-}
-
 type PropertyState = MetadataState &
   FilesState &
   ImagesState &
@@ -20,8 +16,8 @@ type PropertyState = MetadataState &
   RealEstateInfoState &
   PropertyOwnersState &
   Pick<PropertyAPIInput, 'name' | 'type'> & {
-    owners: Map<string, PropertyOwner>
     setPropertyInfo: (propertyInfo: PropertyAPIInput) => void
+    getProperty: () => PropertyAPIInput
     updateName: (name: string) => void
     updateType: (type: string) => void
   }
@@ -52,4 +48,30 @@ export const usePropertyState = create<PropertyState>((set, get, state) => ({
 
   updateName: (name) => set({ name }),
   updateType: (type) => set({ type }),
+
+  getProperty: () => {
+    const {
+      metadata,
+      name,
+      type,
+      getCustomFields,
+      getFiles,
+      getImages,
+      getOwners,
+      vehicleInfo,
+      realEstateInfo,
+    } = get()
+
+    return {
+      metadata,
+      name,
+      type,
+      images: getImages(),
+      files: getFiles(),
+      customFields: getCustomFields(),
+      owners: getOwners(),
+      vehicleInfo,
+      realEstateInfo,
+    }
+  },
 }))

@@ -1,7 +1,8 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Typography from '@mui/material/Typography'
 import Box from '@mui/material/Box'
 import MenuItem from '@mui/material/MenuItem'
+import { usePropertyState } from '../../state/property/propertyState'
 import { Reports } from '../entityViews/reports'
 import { InputFieldMenu } from '../menu/inputFieldMenu'
 import { Graph } from '../entityViews/graph'
@@ -10,9 +11,8 @@ import { PropertyForm } from '../form/property/propertyForm'
 
 type Props = {
   propertyId?: string
-  propertyInfo?: PropertyAPIInput
-  readonly: boolean
-  onSubmit: (data: PropertyAPIInput) => void | Promise<void>
+  propertyInfo: PropertyAPIInput
+  onSubmit: (data: PropertyAPIInput) => void
 }
 
 export const PropertyDetails: React.FunctionComponent<Props> = ({
@@ -21,6 +21,9 @@ export const PropertyDetails: React.FunctionComponent<Props> = ({
   onSubmit,
 }) => {
   const [mainTabIndex, setMainTabIndex] = useState(0)
+  const setPropertyInfo = usePropertyState(({ setPropertyInfo }) => setPropertyInfo)
+
+  useEffect(() => setPropertyInfo(propertyInfo), [propertyInfo])
 
   return (
     <Box sx={{ width: 1, p: 4, mt: 2 }}>
@@ -34,9 +37,7 @@ export const PropertyDetails: React.FunctionComponent<Props> = ({
         }}
       >
         <Typography variant={'h5'} data-cy={'pageTitle'} gutterBottom>
-          {!!propertyId && !!propertyInfo
-            ? `Detalii despre ${propertyInfo.name}`
-            : 'Creaza o proprietate'}
+          {!propertyId ? 'Creaza o proprietate' : `Detalii despre ${propertyInfo.name}`}
         </Typography>
         {!!propertyId && (
           <InputFieldMenu label={'Optiuni'}>
@@ -55,13 +56,7 @@ export const PropertyDetails: React.FunctionComponent<Props> = ({
         )}
       </Box>
       <Box sx={{ width: 1 }}>
-        {mainTabIndex === 0 && (
-          <PropertyForm
-            propertyId={propertyId}
-            propertyInfo={propertyInfo}
-            onSubmit={(values) => void onSubmit(values)}
-          />
-        )}
+        {mainTabIndex === 0 && <PropertyForm propertyId={propertyId} onSubmit={onSubmit} />}
         {mainTabIndex === 1 && !!propertyId && (
           <Box sx={{ height: '70vh' }}>
             <Graph entityId={propertyId} />
