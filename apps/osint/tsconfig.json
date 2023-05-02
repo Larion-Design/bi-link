@@ -20,6 +20,21 @@
     "forceConsistentCasingInFileNames": true,
     "noFallthroughCasesInSwitch": true,
     "importHelpers": true,
-    "paths": {}
-  }
+    "paths": {
+      "@app/browser-module": [
+        "libs/browser-module/src"
+      ],
+      "@app/browser-module/*": [
+        "libs/browser-module/src/*"
+      ]
+    }
+  },
+  "include": [
+    "apps",
+    "libs"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist"
+  ]
 }

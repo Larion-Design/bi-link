@@ -4,26 +4,29 @@
   "sourceRoot": "apps/osint/src",
   "monorepo": true,
   "root": "apps/osint",
+  "generateOptions": {
+    "spec": false
+  },
   "compilerOptions": {
     "webpack": true
   },
   "projects": {
-    "osint": {
+    "scraper-termene": {
       "type": "application",
-      "root": "apps/osint",
+      "root": "apps/scraper-termene",
       "entryFile": "main",
-      "sourceRoot": "apps/osint/src",
+      "sourceRoot": "apps/scraper-termene/src",
       "compilerOptions": {
-        "tsConfigPath": "apps/osint/tsconfig.app.json"
+        "tsConfigPath": "apps/scraper-termene/tsconfig.app.json"
       }
     },
-    "files-parser": {
-      "type": "application",
-      "root": "apps/files-parser",
-      "entryFile": "main",
-      "sourceRoot": "apps/files-parser/src",
+    "browser-module": {
+      "type": "library",
+      "root": "libs/browser-module",
+      "entryFile": "index",
+      "sourceRoot": "libs/browser-module/src",
       "compilerOptions": {
-        "tsConfigPath": "apps/files-parser/tsconfig.app.json"
+        "tsConfigPath": "libs/browser-module/tsconfig.lib.json"
       }
     }
   }
