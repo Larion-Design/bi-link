@@ -46,10 +46,12 @@ export const ReportDocument: React.FunctionComponent = () => {
     <Document title={name} subject={type} language={'ro'}>
       <CoverPage reportName={name} />
 
-      {sections.map(({ content, name }) => (
+      {Array.from(sections.values()).map(({ content, name }) => (
         <Page key={name} wrap break>
           <Header />
-          {content.map(({ order, text, title, table, graph, images, file, link }) => {
+          {Array.from(content.values()).map((uid) => {
+            const { order, text, title, table, graph, images, file, link } = reportContent.get(uid)
+
             if (text) {
               const { content } = text
               return <Paragraph key={order} text={computeRefsValues(content)} />
@@ -66,7 +68,6 @@ export const ReportDocument: React.FunctionComponent = () => {
               const imagesInfo = filesInfo?.getFilesInfo.filter(
                 ({ fileId }) => !!images.find(({ fileId: imageFileId }) => imageFileId === fileId),
               )
-
               if (imagesInfo?.length) {
                 return <ImagesList key={order} images={imagesInfo} />
               }
