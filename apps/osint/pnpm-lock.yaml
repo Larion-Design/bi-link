@@ -28,6 +28,9 @@ importers:
       '@sentry/tracing':
         specifier: ^7.28.1
         version: 7.45.0
+      '@vendia/serverless-express':
+        specifier: ^4.10.1
+        version: 4.10.1
       aws-lambda:
         specifier: ^1.0.7
         version: 1.0.7
@@ -83,6 +86,9 @@ importers:
       '@sentry/hub':
         specifier: ^7.28.1
         version: 7.45.0
+      '@types/aws-lambda':
+        specifier: ^8.10.114
+        version: 8.10.114
       '@types/bull':
         specifier: ^3.15.9
         version: 3.15.9
@@ -2875,6 +2881,10 @@ packages:
     resolution: {integrity: sha512-yOlFc+7UtL/89t2ZhjPvvB/DeAr3r+Dq58IgzsFkOAvVC6NMJXmCGjbptdXdR9qsX7pKcTL+s87FtYREi2dEEQ==}
     dev: true
 
+  /@types/aws-lambda@8.10.114:
+    resolution: {integrity: sha512-M8WpEGfC9iQ6V2Ccq6nGIXoQgeVc6z0Ngk8yCOL5V/TYIxshvb0MWQYLFFTZDesL0zmsoBc4OBjG9DB/4rei6w==}
+    dev: true
+
   /@types/babel__core@7.20.0:
     resolution: {integrity: sha512-+n8dL/9GWblDO0iU6eZAwEIJVr5DWigtle+Q6HLOrh/pdbXOhOtqzq8VPPE2zvNJzSKY4vH/z3iT3tn0A3ypiQ==}
     dependencies:
@@ -3283,6 +3293,11 @@ packages:
       '@typescript-eslint/types': 5.56.0
       eslint-visitor-keys: 3.3.0
     dev: true
+
+  /@vendia/serverless-express@4.10.1:
+    resolution: {integrity: sha512-8FM/GnQ8bbp1fynAWLGzNIy3Hyhoevixwh2Aj8qBPpw7rkbWZ1I7RC2XhZZaTZo/1JTDlff4cDDmkgY0CzUV7g==}
+    engines: {node: '>=12'}
+    dev: false
 
   /@vladfrangu/async_event_emitter@2.1.4:
     resolution: {integrity: sha512-/YeRg3IvYCfRTH9BKHJZQvbG4Z9A9Fl24WzRpCny+eF/eyvDrHbWDV4GdqF+JSs/CdMdtbQ2qqfVzDfIfcQppw==}
