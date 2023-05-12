@@ -4,6 +4,7 @@
     "declaration": false,
     "removeComments": true,
     "moduleResolution": "Node",
+    "esModuleInterop": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "allowSyntheticDefaultImports": true,

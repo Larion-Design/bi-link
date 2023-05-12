@@ -1,10 +1,10 @@
 import { Controller } from '@nestjs/common'
-import { CompanyBasicDataSetScraperService } from '../services/companyBasicDataSetScraperService'
+import { CompanyBasicDatasetScraperService } from '../services/companyBasicDatasetScraperService'
 
 @Controller()
 export class CompanyByCUIController {
   constructor(
-    private readonly companyBasicDataSetScraperService: CompanyBasicDataSetScraperService,
+    private readonly companyBasicDataSetScraperService: CompanyBasicDatasetScraperService,
   ) {}
 
   async getCompanyBasicInfoByCui(cui: string) {

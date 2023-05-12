@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common'
 import { BrowserService } from '@app/browser-module/browserService'
 
 @Injectable()
-export class CompanyBasicDataSetScraperService {
+export class CompanyBasicDatasetScraperService {
   constructor(private readonly browserService: BrowserService) {}
 
   getBasicCompanyDataSet = async (cui: string) => {
@@ -10,8 +10,7 @@ export class CompanyBasicDataSetScraperService {
     const context = await browser.createIncognitoBrowserContext()
     const page = await context.newPage()
 
-    await page.goto(`https://termene.ro/firma/${cui}-firma`)
-
+    await page.goto(this.getCompanyUri(cui))
     const tableRows = await page.$$('#date-de-identificare tbody tr')
     const resultMap = new Map<string, string>()
 
@@ -27,4 +26,6 @@ export class CompanyBasicDataSetScraperService {
     await page.close()
     return resultMap
   }
+
+  private getCompanyUri = (cui: string) => `https://termene.ro/firma/${cui}-firma`
 }
