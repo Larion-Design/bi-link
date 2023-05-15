@@ -14,14 +14,19 @@ export class CompanyBasicDatasetScraperService {
     const tableRows = await page.$$('#date-de-identificare tbody tr')
     const resultMap = new Map<string, string>()
 
-    await Promise.all(
-      tableRows.map(async (tableRow, index) => {
-        const [labelElement, valuelement] = await tableRows[index].$$('td')
-        const label = await page.evaluate((element) => element.textContent.trim(), labelElement)
-        const value = await page.evaluate((element) => element.textContent.trim(), valuelement)
-        resultMap.set(label, value)
-      }),
-    )
+    if (tableRows?.length) {
+      await Promise.all(
+        tableRows.map(async (tableRow) => {
+          const [labelElement, valuelement] = await tableRow.$$('td')
+          const label = await page.evaluate((element) => element?.textContent?.trim(), labelElement)
+          const value = await page.evaluate((element) => element?.textContent?.trim(), valuelement)
+
+          if (label && value) {
+            resultMap.set(label, value)
+          }
+        }),
+      )
+    }
 
     await page.close()
     return resultMap

@@ -22,16 +22,44 @@
     "noFallthroughCasesInSwitch": true,
     "importHelpers": true,
     "paths": {
-      "@app/rpc": ["libs/rpc/src"],
-      "@app/rpc/*": ["libs/rpc/src/*"],
-      "@app/service-health": ["libs/service-health/src"],
-      "@app/service-health/*": ["libs/service-health/src/*"],
-      "@app/definitions": ["libs/definitions/src"],
-      "@app/definitions/*": ["libs/definitions/src/*"],
-      "@app/scheduler-module": ["libs/scheduler-module/src"],
-      "@app/scheduler-module/*": ["libs/scheduler-module/src/*"]
+      "@app/rpc": [
+        "libs/rpc/src"
+      ],
+      "@app/rpc/*": [
+        "libs/rpc/src/*"
+      ],
+      "@app/service-health": [
+        "libs/service-health/src"
+      ],
+      "@app/service-health/*": [
+        "libs/service-health/src/*"
+      ],
+      "@app/definitions": [
+        "libs/definitions/src"
+      ],
+      "@app/definitions/*": [
+        "libs/definitions/src/*"
+      ],
+      "@app/scheduler-module": [
+        "libs/scheduler-module/src"
+      ],
+      "@app/scheduler-module/*": [
+        "libs/scheduler-module/src/*"
+      ],
+      "@app/browser-module": [
+        "libs/browser-module/src"
+      ],
+      "@app/browser-module/*": [
+        "libs/browser-module/src/*"
+      ]
     }
   },
-  "exclude": ["node_modules", "dist"],
-  "include": ["apps", "libs"]
+  "exclude": [
+    "node_modules",
+    "dist"
+  ],
+  "include": [
+    "apps",
+    "libs"
+  ]
 }

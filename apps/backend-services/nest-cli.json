@@ -114,6 +114,24 @@
       "compilerOptions": {
         "tsConfigPath": "apps/files-manager/tsconfig.app.json"
       }
+    },
+    "browser-module": {
+      "type": "library",
+      "root": "libs/browser-module",
+      "entryFile": "index",
+      "sourceRoot": "libs/browser-module/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/browser-module/tsconfig.lib.json"
+      }
+    },
+    "osint-termene": {
+      "type": "application",
+      "root": "apps/osint-termene",
+      "entryFile": "main",
+      "sourceRoot": "apps/osint-termene/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/osint-termene/tsconfig.app.json"
+      }
     }
   }
 }

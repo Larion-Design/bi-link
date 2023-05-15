@@ -60,5 +60,11 @@ export const MICROSERVICES = {
     getFileContent: 'getFileContent',
     extractTextFromFile: 'extractTextFromFile',
   },
-  OSINT: {},
+  OSINT: {
+    TERMENE: {
+      id: 'TERMENE',
+      getCompanyInfoByCUI: 'getCompanyInfoByCUI',
+      getCompanyInfoByName: 'getCompanyInfoByName',
+    },
+  },
 }
