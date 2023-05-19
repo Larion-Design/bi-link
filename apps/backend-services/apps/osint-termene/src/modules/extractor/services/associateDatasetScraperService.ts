@@ -1,14 +1,10 @@
 import { Logger } from '@nestjs/common'
 import { BrowserService } from '@app/browser-module/browserService'
-import { TermeneScraperService } from './termeneScraperService'
 
 export class AssociateDatasetScraperService {
   private readonly logger = new Logger(AssociateDatasetScraperService.name)
 
-  constructor(
-    private readonly browserService: BrowserService,
-    private readonly termeneScraperService: TermeneScraperService,
-  ) {}
+  constructor(private readonly browserService: BrowserService) {}
 
   getPersonAssociateTermeneUrl = async (companyCUI: string, name: string, address?: string) => {
     let personUrl: string | undefined
@@ -16,8 +12,6 @@ export class AssociateDatasetScraperService {
     const page = await browser.newPage()
 
     try {
-      await this.termeneScraperService.authenticate(page)
-
       const url = new URL('https://termene.ro/search.php')
       url.searchParams.set('submitted', 'true')
       url.searchParams.set('search[nume]', encodeURIComponent(name))

@@ -1,19 +1,22 @@
+import { BrowserService } from '@app/browser-module/browserService'
 import { Injectable } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
-import { Page } from 'puppeteer-core'
 
 @Injectable()
-export class TermeneScraperService {
+export class TermeneAuthService {
   private readonly loginPage = 'https://termene.ro/autentificare'
   private readonly email: string
   private readonly password: string
 
-  constructor(configService: ConfigService) {
+  constructor(private readonly browserService: BrowserService, configService: ConfigService) {
     this.email = configService.getOrThrow('SCRAPER_TERMENE_EMAIL')
     this.password = configService.getOrThrow('SCRAPER_TERMENE_PASSWORD')
   }
 
-  authenticate = async (page: Page) => {
+  authenticate = async () => {
+    const browser = await this.browserService.getBrowser()
+    const page = await browser.newPage()
+
     await page.goto(this.loginPage)
     await page.waitForNavigation()
 
@@ -26,7 +29,9 @@ export class TermeneScraperService {
       await page.keyboard.type(this.password, { delay: this.getRandomDelay(100, 200) })
 
       await Promise.all([page.waitForNavigation(), page.click('#loginBtn')])
+      await page.waitForNetworkIdle()
     }
+    await page.close()
   }
 
   private getRandomDelay = (min: number, max: number) =>

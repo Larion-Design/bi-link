@@ -7,9 +7,9 @@ export class CompanyLoaderService {
   constructor(private readonly ingressService: IngressService) {}
 
   findCompany = async (
-    name: string | null,
-    cui: string | null,
-    registrationNumber: string | null,
+    name: string | null = null,
+    cui: string | null = null,
+    registrationNumber: string | null = null,
   ) => this.ingressService.findCompanyId({ cui, name, registrationNumber })
 
   createCompany = async (companyInfo: CompanyAPIInput, author: UpdateSource) =>

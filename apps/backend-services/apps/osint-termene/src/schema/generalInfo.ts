@@ -1,4 +1,5 @@
 import { z } from 'zod'
+import { termeneDateSchema } from './date'
 
 export const companyHeaderInfoSchema = z.object({
   firma: z.object({
@@ -6,7 +7,28 @@ export const companyHeaderInfoSchema = z.object({
     nume_canonic: z.string(),
     j: z.string(),
   }),
-  stare_firma: z.object({}),
+  stare_firma: z.object({
+    mfinante: z.object({
+      curenta: z.object({
+        functiune: z.boolean(),
+      }),
+    }),
+    recom: z.object({
+      curenta: z.object({
+        functiune: z.boolean(),
+      }),
+    }),
+  }),
+  statut_fiscal: z.object({
+    curent: z.object({
+      label: z.string(),
+    }),
+  }),
+  statut_tva: z.object({
+    curent: z.object({
+      label: z.string(),
+    }),
+  }),
 })
 
 export const companyProfileSchema = z.object({
@@ -52,6 +74,6 @@ export const companyProfileSchema = z.object({
     }),
   }),
   data_infiintarii: z.object({
-    data: z.string(),
+    data: termeneDateSchema,
   }),
 })

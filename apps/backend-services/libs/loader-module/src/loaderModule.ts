@@ -3,10 +3,21 @@ import {
   CompanyLoaderService,
   LocationLoaderService,
   PersonLoaderService,
+  ProceedingLoaderService,
 } from '@app/loader-module/services'
 
 @Module({
-  providers: [PersonLoaderService, CompanyLoaderService, LocationLoaderService],
-  exports: [PersonLoaderService, CompanyLoaderService, LocationLoaderService],
+  providers: [
+    PersonLoaderService,
+    CompanyLoaderService,
+    LocationLoaderService,
+    ProceedingLoaderService,
+  ],
+  exports: [
+    PersonLoaderService,
+    CompanyLoaderService,
+    LocationLoaderService,
+    ProceedingLoaderService,
+  ],
 })
 export class LoaderModule {}

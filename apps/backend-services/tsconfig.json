@@ -51,6 +51,18 @@
       ],
       "@app/browser-module/*": [
         "libs/browser-module/src/*"
+      ],
+      "@app/loader-module": [
+        "libs/loader-module/src"
+      ],
+      "@app/loader-module/*": [
+        "libs/loader-module/src/*"
+      ],
+      "@app/diff-module": [
+        "libs/diff-module/src"
+      ],
+      "@app/diff-module/*": [
+        "libs/diff-module/src/*"
       ]
     }
   },

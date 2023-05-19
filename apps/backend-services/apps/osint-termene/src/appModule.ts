@@ -2,13 +2,16 @@ import { CacheModule, Module } from '@nestjs/common'
 import { ConfigModule, ConfigService } from '@nestjs/config'
 import { SentryModule } from '@ntegral/nestjs-sentry'
 import { RpcModule } from '@app/rpc'
-import { CompanyBasicDatasetScraperService } from './services/companyBasicDatasetScraperService'
-import { CompanyDatasetScraperService } from './services/companyDatasetScraperService'
-import { TermeneScraperService } from './services/termeneScraperService'
+import { TermeneRPCModule } from './modules/rpc/termeneRPCModule'
+import { ExtractorModule } from './modules/extractor/extractorModule'
+import { TransformerModule } from './modules/transformer/transformerModule'
 
 @Module({
   imports: [
     RpcModule,
+    ExtractorModule,
+    TermeneRPCModule,
+    TransformerModule,
     CacheModule.register({
       isGlobal: true,
     }),
@@ -33,10 +36,6 @@ import { TermeneScraperService } from './services/termeneScraperService'
       },
     }),
   ],
-  providers: [
-    TermeneScraperService,
-    CompanyBasicDatasetScraperService,
-    CompanyDatasetScraperService,
-  ],
+  providers: [],
 })
 export class AppModule {}
