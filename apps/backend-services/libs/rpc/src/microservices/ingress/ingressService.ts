@@ -436,14 +436,22 @@ export class IngressService {
     }
   }
 
-  findCompanyId = async (cui: string) => {
+  findCompanyId = async ({
+    cui,
+    name,
+    registrationNumber,
+  }: Parameters<IngressServiceMethods['findCompanyId']>[0]) => {
     type Result = ReturnType<IngressServiceMethods['findCompanyId']>
     type Params = Parameters<IngressServiceMethods['findCompanyId']>[0]
 
     try {
       return lastValueFrom(
         this.client
-          .send<Result, Params>(MICROSERVICES.INGRESS.findCompanyIdByCUI, { cui })
+          .send<Result, Params>(MICROSERVICES.INGRESS.findCompanyId, {
+            cui,
+            name,
+            registrationNumber,
+          })
           .pipe(timeout(1000)),
       )
     } catch (e) {

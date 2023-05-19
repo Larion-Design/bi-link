@@ -132,6 +132,24 @@
       "compilerOptions": {
         "tsConfigPath": "apps/osint-termene/tsconfig.app.json"
       }
+    },
+    "loader-module": {
+      "type": "library",
+      "root": "libs/loader-module",
+      "entryFile": "index",
+      "sourceRoot": "libs/loader-module/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/loader-module/tsconfig.lib.json"
+      }
+    },
+    "diff-module": {
+      "type": "library",
+      "root": "libs/diff-module",
+      "entryFile": "index",
+      "sourceRoot": "libs/diff-module/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/diff-module/tsconfig.lib.json"
+      }
     }
   }
 }
