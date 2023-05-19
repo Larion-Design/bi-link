@@ -12,9 +12,7 @@ import { TransformerModule } from './modules/transformer/transformerModule'
     ExtractorModule,
     TermeneRPCModule,
     TransformerModule,
-    CacheModule.register({
-      isGlobal: true,
-    }),
+    CacheModule.register({ isGlobal: true }),
     ConfigModule.forRoot({
       isGlobal: true,
       ignoreEnvVars: true,
@@ -36,6 +34,5 @@ import { TransformerModule } from './modules/transformer/transformerModule'
       },
     }),
   ],
-  providers: [],
 })
 export class AppModule {}

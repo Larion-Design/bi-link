@@ -1,6 +1,6 @@
-import { IngressService } from '@app/rpc/microservices/ingress'
 import { Injectable } from '@nestjs/common'
 import { PersonAPIInput, UpdateSource } from 'defs'
+import { IngressService } from '@app/rpc/microservices/ingress'
 
 @Injectable()
 export class PersonLoaderService {
