@@ -25,6 +25,9 @@ export const MICROSERVICES = {
     revertHistorySnapshot: 'revertHistorySnapshot',
     getFileByHash: 'getFileByHash',
     getReportsTemplates: 'getReportsTemplates',
+    findCompanyId: 'findCompanyId',
+    findPersonId: 'findPersonId',
+    findProceedingId: 'findProceedingId',
   },
   ACTIVITY_HISTORY: {
     id: 'ACTIVITY_HISTORY',

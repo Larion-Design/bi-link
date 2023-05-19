@@ -220,6 +220,35 @@ export const ingressInterfaceSchema = z.object({
   getFileByHash: z.function().args(z.string().nonempty()).returns(fileSchema),
 
   getReportsTemplates: z.function().returns(reportSchema.array()),
+
+  findCompanyId: z
+    .function()
+    .args(
+      z.object({
+        cui: z.string().nullish(),
+        name: z.string().nullish(),
+        registrationNumber: z.string().nullish(),
+      }),
+    )
+    .returns(z.string().nonempty().nullish()),
+
+  findPersonId: z
+    .function()
+    .args(
+      z.object({
+        firstName: z.string().nullish(),
+        lastName: z.string().nullish(),
+        birthdate: z.date().nullish(),
+        cnp: z.string().nullish(),
+        documentNumber: z.string().nullish(),
+      }),
+    )
+    .returns(z.string().nonempty().nullish()),
+
+  findProceedingId: z
+    .function()
+    .args(z.string().nonempty())
+    .returns(z.string().nonempty().nullish()),
 })
 
 export type IngressServiceMethods = z.infer<typeof ingressInterfaceSchema>

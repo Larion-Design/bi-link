@@ -1,4 +1,4 @@
-import { Model, ProjectionFields, Query } from 'mongoose'
+import { FilterQuery, Model, ProjectionFields, Query } from 'mongoose'
 import { Injectable, Logger } from '@nestjs/common'
 import { InjectModel } from '@nestjs/mongoose'
 import { PersonDocument, PersonModel } from '../models/personModel'
@@ -31,10 +31,7 @@ export class PersonsService {
     }
   }
 
-  find = async (
-    personId: string,
-    fetchLinkedEntities: boolean,
-  ): Promise<PersonDocument | undefined> => {
+  find = async (personId: string, fetchLinkedEntities: boolean) => {
     try {
       const query = this.personModel.findById(personId)
       return (fetchLinkedEntities ? this.getLinkedEntities(query) : query).exec()
@@ -43,10 +40,56 @@ export class PersonsService {
     }
   }
 
-  getPersons = async (
-    personsIds: string[],
-    fetchLinkedEntities: boolean,
-  ): Promise<PersonDocument[]> => {
+  findByPersonalInfo = async (firstName: string, lastName: string, birthdate?: Date | null) => {
+    try {
+      const matchConditions: FilterQuery<PersonDocument>[] = [
+        { 'firstName.value': firstName },
+        { 'lastName.value': lastName },
+      ]
+
+      if (birthdate) {
+        matchConditions.push({ 'birthdate.value': birthdate })
+      }
+
+      const personDocument = await this.personModel
+        .findOne({ $and: matchConditions }, { _id: 1 })
+        .exec()
+
+      if (personDocument) {
+        return String(personDocument._id)
+      }
+    } catch (error) {
+      this.logger.error(error)
+    }
+  }
+
+  findByCNP = async (cnp: string) => {
+    try {
+      const personDocument = await this.personModel.findOne({ 'cnp.value': cnp }, { _id: 1 }).exec()
+
+      if (personDocument) {
+        return String(personDocument._id)
+      }
+    } catch (error) {
+      this.logger.error(error)
+    }
+  }
+
+  findByDocumentNumber = async (documentNumber: string) => {
+    try {
+      const personDocument = await this.personModel
+        .findOne({ 'documents.documentNumber': documentNumber }, { _id: 1 })
+        .exec()
+
+      if (personDocument) {
+        return String(personDocument._id)
+      }
+    } catch (error) {
+      this.logger.error(error)
+    }
+  }
+
+  getPersons = async (personsIds: string[], fetchLinkedEntities: boolean) => {
     try {
       if (personsIds.length) {
         const query = this.personModel.find({ _id: personsIds })

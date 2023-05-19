@@ -31,10 +31,7 @@ export class ProceedingsService {
     }
   }
 
-  getProceeding = async (
-    proceedingId: string,
-    fetchLinkedEntities: boolean,
-  ): Promise<ProceedingDocument | undefined> => {
+  getProceeding = async (proceedingId: string, fetchLinkedEntities: boolean) => {
     try {
       const query = this.proceedingModel.findById(proceedingId)
       return (fetchLinkedEntities ? this.getLinkedEntities(query) : query).exec()
@@ -43,15 +40,26 @@ export class ProceedingsService {
     }
   }
 
-  getProceedings = async (
-    proceedingsIds: string[],
-    fetchLinkedEntities: boolean,
-  ): Promise<ProceedingDocument[] | undefined> => {
+  getProceedings = async (proceedingsIds: string[], fetchLinkedEntities: boolean) => {
     try {
       const query = this.proceedingModel.find({ _id: proceedingsIds })
       return (fetchLinkedEntities ? this.getLinkedEntities(query) : query).exec()
     } catch (e) {
       this.logger.error(e)
+    }
+  }
+
+  findByFileNumber = async (fileNumber: string) => {
+    try {
+      const proceedingDocument = await this.proceedingModel
+        .findOne({ 'fileNumber.value': fileNumber }, { _id: 1 })
+        .exec()
+
+      if (proceedingDocument) {
+        return String(proceedingDocument._id)
+      }
+    } catch (error) {
+      this.logger.error(error)
     }
   }
 

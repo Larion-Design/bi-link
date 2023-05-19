@@ -1,9 +1,8 @@
 import { z } from 'zod'
-import { companyAPIInputSchema } from 'defs'
 
 export const osintTermeneServiceConfig = z.object({
-  getCompanyInfoByCUI: z.function().args(z.string()).returns(companyAPIInputSchema.nullable()),
-  getCompanyInfoByName: z.function().args(z.string()).returns(companyAPIInputSchema.nullable()),
+  getCompanyInfoByCUI: z.function().args(z.string()).returns(z.string()),
+  getCompanyInfoByName: z.function().args(z.string()).returns(z.string()),
 })
 
 export type OsintTermeneServiceConfig = z.infer<typeof osintTermeneServiceConfig>

@@ -435,4 +435,62 @@ export class IngressService {
       )
     }
   }
+
+  findCompanyId = async (cui: string) => {
+    type Result = ReturnType<IngressServiceMethods['findCompanyId']>
+    type Params = Parameters<IngressServiceMethods['findCompanyId']>[0]
+
+    try {
+      return lastValueFrom(
+        this.client
+          .send<Result, Params>(MICROSERVICES.INGRESS.findCompanyIdByCUI, { cui })
+          .pipe(timeout(1000)),
+      )
+    } catch (e) {
+      this.logger.error(e)
+      this.logger.debug(
+        'No valid response received from the ingress service. Make sure the service is running properly.',
+      )
+    }
+  }
+
+  findPersonId = async (firstName: string, lastName: string, birthdate?: Date) => {
+    type Result = ReturnType<IngressServiceMethods['findPersonId']>
+    type Params = Parameters<IngressServiceMethods['findPersonId']>[0]
+
+    try {
+      return lastValueFrom(
+        this.client
+          .send<Result, Params>(MICROSERVICES.INGRESS.findPersonId, {
+            firstName,
+            lastName,
+            birthdate,
+          })
+          .pipe(timeout(1000)),
+      )
+    } catch (e) {
+      this.logger.error(e)
+      this.logger.debug(
+        'No valid response received from the ingress service. Make sure the service is running properly.',
+      )
+    }
+  }
+
+  findProceedingId = async (fileNumber: string) => {
+    type Result = ReturnType<IngressServiceMethods['findProceedingId']>
+    type Params = Parameters<IngressServiceMethods['findProceedingId']>[0]
+
+    try {
+      return lastValueFrom(
+        this.client
+          .send<Result, Params>(MICROSERVICES.INGRESS.findProceedingId, fileNumber)
+          .pipe(timeout(1000)),
+      )
+    } catch (e) {
+      this.logger.error(e)
+      this.logger.debug(
+        'No valid response received from the ingress service. Make sure the service is running properly.',
+      )
+    }
+  }
 }
