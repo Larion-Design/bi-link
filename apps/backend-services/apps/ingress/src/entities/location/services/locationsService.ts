@@ -63,21 +63,48 @@ export class LocationsService {
     }
   }
 
-  getLocationId = (location: LocationModel) => {
+  getLocationId = ({
+    street,
+    number,
+    door,
+    building,
+    county,
+    country,
+    locality,
+    otherInfo,
+    zipCode,
+    coordinates: { lat, long },
+  }: LocationModel) => {
     const hash = createHash('sha256')
-    hash.write([
-      location.street,
-      location.number,
-      location.building,
-      location.door,
-      location.locality,
-      location.county,
-      location.country,
-      location.zipCode,
-      location.otherInfo,
-      location.coordinates.lat,
-      location.coordinates.long,
-    ])
+
+    if (
+      street.length ||
+      number.length ||
+      door.length ||
+      building.length ||
+      county.length ||
+      country.length ||
+      locality.length ||
+      zipCode.length ||
+      lat ||
+      long
+    ) {
+      hash.write([
+        street,
+        number,
+        building,
+        door,
+        locality,
+        county,
+        country,
+        zipCode,
+        otherInfo,
+        lat,
+        long,
+      ])
+    } else if (otherInfo.length) {
+      hash.write(otherInfo)
+    }
     return hash.digest('hex')
   }
 

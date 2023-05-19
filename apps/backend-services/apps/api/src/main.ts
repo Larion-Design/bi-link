@@ -6,19 +6,14 @@ import { SentryService } from '@ntegral/nestjs-sentry'
 import { Logger } from '@nestjs/common'
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule)
-
-  app.use(
-    helmet({
-      contentSecurityPolicy: false,
-    }),
-  )
-
   const logger = SentryService.SentryServiceInstance()
   logger.setContext('API')
   logger.setLogLevels(
     process.env.NODE_ENV === 'production' ? ['warn', 'error'] : ['warn', 'error', 'debug'],
   )
+
+  const app = await NestFactory.create(AppModule)
+  app.use(helmet({ contentSecurityPolicy: false }))
   app.useLogger(logger)
   app.enableCors()
 
