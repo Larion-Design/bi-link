@@ -1,4 +1,5 @@
-import { Module } from '@nestjs/common'
+import { BullModule } from '@nestjs/bull'
+import { DynamicModule, Module } from '@nestjs/common'
 import {
   CompanyEventSchedulerService,
   EventSchedulerService,
@@ -26,4 +27,8 @@ import {
     ReportEventSchedulerService,
   ],
 })
-export class SchedulerModule {}
+export class SchedulerModule {
+  static forRoot(queues: string[]): DynamicModule {
+    return BullModule.registerQueue(...queues.map((queue) => ({ name: queue })))
+  }
+}

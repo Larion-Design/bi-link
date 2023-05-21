@@ -13,9 +13,7 @@ import { QUEUE_FILES } from '../../constants'
 export class FileEventDispatcherService {
   private readonly logger = new Logger(FileEventDispatcherService.name)
 
-  constructor(@InjectQueue(QUEUE_FILES) private readonly queue: Queue<FileEventInfo>) {
-    void this.queue.empty()
-  }
+  constructor(@InjectQueue(QUEUE_FILES) private readonly queue: Queue<FileEventInfo>) {}
 
   dispatchFileCreated = async (fileId: string) => this.publishJob(EVENT_CREATED, { fileId })
 
