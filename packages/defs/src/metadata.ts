@@ -15,6 +15,6 @@ export const withMetadataSchema = z.object({
   metadata: metadataSchema,
 })
 
-export type Metadata<T = Record<string, unknown>> = z.infer<typeof metadataSchema> & T
+export type Metadata = z.infer<typeof metadataSchema>
 export type Trustworthiness = z.infer<typeof trustworthinessSchema>
 export type WithMetadata = z.infer<typeof withMetadataSchema>

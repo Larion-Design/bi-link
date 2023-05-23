@@ -4,10 +4,6 @@ import { Proceeding } from 'defs'
 import { CustomFieldModel, CustomFieldSchema } from '../../customField/models/customFieldModel'
 import { FileModel } from '../../file/models/fileModel'
 import { MetadataModel, MetadataSchema } from '../../metadata/models/metadataModel'
-import {
-  NumberValueWithMetadataModel,
-  NumberValueWithMetadataSchema,
-} from '../../metadata/models/numberValueWithMetadataModel'
 import { OptionalDateValueWithMetadataModel } from '../../metadata/models/optionalDateValueWithMetadataModel'
 import {
   TextValueWithMetadataModel,
@@ -24,6 +20,9 @@ export class ProceedingModel implements Proceeding {
 
   @Prop()
   name: string
+
+  @Prop({ type: TextValueWithMetadataSchema })
+  status: TextValueWithMetadataModel
 
   @Prop()
   type: string

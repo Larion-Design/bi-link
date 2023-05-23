@@ -22,6 +22,9 @@ export class Proceeding
   @Field()
   name: string
 
+  @Field(() => TextValue)
+  status: TextValue
+
   @Field()
   description: string
 

@@ -10,14 +10,14 @@ export class OsintTermeneService {
 
   constructor(@Inject(MICROSERVICES.OSINT.TERMENE.id) private client: ClientProxy) {}
 
-  getCompanyInfoByCUI = async (cui: string) => {
-    type Params = Parameters<OsintTermeneServiceConfig['getCompanyInfoByCUI']>[0]
-    type Result = ReturnType<OsintTermeneServiceConfig['getCompanyInfoByCUI']>
+  searchCompanyByCUI = async (cui: string) => {
+    type Params = Parameters<OsintTermeneServiceConfig['searchCompanyByCUI']>[0]
+    type Result = ReturnType<OsintTermeneServiceConfig['searchCompanyByCUI']>
 
     try {
       return lastValueFrom(
         this.client
-          .send<Result, Params>(MICROSERVICES.OSINT.TERMENE.getCompanyInfoByCUI, cui)
+          .send<Result, Params>(MICROSERVICES.OSINT.TERMENE.searchCompanyByCUI, cui)
           .pipe(timeout(1000)),
       )
     } catch (e) {
@@ -28,16 +28,26 @@ export class OsintTermeneService {
     }
   }
 
-  getCompanyInfoByName = async (companyName: string) => {
-    type Params = Parameters<OsintTermeneServiceConfig['getCompanyInfoByName']>[0]
-    type Result = ReturnType<OsintTermeneServiceConfig['getCompanyInfoByName']>
+  searchCompaniesByName = async (companyName: string) => {
+    type Params = Parameters<OsintTermeneServiceConfig['searchCompaniesByName']>[0]
+    type Result = ReturnType<OsintTermeneServiceConfig['searchCompaniesByName']>
 
     try {
       return lastValueFrom(
         this.client
-          .send<Result, Params>(MICROSERVICES.OSINT.TERMENE.getCompanyInfoByCUI, companyName)
+          .send<Result, Params>(MICROSERVICES.OSINT.TERMENE.searchCompaniesByName, companyName)
           .pipe(timeout(1000)),
       )
+    } catch (e) {
+      this.logger.error(e)
+    }
+  }
+
+  importCompany = (cui: string) => {
+    type Params = Parameters<OsintTermeneServiceConfig['importCompany']>[0]
+
+    try {
+      return this.client.emit<Params>(MICROSERVICES.OSINT.TERMENE.importCompany, cui)
     } catch (e) {
       this.logger.error(e)
     }

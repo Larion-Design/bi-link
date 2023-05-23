@@ -17,6 +17,7 @@ export class CompanyBasicDatasetScraperService {
       cui,
       name: '',
       registrationNumber: '',
+      headquarters: '',
     }
 
     if (tableRows?.length) {

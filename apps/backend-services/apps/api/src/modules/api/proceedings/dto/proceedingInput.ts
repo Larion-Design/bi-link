@@ -21,6 +21,9 @@ export class ProceedingInput
   @Field()
   description: string
 
+  @Field(() => TextValueInput)
+  status: TextValueInput
+
   @Field(() => [ProceedingEntityInput])
   entitiesInvolved: ProceedingEntityInput[]
 
