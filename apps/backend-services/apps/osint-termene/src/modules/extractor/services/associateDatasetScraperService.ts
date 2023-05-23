@@ -1,6 +1,6 @@
-import { Logger } from '@nestjs/common'
-import { BrowserService } from '@app/browser-module/browserService'
 import { ElementHandle, Page } from 'puppeteer-core'
+import { BrowserService } from '@app/browser-module/browserService'
+import { OSINTPerson } from 'defs'
 import { delay } from '../../../helpers'
 
 type CompanyInfo = {
@@ -9,43 +9,45 @@ type CompanyInfo = {
   role?: string
 }
 
-type AssociateInfo = {
-  id: string
-  name: string
-  address: string
-  url: string
-}
-
 export class AssociateDatasetScraperService {
-  private readonly logger = new Logger(AssociateDatasetScraperService.name)
-
   constructor(private readonly browserService: BrowserService) {}
 
-  searchAssociatesByName = async (name: string, address?: string) => {
-    const page = await this.openSearchPage(name, address)
-    const associatesMap = new Map<AssociateInfo, CompanyInfo[]>()
+  searchAssociatesByName = async (name: string, address?: string) =>
+    this.browserService.handlePage(async (page) => {
+      await this.openSearchPage(page, name, address)
+      await page.waitForSelector('tbody')
+      const tableRows = await page.$$('tbody > tr')
+      return this.traverseSearchResults(tableRows)
+    })
 
-    const tableRows = await page.$$('tbody > tr')
-    const persons = await this.traverseSearchResults(tableRows)
+  searchAssociatesWithCompaniesByName = async (name: string, address?: string) => {
+    const persons = await this.searchAssociatesByName(name, address)
+    const associatesMap = new Map<OSINTPerson, CompanyInfo[]>()
 
-    for await (const associateInfo of persons) {
-      await delay(3000)
-      await this.openAssociatePage(page, associateInfo.url)
-      const companies = await this.extractCompaniesFromAssociatePage(page)
-
-      if (companies.length) {
-        associatesMap.set(associateInfo, companies)
-      }
+    if (!persons.length) {
+      return associatesMap
     }
 
-    await page.close()
+    await delay(1000)
+
+    for await (const associateInfo of persons) {
+      await this.browserService.handlePage(async (page) => {
+        await this.openAssociatePage(page, associateInfo.url)
+        const companies = await this.extractCompaniesFromAssociatePage(page)
+
+        if (companies.length) {
+          associatesMap.set(associateInfo, companies)
+        }
+      })
+      await delay(2000)
+    }
     return associatesMap
   }
 
-  getPersonAssociateTermeneUrl = async (companyCUI: string, name: string, address?: string) => {
-    const page = await this.openSearchPage(name, address)
-
-    try {
+  getPersonAssociateTermeneUrl = async (companyCUI: string, name: string, address?: string) =>
+    this.browserService.handlePage(async (page) => {
+      await this.openSearchPage(page, name, address)
+      await page.waitForSelector('tbody')
       const tableRows = await page.$$('tbody > tr')
       const persons = await this.traverseSearchResults(tableRows)
 
@@ -58,26 +60,37 @@ export class AssociateDatasetScraperService {
         person?.url?.length &&
         (await this.isPersonAssociateOfCompany(page, person.url, companyCUI))
       ) {
-        await page.close()
         return person.url
       }
-    } catch (e) {
-      this.logger.error(e)
-    }
-    await page.close()
-  }
-
-  private openSearchPage = async (name: string, address?: string) => {
-    const browser = await this.browserService.getBrowser()
-    const page = await browser.newPage()
-    await page.goto(this.getSearchUrl(name, address))
-    await page.waitForNetworkIdle()
-    return page
-  }
+    })
 
   private isPersonAssociateOfCompany = async (page: Page, associateUrl: string, cui: string) => {
     await this.openAssociatePage(page, associateUrl)
+    await page.waitForSelector('tbody')
     return Boolean(await page.$(`tbody a[href*="${cui}"]`))
+  }
+
+  private openSearchPage = async (page: Page, name: string, address?: string) => {
+    await page.goto(this.getSearchUrl(name, address))
+    await page.waitForNetworkIdle()
+  }
+
+  private getSearchUrl = (name: string, address?: string) => {
+    const url = new URL('https://termene.ro/search.php')
+    const params: Record<string, string> = {
+      submitted: 'true',
+      'search[nume]': name,
+    }
+
+    if (address) {
+      params['search[adresa]'] = address
+    }
+
+    url.search = Object.entries(params)
+      .map(([key, value]) => `${key}=${encodeURIComponent(value)}`)
+      .join('&')
+
+    return url.toString()
   }
 
   private traverseSearchResults = (tableRows: ElementHandle<HTMLTableRowElement>[]) =>
@@ -96,7 +109,7 @@ export class AssociateDatasetScraperService {
           name: personName,
           address: personAddress,
           url: associateUrl,
-        } as AssociateInfo
+        } as OSINTPerson
       }),
     )
 
@@ -126,24 +139,6 @@ export class AssociateDatasetScraperService {
         return companyInfo
       }),
     )
-  }
-
-  private getSearchUrl = (name: string, address?: string) => {
-    const url = new URL('https://termene.ro/search.php')
-    const params: Record<string, string> = {
-      submitted: 'true',
-      'search[nume]': name,
-    }
-
-    if (address) {
-      params['search[adresa]'] = address
-    }
-
-    url.search = Object.entries(params)
-      .map(([key, value]) => `${key}=${encodeURIComponent(value)}`)
-      .join('&')
-
-    return url.toString()
   }
 
   private getPersonAssociateUrl = (personId: string) =>

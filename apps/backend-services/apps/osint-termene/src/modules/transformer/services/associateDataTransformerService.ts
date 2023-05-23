@@ -37,6 +37,7 @@ export class AssociateDataTransformerService {
           case 'persoana':
             return this.getPersonAssociate(associate, sourceUrl)
         }
+        return Promise.reject()
       }),
     )
 
@@ -133,6 +134,9 @@ export class AssociateDataTransformerService {
     associate.equity.metadata.trustworthiness.source = sourceUrl
     associate.role.metadata.trustworthiness.source = sourceUrl
     associate.isActive.metadata.trustworthiness.source = sourceUrl
+
+    associate.startDate.value = null
+    associate.endDate.value = null
     return associate
   }
 }

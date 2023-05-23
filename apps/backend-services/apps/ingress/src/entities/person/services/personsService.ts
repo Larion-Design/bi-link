@@ -75,6 +75,20 @@ export class PersonsService {
     }
   }
 
+  findByMetadataSourceUrl = async (dataSource: string) => {
+    try {
+      const personDocument = await this.personModel
+        .findOne({ 'metadata.trustworthiness.source': dataSource }, { _id: 1 })
+        .exec()
+
+      if (personDocument) {
+        return String(personDocument._id)
+      }
+    } catch (error) {
+      this.logger.error(error)
+    }
+  }
+
   findByDocumentNumber = async (documentNumber: string) => {
     try {
       const personDocument = await this.personModel

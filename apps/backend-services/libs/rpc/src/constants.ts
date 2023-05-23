@@ -66,8 +66,13 @@ export const MICROSERVICES = {
   OSINT: {
     TERMENE: {
       id: 'TERMENE',
-      getCompanyInfoByCUI: 'getCompanyInfoByCUI',
-      getCompanyInfoByName: 'getCompanyInfoByName',
+      searchCompanyByCUI: 'searchCompanyByCUI',
+      searchCompaniesByName: 'searchCompaniesByName',
+      searchPersons: 'searchPersons',
+      searchProceedings: 'searchProceedings',
+      importCompany: 'importCompany',
+      importPerson: 'importPerson',
+      importProceeding: 'importProceeding',
     },
   },
 }

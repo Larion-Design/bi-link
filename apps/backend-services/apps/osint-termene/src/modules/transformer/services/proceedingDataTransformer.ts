@@ -23,21 +23,20 @@ export class ProceedingDataTransformer {
     private readonly personLoaderService: PersonLoaderService,
   ) {}
 
-  transformProceedings = async (proceedings: TermeneProceeding[], sourceUrl: string) =>
-    Promise.all(
-      proceedings.map(async (proceeding) => this.transformProceeding(proceeding, sourceUrl)),
-    )
+  transformProceedings = async (proceedings: TermeneProceeding[]) =>
+    Promise.all(proceedings.map(async (proceeding) => this.transformProceeding(proceeding)))
 
-  transformProceeding = async (proceedingInfo: TermeneProceeding, sourceUrl: string) => {
+  transformProceeding = async (proceedingInfo: TermeneProceeding) => {
     const existingProceedingId = await this.proceedingLoaderService.findProceeding(
       proceedingInfo.nr_dosar,
     )
 
     if (!existingProceedingId) {
-      const proceeding = await this.createProceeding(proceedingInfo, sourceUrl)
-      return this.proceedingLoaderService.createProceeding(proceeding, AUTHOR)
+      return this.createProceeding(proceedingInfo, this.getProceedingId(String(proceedingInfo.id)))
     }
   }
+
+  getProceedingId = (id: string) => `https://termene.ro/detalii_dosar/${id}`
 
   private createProceeding = async (proceedingInfo: TermeneProceeding, sourceUrl: string) => {
     const proceeding = getDefaultProceeding()

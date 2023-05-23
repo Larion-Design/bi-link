@@ -2,7 +2,7 @@ import { CompanyLoaderService } from '@app/loader-module'
 import { IndexerService } from '@app/rpc/microservices/indexer/indexerService'
 import { IngressService } from '@app/rpc/microservices/ingress'
 import { Injectable } from '@nestjs/common'
-import { AssociateAPI, CustomFieldAPI } from 'defs'
+import { AssociateAPI, CompanyAPIInput, CustomFieldAPI } from 'defs'
 import { getDefaultCompany, getDefaultCustomField } from 'tools'
 import { AUTHOR } from '../../../constants'
 import { CompanyTermeneDataset } from '../../../schema/company'
@@ -46,14 +46,20 @@ export class CompanyDataTransformerService {
     companyInfo.locations = this.locationDataTransformerService.transformBranchesData(data)
     companyInfo.customFields = this.setCustomFields(data, sourceUrl)
     companyInfo.contactDetails = this.setContactDetails(data, sourceUrl)
+    return companyInfo
+  }
 
-    if (data.associates) {
-      companyInfo.associates = (await this.associateDataTransformerService.transformAssociatesInfo(
-        data.associates,
-        sourceUrl,
-      )) as AssociateAPI[]
+  transformAssociates = async (cui: string, dataset: CompanyTermeneDataset) => {
+    const { associates } = dataset
+
+    if (
+      associates?.asociatiAdministratori.administratori.length &&
+      associates?.asociatiAdministratori.asociati.length
+    ) {
+      const sourceUrl = this.getCompanyUrl(cui)
+      return this.associateDataTransformerService.transformAssociatesInfo(associates, sourceUrl)
     }
-    return this.companyLoaderService.createCompany(companyInfo, AUTHOR)
+    return []
   }
 
   private setCAENCodes = (data: CompanyTermeneDataset, sourceUrl: string): CustomFieldAPI => {

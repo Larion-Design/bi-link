@@ -50,9 +50,17 @@ export const companyAPIInputSchema = companySchema.omit({ _id: true }).merge(
   }),
 )
 
+export const OSINTCompanySchema = z.object({
+  name: companySchema.shape.name.shape.value,
+  cui: companySchema.shape.cui.shape.value,
+  registrationNumber: companySchema.shape.registrationNumber.shape.value,
+  headquarters: z.string(),
+})
+
 export type Company = z.infer<typeof companySchema>
 export type CompanyListRecord = z.infer<typeof companyListRecordSchema>
 export type CompanyAPIOutput = z.infer<typeof companyAPIOutputSchema>
 export type CompanyAPIInput = z.infer<typeof companyAPIInputSchema>
+export type OSINTCompany = z.infer<typeof OSINTCompanySchema>
 
 export interface CompaniesSuggestions extends SearchSuggestions<CompanyListRecord> {}

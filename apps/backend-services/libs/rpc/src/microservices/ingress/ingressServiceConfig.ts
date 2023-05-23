@@ -241,6 +241,7 @@ export const ingressInterfaceSchema = z.object({
         birthdate: z.date().nullish(),
         cnp: z.string().nullish(),
         documentNumber: z.string().nullish(),
+        dataSource: z.string().nullish(),
       }),
     )
     .returns(z.string().nonempty().nullish()),

@@ -462,7 +462,12 @@ export class IngressService {
     }
   }
 
-  findPersonId = async (firstName: string, lastName: string, birthdate?: Date) => {
+  findPersonId = async (
+    firstName: string,
+    lastName: string,
+    birthdate?: Date,
+    dataSource?: string,
+  ) => {
     type Result = ReturnType<IngressServiceMethods['findPersonId']>
     type Params = Parameters<IngressServiceMethods['findPersonId']>[0]
 
@@ -473,6 +478,7 @@ export class IngressService {
             firstName,
             lastName,
             birthdate,
+            dataSource,
           })
           .pipe(timeout(1000)),
       )

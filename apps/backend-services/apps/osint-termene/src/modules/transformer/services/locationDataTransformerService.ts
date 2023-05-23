@@ -1,13 +1,10 @@
 import { Injectable } from '@nestjs/common'
-import { IngressService } from '@app/rpc/microservices/ingress'
 import { LocationAPIInput } from 'defs'
 import { getDefaultLocation } from 'tools'
 import { CompanyTermeneDataset } from '../../../schema/company'
 
 @Injectable()
 export class LocationDataTransformerService {
-  constructor(private readonly ingressService: IngressService) {}
-
   transformHeadquartersData = (data: CompanyTermeneDataset): LocationAPIInput | null => {
     const address = data.profileInfo?.adresa.sediu_social
     return address

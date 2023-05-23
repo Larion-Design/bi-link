@@ -1,8 +1,9 @@
 import { Module } from '@nestjs/common'
-import { GetCompanyInfoByCUI } from './controllers/getCompanyInfoByCUI'
+import { ImportCompany } from './controllers/importCompany'
+import { SearchCompanyByCUI } from './controllers/searchCompanyByCUI'
 
 @Module({
-  providers: [GetCompanyInfoByCUI],
-  controllers: [GetCompanyInfoByCUI],
+  providers: [SearchCompanyByCUI, ImportCompany],
+  controllers: [SearchCompanyByCUI],
 })
 export class TermeneRPCModule {}

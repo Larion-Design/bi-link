@@ -71,6 +71,13 @@ export const personListRecordWithImage = personListRecordSchema.merge(
   }),
 )
 
+export const OSINTPersonSchema = z.object({
+  id: z.string().nonempty(),
+  name: z.string().nonempty(),
+  url: z.string().url(),
+  address: z.string().optional(),
+})
+
 export type Person = z.infer<typeof personSchema>
 export type PersonListRecord = z.infer<typeof personListRecordSchema>
 export type PersonListRecordWithImage = z.infer<typeof personListRecordWithImage>
@@ -79,3 +86,4 @@ export interface PersonsSuggestions<T> extends SearchSuggestions<T> {}
 
 export type PersonAPIInput = z.infer<typeof personAPIInputSchema>
 export type PersonAPIOutput = z.infer<typeof personAPIOutputSchema>
+export type OSINTPerson = z.infer<typeof OSINTPersonSchema>

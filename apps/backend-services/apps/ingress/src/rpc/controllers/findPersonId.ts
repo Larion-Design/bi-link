@@ -15,8 +15,11 @@ export class FindPersonId {
   @MessagePattern(MICROSERVICES.INGRESS.getEntities)
   async findPersonId(
     @Payload()
-    { firstName, lastName, birthdate, cnp, documentNumber }: Params,
+    { firstName, lastName, birthdate, cnp, documentNumber, dataSource }: Params,
   ) {
+    if (dataSource) {
+      return this.personsService.findByMetadataSourceUrl(dataSource)
+    }
     if (cnp) {
       return this.personsService.findByCNP(cnp)
     }

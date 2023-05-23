@@ -9,6 +9,7 @@ import { contactDetailsSchema } from '../../../schema/contactDetails'
 import { courtFilesSchema } from '../../../schema/courtFiles'
 import { companyHeaderInfoSchema, companyProfileSchema } from '../../../schema/generalInfo'
 import { AssociateDatasetScraperService } from './associateDatasetScraperService'
+import { TermeneAuthService } from './termeneAuthService'
 
 @Injectable()
 export class CompanyDatasetScraperService {
@@ -17,9 +18,12 @@ export class CompanyDatasetScraperService {
   constructor(
     private readonly browserService: BrowserService,
     private readonly associateDatasetScraperService: AssociateDatasetScraperService,
+    private readonly termeneAuthService: TermeneAuthService,
   ) {}
 
   getFullCompanyDataSet = async (cui: string) => {
+    await this.termeneAuthService.authenticate()
+
     const browser = await this.browserService.getBrowser()
     const page = await browser.newPage()
 
@@ -91,5 +95,4 @@ export class CompanyDatasetScraperService {
   }
 
   private getCompanyUrl = (cui: string) => `https://termene.ro/firma/${cui}-firma`
-  private getCourtCaseUri = (uid: string) => `https://termene.ro/detalii_dosar_modular/${uid}`
 }

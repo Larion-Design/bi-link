@@ -28,5 +28,6 @@ export const courtFilesSchema = z.object({
   rezultatele_cautarii: termeneProceedingSchema.array(),
 })
 
+export type TermeneProceedingsSchema = z.infer<typeof courtFilesSchema>
 export type TermeneProceeding = z.infer<typeof termeneProceedingSchema>
 export type TermeneInvolvedEntity = z.infer<typeof termeneInvolvedEntity>

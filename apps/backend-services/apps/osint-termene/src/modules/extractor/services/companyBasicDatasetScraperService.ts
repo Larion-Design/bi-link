@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common'
 import { BrowserService } from '@app/browser-module/browserService'
+import { OSINTCompany } from 'defs'
 
 @Injectable()
 export class CompanyBasicDatasetScraperService {
@@ -12,7 +13,11 @@ export class CompanyBasicDatasetScraperService {
 
     await page.goto(this.getCompanyUri(cui))
     const tableRows = await page.$$('#date-de-identificare tbody tr')
-    const resultMap = new Map<string, string>()
+    const company: OSINTCompany = {
+      cui,
+      name: '',
+      registrationNumber: '',
+    }
 
     if (tableRows?.length) {
       await Promise.all(
@@ -21,15 +26,32 @@ export class CompanyBasicDatasetScraperService {
           const label = await page.evaluate((element) => element?.textContent?.trim(), labelElement)
           const value = await page.evaluate((element) => element?.textContent?.trim(), valuelement)
 
-          if (label && value) {
-            resultMap.set(label, value)
+          if (value?.length) {
+            switch (label) {
+              case 'Nume firma': {
+                company.name = value
+                break
+              }
+              case 'Cod Unic de Înregistrare': {
+                company.cui = cui
+                break
+              }
+              case 'Nr. Înmatriculare': {
+                company.registrationNumber = value
+                break
+              }
+              case '.': {
+                company.headquarters = value
+                break
+              }
+            }
           }
         }),
       )
     }
 
     await page.close()
-    return resultMap
+    return company
   }
 
   private getCompanyUri = (cui: string) => `https://termene.ro/firma/${cui}-firma`

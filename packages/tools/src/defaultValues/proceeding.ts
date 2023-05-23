@@ -7,6 +7,7 @@ export const getDefaultProceeding = (): ProceedingAPIInput => ({
   name: '',
   type: '',
   description: '',
+  status: getDefaultTextWithMetadata(),
   reason: getDefaultTextWithMetadata(),
   fileNumber: getDefaultTextWithMetadata(),
   year: getDefaultOptionalDateWithMetadata(),

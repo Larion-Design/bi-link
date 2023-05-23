@@ -1,11 +1,7 @@
 import { z } from 'zod'
 import { customFieldSchema } from '../customField'
 import { fileInputSchema, fileOutputSchema, fileSchema } from '../file'
-import {
-  numberWithMetadataSchema,
-  optionalDateWithMetadataSchema,
-  textWithMetadataSchema,
-} from '../generic'
+import { optionalDateWithMetadataSchema, textWithMetadataSchema } from '../generic'
 import { withMetadataSchema } from '../metadata'
 import { withTimestamps } from '../modelTimestamps'
 import { SearchSuggestions } from '../searchSuggestions'
@@ -19,6 +15,7 @@ export const proceedingSchema = z
     _id: z.string().uuid(),
     name: z.string(),
     type: z.string(),
+    status: textWithMetadataSchema,
     reason: textWithMetadataSchema,
     year: optionalDateWithMetadataSchema,
     fileNumber: textWithMetadataSchema,
@@ -56,6 +53,7 @@ export const proceedingListRecord = proceedingSchema
   })
   .merge(
     z.object({
+      status: proceedingAPIOutputSchema.shape.status.shape.value,
       year: proceedingAPIOutputSchema.shape.year.shape.value,
       fileNumber: proceedingAPIOutputSchema.shape.fileNumber.shape.value,
     }),
