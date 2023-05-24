@@ -1,5 +1,5 @@
 import { z } from 'zod'
-import { coordinatesSchema } from 'defs'
+import { coordinatesSchema, locationSchema } from 'defs'
 
 export const coordinatesIndexSchema = coordinatesSchema.pick({ lat: true }).merge(
   z.object({
@@ -7,10 +7,23 @@ export const coordinatesIndexSchema = coordinatesSchema.pick({ lat: true }).merg
   }),
 )
 
-export const locationIndexSchema = z.object({
-  coordinates: coordinatesIndexSchema,
-  address: z.string(),
-})
+export const locationIndexSchema = locationSchema
+  .pick({
+    street: true,
+    number: true,
+    door: true,
+    building: true,
+    zipCode: true,
+    locality: true,
+    county: true,
+    country: true,
+    otherInfo: true,
+  })
+  .merge(
+    z.object({
+      coordinates: coordinatesIndexSchema,
+    }),
+  )
 
 export type CoordinatesIndex = z.infer<typeof coordinatesIndexSchema>
 export type LocationIndex = z.infer<typeof locationIndexSchema>

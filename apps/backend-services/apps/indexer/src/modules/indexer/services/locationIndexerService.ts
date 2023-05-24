@@ -1,15 +1,33 @@
 import { Injectable } from '@nestjs/common'
 import { Location } from 'defs'
-import { formatAddress } from 'tools'
 import { LocationIndex } from '@app/definitions'
 
 @Injectable()
 export class LocationIndexerService {
-  createLocationIndexData = (locationInfo: Location): LocationIndex => ({
-    address: formatAddress(locationInfo),
+  createLocationIndexData = ({
+    street,
+    number,
+    door,
+    coordinates: { lat, long: lon },
+    otherInfo,
+    county,
+    locality,
+    zipCode,
+    building,
+    country,
+  }: Location): LocationIndex => ({
+    street,
+    number,
+    door,
+    otherInfo,
+    county,
+    locality,
+    zipCode,
+    building,
+    country,
     coordinates: {
-      lat: locationInfo.coordinates.lat,
-      lon: locationInfo.coordinates.long,
+      lat,
+      lon,
     },
   })
 

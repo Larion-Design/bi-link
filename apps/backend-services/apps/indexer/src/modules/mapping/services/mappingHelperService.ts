@@ -44,7 +44,15 @@ export class MappingHelperService {
   readonly location: MappingProperty = {
     type: 'nested',
     properties: {
-      address: this.textField,
+      street: this.textField,
+      number: this.textField,
+      building: this.textField,
+      door: this.textField,
+      zipCode: this.textField,
+      locality: this.textField,
+      county: this.textField,
+      country: this.textField,
+      otherInfo: this.textField,
       coordinates: this.geoPoint,
     },
   }
