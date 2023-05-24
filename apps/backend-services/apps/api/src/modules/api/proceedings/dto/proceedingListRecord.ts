@@ -10,6 +10,9 @@ export class ProceedingListRecord
   @Field()
   fileNumber: string
 
+  @Field()
+  status: string
+
   @Field(() => Date, { nullable: true })
   year: Date | null
 }

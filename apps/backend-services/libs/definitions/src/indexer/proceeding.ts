@@ -10,6 +10,7 @@ export const proceedingIndexSchema = proceedingSchema
     z.object({
       fileNumber: proceedingSchema.shape.fileNumber.shape.value,
       year: proceedingSchema.shape.year.shape.value,
+      status: proceedingSchema.shape.status.shape.value,
       customFields: customFieldIndexSchema.array(),
       files: embeddedFileIndexSchema.array(),
       companies: connectedCompanyIndexSchema.array(),
@@ -23,6 +24,7 @@ export const embeddedProceedingSchema = proceedingSchema.pick({ _id: true }).mer
     fileNumber: true,
     description: true,
     year: true,
+    status: true,
   }),
 )
 

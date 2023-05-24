@@ -64,11 +64,15 @@ export class SearchProceedingsService {
     }
   }
 
-  protected transformRecord = (_id: string, { name, fileNumber, type, year }: ProceedingIndex) => ({
+  protected transformRecord = (
+    _id: string,
+    { name, fileNumber, type, year, status }: ProceedingIndex,
+  ) => ({
     _id,
     name,
     year,
     fileNumber,
     type,
+    status,
   })
 }

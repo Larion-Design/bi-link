@@ -13,6 +13,7 @@ export class ProceedingsMappingService implements MappingInterface<ProceedingInd
     type: this.mappingHelperService.keywordField,
     year: this.mappingHelperService.year,
     fileNumber: this.mappingHelperService.keywordField,
+    status: this.mappingHelperService.keywordField,
     description: this.mappingHelperService.romanianTextProperty,
     persons: this.mappingHelperService.connectedPerson,
     companies: this.mappingHelperService.connectedCompany,

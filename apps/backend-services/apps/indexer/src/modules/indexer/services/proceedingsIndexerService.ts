@@ -43,6 +43,7 @@ export class ProceedingsIndexerService {
       name: proceedingModel.name,
       type: proceedingModel.type,
       fileNumber: proceedingModel.fileNumber.value,
+      status: proceedingModel.status.value,
       description: proceedingModel.description,
       year: proceedingModel.year.value ? formatYear(proceedingModel.year.value) : undefined,
       customFields: this.customFieldsIndexerService.createCustomFieldsIndex(
