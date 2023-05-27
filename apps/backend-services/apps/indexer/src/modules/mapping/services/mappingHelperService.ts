@@ -1,6 +1,7 @@
 import {
   ConnectedCompanyIndex,
   ConnectedPersonIndex,
+  ConnectedProceedingIndex,
   ConnectedPropertyIndex,
 } from '@app/definitions'
 import { Injectable } from '@nestjs/common'
@@ -19,6 +20,41 @@ export class MappingHelperService {
   readonly keywordField: MappingProperty = { type: 'keyword' }
 
   readonly textField: MappingProperty = { type: 'text', index_options: 'docs', term_vector: 'yes' }
+
+  nestedField = <T>(properties: Record<keyof T | string, MappingProperty>) => ({
+    type: 'nested',
+    properties,
+  })
+
+  readonly date: MappingProperty = {
+    type: 'date',
+    format: 'yyyy-mm-dd',
+  }
+
+  readonly dateTime: MappingProperty = {
+    type: 'date',
+    format: 'yyyy-MM-dd HH:mm:ss',
+  }
+
+  readonly year: MappingProperty = {
+    type: 'date',
+    format: 'yyyy',
+  }
+
+  readonly timestamp: MappingProperty = {
+    type: 'date',
+    format: 'epoch_second',
+  }
+
+  readonly dateRange: MappingProperty = {
+    type: 'date_range',
+    format: 'yyyy-mm-dd',
+  }
+
+  readonly yearRange: MappingProperty = {
+    type: 'date_range',
+    format: 'yyyy',
+  }
 
   readonly geoPoint: MappingProperty = {
     type: 'geo_point',
@@ -106,38 +142,16 @@ export class MappingHelperService {
     } as Record<keyof ConnectedPropertyIndex, MappingProperty>,
   }
 
-  nestedField = <T>(properties: Record<keyof T | string, MappingProperty>) => ({
+  readonly connectedProceeding: MappingProperty = {
     type: 'nested',
-    properties,
-  })
-
-  readonly date: MappingProperty = {
-    type: 'date',
-    format: 'yyyy-mm-dd',
-  }
-
-  readonly dateTime: MappingProperty = {
-    type: 'date',
-    format: 'yyyy-MM-dd HH:mm:ss',
-  }
-
-  readonly year: MappingProperty = {
-    type: 'date',
-    format: 'yyyy',
-  }
-
-  readonly timestamp: MappingProperty = {
-    type: 'date',
-    format: 'epoch_second',
-  }
-
-  readonly dateRange: MappingProperty = {
-    type: 'date_range',
-    format: 'yyyy-mm-dd',
-  }
-
-  readonly yearRange: MappingProperty = {
-    type: 'date_range',
-    format: 'yyyy',
+    properties: {
+      _id: this.keywordField,
+      name: this.romanianTextProperty,
+      description: this.romanianTextProperty,
+      type: this.keywordField,
+      year: this.year,
+      status: this.keywordField,
+      fileNumber: this.keywordField,
+    } as Record<keyof ConnectedProceedingIndex, MappingProperty>,
   }
 }

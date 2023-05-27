@@ -1,7 +1,9 @@
+import { Injectable } from '@nestjs/common'
 import { ElementHandle, Page } from 'puppeteer-core'
 import { BrowserService } from '@app/browser-module/browserService'
 import { OSINTPerson } from 'defs'
 import { delay } from '../../../helpers'
+import { getPersonAssociateUrl } from '../helpers'
 
 type CompanyInfo = {
   name?: string
@@ -9,6 +11,7 @@ type CompanyInfo = {
   role?: string
 }
 
+@Injectable()
 export class AssociateDatasetScraperService {
   constructor(private readonly browserService: BrowserService) {}
 
@@ -93,7 +96,7 @@ export class AssociateDatasetScraperService {
     return url.toString()
   }
 
-  private traverseSearchResults = (tableRows: ElementHandle<HTMLTableRowElement>[]) =>
+  private traverseSearchResults = async (tableRows: ElementHandle<HTMLTableRowElement>[]) =>
     Promise.all(
       tableRows.map(async (tableRow) => {
         const [_, nameColumn, addressColumn] = await tableRow.$$('.detalii-text-tabel')
@@ -102,7 +105,7 @@ export class AssociateDatasetScraperService {
 
         const personIdElement = await tableRow.$("form input[name='company_id']")
         const personId = await personIdElement?.evaluate((element) => element.value.trim())
-        const associateUrl = personId ? this.getPersonAssociateUrl(personId) : ''
+        const associateUrl = personId ? getPersonAssociateUrl(personId) : ''
 
         return {
           id: personId,
@@ -140,7 +143,4 @@ export class AssociateDatasetScraperService {
       }),
     )
   }
-
-  private getPersonAssociateUrl = (personId: string) =>
-    `https://termene.ro/persoana.php?id=${personId}`
 }

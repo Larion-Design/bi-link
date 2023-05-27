@@ -1,4 +1,4 @@
-import { routes } from '../../../src/router/routes'
+import { routes } from '../../../apps/frontend/src/router/routes'
 import { faker } from '@faker-js/faker'
 
 describe('Create persons page', () => {

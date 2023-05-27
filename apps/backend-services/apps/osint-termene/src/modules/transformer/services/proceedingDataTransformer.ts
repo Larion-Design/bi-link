@@ -14,6 +14,7 @@ import {
 } from 'tools'
 import { AUTHOR } from '../../../constants'
 import { TermeneInvolvedEntity, TermeneProceeding } from '../../../schema/courtFiles'
+import { getProceedingUrl } from '../../extractor/helpers'
 
 @Injectable()
 export class ProceedingDataTransformer {
@@ -32,15 +33,13 @@ export class ProceedingDataTransformer {
     )
 
     if (!existingProceedingId) {
-      return this.createProceeding(proceedingInfo, this.getProceedingId(String(proceedingInfo.id)))
+      return this.createProceeding(proceedingInfo, getProceedingUrl(String(proceedingInfo.id)))
     }
   }
 
-  getProceedingId = (id: string) => `https://termene.ro/detalii_dosar/${id}`
-
   private createProceeding = async (proceedingInfo: TermeneProceeding, sourceUrl: string) => {
     const proceeding = getDefaultProceeding()
-    proceeding.metadata.trustworthiness.source = this.getProceedingUrl(String(proceedingInfo.id))
+    proceeding.metadata.trustworthiness.source = getProceedingUrl(String(proceedingInfo.id))
     proceeding.name = `${proceedingInfo.nume_scurt_materie_juridica} ${proceedingInfo.data_dosar}`
     proceeding.year.value = new Date(proceedingInfo.data_dosar)
     proceeding.fileNumber.value = proceedingInfo.nr_dosar
@@ -127,8 +126,6 @@ export class ProceedingDataTransformer {
     entityInvolved.metadata.trustworthiness.source = sourceUrl
     return entityInvolved
   }
-
-  private getProceedingUrl = (id: string) => `https://termene.ro/detalii_dosar_modular/${id}`
 
   private computePersonName = (name: string) => {
     const parts = name.split(' ')

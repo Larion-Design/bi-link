@@ -25,6 +25,7 @@ export class ProceedingGraphService {
           name: proceedingDocument.name,
           fileNumber: proceedingDocument.fileNumber.value,
           year: proceedingDocument.year.value,
+          status: proceedingDocument.status.value,
         },
         'PROCEEDING',
       )

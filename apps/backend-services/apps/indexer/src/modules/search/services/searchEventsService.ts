@@ -2,6 +2,7 @@ import { EventIndex, EventSearchIndex } from '@app/definitions'
 import { Injectable, Logger } from '@nestjs/common'
 import { ElasticsearchService } from '@nestjs/elasticsearch'
 import { SearchRequest, SearchTotalHits } from '@elastic/elasticsearch/lib/api/types'
+import { formatAddress } from 'tools'
 import { INDEX_EVENTS } from '../../../constants'
 import { EventListRecord, EventsSuggestions } from 'defs'
 import { SearchHelperService } from './searchHelperService'
@@ -83,7 +84,7 @@ export class SearchEventsService {
   ): EventListRecord => ({
     _id,
     type,
-    location: location?.address ?? null,
+    location: formatAddress(location) ?? null,
     date: date ? new Date(date) : null,
   })
 }

@@ -6,6 +6,7 @@ export const proceedingGraphSchema = proceedingSchema.pick({ name: true, type: t
     .object({
       year: proceedingSchema.shape.year.shape.value,
       fileNumber: proceedingSchema.shape.fileNumber.shape.value,
+      status: proceedingSchema.shape.status.shape.value,
     })
     .merge(nodeMetadataSchema),
 )

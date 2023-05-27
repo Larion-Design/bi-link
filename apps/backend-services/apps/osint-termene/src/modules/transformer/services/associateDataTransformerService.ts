@@ -1,6 +1,5 @@
 import { CompanyLoaderService, PersonLoaderService } from '@app/loader-module'
 import { Injectable } from '@nestjs/common'
-import { IngressService } from '@app/rpc/microservices/ingress'
 import { AssociateAPI } from 'defs'
 import {
   getDefaultCompany,
@@ -19,7 +18,6 @@ import { LocationDataTransformerService } from './locationDataTransformerService
 @Injectable()
 export class AssociateDataTransformerService {
   constructor(
-    private readonly ingressService: IngressService,
     private readonly locationDataTransformerService: LocationDataTransformerService,
     private readonly personLoaderService: PersonLoaderService,
     private readonly companyLoaderService: CompanyLoaderService,
@@ -76,7 +74,7 @@ export class AssociateDataTransformerService {
 
   private getPersonAssociate = async (associateInfo: TermenePersonAssociate, sourceUrl: string) => {
     const { firstName, lastName } = this.computePersonName(associateInfo.nume)
-    const existingPersonId = await this.ingressService.findPersonId(firstName, lastName)
+    const existingPersonId = await this.personLoaderService.findPerson(firstName, lastName)
 
     if (!existingPersonId) {
       const personInfo = this.createPerson(associateInfo)

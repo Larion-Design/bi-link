@@ -8,6 +8,7 @@ import { CompanyTermeneDataset } from '../../../schema/company'
 import { contactDetailsSchema } from '../../../schema/contactDetails'
 import { courtFilesSchema } from '../../../schema/courtFiles'
 import { companyHeaderInfoSchema, companyProfileSchema } from '../../../schema/generalInfo'
+import { getCompanyUrl } from '../helpers'
 import { AssociateDatasetScraperService } from './associateDatasetScraperService'
 import { TermeneAuthService } from './termeneAuthService'
 
@@ -24,11 +25,8 @@ export class CompanyDatasetScraperService {
   getFullCompanyDataSet = async (cui: string) => {
     await this.termeneAuthService.authenticate()
 
-    const browser = await this.browserService.getBrowser()
-    const page = await browser.newPage()
-
-    try {
-      await page.goto(this.getCompanyUrl(cui))
+    const dataset = await this.browserService.handlePage(async (page) => {
+      await page.goto(getCompanyUrl(cui))
       await page.waitForNetworkIdle()
 
       const dataset: CompanyTermeneDataset = {}
@@ -60,39 +58,53 @@ export class CompanyDatasetScraperService {
         return success
       })
 
-      await page.close()
+      return dataset
+    })
 
+    try {
       if (dataset.associates) {
-        const assignEntityTermeneUrl = async (associate: TermeneAssociateSchema) => {
-          if (associate.tipAA === 'firma' && associate.cui) {
-            associate.entityUrl = this.getCompanyUrl(String(associate.cui))
-          } else if (associate.tipAA === 'persoana') {
-            associate.entityUrl =
-              await this.associateDatasetScraperService.getPersonAssociateTermeneUrl(
-                cui,
-                associate.nume,
-              )
-          }
-          return associate
-        }
+        dataset.associates.asociatiAdministratori.administratori =
+          await this.assignEntitiesTermeneUrl(
+            cui,
+            dataset.associates.asociatiAdministratori.administratori,
+          )
 
-        dataset.associates.asociatiAdministratori.administratori = await Promise.all(
-          dataset.associates.asociatiAdministratori.administratori.map(assignEntityTermeneUrl),
-        )
-
-        dataset.associates.asociatiAdministratori.asociati = await Promise.all(
-          dataset.associates.asociatiAdministratori.asociati.map(assignEntityTermeneUrl),
+        dataset.associates.asociatiAdministratori.asociati = await this.assignEntitiesTermeneUrl(
+          cui,
+          dataset.associates.asociatiAdministratori.asociati,
         )
       }
       return dataset
     } catch (e) {
       this.logger.error(e)
-
-      if (!page.isClosed()) {
-        await page.close()
-      }
     }
   }
 
-  private getCompanyUrl = (cui: string) => `https://termene.ro/firma/${cui}-firma`
+  private assignEntitiesTermeneUrl = async (
+    companyCUI: string,
+    associates: TermeneAssociateSchema[],
+  ) => {
+    const cachedUrls = new Map<string, string>()
+    const updatedAssociates: TermeneAssociateSchema[] = []
+
+    for await (const associate of associates) {
+      if (!cachedUrls.has(associate.nume)) {
+        if (associate.tipAA === 'firma' && associate.cui) {
+          associate.entityUrl = getCompanyUrl(String(associate.cui))
+        } else if (associate.tipAA === 'persoana') {
+          associate.entityUrl =
+            await this.associateDatasetScraperService.getPersonAssociateTermeneUrl(
+              companyCUI,
+              associate.nume,
+            )
+        }
+
+        if (associate.entityUrl?.length) {
+          cachedUrls.set(associate.nume, associate.entityUrl)
+        }
+        updatedAssociates.push(associate)
+      }
+    }
+    return updatedAssociates
+  }
 }

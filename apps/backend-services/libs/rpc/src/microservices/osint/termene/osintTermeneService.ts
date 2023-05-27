@@ -1,8 +1,12 @@
-import { Inject, Injectable, Logger } from '@nestjs/common'
+import { RPCValidator } from '@app/rpc/interceptors/RPCValidator'
+import { Inject, Injectable, Logger, UseInterceptors } from '@nestjs/common'
 import { ClientProxy } from '@nestjs/microservices'
 import { lastValueFrom, timeout } from 'rxjs'
 import { MICROSERVICES } from '@app/rpc'
-import { OsintTermeneServiceConfig } from '@app/rpc/microservices/osint/termene/osintTermeneServiceConfig'
+import {
+  osintTermeneServiceConfig,
+  OsintTermeneServiceConfig,
+} from '@app/rpc/microservices/osint/termene/osintTermeneServiceConfig'
 
 @Injectable()
 export class OsintTermeneService {
@@ -10,7 +14,8 @@ export class OsintTermeneService {
 
   constructor(@Inject(MICROSERVICES.OSINT.TERMENE.id) private client: ClientProxy) {}
 
-  searchCompanyByCUI = async (cui: string) => {
+  @UseInterceptors(new RPCValidator(osintTermeneServiceConfig.shape.searchCompanyByCUI))
+  async searchCompanyByCUI(cui: string) {
     type Params = Parameters<OsintTermeneServiceConfig['searchCompanyByCUI']>[0]
     type Result = ReturnType<OsintTermeneServiceConfig['searchCompanyByCUI']>
 
@@ -28,7 +33,8 @@ export class OsintTermeneService {
     }
   }
 
-  searchCompaniesByName = async (companyName: string) => {
+  @UseInterceptors(new RPCValidator(osintTermeneServiceConfig.shape.searchCompaniesByName))
+  async searchCompaniesByName(companyName: string) {
     type Params = Parameters<OsintTermeneServiceConfig['searchCompaniesByName']>[0]
     type Result = ReturnType<OsintTermeneServiceConfig['searchCompaniesByName']>
 
@@ -43,7 +49,8 @@ export class OsintTermeneService {
     }
   }
 
-  importCompany = (cui: string) => {
+  @UseInterceptors(new RPCValidator(osintTermeneServiceConfig.shape.importCompany))
+  importCompany(cui: string) {
     type Params = Parameters<OsintTermeneServiceConfig['importCompany']>[0]
 
     try {

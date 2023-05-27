@@ -65,6 +65,7 @@
     "nest-commander": "^3.3.0",
     "nest-neo4j": "^0.2.0",
     "nestjs-minio-client": "^1.2.0",
+    "newrelic": "^10.1.2",
     "passport": "^0.5.3",
     "passport-firebase-jwt": "^1.2.1",
     "passport-jwt": "^4.0.1",

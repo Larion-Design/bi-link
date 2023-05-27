@@ -12,6 +12,6 @@ export class ImportPerson {
 
   @EventPattern(MICROSERVICES.OSINT.TERMENE.importPerson)
   async importPerson(@Payload() url: Params) {
-    return Promise.resolve()
+    return this.personProducerService.extractPersonCompanies(url)
   }
 }

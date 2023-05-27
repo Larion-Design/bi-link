@@ -1,10 +1,8 @@
-import { CompanyLoaderService } from '@app/loader-module'
 import { IndexerService } from '@app/rpc/microservices/indexer/indexerService'
 import { IngressService } from '@app/rpc/microservices/ingress'
 import { Injectable } from '@nestjs/common'
-import { AssociateAPI, CompanyAPIInput, CustomFieldAPI } from 'defs'
+import { CustomFieldAPI } from 'defs'
 import { getDefaultCompany, getDefaultCustomField } from 'tools'
-import { AUTHOR } from '../../../constants'
 import { CompanyTermeneDataset } from '../../../schema/company'
 import { AssociateDataTransformerService } from './associateDataTransformerService'
 import { LocationDataTransformerService } from './locationDataTransformerService'
@@ -16,10 +14,9 @@ export class CompanyDataTransformerService {
     private readonly indexerService: IndexerService,
     private readonly associateDataTransformerService: AssociateDataTransformerService,
     private readonly locationDataTransformerService: LocationDataTransformerService,
-    private readonly companyLoaderService: CompanyLoaderService,
   ) {}
 
-  public transformCompanyData = async (cui: string, data: CompanyTermeneDataset) => {
+  public transformCompanyData = (cui: string, data: CompanyTermeneDataset) => {
     const companyInfo = getDefaultCompany()
     const sourceUrl = this.getCompanyUrl(cui)
     companyInfo.metadata.trustworthiness.source = sourceUrl

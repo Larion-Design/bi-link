@@ -9,6 +9,7 @@
     "frontend": "pnpm turbo frontend",
     "build": "pnpm turbo build",
     "test": "turbo run test --parallel --stream --concurency=4",
+    "test:e2e": "cypress open",
     "lint": "eslint --ext=.tsx,.ts --quiet ."
   },
   "author": "alextudor@duck.com",
@@ -28,7 +29,11 @@
     "eslint-plugin-prettier": "^4.2.1",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-simple-import-sort": "^7.0.0",
-    "prettier": "^2.8.7"
+    "prettier": "^2.8.7",
+    "@cypress/code-coverage": "^3.10.0",
+    "@cypress/react": "^6.2.1",
+    "@cypress/vite-dev-server": "^3.4.0",
+    "cypress": "^10.11.0"
   },
   "pnpm": {
     "requiredScripts": [
