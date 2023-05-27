@@ -1,4 +1,5 @@
 import { z } from 'zod'
+import { emptyString, nonEmptyString } from './helpers'
 import { withMetadataSchema } from './metadata'
 import { withTimestamps } from './modelTimestamps'
 
@@ -11,6 +12,8 @@ export const fileSchema = z
   .object({
     fileId: z.string(),
     name: z.string(),
+    category: emptyString,
+    tags: nonEmptyString.array(),
     description: z.string(),
     mimeType: z.string(),
     hash: z.string(),
@@ -19,14 +22,12 @@ export const fileSchema = z
   .merge(withTimestamps)
   .merge(withMetadataSchema)
 
-export const fileInputSchema = fileSchema
-  .omit({
-    createdAt: true,
-    updatedAt: true,
-    hash: true,
-    mimeType: true,
-  })
-  .merge(z.object({}))
+export const fileInputSchema = fileSchema.omit({
+  createdAt: true,
+  updatedAt: true,
+  hash: true,
+  mimeType: true,
+})
 
 export const fileOutputSchema = fileSchema.omit({ hash: true }).merge(
   z.object({
