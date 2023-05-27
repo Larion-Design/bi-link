@@ -1,11 +1,37 @@
 import { Injectable } from '@nestjs/common'
 import { BrowserService } from '@app/browser-module/browserService'
 import { OSINTCompany } from 'defs'
+import { searchCompaniesByNameSchema } from '../../../schema/company'
 import { getCompanyUrl } from '../helpers'
 
 @Injectable()
 export class CompanyBasicDatasetScraperService {
   constructor(private readonly browserService: BrowserService) {}
+
+  searchCompaniesByName = async (name: string): Promise<OSINTCompany[]> =>
+    this.browserService.handlePrivatePage(async (page) => {
+      await page.goto('https://termene.ro/firme')
+      await page.waitForSelector('#autocompleterCompanySearchVerify')
+
+      const elem = await page.$('#autocompleterCompanySearchVerify')
+      await elem?.type(name, { delay: 300 })
+
+      const companies: OSINTCompany[] = []
+
+      await page.waitForResponse(async (response) => {
+        const success = response.ok()
+
+        if (success) {
+          if (response.url().includes('searchCompany.php')) {
+            const data = searchCompaniesByNameSchema.parse(await response.json())
+            data.forEach(({ nume, cui }) => companies.push({ cui: String(cui), name: nume }))
+          }
+        }
+        return success
+      })
+
+      return companies
+    })
 
   getBasicCompanyDataSet = async (cui: string) =>
     this.browserService.handlePrivatePage(async (page) => {

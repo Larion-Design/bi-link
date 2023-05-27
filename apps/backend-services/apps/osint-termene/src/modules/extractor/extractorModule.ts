@@ -1,9 +1,11 @@
-import { BrowserModule } from '@app/browser-module'
 import { Module } from '@nestjs/common'
-import { AssociateDatasetScraperService } from './services/associateDatasetScraperService'
-import { CompanyBasicDatasetScraperService } from './services/companyBasicDatasetScraperService'
-import { CompanyDatasetScraperService } from './services/companyDatasetScraperService'
-import { TermeneAuthService } from './services/termeneAuthService'
+import { BrowserModule } from '@app/browser-module'
+import {
+  TermeneAuthService,
+  AssociateDatasetScraperService,
+  CompanyBasicDatasetScraperService,
+  CompanyDatasetScraperService,
+} from './services'
 
 @Module({
   imports: [BrowserModule],

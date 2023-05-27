@@ -18,4 +18,11 @@ export const companyTermeneDatasetSchema = z.object({
   balanceSheet: balanceSheetSchema.optional(),
 })
 
+export const searchCompaniesByNameSchema = z
+  .object({
+    cui: z.number(),
+    nume: z.string(),
+  })
+  .array()
+
 export type CompanyTermeneDataset = z.infer<typeof companyTermeneDatasetSchema>

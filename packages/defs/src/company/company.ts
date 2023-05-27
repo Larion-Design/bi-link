@@ -53,8 +53,8 @@ export const companyAPIInputSchema = companySchema.omit({ _id: true }).merge(
 export const OSINTCompanySchema = z.object({
   name: companySchema.shape.name.shape.value,
   cui: companySchema.shape.cui.shape.value,
-  registrationNumber: companySchema.shape.registrationNumber.shape.value,
-  headquarters: z.string(),
+  registrationNumber: companySchema.shape.registrationNumber.shape.value.optional(),
+  headquarters: z.string().optional(),
 })
 
 export type Company = z.infer<typeof companySchema>
