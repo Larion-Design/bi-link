@@ -26,7 +26,7 @@ export class PersonAPIService {
     private readonly personHistorySnapshotService: PersonHistorySnapshotService,
   ) {}
 
-  create = async (personInfo: PersonAPIInput) => {
+  async create(personInfo: PersonAPIInput) {
     try {
       const personModel = await this.createPersonDocument(personInfo)
       const personDocument = await this.personsService.create(personModel)

@@ -5,10 +5,7 @@ import { optionalDateWithMetadataSchema, textWithMetadataSchema } from '../gener
 import { withMetadataSchema } from '../metadata'
 import { withTimestamps } from '../modelTimestamps'
 import { SearchSuggestions } from '../searchSuggestions'
-import {
-  proceedingEntityInvolvedAPISchema,
-  proceedingEntityInvolvedSchema,
-} from './proceedingEntityInvolved'
+import { proceedingEntityInvolvedSchema } from './proceedingEntityInvolved'
 
 export const proceedingSchema = z
   .object({
@@ -20,26 +17,20 @@ export const proceedingSchema = z
     year: optionalDateWithMetadataSchema,
     fileNumber: textWithMetadataSchema,
     description: z.string(),
-    entitiesInvolved: z.array(proceedingEntityInvolvedSchema),
-    customFields: z.array(customFieldSchema),
+    entitiesInvolved: proceedingEntityInvolvedSchema.array(),
+    customFields: customFieldSchema.array(),
     files: fileSchema.array(),
   })
   .merge(withMetadataSchema)
   .merge(withTimestamps)
 
-const proceedingAPISchema = proceedingSchema.merge(
-  z.object({
-    entitiesInvolved: proceedingEntityInvolvedAPISchema.array(),
-  }),
-)
-
-export const proceedingAPIInputSchema = proceedingAPISchema.omit({ _id: true }).merge(
+export const proceedingAPIInputSchema = proceedingSchema.omit({ _id: true }).merge(
   z.object({
     files: fileInputSchema.array(),
   }),
 )
 
-export const proceedingAPIOutputSchema = proceedingAPISchema.merge(
+export const proceedingAPIOutputSchema = proceedingSchema.merge(
   z.object({
     files: fileOutputSchema.array(),
   }),

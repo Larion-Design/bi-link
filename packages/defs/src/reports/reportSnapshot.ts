@@ -1,11 +1,11 @@
 import { z } from 'zod'
-import { withSnapshotSchema } from '../snapshot'
 import { reportSchema } from './report'
+import { withSnapshotSchema } from '../snapshot'
 
-export const reportSnapshotSchema = withSnapshotSchema.merge(
-  z.object({
+export const reportSnapshotSchema = z
+  .object({
     entityInfo: reportSchema.omit({ _id: true }),
-  }),
-)
+  })
+  .merge(withSnapshotSchema)
 
 export type ReportSnapshot = z.infer<typeof reportSnapshotSchema>

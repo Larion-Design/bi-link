@@ -1,4 +1,4 @@
-import { Document } from 'mongoose'
+import { SchemaTypes, Document } from 'mongoose'
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
 import { File } from 'defs'
 import { MetadataModel, MetadataSchema } from '../../metadata/models/metadataModel'
@@ -18,6 +18,12 @@ export class FileModel implements File {
 
   @Prop({ isRequired: false, default: '' })
   description: string
+
+  @Prop()
+  category: string
+
+  @Prop({ type: [SchemaTypes.String] })
+  tags: string[]
 
   @Prop({ unique: true })
   hash: string

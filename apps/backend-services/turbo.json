@@ -3,31 +3,31 @@
   "pipeline": {
     "build": {
       "cache": true,
-      "outputs": ["./dist"]
+      "outputs": []
     },
     "api": {
       "persistent": true,
-      "outputs": ["./dist"]
+      "outputs": []
     },
     "indexer": {
       "persistent": true,
-      "outputs": ["./dist"]
+      "outputs": []
     },
     "graph": {
       "persistent": true,
-      "outputs": ["./dist"]
+      "outputs": []
     },
     "ingress": {
       "persistent": true,
-      "outputs": ["./dist"]
+      "outputs": []
     },
     "user-actions-recorder": {
       "persistent": true,
-      "outputs": ["./dist"]
+      "outputs": []
     },
     "cli": {
       "persistent": true,
-      "outputs": ["./dist"]
+      "outputs": []
     }
   }
 }

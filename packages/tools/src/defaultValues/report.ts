@@ -6,6 +6,7 @@ export const getDefaultReport = (): ReportAPIInput => ({
   isTemplate: false,
   sections: [],
   refs: [],
+  oldReportFiles: [],
 })
 
 export const getDefaultReportSection = (): ReportSectionAPIInput => ({

@@ -1,4 +1,4 @@
-import { AssociateAPI, CompanyAPIInput } from 'defs'
+import { AssociateAPI, BalanceSheet, CompanyAPIInput } from 'defs'
 import { getDefaultLocation } from './location'
 import { getDefaultMetadata } from './metadata'
 import {
@@ -14,11 +14,21 @@ export const getDefaultCompany = (): CompanyAPIInput => ({
   cui: getDefaultTextWithMetadata(),
   registrationNumber: getDefaultTextWithMetadata(),
   headquarters: getDefaultLocation(),
+  balanceSheets: [],
   associates: [],
   contactDetails: [],
   customFields: [],
   locations: [],
   files: [],
+  registrationDate: getDefaultOptionalDateWithMetadata(),
+  status: {
+    vat: getDefaultTextWithMetadata(),
+    fiscal: getDefaultTextWithMetadata(),
+  },
+  active: {
+    ministryOfFinance: getDefaultBooleanWithMetadata(),
+    tradeRegister: getDefaultBooleanWithMetadata(),
+  },
 })
 
 export const getDefaultAssociate = (): AssociateAPI => ({
@@ -39,4 +49,33 @@ export const getDefaultPersonAssociate = (_id: string): AssociateAPI => ({
 export const getDefaultCompanyAssociate = (_id: string): AssociateAPI => ({
   ...getDefaultAssociate(),
   company: { _id },
+})
+
+export const getDefaultBalanceSheet = (): BalanceSheet => ({
+  metadata: getDefaultMetadata(),
+  year: null,
+  fixedAssets: 0,
+  currentAssets: 0,
+  inventories: 0,
+  creante: 0,
+  houseAndAccountsSeizedByBanks: 0,
+  expensesAdvance: 0,
+  debt: 0,
+  revenueAdvance: 0,
+  provisions: 0,
+  totalCapital: 0,
+  socialCapital: 0,
+  royaltyHeritage: 0,
+  publicHeritage: 0,
+  netBusinessFigure: 0,
+  totalRevenue: 0,
+  totalExpenses: 0,
+  grossProfit: 0,
+  grossLoss: 0,
+  netProfit: 0,
+  netLoss: 0,
+  averageEmployees: 0,
+  caenCode: 0,
+  activityType: '',
+  balanceType: '',
 })

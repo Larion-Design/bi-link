@@ -4,12 +4,19 @@ import { CustomFieldModel, CustomFieldSchema } from '../../customField/models/cu
 import { FileModel } from '../../file/models/fileModel'
 import { MetadataModel, MetadataSchema } from '../../metadata/models/metadataModel'
 import {
+  OptionalDateValueWithMetadataModel,
+  OptionalDateValueWithMetadataSchema,
+} from '../../metadata/models/optionalDateValueWithMetadataModel'
+import {
   TextValueWithMetadataModel,
   TextValueWithMetadataSchema,
 } from '../../metadata/models/textValueWithMetadataModel'
 import { AssociateModel, AssociateSchema } from './associateModel'
 import { LocationDocument, LocationModel } from '../../location/models/locationModel'
 import { Company } from 'defs'
+import { BalanceSheetModel, BalanceSheetSchema } from './balanceSheetModel'
+import { CompanyActiveStateModel, CompanyActiveStateSchema } from './companyActiveStateModel'
+import { CompanyStatusModel, CompanyStatusSchema } from './companyStatusModel'
 
 @Schema({ timestamps: true })
 export class CompanyModel implements Company {
@@ -52,6 +59,18 @@ export class CompanyModel implements Company {
 
   @Prop()
   updatedAt?: Date
+
+  @Prop({ type: [BalanceSheetSchema] })
+  balanceSheets: BalanceSheetModel[]
+
+  @Prop({ type: CompanyActiveStateSchema })
+  active: CompanyActiveStateModel
+
+  @Prop({ type: CompanyStatusSchema })
+  status: CompanyStatusModel
+
+  @Prop({ type: OptionalDateValueWithMetadataSchema })
+  registrationDate: OptionalDateValueWithMetadataModel
 }
 
 export type CompanyDocument = CompanyModel & Document<string>

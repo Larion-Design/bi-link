@@ -1,6 +1,7 @@
 import { z } from 'zod'
-import { withTimestamps } from '../modelTimestamps'
 import { dataRefAPISchema, dataRefSchema } from './dataRef'
+import { fileInputSchema, fileOutputSchema, fileSchema } from '../file'
+import { withTimestamps } from '../modelTimestamps'
 import {
   reportSectionAPIInputSchema,
   reportSectionAPIOutputSchema,
@@ -21,6 +22,7 @@ export const reportSchema = z
     proceeding: connectedEntitySchema.nullish(),
     sections: reportSectionSchema.array(),
     refs: dataRefSchema.array(),
+    oldReportFiles: fileSchema.array(),
   })
   .merge(withTimestamps)
 
@@ -33,6 +35,7 @@ const reportAPISchema = reportSchema.merge(
 export const reportAPIOutputSchema = reportAPISchema.merge(
   z.object({
     sections: reportSectionAPIOutputSchema.array(),
+    oldReportFiles: fileOutputSchema.array(),
   }),
 )
 
@@ -45,6 +48,7 @@ export const reportAPIInputSchema = reportAPISchema
   .merge(
     z.object({
       sections: reportSectionAPIInputSchema.array(),
+      oldReportFiles: fileInputSchema.array(),
     }),
   )
 

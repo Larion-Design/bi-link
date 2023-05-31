@@ -40,20 +40,32 @@ export class PersonsService {
     }
   }
 
-  findByPersonalInfo = async (firstName: string, lastName: string, birthdate?: Date | null) => {
+  findByPersonalInfo = async (
+    firstName?: string,
+    lastName?: string,
+    birthdate?: Date | null,
+    metadataSource?: string,
+  ) => {
     try {
-      const matchConditions: FilterQuery<PersonDocument>[] = [
-        { 'firstName.value': firstName },
-        { 'lastName.value': lastName },
-      ]
+      const conditions: FilterQuery<PersonDocument>[] = []
 
-      if (birthdate) {
-        matchConditions.push({ 'birthdate.value': birthdate })
+      if (metadataSource?.length) {
+        conditions.push({ 'metadata.trustworthiness.source': metadataSource })
+      } else {
+        if (firstName && lastName) {
+          const identificationInfo: FilterQuery<PersonDocument>[] = [
+            { 'firstName.value': firstName },
+            { 'lastName.value': lastName },
+          ]
+
+          if (birthdate) {
+            identificationInfo.push({ 'birthdate.value': birthdate })
+          }
+          conditions.push({ $and: identificationInfo })
+        }
       }
 
-      const personDocument = await this.personModel
-        .findOne({ $and: matchConditions }, { _id: 1 })
-        .exec()
+      const personDocument = await this.personModel.findOne({ $and: conditions }, { _id: 1 }).exec()
 
       if (personDocument) {
         return String(personDocument._id)

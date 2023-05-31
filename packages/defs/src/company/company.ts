@@ -1,12 +1,15 @@
 import { z } from 'zod'
 import { customFieldSchema } from '../customField'
 import { fileInputSchema, fileOutputSchema, fileSchema } from '../file'
-import { textWithMetadataSchema } from '../generic'
+import { optionalDateWithMetadataSchema, textWithMetadataSchema } from '../generic'
 import { locationSchema } from '../geolocation'
 import { withMetadataSchema } from '../metadata'
 import { withTimestamps } from '../modelTimestamps'
 import { SearchSuggestions } from '../searchSuggestions'
 import { associateAPISchema, associateSchema } from './associate'
+import { balanceSheetSchema } from './balanceSheet'
+import { companyActiveStateSchema } from './companyActiveState'
+import { companyStatusSchema } from './companyStatus'
 
 export const companySchema = z
   .object({
@@ -15,11 +18,15 @@ export const companySchema = z
     name: textWithMetadataSchema,
     headquarters: locationSchema.nullable(),
     registrationNumber: textWithMetadataSchema,
+    registrationDate: optionalDateWithMetadataSchema,
     contactDetails: customFieldSchema.array(),
     locations: locationSchema.array(),
     associates: associateSchema.array(),
     customFields: customFieldSchema.array(),
     files: fileSchema.array(),
+    balanceSheets: balanceSheetSchema.array(),
+    active: companyActiveStateSchema,
+    status: companyStatusSchema,
   })
   .merge(withMetadataSchema)
   .merge(withTimestamps)

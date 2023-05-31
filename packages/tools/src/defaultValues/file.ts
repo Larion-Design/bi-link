@@ -7,4 +7,6 @@ export const getDefaultFile = (fileId: string): FileAPIInput => ({
   name: '',
   description: '',
   isHidden: false,
+  category: '',
+  tags: [],
 })
