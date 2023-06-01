@@ -18,4 +18,10 @@ export class FileInput
 
   @Field()
   readonly isHidden: boolean
+
+  @Field()
+  readonly category: string
+
+  @Field(() => [String])
+  readonly tags: string[]
 }
