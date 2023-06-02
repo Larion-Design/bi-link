@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common'
+import { Injectable } from '@nestjs/common'
 import { LocationAPIInput, UpdateSource } from 'defs'
 import { IngressService } from '@app/rpc/microservices/ingress'
 

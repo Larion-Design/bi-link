@@ -150,6 +150,15 @@
       "compilerOptions": {
         "tsConfigPath": "libs/diff-module/tsconfig.lib.json"
       }
+    },
+    "service-cache-module": {
+      "type": "library",
+      "root": "libs/service-cache-module",
+      "entryFile": "index",
+      "sourceRoot": "libs/service-cache-module/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/service-cache-module/tsconfig.lib.json"
+      }
     }
   }
 }

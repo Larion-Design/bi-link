@@ -22,6 +22,8 @@
     "build:user-actions-recorder": "nest build user-actions-recorder",
     "cli": "nest start cli --watch",
     "build:cli": "nest build cli",
+    "termene": "nest start osint-termene --watch",
+    "termene:build": "nest build osint-termene",
     "format": "prettier --write \"apps/**/*.ts\" \"libs/**/*.ts\"",
     "lint": "eslint --ext=.ts --quiet ./",
     "test": "jest --passWithNoTests",
@@ -29,10 +31,10 @@
   },
   "dependencies": {
     "@elastic/elasticsearch": "^8.5.0",
+    "@liaoliaots/nestjs-redis": "^9.0.5",
     "@nestjs-modules/ioredis": "^1.0.1",
     "@nestjs/apollo": "^10.1.7",
     "@nestjs/bull": "^0.6.2",
-    "@nestjs/cache-manager": "^1.0.0",
     "@nestjs/common": "^8.4.7",
     "@nestjs/config": "^2.2.0",
     "@nestjs/core": "^8.4.7",
@@ -49,7 +51,6 @@
     "apollo-server-core": "^3.11.1",
     "apollo-server-express": "^3.11.1",
     "bull": "^4.10.2",
-    "cache-manager": "^4.1.0",
     "date-fns": "^2.29.3",
     "defs": "workspace:*",
     "firebase-admin": "^11.4.1",
@@ -88,7 +89,6 @@
     "@nestjs/testing": "^8.4.7",
     "@sentry/hub": "^7.28.1",
     "@types/bull": "^3.15.9",
-    "@types/cache-manager": "^4.0.2",
     "@types/elasticsearch": "^5.0.40",
     "@types/express": "^4.17.15",
     "@types/inquirer": "^9.0.3",
@@ -141,7 +141,8 @@
       "^@app/definitions(|/.*)$": "<rootDir>/libs/definitions/src/$1",
       "^@app/scheduler-module(|/.*)$": "<rootDir>/libs/scheduler-module/src/$1",
       "^@app/loader-module(|/.*)$": "<rootDir>/libs/loader-module/src/$1",
-      "^@app/diff-module(|/.*)$": "<rootDir>/libs/diff-module/src/$1"
+      "^@app/diff-module(|/.*)$": "<rootDir>/libs/diff-module/src/$1",
+      "^@app/service-cache-module(|/.*)$": "<rootDir>/libs/service-cache-module/src/$1"
     }
   },
   "peerDependencies": {

@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common'
 import { BrowserService } from '@app/browser-module/browserService'
 import { OSINTCompany } from 'defs'
-import { searchCompaniesByNameSchema } from '../../../schema/company'
 import { getCompanyUrl } from '../helpers'
+import { searchCompaniesByNameSchema } from '../../../schema/company'
 
 @Injectable()
 export class CompanyBasicDatasetScraperService {

@@ -1,18 +1,25 @@
-import { CacheModule, Module } from '@nestjs/common'
+import { BrowserModule } from '@app/browser-module'
+import { LoaderModule } from '@app/loader-module'
+import { ServiceCacheModule } from '@app/service-cache-module'
+import { Module } from '@nestjs/common'
 import { ConfigModule, ConfigService } from '@nestjs/config'
 import { SentryModule } from '@ntegral/nestjs-sentry'
 import { RpcModule } from '@app/rpc'
-import { TermeneRPCModule } from './modules/rpc/termeneRPCModule'
-import { ExtractorModule } from './modules/extractor/extractorModule'
+import { ExtractorModule } from './modules/extractor'
+import { TermeneRPCModule } from './modules/rpc'
+import { SchedulerModule } from './modules/scheduler/schedulerModule'
 import { TransformerModule } from './modules/transformer/transformerModule'
 
 @Module({
   imports: [
     RpcModule,
+    ServiceCacheModule,
+    LoaderModule,
+    SchedulerModule,
     ExtractorModule,
     TermeneRPCModule,
     TransformerModule,
-    CacheModule.register({ isGlobal: true }),
+    BrowserModule,
     ConfigModule.forRoot({
       isGlobal: true,
       ignoreEnvVars: true,

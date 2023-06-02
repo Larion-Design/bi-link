@@ -4,6 +4,7 @@ import { Injectable } from '@nestjs/common'
 import { CustomFieldAPI } from 'defs'
 import { getDefaultCompany, getDefaultCustomField } from 'tools'
 import { CompanyTermeneDataset } from '../../../schema/company'
+import { getCompanyUrl } from '../../extractor/helpers'
 import { AssociateDataTransformerService } from './associateDataTransformerService'
 import { LocationDataTransformerService } from './locationDataTransformerService'
 
@@ -18,7 +19,7 @@ export class CompanyDataTransformerService {
 
   public transformCompanyData = (cui: string, data: CompanyTermeneDataset) => {
     const companyInfo = getDefaultCompany()
-    const sourceUrl = this.getCompanyUrl(cui)
+    const sourceUrl = getCompanyUrl(cui)
     companyInfo.metadata.trustworthiness.source = sourceUrl
 
     const name = data.headerInfo?.firma.nume_canonic ?? ''
@@ -53,7 +54,7 @@ export class CompanyDataTransformerService {
       associates?.asociatiAdministratori.administratori.length &&
       associates?.asociatiAdministratori.asociati.length
     ) {
-      const sourceUrl = this.getCompanyUrl(cui)
+      const sourceUrl = getCompanyUrl(cui)
       return this.associateDataTransformerService.transformAssociatesInfo(associates, sourceUrl)
     }
     return []
@@ -161,6 +162,4 @@ export class CompanyDataTransformerService {
     customField.fieldValue = fieldValue
     return customField
   }
-
-  getCompanyUrl = (cui: string) => `https://termene.ro/firma/${cui}-firma`
 }

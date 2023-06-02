@@ -9,10 +9,12 @@ import { GraphService } from '@app/rpc/microservices/graph/graphService'
 import { IndexerService } from '@app/rpc/microservices/indexer/indexerService'
 import { IngressService } from '@app/rpc/microservices/ingress'
 import { FilesManagerService } from '@app/rpc/microservices/filesManager/filesManagerService'
+import { ExtractorModule } from '../../../apps/osint-termene/src/modules/extractor'
 
 @Global()
 @Module({
   imports: [
+    ExtractorModule,
     ClientsModule.registerAsync(
       [
         MICROSERVICES.GLOBAL.id,

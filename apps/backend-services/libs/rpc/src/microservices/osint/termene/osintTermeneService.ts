@@ -14,7 +14,6 @@ export class OsintTermeneService {
 
   constructor(@Inject(MICROSERVICES.OSINT.TERMENE.id) private client: ClientProxy) {}
 
-  @UseInterceptors(new RPCValidator(osintTermeneServiceConfig.shape.searchCompanyByCUI))
   async searchCompanyByCUI(cui: string) {
     type Params = Parameters<OsintTermeneServiceConfig['searchCompanyByCUI']>[0]
     type Result = ReturnType<OsintTermeneServiceConfig['searchCompanyByCUI']>
@@ -33,7 +32,6 @@ export class OsintTermeneService {
     }
   }
 
-  @UseInterceptors(new RPCValidator(osintTermeneServiceConfig.shape.searchCompaniesByName))
   async searchCompaniesByName(companyName: string) {
     type Params = Parameters<OsintTermeneServiceConfig['searchCompaniesByName']>[0]
     type Result = ReturnType<OsintTermeneServiceConfig['searchCompaniesByName']>
@@ -49,7 +47,6 @@ export class OsintTermeneService {
     }
   }
 
-  @UseInterceptors(new RPCValidator(osintTermeneServiceConfig.shape.importCompany))
   importCompany(cui: string) {
     type Params = Parameters<OsintTermeneServiceConfig['importCompany']>[0]
 

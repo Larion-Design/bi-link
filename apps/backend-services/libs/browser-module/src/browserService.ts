@@ -1,14 +1,20 @@
 import { Injectable } from '@nestjs/common'
+import { ConfigService } from '@nestjs/config'
 import puppeteer, { Browser, Page } from 'puppeteer-core'
 
 @Injectable()
 export class BrowserService {
   private browser: Browser | undefined
+  private readonly chromiumInstanceUrl: string
+
+  constructor(configService: ConfigService) {
+    this.chromiumInstanceUrl = configService.getOrThrow<string>('CHROMIUM_INSTANCE_URL')
+  }
 
   getBrowser = async () => {
     if (!this.browser) {
       this.browser = await puppeteer.connect({
-        browserWSEndpoint: `${String(process.env.CHROMIUM_INSTANCE_URL)}?keepalive=60000&stealth`,
+        browserWSEndpoint: `${this.chromiumInstanceUrl}?keepalive=60000&stealth`,
       })
     }
     return this.browser

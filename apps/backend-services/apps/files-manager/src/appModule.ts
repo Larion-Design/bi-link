@@ -1,6 +1,6 @@
 import { RpcModule } from '@app/rpc'
 import { ServiceHealthModule } from '@app/service-health'
-import { CacheModule, Module } from '@nestjs/common'
+import { Module } from '@nestjs/common'
 import { ConfigModule, ConfigService } from '@nestjs/config'
 import { SentryModule } from '@ntegral/nestjs-sentry'
 import { FilesModule } from './files/filesModule'
@@ -12,9 +12,6 @@ import { FilesManagerRPCModule } from './rpc/filesManagerRPCModule'
     FilesModule,
     FilesManagerRPCModule,
     ServiceHealthModule,
-    CacheModule.register({
-      isGlobal: true,
-    }),
     ConfigModule.forRoot({
       isGlobal: true,
       ignoreEnvVars: true,

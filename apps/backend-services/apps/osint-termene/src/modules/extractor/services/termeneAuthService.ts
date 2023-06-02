@@ -1,6 +1,7 @@
 import { BrowserService } from '@app/browser-module/browserService'
 import { Injectable } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
+import { Page } from 'puppeteer-core'
 
 @Injectable()
 export class TermeneAuthService {

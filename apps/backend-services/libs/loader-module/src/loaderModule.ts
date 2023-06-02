@@ -1,12 +1,14 @@
-import { Module } from '@nestjs/common'
+import { ServiceCacheModule } from '@app/service-cache-module'
 import {
   CompanyLoaderService,
   LocationLoaderService,
   PersonLoaderService,
   ProceedingLoaderService,
-} from '@app/loader-module/services'
+} from './services'
+import { Module } from '@nestjs/common'
 
 @Module({
+  imports: [ServiceCacheModule],
   providers: [
     PersonLoaderService,
     CompanyLoaderService,
