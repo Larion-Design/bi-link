@@ -1,6 +1,7 @@
 import { Field, InputType } from '@nestjs/graphql'
 import { ReportAPIInput } from 'defs'
 import { ConnectedEntityInput } from '../../entityInfo/dto/connectedEntityInput'
+import { FileInput } from '../../files/dto/fileInput'
 import { DataRefInput } from './refs/dataRefInput'
 import { ReportSectionInput } from './reportSectionInput'
 
@@ -32,4 +33,7 @@ export class ReportInput implements ReportAPIInput {
 
   @Field(() => [DataRefInput])
   readonly refs: DataRefInput[]
+
+  @Field(() => [FileInput])
+  readonly oldReportFiles: FileInput[]
 }

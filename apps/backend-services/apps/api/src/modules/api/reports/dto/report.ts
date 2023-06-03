@@ -1,5 +1,6 @@
 import { Field, ID, ObjectType } from '@nestjs/graphql'
 import { ReportAPIOutput } from 'defs'
+import { File } from '../../files/dto/file'
 import { ConnectedEntity } from '../../entityInfo/dto/connectedEntity'
 import { DataRef } from './refs/dataRef'
 import { ReportSection } from './reportSection'
@@ -35,6 +36,9 @@ export class Report implements ReportAPIOutput {
 
   @Field(() => [DataRef])
   refs: DataRef[]
+
+  @Field(() => [File])
+  oldReportFiles: File[]
 
   @Field()
   createdAt: Date

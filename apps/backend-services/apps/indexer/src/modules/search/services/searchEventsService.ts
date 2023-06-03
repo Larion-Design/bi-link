@@ -84,7 +84,7 @@ export class SearchEventsService {
   ): EventListRecord => ({
     _id,
     type,
-    location: formatAddress(location) ?? null,
+    location: location ? formatAddress(location) : null,
     date: date ? new Date(date) : null,
   })
 }

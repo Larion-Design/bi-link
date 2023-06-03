@@ -12,9 +12,6 @@ import { IngressRPCModule } from './rpc/ingressRPCModule'
     EntitiesModule,
     IngressRPCModule,
     ServiceHealthModule,
-    CacheModule.register({
-      isGlobal: true,
-    }),
     ConfigModule.forRoot({
       isGlobal: true,
       ignoreEnvVars: true,

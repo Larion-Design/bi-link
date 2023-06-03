@@ -1,6 +1,6 @@
-import { CACHE_MANAGER, Inject, Injectable, Logger } from '@nestjs/common'
-import { Cache } from 'cache-manager'
+import { Injectable, Logger } from '@nestjs/common'
 import { MinioService } from 'nestjs-minio-client'
+import { CacheService } from '@app/service-cache-module'
 import { ConfigService } from '@nestjs/config'
 import { BUCKET_FILES } from '../../constants'
 
@@ -12,9 +12,9 @@ export class FileStorageService {
   private readonly minioPublicUrl: string
 
   constructor(
-    @Inject(CACHE_MANAGER) private readonly cacheManager: Cache,
     private readonly minioService: MinioService,
-    private readonly configService: ConfigService,
+    private readonly cacheService: CacheService,
+    configService: ConfigService,
   ) {
     this.minioInternalUrl = `${configService.getOrThrow<string>(
       'MINIO_ENDPOINT',
@@ -22,18 +22,15 @@ export class FileStorageService {
 
     this.minioPublicUrl = configService.getOrThrow<string>('MINIO_PUBLIC_URL')
 
-    void this.validateBucket()
+    void this.validateBucket(configService.getOrThrow<string>('MINIO_REGION'))
   }
 
-  private validateBucket = async () => {
+  private validateBucket = async (region: string) => {
     this.logger.debug(`Checking whether the bucket ${this.bucketName} exists`)
 
     if (!(await this.minioService.client.bucketExists(this.bucketName))) {
       this.logger.debug(`Bucket ${this.bucketName} will be created`)
-      await this.minioService.client.makeBucket(
-        this.bucketName,
-        this.configService.getOrThrow('MINIO_REGION'),
-      )
+      await this.minioService.client.makeBucket(this.bucketName, region)
       this.logger.debug(`Bucket ${this.bucketName} was created`)
     } else this.logger.debug(`Bucket ${this.bucketName} is online`)
   }
@@ -69,7 +66,7 @@ export class FileStorageService {
 
   getDownloadUrl = async (fileId: string, ttl = 120) => {
     try {
-      let cachedUrl = await this.getCachedUrl(fileId)
+      const cachedUrl = await this.getCachedUrl(fileId)
 
       if (!cachedUrl) {
         const newUrl = this.transformUrl(
@@ -95,11 +92,11 @@ export class FileStorageService {
   private transformUrl = (privateUrl: string) =>
     privateUrl.replace(this.minioInternalUrl, this.minioPublicUrl)
 
-  private getCachedUrl = (fileId: string) =>
-    this.cacheManager.get<string>(this.getFileUrlCacheKey(fileId))
+  private getCachedUrl = async (fileId: string) =>
+    this.cacheService.get<string>(this.getFileUrlCacheKey(fileId))
 
   private getFileUrlCacheKey = (fileId: string) => `/files/download/${fileId}}`
 
-  private cacheFileUrl = (fileId: string, url: string, ttl: number) =>
-    this.cacheManager.set(this.getFileUrlCacheKey(fileId), url, { ttl })
+  private cacheFileUrl = async (fileId: string, url: string, ttl: number) =>
+    this.cacheService.set(this.getFileUrlCacheKey(fileId), url, ttl)
 }

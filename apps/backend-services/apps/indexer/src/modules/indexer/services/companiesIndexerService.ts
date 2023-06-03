@@ -47,17 +47,26 @@ export class CompaniesIndexerService {
     associatedPersons: this.createAssociatedPersonsIndex(company.associates),
     associatedCompanies: this.createAssociatedCompaniesIndex(company.associates),
     files: [],
+    balanceSheets: company.balanceSheets,
   })
 
-  private createAssociatedPersonsIndex = (associates: Associate[]): ConnectedPersonIndex[] =>
-    associates
-      .filter(({ person }) => !!person)
-      .map(({ person }) => this.connectedEntityIndexerService.createConnectedPersonIndex(person!))
+  private createAssociatedPersonsIndex = (associates: Associate[]) => {
+    const persons: ConnectedPersonIndex[] = []
+    associates.forEach(({ person }) => {
+      if (person) {
+        persons.push(this.connectedEntityIndexerService.createConnectedPersonIndex(person))
+      }
+    })
+    return persons
+  }
 
-  private createAssociatedCompaniesIndex = (associates: Associate[]): ConnectedCompanyIndex[] =>
-    associates
-      .filter(({ company }) => !!company)
-      .map(({ company }) =>
-        this.connectedEntityIndexerService.createConnectedCompanyIndex(company as Company),
-      )
+  private createAssociatedCompaniesIndex = (associates: Associate[]) => {
+    const companies: ConnectedCompanyIndex[] = []
+    associates.forEach(({ company }) => {
+      if (company) {
+        companies.push(this.connectedEntityIndexerService.createConnectedCompanyIndex(company))
+      }
+    })
+    return companies
+  }
 }

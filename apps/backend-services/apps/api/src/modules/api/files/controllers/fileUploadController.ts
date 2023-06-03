@@ -3,6 +3,7 @@ import { FileInterceptor } from '@nestjs/platform-express'
 import { FilesManagerService } from '@app/rpc/microservices/filesManager/filesManagerService'
 import { IngressService } from '@app/rpc/microservices/ingress'
 import { FileAPIInput, File } from 'defs'
+import { getDefaultFile } from 'tools'
 
 @Controller()
 export class FileUploadController {
@@ -20,20 +21,10 @@ export class FileUploadController {
 
       if (uploadedFile) {
         const fileModel: File = {
-          fileId: uploadedFile.fileId,
+          ...getDefaultFile(uploadedFile.fileId),
           hash: uploadedFile.hash,
           name: originalname,
-          description: '',
           mimeType: mimetype,
-          isHidden: false,
-          metadata: {
-            access: '',
-            confirmed: true,
-            trustworthiness: {
-              source: '',
-              level: 0,
-            },
-          },
         }
 
         await this.ingressService.createEntity('FILE', fileModel, {

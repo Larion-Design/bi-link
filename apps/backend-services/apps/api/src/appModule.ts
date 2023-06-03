@@ -1,4 +1,4 @@
-import { CacheModule, Module } from '@nestjs/common'
+import { Module } from '@nestjs/common'
 import { GraphQLModule } from '@nestjs/graphql'
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo'
 import { ConfigModule, ConfigService } from '@nestjs/config'
@@ -13,9 +13,6 @@ import { RpcModule } from '@app/rpc'
     RpcModule,
     ApiModule,
     UsersModule,
-    CacheModule.register({
-      isGlobal: true,
-    }),
     ConfigModule.forRoot({
       isGlobal: true,
       ignoreEnvVars: true,

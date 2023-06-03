@@ -1,3 +1,4 @@
+import { balanceSheetIndex } from '@app/definitions/indexer/company/balanceSheet'
 import { z } from 'zod'
 import { companySchema } from 'defs'
 import { connectedCompanyIndexSchema, connectedPersonIndexSchema } from './connectedEntity'
@@ -16,6 +17,7 @@ export const companyIndexSchema = z.object({
   files: embeddedFileIndexSchema.array(),
   associatedCompanies: connectedCompanyIndexSchema.array(),
   associatedPersons: connectedPersonIndexSchema.array(),
+  balanceSheets: balanceSheetIndex.array(),
 })
 
 export const companySearchIndexSchema = companyIndexSchema.pick({

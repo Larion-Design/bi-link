@@ -17,6 +17,8 @@ export class MappingHelperService {
     term_vector: 'yes',
   }
 
+  readonly integerField: MappingProperty = { type: 'integer' }
+
   readonly keywordField: MappingProperty = { type: 'keyword' }
 
   readonly textField: MappingProperty = { type: 'text', index_options: 'docs', term_vector: 'yes' }
