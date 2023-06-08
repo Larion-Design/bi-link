@@ -51,13 +51,7 @@ export class ProceedingsService {
 
   findByFileNumber = async (fileNumber: string) => {
     try {
-      const proceedingDocument = await this.proceedingModel
-        .findOne({ 'fileNumber.value': fileNumber }, { _id: 1 })
-        .exec()
-
-      if (proceedingDocument) {
-        return String(proceedingDocument._id)
-      }
+      return this.proceedingModel.findOne({ 'fileNumber.value': fileNumber }).exec()
     } catch (error) {
       this.logger.error(error)
     }

@@ -1,6 +1,6 @@
-import { CacheService } from '@app/service-cache-module'
 import { Injectable } from '@nestjs/common'
 import { Proceeding } from 'defs'
+import { CacheService } from './cacheService'
 
 @Injectable()
 export class ProceedingCacheService {
@@ -11,13 +11,13 @@ export class ProceedingCacheService {
   getCachedProceedingId = async (fileNumber: string) =>
     this.cacheService.getHashKey(this.key, fileNumber)
 
-  cacheProceedingId = async (proceedingId: string, proceedingInfo: Proceeding) => {
+  cacheProceedingId = async (proceeding: Proceeding) => {
     const {
       fileNumber: { value: fileNumber },
-    } = proceedingInfo
+    } = proceeding
 
     if (fileNumber?.length) {
-      return this.cacheService.setHashKeys(this.key, { [fileNumber]: proceedingId })
+      return this.cacheService.setHashKeys(this.key, { [fileNumber]: String(proceeding._id) })
     }
   }
 }
