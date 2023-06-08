@@ -63,12 +63,6 @@
       ],
       "@app/diff-module/*": [
         "libs/diff-module/src/*"
-      ],
-      "@app/service-cache-module": [
-        "libs/service-cache-module/src"
-      ],
-      "@app/service-cache-module/*": [
-        "libs/service-cache-module/src/*"
       ]
     }
   },

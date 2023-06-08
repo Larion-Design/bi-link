@@ -1,14 +1,16 @@
-import { CacheModule, Module } from '@nestjs/common'
+import { Module } from '@nestjs/common'
 import { RpcModule } from '@app/rpc'
 import { ServiceHealthModule } from '@app/service-health'
 import { ConfigModule, ConfigService } from '@nestjs/config'
 import { MongooseModule } from '@nestjs/mongoose'
+import { CacheModule } from './cache'
 import { EntitiesModule } from './entities'
 import { IngressRPCModule } from './rpc/ingressRPCModule'
 
 @Module({
   imports: [
     RpcModule,
+    CacheModule,
     EntitiesModule,
     IngressRPCModule,
     ServiceHealthModule,

@@ -57,44 +57,31 @@ export class CompaniesService {
 
   findByCUI = async (cui: string) => {
     try {
-      const companyDocument = await this.companyModel
-        .findOne({ 'cui.value': cui }, { _id: 1 })
-        .exec()
-
-      if (companyDocument) {
-        return String(companyDocument._id)
-      }
+      return this.companyModel.findOne({ 'cui.value': cui }, { _id: 1 }).exec()
     } catch (error) {
       this.logger.error(error)
     }
+    return null
   }
 
   findByName = async (name: string) => {
     try {
-      const companyDocument = await this.companyModel
-        .findOne({ 'name.value': name }, { _id: 1 })
-        .exec()
-
-      if (companyDocument) {
-        return String(companyDocument._id)
-      }
+      return this.companyModel.findOne({ 'name.value': name }, { _id: 1 }).exec()
     } catch (error) {
       this.logger.error(error)
     }
+    return null
   }
 
   findByRegistrationNumber = async (registrationNumber: string) => {
     try {
-      const companyDocument = await this.companyModel
+      return this.companyModel
         .findOne({ 'registrationNumber.value': registrationNumber }, { _id: 1 })
         .exec()
-
-      if (companyDocument) {
-        return String(companyDocument._id)
-      }
     } catch (error) {
       this.logger.error(error)
     }
+    return null
   }
 
   async *getAllCompanies(fields: ProjectionFields<CompanyDocument> = { _id: 1 }) {

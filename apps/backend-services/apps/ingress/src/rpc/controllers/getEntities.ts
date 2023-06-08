@@ -29,7 +29,7 @@ export class GetEntities {
   ) {}
 
   @MessagePattern(MICROSERVICES.INGRESS.getEntities)
-  async createEntity(
+  async getEntities(
     @Payload()
     { entitiesIds, entitiesType, fetchLinkedEntities, source }: Params,
   ) {

@@ -1,4 +1,4 @@
-import { FilterQuery, Model, ProjectionFields, Query } from 'mongoose'
+import { Model, ProjectionFields, Query } from 'mongoose'
 import { Injectable, Logger } from '@nestjs/common'
 import { InjectModel } from '@nestjs/mongoose'
 import { PersonDocument, PersonModel } from '../models/personModel'
@@ -40,79 +40,54 @@ export class PersonsService {
     }
   }
 
-  findByPersonalInfo = async (
-    firstName?: string,
-    lastName?: string,
-    birthdate?: Date | null,
-    metadataSource?: string,
-  ) => {
+  findByNameAndBirthdate = async (firstName: string, lastName: string, birthdate: Date) => {
     try {
-      const conditions: FilterQuery<PersonDocument>[] = []
-
-      if (metadataSource?.length) {
-        conditions.push({ 'metadata.trustworthiness.source': metadataSource })
-      } else {
-        if (firstName && lastName) {
-          const identificationInfo: FilterQuery<PersonDocument>[] = [
-            { 'firstName.value': firstName },
-            { 'lastName.value': lastName },
-          ]
-
-          if (birthdate) {
-            identificationInfo.push({ 'birthdate.value': birthdate })
-          }
-          conditions.push({ $and: identificationInfo })
-        }
-      }
-
-      const personDocument = await this.personModel.findOne({ $and: conditions }, { _id: 1 }).exec()
-
-      if (personDocument) {
-        return String(personDocument._id)
-      }
-    } catch (error) {
-      this.logger.error(error)
+      return this.personModel
+        .findOne(
+          {
+            $and: [
+              { 'firstName.value': firstName },
+              { 'lastName.value': lastName },
+              { 'birthdate.value': birthdate },
+            ],
+          },
+          { _id: 1 },
+        )
+        .exec()
+    } catch (e) {
+      this.logger.error(e)
     }
   }
 
   findByCNP = async (cnp: string) => {
     try {
-      const personDocument = await this.personModel.findOne({ 'cnp.value': cnp }, { _id: 1 }).exec()
-
-      if (personDocument) {
-        return String(personDocument._id)
-      }
+      return this.personModel.findOne({ 'cnp.value': cnp }, { _id: 1 }).exec()
     } catch (error) {
       this.logger.error(error)
     }
+    return null
   }
 
   findByMetadataSourceUrl = async (dataSource: string) => {
     try {
-      const personDocument = await this.personModel
+      return await this.personModel
         .findOne({ 'metadata.trustworthiness.source': dataSource }, { _id: 1 })
         .exec()
-
-      if (personDocument) {
-        return String(personDocument._id)
-      }
     } catch (error) {
       this.logger.error(error)
     }
+    return null
   }
 
   findByDocumentNumber = async (documentNumber: string) => {
     try {
-      const personDocument = await this.personModel
+      return this.personModel
         .findOne({ 'documents.documentNumber': documentNumber }, { _id: 1 })
         .exec()
-
-      if (personDocument) {
-        return String(personDocument._id)
-      }
     } catch (error) {
       this.logger.error(error)
     }
+    return null
   }
 
   getPersons = async (personsIds: string[], fetchLinkedEntities: boolean) => {

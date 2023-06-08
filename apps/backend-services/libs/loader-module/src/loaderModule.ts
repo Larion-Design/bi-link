@@ -1,4 +1,3 @@
-import { ServiceCacheModule } from '@app/service-cache-module'
 import {
   CompanyLoaderService,
   LocationLoaderService,
@@ -8,7 +7,7 @@ import {
 import { Module } from '@nestjs/common'
 
 @Module({
-  imports: [ServiceCacheModule],
+  imports: [],
   providers: [
     PersonLoaderService,
     CompanyLoaderService,
