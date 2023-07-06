@@ -10,30 +10,29 @@ export class TermeneAuthService {
   private readonly password: string
 
   constructor(private readonly browserService: BrowserService, configService: ConfigService) {
-    this.email = configService.getOrThrow('SCRAPER_TERMENE_EMAIL')
-    this.password = configService.getOrThrow('SCRAPER_TERMENE_PASSWORD')
+    this.email = configService.getOrThrow<string>('SCRAPER_TERMENE_EMAIL')
+    this.password = configService.getOrThrow<string>('SCRAPER_TERMENE_PASSWORD')
   }
 
-  authenticate = async () => {
-    const browser = await this.browserService.getBrowser()
-    const page = await browser.newPage()
+  authenticate = async () =>
+    this.browserService.handlePage(async (page) => {
+      await page.goto(this.loginPage)
+      await page.waitForNavigation()
 
-    await page.goto(this.loginPage)
-    await page.waitForNavigation()
+      if (this.isUserAuthenticated(page)) {
+        await page.waitForSelector('#login-form')
+        await page.focus('#emailOrPhone')
+        await page.keyboard.type(this.email, { delay: this.getRandomDelay(100, 200) })
 
-    if (page.url() === this.loginPage) {
-      await page.waitForSelector('#login-form')
-      await page.focus('#emailOrPhone')
-      await page.keyboard.type(this.email, { delay: this.getRandomDelay(100, 200) })
+        await page.focus('#password')
+        await page.keyboard.type(this.password, { delay: this.getRandomDelay(100, 200) })
 
-      await page.focus('#password')
-      await page.keyboard.type(this.password, { delay: this.getRandomDelay(100, 200) })
+        await Promise.all([page.waitForNavigation(), page.click('#loginBtn')])
+        await page.waitForNetworkIdle()
+      }
+    })
 
-      await Promise.all([page.waitForNavigation(), page.click('#loginBtn')])
-      await page.waitForNetworkIdle()
-    }
-    await page.close()
-  }
+  isUserAuthenticated = (page: Page) => page.url() !== this.loginPage
 
   private getRandomDelay = (min: number, max: number) =>
     Math.floor(Math.random() * (max - min) + min)

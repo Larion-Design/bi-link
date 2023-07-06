@@ -56,7 +56,7 @@ export class CompanyProcessor {
         data: { companyId, cui, dataset, processAssociates, processProceedings },
       } = job
 
-      const companyInfo = await this.companyTransformService.transformCompanyData(cui, dataset)
+      const companyInfo = this.companyTransformService.transformCompanyData(cui, dataset)
 
       if (companyInfo) {
         if (processAssociates) {

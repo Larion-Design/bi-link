@@ -10,7 +10,7 @@ export class FilesManagerService {
 
   constructor(@Inject(MICROSERVICES.FILES_MANAGER.id) private client: ClientProxy) {}
 
-  uploadFile = async (fileContent: Buffer, mimeType: string) => {
+  async uploadFile(fileContent: Buffer, mimeType: string) {
     type Params = Parameters<FilesManagerServiceMethods['uploadFile']>[0]
     type Result = ReturnType<FilesManagerServiceMethods['uploadFile']>
 
@@ -31,7 +31,7 @@ export class FilesManagerService {
     }
   }
 
-  getFileDownloadUrl = async (fileId: string, ttl: number) => {
+  async getFileDownloadUrl(fileId: string, ttl: number) {
     type Params = Parameters<FilesManagerServiceMethods['getFileDownloadUrl']>[0]
     type Result = ReturnType<FilesManagerServiceMethods['getFileDownloadUrl']>
 
@@ -49,7 +49,7 @@ export class FilesManagerService {
     }
   }
 
-  getFilesDownloadUrls = async (filesIds: string[], ttl: number) => {
+  async getFilesDownloadUrls(filesIds: string[], ttl: number) {
     type Params = Parameters<FilesManagerServiceMethods['getFilesDownloadUrls']>[0]
     type Result = ReturnType<FilesManagerServiceMethods['getFilesDownloadUrls']>
 
@@ -67,7 +67,7 @@ export class FilesManagerService {
     }
   }
 
-  extractTextFromFile = async (fileId: string) => {
+  async extractTextFromFile(fileId: string) {
     type Params = Parameters<FilesManagerServiceMethods['extractTextFromFile']>[0]
     type Result = ReturnType<FilesManagerServiceMethods['extractTextFromFile']>
 

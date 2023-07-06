@@ -19,43 +19,51 @@ import { getProceedingUrl } from '../../extractor/helpers'
 @Injectable()
 export class ProceedingDataTransformer {
   constructor(
-    private readonly proceedingLoaderService: ProceedingLoaderService,
     private readonly companyLoaderService: CompanyLoaderService,
     private readonly personLoaderService: PersonLoaderService,
   ) {}
 
-  transformProceedings = async (proceedings: TermeneProceeding[]) =>
-    Promise.all(proceedings.map(async (proceeding) => this.transformProceeding(proceeding)))
-
-  transformProceeding = async (proceedingInfo: TermeneProceeding) => {
-    const existingProceedingId = await this.proceedingLoaderService.findProceeding(
-      proceedingInfo.nr_dosar,
-    )
-
-    if (!existingProceedingId) {
-      return this.createProceeding(proceedingInfo, getProceedingUrl(String(proceedingInfo.id)))
-    }
+  async transformProceeding(proceedingInfo: TermeneProceeding) {
+    return this.createProceeding(proceedingInfo, getProceedingUrl(String(proceedingInfo.id)))
   }
 
-  private createProceeding = async (proceedingInfo: TermeneProceeding, sourceUrl: string) => {
+  private async createProceeding(proceedingInfo: TermeneProceeding, sourceUrl: string) {
     const proceeding = getDefaultProceeding()
     proceeding.metadata.trustworthiness.source = getProceedingUrl(String(proceedingInfo.id))
     proceeding.name = `${proceedingInfo.nume_scurt_materie_juridica} ${proceedingInfo.data_dosar}`
     proceeding.year.value = new Date(proceedingInfo.data_dosar)
     proceeding.fileNumber.value = proceedingInfo.nr_dosar
     proceeding.type = proceedingInfo.obiect_afisare
-    proceeding.entitiesInvolved = (await Promise.all(
-      proceedingInfo.parti.map(async (involvedEntityInfo) => {
-        switch (involvedEntityInfo.tip) {
-          case 'PF':
-            return this.getInvolvedPerson(involvedEntityInfo, sourceUrl)
-          case 'PJ':
-            return this.getInvolvedCompany(involvedEntityInfo, sourceUrl)
-        }
-        return Promise.reject()
-      }),
-    )) as ProceedingEntityInvolvedAPI[]
+    proceeding.entitiesInvolved = await this.resolveInvolvedEntities(
+      proceedingInfo.parti,
+      sourceUrl,
+    )
     return proceeding
+  }
+
+  private async resolveInvolvedEntities(entitiesInfo: TermeneInvolvedEntity[], sourceUrl: string) {
+    const entitiesInvolved: ProceedingEntityInvolvedAPI[] = []
+
+    for await (const entityInfo of entitiesInfo) {
+      switch (entityInfo.tip) {
+        case 'PF': {
+          const involvedPerson = await this.getInvolvedPerson(entityInfo, sourceUrl)
+
+          if (involvedPerson) {
+            entitiesInvolved.push(involvedPerson)
+          }
+          break
+        }
+        case 'PJ': {
+          const involvedCompany = await this.getInvolvedCompany(entityInfo, sourceUrl)
+
+          if (involvedCompany) {
+            entitiesInvolved.push(involvedCompany)
+          }
+        }
+      }
+    }
+    return entitiesInvolved
   }
 
   private getInvolvedPerson = async (involvedEntity: TermeneInvolvedEntity, sourceUrl: string) => {

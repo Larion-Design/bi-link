@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common'
 import { ElementHandle, Page } from 'puppeteer-core'
 import { BrowserService } from '@app/browser-module/browserService'
-import { OSINTPerson } from 'defs'
+import { OSINTCompanySchema, OSINTPerson, OSINTPersonSchema } from 'defs'
 import { delay } from '../../../helpers'
 import { getPersonAssociateUrl } from '../helpers'
 
@@ -23,7 +23,7 @@ export class AssociateDatasetScraperService {
       return this.traverseSearchResults(tableRows)
     })
 
-  searchAssociatesWithCompaniesByName = async (name: string, address?: string) => {
+  getAssociatesCompaniesMapByPersonName = async (name: string, address?: string) => {
     const persons = await this.searchAssociatesByName(name, address)
     const associatesMap = new Map<OSINTPerson, CompanyInfo[]>()
 
@@ -96,10 +96,12 @@ export class AssociateDatasetScraperService {
     return url.toString()
   }
 
-  private traverseSearchResults = async (tableRows: ElementHandle<HTMLTableRowElement>[]) =>
+  private traverseSearchResults = async (
+    tableRows: ElementHandle<HTMLTableRowElement>[],
+  ): Promise<OSINTPerson[]> =>
     Promise.all(
       tableRows.map(async (tableRow) => {
-        const [_, nameColumn, addressColumn] = await tableRow.$$('.detalii-text-tabel')
+        const [, nameColumn, addressColumn] = await tableRow.$$('.detalii-text-tabel')
         const personName = await nameColumn?.evaluate((elem) => elem?.textContent?.trim())
         const personAddress = await addressColumn?.evaluate((elem) => elem?.textContent?.trim())
 
@@ -107,12 +109,12 @@ export class AssociateDatasetScraperService {
         const personId = await personIdElement?.evaluate((element) => element.value.trim())
         const associateUrl = personId ? getPersonAssociateUrl(personId) : ''
 
-        return {
+        return OSINTPersonSchema.parse({
           id: personId,
           name: personName,
           address: personAddress,
           url: associateUrl,
-        } as OSINTPerson
+        })
       }),
     )
 
@@ -133,13 +135,14 @@ export class AssociateDatasetScraperService {
           companyInfo.cui = await companyInfoElem.evaluate((elem) =>
             elem.href.replace('/catalog/firme/cauta/', ''),
           )
-          companyInfo.name =
-            (await companyInfoElem.evaluate((elem) => elem.textContent?.trim())) ?? ''
+          companyInfo.name = await companyInfoElem.evaluate(
+            (elem) => elem.textContent?.trim() ?? '',
+          )
         }
         if (roleElem) {
-          companyInfo.role = (await roleElem.evaluate((elem) => elem.textContent?.trim())) ?? ''
+          companyInfo.role = await roleElem.evaluate((elem) => elem.textContent?.trim() ?? '')
         }
-        return companyInfo
+        return OSINTCompanySchema.parse(companyInfo)
       }),
     )
   }

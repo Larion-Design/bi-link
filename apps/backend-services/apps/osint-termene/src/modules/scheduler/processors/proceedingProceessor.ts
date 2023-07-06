@@ -21,11 +21,16 @@ export class ProceedingProceessor {
       data: { dataset },
     } = job
 
-    const proceedingInfo = await this.proceedingTransformerService.transformProceeding(dataset)
+    const existingProceedingId = await this.proceedingLoaderService.findProceeding(dataset.nr_dosar)
 
-    if (proceedingInfo) {
-      await this.proceedingProducerService.loadProceeding(proceedingInfo)
+    if (!existingProceedingId) {
+      const proceedingInfo = await this.proceedingTransformerService.transformProceeding(dataset)
+
+      if (proceedingInfo) {
+        await this.proceedingProducerService.loadProceeding(proceedingInfo)
+      }
     }
+    return {}
   }
 
   @Process(EVENT_LOAD)

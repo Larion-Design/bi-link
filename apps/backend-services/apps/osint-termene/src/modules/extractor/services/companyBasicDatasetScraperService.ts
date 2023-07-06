@@ -6,11 +6,13 @@ import { searchCompaniesByNameSchema } from '../../../schema/company'
 
 @Injectable()
 export class CompanyBasicDatasetScraperService {
+  private readonly companiesUrl = 'https://termene.ro/firme'
+
   constructor(private readonly browserService: BrowserService) {}
 
   searchCompaniesByName = async (name: string): Promise<OSINTCompany[]> =>
     this.browserService.handlePrivatePage(async (page) => {
-      await page.goto('https://termene.ro/firme')
+      await page.goto(this.companiesUrl)
       await page.waitForSelector('#autocompleterCompanySearchVerify')
 
       const elem = await page.$('#autocompleterCompanySearchVerify')
@@ -21,15 +23,12 @@ export class CompanyBasicDatasetScraperService {
       await page.waitForResponse(async (response) => {
         const success = response.ok()
 
-        if (success) {
-          if (response.url().includes('searchCompany.php')) {
-            const data = searchCompaniesByNameSchema.parse(await response.json())
-            data.forEach(({ nume, cui }) => companies.push({ cui: String(cui), name: nume }))
-          }
+        if (success && response.url().includes('searchCompany.php')) {
+          const data = searchCompaniesByNameSchema.parse(await response.json())
+          data.forEach(({ nume, cui }) => companies.push({ cui: String(cui), name: nume }))
         }
         return success
       })
-
       return companies
     })
 

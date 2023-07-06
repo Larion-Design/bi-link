@@ -11,7 +11,7 @@ export class ActivityHistoryService {
 
   constructor(@Inject(MICROSERVICES.ACTIVITY_HISTORY.id) private readonly client: ClientProxy) {}
 
-  recordAction = (actionInfo: Required<ActivityEventIndex>) => {
+  recordAction(actionInfo: Required<ActivityEventIndex>) {
     try {
       type Params = Parameters<ActivityHistoryServiceMethods['recordAction']>[0]
       type Result = ReturnType<ActivityHistoryServiceMethods['recordAction']>
@@ -22,7 +22,7 @@ export class ActivityHistoryService {
     }
   }
 
-  getActivityEvents = (startDate: Date, endDate: Date) => {
+  getActivityEvents(startDate: Date, endDate: Date) {
     try {
       type Params = Parameters<ActivityHistoryServiceMethods['getActivityEvents']>[0]
       type Result = ReturnType<ActivityHistoryServiceMethods['getActivityEvents']>

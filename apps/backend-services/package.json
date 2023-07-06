@@ -26,8 +26,7 @@
     "termene:build": "nest build osint-termene",
     "format": "prettier --write \"apps/**/*.ts\" \"libs/**/*.ts\"",
     "lint": "eslint --ext=.ts --quiet ./",
-    "test": "jest --passWithNoTests",
-    "test:e2e": "jest --config apps/api/test/jest-e2e.json --passWithNoTests"
+    "test": "jest --passWithNoTests"
   },
   "dependencies": {
     "@elastic/elasticsearch": "^8.5.0",
@@ -66,7 +65,7 @@
     "nest-commander": "^3.3.0",
     "nest-neo4j": "^0.2.0",
     "nestjs-minio-client": "^1.2.0",
-    "newrelic": "^10.1.2",
+    "newrelic": "latest",
     "passport": "^0.5.3",
     "passport-firebase-jwt": "^1.2.1",
     "passport-jwt": "^4.0.1",
