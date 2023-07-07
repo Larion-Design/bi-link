@@ -6,6 +6,7 @@ import { withMetadataSchema } from '../metadata'
 
 export const workplaceSchema = z
   .object({
+    _id: z.string().optional(),
     company: companySchema.nullish(),
     startDate: optionalDateWithMetadataSchema,
     endDate: optionalDateWithMetadataSchema,

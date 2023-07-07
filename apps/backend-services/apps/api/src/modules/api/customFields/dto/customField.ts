@@ -7,6 +7,9 @@ export class CustomField
   extends PickType(WithMetadata, ['metadata'] as const)
   implements CustomFieldAPI
 {
+  @Field({ nullable: true })
+  _id: string
+
   @Field()
   fieldName: string
 

@@ -5,6 +5,7 @@ const defaultZero = z.number().default(0)
 
 export const balanceSheetSchema = z
   .object({
+    _id: z.string().optional(),
     year: z.date().nullable(),
     fixedAssets: defaultZero,
     currentAssets: defaultZero,

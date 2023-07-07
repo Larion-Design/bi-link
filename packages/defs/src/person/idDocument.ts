@@ -8,6 +8,7 @@ export const idDocumentStatusSchema = z
 
 export const idDocumentSchema = z
   .object({
+    _id: z.string().optional(),
     documentType: z.string(),
     documentNumber: z.string(),
     issueDate: dateSchema.nullish(),

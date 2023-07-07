@@ -18,6 +18,7 @@ export const companyIndexSchema = z.object({
   associatedCompanies: connectedCompanyIndexSchema.array(),
   associatedPersons: connectedPersonIndexSchema.array(),
   balanceSheets: balanceSheetIndex.array(),
+  activityCodes: customFieldIndexSchema.array(),
 })
 
 export const companySearchIndexSchema = companyIndexSchema.pick({

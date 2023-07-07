@@ -1,7 +1,8 @@
 import { CompanyIndex, ConnectedCompanyIndex, ConnectedPersonIndex } from '@app/definitions'
+import { BalanceSheetIndex } from '@app/definitions/indexer/company/balanceSheet'
 import { Injectable, Logger } from '@nestjs/common'
 import { ElasticsearchService } from '@nestjs/elasticsearch'
-import { Associate, Company } from 'defs'
+import { Associate, BalanceSheet, Company, companySchema } from 'defs'
 import { INDEX_COMPANIES } from '../../../constants'
 import { ConnectedEntityIndexerService } from './connectedEntityIndexerService'
 import { CustomFieldsIndexerService } from './customFieldsIndexerService'
@@ -19,7 +20,7 @@ export class CompaniesIndexerService {
     private readonly customFieldsIndexerService: CustomFieldsIndexerService,
   ) {}
 
-  indexCompany = async (companyId: string, companyModel: Company) => {
+  async indexCompany(companyId: string, companyModel: Company) {
     try {
       const { _id } = await this.elasticsearchService.index<CompanyIndex>({
         index: this.index,
@@ -47,10 +48,10 @@ export class CompaniesIndexerService {
     associatedPersons: this.createAssociatedPersonsIndex(company.associates),
     associatedCompanies: this.createAssociatedCompaniesIndex(company.associates),
     files: [],
-    balanceSheets: company.balanceSheets,
+    balanceSheets: this.createBalanceSheetIndex(company.balanceSheets),
   })
 
-  private createAssociatedPersonsIndex = (associates: Associate[]) => {
+  private createAssociatedPersonsIndex(associates: Associate[]) {
     const persons: ConnectedPersonIndex[] = []
     associates.forEach(({ person }) => {
       if (person) {
@@ -64,9 +65,13 @@ export class CompaniesIndexerService {
     const companies: ConnectedCompanyIndex[] = []
     associates.forEach(({ company }) => {
       if (company) {
-        companies.push(this.connectedEntityIndexerService.createConnectedCompanyIndex(company))
+        const companyInfo = companySchema.parse(company)
+        companies.push(this.connectedEntityIndexerService.createConnectedCompanyIndex(companyInfo))
       }
     })
     return companies
   }
+
+  private createBalanceSheetIndex = (balanceSheets: BalanceSheet[]): BalanceSheetIndex[] =>
+    balanceSheets
 }

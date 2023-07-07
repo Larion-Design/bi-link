@@ -2,7 +2,7 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
 import { CustomField } from 'defs'
 import { MetadataModel, MetadataSchema } from '../../metadata/models/metadataModel'
 
-@Schema()
+@Schema({ timestamps: false })
 export class CustomFieldModel implements CustomField {
   @Prop({ type: MetadataSchema })
   metadata: MetadataModel

@@ -1,4 +1,5 @@
 import { CompanyIndex } from '@app/definitions/indexer/company'
+import { BalanceSheetIndex } from '@app/definitions/indexer/company/balanceSheet'
 import { MappingInterface } from './mapping'
 import { MappingHelperService } from './mappingHelperService'
 import { Injectable } from '@nestjs/common'
@@ -19,35 +20,38 @@ export class CompaniesMappingService implements MappingInterface<CompanyIndex> {
     associatedPersons: this.mappingHelperService.connectedPerson,
     associatedCompanies: this.mappingHelperService.connectedCompany,
     customFields: this.mappingHelperService.customFields,
+    activityCodes: this.mappingHelperService.customFields,
     balanceSheets: {
       type: 'nested',
-      properties: {
-        year: this.mappingHelperService.integerField,
-        fixedAssets: this.mappingHelperService.integerField,
-        currentAssets: this.mappingHelperService.integerField,
-        inventories: this.mappingHelperService.integerField,
-        creante: this.mappingHelperService.integerField,
-        houseAndAccountsSeizedByBanks: this.mappingHelperService.integerField,
-        expensesAdvance: this.mappingHelperService.integerField,
-        debt: this.mappingHelperService.integerField,
-        revenueAdvance: this.mappingHelperService.integerField,
-        provisions: this.mappingHelperService.integerField,
-        totalCapital: this.mappingHelperService.integerField,
-        socialCapital: this.mappingHelperService.integerField,
-        royaltyHeritage: this.mappingHelperService.integerField,
-        publicHeritage: this.mappingHelperService.integerField,
-        netBusinessFigure: this.mappingHelperService.integerField,
-        totalRevenue: this.mappingHelperService.integerField,
-        totalExpenses: this.mappingHelperService.integerField,
-        grossProfit: this.mappingHelperService.integerField,
-        grossLoss: this.mappingHelperService.integerField,
-        netProfit: this.mappingHelperService.integerField,
-        netLoss: this.mappingHelperService.integerField,
-        averageEmployees: this.mappingHelperService.integerField,
-        caenCode: this.mappingHelperService.integerField,
-        activityType: this.mappingHelperService.keywordField,
-        balanceType: this.mappingHelperService.keywordField,
-      },
+      properties: this.getBalanceSheetMapping(),
     },
+  })
+
+  private getBalanceSheetMapping = (): Record<keyof BalanceSheetIndex, MappingProperty> => ({
+    year: this.mappingHelperService.integerField,
+    fixedAssets: this.mappingHelperService.integerField,
+    currentAssets: this.mappingHelperService.integerField,
+    inventories: this.mappingHelperService.integerField,
+    receivables: this.mappingHelperService.integerField,
+    houseAndAccountsSeizedByBanks: this.mappingHelperService.integerField,
+    expensesAdvance: this.mappingHelperService.integerField,
+    debt: this.mappingHelperService.integerField,
+    revenueAdvance: this.mappingHelperService.integerField,
+    provisions: this.mappingHelperService.integerField,
+    totalCapital: this.mappingHelperService.integerField,
+    socialCapital: this.mappingHelperService.integerField,
+    royaltyHeritage: this.mappingHelperService.integerField,
+    publicHeritage: this.mappingHelperService.integerField,
+    netBusinessFigure: this.mappingHelperService.integerField,
+    totalRevenue: this.mappingHelperService.integerField,
+    totalExpenses: this.mappingHelperService.integerField,
+    grossProfit: this.mappingHelperService.integerField,
+    grossLoss: this.mappingHelperService.integerField,
+    netProfit: this.mappingHelperService.integerField,
+    netLoss: this.mappingHelperService.integerField,
+    averageEmployees: this.mappingHelperService.integerField,
+    activityCode: this.mappingHelperService.integerField,
+    activityType: this.mappingHelperService.keywordField,
+    balanceType: this.mappingHelperService.keywordField,
   })
 }

@@ -3,6 +3,7 @@ import { withMetadataSchema } from '../metadata'
 
 export const oldNameSchema = z
   .object({
+    _id: z.string().optional(),
     name: z.string(),
     changeReason: z.string(),
   })

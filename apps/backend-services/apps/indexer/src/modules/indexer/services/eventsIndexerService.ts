@@ -25,7 +25,7 @@ export class EventsIndexerService {
     private readonly customFieldsIndexerService: CustomFieldsIndexerService,
   ) {}
 
-  indexEvent = async (eventId: string, eventModel: Event) => {
+  async indexEvent(eventId: string, eventModel: Event) {
     try {
       const { _id } = await this.elasticsearchService.index<EventIndex>({
         index: this.index,
@@ -55,7 +55,7 @@ export class EventsIndexerService {
     properties: this.createPartyPropertiesIndex(event.parties),
   })
 
-  private createPartyCompaniesIndex = (parties: EventParticipant[]): ConnectedCompanyIndex[] => {
+  private createPartyCompaniesIndex(parties: EventParticipant[]): ConnectedCompanyIndex[] {
     const companiesMap = new Map<string, ConnectedCompanyIndex>()
 
     parties.forEach(({ companies }) =>
@@ -68,7 +68,7 @@ export class EventsIndexerService {
     return Array.from(companiesMap.values())
   }
 
-  private createPartyPropertiesIndex = (parties: EventParticipant[]): ConnectedPropertyIndex[] => {
+  private createPartyPropertiesIndex(parties: EventParticipant[]): ConnectedPropertyIndex[] {
     const propertiesMap = new Map<string, ConnectedPropertyIndex>()
 
     parties.forEach(({ properties }) =>
@@ -81,7 +81,7 @@ export class EventsIndexerService {
     return Array.from(propertiesMap.values())
   }
 
-  private createPartyPersonsIndex = (parties: EventParticipant[]): ConnectedPersonIndex[] => {
+  private createPartyPersonsIndex(parties: EventParticipant[]): ConnectedPersonIndex[] {
     const personsMap = new Map<string, ConnectedPersonIndex>()
 
     parties.forEach(({ persons }) =>

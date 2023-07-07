@@ -5,6 +5,7 @@ const nullableNumber = z.number().nullable()
 export const balanceSheetSchema = z.object({
   balanceSheet: z
     .object({
+      _id: z.string().optional(),
       an: z.number(),
       active_imobilizate: nullableNumber,
       active_circulante: nullableNumber,

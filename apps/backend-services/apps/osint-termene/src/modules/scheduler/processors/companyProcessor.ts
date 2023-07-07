@@ -1,7 +1,6 @@
 import { CompanyLoaderService } from '@app/loader-module'
 import { Process, Processor } from '@nestjs/bull'
 import { Job } from 'bull'
-import { AssociateAPI } from 'defs'
 import { AUTHOR } from '../../../constants'
 import { CompanyDatasetScraperService } from '../../extractor'
 import { CompanyDataTransformerService } from '../../transformer/services/companyDataTransformerService'

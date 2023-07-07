@@ -2,7 +2,7 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
 import { OldName } from 'defs'
 import { MetadataModel, MetadataSchema } from '../../metadata/models/metadataModel'
 
-@Schema({ _id: false, timestamps: false })
+@Schema({ timestamps: false })
 export class OldNameModel implements OldName {
   @Prop({ type: MetadataSchema })
   metadata: MetadataModel

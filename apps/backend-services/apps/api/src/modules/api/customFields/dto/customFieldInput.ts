@@ -7,6 +7,9 @@ export class CustomFieldInput
   extends PickType(WithMetadataInput, ['metadata'] as const)
   implements CustomFieldAPI
 {
+  @Field({ nullable: true })
+  _id: string
+
   @Field()
   readonly fieldName: string
 
