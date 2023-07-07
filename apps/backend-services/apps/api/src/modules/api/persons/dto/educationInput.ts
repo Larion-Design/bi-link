@@ -1,5 +1,6 @@
-import { Field, InputType, PickType } from '@nestjs/graphql'
+import { Field, ID, InputType, PickType } from '@nestjs/graphql'
 import { EducationAPIInput } from 'defs'
+import { ConnectedEntityInput } from '../../entityInfo/dto/connectedEntityInput'
 import { WithMetadataInput } from '../../metadata/dto/withMetadataInput'
 
 @InputType()
@@ -7,6 +8,9 @@ export class EducationInput
   extends PickType(WithMetadataInput, ['metadata'] as const)
   implements EducationAPIInput
 {
+  @Field(() => ID, { nullable: true })
+  _id?: string
+
   @Field()
   type: string
 
@@ -15,6 +19,9 @@ export class EducationInput
 
   @Field()
   specialization: string
+
+  @Field(() => ConnectedEntityInput, { nullable: true })
+  company?: ConnectedEntityInput
 
   @Field(() => Date, { nullable: true })
   startDate: Date | null

@@ -1,10 +1,10 @@
 import { Injectable, Logger } from '@nestjs/common'
 import { ElasticsearchService } from '@nestjs/elasticsearch'
-import { format } from 'date-fns'
+import { formatDate, formatYear } from 'tools'
 import { INDEX_PERSONS } from '../../../constants'
 import { Education, IdDocument, OldName, Person } from 'defs'
 import { LocationIndexerService } from './locationIndexerService'
-import { PersonIndex } from '@app/definitions'
+import { EducationIndex, IdDocumentIndex, OldNameIndex, PersonIndex } from '@app/definitions'
 
 @Injectable()
 export class PersonsIndexerService {
@@ -16,13 +16,12 @@ export class PersonsIndexerService {
     private readonly locationIndexerService: LocationIndexerService,
   ) {}
 
-  indexPerson = async (personId: string, personDocument: Person) => {
+  async indexPerson(personId: string, personDocument: Person) {
     try {
       const { _id } = await this.elasticsearchService.index<PersonIndex>({
         index: this.index,
         id: personId,
         document: this.createIndexData(personDocument),
-        refresh: true,
       })
 
       return _id === personId
@@ -42,9 +41,7 @@ export class PersonsIndexerService {
     birthPlace: person.birthPlace
       ? this.locationIndexerService.createLocationIndexData(person.birthPlace)
       : undefined,
-    birthdate: person.birthdate.value
-      ? format(new Date(person.birthdate.value), 'yyyy-mm-dd')
-      : undefined,
+    birthdate: person.birthdate.value ? formatDate(person.birthdate.value) : undefined,
     contactDetails: person.contactDetails,
     documents: this.createIdDocumentsIndex(person.documents),
     customFields: person.customFields,
@@ -52,28 +49,28 @@ export class PersonsIndexerService {
     files: [],
   })
 
-  private createIdDocumentsIndex = (documents: IdDocument[]): PersonIndex['documents'] =>
+  private createIdDocumentsIndex = (documents: IdDocument[]): IdDocumentIndex[] =>
     documents.map(({ documentNumber, status, expirationDate, issueDate }) => ({
       documentNumber,
       status,
       validity: {
-        gte: issueDate ? format(new Date(issueDate), 'yyyy-mm-dd') : null,
-        lte: expirationDate ? format(new Date(expirationDate), 'yyyy-mm-dd') : null,
+        gte: issueDate ? formatDate(issueDate) : null,
+        lte: expirationDate ? formatDate(expirationDate) : null,
       },
     }))
 
-  private createEducationIndex = (education: Education[]): PersonIndex['education'] =>
+  private createEducationIndex = (education: Education[]): EducationIndex[] =>
     education.map(({ startDate, endDate, specialization, type, school }) => ({
       school,
       type,
       specialization,
       period: {
-        gte: startDate ? format(new Date(startDate), 'yyyy') : undefined,
-        lte: endDate ? format(new Date(endDate), 'yyyy') : undefined,
+        gte: startDate ? formatYear(startDate) : undefined,
+        lte: endDate ? formatYear(endDate) : undefined,
       },
     }))
 
-  private createOldNamesIndex = (oldNames: OldName[]): PersonIndex['oldNames'] =>
+  private createOldNamesIndex = (oldNames: OldName[]): OldNameIndex[] =>
     oldNames.map(({ name, changeReason }) => ({
       name,
       changeReason,

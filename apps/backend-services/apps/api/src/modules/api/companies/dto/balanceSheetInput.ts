@@ -1,4 +1,4 @@
-import { Field, InputType, PickType } from '@nestjs/graphql'
+import { Field, ID, InputType, PickType } from '@nestjs/graphql'
 import { BalanceSheet as BalanceSheetType } from 'defs'
 import { WithMetadataInput } from '../../metadata/dto/withMetadataInput'
 
@@ -7,6 +7,9 @@ export class BalanceSheetInput
   extends PickType(WithMetadataInput, ['metadata'] as const)
   implements BalanceSheetType
 {
+  @Field(() => ID, { nullable: true })
+  _id: string
+
   @Field(() => Date, { nullable: true })
   year: Date | null
 
@@ -20,7 +23,7 @@ export class BalanceSheetInput
   inventories: number
 
   @Field()
-  creante: number
+  receivables: number
 
   @Field()
   houseAndAccountsSeizedByBanks: number
@@ -74,7 +77,7 @@ export class BalanceSheetInput
   averageEmployees: number
 
   @Field()
-  caenCode: number
+  activityCode: number
 
   @Field()
   activityType: string
