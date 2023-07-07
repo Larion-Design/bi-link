@@ -9,7 +9,7 @@ export const balanceSheetSchema = z
     fixedAssets: defaultZero,
     currentAssets: defaultZero,
     inventories: defaultZero,
-    creante: defaultZero,
+    receivables: defaultZero,
     houseAndAccountsSeizedByBanks: defaultZero,
     expensesAdvance: defaultZero,
     debt: defaultZero,
@@ -27,7 +27,7 @@ export const balanceSheetSchema = z
     netProfit: defaultZero,
     netLoss: defaultZero,
     averageEmployees: z.number(),
-    caenCode: z.number(),
+    activityCode: z.number(),
     activityType: z.string(),
     balanceType: z.string().nullable(),
   })

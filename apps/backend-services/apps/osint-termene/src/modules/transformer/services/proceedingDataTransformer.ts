@@ -1,9 +1,5 @@
 import { Injectable } from '@nestjs/common'
-import {
-  CompanyLoaderService,
-  PersonLoaderService,
-  ProceedingLoaderService,
-} from '@app/loader-module'
+import { CompanyLoaderService, PersonLoaderService } from '@app/loader-module'
 import { ProceedingEntityInvolvedAPI } from 'defs'
 import {
   getDefaultCompany,
@@ -24,12 +20,9 @@ export class ProceedingDataTransformer {
   ) {}
 
   async transformProceeding(proceedingInfo: TermeneProceeding) {
-    return this.createProceeding(proceedingInfo, getProceedingUrl(String(proceedingInfo.id)))
-  }
-
-  private async createProceeding(proceedingInfo: TermeneProceeding, sourceUrl: string) {
+    const sourceUrl = getProceedingUrl(String(proceedingInfo.id))
     const proceeding = getDefaultProceeding()
-    proceeding.metadata.trustworthiness.source = getProceedingUrl(String(proceedingInfo.id))
+    proceeding.metadata.trustworthiness.source = sourceUrl
     proceeding.name = `${proceedingInfo.nume_scurt_materie_juridica} ${proceedingInfo.data_dosar}`
     proceeding.year.value = new Date(proceedingInfo.data_dosar)
     proceeding.fileNumber.value = proceedingInfo.nr_dosar
@@ -66,7 +59,7 @@ export class ProceedingDataTransformer {
     return entitiesInvolved
   }
 
-  private getInvolvedPerson = async (involvedEntity: TermeneInvolvedEntity, sourceUrl: string) => {
+  private async getInvolvedPerson(involvedEntity: TermeneInvolvedEntity, sourceUrl: string) {
     const personId = await this.getPerson(involvedEntity.denumire)
 
     if (personId) {
@@ -78,7 +71,7 @@ export class ProceedingDataTransformer {
     }
   }
 
-  private getPerson = async (name: string) => {
+  private async getPerson(name: string) {
     const { firstName, lastName } = this.computePersonName(name)
     const existingPersonId = await this.personLoaderService.findPerson(firstName, lastName)
 
@@ -89,14 +82,14 @@ export class ProceedingDataTransformer {
     return existingPersonId
   }
 
-  private createPerson = (firstName: string, lastName: string) => {
+  private createPerson(firstName: string, lastName: string) {
     const personInfo = getDefaultPerson()
     personInfo.lastName.value = lastName
     personInfo.firstName.value = firstName
     return personInfo
   }
 
-  private getInvolvedCompany = async (involvedEntity: TermeneInvolvedEntity, sourceUrl: string) => {
+  private async getInvolvedCompany(involvedEntity: TermeneInvolvedEntity, sourceUrl: string) {
     const companyId = await this.getCompany(involvedEntity.denumire, String(involvedEntity.cui))
 
     if (companyId) {
@@ -125,23 +118,18 @@ export class ProceedingDataTransformer {
     return companyInfo
   }
 
-  private setInvolvedEntityInfo = (
+  private setInvolvedEntityInfo(
     entityInvolved: ProceedingEntityInvolvedAPI,
     partyInfo: TermeneInvolvedEntity,
     sourceUrl: string,
-  ) => {
+  ) {
     entityInvolved.involvedAs = partyInfo.calitate
     entityInvolved.metadata.trustworthiness.source = sourceUrl
     return entityInvolved
   }
 
-  private computePersonName = (name: string) => {
-    const parts = name.split(' ')
-    const [lastName, ...firstNames] = parts
-
-    return {
-      lastName: lastName ?? '',
-      firstName: firstNames.join(' '),
-    }
+  private computePersonName(name: string) {
+    const [lastName = '', ...firstNames] = name.split(' ')
+    return { lastName, firstName: firstNames.join(' ') }
   }
 }

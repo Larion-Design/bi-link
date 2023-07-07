@@ -1,8 +1,9 @@
 import { IndexerService } from '@app/rpc/microservices/indexer/indexerService'
 import { IngressService } from '@app/rpc/microservices/ingress'
 import { Injectable } from '@nestjs/common'
-import { CustomFieldAPI } from 'defs'
-import { getDefaultCompany, getDefaultCustomField } from 'tools'
+import { BalanceSheet, CustomFieldAPI } from 'defs'
+import { getDefaultBalanceSheet, getDefaultCompany, getDefaultCustomField } from 'tools'
+import { TermeneAssociatesSchema } from '../../../schema/associates'
 import { CompanyTermeneDataset } from '../../../schema/company'
 import { getCompanyUrl } from '../../extractor/helpers'
 import { AssociateDataTransformerService } from './associateDataTransformerService'
@@ -17,9 +18,10 @@ export class CompanyDataTransformerService {
     private readonly locationDataTransformerService: LocationDataTransformerService,
   ) {}
 
-  public transformCompanyData = (cui: string, data: CompanyTermeneDataset) => {
+  transformCompanyData(cui: string, data: CompanyTermeneDataset) {
     const companyInfo = getDefaultCompany()
     const sourceUrl = getCompanyUrl(cui)
+
     companyInfo.metadata.trustworthiness.source = sourceUrl
 
     const name = data.headerInfo?.firma.nume_canonic ?? ''
@@ -44,100 +46,121 @@ export class CompanyDataTransformerService {
     companyInfo.locations = this.locationDataTransformerService.transformBranchesData(data)
     companyInfo.customFields = this.setCustomFields(data, sourceUrl)
     companyInfo.contactDetails = this.setContactDetails(data, sourceUrl)
+    companyInfo.activityCodes = this.setActivityCodes(data, sourceUrl)
+    companyInfo.balanceSheets = this.setBalanceSheets(data, sourceUrl)
+
+    if (data.headerInfo?.statut_tva) {
+      companyInfo.status.vat.value = data.headerInfo.statut_tva.curent.label
+      companyInfo.status.vat.metadata.trustworthiness.source = sourceUrl
+    }
+
+    if (data.headerInfo?.statut_fiscal) {
+      companyInfo.status.fiscal.value = data.headerInfo.statut_fiscal.curent.label
+      companyInfo.status.fiscal.metadata.trustworthiness.source = sourceUrl
+    }
+
+    if (data.headerInfo?.stare_firma) {
+      const { recom, mfinante } = data.headerInfo.stare_firma
+
+      if (mfinante) {
+        companyInfo.active.ministryOfFinance.value = mfinante.curenta.functiune
+        companyInfo.active.ministryOfFinance.metadata.trustworthiness.source = sourceUrl
+      }
+
+      if (recom) {
+        companyInfo.active.tradeRegister.value = recom.curenta.functiune
+        companyInfo.active.tradeRegister.metadata.trustworthiness.source = sourceUrl
+      }
+    }
     return companyInfo
   }
 
-  transformAssociates = async (cui: string, dataset: CompanyTermeneDataset) => {
-    const { associates } = dataset
+  async transformAssociates(cui: string, associates: TermeneAssociatesSchema) {
+    const {
+      asociatiAdministratori: { administratori, asociati },
+    } = associates
 
-    if (
-      associates?.asociatiAdministratori.administratori.length &&
-      associates?.asociatiAdministratori.asociati.length
-    ) {
-      const sourceUrl = getCompanyUrl(cui)
-      return this.associateDataTransformerService.transformAssociatesInfo(associates, sourceUrl)
-    }
-    return []
+    return this.associateDataTransformerService.transformAssociatesInfo(
+      [...administratori, ...asociati],
+      getCompanyUrl(cui),
+    )
   }
 
-  private setCAENCodes = (data: CompanyTermeneDataset, sourceUrl: string): CustomFieldAPI => {
-    const codes = new Set<string>()
+  private setActivityCodes(data: CompanyTermeneDataset, sourceUrl: string) {
+    const codes = new Set<number | string>()
     const mainCAEN = data.profileInfo?.cod_caen.principal_mfinante
+    const activityCodes: CustomFieldAPI[] = []
 
     if (mainCAEN) {
-      codes.add(`${mainCAEN.cod} - ${mainCAEN.label}`)
+      codes.add(mainCAEN.cod)
+      activityCodes.push(this.createCustomField(sourceUrl, String(mainCAEN.cod), mainCAEN.label))
     }
 
     data.caen?.cod_caen.secundare_recom.lista.forEach(({ cod, label }) => {
-      codes.add(`${cod} - ${label}`)
+      if (!codes.has(cod)) {
+        codes.add(cod)
+        this.createCustomField(sourceUrl, String(cod), label)
+      }
     })
 
-    return this.createCustomField(
-      sourceUrl,
-      'CAEN',
-      Array.from(codes).join(String.fromCharCode(13, 10)).trim(),
-    )
+    return activityCodes
   }
 
-  private setContactDetails = (data: CompanyTermeneDataset, sourceUrl: string) => {
-    const contactDetails: CustomFieldAPI[] = []
+  private setContactDetails({ contactDetails }: CompanyTermeneDataset, sourceUrl: string) {
+    const contactDetailsList: CustomFieldAPI[] = []
 
-    data.contactDetails?.Web?.split(',').forEach((website) =>
-      this.createCustomField(sourceUrl, 'Website', website),
-    )
+    contactDetails?.Web?.split(',').forEach((website) => {
+      contactDetailsList.push(this.createCustomField(sourceUrl, 'Website', website))
+    })
 
-    data.contactDetails?.Telefon?.split(',').forEach((phoneNumber) =>
-      this.createCustomField(sourceUrl, 'Telefon', phoneNumber),
+    contactDetails?.Telefon?.split(',').forEach((phoneNumber) =>
+      contactDetailsList.push(this.createCustomField(sourceUrl, 'Website', phoneNumber)),
     )
-    return contactDetails
+    return contactDetailsList
   }
 
   private setCustomFields = (data: CompanyTermeneDataset, sourceUrl: string) => {
     const customFields: CustomFieldAPI[] = [
       this.setCompanyStatus(data, sourceUrl),
-      this.setCAENCodes(data, sourceUrl),
       ...this.setCompanyFicalStatus(data, sourceUrl),
-      ...this.setBalanceSheets(data, sourceUrl),
     ]
     return customFields
   }
 
-  private setBalanceSheets = (data: CompanyTermeneDataset, sourceUrl: string): CustomFieldAPI[] =>
-    data.balanceSheet?.balanceSheet.map((balanceSheet) =>
-      this.createCustomField(
-        sourceUrl,
-        `Bilant ${balanceSheet.an}`,
-        Array.from([
-          `Cod CAEN: ${balanceSheet.cod_caen}`,
-          `Tip activitate: ${balanceSheet.tip_activitate ?? 0}`,
-          `Capital social: ${balanceSheet.capital_social ?? 0}`,
-          `Capital total: ${balanceSheet.capital_total ?? 0}`,
-          `Active circulante: ${balanceSheet.active_circulante ?? 0}`,
-          `Active Imobilizate: ${balanceSheet.active_imobilizate ?? 0}`,
-          `Case si conturi la banci: ${balanceSheet.casa_si_conturi_la_banci ?? 0}`,
-          `Cheltuieli in avans: ${balanceSheet.cheltuieli_in_avant ?? 0}`,
-          `Cheltuieli totale: ${balanceSheet.cheltuieli_totale ?? 0}`,
-          `Cifra de afaceri neta: ${balanceSheet.cifra_de_afaceri_neta ?? 0}`,
-          `Datorii: ${balanceSheet.datorii ?? 0}`,
-          `Creante: ${balanceSheet.creante ?? 0}`,
-          `Nr. mediu angajati: ${balanceSheet.numar_mediu_angajati ?? 0}`,
-          `Patrimoniu public: ${balanceSheet.patrimoniu_public ?? 0}`,
-          `Patrimoniu regie: ${balanceSheet.patrimoniu_regie ?? 0}`,
-          `Pierderi brute: ${balanceSheet.pierdere_brut ?? 0}`,
-          `Pierderi nete: ${balanceSheet.pierdere_net ?? 0}`,
-          `Provizioane: ${balanceSheet.provizioane ?? 0}`,
-          `Profit net: ${balanceSheet.profit_net ?? 0}`,
-          `Profit brut: ${balanceSheet.profit_brut ?? 0}`,
-          `Profit sau pierdere bruta: ${balanceSheet.profit_pierdere_bruta ?? 0}`,
-          `Profit sau pierdere neta: ${balanceSheet.profitul_sau_pierdere_neta ?? 0}`,
-          `Venituri in avans: ${balanceSheet.venituri_in_avans ?? 0}`,
-          `Venituri totale: ${balanceSheet.venituri_total ?? 0}`,
-          `Stocuri: ${balanceSheet.stocuri ?? 0}`,
-        ])
-          .join(String.fromCharCode(13, 10))
-          .trim(),
-      ),
-    ) ?? []
+  private setBalanceSheets = (data: CompanyTermeneDataset, sourceUrl: string) =>
+    data?.balanceSheet?.balanceSheet.map((balanceSheetInfo) => {
+      const balanceSheet: BalanceSheet = {
+        ...getDefaultBalanceSheet(),
+        year: new Date(balanceSheetInfo.an),
+        activityCode: balanceSheetInfo.cod_caen,
+        averageEmployees: balanceSheetInfo.numar_mediu_angajati,
+        activityType: balanceSheetInfo.tip_activitate,
+        receivables: balanceSheetInfo.creante ?? 0,
+        balanceType: balanceSheetInfo.tip_bilant,
+        socialCapital: balanceSheetInfo.capital_social ?? 0,
+        totalCapital: balanceSheetInfo.capital_total ?? 0,
+        totalExpenses: balanceSheetInfo.cheltuieli_totale ?? 0,
+        totalRevenue: balanceSheetInfo.venituri_total ?? 0,
+        revenueAdvance: balanceSheetInfo.venituri_in_avans ?? 0,
+        expensesAdvance: balanceSheetInfo.cheltuieli_in_avant ?? 0,
+        currentAssets: balanceSheetInfo.active_circulante ?? 0,
+        fixedAssets: balanceSheetInfo.active_imobilizate ?? 0,
+        royaltyHeritage: balanceSheetInfo.patrimoniu_regie ?? 0,
+        publicHeritage: balanceSheetInfo.patrimoniu_public ?? 0,
+        houseAndAccountsSeizedByBanks: balanceSheetInfo.casa_si_conturi_la_banci ?? 0,
+        debt: balanceSheetInfo.datorii ?? 0,
+        netLoss: balanceSheetInfo.pierdere_net ?? 0,
+        grossLoss: balanceSheetInfo.pierdere_brut ?? 0,
+        grossProfit: balanceSheetInfo.profit_brut ?? 0,
+        netProfit: balanceSheetInfo.profit_net ?? 0,
+        provisions: balanceSheetInfo.provizioane ?? 0,
+        inventories: balanceSheetInfo.stocuri ?? 0,
+        netBusinessFigure: balanceSheetInfo.cifra_de_afaceri_neta ?? 0,
+      }
+
+      balanceSheet.metadata.trustworthiness.source = sourceUrl
+      return balanceSheet
+    }) ?? ([] as BalanceSheet[])
 
   private setCompanyStatus = (data: CompanyTermeneDataset, sourceUrl: string) =>
     this.createCustomField(

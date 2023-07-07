@@ -58,18 +58,17 @@ export class CompanyProcessor {
 
       const companyInfo = this.companyTransformService.transformCompanyData(cui, dataset)
 
-      if (companyInfo) {
-        if (processAssociates) {
-          await this.companyProducerService.transformAssociates(
-            cui,
-            dataset,
-            processProceedings,
-            companyInfo,
-          )
-        } else {
-          await this.companyProducerService.loadCompany(companyInfo, companyId)
-        }
+      if (processAssociates) {
+        await this.companyProducerService.transformAssociates(
+          cui,
+          dataset,
+          processProceedings,
+          companyInfo,
+        )
+      } else {
+        await this.companyProducerService.loadCompany(companyInfo, companyId)
       }
+
       return {}
     } catch (e) {
       return job.moveToFailed(e as { message: string })
@@ -83,21 +82,21 @@ export class CompanyProcessor {
         data: { cui, dataset, companyInfo, companyId, processProceedings },
       } = job
 
-      if (companyInfo) {
-        companyInfo.associates = (await this.companyTransformService.transformAssociates(
+      if (dataset.associates) {
+        companyInfo.associates = await this.companyTransformService.transformAssociates(
           cui,
-          dataset,
-        )) as AssociateAPI[]
-
-        await this.companyProducerService.loadCompany(companyInfo, companyId)
-
-        if (processProceedings && dataset.courtCases?.rezultatele_cautarii.length) {
-          await this.proceedingProducerService.transformProceedings(
-            dataset.courtCases.rezultatele_cautarii,
-          )
-        }
-        return {}
+          dataset.associates,
+        )
       }
+
+      await this.companyProducerService.loadCompany(companyInfo, companyId)
+
+      if (processProceedings && dataset.courtCases?.rezultatele_cautarii.length) {
+        await this.proceedingProducerService.transformProceedings(
+          dataset.courtCases.rezultatele_cautarii,
+        )
+      }
+      return {}
     } catch (e) {
       return job.moveToFailed(e as { message: string })
     }
@@ -114,7 +113,7 @@ export class CompanyProcessor {
         if (!companyId) {
           await this.companyLoaderService.createCompany(companyInfo, AUTHOR)
         } else {
-          //
+          // TODO: update company data
         }
         return {}
       }

@@ -9,7 +9,7 @@ import {
 } from 'tools'
 import { AUTHOR } from '../../../constants'
 import {
-  TermeneAssociatesSchema,
+  TermeneAssociateSchema,
   TermeneCompanyAssociate,
   TermenePersonAssociate,
 } from '../../../schema/associates'
@@ -23,21 +23,31 @@ export class AssociateDataTransformerService {
     private readonly companyLoaderService: CompanyLoaderService,
   ) {}
 
-  transformAssociatesInfo = async (associates: TermeneAssociatesSchema, sourceUrl: string) =>
-    Promise.all(
-      [
-        ...associates.asociatiAdministratori.administratori,
-        ...associates.asociatiAdministratori.asociati,
-      ].map((associate) => {
-        switch (associate.tipAA) {
-          case 'firma':
-            return this.getCompanyAssociate(associate, sourceUrl)
-          case 'persoana':
-            return this.getPersonAssociate(associate, sourceUrl)
+  async transformAssociatesInfo(associates: TermeneAssociateSchema[], sourceUrl: string) {
+    const associatesList: AssociateAPI[] = []
+
+    for await (const associate of associates) {
+      switch (associate.tipAA) {
+        case 'firma': {
+          const companyAssociate = await this.getCompanyAssociate(associate, sourceUrl)
+
+          if (companyAssociate) {
+            associatesList.push(companyAssociate)
+          }
+          break
         }
-        return Promise.reject()
-      }),
-    )
+        case 'persoana': {
+          const personAssociate = await this.getPersonAssociate(associate, sourceUrl)
+
+          if (personAssociate) {
+            associatesList.push(personAssociate)
+          }
+          break
+        }
+      }
+    }
+    return associatesList
+  }
 
   private getCompanyAssociate = async (
     associateInfo: TermeneCompanyAssociate,

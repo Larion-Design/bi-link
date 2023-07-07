@@ -15,7 +15,7 @@ export type TransformCompanyEvent = ProcessCompanyLinkedEntities & {
   cui: string
   dataset: CompanyTermeneDataset
   companyId?: string
-  companyInfo?: CompanyAPIInput
+  companyInfo: CompanyAPIInput
 }
 
 export type LoadCompanyEvent = {

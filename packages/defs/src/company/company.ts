@@ -27,6 +27,7 @@ export const companySchema = z
     balanceSheets: balanceSheetSchema.array(),
     active: companyActiveStateSchema,
     status: companyStatusSchema,
+    activityCodes: customFieldSchema.array(),
   })
   .merge(withMetadataSchema)
   .merge(withTimestamps)

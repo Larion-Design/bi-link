@@ -29,6 +29,7 @@ export const getDefaultCompany = (): CompanyAPIInput => ({
     ministryOfFinance: getDefaultBooleanWithMetadata(),
     tradeRegister: getDefaultBooleanWithMetadata(),
   },
+  activityCodes: [],
 })
 
 export const getDefaultAssociate = (): AssociateAPI => ({
@@ -57,7 +58,7 @@ export const getDefaultBalanceSheet = (): BalanceSheet => ({
   fixedAssets: 0,
   currentAssets: 0,
   inventories: 0,
-  creante: 0,
+  receivables: 0,
   houseAndAccountsSeizedByBanks: 0,
   expensesAdvance: 0,
   debt: 0,
@@ -75,7 +76,7 @@ export const getDefaultBalanceSheet = (): BalanceSheet => ({
   netProfit: 0,
   netLoss: 0,
   averageEmployees: 0,
-  caenCode: 0,
+  activityCode: 0,
   activityType: '',
   balanceType: '',
 })
