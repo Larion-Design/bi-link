@@ -54,4 +54,7 @@ export class CompanyInput
 
   @Field(() => CompanyStatusInput)
   readonly status: CompanyStatusInput
+
+  @Field(() => [CustomFieldInput])
+  readonly activityCodes: CustomFieldInput[]
 }

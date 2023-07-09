@@ -15,6 +15,7 @@ export const routes = {
   newCompany: '/companies/new',
   companyDetails: '/companies/:companyId',
   companies: '/companies',
+  companiesIntegrationTermene: '/companies/integrations/termene',
   companySnapshotDetails: '/companies/snapshots/:snapshotId',
   companyVersionDetails: '/companies/versions/:versionId',
 

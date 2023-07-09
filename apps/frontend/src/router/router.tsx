@@ -1,5 +1,6 @@
 import React, { ReactNode } from 'react'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import { TermeneIntegration } from '../pages/companies/termeneIntegration'
 import { CreateProceeding } from '../pages/proceedings/createProceeding'
 import { ProceedingsList } from '../pages/proceedings/proceedingsList'
 import { routes } from './routes'
@@ -29,6 +30,7 @@ const privateRoutes: Record<string, ReactNode> = {
   [routes.newPerson]: <CreatePerson />,
   [routes.personDetails]: <EditPerson />,
   [routes.companies]: <CompaniesList />,
+  [routes.companiesIntegrationTermene]: <TermeneIntegration />,
   [routes.newCompany]: <CreateCompany />,
   [routes.companyDetails]: <EditCompany />,
   [routes.events]: <EventsList />,

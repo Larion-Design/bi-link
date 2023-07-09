@@ -31,20 +31,23 @@ export class Company
   @Field(() => TextValue)
   registrationNumber: TextValue
 
-  @Field(() => [CustomField], { nullable: true })
+  @Field(() => [CustomField])
   contactDetails: CustomField[]
 
-  @Field(() => [Location], { nullable: true })
+  @Field(() => [Location])
   locations: Location[]
 
-  @Field(() => [Associate], { nullable: true })
+  @Field(() => [Associate])
   associates: Associate[]
 
-  @Field(() => [CustomField], { nullable: true })
+  @Field(() => [CustomField])
   customFields: CustomField[]
 
-  @Field(() => [File], { nullable: true })
+  @Field(() => [File])
   files: File[]
+
+  @Field(() => [CustomField])
+  activityCodes: CustomField[]
 
   @Field(() => Date)
   createdAt: Date

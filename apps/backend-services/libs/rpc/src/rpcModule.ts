@@ -1,4 +1,5 @@
 import { RPCValidator } from '@app/rpc/interceptors/RPCValidator'
+import { OsintTermeneService } from '@app/rpc/microservices/osint/termene'
 import { Global, Module } from '@nestjs/common'
 import { ClientsModule, Transport } from '@nestjs/microservices'
 import { ConfigModule, ConfigService } from '@nestjs/config'
@@ -9,12 +10,10 @@ import { GraphService } from '@app/rpc/microservices/graph/graphService'
 import { IndexerService } from '@app/rpc/microservices/indexer/indexerService'
 import { IngressService } from '@app/rpc/microservices/ingress'
 import { FilesManagerService } from '@app/rpc/microservices/filesManager/filesManagerService'
-import { ExtractorModule } from '../../../apps/osint-termene/src/modules/extractor'
 
 @Global()
 @Module({
   imports: [
-    ExtractorModule,
     ClientsModule.registerAsync(
       [
         MICROSERVICES.GLOBAL.id,
@@ -23,6 +22,7 @@ import { ExtractorModule } from '../../../apps/osint-termene/src/modules/extract
         MICROSERVICES.ACTIVITY_HISTORY.id,
         MICROSERVICES.FILES_MANAGER.id,
         MICROSERVICES.INDEXER.id,
+        MICROSERVICES.OSINT.TERMENE.id,
       ].map((name) => ({
         name,
         imports: [ConfigModule],
@@ -45,6 +45,7 @@ import { ExtractorModule } from '../../../apps/osint-termene/src/modules/extract
     ActivityHistoryService,
     GraphService,
     FilesManagerService,
+    OsintTermeneService,
   ],
   exports: [
     RPCValidator,
@@ -54,6 +55,7 @@ import { ExtractorModule } from '../../../apps/osint-termene/src/modules/extract
     ActivityHistoryService,
     GraphService,
     FilesManagerService,
+    OsintTermeneService,
   ],
 })
 export class RpcModule {}

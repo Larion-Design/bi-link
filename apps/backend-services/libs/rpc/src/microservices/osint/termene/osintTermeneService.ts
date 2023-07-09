@@ -1,12 +1,8 @@
-import { RPCValidator } from '@app/rpc/interceptors/RPCValidator'
-import { Inject, Injectable, Logger, UseInterceptors } from '@nestjs/common'
+import { Inject, Injectable, Logger } from '@nestjs/common'
 import { ClientProxy } from '@nestjs/microservices'
 import { lastValueFrom, timeout } from 'rxjs'
 import { MICROSERVICES } from '@app/rpc'
-import {
-  osintTermeneServiceConfig,
-  OsintTermeneServiceConfig,
-} from '@app/rpc/microservices/osint/termene/osintTermeneServiceConfig'
+import { OsintTermeneServiceConfig } from './osintTermeneServiceConfig'
 
 @Injectable()
 export class OsintTermeneService {

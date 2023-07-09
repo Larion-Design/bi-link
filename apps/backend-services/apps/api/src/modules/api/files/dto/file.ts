@@ -1,14 +1,10 @@
 import { Field, ID, ObjectType, PickType } from '@nestjs/graphql'
-import { Metadata } from '../../metadata/dto/metadata'
 import { WithMetadata } from '../../metadata/dto/withMetadata'
 import { DownloadUrl } from './downloadUrl'
 import { FileAPIOutput } from 'defs'
 
 @ObjectType()
 export class File extends PickType(WithMetadata, ['metadata'] as const) implements FileAPIOutput {
-  @Field(() => Metadata)
-  metadata: Metadata
-
   @Field(() => ID)
   fileId: string
 
