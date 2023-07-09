@@ -16,7 +16,7 @@ export class ImportTermeneCompany {
 
   @Mutation(() => Boolean)
   @UseGuards(FirebaseAuthGuard)
-  createCompany(@Args() { cui }: Params) {
+  importTermeneCompany(@Args() { cui }: Params) {
     this.osintTermeneService.importCompany(cui)
     return true
   }

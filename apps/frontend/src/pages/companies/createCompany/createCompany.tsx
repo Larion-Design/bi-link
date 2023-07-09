@@ -21,7 +21,7 @@ export const CreateCompany: React.FunctionComponent = () => {
 
   useEffect(() => {
     if (error?.message) {
-      showNotification('O eroare a intervenit in timpul comunicarii cu serverul.', 'error')
+      showNotification('ServerError', 'error')
     }
   }, [error?.message])
 

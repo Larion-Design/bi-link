@@ -1,4 +1,6 @@
-import React, { useMemo } from 'react'
+import { importTermeneCompany } from '@frontend/graphql/integrations/termene/mutations/importTermeneCompany'
+import { useNotification } from '@frontend/utils/hooks/useNotification'
+import React, { useEffect, useMemo } from 'react'
 import Box from '@mui/material/Box'
 import OpenInNewOutlinedIcon from '@mui/icons-material/OpenInNewOutlined'
 import {
@@ -16,6 +18,21 @@ type Props = {
 }
 
 export const TermeneCompaniesTable: React.FunctionComponent<Props> = ({ companies }) => {
+  const [importCompany, { loading, error, data }] = importTermeneCompany()
+  const showNotification = useNotification()
+
+  useEffect(() => {
+    if (data?.importTermeneCompany) {
+      showNotification('Compania va fi importata.', 'success')
+    }
+  }, [data?.importTermeneCompany])
+
+  useEffect(() => {
+    if (error) {
+      showNotification('ServerError', 'error')
+    }
+  }, [error])
+
   const columns: Array<GridColDef | GridActionsColDef> = useMemo(
     () => [
       {
@@ -51,14 +68,15 @@ export const TermeneCompaniesTable: React.FunctionComponent<Props> = ({ companie
         getActions: ({ row: { cui, name } }: GridRowParams<OSINTCompany>) => [
           <GridActionsCellItem
             showInMenu={false}
+            disabled={loading}
             icon={<OpenInNewOutlinedIcon />}
             label={`Importa ${name}`}
-            onClick={() => null}
+            onClick={() => void importCompany({ variables: { cui } })}
           />,
         ],
       },
     ],
-    [],
+    [loading],
   )
 
   return (

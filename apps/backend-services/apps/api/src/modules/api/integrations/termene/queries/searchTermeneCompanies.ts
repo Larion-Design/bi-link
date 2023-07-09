@@ -19,7 +19,7 @@ export class SearchTermeneCompanies {
 
   @Query(() => [OSINTCompany])
   @UseGuards(FirebaseAuthGuard)
-  async searchCompanies(@Args() { name, cui }: Params) {
+  async searchTermeneCompanies(@Args() { name, cui }: Params) {
     if (cui?.length) {
       return this.osintTermeneService.searchCompanyByCUI(cui)
     }
