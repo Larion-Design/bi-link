@@ -223,7 +223,7 @@ export const ingressInterfaceSchema = z.object({
 
   findCompanyId: z
     .function()
-    .args(z.record(companySchema.keyof(), z.string().nonempty()))
+    .args(z.record(companySchema.keyof(), z.string().nonempty().nullable()))
     .returns(z.string().nonempty().nullish()),
 
   findPersonId: z
