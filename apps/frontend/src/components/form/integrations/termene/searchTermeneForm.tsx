@@ -1,9 +1,9 @@
+import React, { useCallback } from 'react'
+import { useFormik } from 'formik'
 import { DropdownList } from '@frontend/components/form/dropdownList'
 import { InputField } from '@frontend/components/form/inputField'
 import Button from '@mui/material/Button'
 import Grid from '@mui/material/Grid'
-import { useFormik } from 'formik'
-import React, { useCallback } from 'react'
 
 type Props = {
   onSubmit: (name: string | null, cui: string | null) => void
@@ -27,7 +27,7 @@ export const SearchTermeneForm: React.FunctionComponent<Props> = ({ onSubmit }) 
       cui: '',
       searchField: 'name',
     },
-    onSubmit: ({ name, cui }) => onSubmit(name?.length ? name : null, cui?.length ? cui : null),
+    onSubmit: ({ name, cui }) => onSubmit(name, cui),
   })
 
   const changeSearchParam = useCallback(
@@ -36,8 +36,8 @@ export const SearchTermeneForm: React.FunctionComponent<Props> = ({ onSubmit }) 
   )
 
   const onInputChange = useCallback(
-    (value) => void setFieldValue(values.cui ? 'cui' : 'name', value),
-    [values, setFieldValue],
+    (value) => void setFieldValue(values.searchField, value),
+    [values.searchField, setFieldValue],
   )
 
   return (
