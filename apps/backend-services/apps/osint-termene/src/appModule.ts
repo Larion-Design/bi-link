@@ -1,6 +1,5 @@
 import { BrowserModule } from '@app/browser-module'
 import { LoaderModule } from '@app/loader-module'
-import { ServiceCacheModule } from '@app/service-cache-module'
 import { Module } from '@nestjs/common'
 import { ConfigModule, ConfigService } from '@nestjs/config'
 import { SentryModule } from '@ntegral/nestjs-sentry'
@@ -13,7 +12,6 @@ import { TransformerModule } from './modules/transformer/transformerModule'
 @Module({
   imports: [
     RpcModule,
-    ServiceCacheModule,
     LoaderModule,
     SchedulerModule,
     ExtractorModule,

@@ -4,7 +4,7 @@ import { Job } from 'bull'
 import { AUTHOR } from '../../../constants'
 import { ProceedingDataTransformer } from '../../transformer/services/proceedingDataTransformer'
 import { EVENT_LOAD, EVENT_TRANSFORM, QUEUE_PROCEEDINGS } from '../constants'
-import { ProceedingProducerService } from '../producers/proceedingProducerService'
+import { ProceedingProducerService } from './proceedingProducerService'
 import { LoadProceedingEvent, TransformProceedingEvent } from '../types'
 
 @Processor(QUEUE_PROCEEDINGS)
@@ -40,7 +40,15 @@ export class ProceedingProceessor {
         data: { proceedingInfo },
       } = job
 
-      await this.proceedingLoaderService.createProceeding(proceedingInfo, AUTHOR)
+      const proceedingId = await this.proceedingLoaderService.findProceeding(
+        proceedingInfo.fileNumber.value,
+      )
+
+      if (!proceedingId) {
+        await this.proceedingLoaderService.createProceeding(proceedingInfo, AUTHOR)
+      } else {
+        await this.proceedingLoaderService.updateProceeding(proceedingId, proceedingInfo, AUTHOR)
+      }
       return {}
     } catch (e) {
       return job.moveToFailed(e as { message: string })

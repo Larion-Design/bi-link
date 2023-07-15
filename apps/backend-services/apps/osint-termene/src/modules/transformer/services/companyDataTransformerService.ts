@@ -110,22 +110,27 @@ export class CompanyDataTransformerService {
     const contactDetailsList: CustomFieldAPI[] = []
 
     contactDetails?.Web?.split(',').forEach((website) => {
-      contactDetailsList.push(this.createCustomField(sourceUrl, 'Website', website))
+      const cleanWebsite = website.trim()
+
+      if (cleanWebsite.length) {
+        contactDetailsList.push(this.createCustomField(sourceUrl, 'Website', cleanWebsite))
+      }
     })
 
-    contactDetails?.Telefon?.split(',').forEach((phoneNumber) =>
-      contactDetailsList.push(this.createCustomField(sourceUrl, 'Website', phoneNumber)),
-    )
+    contactDetails?.Telefon?.split(',').forEach((phoneNumber) => {
+      const cleanPhoneNumber = phoneNumber.trim()
+
+      if (cleanPhoneNumber.length) {
+        contactDetailsList.push(this.createCustomField(sourceUrl, 'Telefon', phoneNumber))
+      }
+    })
     return contactDetailsList
   }
 
-  private setCustomFields = (data: CompanyTermeneDataset, sourceUrl: string) => {
-    const customFields: CustomFieldAPI[] = [
-      this.setCompanyStatus(data, sourceUrl),
-      ...this.setCompanyFicalStatus(data, sourceUrl),
-    ]
-    return customFields
-  }
+  private setCustomFields = (data: CompanyTermeneDataset, sourceUrl: string) => [
+    this.setCompanyStatus(data, sourceUrl),
+    ...this.setCompanyFicalStatus(data, sourceUrl),
+  ]
 
   private setBalanceSheets = (data: CompanyTermeneDataset, sourceUrl: string) =>
     data?.balanceSheet?.balanceSheet.map((balanceSheetInfo) => {

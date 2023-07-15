@@ -18,7 +18,7 @@ export class ProceedingProducerService {
       proceedings.map((dataset) => ({
         name: EVENT_TRANSFORM,
         data: { dataset },
-        opts: { jobId: dataset.id },
+        opts: { delay: 5000 },
       })),
     )
 

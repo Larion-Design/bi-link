@@ -4,12 +4,12 @@ import { Module } from '@nestjs/common'
 import { ExtractorModule } from '../extractor'
 import { TransformerModule } from '../transformer/transformerModule'
 import { QUEUE_COMPANIES, QUEUE_PERSONS, QUEUE_PROCEEDINGS } from './constants'
-import { CompanyProcessor } from './processors/companyProcessor'
-import { PersonProcessor } from './processors/personProcessor'
-import { ProceedingProceessor } from './processors/proceedingProceessor'
-import { CompanyProducerService } from './producers/companyProducerService'
-import { PersonProducerService } from './producers/personProducerService'
-import { ProceedingProducerService } from './producers/proceedingProducerService'
+import { CompanyProcessor } from './companies/companyProcessor'
+import { PersonProcessor } from './persons/personProcessor'
+import { ProceedingProceessor } from './proceedings/proceedingProceessor'
+import { CompanyProducerService } from './companies/companyProducerService'
+import { PersonProducerService } from './persons/personProducerService'
+import { ProceedingProducerService } from './proceedings/proceedingProducerService'
 
 @Module({
   imports: [

@@ -2,7 +2,7 @@ import { MICROSERVICES } from '@app/rpc'
 import { OsintTermeneServiceConfig } from '@app/rpc/microservices/osint/termene'
 import { Controller } from '@nestjs/common'
 import { EventPattern, Payload } from '@nestjs/microservices'
-import { PersonProducerService } from '../../scheduler/producers/personProducerService'
+import { PersonProducerService } from '../../scheduler/persons/personProducerService'
 
 type Params = Parameters<OsintTermeneServiceConfig['importPerson']>[0]
 

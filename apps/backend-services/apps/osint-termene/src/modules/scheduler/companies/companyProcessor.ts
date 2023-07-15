@@ -4,16 +4,9 @@ import { Job } from 'bull'
 import { AUTHOR } from '../../../constants'
 import { CompanyDatasetScraperService } from '../../extractor'
 import { CompanyDataTransformerService } from '../../transformer/services/companyDataTransformerService'
-import {
-  EVENT_IMPORT,
-  EVENT_UPDATE,
-  EVENT_LOAD,
-  EVENT_TRANSFORM,
-  EVENT_TRANSFORM_ASSOCIATES,
-  QUEUE_COMPANIES,
-} from '../constants'
-import { CompanyProducerService } from '../producers/companyProducerService'
-import { ProceedingProducerService } from '../producers/proceedingProducerService'
+import { EVENT_IMPORT, EVENT_LOAD, EVENT_TRANSFORM, QUEUE_COMPANIES } from '../constants'
+import { CompanyProducerService } from './companyProducerService'
+import { ProceedingProducerService } from '../proceedings/proceedingProducerService'
 import { ExtractCompanyEvent, LoadCompanyEvent, TransformCompanyEvent } from '../types'
 
 @Processor(QUEUE_COMPANIES)
@@ -44,24 +37,6 @@ export class CompanyProcessor {
     }
   }
 
-  @Process(EVENT_UPDATE)
-  async updateCompanyData(job: Job<ExtractCompanyEvent>) {
-    try {
-      const {
-        data: { companyId, cui },
-      } = job
-
-      const companyScrapedData = await this.companyScraperService.getFullCompanyDataSet(cui)
-
-      if (companyScrapedData) {
-        await this.companyProducerService.transformCompany(cui, companyScrapedData, companyId)
-        return {}
-      }
-    } catch (e) {
-      return job.moveToFailed(e as { message: string })
-    }
-  }
-
   @Process(EVENT_TRANSFORM)
   async transformCompany(job: Job<TransformCompanyEvent>) {
     try {
@@ -71,20 +46,6 @@ export class CompanyProcessor {
 
       const companyInfo = this.companyTransformService.transformCompanyData(cui, dataset)
 
-      await this.companyProducerService.transformAssociates(cui, dataset, companyInfo)
-      return {}
-    } catch (e) {
-      return job.moveToFailed(e as { message: string })
-    }
-  }
-
-  @Process(EVENT_TRANSFORM_ASSOCIATES)
-  async transformAssociates(job: Job<TransformCompanyEvent>) {
-    try {
-      const {
-        data: { cui, dataset, companyInfo, companyId },
-      } = job
-
       if (dataset.associates) {
         companyInfo.associates = await this.companyTransformService.transformAssociates(
           cui,
@@ -92,7 +53,7 @@ export class CompanyProcessor {
         )
       }
 
-      await this.companyProducerService.loadCompany(companyInfo, companyId)
+      await this.companyProducerService.loadCompany(cui, companyInfo)
 
       if (dataset.courtCases?.rezultatele_cautarii.length) {
         await this.proceedingProducerService.transformProceedings(
@@ -109,17 +70,17 @@ export class CompanyProcessor {
   async loadCompany(job: Job<LoadCompanyEvent>) {
     try {
       const {
-        data: { companyInfo, companyId },
+        data: { cui, companyInfo },
       } = job
 
-      if (companyInfo) {
-        if (!companyId) {
-          await this.companyLoaderService.createCompany(companyInfo, AUTHOR)
-        } else {
-          await this.companyLoaderService.updateCompany(companyId, companyInfo, AUTHOR)
-        }
-        return {}
+      const companyId = await this.companyLoaderService.findCompany({ cui })
+
+      if (!companyId) {
+        await this.companyLoaderService.createCompany(companyInfo, AUTHOR)
+      } else {
+        await this.companyLoaderService.updateCompany(companyId, companyInfo, AUTHOR)
       }
+      return {}
     } catch (e) {
       return job.moveToFailed(e as { message: string })
     }

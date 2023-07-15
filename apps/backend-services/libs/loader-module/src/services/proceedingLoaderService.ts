@@ -10,4 +10,15 @@ export class ProceedingLoaderService {
 
   createProceeding = async (proceedingAPIInput: ProceedingAPIInput, author: UpdateSource) =>
     this.ingressService.createEntity('PROCEEDING', proceedingAPIInput, author)
+
+  updateProceeding = async (
+    entityId: string,
+    proceedingAPIInput: ProceedingAPIInput,
+    author: UpdateSource,
+  ) =>
+    this.ingressService.updateEntity(
+      { entityId, entityType: 'PROCEEDING' },
+      proceedingAPIInput,
+      author,
+    )
 }

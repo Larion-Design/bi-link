@@ -6,11 +6,8 @@ import { CompanyAPIInput, UpdateSource } from 'defs'
 export class CompanyLoaderService {
   constructor(private readonly ingressService: IngressService) {}
 
-  findCompany = async (
-    name: string | null = null,
-    cui: string | null = null,
-    registrationNumber: string | null = null,
-  ) => this.ingressService.findCompanyId({ cui, name, registrationNumber })
+  findCompany = async (searchFields: Partial<Record<keyof CompanyAPIInput, string>>) =>
+    this.ingressService.findCompanyId(searchFields)
 
   createCompany = async (companyInfo: CompanyAPIInput, author: UpdateSource) =>
     this.ingressService.createEntity('COMPANY', companyInfo, author)

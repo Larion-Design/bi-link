@@ -12,5 +12,6 @@ export class PersonProducerService {
     private readonly queue: Queue<ExtractPersonEvent>,
   ) {}
 
-  extractPersonCompanies = async (personUrl: string) => this.queue.add(EVENT_IMPORT, { personUrl })
+  extractPersonCompanies = async (personUrl: string) =>
+    this.queue.add(EVENT_IMPORT, { personUrl }, { delay: 5000 })
 }

@@ -13,7 +13,7 @@ import {
   TermeneCompanyAssociate,
   TermenePersonAssociate,
 } from '../../../schema/associates'
-import { CompanyProducerService } from '../../scheduler/producers/companyProducerService'
+import { CompanyProducerService } from '../../scheduler/companies/companyProducerService'
 import { LocationDataTransformerService } from './locationDataTransformerService'
 
 @Injectable()
@@ -51,29 +51,29 @@ export class AssociateDataTransformerService {
     return associatesList
   }
 
-  private getCompanyAssociate = async (
-    associateInfo: TermeneCompanyAssociate,
-    sourceUrl: string,
-  ) => {
-    const existingCompanyId = await this.companyLoaderService.findCompany(null, associateInfo.cui)
+  private async getCompanyAssociate(associateInfo: TermeneCompanyAssociate, sourceUrl: string) {
+    const existingCompanyId = await this.companyLoaderService.findCompany({
+      cui: associateInfo.cui,
+    })
 
-    if (!existingCompanyId) {
-      const companyInfo = this.createCompany(associateInfo)
-      const companyId = await this.companyLoaderService.createCompany(companyInfo, AUTHOR)
+    if (existingCompanyId) {
+      return this.setAssociateInfo(
+        getDefaultCompanyAssociate(existingCompanyId),
+        associateInfo,
+        sourceUrl,
+      )
+    }
 
-      if (companyId) {
-        await this.companyProducerService.updateCompany(companyId, companyInfo.cui.value)
+    const companyInfo = this.createCompany(associateInfo)
+    const companyId = await this.companyLoaderService.createCompany(companyInfo, AUTHOR)
 
-        return this.setAssociateInfo(
-          getDefaultCompanyAssociate(companyId),
-          associateInfo,
-          sourceUrl,
-        )
-      }
+    if (companyId) {
+      await this.companyProducerService.importCompanies([companyInfo.cui.value])
+      return this.setAssociateInfo(getDefaultCompanyAssociate(companyId), associateInfo, sourceUrl)
     }
   }
 
-  private createCompany = ({ cui, adresa, nume, entityUrl }: TermeneCompanyAssociate) => {
+  private createCompany({ cui, adresa, nume, entityUrl }: TermeneCompanyAssociate) {
     const companyInfo = getDefaultCompany()
     companyInfo.name.value = nume
     companyInfo.cui.value = cui
@@ -86,28 +86,30 @@ export class AssociateDataTransformerService {
     return companyInfo
   }
 
-  private getPersonAssociate = async (associateInfo: TermenePersonAssociate, sourceUrl: string) => {
+  private async getPersonAssociate(associateInfo: TermenePersonAssociate, sourceUrl: string) {
     const { firstName, lastName } = this.computePersonName(associateInfo.nume)
     const existingPersonId = await this.personLoaderService.findPerson(firstName, lastName)
 
-    if (!existingPersonId) {
-      const personInfo = this.createPerson(associateInfo)
+    if (existingPersonId) {
+      return this.setAssociateInfo(
+        getDefaultPersonAssociate(existingPersonId),
+        associateInfo,
+        sourceUrl,
+      )
+    }
 
-      if (personInfo) {
-        const personId = await this.personLoaderService.createPerson(personInfo, AUTHOR)
+    const personInfo = this.createPerson(associateInfo)
 
-        if (personId) {
-          return this.setAssociateInfo(
-            getDefaultPersonAssociate(personId),
-            associateInfo,
-            sourceUrl,
-          )
-        }
+    if (personInfo) {
+      const personId = await this.personLoaderService.createPerson(personInfo, AUTHOR)
+
+      if (personId) {
+        return this.setAssociateInfo(getDefaultPersonAssociate(personId), associateInfo, sourceUrl)
       }
     }
   }
 
-  private createPerson = ({ nume, dataNastere, entityUrl, adresa }: TermenePersonAssociate) => {
+  private createPerson({ nume, dataNastere, entityUrl, adresa }: TermenePersonAssociate) {
     const personInfo = getDefaultPerson()
     const { lastName, firstName } = this.computePersonName(nume)
 
@@ -124,7 +126,7 @@ export class AssociateDataTransformerService {
     return personInfo
   }
 
-  private computePersonName = (name: string) => {
+  private computePersonName(name: string) {
     const parts = name.split(' ')
     const [lastName, ...firstNames] = parts
 
@@ -134,12 +136,12 @@ export class AssociateDataTransformerService {
     }
   }
 
-  private setAssociateInfo = (
+  private setAssociateInfo(
     associate: AssociateAPI,
     { procentaj, functiune, functie }: TermenePersonAssociate | TermeneCompanyAssociate,
     sourceUrl: string,
-  ): AssociateAPI => {
-    associate.equity.value = parseFloat(String(procentaj))
+  ): AssociateAPI {
+    associate.equity.value = parseFloat(parseFloat(String(procentaj)).toFixed(2))
     associate.role.value = functie
     associate.isActive.value = functiune
 

@@ -33,7 +33,7 @@ export class LocationDataTransformerService {
     return branches
   }
 
-  getAddress = (address: string, sourceUrl?: string) => {
+  getAddress(address: string, sourceUrl?: string) {
     const locationInfo = getDefaultLocation()
     locationInfo.otherInfo = address
 

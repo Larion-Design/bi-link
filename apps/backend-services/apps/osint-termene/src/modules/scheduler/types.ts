@@ -15,7 +15,7 @@ export type TransformCompanyEvent = {
 }
 
 export type LoadCompanyEvent = {
-  companyId?: string
+  cui: string
   companyInfo: CompanyAPIInput
 }
 

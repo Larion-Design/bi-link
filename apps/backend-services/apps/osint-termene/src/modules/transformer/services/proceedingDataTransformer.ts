@@ -101,8 +101,8 @@ export class ProceedingDataTransformer {
     }
   }
 
-  private getCompany = async (name: string, cui: string) => {
-    const existingCompanyId = await this.companyLoaderService.findCompany(null, cui)
+  private async getCompany(name: string, cui: string) {
+    const existingCompanyId = await this.companyLoaderService.findCompany({ cui })
 
     if (!existingCompanyId) {
       const companyInfo = this.createCompany(name, cui)
@@ -111,7 +111,7 @@ export class ProceedingDataTransformer {
     return existingCompanyId
   }
 
-  private createCompany = (name: string, cui: string) => {
+  private createCompany(name: string, cui: string) {
     const companyInfo = getDefaultCompany()
     companyInfo.name.value = name
     companyInfo.cui.value = cui
