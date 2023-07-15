@@ -31,13 +31,13 @@ export class EventModel implements Event {
   @Prop({ type: OptionalDateValueWithMetadataSchema })
   date: OptionalDateValueWithMetadataModel
 
-  @Prop({ type: Types.ObjectId, ref: LocationModel.name, default: null })
+  @Prop({ type: Types.ObjectId, ref: LocationModel.name, default: null, index: true, sparse: true })
   location?: LocationDocument | null
 
   @Prop({ type: [PartySchema], default: [] })
   parties: PartyModel[]
 
-  @Prop({ type: [{ type: Types.ObjectId, ref: FileModel.name }], default: [] })
+  @Prop({ type: [{ type: Types.ObjectId, ref: FileModel.name }], default: [], index: true })
   files: FileModel[]
 
   @Prop({ type: [CustomFieldSchema], default: [] })

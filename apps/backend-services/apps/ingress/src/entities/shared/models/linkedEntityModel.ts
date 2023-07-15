@@ -1,28 +1,13 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
-import { Document, Types } from 'mongoose'
-import { Report } from 'defs'
+import { Types } from 'mongoose'
 import { CompanyDocument, CompanyModel } from '../../company/models/companyModel'
 import { EventDocument, EventModel } from '../../event/models/eventModel'
-import { FileModel } from '../../file/models/fileModel'
 import { PersonDocument, PersonModel } from '../../person/models/personModel'
 import { ProceedingDocument, ProceedingModel } from '../../proceeding/models/proceedingModel'
 import { PropertyDocument, PropertyModel } from '../../property/models/propertyModel'
-import { DataRefModel, DataRefSchema } from './dataRefModel'
-import { ReportSectionModel, ReportSectionSchema } from './reportSectionModel'
 
-@Schema({ _id: true, timestamps: true })
-export class ReportModel implements Report {
-  _id: string
-
-  @Prop()
-  name: string
-
-  @Prop()
-  type: string
-
-  @Prop({ index: true })
-  isTemplate: boolean
-
+@Schema({ _id: false, timestamps: false })
+export class LinkedEntityModel {
   @Prop({
     type: Types.ObjectId,
     ref: PersonModel.name,
@@ -67,22 +52,6 @@ export class ReportModel implements Report {
     sparse: true,
   })
   proceeding?: ProceedingDocument
-
-  @Prop({ type: [ReportSectionSchema], default: [] })
-  sections: ReportSectionModel[]
-
-  @Prop({ type: [{ type: Types.ObjectId, ref: FileModel.name }], default: [], index: true })
-  oldReportFiles: FileModel[]
-
-  @Prop({ type: [DataRefSchema], default: [] })
-  refs: DataRefModel[]
-
-  @Prop()
-  createdAt?: Date
-
-  @Prop()
-  updatedAt?: Date
 }
 
-export type ReportDocument = ReportModel & Document
-export const ReportSchema = SchemaFactory.createForClass(ReportModel)
+export const LinkedEntitySchema = SchemaFactory.createForClass(LinkedEntityModel)
