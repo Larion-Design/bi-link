@@ -71,7 +71,7 @@ export const MICROSERVICES = {
       searchPersons: 'searchPersons',
       searchProceedings: 'searchProceedings',
       importCompany: 'importCompany',
-      importPerson: 'importPerson',
+      importPersonCompanies: 'importPersonCompanies',
       importProceeding: 'importProceeding',
     },
   },

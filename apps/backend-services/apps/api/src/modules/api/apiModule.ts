@@ -23,7 +23,9 @@ import { GetEvent } from './events/queries/getEvent'
 import { GetEvents } from './events/queries/getEvents'
 import { SearchEvents } from './events/queries/searchEvents'
 import { ImportTermeneCompany } from './integrations/termene/mutations/importTermeneCompany'
+import { ImportTermenePersonCompanies } from './integrations/termene/mutations/importTermenePersonCompanies'
 import { SearchTermeneCompanies } from './integrations/termene/queries/searchTermeneCompanies'
+import { SearchTermenePersons } from './integrations/termene/queries/searchTermenePersons'
 import { CreatePerson } from './persons/mutations/createPerson'
 import { UpdatePerson } from './persons/mutations/updatePerson'
 import { GetPerson } from './persons/queries/getPerson'
@@ -118,7 +120,9 @@ import { GetUsers } from './users/queries/getUsers'
     UpdateProceeding,
     SearchProceedings,
     SearchTermeneCompanies,
+    SearchTermenePersons,
     ImportTermeneCompany,
+    ImportTermenePersonCompanies,
   ],
   controllers: [FileUploadController],
 })

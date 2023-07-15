@@ -52,4 +52,29 @@ export class OsintTermeneService {
       this.logger.error(e)
     }
   }
+
+  importPersonCompanies(personUrl: string) {
+    type Params = Parameters<OsintTermeneServiceConfig['importPersonCompanies']>[0]
+
+    try {
+      return this.client.emit<Params>(MICROSERVICES.OSINT.TERMENE.importPersonCompanies, personUrl)
+    } catch (e) {
+      this.logger.error(e)
+    }
+  }
+
+  async searchPersons(name: string) {
+    type Params = Parameters<OsintTermeneServiceConfig['searchPersons']>[0]
+    type Result = ReturnType<OsintTermeneServiceConfig['searchPersons']>
+
+    try {
+      return lastValueFrom(
+        this.client
+          .send<Result, Params>(MICROSERVICES.OSINT.TERMENE.searchPersons, name)
+          .pipe(timeout(1000)),
+      )
+    } catch (e) {
+      this.logger.error(e)
+    }
+  }
 }

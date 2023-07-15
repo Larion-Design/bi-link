@@ -11,7 +11,7 @@ export const osintTermeneServiceConfig = z.object({
   searchProceedings: z.function().args(z.string().nonempty()).returns(z.unknown().array()),
 
   importCompany: z.function().args(z.string().nonempty()),
-  importPerson: z.function().args(z.string().nonempty().url()),
+  importPersonCompanies: z.function().args(z.string().nonempty().url()),
   importProceeding: z.function().args(z.string().nonempty()),
 })
 

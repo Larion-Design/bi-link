@@ -5,6 +5,8 @@ import { createHash } from 'node:crypto'
 import { IngressService } from '@app/rpc/microservices/ingress'
 import { FileStorageService } from './fileStorageService'
 
+type Result = Promise<ReturnType<FilesManagerServiceMethods['uploadFile']> | undefined>
+
 @Injectable()
 export class FileImporterService {
   constructor(
@@ -12,10 +14,7 @@ export class FileImporterService {
     private readonly fileStorageService: FileStorageService,
   ) {}
 
-  upsertFile = async (
-    buffer: Buffer,
-    mimeType: string,
-  ): Promise<ReturnType<FilesManagerServiceMethods['uploadFile']> | undefined> => {
+  async upsertFile(buffer: Buffer, mimeType: string): Result {
     const hash = this.getFileContentHash(buffer)
     const fileDocument = await this.getFileDocumentByHash(hash)
 

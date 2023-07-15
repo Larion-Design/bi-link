@@ -14,11 +14,7 @@ export class IngressService {
 
   constructor(@Inject(MICROSERVICES.INGRESS.id) private client: ClientProxy) {}
 
-  getEntity = async (
-    entityInfo: EntityInfo,
-    fetchLinkedEntities: boolean,
-    source: UpdateSource,
-  ) => {
+  async getEntity(entityInfo: EntityInfo, fetchLinkedEntities: boolean, source: UpdateSource) {
     type Params = Parameters<IngressServiceMethods['getEntity']>[0]
     type Result = ReturnType<IngressServiceMethods['getEntity']>
 
@@ -401,7 +397,7 @@ export class IngressService {
     }
   }
 
-  getFileByHash = async (hash: string) => {
+  async getFileByHash(hash: string) {
     type Params = Parameters<IngressServiceMethods['getFileByHash']>[0]
     type Result = ReturnType<IngressServiceMethods['getFileByHash']>
 
@@ -419,14 +415,14 @@ export class IngressService {
     }
   }
 
-  getReportsTemplates = async () => {
+  async getReportsTemplates() {
     type Result = ReturnType<IngressServiceMethods['getReportsTemplates']>
 
     try {
       return lastValueFrom(
         this.client
           .send<Result>(MICROSERVICES.INGRESS.getReportsTemplates, null)
-          .pipe(timeout(1000)),
+          .pipe(timeout(2000)),
       )
     } catch (e) {
       this.logger.error(e)
@@ -436,11 +432,11 @@ export class IngressService {
     }
   }
 
-  findCompanyId = async ({
+  async findCompanyId({
     cui,
     name,
     registrationNumber,
-  }: Parameters<IngressServiceMethods['findCompanyId']>[0]) => {
+  }: Parameters<IngressServiceMethods['findCompanyId']>[0]) {
     type Result = ReturnType<IngressServiceMethods['findCompanyId']>
     type Params = Parameters<IngressServiceMethods['findCompanyId']>[0]
 
@@ -462,12 +458,7 @@ export class IngressService {
     }
   }
 
-  findPersonId = async (
-    firstName: string,
-    lastName: string,
-    birthdate?: Date,
-    dataSource?: string,
-  ) => {
+  async findPersonId(firstName: string, lastName: string, birthdate?: Date, dataSource?: string) {
     type Result = ReturnType<IngressServiceMethods['findPersonId']>
     type Params = Parameters<IngressServiceMethods['findPersonId']>[0]
 
@@ -480,7 +471,7 @@ export class IngressService {
             birthdate,
             dataSource,
           })
-          .pipe(timeout(1000)),
+          .pipe(timeout(2000)),
       )
     } catch (e) {
       this.logger.error(e)
@@ -490,7 +481,7 @@ export class IngressService {
     }
   }
 
-  findProceedingId = async (fileNumber: string) => {
+  async findProceedingId(fileNumber: string) {
     type Result = ReturnType<IngressServiceMethods['findProceedingId']>
     type Params = Parameters<IngressServiceMethods['findProceedingId']>[0]
 
