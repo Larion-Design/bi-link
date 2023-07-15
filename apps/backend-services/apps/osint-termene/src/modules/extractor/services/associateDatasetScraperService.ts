@@ -23,7 +23,13 @@ export class AssociateDatasetScraperService {
       return this.traverseSearchResults(tableRows)
     })
 
-  getAssociatesCompaniesMapByPersonName = async (name: string, address?: string) => {
+  getCompaniesByAssociateUrl = async (associateUrl: string) =>
+    this.browserService.handlePage(async (page) => {
+      await this.openAssociatePage(page, associateUrl)
+      return this.extractCompaniesFromAssociatePage(page)
+    })
+
+  async getAssociatesCompaniesMapByPersonName(name: string, address?: string) {
     const persons = await this.searchAssociatesByName(name, address)
     const associatesMap = new Map<OSINTPerson, CompanyInfo[]>()
 
@@ -34,14 +40,11 @@ export class AssociateDatasetScraperService {
     await delay(1000)
 
     for await (const associateInfo of persons) {
-      await this.browserService.handlePage(async (page) => {
-        await this.openAssociatePage(page, associateInfo.url)
-        const companies = await this.extractCompaniesFromAssociatePage(page)
+      const companies = await this.getCompaniesByAssociateUrl(associateInfo.url)
 
-        if (companies.length) {
-          associatesMap.set(associateInfo, companies)
-        }
-      })
+      if (companies.length) {
+        associatesMap.set(associateInfo, companies)
+      }
       await delay(2000)
     }
     return associatesMap
@@ -67,18 +70,18 @@ export class AssociateDatasetScraperService {
       }
     })
 
-  private isPersonAssociateOfCompany = async (page: Page, associateUrl: string, cui: string) => {
+  private async isPersonAssociateOfCompany(page: Page, associateUrl: string, cui: string) {
     await this.openAssociatePage(page, associateUrl)
     await page.waitForSelector('tbody')
     return Boolean(await page.$(`tbody a[href*="${cui}"]`))
   }
 
-  private openSearchPage = async (page: Page, name: string, address?: string) => {
+  private async openSearchPage(page: Page, name: string, address?: string) {
     await page.goto(this.getSearchUrl(name, address))
     await page.waitForNetworkIdle()
   }
 
-  private getSearchUrl = (name: string, address?: string) => {
+  private getSearchUrl(name: string, address?: string) {
     const url = new URL('https://termene.ro/search.php')
     const params: Record<string, string> = {
       submitted: 'true',
@@ -96,10 +99,8 @@ export class AssociateDatasetScraperService {
     return url.toString()
   }
 
-  private traverseSearchResults = async (
-    tableRows: ElementHandle<HTMLTableRowElement>[],
-  ): Promise<OSINTPerson[]> =>
-    Promise.all(
+  private traverseSearchResults = async (tableRows: ElementHandle<HTMLTableRowElement>[]) =>
+    Promise.all<OSINTPerson>(
       tableRows.map(async (tableRow) => {
         const [, nameColumn, addressColumn] = await tableRow.$$('.detalii-text-tabel')
         const personName = await nameColumn?.evaluate((elem) => elem?.textContent?.trim())
@@ -118,7 +119,7 @@ export class AssociateDatasetScraperService {
       }),
     )
 
-  private openAssociatePage = async (page: Page, associateUrl: string) => {
+  private async openAssociatePage(page: Page, associateUrl: string) {
     await page.goto(associateUrl)
     await page.waitForNetworkIdle()
   }

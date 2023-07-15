@@ -80,10 +80,7 @@ export class CompanyDatasetScraperService {
     }
   }
 
-  private assignEntitiesTermeneUrl = async (
-    companyCUI: string,
-    associates: TermeneAssociateSchema[],
-  ) => {
+  private async assignEntitiesTermeneUrl(companyCUI: string, associates: TermeneAssociateSchema[]) {
     const cachedUrls = new Map<string, string>()
     const updatedAssociates: TermeneAssociateSchema[] = []
 

@@ -8,6 +8,7 @@ import {
   eventAPIInputSchema,
   eventSchema,
   eventSnapshotSchema,
+  fileInputSchema,
   fileSchema,
   locationSchema,
   personAPIInputSchema,
@@ -56,7 +57,75 @@ const entitySnapshotModelSchema = z.union([
   reportSnapshotSchema,
 ])
 
+const withAuthor = z.object({ source: updateSourceSchema })
+
+const getEntitySchema = z.function().args(
+  withAuthor.merge(
+    z.object({
+      entityId: z.string().nonempty(),
+      fetchLinkedEntities: z.boolean(),
+    }),
+  ),
+)
+
+const getEntitiesSchema = z.function().args(
+  withAuthor.merge(
+    z.object({
+      entitiesIds: z.string().nonempty().array(),
+      fetchLinkedEntities: z.boolean(),
+    }),
+  ),
+)
+
+const createEntitySchema = z.function().returns(z.string().nonempty())
+
 export const ingressInterfaceSchema = z.object({
+  getPerson: getEntitySchema.returns(personSchema),
+  getCompany: getEntitySchema.returns(companySchema),
+  getProperty: getEntitySchema.returns(propertySchema),
+  getProceeding: getEntitySchema.returns(proceedingSchema),
+  getEvent: getEntitySchema.returns(eventSchema),
+  getFile: getEntitySchema.returns(fileSchema),
+  getReport: getEntitySchema.returns(reportSchema),
+
+  getPersons: getEntitiesSchema.returns(personSchema.array()),
+  getCompanies: getEntitySchema.returns(companySchema.array()),
+  getProperties: getEntitySchema.returns(propertySchema.array()),
+  getProceedings: getEntitySchema.returns(proceedingSchema.array()),
+  getEvents: getEntitySchema.returns(eventSchema.array()),
+  getFiles: getEntitySchema.returns(fileSchema.array()),
+  getReports: getEntitySchema.returns(reportSchema.array()),
+
+  createPerson: createEntitySchema.args(
+    withAuthor.merge(z.object({ entityData: personAPIInputSchema })),
+  ),
+
+  createCompany: createEntitySchema.args(
+    withAuthor.merge(z.object({ entityData: companyAPIInputSchema })),
+  ),
+
+  createProperty: createEntitySchema.args(
+    withAuthor.merge(z.object({ entityData: propertyAPIInputSchema })),
+  ),
+
+  createEvent: createEntitySchema.args(
+    withAuthor.merge(z.object({ entityData: eventAPIInputSchema })),
+  ),
+
+  createProceeding: createEntitySchema.args(
+    withAuthor.merge(z.object({ entityData: proceedingAPIInputSchema })),
+  ),
+
+  createReport: createEntitySchema.args(
+    withAuthor.merge(z.object({ entityData: reportAPIInputSchema })),
+  ),
+
+  createLocation: createEntitySchema.args(
+    withAuthor.merge(z.object({ entityData: locationSchema })),
+  ),
+
+  createFile: createEntitySchema.args(withAuthor.merge(z.object({ entityData: fileInputSchema }))),
+
   getEntity: z
     .function()
     .args(
@@ -72,7 +141,7 @@ export const ingressInterfaceSchema = z.object({
     .function()
     .args(
       z.object({
-        entitiesIds: z.string().uuid().array(),
+        entitiesIds: z.string().nonempty().array(),
         entitiesType: entityTypeSchema,
         fetchLinkedEntities: z.boolean(),
         source: updateSourceSchema,
@@ -80,7 +149,7 @@ export const ingressInterfaceSchema = z.object({
     )
     .returns(entityModelSchema.array()),
 
-  getAllEntities: z.function().args(entityTypeSchema).returns(z.string().uuid().array()),
+  getAllEntities: z.function().args(entityTypeSchema).returns(z.string().nonempty().array()),
 
   createEntity: z
     .function()
