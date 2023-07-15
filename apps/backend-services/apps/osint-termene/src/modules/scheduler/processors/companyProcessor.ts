@@ -5,7 +5,8 @@ import { AUTHOR } from '../../../constants'
 import { CompanyDatasetScraperService } from '../../extractor'
 import { CompanyDataTransformerService } from '../../transformer/services/companyDataTransformerService'
 import {
-  EVENT_EXTRACT,
+  EVENT_IMPORT,
+  EVENT_UPDATE,
   EVENT_LOAD,
   EVENT_TRANSFORM,
   EVENT_TRANSFORM_ASSOCIATES,
@@ -25,8 +26,8 @@ export class CompanyProcessor {
     private readonly companyLoaderService: CompanyLoaderService,
   ) {}
 
-  @Process(EVENT_EXTRACT)
-  async extractCompanyData(job: Job<ExtractCompanyEvent>) {
+  @Process(EVENT_IMPORT)
+  async importCompanyData(job: Job<ExtractCompanyEvent>) {
     try {
       const {
         data: { cui, processAssociates, processProceedings },
@@ -40,6 +41,30 @@ export class CompanyProcessor {
           companyScrapedData,
           processAssociates,
           processProceedings,
+        )
+        return {}
+      }
+    } catch (e) {
+      return job.moveToFailed(e as { message: string })
+    }
+  }
+
+  @Process(EVENT_UPDATE)
+  async updateCompanyData(job: Job<ExtractCompanyEvent>) {
+    try {
+      const {
+        data: { companyId, cui, processAssociates, processProceedings },
+      } = job
+
+      const companyScrapedData = await this.companyScraperService.getFullCompanyDataSet(cui)
+
+      if (companyScrapedData) {
+        await this.companyProducerService.transformCompany(
+          cui,
+          companyScrapedData,
+          processAssociates,
+          processProceedings,
+          companyId,
         )
         return {}
       }

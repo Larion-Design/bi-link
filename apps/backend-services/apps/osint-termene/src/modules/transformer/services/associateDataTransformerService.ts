@@ -13,6 +13,7 @@ import {
   TermeneCompanyAssociate,
   TermenePersonAssociate,
 } from '../../../schema/associates'
+import { CompanyProducerService } from '../../scheduler/producers/companyProducerService'
 import { LocationDataTransformerService } from './locationDataTransformerService'
 
 @Injectable()
@@ -21,6 +22,7 @@ export class AssociateDataTransformerService {
     private readonly locationDataTransformerService: LocationDataTransformerService,
     private readonly personLoaderService: PersonLoaderService,
     private readonly companyLoaderService: CompanyLoaderService,
+    private readonly companyProducerService: CompanyProducerService,
   ) {}
 
   async transformAssociatesInfo(associates: TermeneAssociateSchema[], sourceUrl: string) {
@@ -60,6 +62,8 @@ export class AssociateDataTransformerService {
       const companyId = await this.companyLoaderService.createCompany(companyInfo, AUTHOR)
 
       if (companyId) {
+        await this.companyProducerService.updateCompany(companyId, companyInfo.cui.value)
+
         return this.setAssociateInfo(
           getDefaultCompanyAssociate(companyId),
           associateInfo,

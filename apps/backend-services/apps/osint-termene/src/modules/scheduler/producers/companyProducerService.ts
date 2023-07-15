@@ -4,10 +4,11 @@ import { Queue } from 'bull'
 import { CompanyAPIInput } from 'defs'
 import { CompanyTermeneDataset } from '../../../schema/company'
 import {
-  EVENT_EXTRACT,
+  EVENT_IMPORT,
   EVENT_LOAD,
   EVENT_TRANSFORM,
   EVENT_TRANSFORM_ASSOCIATES,
+  EVENT_UPDATE,
   QUEUE_COMPANIES,
 } from '../constants'
 import { ExtractCompanyEvent, LoadCompanyEvent, TransformCompanyEvent } from '../types'
@@ -19,16 +20,25 @@ export class CompanyProducerService {
     private readonly queue: Queue<ExtractCompanyEvent | TransformCompanyEvent | LoadCompanyEvent>,
   ) {}
 
-  extractCompanies = async (
-    companiesCUI: string[],
-    processAssociates: boolean,
-    processProceedings: boolean,
-  ) =>
+  importCompanies = async (companiesCUI: string[]) =>
     this.queue.addBulk(
       companiesCUI.map((cui) => ({
-        name: EVENT_EXTRACT,
-        data: { cui, processAssociates, processProceedings },
+        name: EVENT_IMPORT,
+        data: { cui, processAssociates: true, processProceedings: true },
+        opts: { jobId: cui },
       })),
+    )
+
+  updateCompany = async (companyId: string, cui: string) =>
+    this.queue.add(
+      EVENT_UPDATE,
+      {
+        cui,
+        companyId,
+        processAssociates: true,
+        processProceedings: true,
+      },
+      { jobId: companyId },
     )
 
   transformCompany = async (
@@ -36,7 +46,19 @@ export class CompanyProducerService {
     dataset: CompanyTermeneDataset,
     processAssociates: boolean,
     processProceedings: boolean,
-  ) => this.queue.add(EVENT_TRANSFORM, { cui, dataset, processAssociates, processProceedings })
+    companyId?: string,
+  ) =>
+    this.queue.add(
+      EVENT_TRANSFORM,
+      {
+        cui,
+        companyId,
+        dataset,
+        processAssociates,
+        processProceedings,
+      },
+      { jobId: cui },
+    )
 
   transformAssociates = async (
     cui: string,
@@ -45,14 +67,18 @@ export class CompanyProducerService {
     companyInfo: CompanyAPIInput,
     companyId?: string,
   ) =>
-    this.queue.add(EVENT_TRANSFORM_ASSOCIATES, {
-      cui,
-      dataset,
-      companyInfo,
-      companyId,
-      processProceedings,
-    })
+    this.queue.add(
+      EVENT_TRANSFORM_ASSOCIATES,
+      {
+        cui,
+        dataset,
+        companyInfo,
+        companyId,
+        processProceedings,
+      },
+      { jobId: cui },
+    )
 
   loadCompany = async (companyInfo: CompanyAPIInput, companyId?: string) =>
-    this.queue.add(EVENT_LOAD, { companyId, companyInfo })
+    this.queue.add(EVENT_LOAD, { companyId, companyInfo }, { jobId: companyId })
 }

@@ -9,6 +9,7 @@ type ProcessCompanyLinkedEntities = {
 
 export type ExtractCompanyEvent = ProcessCompanyLinkedEntities & {
   cui: string
+  companyId?: string
 }
 
 export type TransformCompanyEvent = ProcessCompanyLinkedEntities & {
