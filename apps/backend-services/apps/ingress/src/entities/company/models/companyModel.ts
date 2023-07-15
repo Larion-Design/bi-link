@@ -71,6 +71,9 @@ export class CompanyModel implements Company {
 
   @Prop({ type: OptionalDateValueWithMetadataSchema })
   registrationDate: OptionalDateValueWithMetadataModel
+
+  @Prop({ type: [CustomFieldSchema], default: [] })
+  activityCodes: CustomFieldModel[]
 }
 
 export type CompanyDocument = CompanyModel & Document<string>

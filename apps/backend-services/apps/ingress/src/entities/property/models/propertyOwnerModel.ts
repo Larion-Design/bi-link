@@ -11,7 +11,7 @@ import {
 import { PersonDocument, PersonModel } from '../../person/models/personModel'
 import { VehicleOwnerInfoModel, VehicleOwnerInfoSchema } from './vehicleOwnerInfoModel'
 
-@Schema({ timestamps: false, _id: false })
+@Schema({ timestamps: false })
 export class PropertyOwnerModel implements PropertyOwner {
   @Prop({ type: MetadataSchema })
   metadata: MetadataModel
@@ -22,13 +22,25 @@ export class PropertyOwnerModel implements PropertyOwner {
   @Prop({ type: OptionalDateValueWithMetadataSchema })
   endDate: OptionalDateValueWithMetadataModel
 
-  @Prop({ type: Types.ObjectId, ref: PersonModel.name, isRequired: false })
+  @Prop({
+    type: Types.ObjectId,
+    ref: PersonModel.name,
+    isRequired: false,
+    index: true,
+    sparse: true,
+  })
   person?: PersonDocument
 
-  @Prop({ type: Types.ObjectId, ref: CompanyModel.name, isRequired: false })
+  @Prop({
+    type: Types.ObjectId,
+    ref: CompanyModel.name,
+    isRequired: false,
+    index: true,
+    sparse: true,
+  })
   company?: CompanyDocument
 
-  @Prop({ type: [CustomFieldSchema] })
+  @Prop({ type: [CustomFieldSchema], default: [] })
   customFields: CustomFieldModel[]
 
   @Prop({ type: VehicleOwnerInfoSchema, isRequired: false, default: null })

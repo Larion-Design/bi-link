@@ -7,7 +7,7 @@ import { MetadataModel, MetadataSchema } from '../../metadata/models/metadataMod
 import { PersonDocument, PersonModel } from '../../person/models/personModel'
 import { PropertyDocument, PropertyModel } from '../../property/models/propertyModel'
 
-@Schema({ _id: false, timestamps: false })
+@Schema({ _id: true, timestamps: false })
 export class PartyModel implements EventParticipant {
   @Prop({ type: MetadataSchema })
   metadata: MetadataModel
@@ -18,13 +18,13 @@ export class PartyModel implements EventParticipant {
   @Prop()
   description: string
 
-  @Prop({ type: [{ type: Types.ObjectId, ref: PersonModel.name }] })
+  @Prop({ type: [{ type: Types.ObjectId, ref: PersonModel.name }], index: true, sparse: true })
   persons: PersonDocument[]
 
-  @Prop({ type: [{ type: Types.ObjectId, ref: CompanyModel.name }] })
+  @Prop({ type: [{ type: Types.ObjectId, ref: CompanyModel.name }], index: true, sparse: true })
   companies: CompanyDocument[]
 
-  @Prop({ type: [{ type: Types.ObjectId, ref: PropertyModel.name }] })
+  @Prop({ type: [{ type: Types.ObjectId, ref: PropertyModel.name }], index: true, sparse: true })
   properties: PropertyDocument[]
 
   @Prop({ type: [CustomFieldSchema] })

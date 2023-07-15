@@ -42,7 +42,7 @@ export class ProceedingModel implements Proceeding {
   @Prop({ type: [ProceedingEntitySchema] })
   entitiesInvolved: ProceedingEntityModel[]
 
-  @Prop({ type: [{ type: Types.ObjectId, ref: FileModel.name }] })
+  @Prop({ type: [{ type: Types.ObjectId, ref: FileModel.name }], index: true })
   files: FileModel[]
 
   @Prop({ type: [CustomFieldSchema] })

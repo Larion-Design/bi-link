@@ -15,7 +15,7 @@ import {
 } from '../../metadata/models/textValueWithMetadataModel'
 import { PartyModel, PartySchema } from './partyModel'
 
-@Schema({ timestamps: true })
+@Schema({ _id: true, timestamps: true })
 export class EventModel implements Event {
   _id: string
 
@@ -31,16 +31,16 @@ export class EventModel implements Event {
   @Prop({ type: OptionalDateValueWithMetadataSchema })
   date: OptionalDateValueWithMetadataModel
 
-  @Prop({ type: Types.ObjectId, ref: LocationModel.name, isRequired: false, default: null })
+  @Prop({ type: Types.ObjectId, ref: LocationModel.name, default: null })
   location?: LocationDocument | null
 
-  @Prop({ type: [PartySchema] })
+  @Prop({ type: [PartySchema], default: [] })
   parties: PartyModel[]
 
-  @Prop({ type: [{ type: Types.ObjectId, ref: FileModel.name }] })
+  @Prop({ type: [{ type: Types.ObjectId, ref: FileModel.name }], default: [] })
   files: FileModel[]
 
-  @Prop({ type: [CustomFieldSchema] })
+  @Prop({ type: [CustomFieldSchema], default: [] })
   customFields: CustomFieldModel[]
 
   @Prop()

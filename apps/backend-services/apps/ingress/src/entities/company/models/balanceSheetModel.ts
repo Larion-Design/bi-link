@@ -18,12 +18,6 @@ export class BalanceSheetModel implements BalanceSheet {
   balanceType: string
 
   @Prop()
-  caenCode: number
-
-  @Prop()
-  creante: number
-
-  @Prop()
   currentAssets: number
 
   @Prop()
@@ -82,6 +76,12 @@ export class BalanceSheetModel implements BalanceSheet {
 
   @Prop({ type: SchemaTypes.Date, default: null })
   year: Date | null
+
+  @Prop()
+  activityCode: number
+
+  @Prop()
+  receivables: number
 }
 
 export const BalanceSheetSchema = SchemaFactory.createForClass(BalanceSheetModel)

@@ -4,7 +4,7 @@ import { VehicleOwnerInfo } from 'defs'
 
 @Schema({ _id: false, timestamps: false })
 export class VehicleOwnerInfoModel implements VehicleOwnerInfo {
-  @Prop({ type: [{ type: SchemaTypes.String }] })
+  @Prop({ type: [{ type: SchemaTypes.String }], default: [] })
   plateNumbers: string[]
 }
 

@@ -40,31 +40,31 @@ export class PersonModel implements Person {
   @Prop({ type: OptionalDateValueWithMetadataSchema })
   birthdate: OptionalDateValueWithMetadataModel
 
-  @Prop({ type: Types.ObjectId, ref: LocationModel.name, default: null })
+  @Prop({ type: Types.ObjectId, ref: LocationModel.name, default: null, index: true, sparse: true })
   birthPlace: LocationDocument | null
 
-  @Prop({ type: Types.ObjectId, ref: LocationModel.name, default: null })
+  @Prop({ type: Types.ObjectId, ref: LocationModel.name, default: null, index: true, sparse: true })
   homeAddress: LocationDocument | null
 
-  @Prop({ type: [{ type: Types.ObjectId, ref: FileModel.name }] })
+  @Prop({ type: [{ type: Types.ObjectId, ref: FileModel.name }], default: [], index: true })
   images: FileModel[]
 
-  @Prop({ type: [IdDocumentSchema] })
+  @Prop({ type: [IdDocumentSchema], default: [] })
   documents: IdDocumentModel[]
 
-  @Prop({ type: [RelationshipSchema] })
+  @Prop({ type: [RelationshipSchema], default: [] })
   relationships: RelationshipModel[]
 
-  @Prop({ type: [CustomFieldSchema] })
+  @Prop({ type: [CustomFieldSchema], default: [] })
   contactDetails: CustomFieldModel[]
 
-  @Prop({ type: [EducationSchema] })
+  @Prop({ type: [EducationSchema], default: [] })
   education: EducationModel[]
 
-  @Prop({ type: [{ type: Types.ObjectId, ref: FileModel.name }] })
+  @Prop({ type: [{ type: Types.ObjectId, ref: FileModel.name }], index: true, default: [] })
   files: FileModel[]
 
-  @Prop({ type: [CustomFieldSchema], isRequired: false })
+  @Prop({ type: [CustomFieldSchema], default: [] })
   customFields: CustomFieldModel[]
 
   @Prop()

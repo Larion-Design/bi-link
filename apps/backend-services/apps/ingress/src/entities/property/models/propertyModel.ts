@@ -21,10 +21,10 @@ export class PropertyModel implements Property {
   @Prop()
   type: string
 
-  @Prop({ type: [{ type: Types.ObjectId, ref: FileModel.name }] })
+  @Prop({ type: [{ type: Types.ObjectId, ref: FileModel.name }], index: true })
   files: FileModel[]
 
-  @Prop({ type: [{ type: Types.ObjectId, ref: FileModel.name }] })
+  @Prop({ type: [{ type: Types.ObjectId, ref: FileModel.name }], index: true })
   images: FileModel[]
 
   @Prop({ type: [PropertyOwnerSchema] })

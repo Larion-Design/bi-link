@@ -22,7 +22,7 @@ import {
 import { PersonDocument, PersonModel } from '../../person/models/personModel'
 import { CompanyDocument } from './companyModel'
 
-@Schema({ _id: false, timestamps: false })
+@Schema({ timestamps: false })
 export class AssociateModel implements Associate {
   @Prop({ type: MetadataSchema })
   metadata: MetadataModel
@@ -30,10 +30,16 @@ export class AssociateModel implements Associate {
   @Prop({ type: TextValueWithMetadataSchema })
   role: TextValueWithMetadataModel
 
-  @Prop({ type: Types.ObjectId, ref: PersonModel.name, isRequired: false })
+  @Prop({
+    type: Types.ObjectId,
+    ref: PersonModel.name,
+    isRequired: false,
+    index: true,
+    sparse: true,
+  })
   person?: PersonDocument
 
-  @Prop({ type: Types.ObjectId, ref: 'CompanyModel', isRequired: false })
+  @Prop({ type: Types.ObjectId, ref: 'CompanyModel', isRequired: false, index: true, sparse: true })
   company?: CompanyDocument
 
   @Prop({ type: NumberValueWithMetadataSchema })

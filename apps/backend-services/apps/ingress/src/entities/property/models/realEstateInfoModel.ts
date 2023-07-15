@@ -13,7 +13,13 @@ import {
 
 @Schema({ _id: false, timestamps: false })
 export class RealEstateInfoModel implements RealEstateInfo {
-  @Prop({ type: Types.ObjectId, ref: LocationModel.name, isRequired: false })
+  @Prop({
+    type: Types.ObjectId,
+    ref: LocationModel.name,
+    isRequired: false,
+    index: true,
+    sparse: true,
+  })
   location: LocationDocument | null
 
   @Prop({ type: NumberValueWithMetadataSchema })
