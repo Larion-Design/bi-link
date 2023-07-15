@@ -12,6 +12,6 @@ export class ImportCompany {
 
   @EventPattern(MICROSERVICES.OSINT.TERMENE.importCompany)
   async importCompany(@Payload() cui: Params) {
-    return this.companyProducerService.importCompanies([cui], true, true)
+    return this.companyProducerService.importCompanies([cui])
   }
 }

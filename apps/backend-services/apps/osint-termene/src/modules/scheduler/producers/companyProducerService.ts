@@ -24,38 +24,21 @@ export class CompanyProducerService {
     this.queue.addBulk(
       companiesCUI.map((cui) => ({
         name: EVENT_IMPORT,
-        data: { cui, processAssociates: true, processProceedings: true },
+        data: { cui },
         opts: { jobId: cui },
       })),
     )
 
   updateCompany = async (companyId: string, cui: string) =>
-    this.queue.add(
-      EVENT_UPDATE,
-      {
-        cui,
-        companyId,
-        processAssociates: true,
-        processProceedings: true,
-      },
-      { jobId: companyId },
-    )
+    this.queue.add(EVENT_UPDATE, { cui, companyId }, { jobId: companyId })
 
-  transformCompany = async (
-    cui: string,
-    dataset: CompanyTermeneDataset,
-    processAssociates: boolean,
-    processProceedings: boolean,
-    companyId?: string,
-  ) =>
+  transformCompany = async (cui: string, dataset: CompanyTermeneDataset, companyId?: string) =>
     this.queue.add(
       EVENT_TRANSFORM,
       {
         cui,
         companyId,
         dataset,
-        processAssociates,
-        processProceedings,
       },
       { jobId: cui },
     )
@@ -63,7 +46,6 @@ export class CompanyProducerService {
   transformAssociates = async (
     cui: string,
     dataset: CompanyTermeneDataset,
-    processProceedings: boolean,
     companyInfo: CompanyAPIInput,
     companyId?: string,
   ) =>
@@ -74,7 +56,6 @@ export class CompanyProducerService {
         dataset,
         companyInfo,
         companyId,
-        processProceedings,
       },
       { jobId: cui },
     )

@@ -2,17 +2,12 @@ import { CompanyAPIInput, PersonAPIInput, ProceedingAPIInput } from 'defs'
 import { CompanyTermeneDataset } from '../../schema/company'
 import { TermeneProceeding } from '../../schema/courtFiles'
 
-type ProcessCompanyLinkedEntities = {
-  processAssociates: boolean
-  processProceedings: boolean
-}
-
-export type ExtractCompanyEvent = ProcessCompanyLinkedEntities & {
+export type ExtractCompanyEvent = {
   cui: string
   companyId?: string
 }
 
-export type TransformCompanyEvent = ProcessCompanyLinkedEntities & {
+export type TransformCompanyEvent = {
   cui: string
   dataset: CompanyTermeneDataset
   companyId?: string

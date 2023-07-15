@@ -14,4 +14,14 @@ export class CompanyLoaderService {
 
   createCompany = async (companyInfo: CompanyAPIInput, author: UpdateSource) =>
     this.ingressService.createEntity('COMPANY', companyInfo, author)
+
+  updateCompany = async (entityId: string, companyInfo: CompanyAPIInput, author: UpdateSource) =>
+    this.ingressService.updateEntity(
+      {
+        entityId,
+        entityType: 'COMPANY',
+      },
+      companyInfo,
+      author,
+    )
 }

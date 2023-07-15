@@ -30,18 +30,13 @@ export class CompanyProcessor {
   async importCompanyData(job: Job<ExtractCompanyEvent>) {
     try {
       const {
-        data: { cui, processAssociates, processProceedings },
+        data: { cui },
       } = job
 
       const companyScrapedData = await this.companyScraperService.getFullCompanyDataSet(cui)
 
       if (companyScrapedData) {
-        await this.companyProducerService.transformCompany(
-          cui,
-          companyScrapedData,
-          processAssociates,
-          processProceedings,
-        )
+        await this.companyProducerService.transformCompany(cui, companyScrapedData)
         return {}
       }
     } catch (e) {
@@ -53,19 +48,13 @@ export class CompanyProcessor {
   async updateCompanyData(job: Job<ExtractCompanyEvent>) {
     try {
       const {
-        data: { companyId, cui, processAssociates, processProceedings },
+        data: { companyId, cui },
       } = job
 
       const companyScrapedData = await this.companyScraperService.getFullCompanyDataSet(cui)
 
       if (companyScrapedData) {
-        await this.companyProducerService.transformCompany(
-          cui,
-          companyScrapedData,
-          processAssociates,
-          processProceedings,
-          companyId,
-        )
+        await this.companyProducerService.transformCompany(cui, companyScrapedData, companyId)
         return {}
       }
     } catch (e) {
@@ -77,22 +66,12 @@ export class CompanyProcessor {
   async transformCompany(job: Job<TransformCompanyEvent>) {
     try {
       const {
-        data: { companyId, cui, dataset, processAssociates, processProceedings },
+        data: { cui, dataset },
       } = job
 
       const companyInfo = this.companyTransformService.transformCompanyData(cui, dataset)
 
-      if (processAssociates) {
-        await this.companyProducerService.transformAssociates(
-          cui,
-          dataset,
-          processProceedings,
-          companyInfo,
-        )
-      } else {
-        await this.companyProducerService.loadCompany(companyInfo, companyId)
-      }
-
+      await this.companyProducerService.transformAssociates(cui, dataset, companyInfo)
       return {}
     } catch (e) {
       return job.moveToFailed(e as { message: string })
@@ -103,7 +82,7 @@ export class CompanyProcessor {
   async transformAssociates(job: Job<TransformCompanyEvent>) {
     try {
       const {
-        data: { cui, dataset, companyInfo, companyId, processProceedings },
+        data: { cui, dataset, companyInfo, companyId },
       } = job
 
       if (dataset.associates) {
@@ -115,7 +94,7 @@ export class CompanyProcessor {
 
       await this.companyProducerService.loadCompany(companyInfo, companyId)
 
-      if (processProceedings && dataset.courtCases?.rezultatele_cautarii.length) {
+      if (dataset.courtCases?.rezultatele_cautarii.length) {
         await this.proceedingProducerService.transformProceedings(
           dataset.courtCases.rezultatele_cautarii,
         )
@@ -137,7 +116,7 @@ export class CompanyProcessor {
         if (!companyId) {
           await this.companyLoaderService.createCompany(companyInfo, AUTHOR)
         } else {
-          // TODO: update company data
+          await this.companyLoaderService.updateCompany(companyId, companyInfo, AUTHOR)
         }
         return {}
       }
