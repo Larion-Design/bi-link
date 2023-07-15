@@ -17,31 +17,33 @@ export class ProceedingProceessor {
 
   @Process(EVENT_TRANSFORM)
   async transformProceeding(job: Job<TransformProceedingEvent>) {
-    const {
-      data: { dataset },
-    } = job
+    try {
+      const {
+        data: { dataset },
+      } = job
 
-    const existingProceedingId = await this.proceedingLoaderService.findProceeding(dataset.nr_dosar)
-
-    if (!existingProceedingId) {
       const proceedingInfo = await this.proceedingTransformerService.transformProceeding(dataset)
 
       if (proceedingInfo) {
         await this.proceedingProducerService.loadProceeding(proceedingInfo)
       }
+      return {}
+    } catch (e) {
+      return job.moveToFailed(e as { message: string })
     }
-    return {}
   }
 
   @Process(EVENT_LOAD)
   async loadProceeding(job: Job<LoadProceedingEvent>) {
-    const {
-      data: { proceedingInfo, proceedingId },
-    } = job
+    try {
+      const {
+        data: { proceedingInfo },
+      } = job
 
-    if (!proceedingId) {
       await this.proceedingLoaderService.createProceeding(proceedingInfo, AUTHOR)
+      return {}
+    } catch (e) {
+      return job.moveToFailed(e as { message: string })
     }
-    return {}
   }
 }

@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common'
 import { Company } from 'defs'
+import { CompanyDocument } from '../../entities/company/models/companyModel'
 import { CacheService } from './cacheService'
 
 @Injectable()
@@ -8,10 +9,11 @@ export class CompanyCacheService {
 
   constructor(private readonly cacheService: CacheService) {}
 
-  getCachedCompanyId = async (fieldValue: string) =>
-    this.cacheService.getHashKey(this.key, fieldValue)
+  async getCachedCompanyId(fieldValue: string) {
+    return this.cacheService.getHashKey(this.key, fieldValue)
+  }
 
-  cacheCompanyId = async (company: Company) => {
+  async cacheCompanyId(company: CompanyDocument) {
     const set = new Set<string>()
     const {
       name: { value: name },

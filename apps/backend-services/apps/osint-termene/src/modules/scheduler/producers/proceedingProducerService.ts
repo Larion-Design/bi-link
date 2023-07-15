@@ -14,7 +14,13 @@ export class ProceedingProducerService {
   ) {}
 
   transformProceedings = async (proceedings: TermeneProceeding[]) =>
-    this.queue.addBulk(proceedings.map((dataset) => ({ name: EVENT_TRANSFORM, data: { dataset } })))
+    this.queue.addBulk(
+      proceedings.map((dataset) => ({
+        name: EVENT_TRANSFORM,
+        data: { dataset },
+        opts: { jobId: dataset.id },
+      })),
+    )
 
   loadProceeding = async (proceedingInfo: ProceedingAPIInput) =>
     this.queue.add(EVENT_LOAD, { proceedingInfo })

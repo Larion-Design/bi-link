@@ -10,8 +10,6 @@ type Params = Parameters<IngressServiceMethods['findCompanyId']>[0]
 
 @Controller()
 export class FindCompanyId {
-  private readonly logger = new Logger(FindCompanyId.name)
-
   constructor(
     private readonly companiesService: CompaniesService,
     private readonly companyCacheService: CompanyCacheService,

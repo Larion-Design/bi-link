@@ -1,6 +1,6 @@
 import { MICROSERVICES } from '@app/rpc'
 import { IngressServiceMethods } from '@app/rpc/microservices/ingress'
-import { Controller, Logger } from '@nestjs/common'
+import { Controller } from '@nestjs/common'
 import { MessagePattern, Payload } from '@nestjs/microservices'
 import { PersonCacheService } from '../../cache'
 import { PersonsService } from '../../entities/person/services/personsService'
@@ -9,8 +9,6 @@ type Params = Parameters<IngressServiceMethods['findPersonId']>[0]
 
 @Controller()
 export class FindPersonId {
-  private readonly logger = new Logger(FindPersonId.name)
-
   constructor(
     private readonly personsService: PersonsService,
     private readonly personCacheService: PersonCacheService,
