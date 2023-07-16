@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common'
 import { Proceeding } from 'defs'
-import { CacheService } from './cacheService'
+import { CacheService } from '@app/cache/cacheService'
 
 @Injectable()
 export class ProceedingCacheService {

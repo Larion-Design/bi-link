@@ -1,6 +1,6 @@
+import { CacheService } from '@app/cache'
 import { Injectable, Logger } from '@nestjs/common'
 import { MinioService } from 'nestjs-minio-client'
-import { CacheService } from '@app/service-cache-module'
 import { ConfigService } from '@nestjs/config'
 import { BUCKET_FILES } from '../../constants'
 
@@ -16,10 +16,10 @@ export class FileStorageService {
     private readonly cacheService: CacheService,
     configService: ConfigService,
   ) {
-    this.minioInternalUrl = `${configService.getOrThrow<string>(
-      'MINIO_ENDPOINT',
-    )}:${configService.getOrThrow<string>('MINIO_PORT')}`
+    const endpoint = configService.getOrThrow<string>('MINIO_ENDPOINT')
+    const port = configService.getOrThrow<string>('MINIO_PORT')
 
+    this.minioInternalUrl = `${endpoint}:${port}`
     this.minioPublicUrl = configService.getOrThrow<string>('MINIO_PUBLIC_URL')
 
     void this.validateBucket(configService.getOrThrow<string>('MINIO_REGION'))
@@ -83,7 +83,7 @@ export class FileStorageService {
 
   getDownloadUrls = async (filesIds: string[], ttl = 300) => {
     try {
-      return Promise.allSettled(filesIds.map((fileId) => this.getDownloadUrl(fileId, ttl)))
+      return Promise.all(filesIds.map((fileId) => this.getDownloadUrl(fileId, ttl)))
     } catch (error) {
       this.logger.error(error)
     }
@@ -93,10 +93,10 @@ export class FileStorageService {
     privateUrl.replace(this.minioInternalUrl, this.minioPublicUrl)
 
   private getCachedUrl = async (fileId: string) =>
-    this.cacheService.get<string>(this.getFileUrlCacheKey(fileId))
-
-  private getFileUrlCacheKey = (fileId: string) => `/files/download/${fileId}}`
+    this.cacheService.get(this.getFileUrlCacheKey(fileId))
 
   private cacheFileUrl = async (fileId: string, url: string, ttl: number) =>
     this.cacheService.set(this.getFileUrlCacheKey(fileId), url, ttl)
+
+  private getFileUrlCacheKey = (fileId: string) => `/files/download/${fileId}}`
 }

@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common'
 import { Person } from 'defs'
 import { formatDate } from 'tools'
-import { CacheService } from './cacheService'
+import { CacheService } from '@app/cache/cacheService'
 
 @Injectable()
 export class PersonCacheService {

@@ -11,7 +11,7 @@ export class BrowserService {
     this.chromiumInstanceUrl = configService.getOrThrow<string>('CHROMIUM_INSTANCE_URL')
   }
 
-  getBrowser = async () => {
+  async getBrowser() {
     if (!this.browser) {
       this.browser = await puppeteer.connect({
         browserWSEndpoint: `${this.chromiumInstanceUrl}?keepalive=60000&stealth`,
@@ -20,7 +20,7 @@ export class BrowserService {
     return this.browser
   }
 
-  handlePage = async <T = void>(pageHandler: (page: Page) => Promise<T>) => {
+  async handlePage<T = void>(pageHandler: (page: Page) => Promise<T>) {
     const browser = await this.getBrowser()
     const page = await browser.newPage()
 
@@ -35,11 +35,11 @@ export class BrowserService {
       if (page.isClosed()) {
         await page.close()
       }
+      return Promise.reject(e)
     }
-    return Promise.reject()
   }
 
-  handlePrivatePage = async <T = void>(pageHandler: (page: Page) => Promise<T>) => {
+  async handlePrivatePage<T = void>(pageHandler: (page: Page) => Promise<T>) {
     const browser = await this.getBrowser()
     const context = await browser.createIncognitoBrowserContext()
     const page = await context.newPage()
@@ -55,7 +55,7 @@ export class BrowserService {
       if (page.isClosed()) {
         await page.close()
       }
+      return Promise.reject(e)
     }
-    return Promise.reject()
   }
 }

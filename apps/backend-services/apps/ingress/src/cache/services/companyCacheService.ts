@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common'
-import { Company } from 'defs'
 import { CompanyDocument } from '../../entities/company/models/companyModel'
-import { CacheService } from './cacheService'
+import { CacheService } from '@app/cache/cacheService'
 
 @Injectable()
 export class CompanyCacheService {

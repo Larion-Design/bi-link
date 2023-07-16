@@ -1,2 +1,2 @@
 export * from './services'
-export * from './cacheModule'
+export * from './ingressCacheModule'

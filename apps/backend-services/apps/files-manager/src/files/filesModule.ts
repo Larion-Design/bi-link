@@ -1,3 +1,4 @@
+import { CacheModule } from '@app/cache'
 import { Module } from '@nestjs/common'
 import { ConfigModule, ConfigService } from '@nestjs/config'
 import { MinioModule } from 'nestjs-minio-client'
@@ -7,6 +8,7 @@ import { TextExtractorService } from './services/textExtractorService'
 
 @Module({
   imports: [
+    CacheModule,
     MinioModule.registerAsync({
       imports: [ConfigModule],
       inject: [ConfigService],

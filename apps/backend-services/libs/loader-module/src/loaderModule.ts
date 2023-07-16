@@ -1,3 +1,4 @@
+import { RpcModule } from '@app/rpc'
 import {
   CompanyLoaderService,
   LocationLoaderService,
@@ -7,7 +8,7 @@ import {
 import { Module } from '@nestjs/common'
 
 @Module({
-  imports: [],
+  imports: [RpcModule],
   providers: [
     PersonLoaderService,
     CompanyLoaderService,

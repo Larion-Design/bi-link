@@ -140,7 +140,8 @@
       "^@app/definitions(|/.*)$": "<rootDir>/libs/definitions/src/$1",
       "^@app/scheduler-module(|/.*)$": "<rootDir>/libs/scheduler-module/src/$1",
       "^@app/loader-module(|/.*)$": "<rootDir>/libs/loader-module/src/$1",
-      "^@app/diff-module(|/.*)$": "<rootDir>/libs/diff-module/src/$1"
+      "^@app/diff-module(|/.*)$": "<rootDir>/libs/diff-module/src/$1",
+      "^@app/cache(|/.*)$": "<rootDir>/libs/cache/src/$1"
     }
   },
   "peerDependencies": {
