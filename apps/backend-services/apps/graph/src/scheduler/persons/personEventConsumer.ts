@@ -3,8 +3,8 @@ import { OnQueueActive, OnQueueCompleted, OnQueueFailed, Process, Processor } fr
 import { Logger } from '@nestjs/common'
 import { Job } from 'bull'
 import { personSchema } from 'defs'
-import { QUEUE_GRAPH_PERSONS } from '../../producers/constants'
-import { EVENT_CREATED, EVENT_UPDATED, PersonEventInfo } from '@app/scheduler-module'
+import { AUTHOR, QUEUE_GRAPH_PERSONS } from '../constants'
+import { EVENT_CREATED, EVENT_UPDATED, EntityEventInfo } from '@app/scheduler-module'
 import { PersonGraphService } from '../../graph/services/personGraphService'
 
 @Processor(QUEUE_GRAPH_PERSONS)
@@ -32,14 +32,14 @@ export class PersonEventConsumer {
   }
 
   @Process(EVENT_CREATED)
-  async personCreated(job: Job<PersonEventInfo>) {
+  async personCreated(job: Job<EntityEventInfo>) {
     const {
-      data: { personId },
+      data: { entityId },
     } = job
 
     try {
-      const personModel = await this.getPersonInfo(personId)
-      await this.personGraphService.upsertPersonNode(personId, personModel)
+      const personModel = await this.getPersonInfo(entityId)
+      await this.personGraphService.upsertPersonNode(entityId, personModel)
       return {}
     } catch (error) {
       this.logger.error(error)
@@ -48,14 +48,14 @@ export class PersonEventConsumer {
   }
 
   @Process(EVENT_UPDATED)
-  async personUpdated(job: Job<PersonEventInfo>) {
+  async personUpdated(job: Job<EntityEventInfo>) {
     const {
-      data: { personId },
+      data: { entityId },
     } = job
 
     try {
-      const personModel = await this.getPersonInfo(personId)
-      await this.personGraphService.upsertPersonNode(personId, personModel)
+      const personModel = await this.getPersonInfo(entityId)
+      await this.personGraphService.upsertPersonNode(entityId, personModel)
       return {}
     } catch (error) {
       this.logger.error(error)
@@ -63,18 +63,15 @@ export class PersonEventConsumer {
     }
   }
 
-  private getPersonInfo = async (personId: string) =>
+  private getPersonInfo = async (entityId: string) =>
     personSchema.parse(
       await this.ingressService.getEntity(
         {
-          entityId: personId,
+          entityId,
           entityType: 'PERSON',
         },
         true,
-        {
-          type: 'SERVICE',
-          sourceId: 'SERVICE_GRAPH',
-        },
+        AUTHOR,
       ),
     )
 }

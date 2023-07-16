@@ -1,8 +1,8 @@
 import { Logger } from '@nestjs/common'
 import { Job } from 'bull'
 import { OnQueueActive, OnQueueCompleted, OnQueueFailed, Process, Processor } from '@nestjs/bull'
-import { QUEUE_GRAPH_PROCEEDINGS } from '../../producers/constants'
-import { EVENT_CREATED, EVENT_UPDATED, ProceedingEventInfo } from '@app/scheduler-module'
+import { QUEUE_GRAPH_PROCEEDINGS } from '../constants'
+import { EVENT_CREATED, EVENT_UPDATED, EntityEventInfo } from '@app/scheduler-module'
 import { ProceedingGraphService } from '../../graph/services/proceedingGraphService'
 
 @Processor(QUEUE_GRAPH_PROCEEDINGS)
@@ -27,13 +27,13 @@ export class ProceedingEventConsumer {
   }
 
   @Process(EVENT_CREATED)
-  async propertyCreated(job: Job<ProceedingEventInfo>) {
+  async propertyCreated(job: Job<EntityEventInfo>) {
     const {
-      data: { proceedingId },
+      data: { entityId },
     } = job
 
     try {
-      await this.proceedingGraphService.upsertProceedingNode(proceedingId)
+      await this.proceedingGraphService.upsertProceedingNode(entityId)
       return {}
     } catch (error) {
       await job.moveToFailed(error as { message: string })
@@ -41,13 +41,13 @@ export class ProceedingEventConsumer {
   }
 
   @Process(EVENT_UPDATED)
-  async propertyUpdated(job: Job<ProceedingEventInfo>) {
+  async propertyUpdated(job: Job<EntityEventInfo>) {
     const {
-      data: { proceedingId },
+      data: { entityId },
     } = job
 
     try {
-      await this.proceedingGraphService.upsertProceedingNode(proceedingId)
+      await this.proceedingGraphService.upsertProceedingNode(entityId)
       return {}
     } catch (error) {
       this.logger.error(error)

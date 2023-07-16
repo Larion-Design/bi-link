@@ -3,8 +3,8 @@ import { Logger } from '@nestjs/common'
 import { Job } from 'bull'
 import { OnQueueActive, OnQueueCompleted, OnQueueFailed, Process, Processor } from '@nestjs/bull'
 import { eventSchema } from 'defs'
-import { QUEUE_GRAPH_EVENTS } from '../../producers/constants'
-import { EVENT_CREATED, EVENT_UPDATED, EventEventInfo } from '@app/scheduler-module'
+import { AUTHOR, QUEUE_GRAPH_EVENTS } from '../constants'
+import { EVENT_CREATED, EVENT_UPDATED, EntityEventInfo } from '@app/scheduler-module'
 import { EventGraphService } from '../../graph/services/eventGraphService'
 
 @Processor(QUEUE_GRAPH_EVENTS)
@@ -32,14 +32,14 @@ export class EventConsumer {
   }
 
   @Process(EVENT_CREATED)
-  async eventCreated(job: Job<EventEventInfo>) {
+  async eventCreated(job: Job<EntityEventInfo>) {
     const {
-      data: { eventId },
+      data: { entityId },
     } = job
 
     try {
-      const eventModel = await this.getEventInfo(eventId)
-      await this.eventGraphService.upsertEventNode(eventId, eventModel)
+      const eventModel = await this.getEventInfo(entityId)
+      await this.eventGraphService.upsertEventNode(entityId, eventModel)
       return {}
     } catch (error) {
       this.logger.error(error)
@@ -48,14 +48,14 @@ export class EventConsumer {
   }
 
   @Process(EVENT_UPDATED)
-  async eventUpdated(job: Job<EventEventInfo>) {
+  async eventUpdated(job: Job<EntityEventInfo>) {
     const {
-      data: { eventId },
+      data: { entityId },
     } = job
 
     try {
-      const eventModel = await this.getEventInfo(eventId)
-      await this.eventGraphService.upsertEventNode(eventId, eventModel)
+      const eventModel = await this.getEventInfo(entityId)
+      await this.eventGraphService.upsertEventNode(entityId, eventModel)
       return {}
     } catch (error) {
       this.logger.error(error)
@@ -63,11 +63,12 @@ export class EventConsumer {
     }
   }
 
-  private getEventInfo = async (eventId) =>
+  private getEventInfo = async (entityId) =>
     eventSchema.parse(
-      await this.ingressService.getEntity({ entityId: eventId, entityType: 'EVENT' }, true, {
-        type: 'SERVICE',
-        sourceId: 'SERVICE_INDEXER',
-      }),
+      await this.ingressService.getEntity(
+        { entityId: entityId, entityType: 'EVENT' },
+        true,
+        AUTHOR,
+      ),
     )
 }

@@ -1,8 +1,6 @@
 import { RpcModule } from '@app/rpc'
 import { BullModule } from '@nestjs/bull'
 import { Module } from '@nestjs/common'
-import { ConsumersModule } from './consumers/consumersModule'
-import { ProducersModule } from './producers/producersModule'
 import { ConfigModule, ConfigService } from '@nestjs/config'
 import { SentryModule } from '@ntegral/nestjs-sentry'
 import { ServiceHealthModule } from '@app/service-health'
@@ -12,8 +10,6 @@ import { GraphRPCModule } from './rpc/graphRPCModule'
   imports: [
     RpcModule,
     ServiceHealthModule,
-    ProducersModule,
-    ConsumersModule,
     GraphRPCModule,
     BullModule.forRootAsync({
       imports: [ConfigModule],

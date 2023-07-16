@@ -1,8 +1,8 @@
 import { Logger } from '@nestjs/common'
 import { Job } from 'bull'
 import { OnQueueActive, OnQueueCompleted, OnQueueFailed, Process, Processor } from '@nestjs/bull'
-import { QUEUE_GRAPH_PROPERTIES } from '../../producers/constants'
-import { EVENT_CREATED, EVENT_UPDATED, PropertyEventInfo } from '@app/scheduler-module'
+import { QUEUE_GRAPH_PROPERTIES } from '../constants'
+import { EVENT_CREATED, EVENT_UPDATED, EntityEventInfo } from '@app/scheduler-module'
 import { PropertyGraphService } from '../../graph/services/propertyGraphService'
 
 @Processor(QUEUE_GRAPH_PROPERTIES)
@@ -27,13 +27,13 @@ export class PropertyEventConsumer {
   }
 
   @Process(EVENT_CREATED)
-  async propertyCreated(job: Job<PropertyEventInfo>) {
+  async propertyCreated(job: Job<EntityEventInfo>) {
     const {
-      data: { propertyId },
+      data: { entityId },
     } = job
 
     try {
-      await this.propertyGraphService.upsertPropertyNode(propertyId)
+      await this.propertyGraphService.upsertPropertyNode(entityId)
       return {}
     } catch (error) {
       return job.moveToFailed(error as { message: string })
@@ -41,13 +41,13 @@ export class PropertyEventConsumer {
   }
 
   @Process(EVENT_UPDATED)
-  async propertyUpdated(job: Job<PropertyEventInfo>) {
+  async propertyUpdated(job: Job<EntityEventInfo>) {
     const {
-      data: { propertyId },
+      data: { entityId },
     } = job
 
     try {
-      await this.propertyGraphService.upsertPropertyNode(propertyId)
+      await this.propertyGraphService.upsertPropertyNode(entityId)
       return {}
     } catch (error) {
       this.logger.error(error)

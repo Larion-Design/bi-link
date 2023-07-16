@@ -1,8 +1,8 @@
 import { Logger } from '@nestjs/common'
 import { Job } from 'bull'
-import { EVENT_CREATED, EVENT_UPDATED, ReportEventInfo } from '@app/scheduler-module'
+import { EVENT_CREATED, EVENT_UPDATED, EntityEventInfo } from '@app/scheduler-module'
 import { OnQueueActive, OnQueueCompleted, OnQueueFailed, Process, Processor } from '@nestjs/bull'
-import { QUEUE_GRAPH_REPORTS } from '../../producers/constants'
+import { QUEUE_GRAPH_REPORTS } from '../constants'
 import { ReportGraphService } from '../../graph/services/reportGraphService'
 
 @Processor(QUEUE_GRAPH_REPORTS)
@@ -27,13 +27,13 @@ export class ReportEventConsumer {
   }
 
   @Process(EVENT_CREATED)
-  async reportCreated(job: Job<ReportEventInfo>) {
+  async reportCreated(job: Job<EntityEventInfo>) {
     const {
-      data: { reportId },
+      data: { entityId },
     } = job
 
     try {
-      await this.reportGraphService.upsertReportNode(reportId)
+      await this.reportGraphService.upsertReportNode(entityId)
       return {}
     } catch (error) {
       await job.moveToFailed(error as { message: string })
@@ -41,13 +41,13 @@ export class ReportEventConsumer {
   }
 
   @Process(EVENT_UPDATED)
-  async reportUpdated(job: Job<ReportEventInfo>) {
+  async reportUpdated(job: Job<EntityEventInfo>) {
     const {
-      data: { reportId },
+      data: { entityId },
     } = job
 
     try {
-      await this.reportGraphService.upsertReportNode(reportId)
+      await this.reportGraphService.upsertReportNode(entityId)
       return {}
     } catch (error) {
       this.logger.error(error)

@@ -1,11 +1,11 @@
 import { Module } from '@nestjs/common'
-import { ProducersModule } from '../producers/producersModule'
+import { GraphSchedulerModule } from '../scheduler/graphSchedulerModule'
 import { EntityUpserted } from './controllers/entityUpserted'
 import { GetEntityRelationships } from './controllers/getEntityRelationships'
 import { RefreshEntities } from './controllers/refreshEntities'
 
 @Module({
-  imports: [ProducersModule],
+  imports: [GraphSchedulerModule],
   controllers: [GetEntityRelationships, EntityUpserted, RefreshEntities],
 })
 export class GraphRPCModule {}

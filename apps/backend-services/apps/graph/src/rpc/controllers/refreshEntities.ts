@@ -3,12 +3,12 @@ import { EventPattern, Payload } from '@nestjs/microservices'
 import { EntityType } from 'defs'
 import { MICROSERVICES } from '@app/rpc'
 import { IngressService } from '@app/rpc/microservices/ingress'
-import { CompanyDispatcherService } from '../../producers/services/companyDispatcherService'
-import { EventDispatcherService } from '../../producers/services/eventDispatcherService'
-import { PersonDispatcherService } from '../../producers/services/personDispatcherService'
-import { ProceedingDispatcherService } from '../../producers/services/proceedingDispatcherService'
-import { PropertyDispatcherService } from '../../producers/services/propertyDispatcherService'
-import { ReportDispatcherService } from '../../producers/services/reportDispatcherService'
+import { CompanyDispatcherService } from '../../scheduler/companies/companyDispatcherService'
+import { EventDispatcherService } from '../../scheduler/events/eventDispatcherService'
+import { PersonDispatcherService } from '../../scheduler/persons/personDispatcherService'
+import { ProceedingDispatcherService } from '../../scheduler/proceedings/proceedingDispatcherService'
+import { PropertyDispatcherService } from '../../scheduler/properties/propertyDispatcherService'
+import { ReportDispatcherService } from '../../scheduler/reports/reportDispatcherService'
 
 @Controller()
 export class RefreshEntities {

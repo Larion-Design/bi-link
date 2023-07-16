@@ -3,8 +3,8 @@ import { Job } from 'bull'
 import { OnQueueActive, OnQueueCompleted, OnQueueFailed, Process, Processor } from '@nestjs/bull'
 import { companySchema } from 'defs'
 import { IngressService } from '@app/rpc/microservices/ingress'
-import { CompanyEventInfo, EVENT_CREATED, EVENT_UPDATED } from '@app/scheduler-module'
-import { QUEUE_GRAPH_COMPANIES } from '../../producers/constants'
+import { EntityEventInfo, EVENT_CREATED, EVENT_UPDATED } from '@app/scheduler-module'
+import { AUTHOR, QUEUE_GRAPH_COMPANIES } from '../constants'
 import { CompanyGraphService } from '../../graph/services/companyGraphService'
 
 @Processor(QUEUE_GRAPH_COMPANIES)
@@ -32,13 +32,13 @@ export class CompanyEventConsumer {
   }
 
   @Process(EVENT_CREATED)
-  async companyCreated(job: Job<CompanyEventInfo>) {
+  async companyCreated(job: Job<EntityEventInfo>) {
     const {
-      data: { companyId },
+      data: { entityId },
     } = job
 
     try {
-      await this.upsertCompanyNode(companyId)
+      await this.upsertCompanyNode(entityId)
       return {}
     } catch (error) {
       this.logger.error(error)
@@ -47,13 +47,13 @@ export class CompanyEventConsumer {
   }
 
   @Process(EVENT_UPDATED)
-  async companyUpdated(job: Job<CompanyEventInfo>) {
+  async companyUpdated(job: Job<EntityEventInfo>) {
     const {
-      data: { companyId },
+      data: { entityId },
     } = job
 
     try {
-      await this.upsertCompanyNode(companyId)
+      await this.upsertCompanyNode(entityId)
       return {}
     } catch (error) {
       this.logger.error(error)
@@ -61,16 +61,17 @@ export class CompanyEventConsumer {
     }
   }
 
-  private upsertCompanyNode = async (companyId: string) => {
+  private upsertCompanyNode = async (entityId: string) => {
     const companyModel = companySchema.parse(
-      await this.ingressService.getEntity({ entityId: companyId, entityType: 'COMPANY' }, true, {
-        type: 'SERVICE',
-        sourceId: 'SERVICE_GRAPH',
-      }),
+      await this.ingressService.getEntity(
+        { entityId: entityId, entityType: 'COMPANY' },
+        true,
+        AUTHOR,
+      ),
     )
 
     if (companyModel) {
-      await this.companyGraphService.upsertCompanyNode(companyId, companyModel)
+      await this.companyGraphService.upsertCompanyNode(entityId, companyModel)
     }
   }
 }
