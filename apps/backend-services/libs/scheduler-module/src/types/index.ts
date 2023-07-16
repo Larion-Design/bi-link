@@ -1,3 +1,4 @@
+export * from './entity'
 export * from './company'
 export * from './event'
 export * from './file'

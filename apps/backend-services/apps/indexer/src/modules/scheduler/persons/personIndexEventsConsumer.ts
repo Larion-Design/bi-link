@@ -8,17 +8,12 @@ import {
 } from '@nestjs/bull'
 import { Job } from 'bull'
 import { Logger } from '@nestjs/common'
-import {
-  EVENT_CREATED,
-  EVENT_UPDATED,
-  FileParentEntity,
-  PersonEventInfo,
-} from '@app/scheduler-module'
-import { Person } from 'defs'
+import { EVENT_CREATED, EVENT_UPDATED, EntityEventInfo } from '@app/scheduler-module'
+import { EntityInfo, Person } from 'defs'
 import { IngressService } from '@app/rpc/microservices/ingress'
 import { PersonsIndexerService } from '../../indexer/services'
-import { QUEUE_PERSONS } from '../../constants'
-import { FileEventDispatcherService } from '../../producers/services/fileEventDispatcherService'
+import { AUTHOR, QUEUE_PERSONS } from '../../constants'
+import { FileEventDispatcherService } from '../files/fileEventDispatcherService'
 
 @Processor(QUEUE_PERSONS)
 export class PersonIndexEventsConsumer {
@@ -51,13 +46,13 @@ export class PersonIndexEventsConsumer {
   }
 
   @Process(EVENT_CREATED)
-  async personCreated(job: Job<PersonEventInfo>) {
+  async personCreated(job: Job<EntityEventInfo>) {
     const {
-      data: { personId },
+      data: { entityId },
     } = job
 
     try {
-      await this.indexPersonInfo(personId)
+      await this.indexPersonInfo(entityId)
       return {}
     } catch (error) {
       this.logger.error(error)
@@ -66,41 +61,33 @@ export class PersonIndexEventsConsumer {
   }
 
   @Process(EVENT_UPDATED)
-  async personUpdated(job: Job<PersonEventInfo>) {
+  async personUpdated(job: Job<EntityEventInfo>) {
     const {
-      data: { personId },
+      data: { entityId },
     } = job
 
     try {
-      await this.indexPersonInfo(personId)
-      return {}
+      if (await this.indexPersonInfo(entityId)) {
+        return {}
+      }
     } catch (error) {
       this.logger.error(error)
       await job.moveToFailed(error as { message: string })
     }
   }
 
-  private indexPersonInfo = async (personId: string) => {
-    const person = (await this.ingressService.getEntity(
-      { entityId: personId, entityType: 'PERSON' },
-      true,
-      {
-        type: 'SERVICE',
-        sourceId: 'SERVICE_INDEXER',
-      },
-    )) as Person
+  private async indexPersonInfo(entityId: string) {
+    const entityInfo: EntityInfo = { entityId, entityType: 'PERSON' }
+    const person = (await this.ingressService.getEntity(entityInfo, true, AUTHOR)) as Person
 
     if (person) {
-      const indexingSuccessful = await this.personsIndexerService.indexPerson(personId, person)
+      const indexingSuccessful = await this.personsIndexerService.indexPerson(entityId, person)
 
       if (indexingSuccessful) {
         const filesIds = person.files.map(({ fileId }) => fileId)
 
         if (filesIds.length) {
-          await this.fileEventDispatcherService.dispatchFilesUpdated(filesIds, {
-            type: FileParentEntity.PERSON,
-            id: personId,
-          })
+          await this.fileEventDispatcherService.dispatchFilesUpdated(filesIds, entityInfo)
         }
         return true
       }

@@ -8,16 +8,11 @@ import {
 } from '@nestjs/bull'
 import { Job } from 'bull'
 import { Logger } from '@nestjs/common'
-import { Company } from 'defs'
+import { Company, EntityInfo } from 'defs'
 import { IngressService } from '@app/rpc/microservices/ingress'
-import {
-  CompanyEventInfo,
-  EVENT_CREATED,
-  EVENT_UPDATED,
-  FileParentEntity,
-} from '@app/scheduler-module'
+import { EntityEventInfo, EVENT_CREATED, EVENT_UPDATED } from '@app/scheduler-module'
 import { QUEUE_COMPANIES } from '../../constants'
-import { FileEventDispatcherService } from '../../producers/services/fileEventDispatcherService'
+import { FileEventDispatcherService } from '../files/fileEventDispatcherService'
 import { CompaniesIndexerService } from '../../indexer/services'
 
 @Processor(QUEUE_COMPANIES)
@@ -51,13 +46,13 @@ export class CompanyIndexEventsConsumer {
   }
 
   @Process(EVENT_CREATED)
-  async companyCreated(job: Job<CompanyEventInfo>) {
+  async companyCreated(job: Job<EntityEventInfo>) {
     try {
       const {
-        data: { companyId },
+        data: { entityId },
       } = job
 
-      await this.indexCompanyInfo(companyId)
+      await this.indexCompanyInfo(entityId)
       return {}
     } catch (error) {
       this.logger.error(error)
@@ -66,13 +61,13 @@ export class CompanyIndexEventsConsumer {
   }
 
   @Process(EVENT_UPDATED)
-  async companyUpdated(job: Job<CompanyEventInfo>) {
+  async companyUpdated(job: Job<EntityEventInfo>) {
     try {
       const {
-        data: { companyId },
+        data: { entityId },
       } = job
 
-      await this.indexCompanyInfo(companyId)
+      await this.indexCompanyInfo(entityId)
       return {}
     } catch (error) {
       this.logger.error(error)
@@ -80,27 +75,21 @@ export class CompanyIndexEventsConsumer {
     }
   }
 
-  private indexCompanyInfo = async (companyId: string) => {
-    const company = (await this.ingressService.getEntity(
-      { entityId: companyId, entityType: 'COMPANY' },
-      true,
-      {
-        type: 'SERVICE',
-        sourceId: 'SERVICE_INDEXER',
-      },
-    )) as Company
+  private async indexCompanyInfo(entityId: string) {
+    const entityInfo: EntityInfo = { entityId, entityType: 'COMPANY' }
+    const company = (await this.ingressService.getEntity(entityInfo, true, {
+      type: 'SERVICE',
+      sourceId: 'SERVICE_INDEXER',
+    })) as Company
 
     if (company) {
-      const indexingSuccessful = await this.companiesIndexerService.indexCompany(companyId, company)
+      const indexingSuccessful = await this.companiesIndexerService.indexCompany(entityId, company)
 
       if (indexingSuccessful) {
         const filesIds = company.files.map(({ fileId }) => fileId)
 
         if (filesIds.length) {
-          await this.fileEventDispatcherService.dispatchFilesUpdated(filesIds, {
-            type: FileParentEntity.COMPANY,
-            id: companyId,
-          })
+          await this.fileEventDispatcherService.dispatchFilesUpdated(filesIds, entityInfo)
         }
         return true
       }

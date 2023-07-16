@@ -2,15 +2,10 @@ import { IngressService } from '@app/rpc/microservices/ingress'
 import { OnQueueActive, OnQueueCompleted, OnQueueFailed, Process, Processor } from '@nestjs/bull'
 import { Logger } from '@nestjs/common'
 import { Job } from 'bull'
-import {
-  EVENT_CREATED,
-  EVENT_UPDATED,
-  FileParentEntity,
-  PropertyEventInfo,
-} from '@app/scheduler-module'
-import { Property } from 'defs'
-import { QUEUE_PROPERTIES } from '../../constants'
-import { FileEventDispatcherService } from '../../producers/services/fileEventDispatcherService'
+import { EVENT_CREATED, EVENT_UPDATED, EntityEventInfo } from '@app/scheduler-module'
+import { EntityInfo, Property } from 'defs'
+import { AUTHOR, QUEUE_PROPERTIES } from '../../constants'
+import { FileEventDispatcherService } from '../files/fileEventDispatcherService'
 import { PropertiesIndexerService } from '../../indexer/services'
 
 @Processor(QUEUE_PROPERTIES)
@@ -39,14 +34,14 @@ export class PropertyIndexEventsConsumer {
   }
 
   @Process(EVENT_CREATED)
-  async propertyCreated(job: Job<PropertyEventInfo>) {
+  async propertyCreated(job: Job<EntityEventInfo>) {
     const {
-      data: { propertyId },
+      data: { entityId },
     } = job
 
     try {
-      if (await this.indexPropertyInfo(propertyId)) {
-        return job.moveToCompleted(propertyId)
+      if (await this.indexPropertyInfo(entityId)) {
+        return {}
       }
     } catch (error) {
       this.logger.error(error)
@@ -55,14 +50,14 @@ export class PropertyIndexEventsConsumer {
   }
 
   @Process(EVENT_UPDATED)
-  async propertyUpdated(job: Job<PropertyEventInfo>) {
+  async propertyUpdated(job: Job<EntityEventInfo>) {
     const {
-      data: { propertyId },
+      data: { entityId },
     } = job
 
     try {
-      if (await this.indexPropertyInfo(propertyId)) {
-        return job.moveToCompleted()
+      if (await this.indexPropertyInfo(entityId)) {
+        return {}
       }
     } catch (error) {
       this.logger.error(error)
@@ -70,19 +65,13 @@ export class PropertyIndexEventsConsumer {
     }
   }
 
-  private indexPropertyInfo = async (propertyId: string) => {
-    const property = (await this.ingressService.getEntity(
-      { entityId: propertyId, entityType: 'PROPERTY' },
-      true,
-      {
-        type: 'SERVICE',
-        sourceId: 'SERVICE_INDEXER',
-      },
-    )) as Property
+  private indexPropertyInfo = async (entityId: string) => {
+    const entityInfo: EntityInfo = { entityId, entityType: 'PROPERTY' }
+    const property = (await this.ingressService.getEntity(entityInfo, true, AUTHOR)) as Property
 
     if (property) {
       const indexingSuccessful = await this.propertiesIndexerService.indexProperty(
-        propertyId,
+        entityId,
         property,
       )
 
@@ -90,10 +79,7 @@ export class PropertyIndexEventsConsumer {
         const filesIds = property.files.map(({ fileId }) => fileId)
 
         if (filesIds.length) {
-          await this.fileEventDispatcherService.dispatchFilesUpdated(filesIds, {
-            type: FileParentEntity.PROPERTY,
-            id: propertyId,
-          })
+          await this.fileEventDispatcherService.dispatchFilesUpdated(filesIds, entityInfo)
         }
         return true
       }

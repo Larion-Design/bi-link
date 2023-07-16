@@ -1,17 +1,12 @@
 import { IngressService } from '@app/rpc/microservices/ingress'
-import {
-  EVENT_CREATED,
-  EventEventInfo,
-  EVENT_UPDATED,
-  FileParentEntity,
-} from '@app/scheduler-module'
+import { EVENT_CREATED, EVENT_UPDATED, EntityEventInfo } from '@app/scheduler-module'
 import { OnQueueActive, OnQueueCompleted, OnQueueFailed, Process, Processor } from '@nestjs/bull'
 import { Logger } from '@nestjs/common'
-import { Event } from 'defs'
-import { FileEventDispatcherService } from '../../producers/services/fileEventDispatcherService'
+import { EntityInfo, Event } from 'defs'
+import { FileEventDispatcherService } from '../files/fileEventDispatcherService'
 import { Job } from 'bull'
 import { EventsIndexerService } from '../../indexer/services'
-import { QUEUE_EVENTS } from '../../constants'
+import { AUTHOR, QUEUE_EVENTS } from '../../constants'
 
 @Processor(QUEUE_EVENTS)
 export class EventIndexEventsConsumer {
@@ -39,13 +34,13 @@ export class EventIndexEventsConsumer {
   }
 
   @Process(EVENT_CREATED)
-  async eventCreated(job: Job<EventEventInfo>) {
+  async eventCreated(job: Job<EntityEventInfo>) {
     const {
-      data: { eventId },
+      data: { entityId },
     } = job
 
     try {
-      if (await this.indexEventInfo(eventId)) {
+      if (await this.indexEventInfo(entityId)) {
         return {}
       }
     } catch (error) {
@@ -55,13 +50,13 @@ export class EventIndexEventsConsumer {
   }
 
   @Process(EVENT_UPDATED)
-  async eventUpdated(job: Job<EventEventInfo>) {
+  async eventUpdated(job: Job<EntityEventInfo>) {
     const {
-      data: { eventId },
+      data: { entityId },
     } = job
 
     try {
-      if (await this.indexEventInfo(eventId)) {
+      if (await this.indexEventInfo(entityId)) {
         return {}
       }
     } catch (error) {
@@ -70,27 +65,18 @@ export class EventIndexEventsConsumer {
     }
   }
 
-  private indexEventInfo = async (eventId: string) => {
-    const event = (await this.ingressService.getEntity(
-      { entityId: eventId, entityType: 'EVENT' },
-      true,
-      {
-        type: 'SERVICE',
-        sourceId: 'SERVICE_INDEXER',
-      },
-    )) as Event
+  private async indexEventInfo(entityId: string) {
+    const entityInfo: EntityInfo = { entityId, entityType: 'EVENT' }
+    const event = (await this.ingressService.getEntity(entityInfo, true, AUTHOR)) as Event
 
     if (event) {
-      const indexingSuccessful = await this.eventsIndexerService.indexEvent(eventId, event)
+      const indexingSuccessful = await this.eventsIndexerService.indexEvent(entityId, event)
 
       if (indexingSuccessful) {
         const filesIds = event.files.map(({ fileId }) => fileId)
 
         if (filesIds.length) {
-          await this.fileEventDispatcherService.dispatchFilesUpdated(filesIds, {
-            type: FileParentEntity.EVENT,
-            id: eventId,
-          })
+          await this.fileEventDispatcherService.dispatchFilesUpdated(filesIds, entityInfo)
         }
         return true
       }

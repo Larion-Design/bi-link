@@ -41,53 +41,46 @@ export class MappingController {
   ) {
     switch (entityOrIndex) {
       case 'PERSON': {
-        await this.mappingValidatorService.initIndex(
+        return this.mappingValidatorService.initIndex(
           INDEX_PERSONS,
           this.personsMappingService.getMapping(),
         )
-        break
       }
       case 'COMPANY': {
-        await this.mappingValidatorService.initIndex(
+        return this.mappingValidatorService.initIndex(
           INDEX_COMPANIES,
           this.companiesMappingService.getMapping(),
         )
-        break
       }
       case 'EVENT': {
-        await this.mappingValidatorService.initIndex(
+        return this.mappingValidatorService.initIndex(
           INDEX_EVENTS,
           this.eventsMappingService.getMapping(),
         )
-        break
       }
       case 'PROPERTY': {
-        await this.mappingValidatorService.initIndex(
+        return this.mappingValidatorService.initIndex(
           INDEX_PROPERTIES,
           this.propertiesMappingService.getMapping(),
         )
-        break
       }
       case 'FILE': {
-        await this.mappingValidatorService.initIndex(
+        return this.mappingValidatorService.initIndex(
           INDEX_FILES,
           this.filesMappingService.getMapping(),
         )
-        break
       }
       case 'PROCEEDING': {
-        await this.mappingValidatorService.initIndex(
+        return this.mappingValidatorService.initIndex(
           INDEX_PROCEEDINGS,
           this.proceedingsMappingService.getMapping(),
         )
-        break
       }
       case 'ACTIVITY_EVENT': {
-        await this.mappingValidatorService.initIndex(
+        return this.mappingValidatorService.initIndex(
           INDEX_HISTORY,
           this.historyMappingService.getMapping(),
         )
-        break
       }
     }
   }

@@ -1,14 +1,13 @@
 import { ConfigModule, ConfigService } from '@nestjs/config'
 import { BullModule } from '@nestjs/bull'
 import { Module } from '@nestjs/common'
-import { ConsumersModule } from './modules/consumers/consumersModule'
 import { SentryModule } from '@ntegral/nestjs-sentry'
 import { ServiceHealthModule } from '@app/service-health/serviceHealthModule'
 import { IndexerModule } from './modules/indexer/indexerModule'
 import { MappingModule } from './modules/mapping/mappingModule'
-import { ProducersModule } from './modules/producers/producersModule'
 import { RpcModule } from '@app/rpc'
 import { IndexerRPCModule } from './modules/rpc/indexerRPCModule'
+import { IndexerSchedulerModule } from './modules/scheduler/indexerSchedulerModule'
 import { SearchModule } from './modules/search/searchModule'
 
 @Module({
@@ -17,8 +16,7 @@ import { SearchModule } from './modules/search/searchModule'
     MappingModule,
     IndexerModule,
     SearchModule,
-    ProducersModule,
-    ConsumersModule,
+    IndexerSchedulerModule,
     ServiceHealthModule,
     RpcModule,
     BullModule.forRootAsync({

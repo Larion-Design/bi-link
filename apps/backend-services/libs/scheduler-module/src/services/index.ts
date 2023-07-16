@@ -1,6 +1,1 @@
-export * from './companyEventSchedulerService'
-export * from './eventSchedulerService'
-export * from './personEventSchedulerService'
-export * from './propertyEventSchedulerService'
-export * from './proceedingEventSchedulerService'
-export * from './reportEventSchedulerService'
+export * from './entityEventSchedulerService'

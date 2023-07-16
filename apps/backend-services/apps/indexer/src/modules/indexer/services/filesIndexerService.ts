@@ -1,11 +1,11 @@
 import { FilesManagerService } from '@app/rpc/microservices/filesManager/filesManagerService'
 import { Injectable, Logger } from '@nestjs/common'
 import { ElasticsearchService } from '@nestjs/elasticsearch'
-import { format } from 'date-fns'
 import { IngressService } from '@app/rpc/microservices/ingress'
-import { FileEventInfo, FileParentEntity } from '@app/scheduler-module'
+import { FileEventInfo } from '@app/scheduler-module'
 import { EmbeddedFileIndex, ProcessedFileIndex } from '@app/definitions'
-import { File } from 'defs'
+import { EntityType, File } from 'defs'
+import { formatDateTime } from 'tools'
 import {
   INDEX_EVENTS,
   INDEX_COMPANIES,
@@ -13,6 +13,7 @@ import {
   INDEX_PROPERTIES,
   INDEX_PERSONS,
 } from '../../../constants'
+import { AUTHOR } from '../../constants'
 
 @Injectable()
 export class FilesIndexerService {
@@ -25,7 +26,7 @@ export class FilesIndexerService {
     private readonly ingressService: IngressService,
   ) {}
 
-  appendFileContent = async ({ fileId, linkedEntity }: FileEventInfo) => {
+  async appendFileContent({ fileId, linkedEntity }: FileEventInfo) {
     try {
       let indexedFileContent = await this.getFileContent(fileId)
 
@@ -39,17 +40,13 @@ export class FilesIndexerService {
       }
 
       if (linkedEntity) {
-        const { id, type } = linkedEntity
         const fileModel = await this.ingressService.getEntity(
           {
             entityId: fileId,
             entityType: 'FILE',
           },
           false,
-          {
-            type: 'SERVICE',
-            sourceId: 'SERVICE_INDEXER',
-          },
+          AUTHOR,
         )
 
         if (fileModel) {
@@ -61,20 +58,25 @@ export class FilesIndexerService {
             content: indexedFileContent ?? '',
           }
 
-          const { result } = await this.elasticsearchService.update({
-            id,
-            index: this.getIndexByEntityType(type),
-            refresh: true,
-            retry_on_conflict: 10,
-            script: {
-              source: 'ctx._source.files.addAll(params.files)',
-              lang: 'painless',
-              params: {
-                files: [docFileContent],
+          const { entityId, entityType } = linkedEntity
+          const index = this.getIndexByEntityType(entityType)
+
+          if (index) {
+            const { result } = await this.elasticsearchService.update({
+              id: entityId,
+              index,
+              refresh: true,
+              retry_on_conflict: 10,
+              script: {
+                source: 'ctx._source.files.addAll(params.files)',
+                lang: 'painless',
+                params: {
+                  files: [docFileContent],
+                },
               },
-            },
-          })
-          return result === 'updated'
+            })
+            return result === 'updated'
+          }
         }
       }
       return true
@@ -83,7 +85,7 @@ export class FilesIndexerService {
     }
   }
 
-  private indexFileContent = async (fileId: string, fileContent: string) => {
+  private async indexFileContent(fileId: string, fileContent: string) {
     try {
       const { _id } = await this.elasticsearchService.index<ProcessedFileIndex>({
         index: this.index,
@@ -98,7 +100,7 @@ export class FilesIndexerService {
     }
   }
 
-  private getFileContent = async (fileId: string) => {
+  private async getFileContent(fileId: string) {
     try {
       const indexedContentExists = await this.elasticsearchService.exists({
         index: this.index,
@@ -123,16 +125,19 @@ export class FilesIndexerService {
 
   private createIndexData = (content: string): ProcessedFileIndex => ({
     content,
-    processedDate: format(new Date(), 'yyyy-MM-dd HH:mm:ss'),
+    processedDate: formatDateTime(new Date()),
   })
 
-  private getIndexByEntityType = (entityType: FileParentEntity) => {
+  private getIndexByEntityType(entityType: EntityType) {
     const entitiesIndicesMap = {
-      [FileParentEntity.PERSON]: INDEX_PERSONS,
-      [FileParentEntity.COMPANY]: INDEX_COMPANIES,
-      [FileParentEntity.EVENT]: INDEX_EVENTS,
-      [FileParentEntity.PROPERTY]: INDEX_PROPERTIES,
+      PERSON: INDEX_PERSONS,
+      COMPANY: INDEX_COMPANIES,
+      EVENT: INDEX_EVENTS,
+      PROPERTY: INDEX_PROPERTIES,
     }
-    return entitiesIndicesMap[entityType]
+
+    if (entityType in entitiesIndicesMap) {
+      return String(entitiesIndicesMap[entityType])
+    }
   }
 }

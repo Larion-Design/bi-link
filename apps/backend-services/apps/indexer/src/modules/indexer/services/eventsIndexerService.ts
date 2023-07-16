@@ -8,6 +8,7 @@ import {
   ConnectedPropertyIndex,
 } from '@app/definitions'
 import { Event, EventParticipant } from 'defs'
+import { formatDateTime } from 'tools'
 import { INDEX_EVENTS } from '../../../constants'
 import { CustomFieldsIndexerService } from './customFieldsIndexerService'
 import { LocationIndexerService } from './locationIndexerService'
@@ -43,7 +44,7 @@ export class EventsIndexerService {
 
   private createIndexData = (event: Event): EventIndex => ({
     type: event.type.value,
-    date: event.date.value ? format(new Date(event.date.value), 'yyyy-MM-dd HH:mm:ss') : undefined,
+    date: event.date.value ? formatDateTime(new Date(event.date.value)) : undefined,
     location: event.location
       ? this.locationIndexerService.createLocationIndexData(event.location)
       : undefined,

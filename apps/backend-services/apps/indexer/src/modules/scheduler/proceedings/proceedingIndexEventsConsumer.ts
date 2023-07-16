@@ -2,16 +2,11 @@ import { IngressService } from '@app/rpc/microservices/ingress'
 import { OnQueueActive, OnQueueCompleted, OnQueueFailed, Process, Processor } from '@nestjs/bull'
 import { Logger } from '@nestjs/common'
 import { Job } from 'bull'
-import {
-  EVENT_CREATED,
-  EVENT_UPDATED,
-  FileParentEntity,
-  ProceedingEventInfo,
-} from '@app/scheduler-module'
-import { Proceeding } from 'defs'
+import { EVENT_CREATED, EVENT_UPDATED, EntityEventInfo } from '@app/scheduler-module'
+import { EntityInfo, Proceeding } from 'defs'
 import { ProceedingsIndexerService } from '../../indexer/services/proceedingsIndexerService'
-import { QUEUE_PROCEEDINGS } from '../../constants'
-import { FileEventDispatcherService } from '../../producers/services/fileEventDispatcherService'
+import { AUTHOR, QUEUE_PROCEEDINGS } from '../../constants'
+import { FileEventDispatcherService } from '../files/fileEventDispatcherService'
 
 @Processor(QUEUE_PROCEEDINGS)
 export class ProceedingIndexEventsConsumer {
@@ -39,14 +34,14 @@ export class ProceedingIndexEventsConsumer {
   }
 
   @Process(EVENT_CREATED)
-  async proceedingCreated(job: Job<ProceedingEventInfo>) {
+  async proceedingCreated(job: Job<EntityEventInfo>) {
     const {
-      data: { proceedingId },
+      data: { entityId },
     } = job
 
     try {
-      if (await this.indexProceedingInfo(proceedingId)) {
-        return job.moveToCompleted(proceedingId)
+      if (await this.indexProceedingInfo(entityId)) {
+        return {}
       }
     } catch (error) {
       this.logger.error(error)
@@ -55,14 +50,14 @@ export class ProceedingIndexEventsConsumer {
   }
 
   @Process(EVENT_UPDATED)
-  async propertyUpdated(job: Job<ProceedingEventInfo>) {
+  async propertyUpdated(job: Job<EntityEventInfo>) {
     const {
-      data: { proceedingId },
+      data: { entityId },
     } = job
 
     try {
-      if (await this.indexProceedingInfo(proceedingId)) {
-        return job.moveToCompleted()
+      if (await this.indexProceedingInfo(entityId)) {
+        return {}
       }
     } catch (error) {
       this.logger.error(error)
@@ -70,19 +65,13 @@ export class ProceedingIndexEventsConsumer {
     }
   }
 
-  private indexProceedingInfo = async (proceedingId: string) => {
-    const property = (await this.ingressService.getEntity(
-      { entityId: proceedingId, entityType: 'PROCEEDING' },
-      true,
-      {
-        type: 'SERVICE',
-        sourceId: 'SERVICE_INDEXER',
-      },
-    )) as Proceeding
+  private async indexProceedingInfo(entityId: string) {
+    const entityInfo: EntityInfo = { entityId, entityType: 'PROCEEDING' }
+    const property = (await this.ingressService.getEntity(entityInfo, true, AUTHOR)) as Proceeding
 
     if (property) {
       const indexingSuccessful = await this.proceedingsIndexerService.indexProceeding(
-        proceedingId,
+        entityId,
         property,
       )
 
@@ -90,10 +79,7 @@ export class ProceedingIndexEventsConsumer {
         const filesIds = property.files.map(({ fileId }) => fileId)
 
         if (filesIds.length) {
-          await this.fileEventDispatcherService.dispatchFilesUpdated(filesIds, {
-            type: FileParentEntity.PROCEEDING,
-            id: proceedingId,
-          })
+          await this.fileEventDispatcherService.dispatchFilesUpdated(filesIds, entityInfo)
         }
         return true
       }

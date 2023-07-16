@@ -1,17 +1,6 @@
-export enum FileParentEntity {
-  PERSON = 'PERSON',
-  COMPANY = 'COMPANY',
-  EVENT = 'EVENT',
-  PROPERTY = 'PROPERTY',
-  PROCEEDING = 'PROCEEDING',
-}
-
-export type FileLinkedEntity = {
-  type: FileParentEntity
-  id: string
-}
+import { EntityInfo } from 'defs'
 
 export type FileEventInfo = {
-  linkedEntity?: FileLinkedEntity
+  linkedEntity?: EntityInfo
   fileId: string
 }
