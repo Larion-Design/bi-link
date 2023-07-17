@@ -4,6 +4,7 @@ import { DropdownList } from '@frontend/components/form/dropdownList'
 import { InputField } from '@frontend/components/form/inputField'
 import Button from '@mui/material/Button'
 import Grid from '@mui/material/Grid'
+import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined'
 
 type Props = {
   onSubmit: (name: string | null, cui: string | null) => void
@@ -44,26 +45,28 @@ export const SearchTermeneForm: React.FunctionComponent<Props> = ({ onSubmit }) 
     <Grid container spacing={2} sx={{ alignItems: 'center' }}>
       <Grid item xs={2}>
         <DropdownList
+          size={'small'}
           value={values.searchField}
           options={dropdownOptions}
           onChange={changeSearchParam}
         />
       </Grid>
-      <Grid item xs={8}>
+      <Grid item xs={9}>
         <InputField
+          size={'small'}
           value={values.cui ?? values.name}
           onChange={onInputChange}
           error={errors.cui ?? errors.name}
         />
       </Grid>
-      <Grid item xs={2}>
+      <Grid item xs={1}>
         <Button
           size={'large'}
           variant={'contained'}
           onClick={() => void submitForm()}
           disabled={isSubmitting}
         >
-          Cauta
+          <SearchOutlinedIcon />
         </Button>
       </Grid>
     </Grid>

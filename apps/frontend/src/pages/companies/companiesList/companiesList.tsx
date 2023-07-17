@@ -1,9 +1,10 @@
+import Stack from '@mui/material/Stack'
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useDebounce } from 'usehooks-ts'
 import { useNotification } from '@frontend/utils/hooks/useNotification'
 import AddOutlinedIcon from '@mui/icons-material/AddOutlined'
-import Box from '@mui/material/Box'
+import LanguageOutlinedIcon from '@mui/icons-material/LanguageOutlined'
 import Button from '@mui/material/Button'
 import Grid from '@mui/material/Grid'
 import TextField from '@mui/material/TextField'
@@ -58,35 +59,50 @@ export const CompaniesList: React.FunctionComponent = () => {
     <DashboardPage title={'Companii'}>
       <Grid container spacing={2} sx={{ width: 1, p: 4 }}>
         <Grid item xs={12} mb={4}>
-          <Box
-            display={'flex'}
-            justifyContent={'space-between'}
-            flexWrap={'nowrap'}
-            alignItems={'center'}
-          >
-            <Typography variant={'h5'} data-cy={'pageTitle'}>
-              Companii
-            </Typography>
-            <Box display={'flex'} sx={{ width: 0.7 }}>
+          <Grid container spacing={1} alignItems={'center'}>
+            <Grid item xs={2}>
+              <Typography variant={'h5'} data-cy={'pageTitle'}>
+                Companii
+              </Typography>
+            </Grid>
+
+            <Grid item xs={8}>
               <TextField
+                fullWidth
+                size={'small'}
                 value={searchTerm}
                 label={'Cauta companii'}
-                sx={{ flex: 12, mr: 2 }}
                 onChange={({ target: { value } }) => setSearchTerm(value)}
                 data-cy={'searchCompaniesInput'}
               />
-              <Button
-                variant={'contained'}
-                sx={{ flex: 1 }}
-                onClick={() => navigate(routes.newCompany)}
-                data-cy={'createCompany'}
-              >
-                <Tooltip title={'Creaza o companie'}>
-                  <AddOutlinedIcon />
-                </Tooltip>
-              </Button>
-            </Box>
-          </Box>
+            </Grid>
+
+            <Grid item xs={1}>
+              <Stack spacing={1} direction={'row'}>
+                <Button
+                  size={'medium'}
+                  variant={'contained'}
+                  onClick={() => navigate(routes.newCompany)}
+                  data-cy={'createCompany'}
+                >
+                  <Tooltip title={'Creaza o companie'}>
+                    <AddOutlinedIcon />
+                  </Tooltip>
+                </Button>
+
+                <Button
+                  size={'medium'}
+                  variant={'contained'}
+                  onClick={() => navigate(routes.companiesIntegrationTermene)}
+                  data-cy={'createCompany'}
+                >
+                  <Tooltip title={'Creaza o companie'}>
+                    <LanguageOutlinedIcon />
+                  </Tooltip>
+                </Button>
+              </Stack>
+            </Grid>
+          </Grid>
         </Grid>
         <Grid item xs={12}>
           <CompaniesTable
