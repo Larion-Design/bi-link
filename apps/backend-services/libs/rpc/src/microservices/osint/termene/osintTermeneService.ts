@@ -18,7 +18,7 @@ export class OsintTermeneService {
       return lastValueFrom(
         this.client
           .send<Result, Params>(MICROSERVICES.OSINT.TERMENE.searchCompanyByCUI, cui)
-          .pipe(timeout(1000)),
+          .pipe(timeout(20000)),
       )
     } catch (e) {
       this.logger.error(e)
@@ -36,7 +36,7 @@ export class OsintTermeneService {
       return lastValueFrom(
         this.client
           .send<Result, Params>(MICROSERVICES.OSINT.TERMENE.searchCompaniesByName, companyName)
-          .pipe(timeout(1000)),
+          .pipe(timeout(20000)),
       )
     } catch (e) {
       this.logger.error(e)

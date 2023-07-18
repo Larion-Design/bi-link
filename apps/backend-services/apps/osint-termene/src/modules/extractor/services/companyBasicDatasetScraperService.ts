@@ -69,6 +69,6 @@ export class CompanyBasicDatasetScraperService {
           }),
         )
       }
-      return company
+      return [company]
     })
 }

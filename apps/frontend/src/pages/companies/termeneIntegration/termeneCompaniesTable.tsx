@@ -2,7 +2,7 @@ import { importTermeneCompany } from '@frontend/graphql/integrations/termene/mut
 import { useNotification } from '@frontend/utils/hooks/useNotification'
 import React, { useEffect, useMemo } from 'react'
 import Box from '@mui/material/Box'
-import OpenInNewOutlinedIcon from '@mui/icons-material/OpenInNewOutlined'
+import DownloadForOfflineOutlinedIcon from '@mui/icons-material/DownloadForOfflineOutlined'
 import {
   DataGrid,
   GridActionsCellItem,
@@ -38,7 +38,7 @@ export const TermeneCompaniesTable: React.FunctionComponent<Props> = ({ companie
       {
         field: 'name',
         headerName: 'Nume',
-        flex: 1.5,
+        flex: 2,
         type: 'string',
       },
       {
@@ -67,9 +67,9 @@ export const TermeneCompaniesTable: React.FunctionComponent<Props> = ({ companie
         type: 'actions',
         getActions: ({ row: { cui, name } }: GridRowParams<OSINTCompany>) => [
           <GridActionsCellItem
-            showInMenu={false}
+            showInMenu={true}
             disabled={loading}
-            icon={<OpenInNewOutlinedIcon />}
+            icon={<DownloadForOfflineOutlinedIcon color={'primary'} />}
             label={`Importa ${name}`}
             onClick={() => void importCompany({ variables: { cui } })}
           />,

@@ -3,15 +3,13 @@ import { LoaderModule } from '@app/loader-module'
 import { Module } from '@nestjs/common'
 import { ConfigModule, ConfigService } from '@nestjs/config'
 import { SentryModule } from '@ntegral/nestjs-sentry'
-import { RpcModule } from '@app/rpc'
 import { ExtractorModule } from './modules/extractor'
 import { TermeneRPCModule } from './modules/rpc'
-import { SchedulerModule } from './modules/scheduler/schedulerModule'
-import { TransformerModule } from './modules/transformer/transformerModule'
+import { SchedulerModule } from './modules/scheduler'
+import { TransformerModule } from './modules/transformer'
 
 @Module({
   imports: [
-    RpcModule,
     LoaderModule,
     SchedulerModule,
     ExtractorModule,

@@ -1,38 +1,55 @@
-import { Injectable } from '@nestjs/common'
+import { Injectable, Logger } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
-import puppeteer, { Browser, Page } from 'puppeteer-core'
+import puppeteer, { Browser, Page, ResourceType } from 'puppeteer-core'
+import { async } from 'rxjs'
 
 @Injectable()
 export class BrowserService {
-  private browser: Browser | undefined
+  private readonly logger = new Logger(BrowserService.name)
+
   private readonly chromiumInstanceUrl: string
 
   constructor(configService: ConfigService) {
     this.chromiumInstanceUrl = configService.getOrThrow<string>('CHROMIUM_INSTANCE_URL')
   }
 
-  async getBrowser() {
-    if (!this.browser) {
-      this.browser = await puppeteer.connect({
-        browserWSEndpoint: `${this.chromiumInstanceUrl}?keepalive=60000&stealth`,
-      })
+  async execBrowserSession(sessionHandler: (browser: Browser) => Promise<void>) {
+    const browser = await this.getBrowser()
+
+    try {
+      await sessionHandler(browser)
+
+      if (browser.isConnected()) {
+        browser.disconnect()
+      }
+    } catch (e) {
+      if (browser.isConnected()) {
+        browser.disconnect()
+      }
+      this.logger.error(e)
     }
-    return this.browser
   }
+
+  getBrowser = async () =>
+    puppeteer.connect({
+      browserWSEndpoint: `${this.chromiumInstanceUrl}?keepalive=60000&stealth`,
+    })
 
   async handlePage<T = void>(pageHandler: (page: Page) => Promise<T>) {
     const browser = await this.getBrowser()
     const page = await browser.newPage()
 
+    await this.blockRedundantResources(page)
+
     try {
       const result = await pageHandler(page)
 
-      if (page.isClosed()) {
+      if (!page.isClosed()) {
         await page.close()
       }
       return result
     } catch (e) {
-      if (page.isClosed()) {
+      if (!page.isClosed()) {
         await page.close()
       }
       return Promise.reject(e)
@@ -44,10 +61,12 @@ export class BrowserService {
     const context = await browser.createIncognitoBrowserContext()
     const page = await context.newPage()
 
-    try {
-      const result = await pageHandler(page)
+    await this.blockRedundantResources(page)
 
-      if (page.isClosed()) {
+    try {
+      const result: T = await pageHandler(page)
+
+      if (!page.isClosed()) {
         await page.close()
       }
       return result
@@ -57,5 +76,25 @@ export class BrowserService {
       }
       return Promise.reject(e)
     }
+  }
+
+  private async blockRedundantResources(page: Page) {
+    const resourceTypes = new Set<ResourceType>([
+      'image',
+      'stylesheet',
+      'font',
+      'cspviolationreport',
+      'media',
+    ])
+
+    await page.setRequestInterception(true)
+
+    // eslint-disable-next-line @typescript-eslint/no-misused-promises
+    page.on('request', (request) => {
+      if (resourceTypes.has(request.resourceType())) {
+        return request.abort()
+      }
+      return request.continue()
+    })
   }
 }
