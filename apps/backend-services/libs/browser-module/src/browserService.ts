@@ -1,12 +1,9 @@
 import { Injectable, Logger } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import puppeteer, { Browser, Page, ResourceType } from 'puppeteer-core'
-import { async } from 'rxjs'
 
 @Injectable()
 export class BrowserService {
-  private readonly logger = new Logger(BrowserService.name)
-
   private readonly chromiumInstanceUrl: string
 
   constructor(configService: ConfigService) {
