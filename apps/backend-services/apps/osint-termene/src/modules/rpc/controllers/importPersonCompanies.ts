@@ -4,13 +4,13 @@ import { Controller } from '@nestjs/common'
 import { EventPattern, Payload } from '@nestjs/microservices'
 import { PersonProducerService } from '../../scheduler/persons/personProducerService'
 
-type Params = Parameters<OsintTermeneServiceConfig['importPerson']>[0]
+type Params = Parameters<OsintTermeneServiceConfig['importPersonCompanies']>[0]
 
 @Controller()
-export class ImportPerson {
+export class ImportPersonCompanies {
   constructor(private readonly personProducerService: PersonProducerService) {}
 
-  @EventPattern(MICROSERVICES.OSINT.TERMENE.importPerson)
+  @EventPattern(MICROSERVICES.OSINT.TERMENE.importPersonCompanies)
   async importPerson(@Payload() url: Params) {
     return this.personProducerService.extractPersonCompanies(url)
   }

@@ -4,13 +4,11 @@ import { TermeneProceeding } from '../../schema/courtFiles'
 
 export type ExtractCompanyEvent = {
   cui: string
-  companyId?: string
 }
 
 export type TransformCompanyEvent = {
   cui: string
   dataset: CompanyTermeneDataset
-  companyId?: string
   companyInfo: CompanyAPIInput
 }
 
@@ -28,7 +26,6 @@ export type TransformPersonEvent = {
 }
 
 export type LoadPersonEvent = {
-  personId?: string
   personInfo: PersonAPIInput
 }
 
@@ -41,6 +38,5 @@ export type TransformProceedingEvent = {
 }
 
 export type LoadProceedingEvent = {
-  proceedingId?: string
   proceedingInfo: ProceedingAPIInput
 }

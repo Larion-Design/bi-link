@@ -7,7 +7,7 @@ export class CacheService {
 
   get = async (key: string) => this.redis.get(key)
 
-  getMultiple = async (keys: string[]) => {
+  async getMultiple(keys: string[]) {
     const map: Record<string, string> = {}
     const data = await this.redis.mget(keys)
 
