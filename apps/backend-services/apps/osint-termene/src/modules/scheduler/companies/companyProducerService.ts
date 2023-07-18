@@ -3,8 +3,8 @@ import { Injectable } from '@nestjs/common'
 import { Queue } from 'bull'
 import { CompanyAPIInput } from 'defs'
 import { CompanyTermeneDataset } from '../../../schema/company'
+import { ImportedCompaniesCacheService } from '../../cache'
 import { EVENT_IMPORT, EVENT_LOAD, EVENT_TRANSFORM, QUEUE_COMPANIES } from '../constants'
-import { TermeneCacheService } from '../termeneCacheService'
 import { ExtractCompanyEvent, LoadCompanyEvent, TransformCompanyEvent } from '../types'
 
 @Injectable()
@@ -12,14 +12,14 @@ export class CompanyProducerService {
   constructor(
     @InjectQueue(QUEUE_COMPANIES)
     private readonly queue: Queue<ExtractCompanyEvent | TransformCompanyEvent | LoadCompanyEvent>,
-    private readonly termeneCacheService: TermeneCacheService,
+    private readonly importedCompaniesCacheService: ImportedCompaniesCacheService,
   ) {}
 
   async importCompanies(companiesCUI: string[]) {
-    const newCompanies = await this.termeneCacheService.getNewCompanies(companiesCUI)
+    const newCompanies = await this.importedCompaniesCacheService.getNewCompanies(companiesCUI)
 
     if (newCompanies.length) {
-      await this.termeneCacheService.cacheCompanies(newCompanies)
+      await this.importedCompaniesCacheService.cacheCompanies(newCompanies)
       return this.queue.addBulk(
         newCompanies.map((cui) => ({
           name: EVENT_IMPORT,

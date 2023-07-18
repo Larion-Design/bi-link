@@ -4,7 +4,7 @@ import { Injectable } from '@nestjs/common'
 type KeyFormatter = (id: string) => string
 
 @Injectable()
-export class TermeneCacheService {
+export class ImportedCompaniesCacheService {
   private readonly timeout = 3600
 
   constructor(private readonly cacheService: CacheService) {}

@@ -3,8 +3,8 @@ import { Injectable } from '@nestjs/common'
 import { Queue } from 'bull'
 import { ProceedingAPIInput } from 'defs'
 import { TermeneProceeding } from '../../../schema/courtFiles'
+import { ImportedCompaniesCacheService } from '../../cache'
 import { QUEUE_PROCEEDINGS, EVENT_TRANSFORM, EVENT_LOAD } from '../constants'
-import { TermeneCacheService } from '../termeneCacheService'
 import { LoadProceedingEvent, TransformProceedingEvent } from '../types'
 
 @Injectable()
@@ -12,16 +12,19 @@ export class ProceedingProducerService {
   constructor(
     @InjectQueue(QUEUE_PROCEEDINGS)
     private readonly queue: Queue<TransformProceedingEvent | LoadProceedingEvent>,
-    private readonly termeneCacheService: TermeneCacheService,
+    private readonly importedCompaniesCacheService: ImportedCompaniesCacheService,
   ) {}
 
   async transformProceedings(proceedings: TermeneProceeding[]) {
     const map = new Map<string, TermeneProceeding>()
     proceedings.forEach((proceeding) => map.set(String(proceeding.id), proceeding))
 
-    const newProceedings = await this.termeneCacheService.getNewProceedings(Array.from(map.keys()))
+    const newProceedings = await this.importedCompaniesCacheService.getNewProceedings(
+      Array.from(map.keys()),
+    )
 
     if (newProceedings.length) {
+      await this.importedCompaniesCacheService.cacheProceedings(newProceedings)
       return this.queue.addBulk(
         newProceedings.map((id) => ({
           name: EVENT_TRANSFORM,

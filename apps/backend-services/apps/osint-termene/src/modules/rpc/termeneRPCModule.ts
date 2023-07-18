@@ -1,5 +1,6 @@
 import { RpcModule } from '@app/rpc'
 import { Module } from '@nestjs/common'
+import { TermeneCacheModule } from '../cache'
 import { ExtractorModule } from '../extractor'
 import { SchedulerModule } from '../scheduler'
 import { ImportCompany } from './controllers/importCompany'
@@ -10,7 +11,7 @@ import { SearchPersonsByName } from './controllers/searchPersonsByName'
 import { SearchProceedings } from './controllers/searchProceedings'
 
 @Module({
-  imports: [RpcModule, ExtractorModule, SchedulerModule],
+  imports: [RpcModule, ExtractorModule, TermeneCacheModule, SchedulerModule],
   providers: [
     SearchCompanyByCUI,
     SearchCompaniesByName,

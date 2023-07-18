@@ -2,6 +2,7 @@ import { MICROSERVICES } from '@app/rpc'
 import { OsintTermeneServiceConfig } from '@app/rpc/microservices/osint/termene'
 import { Controller } from '@nestjs/common'
 import { MessagePattern, Payload } from '@nestjs/microservices'
+import { SearchResultsCacheService } from '../../cache'
 import { CompanyBasicDatasetScraperService } from '../../extractor'
 
 type Params = Parameters<OsintTermeneServiceConfig['searchCompaniesByName']>[0]
@@ -11,10 +12,16 @@ type Result = ReturnType<OsintTermeneServiceConfig['searchCompaniesByName']> | u
 export class SearchCompaniesByName {
   constructor(
     private readonly companyBasicDatasetScraperService: CompanyBasicDatasetScraperService,
+    private readonly searchResultsCacheService: SearchResultsCacheService,
   ) {}
 
   @MessagePattern(MICROSERVICES.OSINT.TERMENE.searchCompaniesByName)
   async searchCompaniesByName(@Payload() name: Params): Promise<Result> {
+    const cachedResults = await this.searchResultsCacheService.getCachedResults(name)
+
+    if (cachedResults) {
+      return cachedResults
+    }
     return this.companyBasicDatasetScraperService.searchCompaniesByName(name)
   }
 }
