@@ -20,7 +20,7 @@ export const TermeneIntegration: React.FunctionComponent = () => {
     <DashboardPage title={'Companii'}>
       <Grid container spacing={2} sx={{ p: 2 }}>
         <Grid item xs={12}>
-          <SearchTermeneForm onSubmit={(name, cui) => void search({ variables: { name, cui } })} />
+          <SearchTermeneForm onSubmit={(name, cui) => search({ variables: { name, cui } })} />
         </Grid>
         <Grid item xs={12}>
           <TermeneCompaniesTable companies={data?.searchTermeneCompanies ?? []} />

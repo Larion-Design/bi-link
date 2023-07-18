@@ -7,7 +7,7 @@ import Grid from '@mui/material/Grid'
 import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined'
 
 type Props = {
-  onSubmit: (name: string | null, cui: string | null) => void
+  onSubmit: (name: string | null, cui: string | null) => Promise<unknown>
 }
 
 type FormParams = {
@@ -64,7 +64,7 @@ export const SearchTermeneForm: React.FunctionComponent<Props> = ({ onSubmit }) 
           size={'large'}
           variant={'contained'}
           onClick={() => void submitForm()}
-          disabled={isSubmitting}
+          disabled={isSubmitting || (values.name.length < 3 && values.cui.length < 3)}
         >
           <SearchOutlinedIcon />
         </Button>
