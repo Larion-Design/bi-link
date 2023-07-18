@@ -1,8 +1,9 @@
+import { CacheModule } from '@app/cache'
 import { LoaderModule } from '@app/loader-module'
 import { BullModule } from '@nestjs/bull'
-import { Module } from '@nestjs/common'
+import { forwardRef, Module } from '@nestjs/common'
 import { ExtractorModule } from '../extractor'
-import { TransformerModule } from '../transformer/transformerModule'
+import { TransformerModule } from '../transformer'
 import { QUEUE_COMPANIES, QUEUE_PERSONS, QUEUE_PROCEEDINGS } from './constants'
 import { CompanyProcessor } from './companies/companyProcessor'
 import { PersonProcessor } from './persons/personProcessor'
@@ -10,11 +11,13 @@ import { ProceedingProceessor } from './proceedings/proceedingProceessor'
 import { CompanyProducerService } from './companies/companyProducerService'
 import { PersonProducerService } from './persons/personProducerService'
 import { ProceedingProducerService } from './proceedings/proceedingProducerService'
+import { TermeneCacheService } from './termeneCacheService'
 
 @Module({
   imports: [
+    CacheModule,
     ExtractorModule,
-    TransformerModule,
+    forwardRef(() => TransformerModule),
     LoaderModule,
     BullModule.registerQueue(
       { name: QUEUE_PERSONS },
@@ -23,6 +26,7 @@ import { ProceedingProducerService } from './proceedings/proceedingProducerServi
     ),
   ],
   providers: [
+    TermeneCacheService,
     CompanyProcessor,
     PersonProcessor,
     ProceedingProceessor,
@@ -31,6 +35,7 @@ import { ProceedingProducerService } from './proceedings/proceedingProducerServi
     ProceedingProducerService,
   ],
   exports: [
+    TermeneCacheService,
     CompanyProcessor,
     PersonProcessor,
     ProceedingProceessor,

@@ -26,7 +26,7 @@ export class IngressService {
             fetchLinkedEntities,
             source,
           })
-          .pipe(timeout(1000)),
+          .pipe(timeout(2000)),
       )
     } catch (e) {
       this.logger.error(e)

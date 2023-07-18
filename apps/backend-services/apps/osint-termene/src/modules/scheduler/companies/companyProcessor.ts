@@ -1,6 +1,7 @@
 import { CompanyLoaderService } from '@app/loader-module'
 import { Process, Processor } from '@nestjs/bull'
 import { Job } from 'bull'
+import { CompanyAPIInput } from 'defs'
 import { AUTHOR } from '../../../constants'
 import { CompanyDatasetScraperService } from '../../extractor'
 import { CompanyDataTransformerService } from '../../transformer/services/companyDataTransformerService'
@@ -78,11 +79,29 @@ export class CompanyProcessor {
       if (!companyId) {
         await this.companyLoaderService.createCompany(companyInfo, AUTHOR)
       } else {
-        await this.companyLoaderService.updateCompany(companyId, companyInfo, AUTHOR)
+        const companyData = await this.companyLoaderService.getCompany(companyId, AUTHOR)
+        await this.companyLoaderService.updateCompany(
+          companyId,
+          this.mergeCompanyData(companyData, companyInfo),
+          AUTHOR,
+        )
       }
       return {}
     } catch (e) {
       return job.moveToFailed(e as { message: string })
     }
+  }
+
+  private mergeCompanyData(oldCompanyInfo: CompanyAPIInput, newCompanyInfo: CompanyAPIInput) {
+    oldCompanyInfo.name = newCompanyInfo.name
+    oldCompanyInfo.cui = newCompanyInfo.cui
+    oldCompanyInfo.registrationNumber = newCompanyInfo.registrationNumber
+    oldCompanyInfo.associates = newCompanyInfo.associates
+    oldCompanyInfo.balanceSheets = newCompanyInfo.balanceSheets
+    oldCompanyInfo.activityCodes = newCompanyInfo.activityCodes
+    oldCompanyInfo.status = newCompanyInfo.status
+    oldCompanyInfo.registrationDate = newCompanyInfo.registrationDate
+    oldCompanyInfo.contactDetails = newCompanyInfo.contactDetails
+    return oldCompanyInfo
   }
 }
