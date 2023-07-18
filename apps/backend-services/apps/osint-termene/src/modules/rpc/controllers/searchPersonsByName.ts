@@ -1,3 +1,4 @@
+import { BrowserService } from '@app/browser-module'
 import { MICROSERVICES } from '@app/rpc'
 import { OsintTermeneServiceConfig } from '@app/rpc/microservices/osint/termene'
 import { Controller } from '@nestjs/common'
@@ -9,10 +10,15 @@ type Result = ReturnType<OsintTermeneServiceConfig['searchPersons']> | undefined
 
 @Controller()
 export class SearchPersonsByName {
-  constructor(private readonly associateScraperService: AssociateDatasetScraperService) {}
+  constructor(
+    private readonly associateScraperService: AssociateDatasetScraperService,
+    private readonly browserService: BrowserService,
+  ) {}
 
   @MessagePattern(MICROSERVICES.OSINT.TERMENE.searchPersons)
   async searchCompanyByCUI(@Payload() cui: Params): Promise<Result> {
-    return this.associateScraperService.searchAssociatesByName(cui)
+    return this.browserService.execBrowserSession(async (browser) =>
+      this.associateScraperService.searchAssociatesByName(browser, cui),
+    )
   }
 }

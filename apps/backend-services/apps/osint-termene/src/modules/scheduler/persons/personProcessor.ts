@@ -1,3 +1,4 @@
+import { BrowserService } from '@app/browser-module'
 import { Process, Processor } from '@nestjs/bull'
 import { Job } from 'bull'
 import { AssociateDatasetScraperService } from '../../extractor'
@@ -10,6 +11,7 @@ export class PersonProcessor {
   constructor(
     private readonly associateDatasetScraperService: AssociateDatasetScraperService,
     private readonly companyProducerService: CompanyProducerService,
+    private readonly browserService: BrowserService,
   ) {}
 
   @Process(EVENT_IMPORT)
@@ -19,8 +21,8 @@ export class PersonProcessor {
         data: { personUrl },
       } = job
 
-      const companies = await this.associateDatasetScraperService.getCompaniesByAssociateUrl(
-        personUrl,
+      const companies = await this.browserService.execBrowserSession(async (browser) =>
+        this.associateDatasetScraperService.getCompaniesByAssociateUrl(browser, personUrl),
       )
 
       if (companies.length) {

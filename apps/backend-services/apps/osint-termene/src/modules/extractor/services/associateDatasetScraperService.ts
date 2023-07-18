@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common'
-import { ElementHandle, Page } from 'puppeteer-core'
+import { Browser, ElementHandle, Page } from 'puppeteer-core'
 import { BrowserService } from '@app/browser-module/browserService'
 import { OSINTCompanySchema, OSINTPerson, OSINTPersonSchema } from 'defs'
 import { delay } from '../../../helpers'
@@ -15,22 +15,22 @@ type CompanyInfo = {
 export class AssociateDatasetScraperService {
   constructor(private readonly browserService: BrowserService) {}
 
-  searchAssociatesByName = async (name: string, address?: string) =>
-    this.browserService.handlePage(async (page) => {
+  searchAssociatesByName = async (browser: Browser, name: string, address?: string) =>
+    this.browserService.handlePage(browser, async (page) => {
       await this.openSearchPage(page, name, address)
       await page.waitForSelector('tbody')
       const tableRows = await page.$$('tbody > tr')
       return this.traverseSearchResults(tableRows)
     })
 
-  getCompaniesByAssociateUrl = async (associateUrl: string) =>
-    this.browserService.handlePage(async (page) => {
+  getCompaniesByAssociateUrl = async (browser: Browser, associateUrl: string) =>
+    this.browserService.handlePage(browser, async (page) => {
       await this.openAssociatePage(page, associateUrl)
       return this.extractCompaniesFromAssociatePage(page)
     })
 
-  async getAssociatesCompaniesMapByPersonName(name: string, address?: string) {
-    const persons = await this.searchAssociatesByName(name, address)
+  async getAssociatesCompaniesMapByPersonName(browser: Browser, name: string, address?: string) {
+    const persons = await this.searchAssociatesByName(browser, name, address)
     const associatesMap = new Map<OSINTPerson, CompanyInfo[]>()
 
     if (!persons.length) {
@@ -40,7 +40,7 @@ export class AssociateDatasetScraperService {
     await delay(1000)
 
     for await (const associateInfo of persons) {
-      const companies = await this.getCompaniesByAssociateUrl(associateInfo.url)
+      const companies = await this.getCompaniesByAssociateUrl(browser, associateInfo.url)
 
       if (companies.length) {
         associatesMap.set(associateInfo, companies)
@@ -50,8 +50,13 @@ export class AssociateDatasetScraperService {
     return associatesMap
   }
 
-  getPersonAssociateTermeneUrl = async (companyCUI: string, name: string, address?: string) =>
-    this.browserService.handlePage(async (page) => {
+  getPersonAssociateTermeneUrl = async (
+    browser: Browser,
+    companyCUI: string,
+    name: string,
+    address?: string,
+  ) =>
+    this.browserService.handlePage(browser, async (page) => {
       await this.openSearchPage(page, name, address)
       await page.waitForSelector('tbody')
       const tableRows = await page.$$('tbody > tr')

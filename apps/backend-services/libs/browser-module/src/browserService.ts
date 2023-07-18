@@ -13,20 +13,21 @@ export class BrowserService {
     this.chromiumInstanceUrl = configService.getOrThrow<string>('CHROMIUM_INSTANCE_URL')
   }
 
-  async execBrowserSession(sessionHandler: (browser: Browser) => Promise<void>) {
+  async execBrowserSession<T>(sessionHandler: (browser: Browser) => Promise<T>) {
     const browser = await this.getBrowser()
 
     try {
-      await sessionHandler(browser)
+      const result = await sessionHandler(browser)
 
       if (browser.isConnected()) {
         browser.disconnect()
       }
+      return result
     } catch (e) {
       if (browser.isConnected()) {
         browser.disconnect()
       }
-      this.logger.error(e)
+      return Promise.reject(e)
     }
   }
 
@@ -35,8 +36,7 @@ export class BrowserService {
       browserWSEndpoint: `${this.chromiumInstanceUrl}?keepalive=60000&stealth`,
     })
 
-  async handlePage<T = void>(pageHandler: (page: Page) => Promise<T>) {
-    const browser = await this.getBrowser()
+  async handlePage<T = void>(browser: Browser, pageHandler: (page: Page) => Promise<T>) {
     const page = await browser.newPage()
 
     await this.blockRedundantResources(page)
@@ -56,22 +56,21 @@ export class BrowserService {
     }
   }
 
-  async handlePrivatePage<T = void>(pageHandler: (page: Page) => Promise<T>) {
-    const browser = await this.getBrowser()
+  async handlePrivatePage<T = void>(browser: Browser, pageHandler: (page: Page) => Promise<T>) {
     const context = await browser.createIncognitoBrowserContext()
     const page = await context.newPage()
 
     await this.blockRedundantResources(page)
 
     try {
-      const result: T = await pageHandler(page)
+      const result = await pageHandler(page)
 
       if (!page.isClosed()) {
         await page.close()
       }
       return result
     } catch (e) {
-      if (page.isClosed()) {
+      if (!page.isClosed()) {
         await page.close()
       }
       return Promise.reject(e)
