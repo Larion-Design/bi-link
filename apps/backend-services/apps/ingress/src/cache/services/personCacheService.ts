@@ -31,36 +31,34 @@ export class PersonCacheService {
       documents,
     } = person
 
-    const set = new Set<string>()
+    const personId = String(person._id)
+    const map = new Map<string, string>()
 
     if (cnp.length) {
-      set.add(cnp)
+      map.set(cnp, personId)
     }
     if (source.length) {
-      set.add(source)
+      map.set(source, personId)
     }
 
     contactDetails.forEach(({ fieldValue }) => {
       if (fieldValue.length) {
-        set.add(fieldValue)
+        map.set(fieldValue, personId)
       }
     })
 
     documents.forEach(({ documentNumber }) => {
       if (documentNumber.length) {
-        set.add(documentNumber)
+        map.set(documentNumber, personId)
       }
     })
 
     if (firstName.length && lastName.length && birthdate) {
-      set.add(this.getPersonNameAndBirthdateCacheKey(firstName, lastName, birthdate))
+      map.set(this.getPersonNameAndBirthdateCacheKey(firstName, lastName, birthdate), personId)
     }
 
-    if (set.size) {
-      const personId = String(person._id)
-      const map: Record<string, string> = {}
-      set.forEach((cacheKey) => (map[cacheKey] = personId))
-      return this.cacheService.setHashKeys(this.key, map)
+    if (map.size) {
+      return this.cacheService.setHashKeys(this.key, Object.fromEntries(map))
     }
   }
 }

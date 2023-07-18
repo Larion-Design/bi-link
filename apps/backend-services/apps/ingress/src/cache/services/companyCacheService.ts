@@ -13,7 +13,9 @@ export class CompanyCacheService {
   }
 
   async cacheCompanyId(company: CompanyDocument) {
-    const set = new Set<string>()
+    const map = new Map<string, string>()
+    const companyId = String(company._id)
+
     const {
       name: { value: name },
       cui: { value: cui },
@@ -22,26 +24,23 @@ export class CompanyCacheService {
     } = company
 
     if (name.length) {
-      set.add(name)
+      map.set(name, companyId)
     }
     if (cui.length) {
-      set.add(cui)
+      map.set(cui, companyId)
     }
     if (registrationNumber.length) {
-      set.add(registrationNumber)
+      map.set(registrationNumber, companyId)
     }
 
     contactDetails.forEach(({ fieldValue }) => {
       if (fieldValue.length) {
-        set.add(fieldValue)
+        map.set(fieldValue, companyId)
       }
     })
 
-    if (set.size) {
-      const companyId = String(company._id)
-      const map: Record<string, string> = {}
-      set.forEach((cacheKey) => (map[cacheKey] = companyId))
-      return this.cacheService.setHashKeys(this.key, map)
+    if (map.size) {
+      return this.cacheService.setHashKeys(this.key, Object.fromEntries(map))
     }
   }
 }
