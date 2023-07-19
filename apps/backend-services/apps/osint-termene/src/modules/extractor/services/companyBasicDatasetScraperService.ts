@@ -76,7 +76,20 @@ export class CompanyBasicDatasetScraperService {
               }),
             )
           }
-          return [company]
+
+          const fiscalAddressElement = await page.$('#fiscalAddress')
+
+          if (fiscalAddressElement) {
+            const headquarters = await page.evaluate(
+              (element) => element?.textContent?.trim() ?? '',
+              fiscalAddressElement,
+            )
+
+            if (headquarters?.length) {
+              company.headquarters = headquarters
+            }
+          }
+          return company
         }),
       true,
     )

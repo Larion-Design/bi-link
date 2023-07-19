@@ -92,19 +92,16 @@ export class AssociateDatasetScraperService {
 
   private getSearchUrl(name: string, address?: string) {
     const url = new URL('https://termene.ro/search.php')
-    const params: Record<string, string> = {
-      submitted: 'true',
-      'search[nume]': name,
-    }
+    const params: [string, string][] = [
+      ['submitted', 'true'],
+      ['search[nume]', name],
+    ]
 
     if (address) {
-      params['search[adresa]'] = address
+      params.push(['search[adresa]', address])
     }
 
-    url.search = Object.entries(params)
-      .map(([key, value]) => `${key}=${encodeURIComponent(value)}`)
-      .join('&')
-
+    url.search = params.map(([key, value]) => `${key}=${encodeURIComponent(value)}`).join('&')
     return url.toString()
   }
 

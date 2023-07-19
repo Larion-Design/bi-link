@@ -16,12 +16,18 @@ export class SearchCompaniesByName {
   ) {}
 
   @MessagePattern(MICROSERVICES.OSINT.TERMENE.searchCompaniesByName)
-  async searchCompaniesByName(@Payload() name: Params): Promise<Result> {
-    const cachedResults = await this.searchResultsCacheService.getCachedResults(name)
+  async searchCompaniesByName(@Payload() searchTerm: Params): Promise<Result> {
+    const cachedResults = await this.searchResultsCacheService.getCachedResults(searchTerm)
 
     if (cachedResults) {
       return cachedResults
     }
-    return this.companyBasicDatasetScraperService.searchCompaniesByName(name)
+
+    const companies = await this.companyBasicDatasetScraperService.searchCompaniesByName(searchTerm)
+
+    if (companies?.length) {
+      await this.searchResultsCacheService.cacheResults(searchTerm, companies)
+    }
+    return companies
   }
 }
