@@ -66,7 +66,6 @@ export const MICROSERVICES = {
   OSINT: {
     TERMENE: {
       id: 'TERMENE',
-      searchCompanyByCUI: 'searchCompanyByCUI',
       searchCompaniesByName: 'searchCompaniesByName',
       searchPersons: 'searchPersons',
       searchProceedings: 'searchProceedings',

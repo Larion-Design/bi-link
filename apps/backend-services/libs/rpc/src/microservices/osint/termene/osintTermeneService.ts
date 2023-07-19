@@ -10,24 +10,6 @@ export class OsintTermeneService {
 
   constructor(@Inject(MICROSERVICES.OSINT.TERMENE.id) private client: ClientProxy) {}
 
-  async searchCompanyByCUI(cui: string) {
-    type Params = Parameters<OsintTermeneServiceConfig['searchCompanyByCUI']>[0]
-    type Result = ReturnType<OsintTermeneServiceConfig['searchCompanyByCUI']>
-
-    try {
-      return lastValueFrom(
-        this.client
-          .send<Result, Params>(MICROSERVICES.OSINT.TERMENE.searchCompanyByCUI, cui)
-          .pipe(timeout(20000)),
-      )
-    } catch (e) {
-      this.logger.error(e)
-      this.logger.debug(
-        'No valid response received from the OSINT Termene service. Make sure the service is running properly.',
-      )
-    }
-  }
-
   async searchCompaniesByName(companyName: string) {
     type Params = Parameters<OsintTermeneServiceConfig['searchCompaniesByName']>[0]
     type Result = ReturnType<OsintTermeneServiceConfig['searchCompaniesByName']>

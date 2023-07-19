@@ -2,7 +2,6 @@ import { z } from 'zod'
 import { OSINTCompanySchema, OSINTPersonSchema } from 'defs'
 
 export const osintTermeneServiceConfig = z.object({
-  searchCompanyByCUI: z.function().args(z.string()).returns(OSINTCompanySchema.array()),
   searchCompaniesByName: z
     .function()
     .args(z.string().nonempty())

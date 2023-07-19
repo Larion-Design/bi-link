@@ -6,11 +6,8 @@ import { OSINTCompany } from '../../shared/dto/osintCompany'
 
 @ArgsType()
 class Params {
-  @Field({ nullable: true })
-  name?: string
-
-  @Field({ nullable: true })
-  cui?: string
+  @Field()
+  searchTerm: string
 }
 
 @Resolver(() => OSINTCompany)
@@ -19,12 +16,7 @@ export class SearchTermeneCompanies {
 
   @Query(() => [OSINTCompany])
   @UseGuards(FirebaseAuthGuard)
-  async searchTermeneCompanies(@Args() { name, cui }: Params) {
-    if (cui?.length) {
-      return this.osintTermeneService.searchCompanyByCUI(cui)
-    }
-    if (name?.length) {
-      return this.osintTermeneService.searchCompaniesByName(name)
-    }
+  async searchTermeneCompanies(@Args() { searchTerm }: Params) {
+    return this.osintTermeneService.searchCompaniesByName(searchTerm)
   }
 }
