@@ -96,7 +96,7 @@ export const CompaniesList: React.FunctionComponent = () => {
                   onClick={() => navigate(routes.companiesIntegrationTermene)}
                   data-cy={'createCompany'}
                 >
-                  <Tooltip title={'Creaza o companie'}>
+                  <Tooltip title={'Cauta companii pe termene.ro'}>
                     <LanguageOutlinedIcon />
                   </Tooltip>
                 </Button>
