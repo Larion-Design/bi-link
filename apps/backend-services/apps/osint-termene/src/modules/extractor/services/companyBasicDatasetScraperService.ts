@@ -13,27 +13,45 @@ export class CompanyBasicDatasetScraperService {
   searchCompaniesByName = async (name: string): Promise<OSINTCompany[] | undefined> =>
     this.browserService.execBrowserSession(
       async (context) =>
-        this.browserService.handlePage(context, async (page) => {
-          await page.goto(this.companiesUrl)
-          await page.waitForSelector('#autocompleterCompanySearchVerify')
-          const elem = await page.$('#autocompleterCompanySearchVerify')
-          const companies: OSINTCompany[] = []
+        this.browserService.handlePage(
+          context,
+          async (page) => {
+            await page.goto(this.companiesUrl)
+            await page.waitForSelector('#autocompleterCompanySearchVerify')
+            const elem = await page.$('#autocompleterCompanySearchVerify')
+            const companies: OSINTCompany[] = []
 
-          if (elem) {
-            await elem.type(name, { delay: 80 })
+            if (elem) {
+              await elem.type(name, { delay: 80 })
 
-            await page.waitForResponse(async (response) => {
-              const success = response.ok()
+              await page.waitForResponse(async (response) => {
+                const success = response.ok()
 
-              if (success && response.url().includes('searchCompany.php')) {
-                const data = searchCompaniesByNameSchema.parse(await response.json())
-                data.forEach(({ nume, cui }) => companies.push({ cui: String(cui), name: nume }))
-              }
-              return success
-            })
-          }
-          return companies
-        }),
+                if (success && response.url().includes('searchCompany.php')) {
+                  const data = searchCompaniesByNameSchema.parse(await response.json())
+                  data.forEach(({ nume, cui }) => companies.push({ cui: String(cui), name: nume }))
+                }
+                return success
+              })
+            }
+            return companies
+          },
+          {
+            blockResources: [
+              'script',
+              'media',
+              'font',
+              'cspviolationreport',
+              'other',
+              'cspviolationreport',
+              'eventsource',
+              'fetch',
+              'stylesheet',
+              'texttrack',
+            ],
+            disableJavascript: true,
+          },
+        ),
       true,
     )
 
@@ -52,23 +70,20 @@ export class CompanyBasicDatasetScraperService {
           }
 
           if (tableRows?.length) {
+            const labelToKeysMap: { [key: string]: keyof OSINTCompany } = {
+              'Nume firma': 'name',
+              'Cod Unic de Înregistrare': 'cui',
+              'Nr. Înmatriculare': 'registrationNumber',
+            }
+
             await Promise.all(
               tableRows.map(async (tableRow) => {
                 const [labelElement, valuelement] = await tableRow.$$('td')
-                const label = await page.evaluate(
-                  (element) => element?.textContent?.trim() ?? '',
-                  labelElement,
-                )
-                const value = await page.evaluate(
-                  (element) => element?.textContent?.trim() ?? '',
-                  valuelement,
-                )
 
-                const labelToKeysMap: { [key: string]: keyof OSINTCompany } = {
-                  'Nume firma': 'name',
-                  'Cod Unic de Înregistrare': 'cui',
-                  'Nr. Înmatriculare': 'registrationNumber',
-                }
+                const [label, value] = await Promise.all([
+                  page.evaluate((element) => element?.textContent?.trim() ?? '', labelElement),
+                  page.evaluate((element) => element?.textContent?.trim() ?? '', valuelement),
+                ])
 
                 if (value?.length && labelToKeysMap[label]) {
                   company[labelToKeysMap[label] as keyof OSINTCompany] = value
@@ -77,17 +92,13 @@ export class CompanyBasicDatasetScraperService {
             )
           }
 
-          const fiscalAddressElement = await page.$('#fiscalAddress')
+          const headquarters = await page.$eval(
+            '#fiscalAddress',
+            (element) => element?.textContent?.trim() ?? '',
+          )
 
-          if (fiscalAddressElement) {
-            const headquarters = await page.evaluate(
-              (element) => element?.textContent?.trim() ?? '',
-              fiscalAddressElement,
-            )
-
-            if (headquarters?.length) {
-              company.headquarters = headquarters
-            }
+          if (headquarters?.length) {
+            company.headquarters = headquarters
           }
           return company
         }),
