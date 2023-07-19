@@ -28,6 +28,10 @@
     "cli": {
       "persistent": true,
       "outputs": []
+    },
+    "termene": {
+      "persistent": true,
+      "outputs": []
     }
   }
 }

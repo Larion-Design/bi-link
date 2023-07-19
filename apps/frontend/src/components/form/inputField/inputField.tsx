@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useDebounce } from 'usehooks-ts'
 import TextField from '@mui/material/TextField'
-import { InputFieldProps } from '@frontend/components/form/inputField/types'
+import { InputFieldProps } from './types'
 
 export const InputField: React.FunctionComponent<InputFieldProps> = ({
   size,
@@ -17,13 +17,13 @@ export const InputField: React.FunctionComponent<InputFieldProps> = ({
   required,
   endIcon,
   startIcon,
+  placeholder,
+  autoComplete,
 }) => {
   const [currentValue, setCurrentValue] = useState(value)
   const debouncedValue = useDebounce(currentValue, 500)
 
-  useEffect(() => {
-    void onChange(debouncedValue)
-  }, [debouncedValue])
+  useEffect(() => void onChange(debouncedValue), [debouncedValue])
 
   useEffect(() => {
     if (value !== debouncedValue) {
@@ -33,6 +33,7 @@ export const InputField: React.FunctionComponent<InputFieldProps> = ({
 
   return (
     <TextField
+      autoComplete={autoComplete}
       size={size}
       required={required}
       data-cy={name}
@@ -40,6 +41,7 @@ export const InputField: React.FunctionComponent<InputFieldProps> = ({
       fullWidth
       name={name}
       label={label}
+      placeholder={placeholder}
       multiline={multiline}
       minRows={rows}
       value={currentValue}

@@ -2,8 +2,7 @@ import { gql, useLazyQuery } from '@apollo/client'
 import { OSINTCompany } from 'defs'
 
 type Params = {
-  name?: string
-  cui?: string
+  searchTerm: string
 }
 
 type Response = {
@@ -11,8 +10,8 @@ type Response = {
 }
 
 const request = gql`
-  query SearchTermeneCompanies($cui: String, $name: String) {
-    searchTermeneCompanies(cui: $cui, name: $name) {
+  query SearchTermeneCompanies($searchTerm: String!) {
+    searchTermeneCompanies(searchTerm: $searchTerm) {
       cui
       name
       registrationNumber

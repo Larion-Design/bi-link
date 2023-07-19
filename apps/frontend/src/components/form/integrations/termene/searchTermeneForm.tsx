@@ -1,62 +1,39 @@
 import React, { useCallback } from 'react'
 import { useFormik } from 'formik'
-import { DropdownList } from '@frontend/components/form/dropdownList'
 import { InputField } from '@frontend/components/form/inputField'
 import Button from '@mui/material/Button'
 import Grid from '@mui/material/Grid'
 import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined'
 
 type Props = {
-  onSubmit: (name: string | null, cui: string | null) => Promise<unknown>
+  onSubmit: (searchTerm: string) => Promise<unknown>
 }
 
 type FormParams = {
-  name?: string
-  cui?: string
-  searchField: string
-}
-
-const dropdownOptions = {
-  name: 'Nume',
-  cui: 'CIF / CUI',
+  searchTerm: string
 }
 
 export const SearchTermeneForm: React.FunctionComponent<Props> = ({ onSubmit }) => {
   const { submitForm, setFieldValue, isSubmitting, values, errors } = useFormik<FormParams>({
     initialValues: {
-      name: '',
-      cui: '',
-      searchField: 'name',
+      searchTerm: '',
     },
-    onSubmit: ({ name, cui }) => onSubmit(name, cui),
+    onSubmit: ({ searchTerm }) => onSubmit(searchTerm),
   })
 
-  const changeSearchParam = useCallback(
-    (value) => void setFieldValue('searchField', value),
+  const onInputChange = useCallback(
+    (value: string) => void setFieldValue('searchTerm', value.trim()),
     [setFieldValue],
   )
 
-  const onInputChange = useCallback(
-    (value) => void setFieldValue(values.searchField, value),
-    [values.searchField, setFieldValue],
-  )
-
   return (
-    <Grid container spacing={2} sx={{ alignItems: 'center' }}>
-      <Grid item xs={2}>
-        <DropdownList
-          size={'small'}
-          value={values.searchField}
-          options={dropdownOptions}
-          onChange={changeSearchParam}
-        />
-      </Grid>
-      <Grid item xs={9}>
+    <Grid container spacing={3} sx={{ alignItems: 'center' }}>
+      <Grid item xs={11}>
         <InputField
           size={'small'}
-          value={values.cui ?? values.name}
+          placeholder={'Cauta companii dupa nume sau CUI / CIF'}
+          value={values.searchTerm}
           onChange={onInputChange}
-          error={errors.cui ?? errors.name}
         />
       </Grid>
       <Grid item xs={1}>
@@ -64,7 +41,7 @@ export const SearchTermeneForm: React.FunctionComponent<Props> = ({ onSubmit }) 
           size={'large'}
           variant={'contained'}
           onClick={() => void submitForm()}
-          disabled={isSubmitting || (values.name.length < 3 && values.cui.length < 3)}
+          disabled={isSubmitting || values.searchTerm.length < 3}
         >
           <SearchOutlinedIcon />
         </Button>

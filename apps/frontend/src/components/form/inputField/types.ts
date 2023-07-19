@@ -7,6 +7,8 @@ export type InputFieldProps = {
   label?: string
   value: string
   error?: string
+  autoComplete?: BaseTextFieldProps['autoComplete']
+  placeholder?: string
   onChange: (value: string) => void
   readonly?: boolean
   multiline?: boolean
