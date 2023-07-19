@@ -1,6 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common'
 import { BrowserService } from '@app/browser-module/browserService'
-import { Browser } from 'puppeteer-core'
+import { BrowserContext } from 'puppeteer-core'
 import { associatesSchema, TermeneAssociateSchema } from '../../../schema/associates'
 import { balanceSheetSchema } from '../../../schema/balanceSheet'
 import { branchesSchema } from '../../../schema/branches'
@@ -24,8 +24,8 @@ export class CompanyDatasetScraperService {
   ) {}
 
   getFullCompanyDataSet = async (cui: string) =>
-    this.browserService.execBrowserSession(async (browser) => {
-      const dataset = await this.browserService.handlePage(browser, async (page) => {
+    this.browserService.execBrowserSession(async (context) => {
+      const dataset = await this.browserService.handlePage(context, async (page) => {
         const authenticated = await this.termeneAuthService.authenticate(page)
 
         if (authenticated) {
@@ -70,14 +70,14 @@ export class CompanyDatasetScraperService {
           if (dataset.associates) {
             dataset.associates.asociatiAdministratori.administratori =
               await this.assignEntitiesTermeneUrl(
-                browser,
+                context,
                 cui,
                 dataset.associates.asociatiAdministratori.administratori,
               )
 
             dataset.associates.asociatiAdministratori.asociati =
               await this.assignEntitiesTermeneUrl(
-                browser,
+                context,
                 cui,
                 dataset.associates.asociatiAdministratori.asociati,
               )
@@ -90,7 +90,7 @@ export class CompanyDatasetScraperService {
     })
 
   private async assignEntitiesTermeneUrl(
-    browser: Browser,
+    context: BrowserContext,
     companyCUI: string,
     associates: TermeneAssociateSchema[],
   ) {
@@ -104,7 +104,7 @@ export class CompanyDatasetScraperService {
         } else if (associate.tipAA === 'persoana') {
           associate.entityUrl =
             await this.associateDatasetScraperService.getPersonAssociateTermeneUrl(
-              browser,
+              context,
               companyCUI,
               associate.nume,
             )
