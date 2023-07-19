@@ -14,7 +14,7 @@ type FormParams = {
 }
 
 export const SearchTermeneForm: React.FunctionComponent<Props> = ({ onSubmit }) => {
-  const { submitForm, setFieldValue, isSubmitting, values, errors } = useFormik<FormParams>({
+  const { submitForm, setFieldValue, isSubmitting, values } = useFormik<FormParams>({
     initialValues: {
       searchTerm: '',
     },
@@ -27,11 +27,11 @@ export const SearchTermeneForm: React.FunctionComponent<Props> = ({ onSubmit }) 
   )
 
   return (
-    <Grid container spacing={3} sx={{ alignItems: 'center' }}>
+    <Grid container spacing={1} sx={{ alignItems: 'center' }}>
       <Grid item xs={11}>
         <InputField
           size={'small'}
-          placeholder={'Cauta companii dupa nume sau CUI / CIF'}
+          placeholder={'Cauta companii dupa nume sau CUI / CIF pe termene.ro'}
           value={values.searchTerm}
           onChange={onInputChange}
         />
