@@ -1,5 +1,5 @@
 import { CompanyLoaderService, PersonLoaderService } from '@app/loader-module'
-import { Injectable } from '@nestjs/common'
+import { Injectable, Logger } from '@nestjs/common'
 import { AssociateAPI } from 'defs'
 import {
   getDefaultCompany,
@@ -14,19 +14,25 @@ import {
   TermenePersonAssociate,
 } from '../../../schema/associates'
 import { CompanyProducerService } from '../../scheduler/companies/companyProducerService'
+import { PersonProducerService } from '../../scheduler/persons/personProducerService'
 import { LocationDataTransformerService } from './locationDataTransformerService'
 
 @Injectable()
 export class AssociateDataTransformerService {
+  private readonly logger = new Logger(AssociateDataTransformerService.name)
+
   constructor(
     private readonly locationDataTransformerService: LocationDataTransformerService,
     private readonly personLoaderService: PersonLoaderService,
     private readonly companyLoaderService: CompanyLoaderService,
     private readonly companyProducerService: CompanyProducerService,
+    private readonly personProducerService: PersonProducerService,
   ) {}
 
   async transformAssociatesInfo(associates: TermeneAssociateSchema[], sourceUrl: string) {
     const associatesList: AssociateAPI[] = []
+    const companiesCUISet = new Set<string>()
+    const personsUrlsSet = new Set<string>()
 
     for await (const associate of associates) {
       switch (associate.tipAA) {
@@ -35,6 +41,7 @@ export class AssociateDataTransformerService {
 
           if (companyAssociate) {
             associatesList.push(companyAssociate)
+            companiesCUISet.add(associate.cui)
           }
           break
         }
@@ -43,10 +50,23 @@ export class AssociateDataTransformerService {
 
           if (personAssociate) {
             associatesList.push(personAssociate)
+
+            if (associate.entityUrl) {
+              personsUrlsSet.add(associate.entityUrl)
+            }
           }
           break
         }
       }
+    }
+
+    if (companiesCUISet.size) {
+      this.logger.debug(`${companiesCUISet.size} companies will be imported from termene.ro`)
+      await this.companyProducerService.importCompanies(Array.from(companiesCUISet))
+    }
+    if (personsUrlsSet.size) {
+      this.logger.debug(`${personsUrlsSet.size} persons will be imported from termene.ro`)
+      await this.personProducerService.extractPersonsCompanies(Array.from(personsUrlsSet))
     }
     return associatesList
   }
@@ -68,7 +88,6 @@ export class AssociateDataTransformerService {
     const companyId = await this.companyLoaderService.createCompany(companyInfo, AUTHOR)
 
     if (companyId) {
-      await this.companyProducerService.importCompanies([companyInfo.cui.value])
       return this.setAssociateInfo(getDefaultCompanyAssociate(companyId), associateInfo, sourceUrl)
     }
   }

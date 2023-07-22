@@ -106,22 +106,25 @@ export class AssociateDatasetScraperService {
   }
 
   private traverseSearchResults = async (tableRows: ElementHandle<HTMLTableRowElement>[]) =>
-    Promise.all<OSINTPerson>(
+    Promise.all(
       tableRows.map(async (tableRow) => {
         const [, nameColumn, addressColumn] = await tableRow.$$('.detalii-text-tabel')
-        const personName = await nameColumn?.evaluate((elem) => elem?.textContent?.trim())
-        const personAddress = await addressColumn?.evaluate((elem) => elem?.textContent?.trim())
+        const personName = await nameColumn?.evaluate((elem) => elem?.textContent?.trim() ?? '')
+        const personAddress = await addressColumn?.evaluate(
+          (elem) => elem?.textContent?.trim() ?? '',
+        )
+        const personId = await tableRow.$eval("form input[name='company_id']", (element) =>
+          element.value.trim(),
+        )
 
-        const personIdElement = await tableRow.$("form input[name='company_id']")
-        const personId = await personIdElement?.evaluate((element) => element.value.trim())
-        const associateUrl = personId ? getPersonAssociateUrl(personId) : ''
-
-        return OSINTPersonSchema.parse({
+        const personInfo: OSINTPerson = {
           id: personId,
-          name: personName,
+          name: personName ?? '',
           address: personAddress,
-          url: associateUrl,
-        })
+          url: personId.length ? getPersonAssociateUrl(personId) : '',
+        }
+
+        return OSINTPersonSchema.parse(personInfo)
       }),
     )
 
@@ -130,24 +133,20 @@ export class AssociateDatasetScraperService {
     await page.waitForNetworkIdle()
   }
 
-  private extractCompaniesFromAssociatePage = async (page: Page) => {
+  private async extractCompaniesFromAssociatePage(page: Page) {
     const rows = await page.$$(`.df-ta-main-row`)
     return Promise.all(
       rows.map(async (row) => {
-        const companyInfo: CompanyInfo = {}
-        const companyInfoElem = await row.$('a[href^="/catalog"]')
-        const roleElem = await row.$('td:nth-child(2)')
+        const companyNameAndCUI = await row.$eval('a[href^="/catalog"]', (elem) => ({
+          cui: elem.href.replace('/catalog/firme/cauta/', ''),
+          name: elem.textContent?.trim() ?? '',
+        }))
 
-        if (companyInfoElem) {
-          companyInfo.cui = await companyInfoElem.evaluate((elem) =>
-            elem.href.replace('/catalog/firme/cauta/', ''),
-          )
-          companyInfo.name = await companyInfoElem.evaluate(
-            (elem) => elem.textContent?.trim() ?? '',
-          )
-        }
-        if (roleElem) {
-          companyInfo.role = await roleElem.evaluate((elem) => elem.textContent?.trim() ?? '')
+        const companyInfo: CompanyInfo = {}
+
+        if (companyNameAndCUI) {
+          companyInfo.cui = companyNameAndCUI.cui
+          companyInfo.name = companyNameAndCUI.name
         }
         return OSINTCompanySchema.parse(companyInfo)
       }),

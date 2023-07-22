@@ -3,7 +3,7 @@ import { Injectable } from '@nestjs/common'
 import { Queue } from 'bull'
 import { CompanyAPIInput } from 'defs'
 import { CompanyTermeneDataset } from '../../../schema/company'
-import { ImportedCompaniesCacheService } from '../../cache'
+import { ImportedEntitiesCacheService } from '../../cache'
 import { EVENT_IMPORT, EVENT_LOAD, EVENT_TRANSFORM, QUEUE_COMPANIES } from '../constants'
 import { ExtractCompanyEvent, LoadCompanyEvent, TransformCompanyEvent } from '../types'
 
@@ -12,16 +12,27 @@ export class CompanyProducerService {
   constructor(
     @InjectQueue(QUEUE_COMPANIES)
     private readonly queue: Queue<ExtractCompanyEvent | TransformCompanyEvent | LoadCompanyEvent>,
-    private readonly importedCompaniesCacheService: ImportedCompaniesCacheService,
+    private readonly importedEntitiesCacheService: ImportedEntitiesCacheService,
   ) {}
 
-  async importCompanies(companiesCUI: string[]) {
-    const newCompanies = await this.importedCompaniesCacheService.getNewCompanies(companiesCUI)
+  async importCompanies(companiesCUI: string[], skipCache = false) {
+    if (!skipCache) {
+      const newCompanies = await this.importedEntitiesCacheService.getNewCompanies(companiesCUI)
 
-    if (newCompanies.length) {
-      await this.importedCompaniesCacheService.cacheCompanies(newCompanies)
+      if (newCompanies.length) {
+        await this.importedEntitiesCacheService.cacheCompanies(companiesCUI)
+        return this.queue.addBulk(
+          newCompanies.map((cui) => ({
+            name: EVENT_IMPORT,
+            data: { cui },
+            opts: { delay: 5000 },
+          })),
+        )
+      }
+    } else {
+      await this.importedEntitiesCacheService.cacheCompanies(companiesCUI)
       return this.queue.addBulk(
-        newCompanies.map((cui) => ({
+        companiesCUI.map((cui) => ({
           name: EVENT_IMPORT,
           data: { cui },
           opts: { delay: 5000 },
