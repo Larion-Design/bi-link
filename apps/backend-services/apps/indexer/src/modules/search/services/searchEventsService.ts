@@ -4,7 +4,7 @@ import { ElasticsearchService } from '@nestjs/elasticsearch'
 import { SearchRequest, SearchTotalHits } from '@elastic/elasticsearch/lib/api/types'
 import { formatAddress } from 'tools'
 import { INDEX_EVENTS } from '../../../constants'
-import { EventListRecord, EventsSuggestions } from 'defs'
+import { EventListRecord, EventsSuggestions, LocationAPIOutput, locationSchema } from 'defs'
 import { SearchHelperService } from './searchHelperService'
 
 @Injectable()
@@ -71,7 +71,9 @@ export class SearchEventsService {
 
       return {
         total: (total as SearchTotalHits).value,
-        records: hits.map(({ _id, _source }) => this.transformRecord(_id, _source!)),
+        records: hits.map(({ _id, _source }) =>
+          this.transformRecord(_id, _source as EventSearchIndex),
+        ),
       }
     } catch (error) {
       this.logger.error(error)
@@ -84,7 +86,7 @@ export class SearchEventsService {
   ): EventListRecord => ({
     _id,
     type,
-    location: location ? formatAddress(location) : null,
+    location: location ? formatAddress(locationSchema.parse(location)) : null,
     date: date ? new Date(date) : null,
   })
 }

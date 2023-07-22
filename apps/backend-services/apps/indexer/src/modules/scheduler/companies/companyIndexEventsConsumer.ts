@@ -11,7 +11,7 @@ import { Logger } from '@nestjs/common'
 import { Company, EntityInfo } from 'defs'
 import { IngressService } from '@app/rpc/microservices/ingress'
 import { EntityEventInfo, EVENT_CREATED, EVENT_UPDATED } from '@app/scheduler-module'
-import { QUEUE_COMPANIES } from '../../constants'
+import { AUTHOR, QUEUE_COMPANIES } from '../../constants'
 import { FileEventDispatcherService } from '../files/fileEventDispatcherService'
 import { CompaniesIndexerService } from '../../indexer/services'
 
@@ -71,16 +71,13 @@ export class CompanyIndexEventsConsumer {
       return {}
     } catch (error) {
       this.logger.error(error)
-      await job.moveToFailed(error as { message: string })
+      return job.moveToFailed(error as { message: string })
     }
   }
 
   private async indexCompanyInfo(entityId: string) {
     const entityInfo: EntityInfo = { entityId, entityType: 'COMPANY' }
-    const company = (await this.ingressService.getEntity(entityInfo, true, {
-      type: 'SERVICE',
-      sourceId: 'SERVICE_INDEXER',
-    })) as Company
+    const company = (await this.ingressService.getEntity(entityInfo, true, AUTHOR)) as Company
 
     if (company) {
       const indexingSuccessful = await this.companiesIndexerService.indexCompany(entityId, company)

@@ -10,5 +10,5 @@ export const formatAddress = ({
   country,
   zipCode,
   otherInfo,
-}: Location) =>
+}: Partial<Location>) =>
   [street, number, building, door, locality, county, country, zipCode, otherInfo].join(' ').trim()
