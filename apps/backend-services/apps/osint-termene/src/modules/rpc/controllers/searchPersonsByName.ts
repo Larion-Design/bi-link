@@ -16,9 +16,10 @@ export class SearchPersonsByName {
   ) {}
 
   @MessagePattern(MICROSERVICES.OSINT.TERMENE.searchPersons)
-  async searchCompanyByCUI(@Payload() cui: Params): Promise<Result> {
-    return this.browserService.execBrowserSession(async (browser) =>
-      this.associateScraperService.searchAssociatesByName(browser, cui),
+  async searchPersons(@Payload() name: Params): Promise<Result> {
+    return this.browserService.execBrowserSession(
+      async (browser) => this.associateScraperService.searchAssociatesByName(browser, name),
+      { private: true, sessionId: `osint.termene.searchPersons` },
     )
   }
 }

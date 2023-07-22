@@ -3,7 +3,8 @@ import { BrowserService } from '@app/browser-module/browserService'
 import { CacheService } from '@app/cache'
 import { Injectable, Logger } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
-import { Page, Protocol } from 'puppeteer-core'
+import { BrowserContext, Page, Protocol } from 'puppeteer-core'
+import { v4 } from 'uuid'
 
 @Injectable()
 export class TermeneAuthService {
@@ -24,19 +25,46 @@ export class TermeneAuthService {
     this.password = configService.getOrThrow<string>('SCRAPER_TERMENE_PASSWORD')
   }
 
-  async authenticatedSession<T>(handler: (page: Page) => Promise<T>) {
-    return this.browserService.execBrowserSession(async (context) => {
-      const authenticated = await this.browserService.handlePage(context, async (page) => {
-        if (!(await this.isUserAuthenticated(page))) {
-          return this.authenticate(page)
-        }
-        return true
-      })
+  async authenticatedPage<T>(handler: (page: Page) => Promise<T>) {
+    return this.browserService.execBrowserSession(
+      async (context) => {
+        const authenticated = await this.browserService.handlePage(context, async (page) => {
+          if (!(await this.isUserAuthenticated(page))) {
+            return this.authenticate(page)
+          }
+          return true
+        })
 
-      if (authenticated) {
-        return this.browserService.handlePage(context, handler)
-      }
-    })
+        if (authenticated) {
+          return this.browserService.handlePage(context, handler)
+        }
+      },
+      {
+        private: true,
+        sessionId: v4(),
+      },
+    )
+  }
+
+  async authenticatedSession<T>(handler: (context: BrowserContext) => Promise<T>) {
+    return this.browserService.execBrowserSession(
+      async (context) => {
+        const authenticated = await this.browserService.handlePage(context, async (page) => {
+          if (!(await this.isUserAuthenticated(page))) {
+            return this.authenticate(page)
+          }
+          return true
+        })
+
+        if (authenticated) {
+          return handler(context)
+        }
+      },
+      {
+        private: true,
+        sessionId: v4(),
+      },
+    )
   }
 
   private async isUserAuthenticated(page: Page) {

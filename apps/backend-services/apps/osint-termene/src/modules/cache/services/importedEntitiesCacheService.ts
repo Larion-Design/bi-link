@@ -6,7 +6,6 @@ type KeyFormatter = (id: string) => string
 @Injectable()
 export class ImportedEntitiesCacheService {
   private readonly logger = new Logger(ImportedEntitiesCacheService.name)
-
   private readonly timeout = 3600
 
   constructor(private readonly cacheService: CacheService) {}

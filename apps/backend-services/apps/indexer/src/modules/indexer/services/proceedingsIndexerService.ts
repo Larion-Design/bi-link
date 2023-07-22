@@ -1,13 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common'
 import { ConnectedCompanyIndex, ConnectedPersonIndex, ProceedingIndex } from '@app/definitions'
 import { ElasticsearchService } from '@nestjs/elasticsearch'
-import {
-  CompanyAPIOutput,
-  PersonAPIInput,
-  PersonAPIOutput,
-  Proceeding,
-  ProceedingEntityInvolved,
-} from 'defs'
+import { CompanyAPIOutput, PersonAPIOutput, Proceeding, ProceedingEntityInvolved } from 'defs'
 import { formatYear } from 'tools'
 import { INDEX_PROCEEDINGS } from '../../../constants'
 import { ConnectedEntityIndexerService } from './connectedEntityIndexerService'
@@ -24,7 +18,7 @@ export class ProceedingsIndexerService {
     private readonly customFieldsIndexerService: CustomFieldsIndexerService,
   ) {}
 
-  indexProceeding = async (proceedingId: string, proceedingModel: Proceeding) => {
+  async indexProceeding(proceedingId: string, proceedingModel: Proceeding) {
     try {
       const { _id } = await this.elasticsearchService.index<ProceedingIndex>({
         index: this.index,
@@ -40,7 +34,7 @@ export class ProceedingsIndexerService {
     }
   }
 
-  private createIndexData = (proceedingModel: Proceeding): ProceedingIndex => {
+  private createIndexData(proceedingModel: Proceeding): ProceedingIndex {
     const { persons, companies } = this.createConnectedEntitiesIndex(
       proceedingModel.entitiesInvolved,
     )
@@ -61,7 +55,7 @@ export class ProceedingsIndexerService {
     }
   }
 
-  private createConnectedEntitiesIndex = (entities: ProceedingEntityInvolved[]) => {
+  private createConnectedEntitiesIndex(entities: ProceedingEntityInvolved[]) {
     const persons: ConnectedPersonIndex[] = []
     const companies: ConnectedCompanyIndex[] = []
 

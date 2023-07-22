@@ -1,12 +1,16 @@
 import { Injectable, Logger } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
-import e from 'express'
 import puppeteer, { Browser, BrowserContext, Page, ResourceType } from 'puppeteer-core'
 
 type PageOptions = {
   blockResources?: ResourceType[]
   disableJavascript?: boolean
   htmlOnly?: boolean
+}
+
+type BrowserSessionOptions = {
+  private?: boolean
+  sessionId?: string
 }
 
 @Injectable()
@@ -49,12 +53,12 @@ export class BrowserService {
 
   async execBrowserSession<T>(
     sessionHandler: (browser: BrowserContext) => Promise<T>,
-    privateSession = false,
+    options?: BrowserSessionOptions,
   ) {
-    const browser = await this.getBrowser()
-    const context = browser.defaultBrowserContext()
-
-    browser.on('disconnected', () => console.debug('browser crashed or disconnected.'))
+    const browser = await this.getBrowser(options?.sessionId)
+    const context = options?.private
+      ? await browser.createIncognitoBrowserContext()
+      : browser.defaultBrowserContext()
 
     try {
       const result = await sessionHandler(context)
@@ -70,17 +74,16 @@ export class BrowserService {
     }
   }
 
-  private async getRemoteBrowser() {
-    return puppeteer.connect({
-      browserWSEndpoint: this.chromiumInstanceUrl,
-    })
-  }
-
-  private async getBrowser() {
+  private async getBrowser(sessionId?: string) {
     if (!this.browser || !this.browser.isConnected()) {
-      console.debug('connecting to browser')
+      const url = new URL(this.chromiumInstanceUrl)
+
+      if (sessionId) {
+        url.searchParams.set('trackingId', sessionId)
+      }
+
       this.browser = await puppeteer.connect({
-        browserWSEndpoint: this.chromiumInstanceUrl,
+        browserWSEndpoint: url.toString(),
       })
     }
     return this.browser

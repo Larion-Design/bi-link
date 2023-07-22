@@ -17,7 +17,7 @@ export class PropertiesIndexerService {
     private readonly locationIndexerService: LocationIndexerService,
   ) {}
 
-  indexProperty = async (propertyId: string, propertyModel: Property) => {
+  async indexProperty(propertyId: string, propertyModel: Property) {
     try {
       const { _id } = await this.elasticsearchService.index<PropertyIndex>({
         index: this.index,
@@ -33,7 +33,7 @@ export class PropertiesIndexerService {
     }
   }
 
-  private createIndexData = (propertyModel: Property): PropertyIndex => {
+  private createIndexData(propertyModel: Property): PropertyIndex {
     const propertyIndex: PropertyIndex = {
       name: propertyModel.name,
       type: propertyModel.type,

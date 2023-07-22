@@ -25,7 +25,7 @@ export class CompanyScraperService {
   ) {}
 
   async extractCompanyData(cui: string) {
-    const dataset = await this.termeneAuthService.authenticatedSession(async (page) => {
+    const dataset = await this.termeneAuthService.authenticatedPage(async (page) => {
       await page.goto(getCompanyUrl(cui))
 
       const dataset: CompanyTermeneDataset = {}
@@ -135,7 +135,7 @@ export class CompanyScraperService {
             blockResources: ['image', 'media', 'ping', 'eventsource', 'preflight', 'prefetch'],
           },
         ),
-      true,
+      { private: true, sessionId: `osint.termene.search.companies` },
     )
 
   getBasicCompanyDataSet = async (cui: string) =>
@@ -167,6 +167,6 @@ export class CompanyScraperService {
             htmlOnly: true,
           },
         ),
-      true,
+      { private: true, sessionId: `osint.termene.import.basic.${cui}` },
     )
 }

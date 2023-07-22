@@ -5,12 +5,7 @@ import { Page } from 'puppeteer-core'
 export class BrowserPageService {
   async type(page: Page, inputSelector: string, value: string) {
     await page.waitForSelector(inputSelector)
-    const element = await page.$(inputSelector)
-
-    if (element) {
-      await element.focus()
-      await element.type(value, { delay: this.getRandomDelay(50, 100) })
-    }
+    await page.type(inputSelector, value, { delay: this.getRandomDelay(50, 100) })
   }
 
   async fillForm(page: Page, selectorValues: Record<string, string>) {

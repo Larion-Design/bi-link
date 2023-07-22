@@ -28,7 +28,7 @@ export class AssociateScraperService {
     })
 
   getCompaniesByAssociateUrl = async (associateUrl: string) =>
-    this.termeneAuthService.authenticatedSession(async (page) => {
+    this.termeneAuthService.authenticatedPage(async (page) => {
       await page.goto(associateUrl)
       return this.extractCompaniesFromAssociatePage(page)
     })
@@ -59,7 +59,7 @@ export class AssociateScraperService {
   }
 
   getPersonAssociateTermeneUrl = async (companyCUI: string, name: string, address?: string) =>
-    this.termeneAuthService.authenticatedSession(async (page) => {
+    this.termeneAuthService.authenticatedPage(async (page) => {
       await this.openSearchPage(page, name, address)
       await page.waitForSelector('tbody')
       const tableRows = await page.$$('tbody > tr')

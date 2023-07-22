@@ -1,275 +1,260 @@
 lockfileVersion: '6.0'
 
+dependencies:
+  '@elastic/elasticsearch':
+    specifier: ^8.5.0
+    version: 8.5.0
+  '@liaoliaots/nestjs-redis':
+    specifier: ^9.0.5
+    version: 9.0.5(@nestjs/common@8.4.7)(@nestjs/core@8.4.7)(ioredis@5.2.4)
+  '@nestjs-modules/ioredis':
+    specifier: ^1.0.1
+    version: 1.0.1(@nestjs/common@8.4.7)(@nestjs/core@8.4.7)(ioredis@5.2.4)
+  '@nestjs/apollo':
+    specifier: ^10.1.7
+    version: 10.1.7(@nestjs/common@8.4.7)(@nestjs/core@8.4.7)(@nestjs/graphql@10.1.7)(apollo-server-core@3.11.1)(apollo-server-express@3.11.1)(graphql@16.6.0)
+  '@nestjs/bull':
+    specifier: ^0.6.2
+    version: 0.6.2(@nestjs/common@8.4.7)(@nestjs/core@8.4.7)(bull@4.10.2)
+  '@nestjs/common':
+    specifier: ^8.4.7
+    version: 8.4.7(class-transformer@0.4.0)(class-validator@0.13.2)(reflect-metadata@0.1.13)(rxjs@7.8.0)
+  '@nestjs/config':
+    specifier: ^2.2.0
+    version: 2.2.0(@nestjs/common@8.4.7)(reflect-metadata@0.1.13)(rxjs@7.8.0)
+  '@nestjs/core':
+    specifier: ^8.4.7
+    version: 8.4.7(@nestjs/common@8.4.7)(@nestjs/microservices@9.2.1)(@nestjs/platform-express@8.4.7)(reflect-metadata@0.1.13)(rxjs@7.8.0)
+  '@nestjs/elasticsearch':
+    specifier: ^8.1.0
+    version: 8.1.0(@elastic/elasticsearch@8.5.0)(@nestjs/common@8.4.7)(rxjs@7.8.0)
+  '@nestjs/graphql':
+    specifier: ^10.1.7
+    version: 10.1.7(@nestjs/common@8.4.7)(@nestjs/core@8.4.7)(class-transformer@0.4.0)(class-validator@0.13.2)(graphql@16.6.0)(reflect-metadata@0.1.13)
+  '@nestjs/jwt':
+    specifier: ^9.0.0
+    version: 9.0.0(@nestjs/common@8.4.7)
+  '@nestjs/microservices':
+    specifier: ^9.2.1
+    version: 9.2.1(@nestjs/common@8.4.7)(@nestjs/core@8.4.7)(ioredis@5.2.4)(nats@2.13.1)(reflect-metadata@0.1.13)(rxjs@7.8.0)
+  '@nestjs/mongoose':
+    specifier: ^9.2.1
+    version: 9.2.1(@nestjs/common@8.4.7)(@nestjs/core@8.4.7)(mongoose@6.8.1)(reflect-metadata@0.1.13)(rxjs@7.8.0)
+  '@nestjs/passport':
+    specifier: ^8.2.2
+    version: 8.2.2(@nestjs/common@8.4.7)(passport@0.5.3)
+  '@nestjs/platform-express':
+    specifier: ^8.4.7
+    version: 8.4.7(@nestjs/common@8.4.7)(@nestjs/core@8.4.7)
+  '@ntegral/nestjs-sentry':
+    specifier: ^3.0.7
+    version: 3.0.7(@nestjs/common@8.4.7)(@nestjs/core@8.4.7)(@sentry/hub@7.28.1)(@sentry/node@7.28.1)(apollo-server-core@3.11.1)(apollo-server-express@3.11.1)(class-transformer@0.4.0)(class-validator@0.13.2)(graphql@16.6.0)(reflect-metadata@0.1.13)(rimraf@3.0.2)(rxjs@7.8.0)
+  '@sentry/node':
+    specifier: ^7.28.1
+    version: 7.28.1
+  '@sentry/tracing':
+    specifier: ^7.28.1
+    version: 7.28.1
+  apollo-server-core:
+    specifier: ^3.11.1
+    version: 3.11.1(graphql@16.6.0)
+  apollo-server-express:
+    specifier: ^3.11.1
+    version: 3.11.1(express@4.18.2)(graphql@16.6.0)
+  bull:
+    specifier: ^4.10.2
+    version: 4.10.2
+  date-fns:
+    specifier: ^2.29.3
+    version: 2.29.3
+  defs:
+    specifier: workspace:*
+    version: file:../../packages/defs
+  firebase-admin:
+    specifier: ^11.4.1
+    version: 11.4.1(@firebase/app-types@0.8.1)
+  graphql:
+    specifier: ^16.6.0
+    version: 16.6.0
+  helmet:
+    specifier: ^5.1.1
+    version: 5.1.1
+  ioredis:
+    specifier: ^5.2.4
+    version: 5.2.4
+  jwks-rsa:
+    specifier: ^2.1.5
+    version: 2.1.5
+  mime-types:
+    specifier: ^2.1.35
+    version: 2.1.35
+  mongoose:
+    specifier: ^6.8.1
+    version: 6.8.1
+  multer:
+    specifier: 1.4.5-lts.1
+    version: 1.4.5-lts.1
+  nats:
+    specifier: ^2.13.1
+    version: 2.13.1
+  neo4j-driver:
+    specifier: ^5.3.0
+    version: 5.3.0
+  nest-commander:
+    specifier: ^3.3.0
+    version: 3.3.0(@nestjs/common@8.4.7)(@nestjs/core@8.4.7)(@types/inquirer@9.0.3)
+  nest-neo4j:
+    specifier: ^0.2.0
+    version: 0.2.0
+  nestjs-minio-client:
+    specifier: ^1.2.0
+    version: 1.2.0
+  newrelic:
+    specifier: latest
+    version: 10.5.0
+  passport:
+    specifier: ^0.5.3
+    version: 0.5.3
+  passport-firebase-jwt:
+    specifier: ^1.2.1
+    version: 1.2.1
+  passport-jwt:
+    specifier: ^4.0.1
+    version: 4.0.1
+  pdf-lib:
+    specifier: ^1.17.1
+    version: 1.17.1
+  pdf-parse:
+    specifier: ^1.1.1
+    version: 1.1.1
+  puppeteer-core:
+    specifier: ^19.11.1
+    version: 19.11.1(typescript@4.9.5)
+  reflect-metadata:
+    specifier: ^0.1.13
+    version: 0.1.13
+  rxjs:
+    specifier: ^7.8.0
+    version: 7.8.0
+  tesseract.js:
+    specifier: ^3.0.3
+    version: 3.0.3(eslint@8.41.0)
+  uuid:
+    specifier: ^8.3.2
+    version: 8.3.2
+  word-extractor:
+    specifier: ^1.0.4
+    version: 1.0.4
+  xlsx:
+    specifier: ^0.18.5
+    version: 0.18.5
+  zod:
+    specifier: ^3.21.4
+    version: 3.21.4
+
+devDependencies:
+  '@faker-js/faker':
+    specifier: ^7.6.0
+    version: 7.6.0
+  '@firebase/app-types':
+    specifier: ^0.8.1
+    version: 0.8.1
+  '@nestjs/cli':
+    specifier: ^8.2.8
+    version: 8.2.8
+  '@nestjs/schematics':
+    specifier: ^8.0.11
+    version: 8.0.11(chokidar@3.5.3)(typescript@4.7.4)
+  '@nestjs/testing':
+    specifier: ^8.4.7
+    version: 8.4.7(@nestjs/common@8.4.7)(@nestjs/core@8.4.7)(@nestjs/microservices@9.2.1)(@nestjs/platform-express@8.4.7)
+  '@sentry/hub':
+    specifier: ^7.28.1
+    version: 7.28.1
+  '@types/bull':
+    specifier: ^3.15.9
+    version: 3.15.9
+  '@types/elasticsearch':
+    specifier: ^5.0.40
+    version: 5.0.40
+  '@types/express':
+    specifier: ^4.17.15
+    version: 4.17.15
+  '@types/inquirer':
+    specifier: ^9.0.3
+    version: 9.0.3
+  '@types/jest':
+    specifier: 27.5.0
+    version: 27.5.0
+  '@types/mime-types':
+    specifier: ^2.1.1
+    version: 2.1.1
+  '@types/multer':
+    specifier: ^1.4.7
+    version: 1.4.7
+  '@types/node':
+    specifier: ^16.18.11
+    version: 16.18.11
+  '@types/passport-jwt':
+    specifier: ^3.0.8
+    version: 3.0.8
+  '@types/pdf-parse':
+    specifier: ^1.1.1
+    version: 1.1.1
+  '@types/supertest':
+    specifier: ^2.0.12
+    version: 2.0.12
+  '@types/uuid':
+    specifier: ^8.3.4
+    version: 8.3.4
+  '@types/word-extractor':
+    specifier: ^1.0.1
+    version: 1.0.1
+  express:
+    specifier: ^4.18.2
+    version: 4.18.2
+  jest:
+    specifier: 28.0.3
+    version: 28.0.3(@types/node@16.18.11)(ts-node@10.9.1)
+  nest-commander-testing:
+    specifier: ^3.1.0
+    version: 3.1.0(@nestjs/common@8.4.7)(@nestjs/core@8.4.7)(@nestjs/testing@8.4.7)(nest-commander@3.3.0)
+  source-map-support:
+    specifier: ^0.5.21
+    version: 0.5.21
+  supertest:
+    specifier: ^6.3.3
+    version: 6.3.3
+  tools:
+    specifier: workspace:*
+    version: file:../../packages/tools
+  ts-jest:
+    specifier: 28.0.1
+    version: 28.0.1(@babel/core@7.20.7)(@types/jest@27.5.0)(jest@28.0.3)(typescript@4.9.5)
+  ts-loader:
+    specifier: ^9.4.2
+    version: 9.4.2(typescript@4.9.5)(webpack@5.75.0)
+  ts-node:
+    specifier: ^10.9.1
+    version: 10.9.1(@types/node@16.18.11)(typescript@4.9.5)
+  tsconfig-paths:
+    specifier: 4.0.0
+    version: 4.0.0
+  tslib:
+    specifier: ^2.5.0
+    version: 2.5.0
+  typescript:
+    specifier: ^4.9.5
+    version: 4.9.5
+  webpack:
+    specifier: ^5.75.0
+    version: 5.75.0
+
 dependenciesMeta:
   defs:
     injected: true
   tools:
     injected: true
-
-importers:
-
-  .:
-    dependencies:
-      '@elastic/elasticsearch':
-        specifier: ^8.5.0
-        version: 8.5.0
-      '@liaoliaots/nestjs-redis':
-        specifier: ^9.0.5
-        version: 9.0.5(@nestjs/common@8.4.7)(@nestjs/core@8.4.7)(ioredis@5.2.4)
-      '@nestjs-modules/ioredis':
-        specifier: ^1.0.1
-        version: 1.0.1(@nestjs/common@8.4.7)(@nestjs/core@8.4.7)(ioredis@5.2.4)
-      '@nestjs/apollo':
-        specifier: ^10.1.7
-        version: 10.1.7(@nestjs/common@8.4.7)(@nestjs/core@8.4.7)(@nestjs/graphql@10.1.7)(apollo-server-core@3.11.1)(apollo-server-express@3.11.1)(graphql@16.6.0)
-      '@nestjs/bull':
-        specifier: ^0.6.2
-        version: 0.6.2(@nestjs/common@8.4.7)(@nestjs/core@8.4.7)(bull@4.10.2)
-      '@nestjs/common':
-        specifier: ^8.4.7
-        version: 8.4.7(class-transformer@0.4.0)(class-validator@0.13.2)(reflect-metadata@0.1.13)(rxjs@7.8.0)
-      '@nestjs/config':
-        specifier: ^2.2.0
-        version: 2.2.0(@nestjs/common@8.4.7)(reflect-metadata@0.1.13)(rxjs@7.8.0)
-      '@nestjs/core':
-        specifier: ^8.4.7
-        version: 8.4.7(@nestjs/common@8.4.7)(@nestjs/microservices@9.2.1)(@nestjs/platform-express@8.4.7)(reflect-metadata@0.1.13)(rxjs@7.8.0)
-      '@nestjs/elasticsearch':
-        specifier: ^8.1.0
-        version: 8.1.0(@elastic/elasticsearch@8.5.0)(@nestjs/common@8.4.7)(rxjs@7.8.0)
-      '@nestjs/graphql':
-        specifier: ^10.1.7
-        version: 10.1.7(@nestjs/common@8.4.7)(@nestjs/core@8.4.7)(class-transformer@0.4.0)(class-validator@0.13.2)(graphql@16.6.0)(reflect-metadata@0.1.13)
-      '@nestjs/jwt':
-        specifier: ^9.0.0
-        version: 9.0.0(@nestjs/common@8.4.7)
-      '@nestjs/microservices':
-        specifier: ^9.2.1
-        version: 9.2.1(@nestjs/common@8.4.7)(@nestjs/core@8.4.7)(ioredis@5.2.4)(nats@2.13.1)(reflect-metadata@0.1.13)(rxjs@7.8.0)
-      '@nestjs/mongoose':
-        specifier: ^9.2.1
-        version: 9.2.1(@nestjs/common@8.4.7)(@nestjs/core@8.4.7)(mongoose@6.8.1)(reflect-metadata@0.1.13)(rxjs@7.8.0)
-      '@nestjs/passport':
-        specifier: ^8.2.2
-        version: 8.2.2(@nestjs/common@8.4.7)(passport@0.5.3)
-      '@nestjs/platform-express':
-        specifier: ^8.4.7
-        version: 8.4.7(@nestjs/common@8.4.7)(@nestjs/core@8.4.7)
-      '@ntegral/nestjs-sentry':
-        specifier: ^3.0.7
-        version: 3.0.7(@nestjs/common@8.4.7)(@nestjs/core@8.4.7)(@sentry/hub@7.28.1)(@sentry/node@7.28.1)(apollo-server-core@3.11.1)(apollo-server-express@3.11.1)(class-transformer@0.4.0)(class-validator@0.13.2)(graphql@16.6.0)(reflect-metadata@0.1.13)(rimraf@3.0.2)(rxjs@7.8.0)
-      '@sentry/node':
-        specifier: ^7.28.1
-        version: 7.28.1
-      '@sentry/tracing':
-        specifier: ^7.28.1
-        version: 7.28.1
-      apollo-server-core:
-        specifier: ^3.11.1
-        version: 3.11.1(graphql@16.6.0)
-      apollo-server-express:
-        specifier: ^3.11.1
-        version: 3.11.1(express@4.18.2)(graphql@16.6.0)
-      bull:
-        specifier: ^4.10.2
-        version: 4.10.2
-      date-fns:
-        specifier: ^2.29.3
-        version: 2.29.3
-      defs:
-        specifier: workspace:*
-        version: file:../../packages/defs
-      firebase-admin:
-        specifier: ^11.4.1
-        version: 11.4.1(@firebase/app-types@0.8.1)
-      graphql:
-        specifier: ^16.6.0
-        version: 16.6.0
-      helmet:
-        specifier: ^5.1.1
-        version: 5.1.1
-      ioredis:
-        specifier: ^5.2.4
-        version: 5.2.4
-      jwks-rsa:
-        specifier: ^2.1.5
-        version: 2.1.5
-      mime-types:
-        specifier: ^2.1.35
-        version: 2.1.35
-      mongoose:
-        specifier: ^6.8.1
-        version: 6.8.1
-      multer:
-        specifier: 1.4.5-lts.1
-        version: 1.4.5-lts.1
-      nats:
-        specifier: ^2.13.1
-        version: 2.13.1
-      neo4j-driver:
-        specifier: ^5.3.0
-        version: 5.3.0
-      nest-commander:
-        specifier: ^3.3.0
-        version: 3.3.0(@nestjs/common@8.4.7)(@nestjs/core@8.4.7)(@types/inquirer@9.0.3)
-      nest-neo4j:
-        specifier: ^0.2.0
-        version: 0.2.0
-      nestjs-minio-client:
-        specifier: ^1.2.0
-        version: 1.2.0
-      newrelic:
-        specifier: latest
-        version: 10.5.0
-      passport:
-        specifier: ^0.5.3
-        version: 0.5.3
-      passport-firebase-jwt:
-        specifier: ^1.2.1
-        version: 1.2.1
-      passport-jwt:
-        specifier: ^4.0.1
-        version: 4.0.1
-      pdf-lib:
-        specifier: ^1.17.1
-        version: 1.17.1
-      pdf-parse:
-        specifier: ^1.1.1
-        version: 1.1.1
-      puppeteer-core:
-        specifier: ^19.11.1
-        version: 19.11.1(typescript@4.9.5)
-      reflect-metadata:
-        specifier: ^0.1.13
-        version: 0.1.13
-      rxjs:
-        specifier: ^7.8.0
-        version: 7.8.0
-      tesseract.js:
-        specifier: ^3.0.3
-        version: 3.0.3(eslint@8.41.0)
-      uuid:
-        specifier: ^8.3.2
-        version: 8.3.2
-      word-extractor:
-        specifier: ^1.0.4
-        version: 1.0.4
-      xlsx:
-        specifier: ^0.18.5
-        version: 0.18.5
-      zod:
-        specifier: ^3.21.4
-        version: 3.21.4
-    devDependencies:
-      '@faker-js/faker':
-        specifier: ^7.6.0
-        version: 7.6.0
-      '@firebase/app-types':
-        specifier: ^0.8.1
-        version: 0.8.1
-      '@nestjs/cli':
-        specifier: ^8.2.8
-        version: 8.2.8
-      '@nestjs/schematics':
-        specifier: ^8.0.11
-        version: 8.0.11(chokidar@3.5.3)(typescript@4.7.4)
-      '@nestjs/testing':
-        specifier: ^8.4.7
-        version: 8.4.7(@nestjs/common@8.4.7)(@nestjs/core@8.4.7)(@nestjs/microservices@9.2.1)(@nestjs/platform-express@8.4.7)
-      '@sentry/hub':
-        specifier: ^7.28.1
-        version: 7.28.1
-      '@types/bull':
-        specifier: ^3.15.9
-        version: 3.15.9
-      '@types/elasticsearch':
-        specifier: ^5.0.40
-        version: 5.0.40
-      '@types/express':
-        specifier: ^4.17.15
-        version: 4.17.15
-      '@types/inquirer':
-        specifier: ^9.0.3
-        version: 9.0.3
-      '@types/jest':
-        specifier: 27.5.0
-        version: 27.5.0
-      '@types/mime-types':
-        specifier: ^2.1.1
-        version: 2.1.1
-      '@types/multer':
-        specifier: ^1.4.7
-        version: 1.4.7
-      '@types/node':
-        specifier: ^16.18.11
-        version: 16.18.11
-      '@types/passport-jwt':
-        specifier: ^3.0.8
-        version: 3.0.8
-      '@types/pdf-parse':
-        specifier: ^1.1.1
-        version: 1.1.1
-      '@types/supertest':
-        specifier: ^2.0.12
-        version: 2.0.12
-      '@types/uuid':
-        specifier: ^8.3.4
-        version: 8.3.4
-      '@types/word-extractor':
-        specifier: ^1.0.1
-        version: 1.0.1
-      express:
-        specifier: ^4.18.2
-        version: 4.18.2
-      jest:
-        specifier: 28.0.3
-        version: 28.0.3(@types/node@16.18.11)(ts-node@10.9.1)
-      nest-commander-testing:
-        specifier: ^3.1.0
-        version: 3.1.0(@nestjs/common@8.4.7)(@nestjs/core@8.4.7)(@nestjs/testing@8.4.7)(nest-commander@3.3.0)
-      source-map-support:
-        specifier: ^0.5.21
-        version: 0.5.21
-      supertest:
-        specifier: ^6.3.3
-        version: 6.3.3
-      tools:
-        specifier: workspace:*
-        version: file:../../packages/tools
-      ts-jest:
-        specifier: 28.0.1
-        version: 28.0.1(@babel/core@7.20.7)(@types/jest@27.5.0)(jest@28.0.3)(typescript@4.9.5)
-      ts-loader:
-        specifier: ^9.4.2
-        version: 9.4.2(typescript@4.9.5)(webpack@5.75.0)
-      ts-node:
-        specifier: ^10.9.1
-        version: 10.9.1(@types/node@16.18.11)(typescript@4.9.5)
-      tsconfig-paths:
-        specifier: 4.0.0
-        version: 4.0.0
-      tslib:
-        specifier: ^2.5.0
-        version: 2.5.0
-      typescript:
-        specifier: ^4.9.5
-        version: 4.9.5
-      webpack:
-        specifier: ^5.75.0
-        version: 5.75.0
-    dependenciesMeta:
-      defs:
-        injected: true
-      tools:
-        injected: true
-
-  ../..: {}
-
-  ../../packages/defs: {}
-
-  ../../packages/tools: {}
-
-  ../frontend: {}
 
 packages:
 
