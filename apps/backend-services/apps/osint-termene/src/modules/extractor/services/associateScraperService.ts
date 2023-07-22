@@ -4,6 +4,7 @@ import { BrowserService } from '@app/browser-module/browserService'
 import { OSINTCompanySchema, OSINTPerson, OSINTPersonSchema } from 'defs'
 import { delay } from '../../../helpers'
 import { getPersonAssociateUrl } from '../helpers'
+import { TermeneAuthService } from './termeneAuthService'
 
 type CompanyInfo = {
   name?: string
@@ -13,7 +14,10 @@ type CompanyInfo = {
 
 @Injectable()
 export class AssociateScraperService {
-  constructor(private readonly browserService: BrowserService) {}
+  constructor(
+    private readonly browserService: BrowserService,
+    private readonly termeneAuthService: TermeneAuthService,
+  ) {}
 
   searchAssociatesByName = async (context: BrowserContext, name: string, address?: string) =>
     this.browserService.handlePage(context, async (page) => {
@@ -23,9 +27,9 @@ export class AssociateScraperService {
       return this.traverseSearchResults(tableRows)
     })
 
-  getCompaniesByAssociateUrl = async (context: BrowserContext, associateUrl: string) =>
-    this.browserService.handlePage(context, async (page) => {
-      await this.openAssociatePage(page, associateUrl)
+  getCompaniesByAssociateUrl = async (associateUrl: string) =>
+    this.termeneAuthService.authenticatedSession(async (page) => {
+      await page.goto(associateUrl)
       return this.extractCompaniesFromAssociatePage(page)
     })
 
@@ -44,9 +48,9 @@ export class AssociateScraperService {
     await delay(1000)
 
     for await (const associateInfo of persons) {
-      const companies = await this.getCompaniesByAssociateUrl(context, associateInfo.url)
+      const companies = await this.getCompaniesByAssociateUrl(associateInfo.url)
 
-      if (companies.length) {
+      if (companies?.length) {
         associatesMap.set(associateInfo, companies)
       }
       await delay(2000)
@@ -54,13 +58,8 @@ export class AssociateScraperService {
     return associatesMap
   }
 
-  getPersonAssociateTermeneUrl = async (
-    context: BrowserContext,
-    companyCUI: string,
-    name: string,
-    address?: string,
-  ) =>
-    this.browserService.handlePage(context, async (page) => {
+  getPersonAssociateTermeneUrl = async (companyCUI: string, name: string, address?: string) =>
+    this.termeneAuthService.authenticatedSession(async (page) => {
       await this.openSearchPage(page, name, address)
       await page.waitForSelector('tbody')
       const tableRows = await page.$$('tbody > tr')
@@ -77,10 +76,11 @@ export class AssociateScraperService {
       ) {
         return person.url
       }
+      return ''
     })
 
   private async isPersonAssociateOfCompany(page: Page, associateUrl: string, cui: string) {
-    await this.openAssociatePage(page, associateUrl)
+    await page.goto(associateUrl)
     await page.waitForSelector('tbody')
     return Boolean(await page.$(`tbody a[href*="${cui}"]`))
   }
@@ -108,19 +108,22 @@ export class AssociateScraperService {
   private traverseSearchResults = async (tableRows: ElementHandle<HTMLTableRowElement>[]) =>
     Promise.all(
       tableRows.map(async (tableRow) => {
-        const [, nameColumn, addressColumn] = await tableRow.$$('.detalii-text-tabel')
-        const personName = await nameColumn?.evaluate((elem) => elem?.textContent?.trim() ?? '')
-        const personAddress = await addressColumn?.evaluate(
-          (elem) => elem?.textContent?.trim() ?? '',
+        const { name, address } = await tableRow.$$eval(
+          '.detalii-text-tabel',
+          ([, nameColumn, addressColumn]) => ({
+            name: nameColumn?.textContent?.trim() ?? '',
+            address: addressColumn?.textContent?.trim() ?? '',
+          }),
         )
+
         const personId = await tableRow.$eval("form input[name='company_id']", (element) =>
           element.value.trim(),
         )
 
         const personInfo: OSINTPerson = {
           id: personId,
-          name: personName ?? '',
-          address: personAddress,
+          name,
+          address,
           url: personId.length ? getPersonAssociateUrl(personId) : '',
         }
 
@@ -128,28 +131,14 @@ export class AssociateScraperService {
       }),
     )
 
-  private async openAssociatePage(page: Page, associateUrl: string) {
-    await page.goto(associateUrl)
-    await page.waitForNetworkIdle()
-  }
-
   private async extractCompaniesFromAssociatePage(page: Page) {
-    const rows = await page.$$(`.df-ta-main-row`)
-    return Promise.all(
-      rows.map(async (row) => {
-        const companyNameAndCUI = await row.$eval('a[href^="/catalog"]', (elem) => ({
-          cui: elem.href.replace('/catalog/firme/cauta/', ''),
-          name: elem.textContent?.trim() ?? '',
-        }))
-
-        const companyInfo: CompanyInfo = {}
-
-        if (companyNameAndCUI) {
-          companyInfo.cui = companyNameAndCUI.cui
-          companyInfo.name = companyNameAndCUI.name
-        }
-        return OSINTCompanySchema.parse(companyInfo)
-      }),
+    const companies = await page.$$eval('.df-ta-main-row a[href^="/catalog"]', (anchorLinks) =>
+      anchorLinks.map((achorLink) => ({
+        cui: achorLink.href.replace('/catalog/firme/cauta/', ''),
+        name: achorLink.textContent?.trim() ?? '',
+      })),
     )
+
+    return OSINTCompanySchema.array().parse(companies)
   }
 }

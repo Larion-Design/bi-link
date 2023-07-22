@@ -49,6 +49,7 @@ export class CompaniesIndexerService {
     associatedCompanies: this.createAssociatedCompaniesIndex(company.associates),
     files: [],
     balanceSheets: this.createBalanceSheetIndex(company.balanceSheets),
+    activityCodes: this.customFieldsIndexerService.createCustomFieldsIndex(company.activityCodes),
   })
 
   private createAssociatedPersonsIndex(associates: Associate[]) {

@@ -21,7 +21,7 @@ export class PersonProcessor {
 
       const companies = await this.personScraperService.getPersonCompanies(personUrl)
 
-      if (companies.length) {
+      if (companies?.length) {
         await this.companyProducerService.importCompanies(companies.map(({ cui }) => cui))
       }
       return {}

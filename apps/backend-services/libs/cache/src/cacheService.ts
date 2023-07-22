@@ -1,11 +1,19 @@
 import { InjectRedis, Redis } from '@nestjs-modules/ioredis'
-import { Injectable } from '@nestjs/common'
+import { Injectable, Logger } from '@nestjs/common'
 
 @Injectable()
 export class CacheService {
+  private readonly logger = new Logger(CacheService.name)
+
   constructor(@InjectRedis() private readonly redis: Redis) {}
 
-  get = async (key: string) => this.redis.get(key)
+  async get(key: string) {
+    try {
+      return this.redis.get(key)
+    } catch (e) {
+      this.logger.error(e)
+    }
+  }
 
   async getMultiple(keys: string[]) {
     const map: Record<string, string> = {}
@@ -28,7 +36,13 @@ export class CacheService {
     return this.redis.mset(data)
   }
 
-  set = async (key: string, value: string, ttl = 0) => this.redis.setex(key, value, ttl)
+  async set(key: string, value: string, ttl = 0) {
+    try {
+      return this.redis.setex(key, ttl, value)
+    } catch (e) {
+      this.logger.error(e)
+    }
+  }
 
   delete = async (keys: string[]) => this.redis.del(keys)
 

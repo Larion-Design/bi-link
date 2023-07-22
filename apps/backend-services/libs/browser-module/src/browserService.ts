@@ -1,5 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
+import e from 'express'
 import puppeteer, { Browser, BrowserContext, Page, ResourceType } from 'puppeteer-core'
 
 type PageOptions = {
@@ -51,31 +52,33 @@ export class BrowserService {
     privateSession = false,
   ) {
     const browser = await this.getBrowser()
+    const context = browser.defaultBrowserContext()
+
+    browser.on('disconnected', () => console.debug('browser crashed or disconnected.'))
 
     try {
-      const context = privateSession
-        ? await browser.createIncognitoBrowserContext()
-        : browser.defaultBrowserContext()
-
-      try {
-        const result = await sessionHandler(context)
-        await this.closeContext(context)
-        return result
-      } catch (e) {
-        await this.closeContext(context)
-        throw e
-      }
+      const result = await sessionHandler(context)
+      await this.closeContext(context)
+      return result
     } catch (e) {
-      if (browser.isConnected()) {
-        browser.disconnect()
-      }
+      await this.closeContext(context)
       this.logger.error(e)
-      throw e
+    } finally {
+      if (browser) {
+        await browser.close()
+      }
     }
+  }
+
+  private async getRemoteBrowser() {
+    return puppeteer.connect({
+      browserWSEndpoint: this.chromiumInstanceUrl,
+    })
   }
 
   private async getBrowser() {
     if (!this.browser || !this.browser.isConnected()) {
+      console.debug('connecting to browser')
       this.browser = await puppeteer.connect({
         browserWSEndpoint: this.chromiumInstanceUrl,
       })
@@ -88,10 +91,7 @@ export class BrowserService {
     pageHandler: (page: Page) => Promise<T>,
     options?: PageOptions,
   ) {
-    console.debug('opening a new page')
     const page = await context.newPage()
-
-    console.debug('opened a new page')
 
     try {
       if (options?.disableJavascript) {

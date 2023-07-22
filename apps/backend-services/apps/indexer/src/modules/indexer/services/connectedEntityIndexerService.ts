@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common'
-import { Company, Person, Property } from 'defs'
+import { CompanyAPIOutput, PersonAPIOutput, PropertyAPIOutput } from 'defs'
 import {
   ConnectedCompanyIndex,
   ConnectedPersonIndex,
@@ -17,7 +17,7 @@ export class ConnectedEntityIndexerService {
     lastName,
     cnp,
     documents,
-  }: Person): ConnectedPersonIndex => ({
+  }: PersonAPIOutput): ConnectedPersonIndex => ({
     _id: String(_id),
     firstName: firstName.value,
     lastName: lastName.value,
@@ -30,7 +30,7 @@ export class ConnectedEntityIndexerService {
     name,
     cui,
     registrationNumber,
-  }: Company): ConnectedCompanyIndex => ({
+  }: CompanyAPIOutput): ConnectedCompanyIndex => ({
     _id: String(_id),
     name: name.value,
     cui: cui.value,
@@ -44,7 +44,7 @@ export class ConnectedEntityIndexerService {
     vehicleInfo,
     realEstateInfo,
     owners,
-  }: Property): ConnectedPropertyIndex => {
+  }: PropertyAPIOutput): ConnectedPropertyIndex => {
     const propertyIndex: ConnectedPropertyIndex = {
       _id: String(_id),
       type,

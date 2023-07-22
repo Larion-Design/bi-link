@@ -41,27 +41,27 @@ export class RefreshEntities {
       switch (entityType) {
         case 'PERSON': {
           this.logger.debug(`Refreshing ${entitiesIds.length} persons in graph`)
-          return this.personEventDispatcherService.dispatchPersonsUpdated(entitiesIds)
+          return this.personEventDispatcherService.dispatchEntitiesUpdated(entitiesIds)
         }
         case 'COMPANY': {
           this.logger.debug(`Refreshing ${entitiesIds.length} companies in graph`)
-          return this.companyEventDispatcherService.dispatchCompaniesUpdated(entitiesIds)
+          return this.companyEventDispatcherService.dispatchEntitiesUpdated(entitiesIds)
         }
         case 'EVENT': {
           this.logger.debug(`Refreshing ${entitiesIds.length} events in graph`)
-          return this.eventDispatcherService.dispatchEventsUpdated(entitiesIds)
+          return this.eventDispatcherService.dispatchEntitiesUpdated(entitiesIds)
         }
         case 'PROPERTY': {
           this.logger.debug(`Refreshing ${entitiesIds.length} properties in graph`)
-          return this.propertyEventDispatcherService.dispatchPropertiesUpdated(entitiesIds)
+          return this.propertyEventDispatcherService.dispatchEntitiesUpdated(entitiesIds)
         }
         case 'REPORT': {
           this.logger.debug(`Refreshing ${entitiesIds.length} reports in graph`)
-          return this.reportDispatcherService.dispatchReportsUpdated(entitiesIds)
+          return this.reportDispatcherService.dispatchEntitiesUpdated(entitiesIds)
         }
         case 'PROCEEDING': {
           this.logger.debug(`Refreshing ${entitiesIds.length} proceedings in graph`)
-          return this.proceedingDispatcherService.dispatchProceedingsUpdated(entitiesIds)
+          return this.proceedingDispatcherService.dispatchEntitiesUpdated(entitiesIds)
         }
       }
     } else this.logger.debug(`No entities of type ${entityType} to refresh in graph`)

@@ -40,22 +40,22 @@ export class EntityUpserted {
   private readonly scheduleGraphUpdate = async ({ entityId, entityType }: EntityInfo) => {
     switch (entityType) {
       case 'PERSON': {
-        return this.personEventDispatcherService.dispatchPersonUpdated(entityId)
+        return this.personEventDispatcherService.dispatchEntityUpdated(entityId)
       }
       case 'COMPANY': {
-        return this.companyEventDispatcherService.dispatchCompanyUpdated(entityId)
+        return this.companyEventDispatcherService.dispatchEntityUpdated(entityId)
       }
       case 'EVENT': {
-        return this.eventDispatcherService.dispatchEventUpdated(entityId)
+        return this.eventDispatcherService.dispatchEntityUpdated(entityId)
       }
       case 'PROPERTY': {
-        return this.propertyEventDispatcherService.dispatchPropertyUpdated(entityId)
+        return this.propertyEventDispatcherService.dispatchEntityUpdated(entityId)
       }
       case 'REPORT': {
-        return this.reportDispatcherService.dispatchReportUpdated(entityId)
+        return this.reportDispatcherService.dispatchEntityUpdated(entityId)
       }
       case 'PROCEEDING': {
-        return this.proceedingDispatcherService.dispatchProceedingUpdated(entityId)
+        return this.proceedingDispatcherService.dispatchEntityUpdated(entityId)
       }
     }
   }

@@ -3,7 +3,7 @@ import { BrowserService } from '@app/browser-module/browserService'
 import { CacheService } from '@app/cache'
 import { Injectable, Logger } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
-import { Page } from 'puppeteer-core'
+import { Page, Protocol } from 'puppeteer-core'
 
 @Injectable()
 export class TermeneAuthService {
@@ -12,6 +12,7 @@ export class TermeneAuthService {
   private readonly profilePage = 'https://termene.ro/profil'
   private readonly email: string
   private readonly password: string
+  private cookies?: Protocol.Network.Cookie[]
 
   constructor(
     private readonly browserService: BrowserService,
@@ -21,61 +22,49 @@ export class TermeneAuthService {
   ) {
     this.email = configService.getOrThrow<string>('SCRAPER_TERMENE_EMAIL')
     this.password = configService.getOrThrow<string>('SCRAPER_TERMENE_PASSWORD')
-
-    // const t0 = performance.now()
-    void this.browserService.execBrowserSession(async (context) =>
-      this.authenticatedSession(context, async (page) => {
-        await page.goto(this.profilePage)
-        await page.waitForNetworkIdle()
-        console.debug(page.url())
-      }),
-    )
   }
 
-  async authenticatedSession<T>(context, handler: (page: Page) => Promise<T>) {
-    const authenticated = await this.browserService.handlePage(context, async (page) => {
-      if (!(await this.isUserAuthenticated(page))) {
-        return this.authenticate(page)
+  async authenticatedSession<T>(handler: (page: Page) => Promise<T>) {
+    return this.browserService.execBrowserSession(async (context) => {
+      const authenticated = await this.browserService.handlePage(context, async (page) => {
+        if (!(await this.isUserAuthenticated(page))) {
+          return this.authenticate(page)
+        }
+        return true
+      })
+
+      if (authenticated) {
+        return this.browserService.handlePage(context, handler)
       }
-      return true
     })
-
-    if (authenticated) {
-      return this.browserService.handlePage(context, handler)
-    }
   }
 
-  async isUserAuthenticated(page: Page) {
-    console.debug('restoring cookies')
+  private async isUserAuthenticated(page: Page) {
     await this.restoreAuthSession(page)
     await page.goto(this.loginPage)
-    await page.waitForNetworkIdle()
-    return page.url() === this.profilePage
+
+    const isAuthenticated = page.url() === this.profilePage
+
+    if (isAuthenticated) {
+      this.logger.debug('Session is already authenticated')
+    }
+    return isAuthenticated
   }
 
   async authenticate(page: Page) {
     if (page.url() !== this.loginPage) {
-      await page.goto(this.loginPage)
+      await page.goto(this.loginPage, { waitUntil: 'domcontentloaded' })
     }
 
     this.logger.debug('Will begin user authentication into termene.ro')
-    await page.setRequestInterception(true)
 
-    // eslint-disable-next-line @typescript-eslint/no-misused-promises
-    page.on('request', (request) => {
-      if (request.method().toUpperCase() === 'POST' && request.url().includes('login.php')) {
-        const urlParams = new URLSearchParams({
-          emailOrPhone: this.email,
-          password: this.password,
-        })
+    await page.type('#emailOrPhone', this.email)
+    await page.type('#password', this.password)
 
-        return request.continue({ postData: urlParams.toString() })
-      }
-      return request.continue()
-    })
-
-    await page.click('#loginBtn')
-    await page.waitForNetworkIdle()
+    await Promise.all([
+      page.waitForNavigation({ waitUntil: 'networkidle2' }),
+      page.click('#loginBtn'),
+    ])
 
     const isAuthenticated = page.url() === this.profilePage
 
@@ -83,26 +72,37 @@ export class TermeneAuthService {
       this.logger.debug('The user was authenticated')
       await this.saveAuthSession(page)
     } else {
-      this.logger.debug('The user was not authenticated')
+      this.logger.debug(
+        `The user was not authenticated, Current page after login attempt is ${page.url()}`,
+      )
     }
     return isAuthenticated
   }
 
   private async saveAuthSession(page: Page) {
-    console.debug('saving cookies')
+    this.logger.debug('Saving session cookies for termene.ro')
 
     const cookies = await page.cookies()
 
     if (cookies.length) {
       await this.cacheService.set('osint.termene.authSession', JSON.stringify(cookies), 600)
+      this.cookies = cookies
     }
   }
 
   private async restoreAuthSession(page: Page) {
-    const cookiesString = await this.cacheService.get('osint.termene.authSession')
+    console.debug('Restoring session cookies for termene.ro')
 
-    if (cookiesString) {
-      await page.setCookie(JSON.parse(cookiesString))
+    if (!this.cookies) {
+      const cookiesString = await this.cacheService.get('osint.termene.authSession')
+
+      if (cookiesString) {
+        this.cookies = Array.from<Protocol.Network.Cookie>(JSON.parse(cookiesString))
+      }
+    }
+
+    if (this.cookies?.length) {
+      await page.setCookie(...this.cookies)
     }
   }
 }

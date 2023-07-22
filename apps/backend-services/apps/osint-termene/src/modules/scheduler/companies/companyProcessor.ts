@@ -27,7 +27,7 @@ export class CompanyProcessor {
         data: { cui },
       } = job
 
-      const companyScrapedData = await this.companyScraperService.getFullCompanyDataSet(cui)
+      const companyScrapedData = await this.companyScraperService.extractCompanyData(cui)
 
       if (companyScrapedData) {
         await this.companyProducerService.transformCompany(cui, companyScrapedData)

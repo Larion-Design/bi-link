@@ -1,7 +1,13 @@
 import { Injectable, Logger } from '@nestjs/common'
 import { ConnectedCompanyIndex, ConnectedPersonIndex, ProceedingIndex } from '@app/definitions'
 import { ElasticsearchService } from '@nestjs/elasticsearch'
-import { Proceeding, ProceedingEntityInvolved } from 'defs'
+import {
+  CompanyAPIOutput,
+  PersonAPIInput,
+  PersonAPIOutput,
+  Proceeding,
+  ProceedingEntityInvolved,
+} from 'defs'
 import { formatYear } from 'tools'
 import { INDEX_PROCEEDINGS } from '../../../constants'
 import { ConnectedEntityIndexerService } from './connectedEntityIndexerService'
@@ -61,9 +67,15 @@ export class ProceedingsIndexerService {
 
     entities.forEach(({ person, company }) => {
       if (person) {
-        persons.push(this.connectedEntityIndexerService.createConnectedPersonIndex(person))
+        persons.push(
+          this.connectedEntityIndexerService.createConnectedPersonIndex(person as PersonAPIOutput),
+        )
       } else if (company) {
-        companies.push(this.connectedEntityIndexerService.createConnectedCompanyIndex(company))
+        companies.push(
+          this.connectedEntityIndexerService.createConnectedCompanyIndex(
+            company as CompanyAPIOutput,
+          ),
+        )
       }
     })
 
