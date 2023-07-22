@@ -3,7 +3,7 @@ import { Process, Processor } from '@nestjs/bull'
 import { Job } from 'bull'
 import { CompanyAPIInput } from 'defs'
 import { AUTHOR } from '../../../constants'
-import { CompanyDatasetScraperService } from '../../extractor'
+import { CompanyScraperService } from '../../extractor'
 import { CompanyDataTransformerService } from '../../transformer/services/companyDataTransformerService'
 import { EVENT_IMPORT, EVENT_LOAD, EVENT_TRANSFORM, QUEUE_COMPANIES } from '../constants'
 import { CompanyProducerService } from './companyProducerService'
@@ -13,7 +13,7 @@ import { ExtractCompanyEvent, LoadCompanyEvent, TransformCompanyEvent } from '..
 @Processor(QUEUE_COMPANIES)
 export class CompanyProcessor {
   constructor(
-    private readonly companyScraperService: CompanyDatasetScraperService,
+    private readonly companyScraperService: CompanyScraperService,
     private readonly companyProducerService: CompanyProducerService,
     private readonly proceedingProducerService: ProceedingProducerService,
     private readonly companyTransformService: CompanyDataTransformerService,

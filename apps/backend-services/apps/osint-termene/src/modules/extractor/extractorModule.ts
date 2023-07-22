@@ -1,25 +1,26 @@
+import { CacheModule } from '@app/cache'
 import { Module } from '@nestjs/common'
 import { BrowserModule } from '@app/browser-module'
 import {
   TermeneAuthService,
-  AssociateDatasetScraperService,
-  CompanyBasicDatasetScraperService,
-  CompanyDatasetScraperService,
+  AssociateScraperService,
+  CompanyScraperService,
+  PersonScraperService,
 } from './services'
 
 @Module({
-  imports: [BrowserModule],
+  imports: [BrowserModule, CacheModule],
   providers: [
     TermeneAuthService,
-    CompanyBasicDatasetScraperService,
-    CompanyDatasetScraperService,
-    AssociateDatasetScraperService,
+    CompanyScraperService,
+    AssociateScraperService,
+    PersonScraperService,
   ],
   exports: [
     TermeneAuthService,
-    CompanyBasicDatasetScraperService,
-    CompanyDatasetScraperService,
-    AssociateDatasetScraperService,
+    CompanyScraperService,
+    AssociateScraperService,
+    PersonScraperService,
   ],
 })
 export class ExtractorModule {}

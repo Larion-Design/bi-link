@@ -1,25 +1,27 @@
 import { Injectable, Logger } from '@nestjs/common'
 import { BrowserService } from '@app/browser-module/browserService'
+import { OSINTCompany } from 'defs'
 import { BrowserContext } from 'puppeteer-core'
 import { associatesSchema, TermeneAssociateSchema } from '../../../schema/associates'
 import { balanceSheetSchema } from '../../../schema/balanceSheet'
 import { branchesSchema } from '../../../schema/branches'
 import { CAENCodesSchema } from '../../../schema/caen'
-import { CompanyTermeneDataset } from '../../../schema/company'
+import { CompanyTermeneDataset, searchCompaniesByNameSchema } from '../../../schema/company'
 import { contactDetailsSchema } from '../../../schema/contactDetails'
 import { courtFilesSchema } from '../../../schema/courtFiles'
 import { companyHeaderInfoSchema, companyProfileSchema } from '../../../schema/generalInfo'
 import { getCompanyUrl } from '../helpers'
-import { AssociateDatasetScraperService } from './associateDatasetScraperService'
+import { AssociateScraperService } from './associateScraperService'
 import { TermeneAuthService } from './termeneAuthService'
 
 @Injectable()
-export class CompanyDatasetScraperService {
-  private readonly logger = new Logger(CompanyDatasetScraperService.name)
+export class CompanyScraperService {
+  private readonly logger = new Logger(CompanyScraperService.name)
+  private readonly companiesUrl = 'https://termene.ro/firme'
 
   constructor(
     private readonly browserService: BrowserService,
-    private readonly associateDatasetScraperService: AssociateDatasetScraperService,
+    private readonly associateDatasetScraperService: AssociateScraperService,
     private readonly termeneAuthService: TermeneAuthService,
   ) {}
 
@@ -118,4 +120,68 @@ export class CompanyDatasetScraperService {
     }
     return updatedAssociates
   }
+
+  searchCompaniesByName = async (name: string) =>
+    this.browserService.execBrowserSession(
+      async (context) =>
+        this.browserService.handlePage(
+          context,
+          async (page) => {
+            await page.goto(this.companiesUrl)
+            await page.waitForSelector('#autocompleterCompanySearchVerify')
+            const elem = await page.$('#autocompleterCompanySearchVerify')
+            const companies: OSINTCompany[] = []
+
+            if (elem) {
+              await elem.type(name, { delay: 80 })
+              await page.waitForResponse(async (response) => {
+                const success = response.ok()
+
+                if (success && response.url().includes('searchCompany.php')) {
+                  const data = searchCompaniesByNameSchema.parse(await response.json())
+                  data.forEach(({ nume, cui }) => companies.push({ cui: String(cui), name: nume }))
+                }
+                return success
+              })
+            }
+            return companies
+          },
+          {
+            blockResources: ['image', 'media', 'ping', 'eventsource', 'preflight', 'prefetch'],
+          },
+        ),
+      true,
+    )
+
+  getBasicCompanyDataSet = async (cui: string) =>
+    this.browserService.execBrowserSession(
+      async (context) =>
+        this.browserService.handlePage(
+          context,
+          async (page) => {
+            await page.goto(getCompanyUrl(cui))
+
+            const { name, registrationNumber, headquarters } = await page.$$eval(
+              ['#fiscalName', '#fiscalRegCode', '#fiscalAddress'].join(','),
+              ([nameElem, regNumberElem, hqElem]) => ({
+                name: nameElem?.textContent?.trim() ?? '',
+                registrationNumber: regNumberElem?.textContent?.trim() ?? '',
+                headquarters: hqElem?.textContent?.trim() ?? '',
+              }),
+            )
+
+            return {
+              cui,
+              name,
+              registrationNumber,
+              headquarters,
+            } as OSINTCompany
+          },
+          {
+            disableJavascript: true,
+            htmlOnly: true,
+          },
+        ),
+      true,
+    )
 }

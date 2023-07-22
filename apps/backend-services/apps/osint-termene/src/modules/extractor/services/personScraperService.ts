@@ -1,11 +1,11 @@
 import { BrowserService } from '@app/browser-module'
 import { Injectable } from '@nestjs/common'
-import { AssociateDatasetScraperService } from './associateDatasetScraperService'
+import { AssociateScraperService } from './associateScraperService'
 
 @Injectable()
 export class PersonScraperService {
   constructor(
-    private readonly associateDatasetScraperService: AssociateDatasetScraperService,
+    private readonly associateDatasetScraperService: AssociateScraperService,
     private readonly browserService: BrowserService,
   ) {}
 

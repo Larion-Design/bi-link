@@ -3,7 +3,7 @@ import { OsintTermeneServiceConfig } from '@app/rpc/microservices/osint/termene'
 import { Controller } from '@nestjs/common'
 import { MessagePattern, Payload } from '@nestjs/microservices'
 import { SearchResultsCacheService } from '../../cache'
-import { CompanyBasicDatasetScraperService } from '../../extractor'
+import { CompanyScraperService } from '../../extractor'
 
 type Params = Parameters<OsintTermeneServiceConfig['searchCompaniesByName']>[0]
 type Result = ReturnType<OsintTermeneServiceConfig['searchCompaniesByName']> | undefined
@@ -11,7 +11,7 @@ type Result = ReturnType<OsintTermeneServiceConfig['searchCompaniesByName']> | u
 @Controller()
 export class SearchCompaniesByName {
   constructor(
-    private readonly companyBasicDatasetScraperService: CompanyBasicDatasetScraperService,
+    private readonly companyScraperService: CompanyScraperService,
     private readonly searchResultsCacheService: SearchResultsCacheService,
   ) {}
 
@@ -23,7 +23,7 @@ export class SearchCompaniesByName {
       return cachedResults
     }
 
-    const companies = await this.companyBasicDatasetScraperService.searchCompaniesByName(searchTerm)
+    const companies = await this.companyScraperService.searchCompaniesByName(searchTerm)
 
     if (companies?.length) {
       await this.searchResultsCacheService.cacheResults(searchTerm, companies)

@@ -1,5 +1,4 @@
-export * from './associateDatasetScraperService'
-export * from './companyBasicDatasetScraperService'
-export * from './companyDatasetScraperService'
+export * from './associateScraperService'
+export * from './companyScraperService'
 export * from './termeneAuthService'
 export * from './personScraperService'

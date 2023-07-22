@@ -12,7 +12,7 @@ type CompanyInfo = {
 }
 
 @Injectable()
-export class AssociateDatasetScraperService {
+export class AssociateScraperService {
   constructor(private readonly browserService: BrowserService) {}
 
   searchAssociatesByName = async (context: BrowserContext, name: string, address?: string) =>

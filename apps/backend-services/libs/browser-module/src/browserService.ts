@@ -5,6 +5,7 @@ import puppeteer, { Browser, BrowserContext, Page, ResourceType } from 'puppetee
 type PageOptions = {
   blockResources?: ResourceType[]
   disableJavascript?: boolean
+  htmlOnly?: boolean
 }
 
 @Injectable()
@@ -23,6 +24,26 @@ export class BrowserService {
     'font',
     'cspviolationreport',
     'media',
+  ]
+
+  private getAllResourceTypesExceptHTML = (): ResourceType[] => [
+    'script',
+    'media',
+    'font',
+    'eventsource',
+    'image',
+    'stylesheet',
+    'cspviolationreport',
+    'websocket',
+    'xhr',
+    'manifest',
+    'fetch',
+    'prefetch',
+    'preflight',
+    'texttrack',
+    'signedexchange',
+    'ping',
+    'other',
   ]
 
   async execBrowserSession<T>(
@@ -56,7 +77,7 @@ export class BrowserService {
   private async getBrowser() {
     if (!this.browser || !this.browser.isConnected()) {
       this.browser = await puppeteer.connect({
-        browserWSEndpoint: `${this.chromiumInstanceUrl}?keepalive=60000&stealth`,
+        browserWSEndpoint: this.chromiumInstanceUrl,
       })
     }
     return this.browser
@@ -67,14 +88,19 @@ export class BrowserService {
     pageHandler: (page: Page) => Promise<T>,
     options?: PageOptions,
   ) {
+    console.debug('opening a new page')
     const page = await context.newPage()
 
+    console.debug('opened a new page')
+
     try {
-      if (options?.blockResources) {
-        await this.blockRedundantResources(page, options.blockResources)
-      }
       if (options?.disableJavascript) {
         await page.setJavaScriptEnabled(false)
+      }
+      if (options?.blockResources?.length) {
+        await this.blockRedundantResources(page, options.blockResources)
+      } else if (options?.htmlOnly) {
+        await this.blockRedundantResources(page, this.getAllResourceTypesExceptHTML())
       }
 
       const result = await pageHandler(page)
@@ -91,13 +117,15 @@ export class BrowserService {
     await page.setRequestInterception(true)
     // eslint-disable-next-line @typescript-eslint/no-misused-promises
     page.on('request', (request) => {
-      if (
-        request.method().toUpperCase() === 'GET' &&
-        blockedResources.includes(request.resourceType())
-      ) {
-        return request.abort()
+      if (!request.isInterceptResolutionHandled()) {
+        if (
+          request.method().toUpperCase() === 'GET' &&
+          blockedResources.includes(request.resourceType())
+        ) {
+          return request.abort()
+        }
+        return request.continue()
       }
-      return request.continueRequestOverrides()
     })
   }
 
