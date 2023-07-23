@@ -3,7 +3,7 @@ import { BrowserService } from '@app/browser-module/browserService'
 import { CacheService } from '@app/cache'
 import { Injectable, Logger } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
-import { BrowserContext, Page, Protocol } from 'puppeteer-core'
+import { BrowserContext, Page } from 'puppeteer-core'
 import { v4 } from 'uuid'
 
 @Injectable()
@@ -13,7 +13,6 @@ export class TermeneAuthService {
   private readonly profilePage = 'https://termene.ro/profil'
   private readonly email: string
   private readonly password: string
-  private cookies?: Protocol.Network.Cookie[]
 
   constructor(
     private readonly browserService: BrowserService,
@@ -27,18 +26,22 @@ export class TermeneAuthService {
 
   async authenticatedPage<T>(handler: (page: Page) => Promise<T>) {
     return this.browserService.execBrowserSession(
-      async (context) => {
-        const authenticated = await this.browserService.handlePage(context, async (page) => {
-          if (!(await this.isUserAuthenticated(page))) {
-            return this.authenticate(page)
-          }
-          return true
-        })
+      async (context) =>
+        this.browserService.handlePage(
+          context,
+          async (page) => {
+            await page.setJavaScriptEnabled(false)
 
-        if (authenticated) {
-          return this.browserService.handlePage(context, handler)
-        }
-      },
+            if ((await this.isUserAuthenticated(page)) || (await this.authenticate(page))) {
+              await page.setJavaScriptEnabled(true)
+              return handler(page)
+            }
+          },
+          {
+            enableCache: true,
+            persistentCookiesKey: 'osint.termene.authSession',
+          },
+        ),
       {
         private: true,
         sessionId: v4(),
@@ -49,12 +52,20 @@ export class TermeneAuthService {
   async authenticatedSession<T>(handler: (context: BrowserContext) => Promise<T>) {
     return this.browserService.execBrowserSession(
       async (context) => {
-        const authenticated = await this.browserService.handlePage(context, async (page) => {
-          if (!(await this.isUserAuthenticated(page))) {
-            return this.authenticate(page)
-          }
-          return true
-        })
+        const authenticated = await this.browserService.handlePage(
+          context,
+          async (page) => {
+            if (!(await this.isUserAuthenticated(page))) {
+              return this.authenticate(page)
+            }
+            return true
+          },
+          {
+            enableCache: true,
+            disableJavascript: true,
+            persistentCookiesKey: 'osint.termene.authSession',
+          },
+        )
 
         if (authenticated) {
           return handler(context)
@@ -68,7 +79,6 @@ export class TermeneAuthService {
   }
 
   private async isUserAuthenticated(page: Page) {
-    await this.restoreAuthSession(page)
     await page.goto(this.loginPage)
 
     const isAuthenticated = page.url() === this.profilePage
@@ -98,39 +108,11 @@ export class TermeneAuthService {
 
     if (isAuthenticated) {
       this.logger.debug('The user was authenticated')
-      await this.saveAuthSession(page)
     } else {
       this.logger.debug(
         `The user was not authenticated, Current page after login attempt is ${page.url()}`,
       )
     }
     return isAuthenticated
-  }
-
-  private async saveAuthSession(page: Page) {
-    this.logger.debug('Saving session cookies for termene.ro')
-
-    const cookies = await page.cookies()
-
-    if (cookies.length) {
-      await this.cacheService.set('osint.termene.authSession', JSON.stringify(cookies), 600)
-      this.cookies = cookies
-    }
-  }
-
-  private async restoreAuthSession(page: Page) {
-    console.debug('Restoring session cookies for termene.ro')
-
-    if (!this.cookies) {
-      const cookiesString = await this.cacheService.get('osint.termene.authSession')
-
-      if (cookiesString) {
-        this.cookies = Array.from<Protocol.Network.Cookie>(JSON.parse(cookiesString))
-      }
-    }
-
-    if (this.cookies?.length) {
-      await page.setCookie(...this.cookies)
-    }
   }
 }

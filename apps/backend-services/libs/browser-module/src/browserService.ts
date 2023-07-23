@@ -1,3 +1,4 @@
+import { PersistentCookiesService } from '@app/browser-module/persistentCookiesService'
 import { Injectable, Logger } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import puppeteer, { Browser, BrowserContext, Page, ResourceType } from 'puppeteer-core'
@@ -6,6 +7,8 @@ type PageOptions = {
   blockResources?: ResourceType[]
   disableJavascript?: boolean
   htmlOnly?: boolean
+  enableCache?: boolean
+  persistentCookiesKey?: string
 }
 
 type BrowserSessionOptions = {
@@ -19,7 +22,10 @@ export class BrowserService {
   private readonly chromiumInstanceUrl: string
   private browser: Browser | undefined
 
-  constructor(configService: ConfigService) {
+  constructor(
+    private readonly persistentCookiesService: PersistentCookiesService,
+    configService: ConfigService,
+  ) {
     this.chromiumInstanceUrl = configService.getOrThrow<string>('CHROMIUM_INSTANCE_URL')
   }
 
@@ -55,7 +61,7 @@ export class BrowserService {
     sessionHandler: (browser: BrowserContext) => Promise<T>,
     options?: BrowserSessionOptions,
   ) {
-    const browser = await this.getBrowser(options?.sessionId)
+    const browser = await this.getBrowser(options)
     const context = options?.private
       ? await browser.createIncognitoBrowserContext()
       : browser.defaultBrowserContext()
@@ -74,12 +80,15 @@ export class BrowserService {
     }
   }
 
-  private async getBrowser(sessionId?: string) {
+  private async getBrowser(options?: BrowserSessionOptions) {
     if (!this.browser || !this.browser.isConnected()) {
       const url = new URL(this.chromiumInstanceUrl)
 
-      if (sessionId) {
-        url.searchParams.set('trackingId', sessionId)
+      if (options?.sessionId) {
+        url.searchParams.set('trackingId', options.sessionId)
+      }
+      if (options?.private) {
+        url.searchParams.set('stealth', '')
       }
 
       this.browser = await puppeteer.connect({
@@ -97,8 +106,22 @@ export class BrowserService {
     const page = await context.newPage()
 
     try {
+      await page.setBypassCSP(true)
+
       if (options?.disableJavascript) {
         await page.setJavaScriptEnabled(false)
+      }
+      if (options?.enableCache) {
+        await page.setCacheEnabled(true)
+      }
+      if (options?.persistentCookiesKey) {
+        const cookies = await this.persistentCookiesService.retrieveCookies(
+          options.persistentCookiesKey,
+        )
+
+        if (cookies) {
+          await page.setCookie(...cookies)
+        }
       }
       if (options?.blockResources?.length) {
         await this.blockRedundantResources(page, options.blockResources)
@@ -107,6 +130,15 @@ export class BrowserService {
       }
 
       const result = await pageHandler(page)
+
+      if (options?.persistentCookiesKey) {
+        const cookies = await page.cookies()
+
+        if (cookies?.length) {
+          await this.persistentCookiesService.persistCookies(options.persistentCookiesKey, cookies)
+        }
+      }
+
       await this.closePage(context, page)
       return result
     } catch (e) {
