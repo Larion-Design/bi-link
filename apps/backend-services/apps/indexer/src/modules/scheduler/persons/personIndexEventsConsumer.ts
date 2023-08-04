@@ -1,14 +1,7 @@
-import {
-  OnQueueActive,
-  OnQueueCompleted,
-  OnQueueFailed,
-  OnQueueStalled,
-  Process,
-  Processor,
-} from '@nestjs/bull'
-import { Job } from 'bull'
+import { Processor, WorkerHost } from '@nestjs/bullmq'
+import { Job } from 'bullmq'
 import { Logger } from '@nestjs/common'
-import { EVENT_CREATED, EVENT_UPDATED, EntityEventInfo } from '@app/scheduler-module'
+import { EntityEventInfo } from '@app/scheduler-module'
 import { EntityInfo, Person } from 'defs'
 import { IngressService } from '@app/rpc/microservices/ingress'
 import { PersonsIndexerService } from '../../indexer/services'
@@ -16,64 +9,19 @@ import { AUTHOR, QUEUE_PERSONS } from '../../constants'
 import { FileEventDispatcherService } from '../files/fileEventDispatcherService'
 
 @Processor(QUEUE_PERSONS)
-export class PersonIndexEventsConsumer {
+export class PersonIndexEventsConsumer extends WorkerHost {
   private readonly logger = new Logger(PersonIndexEventsConsumer.name)
 
   constructor(
     private readonly ingressService: IngressService,
     private readonly personsIndexerService: PersonsIndexerService,
     private readonly fileEventDispatcherService: FileEventDispatcherService,
-  ) {}
-
-  @OnQueueActive()
-  onQueueActive({ id, name }: Job) {
-    this.logger.debug(`Processing job ID ${id} (${name})`)
+  ) {
+    super()
   }
 
-  @OnQueueCompleted()
-  onQueueCompleted({ id, name }: Job) {
-    this.logger.debug(`Completed job ID ${id} (${name})`)
-  }
-
-  @OnQueueFailed()
-  onQueueFailed({ id, name, failedReason }: Job) {
-    this.logger.error(`Failed job ID ${id} (${name}) - ${String(failedReason)}`)
-  }
-
-  @OnQueueStalled()
-  onQueueStalled({ id, name, failedReason }: Job) {
-    this.logger.error(`Job stalled ${id} (${name}) - ${String(failedReason)}`)
-  }
-
-  @Process(EVENT_CREATED)
-  async personCreated(job: Job<EntityEventInfo>) {
-    const {
-      data: { entityId },
-    } = job
-
-    try {
-      await this.indexPersonInfo(entityId)
-      return {}
-    } catch (error) {
-      this.logger.error(error)
-      await job.moveToFailed(error as { message: string })
-    }
-  }
-
-  @Process(EVENT_UPDATED)
-  async personUpdated(job: Job<EntityEventInfo>) {
-    const {
-      data: { entityId },
-    } = job
-
-    try {
-      if (await this.indexPersonInfo(entityId)) {
-        return {}
-      }
-    } catch (error) {
-      this.logger.error(error)
-      await job.moveToFailed(error as { message: string })
-    }
+  async process(job: Job<EntityEventInfo>): Promise<void> {
+    await this.indexPersonInfo(job.data.entityId)
   }
 
   private async indexPersonInfo(entityId: string) {

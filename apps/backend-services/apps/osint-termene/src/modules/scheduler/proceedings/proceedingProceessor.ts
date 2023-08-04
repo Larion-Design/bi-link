@@ -1,11 +1,12 @@
 import { ProceedingLoaderService } from '@app/loader-module'
+import { TaskProgress } from '@app/scheduler-module'
 import { Job } from 'bullmq'
 import { WorkerHost, Processor } from '@nestjs/bullmq'
 import { ProceedingAPIInput } from 'defs'
 import { AUTHOR } from '../../../constants'
 import { ProceedingDataTransformer } from '../../transformer/services/proceedingDataTransformer'
 import { QUEUE_PROCEEDINGS } from '../constants'
-import { ProcessProceedingEvent, TaskProgress } from '../types'
+import { ProcessProceedingEvent } from '../types'
 
 @Processor(QUEUE_PROCEEDINGS)
 export class ProceedingProceessor extends WorkerHost {

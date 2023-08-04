@@ -14,6 +14,8 @@ export type ParentTask = {
   id: string
 }
 
-export type TaskProgress<T = string> = {
+export type ETLStages = 'EXTRACT' | 'TRANSFORM' | 'LOAD'
+
+export type TaskProgress<T = ETLStages> = {
   stage: T
 }

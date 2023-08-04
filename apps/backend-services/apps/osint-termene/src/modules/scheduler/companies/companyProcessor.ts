@@ -1,4 +1,5 @@
 import { CompanyLoaderService } from '@app/loader-module'
+import { TaskProgress } from '@app/scheduler-module'
 import { Processor, WorkerHost } from '@nestjs/bullmq'
 import { Job } from 'bullmq'
 import { CompanyAPIInput } from 'defs'
@@ -8,7 +9,7 @@ import { CompanyScraperService } from '../../extractor'
 import { CompanyDataTransformerService } from '../../transformer/services/companyDataTransformerService'
 import { QUEUE_COMPANIES } from '../constants'
 import { ProceedingProducerService } from '../proceedings/proceedingProducerService'
-import { ProcessCompanyEvent, TaskProgress } from '../types'
+import { ProcessCompanyEvent } from '../types'
 
 @Processor(QUEUE_COMPANIES)
 export class CompanyProcessor extends WorkerHost {

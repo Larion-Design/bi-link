@@ -1,5 +1,5 @@
 import { RpcModule } from '@app/rpc'
-import { BullModule } from '@nestjs/bull'
+import { BullModule } from '@nestjs/bullmq'
 import { Module } from '@nestjs/common'
 import { ConfigModule, ConfigService } from '@nestjs/config'
 import { SentryModule } from '@ntegral/nestjs-sentry'
@@ -27,6 +27,7 @@ import { GraphRPCModule } from './rpc/graphRPCModule'
             removeOnComplete: true,
             timeout: 60000,
           },
+          sharedConnection: true,
         }),
     }),
     ConfigModule.forRoot({

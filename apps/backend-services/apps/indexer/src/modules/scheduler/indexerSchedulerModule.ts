@@ -6,7 +6,6 @@ import {
   QUEUE_PERSONS,
   QUEUE_PROCEEDINGS,
   QUEUE_PROPERTIES,
-  QUEUE_REPORTS,
 } from '../constants'
 import { SchedulerModule } from '@app/scheduler-module'
 import { IndexerModule } from '../indexer/indexerModule'
@@ -15,7 +14,6 @@ import { FileEventDispatcherService } from './files/fileEventDispatcherService'
 import { PersonEventDispatcherService } from './persons/personEventDispatcherService'
 import { ProceedingEventDispatcherService } from './proceedings/proceedingEventDispatcherService'
 import { PropertyEventDispatcherService } from './properties/propertyEventDispatcherService'
-import { ReportEventDispatcherService } from './reports/reportEventDispatcherService'
 import { SearchModule } from '../search/searchModule'
 import { CompanyEventDispatcherService } from './companies/companyEventDispatcherService'
 import { CompanyIndexEventsConsumer } from './companies/companyIndexEventsConsumer'
@@ -33,7 +31,6 @@ import { PropertyIndexEventsConsumer } from './properties/propertyIndexEventsCon
       QUEUE_FILES,
       QUEUE_EVENTS,
       QUEUE_PROPERTIES,
-      QUEUE_REPORTS,
       QUEUE_PROCEEDINGS,
     ]),
     IndexerModule,
@@ -51,7 +48,6 @@ import { PropertyIndexEventsConsumer } from './properties/propertyIndexEventsCon
     CompanyEventDispatcherService,
     FileEventDispatcherService,
     EventDispatcherService,
-    ReportEventDispatcherService,
     ProceedingEventDispatcherService,
   ],
   exports: [
@@ -60,7 +56,6 @@ import { PropertyIndexEventsConsumer } from './properties/propertyIndexEventsCon
     CompanyEventDispatcherService,
     FileEventDispatcherService,
     EventDispatcherService,
-    ReportEventDispatcherService,
     ProceedingEventDispatcherService,
   ],
 })

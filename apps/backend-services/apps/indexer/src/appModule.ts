@@ -1,5 +1,5 @@
 import { ConfigModule, ConfigService } from '@nestjs/config'
-import { BullModule } from '@nestjs/bull'
+import { BullModule } from '@nestjs/bullmq'
 import { Module } from '@nestjs/common'
 import { SentryModule } from '@ntegral/nestjs-sentry'
 import { ServiceHealthModule } from '@app/service-health/serviceHealthModule'

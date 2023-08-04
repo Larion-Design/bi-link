@@ -1,6 +1,6 @@
-import { InjectQueue } from '@nestjs/bull'
+import { InjectQueue } from '@nestjs/bullmq'
 import { Injectable } from '@nestjs/common'
-import { Queue } from 'bull'
+import { Queue } from 'bullmq'
 import { EntityEventInfo, EntityEventSchedulerService } from '@app/scheduler-module'
 import { QUEUE_GRAPH_EVENTS } from '../constants'
 

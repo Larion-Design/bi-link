@@ -1,57 +1,23 @@
 import { Logger } from '@nestjs/common'
-import { Job } from 'bull'
-import { OnQueueActive, OnQueueCompleted, OnQueueFailed, Process, Processor } from '@nestjs/bull'
+import { Job } from 'bullmq'
+import { Processor, WorkerHost } from '@nestjs/bullmq'
 import { QUEUE_GRAPH_PROPERTIES } from '../constants'
-import { EVENT_CREATED, EVENT_UPDATED, EntityEventInfo } from '@app/scheduler-module'
+import { EntityEventInfo } from '@app/scheduler-module'
 import { PropertyGraphService } from '../../graph/services/propertyGraphService'
 
 @Processor(QUEUE_GRAPH_PROPERTIES)
-export class PropertyEventConsumer {
+export class PropertyEventConsumer extends WorkerHost {
   private readonly logger = new Logger(PropertyEventConsumer.name)
 
-  constructor(private readonly propertyGraphService: PropertyGraphService) {}
-
-  @OnQueueActive()
-  onQueueActive({ id, name }: Job) {
-    this.logger.debug(`Processing job ID ${id} (${name})`)
+  constructor(private readonly propertyGraphService: PropertyGraphService) {
+    super()
   }
 
-  @OnQueueCompleted()
-  onQueueCompleted({ id, name }: Job) {
-    this.logger.debug(`Completed job ID ${id} (${name})`)
-  }
-
-  @OnQueueFailed()
-  onQueueFailed({ id, name }: Job) {
-    this.logger.debug(`Failed job ID ${id} (${name})`)
-  }
-
-  @Process(EVENT_CREATED)
-  async propertyCreated(job: Job<EntityEventInfo>) {
+  async process(job: Job<EntityEventInfo>): Promise<void> {
     const {
       data: { entityId },
     } = job
 
-    try {
-      await this.propertyGraphService.upsertPropertyNode(entityId)
-      return {}
-    } catch (error) {
-      return job.moveToFailed(error as { message: string })
-    }
-  }
-
-  @Process(EVENT_UPDATED)
-  async propertyUpdated(job: Job<EntityEventInfo>) {
-    const {
-      data: { entityId },
-    } = job
-
-    try {
-      await this.propertyGraphService.upsertPropertyNode(entityId)
-      return {}
-    } catch (error) {
-      this.logger.error(error)
-      await job.moveToFailed(error as { message: string })
-    }
+    await this.propertyGraphService.upsertPropertyNode(entityId)
   }
 }

@@ -10,7 +10,6 @@ import { EventDispatcherService } from '../../scheduler/events/eventDispatcherSe
 import { ProceedingEventDispatcherService } from '../../scheduler/proceedings/proceedingEventDispatcherService'
 import { FileEventDispatcherService } from '../../scheduler/files/fileEventDispatcherService'
 import { PropertyEventDispatcherService } from '../../scheduler/properties/propertyEventDispatcherService'
-import { ReportEventDispatcherService } from '../../scheduler/reports/reportEventDispatcherService'
 
 @Controller()
 export class IndexerController {
@@ -23,7 +22,6 @@ export class IndexerController {
     private readonly propertyEventDispatcherService: PropertyEventDispatcherService,
     private readonly eventEventDispatcherService: EventDispatcherService,
     private readonly fileEventDispatcherService: FileEventDispatcherService,
-    private readonly reportEventDispatcherService: ReportEventDispatcherService,
     private readonly proceedingEventDispatcherService: ProceedingEventDispatcherService,
     private readonly historyIndexerService: HistoryIndexerService,
   ) {}
@@ -50,9 +48,6 @@ export class IndexerController {
       }
       case 'FILE': {
         return this.fileEventDispatcherService.dispatchFileCreated(entityId)
-      }
-      case 'REPORT': {
-        return this.reportEventDispatcherService.dispatchEntityCreated(entityId)
       }
       case 'PROCEEDING': {
         return this.proceedingEventDispatcherService.dispatchEntityCreated(entityId)
@@ -95,9 +90,6 @@ export class IndexerController {
       }
       case 'FILE': {
         return this.fileEventDispatcherService.dispatchFileUpdated(entityId)
-      }
-      case 'REPORT': {
-        return this.reportEventDispatcherService.dispatchEntityUpdated(entityId)
       }
       case 'PROCEEDING': {
         return this.proceedingEventDispatcherService.dispatchEntityUpdated(entityId)

@@ -1,6 +1,6 @@
 import { EntityEventInfo, EVENT_CREATED, EVENT_UPDATED } from '@app/scheduler-module'
 import { Injectable, Logger } from '@nestjs/common'
-import { Queue } from 'bull'
+import { Queue } from 'bullmq'
 
 @Injectable()
 export class EntityEventSchedulerService {

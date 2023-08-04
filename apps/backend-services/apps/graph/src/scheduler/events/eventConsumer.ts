@@ -1,66 +1,30 @@
 import { IngressService } from '@app/rpc/microservices/ingress'
 import { Logger } from '@nestjs/common'
-import { Job } from 'bull'
-import { OnQueueActive, OnQueueCompleted, OnQueueFailed, Process, Processor } from '@nestjs/bull'
+import { Job } from 'bullmq'
+import { Processor, WorkerHost } from '@nestjs/bullmq'
 import { eventSchema } from 'defs'
 import { AUTHOR, QUEUE_GRAPH_EVENTS } from '../constants'
-import { EVENT_CREATED, EVENT_UPDATED, EntityEventInfo } from '@app/scheduler-module'
+import { EntityEventInfo } from '@app/scheduler-module'
 import { EventGraphService } from '../../graph/services/eventGraphService'
 
 @Processor(QUEUE_GRAPH_EVENTS)
-export class EventConsumer {
+export class EventConsumer extends WorkerHost {
   private readonly logger = new Logger(EventConsumer.name)
 
   constructor(
     private readonly ingressService: IngressService,
     private readonly eventGraphService: EventGraphService,
-  ) {}
-
-  @OnQueueActive()
-  onQueueActive({ id, name }: Job) {
-    this.logger.debug(`Processing job ID ${id} (${name})`)
+  ) {
+    super()
   }
 
-  @OnQueueCompleted()
-  onQueueCompleted({ id, name }: Job) {
-    this.logger.debug(`Completed job ID ${id} (${name})`)
-  }
-
-  @OnQueueFailed()
-  onQueueFailed({ id, name, failedReason }: Job) {
-    this.logger.error(`Failed job ID ${id} (${name}) - ${String(failedReason)}`)
-  }
-
-  @Process(EVENT_CREATED)
-  async eventCreated(job: Job<EntityEventInfo>) {
+  async process(job: Job<EntityEventInfo>): Promise<void> {
     const {
       data: { entityId },
     } = job
 
-    try {
-      const eventModel = await this.getEventInfo(entityId)
-      await this.eventGraphService.upsertEventNode(entityId, eventModel)
-      return {}
-    } catch (error) {
-      this.logger.error(error)
-      await job.moveToFailed(error as { message: string })
-    }
-  }
-
-  @Process(EVENT_UPDATED)
-  async eventUpdated(job: Job<EntityEventInfo>) {
-    const {
-      data: { entityId },
-    } = job
-
-    try {
-      const eventModel = await this.getEventInfo(entityId)
-      await this.eventGraphService.upsertEventNode(entityId, eventModel)
-      return {}
-    } catch (error) {
-      this.logger.error(error)
-      await job.moveToFailed(error as { message: string })
-    }
+    const eventModel = await this.getEventInfo(entityId)
+    await this.eventGraphService.upsertEventNode(entityId, eventModel)
   }
 
   private getEventInfo = async (entityId) =>

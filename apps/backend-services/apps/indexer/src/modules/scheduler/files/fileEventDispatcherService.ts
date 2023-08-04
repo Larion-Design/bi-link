@@ -1,7 +1,7 @@
 import { EVENT_CREATED, EVENT_UPDATED, FileEventInfo } from '@app/scheduler-module'
 import { Injectable, Logger } from '@nestjs/common'
-import { InjectQueue } from '@nestjs/bull'
-import { Queue } from 'bull'
+import { InjectQueue } from '@nestjs/bullmq'
+import { Queue } from 'bullmq'
 import { EntityInfo } from 'defs'
 import { QUEUE_FILES } from '../../constants'
 

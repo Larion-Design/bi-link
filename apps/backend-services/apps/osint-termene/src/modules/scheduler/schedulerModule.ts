@@ -1,6 +1,6 @@
 import { CacheModule } from '@app/cache'
 import { LoaderModule } from '@app/loader-module'
-import { BullModule } from '@nestjs/bull'
+import { BullModule } from '@nestjs/bullmq'
 import { forwardRef, Module } from '@nestjs/common'
 import { TermeneCacheModule } from '../cache'
 import { ExtractorModule } from '../extractor'
