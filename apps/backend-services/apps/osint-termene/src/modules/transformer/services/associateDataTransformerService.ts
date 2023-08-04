@@ -1,4 +1,5 @@
 import { CompanyLoaderService, PersonLoaderService } from '@app/loader-module'
+import { ParentTask } from '@app/scheduler-module'
 import { Injectable, Logger } from '@nestjs/common'
 import { AssociateAPI } from 'defs'
 import {
@@ -29,7 +30,11 @@ export class AssociateDataTransformerService {
     private readonly personProducerService: PersonProducerService,
   ) {}
 
-  async transformAssociatesInfo(associates: TermeneAssociateSchema[], sourceUrl: string) {
+  async transformAssociatesInfo(
+    associates: TermeneAssociateSchema[],
+    sourceUrl: string,
+    parentCompanyTask?: ParentTask,
+  ) {
     const associatesList: AssociateAPI[] = []
     const companiesCUISet = new Set<string>()
     const personsUrlsSet = new Set<string>()
@@ -62,7 +67,11 @@ export class AssociateDataTransformerService {
 
     if (companiesCUISet.size) {
       this.logger.debug(`${companiesCUISet.size} companies will be imported from termene.ro`)
-      await this.companyProducerService.importCompanies(Array.from(companiesCUISet))
+      await this.companyProducerService.importCompanies(
+        Array.from(companiesCUISet),
+        false,
+        parentCompanyTask,
+      )
     }
     if (personsUrlsSet.size) {
       this.logger.debug(`${personsUrlsSet.size} persons will be imported from termene.ro`)

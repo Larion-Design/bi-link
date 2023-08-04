@@ -1,57 +1,61 @@
 import { ProceedingLoaderService } from '@app/loader-module'
-import { Process, Processor } from '@nestjs/bull'
-import { Job } from 'bull'
+import { Job } from 'bullmq'
+import { WorkerHost, Processor } from '@nestjs/bullmq'
+import { ProceedingAPIInput } from 'defs'
 import { AUTHOR } from '../../../constants'
 import { ProceedingDataTransformer } from '../../transformer/services/proceedingDataTransformer'
-import { EVENT_LOAD, EVENT_TRANSFORM, QUEUE_PROCEEDINGS } from '../constants'
-import { ProceedingProducerService } from './proceedingProducerService'
-import { LoadProceedingEvent, TransformProceedingEvent } from '../types'
+import { QUEUE_PROCEEDINGS } from '../constants'
+import { ProcessProceedingEvent, TaskProgress } from '../types'
 
 @Processor(QUEUE_PROCEEDINGS)
-export class ProceedingProceessor {
+export class ProceedingProceessor extends WorkerHost {
   constructor(
-    private readonly proceedingProducerService: ProceedingProducerService,
     private readonly proceedingTransformerService: ProceedingDataTransformer,
     private readonly proceedingLoaderService: ProceedingLoaderService,
-  ) {}
+  ) {
+    super()
+  }
 
-  @Process(EVENT_TRANSFORM)
-  async transformProceeding(job: Job<TransformProceedingEvent>) {
-    try {
+  async process(job: Job<ProcessProceedingEvent>): Promise<void> {
+    if (!job.progress) {
+      await job.updateProgress({ stage: 'TRANSFORM' } as TaskProgress)
+    }
+
+    if ((job.progress as TaskProgress).stage === 'TRANSFORM') {
       const {
         data: { dataset },
       } = job
 
-      const proceedingInfo = await this.proceedingTransformerService.transformProceeding(dataset)
+      if (dataset) {
+        const proceedingInfo = await this.proceedingTransformerService.transformProceeding(dataset)
 
-      if (proceedingInfo) {
-        await this.proceedingProducerService.loadProceeding(proceedingInfo)
+        if (proceedingInfo) {
+          await job.updateData({ ...job.data, proceedingInfo })
+          await job.updateProgress({ stage: 'LOAD' } as TaskProgress)
+        }
       }
-      return {}
-    } catch (e) {
-      return job.moveToFailed(e as { message: string })
     }
-  }
 
-  @Process(EVENT_LOAD)
-  async loadProceeding(job: Job<LoadProceedingEvent>) {
-    try {
+    if ((job.progress as TaskProgress).stage === 'LOAD') {
       const {
         data: { proceedingInfo },
       } = job
 
-      const proceedingId = await this.proceedingLoaderService.findProceeding(
-        proceedingInfo.fileNumber.value,
-      )
-
-      if (!proceedingId) {
-        await this.proceedingLoaderService.createProceeding(proceedingInfo, AUTHOR)
-      } else {
-        await this.proceedingLoaderService.updateProceeding(proceedingId, proceedingInfo, AUTHOR)
+      if (proceedingInfo) {
+        await this.loadProceeding(proceedingInfo)
       }
-      return {}
-    } catch (e) {
-      return job.moveToFailed(e as { message: string })
+    }
+  }
+
+  private async loadProceeding(proceedingInfo: ProceedingAPIInput) {
+    const proceedingId = await this.proceedingLoaderService.findProceeding(
+      proceedingInfo.fileNumber.value,
+    )
+
+    if (!proceedingId) {
+      await this.proceedingLoaderService.createProceeding(proceedingInfo, AUTHOR)
+    } else {
+      await this.proceedingLoaderService.updateProceeding(proceedingId, proceedingInfo, AUTHOR)
     }
   }
 }

@@ -1,5 +1,4 @@
-import { IndexerService } from '@app/rpc/microservices/indexer/indexerService'
-import { IngressService } from '@app/rpc/microservices/ingress'
+import { ParentTask } from '@app/scheduler-module'
 import { Injectable } from '@nestjs/common'
 import { BalanceSheet, CustomFieldAPI } from 'defs'
 import { getDefaultBalanceSheet, getDefaultCompany, getDefaultCustomField } from 'tools'
@@ -12,8 +11,6 @@ import { LocationDataTransformerService } from './locationDataTransformerService
 @Injectable()
 export class CompanyDataTransformerService {
   constructor(
-    private readonly ingressService: IngressService,
-    private readonly indexerService: IndexerService,
     private readonly associateDataTransformerService: AssociateDataTransformerService,
     private readonly locationDataTransformerService: LocationDataTransformerService,
   ) {}
@@ -75,7 +72,11 @@ export class CompanyDataTransformerService {
     return companyInfo
   }
 
-  async transformAssociates(cui: string, associates: TermeneAssociatesSchema) {
+  async transformAssociates(
+    cui: string,
+    associates: TermeneAssociatesSchema,
+    parentCompanyTask?: ParentTask,
+  ) {
     const {
       asociatiAdministratori: { administratori, asociati },
     } = associates
@@ -83,6 +84,7 @@ export class CompanyDataTransformerService {
     return this.associateDataTransformerService.transformAssociatesInfo(
       [...administratori, ...asociati],
       getCompanyUrl(cui),
+      parentCompanyTask,
     )
   }
 

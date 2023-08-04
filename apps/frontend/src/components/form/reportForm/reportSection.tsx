@@ -1,14 +1,5 @@
-import React, { useCallback, useMemo, useState } from 'react'
-import {
-  DragOverlay,
-  defaultDropAnimationSideEffects,
-  DndContext,
-  KeyboardSensor,
-  PointerSensor,
-  useSensor,
-  useSensors,
-} from '@dnd-kit/core'
-import { SortableContext, sortableKeyboardCoordinates } from '@dnd-kit/sortable'
+import React, { useCallback, useState } from 'react'
+import { Editor } from '@frontend/components/editor'
 import Grid from '@mui/material/Grid'
 import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined'
 import Box from '@mui/material/Box'
@@ -19,7 +10,6 @@ import { ActionButton } from '../../button/actionButton'
 import { useDialog } from '../../dialog/dialogProvider'
 import { ToolbarMenu } from '../../menu/toolbarMenu'
 import { InputField } from '../inputField'
-import { ReportContentElement } from './reportContentElement'
 
 type Props = {
   entityId?: string
@@ -44,7 +34,6 @@ export const ReportSection: React.FunctionComponent<Props> = ({
         removeSection,
       }) => [sections, updateSectionName, updateContent, addContent, reportContent, removeSection],
     )
-  const [draggingElement, setDraggingElement] = useState<string | null>(null)
   const sectionInfo = sections.get(sectionId)
 
   const addContentElement = useCallback(
@@ -72,25 +61,6 @@ export const ReportSection: React.FunctionComponent<Props> = ({
     [sectionId, addContent, sectionInfo.content],
   )
 
-  const sortedSections = useMemo(() => {
-    const contentEntries = Array.from(reportContent.entries())
-
-    if (!draggingElement) {
-      return contentEntries.sort(
-        ([_, { order: firstSectionOrder }], [__, { order: secondSectionOrder }]) => {
-          if (firstSectionOrder < secondSectionOrder) {
-            return -1
-          }
-          if (firstSectionOrder > secondSectionOrder) {
-            return 1
-          }
-          return 0
-        },
-      )
-    }
-    return contentEntries
-  }, [reportContent, draggingElement])
-
   const openDialogToRemoveSection = useCallback(
     () =>
       dialog.openDialog({
@@ -99,13 +69,6 @@ export const ReportSection: React.FunctionComponent<Props> = ({
         onConfirm: () => removeSection(sectionId),
       }),
     [dialog, removeSection],
-  )
-
-  const sensors = useSensors(
-    useSensor(PointerSensor),
-    useSensor(KeyboardSensor, {
-      coordinateGetter: sortableKeyboardCoordinates,
-    }),
   )
 
   return (
@@ -149,61 +112,7 @@ export const ReportSection: React.FunctionComponent<Props> = ({
         </Box>
       </Box>
       <Grid container spacing={2}>
-        <DndContext
-          sensors={sensors}
-          onDragStart={({ active }) => setDraggingElement(String(active.id))}
-          onDragEnd={({ active, over }) => {
-            if (over?.id && active?.id && active?.id !== over?.id) {
-              const itemIdA = String(active.id)
-              const itemIdB = String(over.id)
-
-              if (reportContent.has(itemIdA) && reportContent.has(itemIdB)) {
-                const { order: itemOrderA, ...itemInfoA } = reportContent.get(itemIdA)
-                const { order: itemOrderB, ...itemInfoB } = reportContent.get(itemIdB)
-
-                updateContent(itemIdA, { ...itemInfoA, order: itemOrderB })
-                updateContent(itemIdB, { ...itemInfoB, order: itemOrderA })
-              }
-            }
-            setDraggingElement(null)
-          }}
-          onDragCancel={() => setDraggingElement(null)}
-        >
-          <SortableContext
-            items={Array.from(reportContent.keys())}
-            disabled={reportContent.size < 2}
-          >
-            {sortedSections.map(([uid]) => (
-              <ReportContentElement
-                key={uid}
-                sectionId={sectionId}
-                contentId={uid}
-                entityId={entityId}
-                entityType={entityType}
-              />
-            ))}
-          </SortableContext>
-          {reportContent.size > 1 && !!draggingElement && (
-            <DragOverlay
-              dropAnimation={{
-                sideEffects: defaultDropAnimationSideEffects({
-                  styles: {
-                    active: {
-                      opacity: '0.6',
-                    },
-                  },
-                }),
-              }}
-            >
-              <ReportContentElement
-                sectionId={sectionId}
-                contentId={draggingElement}
-                entityId={entityId}
-                entityType={entityType}
-              />
-            </DragOverlay>
-          )}
-        </DndContext>
+        <Editor data={[]} />
       </Grid>
     </Box>
   )

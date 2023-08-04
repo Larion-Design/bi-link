@@ -1,20 +1,21 @@
-import { InjectQueue } from '@nestjs/bull'
+import { ParentTask } from '@app/scheduler-module'
+import { InjectQueue } from '@nestjs/bullmq'
 import { Injectable } from '@nestjs/common'
-import { Queue } from 'bull'
+import { Queue } from 'bullmq'
 import { ImportedEntitiesCacheService } from '../../cache'
 
 import { EVENT_IMPORT, QUEUE_PERSONS } from '../constants'
-import { ExtractPersonEvent } from '../types'
+import { ProcessPersonEvent } from '../types'
 
 @Injectable()
 export class PersonProducerService {
   constructor(
     @InjectQueue(QUEUE_PERSONS)
-    private readonly queue: Queue<ExtractPersonEvent>,
+    private readonly queue: Queue<ProcessPersonEvent>,
     private readonly importedEntitiesCacheService: ImportedEntitiesCacheService,
   ) {}
 
-  async extractPersonsCompanies(personsUrls: string[], skipCache = false) {
+  async extractPersonsCompanies(personsUrls: string[], skipCache = false, parentTask?: ParentTask) {
     if (!skipCache) {
       const newPersons = await this.importedEntitiesCacheService.getNewPersons(personsUrls)
 
@@ -24,7 +25,7 @@ export class PersonProducerService {
           newPersons.map((personUrl) => ({
             name: EVENT_IMPORT,
             data: { personUrl },
-            opts: { delay: 5000 },
+            opts: { delay: 5000, parent: parentTask },
           })),
         )
       }
@@ -34,7 +35,7 @@ export class PersonProducerService {
         personsUrls.map((personUrl) => ({
           name: EVENT_IMPORT,
           data: { personUrl },
-          opts: { delay: 5000 },
+          opts: { delay: 5000, parent: parentTask },
         })),
       )
     }

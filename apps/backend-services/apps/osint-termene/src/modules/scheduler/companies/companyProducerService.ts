@@ -1,21 +1,20 @@
-import { InjectQueue } from '@nestjs/bull'
+import { ParentTask } from '@app/scheduler-module'
+import { InjectQueue } from '@nestjs/bullmq'
 import { Injectable } from '@nestjs/common'
-import { Queue } from 'bull'
-import { CompanyAPIInput } from 'defs'
-import { CompanyTermeneDataset } from '../../../schema/company'
+import { Queue } from 'bullmq'
 import { ImportedEntitiesCacheService } from '../../cache'
-import { EVENT_IMPORT, EVENT_LOAD, EVENT_TRANSFORM, QUEUE_COMPANIES } from '../constants'
-import { ExtractCompanyEvent, LoadCompanyEvent, TransformCompanyEvent } from '../types'
+import { EVENT_IMPORT, QUEUE_COMPANIES } from '../constants'
+import { ProcessCompanyEvent } from '../types'
 
 @Injectable()
 export class CompanyProducerService {
   constructor(
     @InjectQueue(QUEUE_COMPANIES)
-    private readonly queue: Queue<ExtractCompanyEvent | TransformCompanyEvent | LoadCompanyEvent>,
+    private readonly queue: Queue<ProcessCompanyEvent>,
     private readonly importedEntitiesCacheService: ImportedEntitiesCacheService,
   ) {}
 
-  async importCompanies(companiesCUI: string[], skipCache = false) {
+  async importCompanies(companiesCUI: string[], skipCache = false, parentTask?: ParentTask) {
     if (!skipCache) {
       const newCompanies = await this.importedEntitiesCacheService.getNewCompanies(companiesCUI)
 
@@ -24,8 +23,8 @@ export class CompanyProducerService {
         return this.queue.addBulk(
           newCompanies.map((cui) => ({
             name: EVENT_IMPORT,
-            data: { cui },
-            opts: { delay: 5000 },
+            data: { cui, stage: 'EXTRACT' },
+            opts: { delay: 5000, parent: parentTask },
           })),
         )
       }
@@ -34,16 +33,10 @@ export class CompanyProducerService {
       return this.queue.addBulk(
         companiesCUI.map((cui) => ({
           name: EVENT_IMPORT,
-          data: { cui },
-          opts: { delay: 5000 },
+          data: { cui, stage: 'EXTRACT' },
+          opts: { delay: 5000, parent: parentTask },
         })),
       )
     }
   }
-
-  transformCompany = async (cui: string, dataset: CompanyTermeneDataset) =>
-    this.queue.add(EVENT_TRANSFORM, { cui, dataset })
-
-  loadCompany = async (cui: string, companyInfo: CompanyAPIInput) =>
-    this.queue.add(EVENT_LOAD, { cui, companyInfo })
 }

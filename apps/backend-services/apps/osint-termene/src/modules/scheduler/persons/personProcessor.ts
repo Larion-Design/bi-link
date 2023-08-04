@@ -1,32 +1,35 @@
-import { Process, Processor } from '@nestjs/bull'
-import { Job } from 'bull'
+import { WorkerHost, Processor } from '@nestjs/bullmq'
+import { Job } from 'bullmq'
 import { PersonScraperService } from '../../extractor'
 import { CompanyProducerService } from '../companies/companyProducerService'
-import { EVENT_IMPORT, QUEUE_PERSONS } from '../constants'
-import { ExtractPersonEvent } from '../types'
+import { QUEUE_PERSONS } from '../constants'
+import { ProcessPersonEvent } from '../types'
 
 @Processor(QUEUE_PERSONS)
-export class PersonProcessor {
+export class PersonProcessor extends WorkerHost {
   constructor(
     private readonly personScraperService: PersonScraperService,
     private readonly companyProducerService: CompanyProducerService,
-  ) {}
+  ) {
+    super()
+  }
 
-  @Process(EVENT_IMPORT)
-  async extractPersonCompanies(job: Job<ExtractPersonEvent>) {
-    try {
-      const {
-        data: { personUrl },
-      } = job
+  async process(job: Job<ProcessPersonEvent>): Promise<void> {
+    const {
+      data: { personUrl },
+    } = job
 
-      const companies = await this.personScraperService.getPersonCompanies(personUrl)
+    const companies = await this.personScraperService.getPersonCompanies(personUrl)
 
-      if (companies?.length) {
-        await this.companyProducerService.importCompanies(companies.map(({ cui }) => cui))
-      }
-      return {}
-    } catch (e) {
-      return job.moveToFailed(e as { message: string })
+    if (companies?.length) {
+      await this.companyProducerService.importCompanies(
+        companies.map(({ cui }) => cui),
+        false,
+        {
+          queue: QUEUE_PERSONS,
+          id: String(job.id),
+        },
+      )
     }
   }
 }
