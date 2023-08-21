@@ -9,7 +9,14 @@ import { EntityEventSchedulerService } from '@app/scheduler-module/services'
 export class SchedulerModule {
   static forRoot(queues: string[]): DynamicModule {
     return BullModule.registerQueue(
-      ...queues.map((queue) => ({ name: queue, sharedConnection: true })),
+      ...queues.map((queue) => ({
+        name: queue,
+        sharedConnection: true,
+        connection: {
+          host: process.env.REDIS_HOST,
+          port: Number(process.env.REDIS_PORT),
+        },
+      })),
     )
   }
 }
