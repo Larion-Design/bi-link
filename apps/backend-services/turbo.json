@@ -6,31 +6,31 @@
       "outputs": []
     },
     "api": {
-      "persistent": true,
+      "persistent": false,
       "outputs": []
     },
     "indexer": {
-      "persistent": true,
+      "persistent": false,
       "outputs": []
     },
     "graph": {
-      "persistent": true,
+      "persistent": false,
       "outputs": []
     },
     "ingress": {
-      "persistent": true,
+      "persistent": false,
       "outputs": []
     },
     "user-actions-recorder": {
-      "persistent": true,
+      "persistent": false,
       "outputs": []
     },
     "cli": {
-      "persistent": true,
+      "persistent": false,
       "outputs": []
     },
     "termene": {
-      "persistent": true,
+      "persistent": false,
       "outputs": []
     }
   }

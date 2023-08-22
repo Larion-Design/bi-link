@@ -6,7 +6,7 @@
       "outputs": ["./dist"]
     },
     "dev": {
-      "persistent": true,
+      "persistent": false,
       "outputs": ["./dist"]
     }
   }
