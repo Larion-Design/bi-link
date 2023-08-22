@@ -3,53 +3,52 @@
   "pipeline": {
     "dev": {
       "cache": false,
-      "dependsOn": ["backend", "frontend"],
-      "outputs": ["dist/**"]
+      "dependsOn": ["backend", "frontend"]
     },
     "backend": {
       "cache": false,
-      "dependsOn": ["api", "graph", "indexer", "files-manager", "user-actions-recorder"],
-      "outputs": ["dist/**"]
+      "dependsOn": ["ingress","api", "graph", "indexer", "files-manager", "user-actions-recorder", "termene"]
     },
     "frontend": {
       "cache": false,
-      "dependsOn": ["^dev"],
-      "outputs": ["dist/**"]
+      "dependsOn": ["^dev"]
     },
     "native-app": {
       "cache": false,
-      "dependsOn": ["^native:dev"],
-      "outputs": ["dist/**"]
+      "dependsOn": ["^native:dev"]
+    },
+    "ingress": {
+      "cache": false,
+      "dependsOn": ["^ingress"]
     },
     "api": {
       "cache": false,
-      "dependsOn": ["^api"],
-      "outputs": ["dist/**"]
+      "dependsOn": ["^api"]
     },
     "indexer": {
       "cache": false,
-      "dependsOn": ["^indexer"],
-      "outputs": ["dist/**"]
+      "dependsOn": ["^indexer"]
     },
     "files-manager": {
       "cache": false,
-      "dependsOn": ["^files-manager"],
-      "outputs": ["dist/**"]
+      "dependsOn": ["^files-manager"]
     },
     "graph": {
       "cache": false,
-      "dependsOn": ["^graph"],
-      "outputs": ["dist/**"]
+      "dependsOn": ["^graph"]
     },
     "user-actions-recorder": {
       "cache": false,
-      "dependsOn": ["^user-actions-recorder"],
-      "outputs": ["dist/**"]
+      "dependsOn": ["^user-actions-recorder"]
     },
     "cli": {
       "cache": false,
-      "dependsOn": ["^cli"],
-      "outputs": ["dist/**"]
+      "dependsOn": ["^cli"]
+    },
+    "termene": {
+      "cache": false,
+      "dependsOn": ["^termene"]
+      
     },
     "lint": {
       "cache": true,
