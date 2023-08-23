@@ -1,7 +1,7 @@
 import { z } from 'zod'
 import { withTimestamps } from '../modelTimestamps'
 
-const fieldTypes = z.enum([
+const fieldType = z.enum([
   'entityId',
   'dateRange',
   'numberRange',
@@ -18,7 +18,6 @@ const fieldTypes = z.enum([
 const baseFieldMetadata = z.object({
   unique: z.boolean().default(false).nullish(),
   required: z.boolean().default(false).nullish(),
-  dbIndex: z.boolean().default(false).nullish(),
   graphIndex: z.boolean().default(false).nullish(),
   searchIndex: z.boolean().default(false).nullish(),
 })
@@ -28,7 +27,7 @@ const baseField = z
     _id: z.string().nonempty(),
     _groupId: z.string().nonempty().nullish(),
     _fieldId: z.string().nonempty(),
-    _type: fieldTypes,
+    _type: fieldType,
     name: z.string(),
     metadata: baseFieldMetadata,
   })
@@ -36,49 +35,49 @@ const baseField = z
 
 export const entityIdField = baseField.merge(
   z.object({
-    _type: z.literal(fieldTypes.enum.entityId),
+    _type: z.literal(fieldType.enum.entityId),
     entityId: z.string().nonempty().nullable(),
   }),
 )
 
-export const numberField = z
-  .object({
-    _type: z.literal(fieldTypes.enum.number),
+export const numberField = baseField.merge(
+  z.object({
+    _type: z.literal(fieldType.enum.number),
     value: z.number(),
-  })
-  .merge(baseField)
+  }),
+)
 
-export const textField = z
-  .object({
-    _type: z.literal(fieldTypes.enum.text),
+export const textField = baseField.merge(
+  z.object({
+    _type: z.literal(fieldType.enum.text),
     value: z.string(),
-  })
-  .merge(baseField)
+  }),
+)
 
-export const dateField = z
-  .object({
-    _type: z.literal(fieldTypes.enum.date),
+export const dateField = baseField.merge(
+  z.object({
+    _type: z.literal(fieldType.enum.date),
     value: z.date().nullable(),
-  })
-  .merge(baseField)
+  }),
+)
 
-export const geoCoordinatesField = z
-  .object({
-    _type: z.literal(fieldTypes.enum.geoCoordinates),
+export const geoCoordinatesField = baseField.merge(
+  z.object({
+    _type: z.literal(fieldType.enum.geoCoordinates),
     value: z.tuple([z.number().default(0), z.number().default(0)]),
-  })
-  .merge(baseField)
+  }),
+)
 
 export const dateRangeField = baseField.merge(
   z.object({
-    _type: z.literal(fieldTypes.enum.dateRange),
+    _type: z.literal(fieldType.enum.dateRange),
     value: z.tuple([z.date().nullable(), z.date().nullable()]),
   }),
 )
 
 export const numberRangeField = baseField.merge(
   z.object({
-    _type: z.literal(fieldTypes.enum.numberRange),
+    _type: z.literal(fieldType.enum.numberRange),
     value: z.tuple([z.number().nullable(), z.number().nullable()]),
   }),
 )
@@ -87,33 +86,33 @@ const fieldsList = z
   .union([entityIdField, numberField, textField, dateField, geoCoordinatesField])
   .array()
 
-export const relationshipField = z
-  .object({
-    _type: z.literal(fieldTypes.enum.relationship),
+export const relationshipField = baseField.merge(
+  z.object({
+    _type: z.literal(fieldType.enum.relationship),
     entityId: z.string().nonempty().nullable(),
     bidirectional: z.boolean().default(false).nullish(),
     data: fieldsList,
-  })
-  .merge(baseField)
+  }),
+)
 
-export const relationshipGroupField = z
-  .object({
-    _type: z.literal(fieldTypes.enum.relationshipGroup),
+export const relationshipGroupField = baseField.merge(
+  z.object({
+    _type: z.literal(fieldType.enum.relationshipGroup),
     entitesIds: z.string().nonempty().array(),
     data: fieldsList,
-  })
-  .merge(baseField)
+  }),
+)
 
 export const mapField = baseField.merge(
   z.object({
-    _type: z.literal(fieldTypes.enum.map),
+    _type: z.literal(fieldType.enum.map),
     data: z.record(z.string().nonempty(), z.string()),
   }),
 )
 
 export const setField = baseField.merge(
   z.object({
-    _type: z.literal(fieldTypes.enum.map),
+    _type: z.literal(fieldType.enum.map),
     data: z.string().nonempty().array(),
   }),
 )
@@ -125,8 +124,9 @@ export type DateField = z.infer<typeof dateField>
 export type RelationshipField = z.infer<typeof relationshipField>
 export type RelationshipGroupField = z.infer<typeof relationshipGroupField>
 export type DateRangeField = z.infer<typeof dateRangeField>
-export type NumberRangeField = z.infer<typeof dateRangeField>
+export type NumberRangeField = z.infer<typeof numberRangeField>
 export type MapField = z.infer<typeof mapField>
 export type SetField = z.infer<typeof setField>
 export type BaseField = z.infer<typeof baseField>
 export type BaseFieldMetadata = z.infer<typeof baseFieldMetadata>
+export type FieldType = z.infer<typeof fieldType>

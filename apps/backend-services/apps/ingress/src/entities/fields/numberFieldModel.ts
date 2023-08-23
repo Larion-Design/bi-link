@@ -1,20 +1,13 @@
-import { NumberField } from 'defs'
+import { Schema, Prop } from '@nestjs/mongoose'
+import { SchemaTypes } from 'mongoose'
+import { FieldType, NumberField } from 'defs'
+import { BaseFieldModel } from './baseFieldModel'
 
-export class NumberFieldModel implements NumberField {
-  _fieldId: string
-  _groupId: string | null | undefined
-  _id: string
-  _type: 'number'
-  createdAt: Date | undefined
-  metadata: {
-    graph: { index: boolean }
-    rules: string[]
-    db: { index: boolean }
-    search: { index: boolean }
-    unique?: boolean | null | undefined
-    required?: boolean | null | undefined
-  }
-  name: string
-  updatedAt: Date | undefined
+@Schema()
+export class NumberFieldModel extends BaseFieldModel implements NumberField {
+  @Prop({ type: SchemaTypes.String })
+  declare _type: 'map'
+
+  @Prop({ required: true })
   value: number
 }
