@@ -29,6 +29,7 @@ const baseField = z
     _fieldId: z.string().nonempty(),
     _type: fieldType,
     name: z.string(),
+    description: z.string(),
     metadata: baseFieldMetadata,
   })
   .merge(withTimestamps)
