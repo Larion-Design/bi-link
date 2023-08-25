@@ -1,11 +1,15 @@
-import { InjectRedis, Redis } from '@nestjs-modules/ioredis'
-import { Injectable, Logger } from '@nestjs/common'
+import { Cache } from 'cache-manager'
+import { RedisStore } from 'cache-manager-ioredis-yet'
+import { CACHE_MANAGER } from '@nestjs/cache-manager'
+import { Inject, Injectable, Logger } from '@nestjs/common'
 
 @Injectable()
 export class CacheService {
   private readonly logger = new Logger(CacheService.name)
 
-  constructor(@InjectRedis() private readonly redis: Redis) {}
+  constructor(@Inject(CACHE_MANAGER) private redis: Cache<RedisStore>) {}
+
+  private getStore = () => this.redis.store.client
 
   async get(key: string) {
     try {
@@ -17,7 +21,7 @@ export class CacheService {
 
   async getMultiple(keys: string[]) {
     const map: Record<string, string> = {}
-    const data = await this.redis.mget(keys)
+    const data = await this.getStore().mget(...keys)
 
     data.forEach((value, index) => {
       if (value?.length) {
@@ -29,28 +33,28 @@ export class CacheService {
 
   async setMultiple(data: Record<string, string>, ttl = 0) {
     if (ttl) {
-      const transaction = this.redis.multi()
+      const transaction = this.getStore().multi()
       Object.entries(data).forEach(([key, value]) => transaction.setex(key, value, ttl))
       return transaction.exec()
     }
-    return this.redis.mset(data)
+    return this.getStore().mset(data)
   }
 
   async set(key: string, value: string, ttl = 0) {
     try {
-      return this.redis.setex(key, ttl, value)
+      return this.getStore().setex(key, ttl, value)
     } catch (e) {
       this.logger.error(e)
     }
   }
 
-  delete = async (keys: string[]) => this.redis.del(keys)
+  delete = async (keys: string[]) => this.getStore().del(keys)
 
-  getHashKey = async (rootKey: string, hashKey: string) => this.redis.hget(rootKey, hashKey)
+  getHashKey = async (rootKey: string, hashKey: string) => this.getStore().hget(rootKey, hashKey)
 
   setHashKeys = async (rootKey: string, data: Record<string, string>) =>
-    this.redis.hset(rootKey, data)
+    this.getStore().hset(rootKey, data)
 
   deleteHashKeys = async (rootKey: string, hashKeys: string[]) =>
-    this.redis.hdel(rootKey, ...hashKeys)
+    this.getStore().hdel(rootKey, ...hashKeys)
 }
