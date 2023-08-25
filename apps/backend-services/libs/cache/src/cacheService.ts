@@ -9,7 +9,9 @@ export class CacheService {
 
   constructor(@Inject(CACHE_MANAGER) private redis: Cache<RedisStore>) {}
 
-  private getStore = () => this.redis.store.client
+  private get store() {
+    return this.redis.store.client
+  }
 
   async get(key: string) {
     try {
@@ -21,7 +23,7 @@ export class CacheService {
 
   async getMultiple(keys: string[]) {
     const map: Record<string, string> = {}
-    const data = await this.getStore().mget(...keys)
+    const data = await this.store.mget(...keys)
 
     data.forEach((value, index) => {
       if (value?.length) {
@@ -33,28 +35,28 @@ export class CacheService {
 
   async setMultiple(data: Record<string, string>, ttl = 0) {
     if (ttl) {
-      const transaction = this.getStore().multi()
+      const transaction = this.store.multi()
       Object.entries(data).forEach(([key, value]) => transaction.setex(key, value, ttl))
       return transaction.exec()
     }
-    return this.getStore().mset(data)
+    return this.store.mset(data)
   }
 
   async set(key: string, value: string, ttl = 0) {
     try {
-      return this.getStore().setex(key, ttl, value)
+      return this.store.setex(key, ttl, value)
     } catch (e) {
       this.logger.error(e)
     }
   }
 
-  delete = async (keys: string[]) => this.getStore().del(keys)
+  delete = async (keys: string[]) => this.store.del(keys)
 
-  getHashKey = async (rootKey: string, hashKey: string) => this.getStore().hget(rootKey, hashKey)
+  getHashKey = async (rootKey: string, hashKey: string) => this.store.hget(rootKey, hashKey)
 
   setHashKeys = async (rootKey: string, data: Record<string, string>) =>
-    this.getStore().hset(rootKey, data)
+    this.store.hset(rootKey, data)
 
   deleteHashKeys = async (rootKey: string, hashKeys: string[]) =>
-    this.getStore().hdel(rootKey, ...hashKeys)
+    this.store.hdel(rootKey, ...hashKeys)
 }
