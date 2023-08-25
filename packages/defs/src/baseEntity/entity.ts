@@ -1,10 +1,12 @@
 import { z } from 'zod'
-import { withTimestamps } from '../modelTimestamps'
+import { withTimestamps } from '../timestamps'
 import {
   dateField,
+  dateRangeField,
   entityIdField,
   geoCoordinatesField,
   numberField,
+  numberRangeField,
   relationshipField,
   relationshipGroupField,
   textField,
@@ -21,6 +23,8 @@ export const entitySchema = z
         numberField,
         textField,
         dateField,
+        dateRangeField,
+        numberRangeField,
         geoCoordinatesField,
         relationshipField,
         relationshipGroupField,

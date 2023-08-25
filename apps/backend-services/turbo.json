@@ -3,39 +3,39 @@
   "pipeline": {
     "build": {
       "cache": true,
-      "outputs": []
+      "outputs": ["dist"]
     },
     "api": {
       "persistent": false,
-      "outputs": []
+      "outputs": ["dist"]
     },
     "indexer": {
       "persistent": false,
-      "outputs": []
+      "outputs": ["dist"]
     },
     "graph": {
       "persistent": false,
-      "outputs": []
+      "outputs": ["dist"]
     },
     "ingress": {
       "persistent": false,
-      "outputs": []
+      "outputs": ["dist"]
     },
     "files-manager": {
       "persistent": false,
-      "outputs": []
+      "outputs": ["dist"]
     },
     "user-actions-recorder": {
       "persistent": false,
-      "outputs": []
+      "outputs": ["dist"]
     },
     "cli": {
       "persistent": false,
-      "outputs": []
+      "outputs": ["dist"]
     },
     "termene": {
       "persistent": false,
-      "outputs": []
+      "outputs": ["dist"]
     }
   }
 }

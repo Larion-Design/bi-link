@@ -3,7 +3,7 @@ import { customFieldSchema } from '../customField'
 import { fileInputSchema, fileOutputSchema, fileSchema } from '../file'
 import { optionalDateWithMetadataSchema, textWithMetadataSchema } from '../generic'
 import { withMetadataSchema } from '../metadata'
-import { withTimestamps } from '../modelTimestamps'
+import { withTimestamps } from '../timestamps'
 import { SearchSuggestions } from '../searchSuggestions'
 import { proceedingEntityInvolvedSchema } from './proceedingEntityInvolved'
 

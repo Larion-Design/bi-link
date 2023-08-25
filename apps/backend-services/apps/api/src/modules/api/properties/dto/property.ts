@@ -1,6 +1,6 @@
 import { PropertyAPIOutput } from 'defs'
 import { Field, ID, ObjectType, PickType } from '@nestjs/graphql'
-import { Timestamps } from 'defs/dist/modelTimestamps'
+import { Timestamps } from 'defs'
 import { File } from '../../files/dto/file'
 import { CustomField } from '../../customFields/dto/customField'
 import { WithMetadata } from '../../metadata/dto/withMetadata'

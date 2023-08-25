@@ -1,7 +1,7 @@
 import { z } from 'zod'
 import { dataRefAPISchema, dataRefSchema } from './dataRef'
 import { fileInputSchema, fileOutputSchema, fileSchema } from '../file'
-import { withTimestamps } from '../modelTimestamps'
+import { withTimestamps } from '../timestamps'
 import {
   reportSectionAPIInputSchema,
   reportSectionAPIOutputSchema,

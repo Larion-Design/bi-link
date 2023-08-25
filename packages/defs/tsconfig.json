@@ -4,6 +4,7 @@
     "outDir": "./dist",
     "module": "CommonJS",
     "target": "ESNext",
+    "composite": true,
     "strict": true,
     "declaration": true,
     "esModuleInterop": true,

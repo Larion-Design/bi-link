@@ -1,5 +1,5 @@
 import { Field, ID, ObjectType, PickType } from '@nestjs/graphql'
-import { Timestamps } from 'defs/dist/modelTimestamps'
+import { Timestamps } from 'defs'
 import { OptionalDateValue } from '../../generic/dto/optionalDateValue'
 import { TextValue } from '../../generic/dto/textValue'
 import { Location } from '../../geolocation/dto/location'

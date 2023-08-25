@@ -151,13 +151,5 @@
     "@firebase/app-types": "^0.8.0",
     "@sentry/hub": "^7.6.0",
     "@types/inquirer": "^9.0.3"
-  },
-  "dependenciesMeta": {
-    "defs": {
-      "injected": true
-    },
-    "tools": {
-      "injected": true
-    }
   }
 }

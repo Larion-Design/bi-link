@@ -4,7 +4,7 @@ import { optionalDateWithMetadataSchema, textWithMetadataSchema } from '../gener
 import { fileInputSchema, fileOutputSchema, fileSchema } from '../file'
 import { locationSchema } from '../geolocation'
 import { withMetadataSchema } from '../metadata'
-import { withTimestamps } from '../modelTimestamps'
+import { withTimestamps } from '../timestamps'
 import { SearchSuggestions } from '../searchSuggestions'
 import { eventParticipantAPISchema, eventParticipantSchema } from './party'
 

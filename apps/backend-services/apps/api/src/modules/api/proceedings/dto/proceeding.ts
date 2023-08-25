@@ -1,6 +1,6 @@
 import { Field, ID, ObjectType, PickType } from '@nestjs/graphql'
 import { ProceedingAPIOutput } from 'defs'
-import { Timestamps } from 'defs/dist/modelTimestamps'
+import { Timestamps } from 'defs'
 import { CustomField } from '../../customFields/dto/customField'
 import { File } from '../../files/dto/file'
 import { OptionalDateValue } from '../../generic/dto/optionalDateValue'

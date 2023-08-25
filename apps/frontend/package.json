@@ -119,10 +119,5 @@
     "prop-types": "^15.8.1",
     "typescript": "^4.9.4",
     "webpack": "^5.74.0"
-  },
-  "dependenciesMeta": {
-    "tools": {
-      "injected": true
-    }
   }
 }

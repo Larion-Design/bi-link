@@ -1,7 +1,7 @@
 import { z } from 'zod'
 import { emptyString, nonEmptyString } from './helpers'
 import { withMetadataSchema } from './metadata'
-import { withTimestamps } from './modelTimestamps'
+import { withTimestamps } from './timestamps'
 
 export const downloadUrlSchema = z.object({
   url: z.string(),

@@ -1,5 +1,5 @@
 import { z } from 'zod'
-import { withTimestamps } from './modelTimestamps'
+import { withTimestamps } from './timestamps'
 import { updateSourceSchema } from './updateSource'
 
 export const withSnapshotSchema = z
