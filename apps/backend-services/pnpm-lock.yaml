@@ -64,6 +64,9 @@ dependencies:
   bullmq:
     specifier: ^4.7.0
     version: 4.7.0
+  compression:
+    specifier: ^1.7.4
+    version: 1.7.4
   date-fns:
     specifier: ^2.29.3
     version: 2.29.3
@@ -111,7 +114,7 @@ dependencies:
     version: 1.2.0
   newrelic:
     specifier: latest
-    version: 10.6.1
+    version: 10.6.2
   passport:
     specifier: ^0.5.3
     version: 0.5.3
@@ -171,6 +174,9 @@ devDependencies:
   '@sentry/hub':
     specifier: ^7.28.1
     version: 7.28.1
+  '@types/compression':
+    specifier: ^1.7.2
+    version: 1.7.2
   '@types/elasticsearch':
     specifier: ^5.0.40
     version: 5.0.40
@@ -3294,22 +3300,22 @@ packages:
       tslib: 2.4.0
     dev: true
 
-  /@newrelic/aws-sdk@6.0.0(newrelic@10.6.1):
+  /@newrelic/aws-sdk@6.0.0(newrelic@10.6.2):
     resolution: {integrity: sha512-17DwEvyDS9pAkV5kBSGtm2oIQbII0qOSAXSlU51MLA0Vp/PxNDTCBBFVgpKbGyKpPfudIJMGvh4jAmlzH3xIng==}
     engines: {node: '>=14.0.0'}
     peerDependencies:
       newrelic: '>=8.7.0'
     dependencies:
-      newrelic: 10.6.1
+      newrelic: 10.6.2
     dev: false
 
-  /@newrelic/koa@7.2.0(newrelic@10.6.1):
+  /@newrelic/koa@7.2.0(newrelic@10.6.2):
     resolution: {integrity: sha512-3y/CCOLJ6sEPTKyQAmBrBP5CfZ5ak8mWt+7mWjdbblOXQh20LEsrA/KQAh/ROcTh6rV8oxsubLZ3N13LIeIoVQ==}
     engines: {node: '>=14.0.0'}
     peerDependencies:
       newrelic: '>=6.11.0'
     dependencies:
-      newrelic: 10.6.1
+      newrelic: 10.6.2
     dev: false
 
   /@newrelic/native-metrics@9.0.1:
@@ -3325,12 +3331,12 @@ packages:
     dev: false
     optional: true
 
-  /@newrelic/security-agent@0.2.0:
-    resolution: {integrity: sha512-sPUlYI99ursxaNq07TznLczmEWOjvOe5PkHe1ghjxolsZb5wy/DZYSmqIk9WuW5kNqyizUz+NNxc/7XqIAhpMw==}
+  /@newrelic/security-agent@0.2.1:
+    resolution: {integrity: sha512-oFPnBO+BlJap/qC3r80NuiHmedXdjpWnVnzAlNjsSZoAT7qJM/29tip6ZX/Qmp17mZAIiOVJ2MkyQ5OXHXPdLw==}
     dependencies:
       '@aws-sdk/client-lambda': 3.370.0
       axios: 0.21.4
-      check-disk-space: 3.4.0
+      check-disk-space: 3.3.1
       content-type: 1.0.5
       fast-safe-stringify: 2.1.1
       find-package-json: 1.2.0
@@ -3358,13 +3364,13 @@ packages:
       - utf-8-validate
     dev: false
 
-  /@newrelic/superagent@6.0.0(newrelic@10.6.1):
+  /@newrelic/superagent@6.0.0(newrelic@10.6.2):
     resolution: {integrity: sha512-5nClQp9ACd4BvLusAgFHjjKLDgAaC+dKmIsRNOPC82LOLFaoOgxxtbecnDIJ0NWCKQS+WOdmXdgYutwH+e5dsA==}
     engines: {node: '>=14.0'}
     peerDependencies:
       newrelic: '>=6.11.0'
     dependencies:
-      newrelic: 10.6.1
+      newrelic: 10.6.2
     dev: false
 
   /@nodelib/fs.scandir@2.1.5:
@@ -4028,6 +4034,12 @@ packages:
       '@types/connect': 3.4.35
       '@types/node': 16.18.11
 
+  /@types/compression@1.7.2:
+    resolution: {integrity: sha512-lwEL4M/uAGWngWFLSG87ZDr2kLrbuR8p7X+QZB1OQlT+qkHsCPDVFnHPyXf4Vyl4yDDorNY+mAhosxkCvppatg==}
+    dependencies:
+      '@types/express': 4.17.15
+    dev: true
+
   /@types/concat-stream@1.6.1:
     resolution: {integrity: sha512-eHE4cQPoj6ngxBZMvVf6Hw7Mh4jMW4U9lpGmS5GBPB9RYxlFg+CHaVN7ErNY4W9XfLIEn20b4VDYaIrbq0q4uA==}
     dependencies:
@@ -4498,6 +4510,15 @@ packages:
       - supports-color
     dev: false
 
+  /agent-base@7.1.0:
+    resolution: {integrity: sha512-o/zjMZRhJxny7OyEF+Op8X+efiELC7k7yOjMzgfzVqOzXqkBkWI79YoTdOtsuWd5BWhAGAuOY/Xa6xpiaWXiNg==}
+    engines: {node: '>= 14'}
+    dependencies:
+      debug: 4.3.4
+    transitivePeerDependencies:
+      - supports-color
+    dev: false
+
   /ajv-formats@2.1.1(ajv@8.9.0):
     resolution: {integrity: sha512-Wx0Kx52hxE7C18hkMEggYlEifqWZtYaRgouJor+WMdPnQyEK13vgEWyVNup7SoeeoLMsr4kf5h6dOW11I15MUA==}
     peerDependencies:
@@ -4886,12 +4907,12 @@ packages:
     dependencies:
       buffer: 5.7.1
       inherits: 2.0.4
-      readable-stream: 3.6.0
+      readable-stream: 3.6.2
 
   /block-stream2@2.1.0:
     resolution: {integrity: sha512-suhjmLI57Ewpmq00qaygS8UgEq2ly2PCItenIyhMqVjo4t4pGzqMvfgJuX8iWTeSDdfSSqS6j38fL4ToNL7Pfg==}
     dependencies:
-      readable-stream: 3.6.0
+      readable-stream: 3.6.2
     dev: false
 
   /bluebird@3.7.2:
@@ -5108,6 +5129,11 @@ packages:
     dependencies:
       streamsearch: 1.1.0
 
+  /bytes@3.0.0:
+    resolution: {integrity: sha1-0ygVQE1olpn4Wk6k+odV3ROpYEg=}
+    engines: {node: '>= 0.8'}
+    dev: false
+
   /bytes@3.1.2:
     resolution: {integrity: sha512-/Nf7TyzTx6S3yRJObOAV7956r8cr2+Oj8AC5dt8wSP3BQAoeX58NoHyCU8P8zGkNXStjTSi6fzO6F0pBdcYbEg==}
     engines: {node: '>= 0.8'}
@@ -5195,9 +5221,9 @@ packages:
   /chardet@0.7.0:
     resolution: {integrity: sha512-mT8iDcrh03qDGRRmoA2hmBJnxpllMR+0/0qlzjqZES6NdiWDcZkCNAk4rPFZ9Q85r27unkiNNg8ZOiwZXBHwcA==}
 
-  /check-disk-space@3.4.0:
-    resolution: {integrity: sha512-drVkSqfwA+TvuEhFipiR1OC9boEGZL5RrWvVsOthdcvQNXyCCuKkEiTOTXZ7qxSf/GLwq4GvzfrQD/Wz325hgw==}
-    engines: {node: '>=16'}
+  /check-disk-space@3.3.1:
+    resolution: {integrity: sha512-iOrT8yCZjSnyNZ43476FE2rnssvgw5hnuwOM0hm8Nj1qa0v4ieUUEbCyxxsEliaoDUb/75yCOL71zkDiDBLbMQ==}
+    engines: {node: '>=12'}
     dev: false
 
   /chevrotain@10.5.0:
@@ -5382,7 +5408,21 @@ packages:
     dependencies:
       mime-db: 1.52.0
     dev: false
-    optional: true
+
+  /compression@1.7.4:
+    resolution: {integrity: sha512-jaSIDzP9pZVS4ZfQ+TzvtiWhdpFhE2RDHz8QJkpX9SIpLq88VueF5jJw6t+6CUQcAoA6t+x89MLrWAqpfDE8iQ==}
+    engines: {node: '>= 0.8.0'}
+    dependencies:
+      accepts: 1.3.8
+      bytes: 3.0.0
+      compressible: 2.0.18
+      debug: 2.6.9
+      on-headers: 1.0.2
+      safe-buffer: 5.1.2
+      vary: 1.1.2
+    transitivePeerDependencies:
+      - supports-color
+    dev: false
 
   /concat-map@0.0.1:
     resolution: {integrity: sha1-2Klr13/Wjfd5OnMDajug1UBdR3s=}
@@ -6773,6 +6813,16 @@ packages:
       - supports-color
     dev: false
 
+  /https-proxy-agent@7.0.1:
+    resolution: {integrity: sha512-Eun8zV0kcYS1g19r78osiQLEFIRspRUDd9tIfBCTBPBeMieF/EsJNL8VI3xOIdYRDEkjQnqOYPsZ2DsWsVsFwQ==}
+    engines: {node: '>= 14'}
+    dependencies:
+      agent-base: 7.1.0
+      debug: 4.3.4
+    transitivePeerDependencies:
+      - supports-color
+    dev: false
+
   /human-signals@1.1.1:
     resolution: {integrity: sha512-SEQu7vl8KjNL2eoGBLF3+wAjpsNfA9XMlXAYj/3EdaNfAlxKthD1xjEQfGOUhllCGGJVNY34bRr6lPINhNjyZw==}
     engines: {node: '>=8.12.0'}
@@ -7468,7 +7518,7 @@ packages:
       jest-util: 28.1.3
       natural-compare: 1.4.0
       pretty-format: 28.1.3
-      semver: 7.3.8
+      semver: 7.5.4
     transitivePeerDependencies:
       - supports-color
     dev: true
@@ -8387,21 +8437,21 @@ packages:
       rxjs: 7.8.0
     dev: false
 
-  /newrelic@10.6.1:
-    resolution: {integrity: sha512-jtBOCcTDqEp7oWWpuFQQDhe4DEydxm6NzuloNzJANawWc94PT7abHknhXq+f4wtP6Ydzs8Uq9MdQBHkS9nQ2wQ==}
+  /newrelic@10.6.2:
+    resolution: {integrity: sha512-eCne93dEXcXsoFhjFnFJF6AO1PDhMZGA4G8i/sf5YjpaYXyUNfWacsDHQUM+0r1cf/BW8gL8HEVmIIW5uyAaXA==}
     engines: {node: '>=14', npm: '>=6.0.0'}
     hasBin: true
     dependencies:
       '@grpc/grpc-js': 1.8.14
       '@grpc/proto-loader': 0.7.7
       '@mrleebo/prisma-ast': 0.5.2
-      '@newrelic/aws-sdk': 6.0.0(newrelic@10.6.1)
-      '@newrelic/koa': 7.2.0(newrelic@10.6.1)
-      '@newrelic/security-agent': 0.2.0
-      '@newrelic/superagent': 6.0.0(newrelic@10.6.1)
+      '@newrelic/aws-sdk': 6.0.0(newrelic@10.6.2)
+      '@newrelic/koa': 7.2.0(newrelic@10.6.2)
+      '@newrelic/security-agent': 0.2.1
+      '@newrelic/superagent': 6.0.0(newrelic@10.6.2)
       '@tyriar/fibonacci-heap': 2.0.9
       concat-stream: 2.0.0
-      https-proxy-agent: 5.0.1
+      https-proxy-agent: 7.0.1
       json-bigint: 1.0.0
       json-stringify-safe: 5.0.1
       readable-stream: 3.6.2
@@ -8509,6 +8559,11 @@ packages:
     engines: {node: '>= 0.8'}
     dependencies:
       ee-first: 1.1.1
+
+  /on-headers@1.0.2:
+    resolution: {integrity: sha512-pZAE+FJLoyITytdqK0U5s+FIpjN0JP3OzFi/u8Rx+EV5/W+JTWGXG8xFzevE7AjBfDqHv/8vL8qQsIhHnqRkrA==}
+    engines: {node: '>= 0.8'}
+    dev: false
 
   /once@1.4.0:
     resolution: {integrity: sha512-lNaJgI+2Q5URQBkccEKHTQOPaXdUxnZZElQTZY0MFUAuaEqe1E+Nyvgdz/aIyNi6Z9MzO5dv1H8n58/GELp3+w==}
@@ -9003,14 +9058,6 @@ packages:
       string_decoder: 1.1.1
       util-deprecate: 1.0.2
 
-  /readable-stream@3.6.0:
-    resolution: {integrity: sha512-BViHy7LKeTz4oNnkcLJ+lVSL6vpiFeX6/d3oSH8zCW7UxP2onchk+vTGB143xuFjHS3deTgkKoXXymXqymiIdA==}
-    engines: {node: '>= 6'}
-    dependencies:
-      inherits: 2.0.4
-      string_decoder: 1.3.0
-      util-deprecate: 1.0.2
-
   /readable-stream@3.6.2:
     resolution: {integrity: sha512-9u/sniCrY3D5WdsERHzHE4G2YCXqoG5FTHUiCC4SIbr6XcLZBY05ya9EKjYek9O5xOAwjGq+1JdGBAS7Q9ScoA==}
     engines: {node: '>= 6'}
@@ -9018,7 +9065,6 @@ packages:
       inherits: 2.0.4
       string_decoder: 1.3.0
       util-deprecate: 1.0.2
-    dev: false
 
   /readdirp@3.6.0:
     resolution: {integrity: sha512-hOS089on8RduqdbhvQ5Z37A0ESjsqz6qnRcffsMU3495FuTdqSm+7bhJ29JvIOsBDEEnan5DPu9t3To9VRlMzA==}
@@ -9250,7 +9296,6 @@ packages:
     hasBin: true
     dependencies:
       lru-cache: 6.0.0
-    dev: false
 
   /send@0.18.0:
     resolution: {integrity: sha512-qqWzuOjSFOuqPjFe4NOsMLafToQQwBSOEpS+FwEt3A2V3vKubTquT3vmLTQpFgMXp8AlFWFuP1qKaJZOtPpVXg==}
@@ -9635,7 +9680,7 @@ packages:
       end-of-stream: 1.4.4
       fs-constants: 1.0.0
       inherits: 2.0.4
-      readable-stream: 3.6.0
+      readable-stream: 3.6.2
     dev: false
 
   /teeny-request@8.0.2:
@@ -9785,7 +9830,7 @@ packages:
     resolution: {integrity: sha512-enaDQ4MUyP2W6ZyT6EsMzqBPZaM/avg8iuo+l2d3QCs0J+6RaqkHV/2/lOwDTueBHeJ/2LG9lrLW3d5rWPucuQ==}
     dependencies:
       inherits: 2.0.4
-      readable-stream: 3.6.0
+      readable-stream: 3.6.2
     dev: false
 
   /through@2.3.8:
