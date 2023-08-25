@@ -21,6 +21,10 @@
       "persistent": false,
       "outputs": []
     },
+    "files-manager": {
+      "persistent": false,
+      "outputs": []
+    },
     "user-actions-recorder": {
       "persistent": false,
       "outputs": []

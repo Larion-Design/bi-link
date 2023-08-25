@@ -13,6 +13,7 @@ import { CacheService } from './cacheService'
           config: {
             host: configService.getOrThrow<string>('REDIS_HOST'),
             port: configService.getOrThrow<number>('REDIS_PORT'),
+            showFriendlyErrorStack: true,
           },
         }),
     }),

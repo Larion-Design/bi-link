@@ -27,7 +27,7 @@ export class CacheService {
     return map
   }
 
-  setMultiple = async (data: Record<string, string>, ttl = 0) => {
+  async setMultiple(data: Record<string, string>, ttl = 0) {
     if (ttl) {
       const transaction = this.redis.multi()
       Object.entries(data).forEach(([key, value]) => transaction.setex(key, value, ttl))
