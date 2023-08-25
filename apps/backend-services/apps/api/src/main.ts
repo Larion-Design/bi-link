@@ -1,7 +1,7 @@
 import 'tsconfig-paths/register'
 import { NestFactory } from '@nestjs/core'
 import helmet from 'helmet'
-import compression from 'compression'
+import * as compression from 'compression'
 import { AppModule } from './appModule'
 import { SentryService } from '@ntegral/nestjs-sentry'
 import { Logger } from '@nestjs/common'
