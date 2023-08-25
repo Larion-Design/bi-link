@@ -3,6 +3,7 @@ import react from '@vitejs/plugin-react-swc'
 // import basicSSL from '@vitejs/plugin-basic-ssl'
 import { defineConfig, splitVendorChunkPlugin } from 'vite'
 import tsconfigPaths from 'vite-tsconfig-paths'
+import { VitePWA } from 'vite-plugin-pwa'
 
 /**
  * @see https://vitejs.dev/config/
@@ -16,6 +17,20 @@ export default defineConfig({
     }),
     splitVendorChunkPlugin(),
     // basicSSL(),
+    VitePWA({
+      registerType: 'autoUpdate',
+      devOptions: {
+        enabled: true,
+      },
+      srcDir: 'src/serviceWorker',
+      filename: 'index.ts',
+      strategies: 'generateSW',
+      injectRegister: false,
+      manifest: false,
+      injectManifest: {
+        injectionPoint: null,
+      },
+    }),
   ],
   preview: {
     port: 5173,
