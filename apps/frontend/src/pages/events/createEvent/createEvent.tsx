@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useNotification } from '@frontend/utils/hooks/useNotification'
-import { getDefaultEvent } from 'tools'
+import { getDefaultEvent } from 'default-values'
 import { DashboardPage } from '../../../components/page/DashboardPage'
 import { routes } from '../../../router/routes'
 import { createEventRequest } from '../../../graphql/events/mutations/createEvent'

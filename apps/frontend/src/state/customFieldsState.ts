@@ -1,7 +1,7 @@
-import { getDefaultCustomField } from 'tools'
 import { v4 } from 'uuid'
 import { StateCreator } from 'zustand'
 import { CustomFieldAPI } from 'defs'
+import { getDefaultCustomField } from 'default-values'
 import { removeMapItems } from './utils'
 
 export type CustomFieldsState = {

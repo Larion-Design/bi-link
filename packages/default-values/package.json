@@ -1,13 +1,13 @@
 {
-  "name": "tools",
-  "version": "0.0.1",
+  "name": "default-values",
+  "version": "0.0.2",
   "private": true,
-  "description": "BI Link tools",
+  "description": "BI Link default values",
   "main": "./dist/index.js",
+  "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "exports": {
     ".": "./dist/index.js",
-    "./*": "./dist/*",
     "./package.json": "./package.json"
   },
   "scripts": {
@@ -15,12 +15,13 @@
     "prepare": "pnpm build"
   },
   "dependencies": {
-    "date-fns": "^2.29.3",
-    "defs": "workspace:*"
+    "defs": "workspace:*",
+    "uuid": "^8.3.2"
   },
   "devDependencies": {
     "@swc/cli": "^0.1.62",
     "@swc/core": "^1.3.80",
+    "@types/uuid": "^8.3.4",
     "tslib": "^2.5.0",
     "typescript": "^5.0.4"
   }

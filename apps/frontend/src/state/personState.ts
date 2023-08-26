@@ -19,7 +19,7 @@ import {
   getDefaultOptionalDateWithMetadata,
   getDefaultRelationship,
   getDefaultTextWithMetadata,
-} from 'tools'
+} from 'default-values'
 import { createContactDetailsStore, ContactDetailsState } from './contactDetailsState'
 import { createCustomFieldsStore, CustomFieldsState } from './customFieldsState'
 import { createFilesStore, FilesState } from './filesStore'

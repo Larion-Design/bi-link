@@ -1,5 +1,5 @@
 import { BooleanWithMetadata, LocationAPIInput, NumberWithMetadata, RealEstateInfo } from 'defs'
-import { getDefaultRealEstate } from 'tools'
+import { getDefaultRealEstate } from 'default-values'
 import { StateCreator } from 'zustand'
 
 export type RealEstateInfoState = {

@@ -1,5 +1,5 @@
 import { Metadata } from 'defs'
-import { getDefaultMetadata } from 'tools'
+import { getDefaultMetadata } from 'default-values'
 import { StateCreator } from 'zustand'
 
 export type MetadataState = {

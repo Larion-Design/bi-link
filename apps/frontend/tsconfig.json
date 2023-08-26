@@ -5,22 +5,21 @@
     "target": "ESNext",
     "useDefineForClassFields": true,
     "lib": ["DOM", "DOM.Iterable", "ESNext"],
-    "allowJs": false,
+    "removeComments": true,
     "skipLibCheck": true,
     "esModuleInterop": true,
     "preserveConstEnums": true,
     "noUncheckedIndexedAccess": true,
     "allowSyntheticDefaultImports": true,
-    "strict": false,
+    "allowJs": true,
     "forceConsistentCasingInFileNames": true,
     "moduleResolution": "Node",
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "react-jsx",
-    "types": ["node", "vite-plugin-pwa/client"],
+    "types": ["node"],
     "importHelpers": true,
-    "suppressImplicitAnyIndexErrors": true,
     "paths": {
       "@frontend/graphql": ["src/graphql"],
       "@frontend/graphql/*": ["src/graphql/*"],
@@ -32,9 +31,5 @@
       "@frontend/utils/*": ["src/utils/*"]
     }
   },
-  "include": ["src", "vite.config.ts"],
-  "references": [
-    {"path": "node_modules/defs"},
-    {"path": "node_modules/tools"},
-  ]
+  "include": ["src","vite.config.ts"]
 }

@@ -1,7 +1,7 @@
 import { ParentTask } from '@app/scheduler-module'
 import { Injectable } from '@nestjs/common'
 import { BalanceSheet, CustomFieldAPI } from 'defs'
-import { getDefaultBalanceSheet, getDefaultCompany, getDefaultCustomField } from 'tools'
+import { getDefaultBalanceSheet, getDefaultCompany, getDefaultCustomField } from 'default-values'
 import { TermeneAssociatesSchema } from '../../../schema/associates'
 import { CompanyTermeneDataset } from '../../../schema/company'
 import { getCompanyUrl } from '../../extractor/helpers'

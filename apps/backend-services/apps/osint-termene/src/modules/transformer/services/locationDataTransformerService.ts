@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common'
 import { LocationAPIInput } from 'defs'
-import { getDefaultLocation } from 'tools'
+import { getDefaultLocation } from 'default-values'
 import { CompanyTermeneDataset } from '../../../schema/company'
 
 @Injectable()

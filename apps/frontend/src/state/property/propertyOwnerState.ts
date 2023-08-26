@@ -1,7 +1,7 @@
 import { v4 } from 'uuid'
 import { StateCreator } from 'zustand'
 import { CustomFieldAPI, OptionalDateWithMetadata, PropertyOwnerAPI, VehicleOwnerInfo } from 'defs'
-import { getDefaultCustomField } from 'tools'
+import { getDefaultCustomField } from 'default-values'
 import { removeMapItems } from '../utils'
 
 export type PropertyOwnerInfoState = Omit<PropertyOwnerAPI, 'customFields'> & {

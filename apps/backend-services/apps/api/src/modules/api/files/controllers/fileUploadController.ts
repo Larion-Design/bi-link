@@ -3,7 +3,7 @@ import { FileInterceptor } from '@nestjs/platform-express'
 import { FilesManagerService } from '@app/rpc/microservices/filesManager/filesManagerService'
 import { IngressService } from '@app/rpc/microservices/ingress'
 import { FileAPIInput, File } from 'defs'
-import { getDefaultFile } from 'tools'
+import { getDefaultFile } from 'default-values'
 
 @Controller()
 export class FileUploadController {

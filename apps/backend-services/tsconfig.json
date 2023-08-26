@@ -75,9 +75,5 @@
   "include": [
     "apps",
     "libs"
-  ],
-  "references": [
-    {"path": "node_modules/defs"},
-    {"path": "node_modules/tools"}
   ]
 }

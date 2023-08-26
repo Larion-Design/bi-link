@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { getDefaultCompany } from 'tools'
+import { getDefaultCompany } from 'default-values'
 import { DashboardPage } from '../../../components/page/DashboardPage'
 import { createCompanyRequest } from '../../../graphql/companies/mutations/createCompany'
 import { routes } from '../../../router/routes'

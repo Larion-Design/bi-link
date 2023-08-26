@@ -4,7 +4,7 @@ import { DashboardPage } from '@frontend/components/page/DashboardPage'
 import { ProceedingDetails } from '@frontend/components/page/proceedingDetails'
 import { createProceedingRequest } from '@frontend/graphql/proceedings/mutations/createProceeding'
 import { useNotification } from '@frontend/utils/hooks/useNotification'
-import { getDefaultProceeding } from 'tools'
+import { getDefaultProceeding } from 'default-values'
 import { routes } from '../../../router/routes'
 
 export const CreateProceeding: React.FunctionComponent = () => {

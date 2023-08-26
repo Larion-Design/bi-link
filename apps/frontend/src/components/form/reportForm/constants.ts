@@ -1,5 +1,5 @@
 import { ConnectedEntity, EntityType, ReportAPIInput } from 'defs'
-import { getDefaultReport } from 'tools'
+import { getDefaultReport } from 'default-values'
 
 export const addEntityToReport = (
   entityId: string,

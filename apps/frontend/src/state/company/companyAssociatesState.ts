@@ -8,7 +8,7 @@ import {
   OptionalDateWithMetadata,
   TextWithMetadata,
 } from 'defs'
-import { getDefaultCustomField } from 'tools'
+import { getDefaultCustomField } from 'default-values'
 import { removeMapItems } from '../utils'
 
 export type CompanyAssociateInfoState = Omit<AssociateAPI, 'customFields'> & {

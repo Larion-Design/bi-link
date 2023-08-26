@@ -1,4 +1,4 @@
-import { getDefaultMetadata } from 'tools'
+import { getDefaultMetadata } from 'default-values'
 import { describe, expect, it } from 'vitest'
 import { faker } from '@faker-js/faker'
 import { getPersonFullName } from './person'

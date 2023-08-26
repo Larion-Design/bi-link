@@ -14,7 +14,7 @@ import {
   getDefaultMetadata,
   getDefaultOptionalDateWithMetadata,
   getDefaultTextWithMetadata,
-} from 'tools'
+} from 'default-values'
 import { createCustomFieldsStore, CustomFieldsState } from './customFieldsState'
 import { createFilesStore, FilesState } from './filesStore'
 import { createMetadataStore, MetadataState } from './metadataStore'

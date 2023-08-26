@@ -7,7 +7,7 @@ import {
   getDefaultInvolvedPerson,
   getDefaultPerson,
   getDefaultProceeding,
-} from 'tools'
+} from 'default-values'
 import { AUTHOR } from '../../../constants'
 import { TermeneInvolvedEntity, TermeneProceeding } from '../../../schema/courtFiles'
 import { getProceedingUrl } from '../../extractor/helpers'

@@ -1,7 +1,7 @@
 import { v4 } from 'uuid'
 import { StateCreator } from 'zustand'
 import { ReportContentAPIInput, ReportSectionAPIInput } from 'defs'
-import { getDefaultReportSection } from 'tools'
+import { getDefaultReportSection } from 'default-values'
 import { removeMapItems } from '../utils'
 
 type ReportSectionContent = Omit<ReportSectionAPIInput, 'content'> & { content: Set<string> }

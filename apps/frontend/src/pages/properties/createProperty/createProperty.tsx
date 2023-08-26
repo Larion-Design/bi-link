@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { useNotification } from '@frontend/utils/hooks/useNotification'
 import { useNavigate } from 'react-router-dom'
-import { getDefaultProperty } from 'tools'
+import { getDefaultProperty } from 'default-values'
 import { DashboardPage } from '../../../components/page/DashboardPage'
 import { routes } from '../../../router/routes'
 import { PropertyDetails } from '../../../components/page/propertyDetails'

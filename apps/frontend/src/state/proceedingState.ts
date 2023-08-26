@@ -6,7 +6,7 @@ import {
   ProceedingEntityInvolvedAPI,
   OptionalDateWithMetadata,
 } from 'defs'
-import { getDefaultOptionalDateWithMetadata, getDefaultTextWithMetadata } from 'tools'
+import { getDefaultOptionalDateWithMetadata, getDefaultTextWithMetadata } from 'default-values'
 import { createCustomFieldsStore, CustomFieldsState } from './customFieldsState'
 import { createFilesStore, FilesState } from './filesStore'
 import { createMetadataStore, MetadataState } from './metadataStore'
@@ -87,6 +87,7 @@ export const useProceedingState = create<ProceedingState>((set, get, state) => (
       year,
       reason,
       fileNumber,
+      status: getDefaultTextWithMetadata(),
       entitiesInvolved: getEntitiesInvolved(),
       files: getFiles(),
       customFields: getCustomFields(),

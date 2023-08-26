@@ -1,7 +1,12 @@
 {
   "extends": "../tsconfig.package.json",
-  "include": ["src"],
-  "exclude": ["dist", "node_modules"],
+  "include": [
+    "src"
+  ],
+  "exclude": [
+    "dist",
+    "node_modules"
+  ],
   "compilerOptions": {
     "baseUrl": "./src",
     "outDir": "./dist"

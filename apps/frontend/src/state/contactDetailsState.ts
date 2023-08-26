@@ -1,4 +1,4 @@
-import { getDefaultCustomField } from 'tools'
+import { getDefaultCustomField } from 'default-values'
 import { v4 } from 'uuid'
 import { StateCreator } from 'zustand'
 import { CustomFieldAPI } from 'defs'

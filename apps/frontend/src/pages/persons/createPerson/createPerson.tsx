@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { getDefaultPerson } from 'tools'
+import { getDefaultPerson } from 'default-values'
 import { DashboardPage } from '../../../components/page/DashboardPage'
 import { createPersonRequest } from '../../../graphql/persons/mutations/createPerson'
 import { routes } from '../../../router/routes'

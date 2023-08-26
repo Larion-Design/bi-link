@@ -7,7 +7,7 @@ import {
   getDefaultCompanyAssociate,
   getDefaultPerson,
   getDefaultPersonAssociate,
-} from 'tools'
+} from 'default-values'
 import { AUTHOR } from '../../../constants'
 import {
   TermeneAssociateSchema,

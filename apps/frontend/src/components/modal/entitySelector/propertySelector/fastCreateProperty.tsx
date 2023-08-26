@@ -6,7 +6,7 @@ import { RealEstateInfo } from '@frontend/components/form/property/realEstateInf
 import { VehicleInfo } from '@frontend/components/form/property/vehicleInfo'
 import { PropertyAPIInput } from 'defs'
 import React, { useEffect } from 'react'
-import { getDefaultProperty } from 'tools'
+import { getDefaultProperty } from 'default-values'
 import { usePropertyState } from '../../../../state/property/propertyState'
 import { PropertySelectorView } from './propertySelector'
 import { useFormik } from 'formik'
