@@ -1,7 +1,6 @@
 import { z } from 'zod'
 import { relationshipField } from '../field/relationship'
 import { withTimestamps } from '../../timestamps'
-import { fieldGroup } from '../field/group'
 import { dataField } from '../field/union'
 import { nonEmptyString } from '../helperTypes'
 
@@ -11,7 +10,7 @@ export const entitySchema = z
   .object({
     _id: nonEmptyString.nullish(),
     name: z.string(),
-    data: dataField.or(relationshipField).or(fieldGroup).array(),
+    data: dataField.or(relationshipField).array(),
     metadata: entityMetadataSchema,
   })
   .merge(withTimestamps)

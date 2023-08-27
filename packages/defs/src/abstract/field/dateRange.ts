@@ -6,6 +6,8 @@ export const dateRangeField = baseField.merge(
   z.object({
     _type: z.literal(fieldType.enum.dateRange),
     value: z.tuple([nullableDate, nullableDate]),
+    minDate: nullableDate,
+    maxDate: nullableDate,
   }),
 )
 
