@@ -11,7 +11,7 @@
   },
   "scripts": {
     "build": "tsc",
-    "postinstall": "pnpm build"
+    "prepare": "pnpm build"
   },
   "devDependencies": {
     "tslib": "^2.5.0",

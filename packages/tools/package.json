@@ -11,7 +11,7 @@
   },
   "scripts": {
     "build": "tsc",
-    "postinstall": "pnpm build"
+    "prepare": "pnpm build"
   },
   "dependencies": {
     "date-fns": "^2.29.3",
