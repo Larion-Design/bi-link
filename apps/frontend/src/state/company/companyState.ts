@@ -1,7 +1,12 @@
 import { v4 } from 'uuid'
 import { create } from 'zustand'
 import { AssociateAPI, CompanyAPIInput, LocationAPIInput, TextWithMetadata } from 'defs'
-import { getDefaultLocation, getDefaultTextWithMetadata } from 'tools'
+import {
+  getDefaultBooleanWithMetadata,
+  getDefaultLocation,
+  getDefaultOptionalDateWithMetadata,
+  getDefaultTextWithMetadata,
+} from 'tools'
 import { CompanyAssociatesState, createCompanyAssociatesStore } from './companyAssociatesState'
 import { createContactDetailsStore, ContactDetailsState } from '../contactDetailsState'
 import { createCustomFieldsStore, CustomFieldsState } from '../customFieldsState'
@@ -101,11 +106,22 @@ export const useCompanyState = create<CompanyState>((set, get, state) => ({
       cui,
       registrationNumber,
       headquarters,
+      status: {
+        vat: getDefaultTextWithMetadata(),
+        fiscal: getDefaultTextWithMetadata(),
+      },
       locations: getBranches(),
       files: getFiles(),
       customFields: getCustomFields(),
       contactDetails: getContactDetails(),
       associates: getAssociates(),
+      registrationDate: getDefaultOptionalDateWithMetadata(),
+      balanceSheets: [],
+      active: {
+        ministryOfFinance: getDefaultBooleanWithMetadata(),
+        tradeRegister: getDefaultBooleanWithMetadata(),
+      },
+      activityCodes: [],
     }
   },
 }))
