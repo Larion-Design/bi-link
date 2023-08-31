@@ -87,6 +87,7 @@ export const useProceedingState = create<ProceedingState>((set, get, state) => (
       year,
       reason,
       fileNumber,
+      status: getDefaultTextWithMetadata(),
       entitiesInvolved: getEntitiesInvolved(),
       files: getFiles(),
       customFields: getCustomFields(),

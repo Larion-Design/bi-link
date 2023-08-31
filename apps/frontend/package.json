@@ -12,6 +12,7 @@
     "build:native": "pnpm tauri build",
     "build:frontend:staging": "tsc && vite build --mode development",
     "preview": "vite preview --host",
+    "serve": "vite serve",
     "test": "vitest",
     "coverage": "vitest run --coverage",
     "lint": "eslint --ext=.tsx,.ts --quiet ./src",

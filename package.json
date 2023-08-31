@@ -5,7 +5,7 @@
   "description": "BI Link Monorepo",
   "scripts": {
     "start": "pnpm turbo dev",
-    "backend": "pnpm turbo backend --concurrency=10",
+    "backend": "pnpm turbo backend --concurrency=10 --no-daemon",
     "frontend": "pnpm turbo frontend",
     "build": "pnpm turbo build",
     "test": "turbo run test --parallel --stream --concurency=4",
