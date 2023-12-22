@@ -29,10 +29,10 @@ export default defineConfig({
     target: ['es2021', 'chrome100', 'safari13'],
     minify: !process.env.TAURI_DEBUG || process.env.NODE_ENV === 'production' ? 'esbuild' : false,
     sourcemap: !!process.env.TAURI_DEBUG,
-    commonjsOptions: {
+    /*commonjsOptions: {
       include: [/node_modules/],
       transformMixedEsModules: true,
-    },
+    },*/
     rollupOptions: {
       external: [/node_modules/],
     },

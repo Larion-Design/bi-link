@@ -40,4 +40,4 @@ export const routes = {
   users: '/users',
   history: '/history',
   search: '/search',
-}
+} as const

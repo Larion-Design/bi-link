@@ -47,7 +47,7 @@ const privateRoutes: Record<string, ReactNode> = {
 const publicRoutes: Record<string, ReactNode> = {
   [routes.login]: <LoginPage />,
   [routes.signup]: <SignupPage />,
-  [routes.resetPassword]: <Page>Pagina nu este disponibila momentan.</Page>,
+  [routes.resetPassword]: <Page>Pagina nu este disponibila momentan.</Page>
 }
 
 export const Router: React.FunctionComponent = () => (

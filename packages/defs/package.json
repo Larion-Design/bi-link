@@ -3,21 +3,21 @@
   "version": "1.0.2",
   "private": true,
   "description": "BI Link types and definitions",
-  "main": "dist/index.js",
+  "source": "src/index.ts",
+  "main": "dist/index.cjs",
+  "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
-  "exports": {
-    ".": "./dist/index.js",
-    "./package.json": "./package.json"
-  },
+  "files": ["dist"],
   "scripts": {
-    "build": "tsc",
+    "build": "parcel build --no-cache",
     "prepare": "pnpm build"
   },
   "devDependencies": {
-    "tslib": "^2.5.0",
+    "@parcel/packager-ts": "2.10.3",
     "typescript": "^5.0.4"
   },
   "dependencies": {
+    "tslib": "^2.5.0",
     "zod": "^3.21.4"
   }
 }

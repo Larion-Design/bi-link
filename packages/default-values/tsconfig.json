@@ -9,6 +9,7 @@
   ],
   "compilerOptions": {
     "baseUrl": "./src",
-    "outDir": "./dist"
+    "outDir": "./dist",
+    "noEmit": true
   }
 }

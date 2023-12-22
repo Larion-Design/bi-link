@@ -7,3 +7,4 @@ dist
 out
 test
 cypress.config.ts
+.parcel-cache
