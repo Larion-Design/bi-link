@@ -1,0 +1,91 @@
+version: '3.8'
+services:
+  minio:
+    container_name: 'minio'
+    image: minio/minio:RELEASE.2023-04-28T18-11-17Z
+    ports:
+      - '9000:9000'
+      - '9001:9001'
+    volumes:
+      - 'minio_data:/data'
+    environment:
+      - MINIO_ROOT_USER=link-app
+      - MINIO_ROOT_PASSWORD=RVvVi!UH383Am
+      - MINIO_BROWSER=on
+    restart: unless-stopped
+    command: server --console-address ":9001" /data
+    healthcheck:
+      test: [ "CMD-SHELL", 'curl -s -o /dev/null -w "%{http_code}" http://localhost:9000/minio/health/live | grep -q 200' ]
+      interval: 5s
+      timeout: 10s
+      retries: 10
+      start_period: 10s
+  graph:
+    image: memgraph/memgraph-platform
+    container_name: "graph"
+    ports:
+      - '7687:7687'
+      - '3000:3000'
+      - '7444:7444'
+    volumes:
+      - 'memgraph_lib:/var/lib/memgraph'
+      - 'memgraph_log:/var/log/memgraph'
+      - 'memgraph_etc:/etc/memgraph'
+    environment:
+      - MEMGRAPH="--log-level=TRACE"
+    entrypoint: ["/usr/bin/supervisord"]
+  elasticsearch:
+    container_name: 'elasticsearch'
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.2.3
+    ports:
+      - '9200:9200'
+      - '9300:9300'
+    environment:
+      - xpack.security.enabled=false
+      - discovery.type=single-node
+    volumes:
+      - 'elasticsearch_data:/usr/share/elasticsearch/data'
+    healthcheck:
+      test: [ "CMD-SHELL", 'curl -s "http://localhost:9200/_cat/health?h=status" | grep -v red' ]
+      interval: 3s
+      timeout: 5s
+      retries: 10
+      start_period: 15s
+    restart: unless-stopped
+  redis:
+    container_name: 'redis'
+    image: redis:7-alpine
+    ports:
+      - '6379:6379'
+    volumes:
+      - 'redis_data:/data'
+    healthcheck:
+      test: [ "CMD-SHELL", "redis-cli --no-auth-warning ping | grep PONG" ]
+      interval: 3s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    restart: unless-stopped
+  nats:
+    container_name: 'nats'
+    image: nats:alpine3.17
+    ports:
+      - '4222:4222'
+    volumes:
+      - 'nats_data:/data'
+    restart: unless-stopped
+volumes:
+  minio_data:
+    driver: local
+  redis_data:
+    driver: local
+  nats_data:
+    driver: local
+  memgraph_lib:
+    driver: local
+  memgraph_log:
+    driver: local
+  memgraph_etc:
+    driver: local
+  elasticsearch_data:
+    driver: local

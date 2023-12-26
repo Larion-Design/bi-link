@@ -5,9 +5,17 @@
       "cache": false,
       "dependsOn": ["backend", "frontend"]
     },
+    "docker:start": {
+      "cache": false,
+      "dependsOn": ["^docker:start"]
+    },
+    "docker:stop": {
+      "cache": false,
+      "dependsOn": ["^docker:stop"]
+    },
     "backend": {
       "cache": false,
-      "dependsOn": ["ingress","api", "graph", "indexer", "files-manager", "user-actions-recorder", "termene"]
+      "dependsOn": ["ingress", "api", "graph", "indexer", "files-manager", "user-actions-recorder", "termene"]
     },
     "frontend": {
       "cache": false,

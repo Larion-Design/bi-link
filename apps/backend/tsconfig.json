@@ -1,0 +1,52 @@
+{
+  "compilerOptions": {
+    "module": "CommonJS",
+    "strictNullChecks": true,
+    "strictPropertyInitialization": false,
+    "declaration": false,
+    "removeComments": true,
+    "moduleResolution": "Node",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "allowSyntheticDefaultImports": true,
+    "target": "ESNext",
+    "sourceMap": true,
+    "outDir": "./dist",
+    "baseUrl": "./",
+    "incremental": true,
+    "skipLibCheck": true,
+    "noImplicitAny": false,
+    "noUncheckedIndexedAccess": true,
+    "strictBindCallApply": false,
+    "forceConsistentCasingInFileNames": true,
+    "noFallthroughCasesInSwitch": true,
+    "importHelpers": true,
+    "paths": {
+      "@modules/definitions": ["src/definitions"],
+      "@modules/definitions/*": ["src/definitions/*"],
+
+      "@modules/iam": ["src/iam"],
+      "@modules/iam/*": ["src/iam/*"],
+
+      "@modules/search": ["src/search"],
+      "@modules/search/*": ["src/search/*"],
+
+      "@modules/graph": ["src/graph"],
+      "@modules/graph/*": ["src/graph/*"],
+
+      "@modules/api": ["src/api"],
+      "@modules/api/*": ["src/api/*"],
+
+      "@modules/central": ["src/central"],
+      "@modules/central/*": ["src/central/*"],
+
+      "@modules/cache": ["src/cache"],
+      "@modules/cache/*": ["src/cache/*"],
+
+      "@modules/files": ["src/files"],
+      "@modules/files/*": ["src/files/*"]
+    }
+  },
+  "include": ["src"],
+  "exclude": ["src/termene"]
+}
