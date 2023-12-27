@@ -1,9 +1,0 @@
-{
-  "extends": "../../../backend-services/tsconfig.json",
-  "compilerOptions": {
-    "declaration": false,
-    "outDir": "../../dist/libs/browser-module"
-  },
-  "include": ["src/**/*"],
-  "exclude": ["node_modules", "dist", "test", "**/*spec.ts"]
-}

@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { BrowserContext, ElementHandle, Page } from 'puppeteer-core';
 import { OSINTCompanySchema, OSINTPerson, OSINTPersonSchema } from 'defs';
-import { delay } from '../../../../../backend-services/apps/osint-termene/src/helpers';
 import { BrowserService } from '../../../browser';
 import { getPersonAssociateUrl } from './helpers';
 import { TermeneAuthService } from './termeneAuthService';
@@ -49,7 +48,7 @@ export class AssociateScraperService {
       return associatesMap;
     }
 
-    await delay(1000);
+    // await delay(1000);
 
     for await (const associateInfo of persons) {
       const companies = await this.getCompaniesByAssociateUrl(
@@ -59,7 +58,7 @@ export class AssociateScraperService {
       if (companies?.length) {
         associatesMap.set(associateInfo, companies);
       }
-      await delay(2000);
+      // await delay(2000);
     }
     return associatesMap;
   }

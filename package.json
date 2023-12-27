@@ -5,8 +5,8 @@
   "packageManager": "pnpm@8.1.1",
   "description": "BI Link Monorepo",
   "scripts": {
-    "start": "pnpm turbo dev",
-    "backend": "pnpm turbo backend --concurrency=10",
+    "start": "pnpm turbo start",
+    "backend": "pnpm turbo backend",
     "frontend": "pnpm turbo frontend",
     "build": "pnpm turbo build",
     "test": "turbo run test --parallel --stream --concurency=4",

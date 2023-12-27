@@ -1,7 +1,7 @@
 {
   "$schema": "https://turbo.build/schema.json",
   "pipeline": {
-    "dev": {
+    "start": {
       "cache": false,
       "dependsOn": ["backend", "frontend"]
     },
@@ -15,7 +15,7 @@
     },
     "backend": {
       "cache": false,
-      "dependsOn": ["ingress", "api", "graph", "indexer", "files-manager", "user-actions-recorder", "termene"]
+      "dependsOn": ["start"]
     },
     "frontend": {
       "cache": false,
@@ -24,39 +24,6 @@
     "native-app": {
       "cache": false,
       "dependsOn": ["^native:dev"]
-    },
-    "ingress": {
-      "cache": false,
-      "dependsOn": ["^ingress"]
-    },
-    "api": {
-      "cache": false,
-      "dependsOn": ["^api"]
-    },
-    "indexer": {
-      "cache": false,
-      "dependsOn": ["^indexer"]
-    },
-    "files-manager": {
-      "cache": false,
-      "dependsOn": ["^files-manager"]
-    },
-    "graph": {
-      "cache": false,
-      "dependsOn": ["^graph"]
-    },
-    "user-actions-recorder": {
-      "cache": false,
-      "dependsOn": ["^user-actions-recorder"]
-    },
-    "cli": {
-      "cache": false,
-      "dependsOn": ["^cli"]
-    },
-    "termene": {
-      "cache": false,
-      "dependsOn": ["^termene"]
-      
     },
     "lint": {
       "cache": true,

@@ -1,4 +1,4 @@
-import { CacheService } from '../../../../../backend-services/libs/cache/src';
+import { CacheService } from '@modules/cache';
 import { Injectable } from '@nestjs/common';
 import { OSINTCompany, OSINTCompanySchema } from 'defs';
 

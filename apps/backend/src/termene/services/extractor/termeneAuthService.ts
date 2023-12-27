@@ -1,6 +1,5 @@
-import { BrowserPageService } from '@app/browser-module/browserPageService';
-import { BrowserService } from '@app/browser-module/browserService';
-import { CacheService } from '../../../../../backend-services/libs/cache/src';
+import { BrowserPageService, BrowserService } from '@modules/browser';
+import { CacheService } from '@modules/cache';
 import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { BrowserContext, Page } from 'puppeteer-core';

@@ -44,7 +44,10 @@
       "@modules/cache/*": ["src/cache/*"],
 
       "@modules/files": ["src/files"],
-      "@modules/files/*": ["src/files/*"]
+      "@modules/files/*": ["src/files/*"],
+
+      "@modules/browser": ["src/browser"],
+      "@modules/browser/*": ["src/browser/*"]
     }
   },
   "include": ["src"],
