@@ -1,3 +1,4 @@
+import { GraphEventsHandlerService } from '@modules/graph/services/graph-events-handlers.service';
 import { Global, Module, Provider } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { Neo4jModule, Neo4jScheme } from 'nest-neo4j/dist';
@@ -20,6 +21,8 @@ const providers: Provider[] = [
   ProceedingGraphService,
   PropertyGraphService,
   ReportGraphService,
+
+  GraphEventsHandlerService,
 ];
 
 @Global()

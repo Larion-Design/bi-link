@@ -2,28 +2,28 @@
   "name": "bi-link",
   "version": "0.0.9",
   "private": true,
-  "packageManager": "pnpm@8.1.1",
+  "packageManager": "pnpm@8.12.1",
   "description": "BI Link Monorepo",
   "scripts": {
-    "start": "pnpm turbo start",
-    "backend": "pnpm turbo backend",
-    "frontend": "pnpm turbo frontend",
-    "build": "pnpm turbo build",
-    "test": "turbo run test --parallel --stream --concurency=4",
-    "test:e2e": "playwright test",
-    "lint": "eslint --ext=.tsx,.ts --quiet ."
+    "start": "pnpm nx run-many -t start",
+    "backend": "pnpm nx start backend",
+    "frontend": "pnpm nx start frontend",
+    "build": "pnpm nx affected --base=FETCH_HEAD -t build --parallel=3",
+    "docker:start": "pnpm nx up docker",
+    "docker:stop": "pnpm nx stop docker",
+    "test": "pnpm nx affected --base=FETCH_HEAD -t test --parallel=3"
   },
   "author": "alextudor@duck.com",
   "license": "proprietary",
   "devDependencies": {
+    "@parcel/packager-ts": "2.10.3",
+    "@parcel/transformer-typescript-types": "^2.10.3",
     "@playwright/test": "^1.37.1",
     "@types/node": "^20.5.4",
-    "rimraf": "^3.0.2",
-    "turbo": "^1.10.13",
-    "typescript": "^5.2.2",
+    "nx": "17.2.7",
     "parcel": "^2.10.3",
-    "@parcel/packager-ts": "2.10.3",
-    "@parcel/transformer-typescript-types": "^2.10.3"
+    "rimraf": "^3.0.2",
+    "typescript": "^5.2.2"
   },
   "optionalDependencies": {
     "@typescript-eslint/eslint-plugin": "^5.57.1",

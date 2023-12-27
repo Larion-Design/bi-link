@@ -1,4 +1,6 @@
-import { Injectable } from '@nestjs/common';
+import { INDEX_PROCEEDINGS } from '@modules/search/constants';
+import { MappingValidatorService } from '@modules/search/services/mapping/mappingValidatorService';
+import { Injectable, OnApplicationBootstrap } from '@nestjs/common';
 import { ProceedingIndex } from '@modules/definitions';
 import { MappingProperty } from '@elastic/elasticsearch/lib/api/types';
 import { MappingInterface } from './mapping';
@@ -6,9 +8,12 @@ import { MappingHelperService } from './mappingHelperService';
 
 @Injectable()
 export class ProceedingsMappingService
-  implements MappingInterface<ProceedingIndex>
+  implements MappingInterface<ProceedingIndex>, OnApplicationBootstrap
 {
-  constructor(private readonly mappingHelperService: MappingHelperService) {}
+  constructor(
+    private readonly mappingHelperService: MappingHelperService,
+    private readonly mappingValidatorService: MappingValidatorService,
+  ) {}
 
   getMapping = (): Record<keyof ProceedingIndex, MappingProperty> => ({
     name: this.mappingHelperService.textField,
@@ -22,4 +27,11 @@ export class ProceedingsMappingService
     customFields: this.mappingHelperService.customFields,
     files: this.mappingHelperService.files,
   });
+
+  async onApplicationBootstrap() {
+    await this.mappingValidatorService.initIndex(
+      INDEX_PROCEEDINGS,
+      this.getMapping(),
+    );
+  }
 }

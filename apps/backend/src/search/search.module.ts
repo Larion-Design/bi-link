@@ -1,3 +1,4 @@
+import { SearchEventsHandlerService } from '@modules/search/services/search-events-handler.service';
 import { Global, Module, Provider } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { ElasticsearchModule } from '@nestjs/elasticsearch';
@@ -68,6 +69,8 @@ const providers: Provider[] = [
   PropertiesIndexerService,
   HistoryIndexerService,
   ProceedingsIndexerService,
+
+  SearchEventsHandlerService,
 ];
 
 @Global()

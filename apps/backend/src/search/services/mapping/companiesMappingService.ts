@@ -1,12 +1,19 @@
 import { CompanyIndex, BalanceSheetIndex } from '@modules/definitions';
+import { INDEX_COMPANIES, INDEX_PROPERTIES } from '@modules/search/constants';
+import { MappingValidatorService } from '@modules/search/services/mapping/mappingValidatorService';
 import { MappingInterface } from './mapping';
 import { MappingHelperService } from './mappingHelperService';
-import { Injectable } from '@nestjs/common';
+import { Injectable, OnApplicationBootstrap } from '@nestjs/common';
 import { MappingProperty } from '@elastic/elasticsearch/lib/api/types';
 
 @Injectable()
-export class CompaniesMappingService implements MappingInterface<CompanyIndex> {
-  constructor(private readonly mappingHelperService: MappingHelperService) {}
+export class CompaniesMappingService
+  implements MappingInterface<CompanyIndex>, OnApplicationBootstrap
+{
+  constructor(
+    private readonly mappingHelperService: MappingHelperService,
+    private readonly mappingValidatorService: MappingValidatorService,
+  ) {}
 
   getMapping = (): Record<keyof CompanyIndex, MappingProperty> => ({
     name: this.mappingHelperService.textField,
@@ -56,4 +63,11 @@ export class CompaniesMappingService implements MappingInterface<CompanyIndex> {
     activityType: this.mappingHelperService.keywordField,
     balanceType: this.mappingHelperService.keywordField,
   });
+
+  async onApplicationBootstrap() {
+    await this.mappingValidatorService.initIndex(
+      INDEX_COMPANIES,
+      this.getMapping(),
+    );
+  }
 }

@@ -1,12 +1,19 @@
 import { PersonIndex } from '@modules/definitions';
+import { INDEX_PERSONS } from '@modules/search/constants';
+import { MappingValidatorService } from '@modules/search/services/mapping/mappingValidatorService';
 import { MappingInterface } from './mapping';
 import { MappingHelperService } from './mappingHelperService';
-import { Injectable } from '@nestjs/common';
+import { Injectable, OnApplicationBootstrap } from '@nestjs/common';
 import { MappingProperty } from '@elastic/elasticsearch/lib/api/types';
 
 @Injectable()
-export class PersonsMappingService implements MappingInterface<PersonIndex> {
-  constructor(private readonly mappingHelperService: MappingHelperService) {}
+export class PersonsMappingService
+  implements MappingInterface<PersonIndex>, OnApplicationBootstrap
+{
+  constructor(
+    private readonly mappingHelperService: MappingHelperService,
+    private readonly mappingValidatorService: MappingValidatorService,
+  ) {}
 
   getMapping = (): Record<keyof PersonIndex, MappingProperty> => ({
     cnp: this.mappingHelperService.keywordField,
@@ -44,4 +51,11 @@ export class PersonsMappingService implements MappingInterface<PersonIndex> {
       },
     },
   });
+
+  async onApplicationBootstrap() {
+    await this.mappingValidatorService.initIndex(
+      INDEX_PERSONS,
+      this.getMapping(),
+    );
+  }
 }

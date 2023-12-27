@@ -1,3 +1,4 @@
+import { EntityEventDispatcherService } from '@modules/entity-events';
 import { Args, ArgsType, Field, ID, Mutation, Resolver } from '@nestjs/graphql';
 import { UseGuards } from '@nestjs/common';
 import { CompaniesService } from '@modules/central/schema/company/services/companiesService';
@@ -14,13 +15,16 @@ class CreateCompanyArgs {
 
 @Resolver(() => Company)
 export class CreateCompany {
-  constructor(private readonly companiesService: CompaniesService) {}
+  constructor(
+    private readonly companiesService: CompaniesService,
+    private readonly entityEventDispatcherService: EntityEventDispatcherService,
+  ) {}
   @Mutation(() => ID)
   @UseGuards(FirebaseAuthGuard)
   async createCompany(
     @CurrentUser() { _id }: User,
     @Args() { data }: CreateCompanyArgs,
   ) {
-    return this.companiesService.create(data);
+    const company = await this.companiesService.create(data);
   }
 }

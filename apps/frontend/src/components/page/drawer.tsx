@@ -116,7 +116,7 @@ export const AppDrawer: React.FunctionComponent<AppDrawerProps> = ({ open, toggl
           </ListItemIcon>
           <ListItemText primary="Companii" />
         </ListItemButton>
-        <ListItemButton onClick={() => navigate(routes.properties)}>
+        <ListItemButton onClick={() => navigate(routes.properties)} disabled>
           <ListItemIcon>
             {pathname === routes.properties ? (
               <AddHomeWorkIcon color={'primary'} />
@@ -126,7 +126,7 @@ export const AppDrawer: React.FunctionComponent<AppDrawerProps> = ({ open, toggl
           </ListItemIcon>
           <ListItemText primary={'Bunuri si proprietati'} />
         </ListItemButton>
-        <ListItemButton onClick={() => navigate(routes.events)}>
+        <ListItemButton onClick={() => navigate(routes.events)} disabled>
           <ListItemIcon>
             {pathname === routes.events ? (
               <LocalHospitalIcon color={'primary'} />
@@ -136,7 +136,7 @@ export const AppDrawer: React.FunctionComponent<AppDrawerProps> = ({ open, toggl
           </ListItemIcon>
           <ListItemText primary="Evenimente" />
         </ListItemButton>
-        <ListItemButton onClick={() => navigate(routes.proceedings)}>
+        <ListItemButton onClick={() => navigate(routes.proceedings)} disabled>
           <ListItemIcon>
             {pathname === routes.proceedings ? (
               <GavelIcon color={'primary'} />
@@ -144,11 +144,11 @@ export const AppDrawer: React.FunctionComponent<AppDrawerProps> = ({ open, toggl
               <GavelOutlinedIcon />
             )}
           </ListItemIcon>
-          <ListItemText primary={'Procese juridice'} />
+          <ListItemText primary={'Procese in instanta'} />
         </ListItemButton>
         {hasPrivilegedAccess && (
           <>
-            <ListItemButton onClick={() => navigate(routes.users)}>
+            <ListItemButton onClick={() => navigate(routes.users)} disabled>
               <ListItemIcon>
                 {pathname === routes.users ? (
                   <ManageAccountsIcon color={'primary'} />
@@ -158,7 +158,7 @@ export const AppDrawer: React.FunctionComponent<AppDrawerProps> = ({ open, toggl
               </ListItemIcon>
               <ListItemText primary={'Utilizatori'} />
             </ListItemButton>
-            <ListItemButton onClick={() => navigate(routes.history)}>
+            <ListItemButton onClick={() => navigate(routes.history)} disabled>
               <ListItemIcon>
                 {pathname === routes.history ? (
                   <WorkHistoryIcon color={'primary'} />

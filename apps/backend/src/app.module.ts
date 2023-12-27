@@ -10,6 +10,7 @@ import { CentralModule } from '@modules/central';
 import { GraphModule } from '@modules/graph';
 import { IamModule } from '@modules/iam';
 import { SearchModule } from '@modules/search';
+import { EntityEventsModule } from './entity-events';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { SearchModule } from '@modules/search';
     SearchModule,
     CacheModule,
     FilesModule,
+    EntityEventsModule,
     ConfigModule.forRoot({
       isGlobal: true,
       ignoreEnvVars: true,
@@ -37,7 +39,7 @@ import { SearchModule } from '@modules/search';
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: async (configService: ConfigService) => {
-        const environment = configService.getOrThrow<string>(
+        const environment = configService.get<string>(
           'NODE_ENV',
           'development',
         );

@@ -1,0 +1,29 @@
+{
+  "name": "docker",
+  "targets": {
+    "up": {
+      "cache": false,
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "{projectRoot}",
+        "command": "docker compose up -d"
+      }
+    },
+    "stop": {
+      "cache": false,
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "{projectRoot}",
+        "command": "docker compose stop"
+      }
+    },
+    "down": {
+      "cache": false,
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "{projectRoot}",
+        "command": "docker compose down"
+      }
+    }
+  }
+}

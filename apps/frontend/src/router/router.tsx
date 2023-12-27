@@ -33,7 +33,7 @@ const privateRoutes: Record<string, ReactNode> = {
   [routes.companiesIntegrationTermene]: <TermeneIntegration />,
   [routes.newCompany]: <CreateCompany />,
   [routes.companyDetails]: <EditCompany />,
-  [routes.events]: <EventsList />,
+  /*  [routes.events]: <EventsList />,
   [routes.newEvent]: <CreateEvent />,
   [routes.eventDetails]: <EditEvent />,
   [routes.users]: <UsersList />,
@@ -41,13 +41,13 @@ const privateRoutes: Record<string, ReactNode> = {
   [routes.newProperty]: <CreateProperty />,
   [routes.propertyDetails]: <EditProperty />,
   [routes.proceedings]: <ProceedingsList />,
-  [routes.newProceeding]: <CreateProceeding />,
+  [routes.newProceeding]: <CreateProceeding />,*/
 }
 
 const publicRoutes: Record<string, ReactNode> = {
   [routes.login]: <LoginPage />,
   [routes.signup]: <SignupPage />,
-  [routes.resetPassword]: <Page>Pagina nu este disponibila momentan.</Page>
+  [routes.resetPassword]: <Page>Pagina nu este disponibila momentan.</Page>,
 }
 
 export const Router: React.FunctionComponent = () => (

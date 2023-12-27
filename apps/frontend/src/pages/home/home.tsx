@@ -78,6 +78,7 @@ export const Home: React.FunctionComponent = () => {
             </CardContent>
             <CardActions sx={{ p: 2 }}>
               <Button
+                disabled
                 variant={'contained'}
                 size={'small'}
                 onClick={() => navigate(routes.newProperty)}
@@ -85,6 +86,7 @@ export const Home: React.FunctionComponent = () => {
                 Creaza
               </Button>
               <Button
+                disabled
                 variant={'contained'}
                 size={'small'}
                 onClick={() => navigate(routes.properties)}
@@ -104,13 +106,19 @@ export const Home: React.FunctionComponent = () => {
             </CardContent>
             <CardActions sx={{ p: 2 }}>
               <Button
+                disabled
                 variant={'contained'}
                 size={'small'}
                 onClick={() => navigate(routes.newEvent)}
               >
                 Creaza
               </Button>
-              <Button variant={'contained'} size={'small'} onClick={() => navigate(routes.events)}>
+              <Button
+                variant={'contained'}
+                size={'small'}
+                onClick={() => navigate(routes.events)}
+                disabled
+              >
                 Cauta
               </Button>
             </CardActions>

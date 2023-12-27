@@ -47,7 +47,10 @@
       "@modules/files/*": ["src/files/*"],
 
       "@modules/browser": ["src/browser"],
-      "@modules/browser/*": ["src/browser/*"]
+      "@modules/browser/*": ["src/browser/*"],
+
+      "@modules/entity-events": ["src/entity-events"],
+      "@modules/entity-events/*": ["src/entity-events/*"]
     }
   },
   "include": ["src"],

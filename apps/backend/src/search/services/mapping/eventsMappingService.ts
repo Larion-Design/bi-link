@@ -1,12 +1,19 @@
 import { EventIndex } from '@modules/definitions';
+import { INDEX_EVENTS } from '@modules/search/constants';
+import { MappingValidatorService } from '@modules/search/services/mapping/mappingValidatorService';
 import { MappingInterface } from './mapping';
 import { MappingHelperService } from './mappingHelperService';
-import { Injectable } from '@nestjs/common';
+import { Injectable, OnApplicationBootstrap } from '@nestjs/common';
 import { MappingProperty } from '@elastic/elasticsearch/lib/api/types';
 
 @Injectable()
-export class EventsMappingService implements MappingInterface<EventIndex> {
-  constructor(private readonly mappingHelperService: MappingHelperService) {}
+export class EventsMappingService
+  implements MappingInterface<EventIndex>, OnApplicationBootstrap
+{
+  constructor(
+    private readonly mappingHelperService: MappingHelperService,
+    private readonly mappingValidatorService: MappingValidatorService,
+  ) {}
 
   getMapping = (): Record<keyof EventIndex, MappingProperty> => ({
     type: this.mappingHelperService.keywordField,
@@ -19,4 +26,11 @@ export class EventsMappingService implements MappingInterface<EventIndex> {
     files: this.mappingHelperService.files,
     customFields: this.mappingHelperService.customFields,
   });
+
+  async onApplicationBootstrap() {
+    await this.mappingValidatorService.initIndex(
+      INDEX_EVENTS,
+      this.getMapping(),
+    );
+  }
 }
