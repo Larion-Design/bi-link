@@ -22,10 +22,10 @@ export class PersistentCookiesService {
       return cookies;
     }
 
-    const cookiesString = await this.cacheService.get(key);
+    const cookiesString = await this.cacheService.get<CookiesList>(key);
 
     if (cookiesString) {
-      const cookies: CookiesList = Array.from(JSON.parse(cookiesString));
+      const cookies: CookiesList = Array.from(cookiesString);
 
       if (cookies?.length) {
         this.persistentCookiesMap.set(key, cookies);

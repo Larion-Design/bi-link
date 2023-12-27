@@ -4,7 +4,7 @@
   "version": "0.0.9",
   "author": "Alex Tudor",
   "scripts": {
-    "dev": "vite --host",
+    "start": "vite --host",
     "frontend": "vite",
     "native-app": "pnpm tauri dev",
     "build": "tsc && vite build",
@@ -14,8 +14,8 @@
     "preview": "vite preview --host",
     "test": "vitest",
     "coverage": "vitest run --coverage",
-    "lint": "eslint --ext=.tsx,.ts --quiet ./src",
-    "lint:fix": "eslint --ext=.tsx,.ts --quiet --fix ./src",
+    "lint": "eslint --ext=.tsx,.ts --cache --quiet ./src",
+    "lint:fix": "eslint --ext=.tsx,.ts --cache --quiet --fix ./src",
     "webstorm-integration": "vitest --watch --reporter=dot --reporter=json --outputFile=.vitest-result.json"
   },
   "dependencies": {

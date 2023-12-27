@@ -13,12 +13,9 @@ export class CacheService {
     return this.redis.store.client;
   }
 
-  async get(key: string) {
-    try {
-      return this.redis.get(key);
-    } catch (e) {
-      this.logger.error(e);
-    }
+  async get<Shape>(key: string) {
+    const data = await this.redis.get<string>(key);
+    return data ? (JSON.parse(data) as Shape) : null;
   }
 
   async getMultiple(keys: string[]) {
@@ -27,7 +24,7 @@ export class CacheService {
 
     data.forEach((value, index) => {
       if (value?.length) {
-        map[keys[index] as string] = value;
+        map[keys[index] as string] = JSON.parse(value);
       }
     });
     return map;
@@ -44,12 +41,8 @@ export class CacheService {
     return this.store.mset(data);
   }
 
-  async set(key: string, value: string, ttl = 0) {
-    try {
-      return this.store.setex(key, ttl, value);
-    } catch (e) {
-      this.logger.error(e);
-    }
+  async set(key: string, value: unknown, ttl = 0) {
+    await this.store.setex(key, ttl, JSON.stringify(value));
   }
 
   delete = async (keys: string[]) => this.store.del(keys);

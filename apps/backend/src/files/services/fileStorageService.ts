@@ -111,7 +111,7 @@ export class FileStorageService implements OnApplicationBootstrap {
   private cacheFileUrl = async (fileId: string, url: string, ttl: number) =>
     this.cacheService.set(this.getFileUrlCacheKey(fileId), url, ttl);
 
-  private getFileUrlCacheKey = (fileId: string) => `/files/download/${fileId}}`;
+  private getFileUrlCacheKey = (fileId: string) => `files:${fileId}}`;
 
   async onApplicationBootstrap() {
     await this.validateBucket();

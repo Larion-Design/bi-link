@@ -5,8 +5,8 @@
       "cache": true,
       "outputs": ["dist"]
     },
-    "dev": {
-      "cache": true,
+    "start": {
+      "cache": false,
       "persistent": false,
       "outputs": ["dist"]
     }
