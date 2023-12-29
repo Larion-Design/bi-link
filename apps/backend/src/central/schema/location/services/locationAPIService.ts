@@ -10,28 +10,23 @@ export class LocationAPIService {
 
   constructor(private readonly locationsService: LocationsService) {}
 
-  getLocationModel = async (location: LocationAPIInput) => {
-    try {
-      const locationModel = this.createLocationModel(location)
+  async getLocationModel(location: LocationAPIInput) {
+    const locationModel = this.createLocationModel(location)
 
-      if (locationModel) {
-        return this.locationsService.upsertLocation(locationModel)
-      }
-    } catch (e) {
-      this.logger.error(e)
+    if (locationModel) {
+      return this.locationsService.upsertLocation(locationModel)
     }
   }
 
   getLocationsModels = async (locationsInfo: LocationAPIInput[]) => {
-    try {
+    if (locationsInfo.length) {
       const locationsModels = locationsInfo
         .map(this.createLocationModel)
         .filter((locationModel) => !!locationModel)
 
-      return locationsModels.length ? this.locationsService.upsertLocations(locationsModels) : []
-    } catch (error) {
-      this.logger.error(error)
+      return this.locationsService.upsertLocations(locationsModels)
     }
+    return []
   }
 
   createLocationModel = (location: LocationAPIInput) => {

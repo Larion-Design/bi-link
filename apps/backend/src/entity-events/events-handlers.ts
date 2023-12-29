@@ -3,8 +3,8 @@ import { Company, Person } from 'defs'
 export const EVENT = {
   PERSON_CREATED: 'person.created',
   PERSON_UPDATED: 'person.updated',
-  COMPANY_CREATED: 'person.created',
-  COMPANY_UPDATED: 'person.updated',
+  COMPANY_CREATED: 'company.created',
+  COMPANY_UPDATED: 'company.updated',
 } as const
 
 export interface OnPersonCreated {

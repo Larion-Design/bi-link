@@ -20,22 +20,22 @@ export class GraphEventsHandlerService
     private readonly companyGraphService: CompanyGraphService,
   ) {}
 
-  @OnEvent(EVENT.PERSON_CREATED)
+  @OnEvent(EVENT.PERSON_CREATED, { suppressErrors: false })
   async onPersonCreated(person: Person) {
     await this.personGraphService.upsertPersonNode(person._id, person)
   }
 
-  @OnEvent(EVENT.PERSON_UPDATED)
+  @OnEvent(EVENT.PERSON_UPDATED, { suppressErrors: false })
   async onPersonUpdated(person: Person) {
     await this.personGraphService.upsertPersonNode(person._id, person)
   }
 
-  @OnEvent(EVENT.COMPANY_CREATED)
+  @OnEvent(EVENT.COMPANY_CREATED, { suppressErrors: false })
   async onCompanyCreated(company: Company) {
     await this.companyGraphService.upsertCompanyNode(company._id, company)
   }
 
-  @OnEvent(EVENT.COMPANY_UPDATED)
+  @OnEvent(EVENT.COMPANY_UPDATED, { suppressErrors: false })
   async onCompanyUpdated(company: Company) {
     await this.companyGraphService.upsertCompanyNode(company._id, company)
   }

@@ -8,7 +8,7 @@ export class LocationIndexerService {
     street,
     number,
     door,
-    coordinates: { lat, long: lon },
+    coordinates: { lat = 0, long = 0 },
     otherInfo,
     county,
     locality,
@@ -25,10 +25,7 @@ export class LocationIndexerService {
     zipCode,
     building,
     country,
-    coordinates: {
-      lat,
-      lon,
-    },
+    coordinates: [lat, long],
   })
 
   createLocationsIndexData = (locations: Location[]) => locations?.map(this.createLocationIndexData)

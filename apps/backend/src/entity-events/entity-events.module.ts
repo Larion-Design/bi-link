@@ -7,6 +7,7 @@ import { EntityEventDispatcherService } from './entity-event-dispatcher.service'
   imports: [
     EventEmitterModule.forRoot({
       ignoreErrors: true,
+      verboseMemoryLeak: true,
     }),
   ],
   providers: [EntityEventDispatcherService],

@@ -14,22 +14,18 @@ export class CompanyGraphService {
   ) {}
 
   upsertCompanyNode = async (companyId: string, companyDocument: Company) => {
-    try {
-      await this.graphService.upsertEntity<CompanyGraphNode>(
-        {
-          _id: companyId,
-          name: companyDocument.name.value,
-          cui: companyDocument.cui.value,
-          registrationNumber: companyDocument.registrationNumber.value,
-        },
-        'COMPANY',
-      )
+    await this.graphService.upsertEntity<CompanyGraphNode>(
+      {
+        _id: companyId,
+        name: companyDocument.name.value,
+        cui: companyDocument.cui.value,
+        registrationNumber: companyDocument.registrationNumber.value,
+      },
+      'COMPANY',
+    )
 
-      await this.upsertCompanyAssociates(companyDocument)
-      await this.upsertCompanyLocations(companyDocument)
-    } catch (e) {
-      this.logger.error(e)
-    }
+    await this.upsertCompanyAssociates(companyDocument)
+    await this.upsertCompanyLocations(companyDocument)
   }
 
   private upsertCompanyAssociates = async (companyDocument: Company) => {

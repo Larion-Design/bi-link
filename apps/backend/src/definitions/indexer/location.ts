@@ -21,7 +21,7 @@ export const locationIndexSchema = locationSchema
   })
   .merge(
     z.object({
-      coordinates: coordinatesIndexSchema,
+      coordinates: z.tuple([z.number().default(0), z.number().default(0)]),
     }),
   )
 

@@ -17,17 +17,13 @@ export class PersonsIndexerService {
   ) {}
 
   async indexPerson(personId: string, personDocument: Person) {
-    try {
-      const { _id } = await this.elasticsearchService.index<PersonIndex>({
-        index: this.index,
-        id: personId,
-        document: this.createIndexData(personDocument),
-      })
+    const { result } = await this.elasticsearchService.index<PersonIndex>({
+      index: this.index,
+      id: personId,
+      document: this.createIndexData(personDocument),
+    })
 
-      return _id === personId
-    } catch (error) {
-      this.logger.error(error)
-    }
+    return result === 'created'
   }
 
   private createIndexData = (person: Person): PersonIndex => ({

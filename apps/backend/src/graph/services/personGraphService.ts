@@ -10,10 +10,10 @@ export class PersonGraphService {
 
   constructor(
     private readonly graphService: GraphService,
-    private readonly locationGraphservice: LocationGraphService,
+    private readonly locationGraphService: LocationGraphService,
   ) {}
 
-  upsertPersonNode = async (personId: string, personDocument: Person) => {
+  async upsertPersonNode(personId: string, personDocument: Person) {
     await this.graphService.upsertEntity<PersonGraphNode>(
       {
         _id: personId,
@@ -21,8 +21,8 @@ export class PersonGraphService {
         lastName: personDocument.lastName.value,
         cnp: personDocument.cnp.value,
         documents: personDocument.documents.map(({ documentNumber }) => documentNumber),
-        _confirmed: personDocument.metadata.confirmed,
-        _trustworthiness: personDocument.metadata.trustworthiness.level,
+        _confirmed: personDocument.metadata?.confirmed ?? true,
+        _trustworthiness: personDocument.metadata?.trustworthiness.level ?? 0,
       },
       'PERSON',
     )
@@ -73,12 +73,12 @@ export class PersonGraphService {
       }
 
       if (locations.length) {
-        await this.locationGraphservice.upsertLocationNodes(locations)
+        await this.locationGraphService.upsertLocationNodes(locations)
 
         const personId = String(_id)
 
         if (homeAddress) {
-          await this.locationGraphservice.upsertLocationRelationship(
+          await this.locationGraphService.upsertLocationRelationship(
             homeAddress.locationId,
             personId,
             'LIVES_AT',
@@ -86,7 +86,7 @@ export class PersonGraphService {
         }
 
         if (birthPlace) {
-          await this.locationGraphservice.upsertLocationRelationship(
+          await this.locationGraphService.upsertLocationRelationship(
             birthPlace.locationId,
             personId,
             'BORN_IN',

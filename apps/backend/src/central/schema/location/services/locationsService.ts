@@ -90,7 +90,7 @@ export class LocationsService {
       lat ||
       long
     ) {
-      hash.write([
+      const formattedLocationString = [
         street,
         number,
         building,
@@ -102,9 +102,13 @@ export class LocationsService {
         otherInfo,
         lat,
         long,
-      ])
+      ]
+        .map((locationDetail) => String(locationDetail).trim())
+        .join(' ')
+
+      hash.update(formattedLocationString)
     } else if (otherInfo.length) {
-      hash.write(otherInfo)
+      hash.update(otherInfo)
     }
     return hash.digest('hex')
   }

@@ -29,23 +29,19 @@ export class PersonAPIService {
   ) {}
 
   async create(personInfo: PersonAPIInput) {
-    try {
-      const personModel = await this.createPersonDocument(personInfo)
-      const personDocument = await this.personsService.create(personModel)
+    const personModel = await this.createPersonDocument(personInfo)
+    const personDocument = await this.personsService.create(personModel)
 
-      if (personDocument) {
-        if (personInfo.relationships.length) {
-          await this.relationshipsService.addRelationshipToConnectedPersons(
-            personDocument,
-            personInfo.relationships,
-          )
-        }
-
-        this.entityEventDispatcherService.personCreated(personDocument)
-        return String(personDocument._id)
+    if (personDocument) {
+      if (personInfo.relationships.length) {
+        await this.relationshipsService.addRelationshipToConnectedPersons(
+          personDocument,
+          personInfo.relationships,
+        )
       }
-    } catch (error) {
-      this.logger.error(error)
+
+      this.entityEventDispatcherService.personCreated(personDocument)
+      return String(personDocument._id)
     }
   }
 
