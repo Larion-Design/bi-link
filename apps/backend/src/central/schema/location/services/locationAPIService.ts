@@ -46,6 +46,7 @@ export class LocationAPIService {
     locationModel.zipCode = location.zipCode
     locationModel.otherInfo = location.otherInfo
     locationModel.coordinates = coordinatesModel
+    locationModel.metadata = location.metadata
 
     if (this.locationsService.isValidLocation(locationModel)) {
       locationModel.locationId = this.locationsService.getLocationId(locationModel)

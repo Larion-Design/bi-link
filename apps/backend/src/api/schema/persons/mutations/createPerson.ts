@@ -3,7 +3,6 @@ import { Args, ArgsType, Field, ID, Mutation, Resolver } from '@nestjs/graphql'
 import { UseGuards } from '@nestjs/common'
 import { User } from 'defs'
 import { CurrentUser, FirebaseAuthGuard } from '@modules/iam'
-
 import { Person } from '../dto/person'
 import { PersonInput } from '../dto/personInput'
 

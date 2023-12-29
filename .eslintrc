@@ -1,7 +1,8 @@
 {
   "root": true,
   "parserOptions": {
-    "project": ["./tsconfig.json"]
+    "project": ["./tsconfig.json"],
+    "sourceType": "module"
   },
   "parser": "@typescript-eslint/parser",
   "plugins": ["@typescript-eslint", "simple-import-sort", "prettier"],

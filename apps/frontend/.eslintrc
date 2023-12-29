@@ -7,7 +7,9 @@
     "serviceworker": true
   },
   "parserOptions": {
-    "project": ["apps/frontend/tsconfig.eslint.json"]
+    "project": ["apps/frontend/tsconfig.eslint.json"],
+    "sourceType": "module",
+    "ecmaVersion": "latest"
   },
   "plugins": []
 }
