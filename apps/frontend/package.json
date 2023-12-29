@@ -1,6 +1,7 @@
 {
   "name": "frontend",
   "private": true,
+  "type": "module",
   "version": "0.0.9",
   "author": "Alex Tudor",
   "scripts": {
@@ -95,8 +96,8 @@
     "@types/uuid": "^8.3.4",
     "@typescript-eslint/eslint-plugin": "^5.62.0",
     "@typescript-eslint/parser": "^5.62.0",
-    "@vitejs/plugin-basic-ssl": "^1.0.1",
-    "@vitejs/plugin-react-swc": "^3.3.2",
+    "@vitejs/plugin-basic-ssl": "^1",
+    "@vitejs/plugin-react-swc": "^3",
     "c8": "^7.14.0",
     "default-values": "workspace:*",
     "defs": "workspace:*",
@@ -104,8 +105,8 @@
     "tools": "workspace:*",
     "tslib": "^2.6.2",
     "typescript": "^5.2.2",
-    "vite": "^4.4.9",
-    "vite-tsconfig-paths": "^4.2.0",
+    "vite": "^5",
+    "vite-tsconfig-paths": "^4",
     "vitest": "^0.16.0",
     "web-worker": "^1.2.0",
     "webpack": "^5.88.2"
