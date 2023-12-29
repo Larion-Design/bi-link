@@ -1,13 +1,5 @@
-import {
-  Args,
-  ArgsType,
-  Field,
-  ID,
-  Int,
-  Query,
-  Resolver,
-} from '@nestjs/graphql';
-import { UseGuards } from '@nestjs/common';
+import { Args, ArgsType, Field, ID, Int, Query, Resolver } from '@nestjs/graphql'
+import { UseGuards } from '@nestjs/common'
 import {
   Company,
   EntityInfo,
@@ -22,18 +14,18 @@ import {
   Property,
   Report,
   User,
-} from 'defs';
-import { GraphService } from '@modules/graph/services/graphService';
-import { CurrentUser, FirebaseAuthGuard } from '@modules/iam';
-import { EntitiesGraph } from '../dto/entitiesGraph';
+} from 'defs'
+import { GraphService } from '@modules/graph/services/graphService'
+import { CurrentUser, FirebaseAuthGuard } from '@modules/iam'
+import { EntitiesGraph } from '../dto/entitiesGraph'
 
 @ArgsType()
 class Params {
   @Field(() => ID)
-  readonly id: string;
+  readonly id: string
 
   @Field(() => Int)
-  readonly depth: number;
+  readonly depth: number
 }
 
 @Resolver(() => EntitiesGraph)
@@ -46,15 +38,15 @@ export class GetEntitiesGraph {
     @CurrentUser() { _id }: User,
     @Args() { id, depth }: Params,
   ): Promise<Graph | undefined> {
-    const relationships = await this.graphService.getEntitiesGraph(id, depth);
+    const relationships = await this.graphService.getEntitiesGraph(id, depth)
 
     if (relationships) {
-      const entities = await this.fetchEntitiesInfo(relationships, _id);
+      const entities = await this.fetchEntitiesInfo(relationships, _id)
 
       return {
         relationships,
         entities,
-      };
+      }
     }
   }
 
@@ -70,47 +62,47 @@ export class GetEntitiesGraph {
       locations: new Set<string>(),
       proceedings: new Set<string>(),
       reports: new Set<string>(),
-    };
+    }
 
     const registerEntity = ({ entityId, entityType }: EntityInfo) => {
       switch (entityType) {
         case 'PERSON': {
-          entities.persons.add(entityId);
-          break;
+          entities.persons.add(entityId)
+          break
         }
         case 'COMPANY': {
-          entities.companies.add(entityId);
-          break;
+          entities.companies.add(entityId)
+          break
         }
         case 'PROPERTY': {
-          entities.properties.add(entityId);
-          break;
+          entities.properties.add(entityId)
+          break
         }
         case 'EVENT': {
-          entities.events.add(entityId);
-          break;
+          entities.events.add(entityId)
+          break
         }
         case 'LOCATION': {
-          entities.locations.add(entityId);
-          break;
+          entities.locations.add(entityId)
+          break
         }
         case 'PROCEEDING': {
-          entities.proceedings.add(entityId);
-          break;
+          entities.proceedings.add(entityId)
+          break
         }
         case 'REPORT': {
-          entities.reports.add(entityId);
-          break;
+          entities.reports.add(entityId)
+          break
         }
       }
-    };
+    }
 
     Object.values(relationships).forEach((relationshipsSet) =>
       relationshipsSet.forEach(({ startNode, endNode }) => {
-        registerEntity(startNode);
-        registerEntity(endNode);
+        registerEntity(startNode)
+        registerEntity(endNode)
       }),
-    );
+    )
 
     return {
       persons: (await this.fetchEntities(
@@ -128,11 +120,7 @@ export class GetEntitiesGraph {
         'PROPERTY',
         userId,
       )) as Property[],
-      events: (await this.fetchEntities(
-        Array.from(entities.events),
-        'EVENT',
-        userId,
-      )) as Event[],
+      events: (await this.fetchEntities(Array.from(entities.events), 'EVENT', userId)) as Event[],
       proceedings: (await this.fetchEntities(
         Array.from(entities.proceedings),
         'PROCEEDING',
@@ -148,18 +136,14 @@ export class GetEntitiesGraph {
         'REPORT',
         userId,
       )) as Report[],
-    };
-  };
+    }
+  }
 
-  private fetchEntities = async (
-    entitiesIds: string[],
-    entityType: EntityType,
-    userId: string,
-  ) =>
+  private fetchEntities = async (entitiesIds: string[], entityType: EntityType, userId: string) =>
     entitiesIds.length
       ? (await this.ingressService.getEntities(entitiesIds, entityType, false, {
           type: 'USER',
           sourceId: userId,
         })) ?? []
-      : [];
+      : []
 }

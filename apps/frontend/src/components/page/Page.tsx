@@ -8,10 +8,7 @@ type Props = {
   title?: string
 }
 
-export const Page: React.FunctionComponent<PropsWithChildren<Props>> = ({
-  title,
-  children,
-}) => (
+export const Page: React.FunctionComponent<PropsWithChildren<Props>> = ({ title, children }) => (
   <ErrorBoundary showDialog={true}>
     <Box display={'flex'}>
       <Helmet title={title ? `BI Link | ${title}` : 'BI Link'} />

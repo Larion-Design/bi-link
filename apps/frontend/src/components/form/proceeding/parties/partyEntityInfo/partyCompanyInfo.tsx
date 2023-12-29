@@ -7,10 +7,7 @@ type Props = {
   cui: string
 }
 
-export const PartyCompanyInfo: React.FunctionComponent<Props> = ({
-  name,
-  cui,
-}) => (
+export const PartyCompanyInfo: React.FunctionComponent<Props> = ({ name, cui }) => (
   <Box>
     <Typography variant={'body2'}>{name}</Typography>
     <Typography variant={'caption'}>{cui}</Typography>

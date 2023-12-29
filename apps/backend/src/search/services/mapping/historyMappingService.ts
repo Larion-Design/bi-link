@@ -1,12 +1,8 @@
-import { ActivityEventIndex } from '@modules/definitions';
-import { Injectable } from '@nestjs/common';
-import { MappingProperty } from '@elastic/elasticsearch/lib/api/types';
-import { ActivityEvent } from 'defs';
-import {
-  MappingHelperService,
-  MappingInterface,
-  MappingValidatorService,
-} from './index';
+import { ActivityEventIndex } from '@modules/definitions'
+import { Injectable } from '@nestjs/common'
+import { MappingProperty } from '@elastic/elasticsearch/lib/api/types'
+import { ActivityEvent } from 'defs'
+import { MappingHelperService, MappingInterface, MappingValidatorService } from './index'
 
 @Injectable()
 export class HistoryMappingService implements MappingInterface<ActivityEvent> {
@@ -32,5 +28,5 @@ export class HistoryMappingService implements MappingInterface<ActivityEvent> {
         sourceId: this.mappingHelperService.keywordField,
       },
     },
-  });
+  })
 }

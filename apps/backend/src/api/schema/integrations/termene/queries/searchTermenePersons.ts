@@ -1,12 +1,12 @@
-import { UseGuards } from '@nestjs/common';
-import { Args, ArgsType, Field, Query, Resolver } from '@nestjs/graphql';
-import { FirebaseAuthGuard } from '@modules/iam';
-import { OSINTPerson } from '../../shared/dto/osintPerson';
+import { UseGuards } from '@nestjs/common'
+import { Args, ArgsType, Field, Query, Resolver } from '@nestjs/graphql'
+import { FirebaseAuthGuard } from '@modules/iam'
+import { OSINTPerson } from '../../shared/dto/osintPerson'
 
 @ArgsType()
 class Params {
   @Field()
-  name: string;
+  name: string
 }
 
 @Resolver(() => OSINTPerson)

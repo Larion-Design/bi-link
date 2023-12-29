@@ -1,13 +1,10 @@
-import { balanceSheetIndex } from 'src/definitions/indexer/company/balanceSheet';
-import { z } from 'zod';
-import { companySchema } from 'defs';
-import {
-  connectedCompanyIndexSchema,
-  connectedPersonIndexSchema,
-} from './connectedEntity';
-import { locationIndexSchema } from './location';
-import { embeddedFileIndexSchema } from './file';
-import { customFieldIndexSchema } from './customField';
+import { balanceSheetIndex } from 'src/definitions/indexer/company/balanceSheet'
+import { z } from 'zod'
+import { companySchema } from 'defs'
+import { connectedCompanyIndexSchema, connectedPersonIndexSchema } from './connectedEntity'
+import { locationIndexSchema } from './location'
+import { embeddedFileIndexSchema } from './file'
+import { customFieldIndexSchema } from './customField'
 
 export const companyIndexSchema = z.object({
   name: companySchema.shape.name.shape.value,
@@ -22,13 +19,13 @@ export const companyIndexSchema = z.object({
   associatedPersons: connectedPersonIndexSchema.array(),
   balanceSheets: balanceSheetIndex.array(),
   activityCodes: customFieldIndexSchema.array(),
-});
+})
 
 export const companySearchIndexSchema = companyIndexSchema.pick({
   name: true,
   cui: true,
   registrationNumber: true,
-});
+})
 
-export type CompanyIndex = z.infer<typeof companyIndexSchema>;
-export type CompanySearchIndex = z.infer<typeof companySearchIndexSchema>;
+export type CompanyIndex = z.infer<typeof companyIndexSchema>
+export type CompanySearchIndex = z.infer<typeof companySearchIndexSchema>

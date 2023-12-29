@@ -1,16 +1,16 @@
-import { GraphEventsHandlerService } from '@modules/graph/services/graph-events-handlers.service';
-import { Global, Module, Provider } from '@nestjs/common';
-import { ConfigModule, ConfigService } from '@nestjs/config';
-import { Neo4jModule, Neo4jScheme } from 'nest-neo4j/dist';
-import { Neo4jConfig } from 'nest-neo4j/src/interfaces/neo4j-config.interface';
-import { CompanyGraphService } from './services/companyGraphService';
-import { EventGraphService } from './services/eventGraphService';
-import { GraphService } from './services/graphService';
-import { LocationGraphService } from './services/locationGraphService';
-import { PersonGraphService } from './services/personGraphService';
-import { ProceedingGraphService } from './services/proceedingGraphService';
-import { PropertyGraphService } from './services/propertyGraphService';
-import { ReportGraphService } from './services/reportGraphService';
+import { GraphEventsHandlerService } from '@modules/graph/services/graph-events-handlers.service'
+import { Global, Module, Provider } from '@nestjs/common'
+import { ConfigModule, ConfigService } from '@nestjs/config'
+import { Neo4jModule, Neo4jScheme } from 'nest-neo4j/dist'
+import { Neo4jConfig } from 'nest-neo4j/src/interfaces/neo4j-config.interface'
+import { CompanyGraphService } from './services/companyGraphService'
+import { EventGraphService } from './services/eventGraphService'
+import { GraphService } from './services/graphService'
+import { LocationGraphService } from './services/locationGraphService'
+import { PersonGraphService } from './services/personGraphService'
+import { ProceedingGraphService } from './services/proceedingGraphService'
+import { PropertyGraphService } from './services/propertyGraphService'
+import { ReportGraphService } from './services/reportGraphService'
 
 const providers: Provider[] = [
   GraphService,
@@ -23,7 +23,7 @@ const providers: Provider[] = [
   ReportGraphService,
 
   GraphEventsHandlerService,
-];
+]
 
 @Global()
 @Module({

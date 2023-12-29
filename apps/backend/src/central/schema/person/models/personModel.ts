@@ -40,13 +40,29 @@ export class PersonModel implements Person {
   @Prop({ type: OptionalDateValueWithMetadataSchema })
   birthdate: OptionalDateValueWithMetadataModel
 
-  @Prop({ type: Types.ObjectId, ref: LocationModel.name, default: null, index: true, sparse: true })
+  @Prop({
+    type: Types.ObjectId,
+    ref: LocationModel.name,
+    default: null,
+    index: true,
+    sparse: true,
+  })
   birthPlace: LocationDocument | null
 
-  @Prop({ type: Types.ObjectId, ref: LocationModel.name, default: null, index: true, sparse: true })
+  @Prop({
+    type: Types.ObjectId,
+    ref: LocationModel.name,
+    default: null,
+    index: true,
+    sparse: true,
+  })
   homeAddress: LocationDocument | null
 
-  @Prop({ type: [{ type: Types.ObjectId, ref: FileModel.name }], default: [], index: true })
+  @Prop({
+    type: [{ type: Types.ObjectId, ref: FileModel.name }],
+    default: [],
+    index: true,
+  })
   images: FileModel[]
 
   @Prop({ type: [IdDocumentSchema], default: [] })
@@ -61,7 +77,11 @@ export class PersonModel implements Person {
   @Prop({ type: [EducationSchema], default: [] })
   education: EducationModel[]
 
-  @Prop({ type: [{ type: Types.ObjectId, ref: FileModel.name }], index: true, default: [] })
+  @Prop({
+    type: [{ type: Types.ObjectId, ref: FileModel.name }],
+    index: true,
+    default: [],
+  })
   files: FileModel[]
 
   @Prop({ type: [CustomFieldSchema], default: [] })

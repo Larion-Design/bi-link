@@ -13,7 +13,8 @@ export class RelationshipsAPIService {
   constructor(
     @InjectModel(RelationshipModel.name)
     private readonly relationshipModel: Model<RelationshipDocument>,
-    @InjectModel(PersonModel.name) private readonly personModel: Model<PersonDocument>,
+    @InjectModel(PersonModel.name)
+    private readonly personModel: Model<PersonDocument>,
     private readonly personsService: PersonsService,
   ) {}
 

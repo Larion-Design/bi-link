@@ -1,7 +1,7 @@
 import { z } from 'zod'
 import { graphCompanyAssociateSchema } from './companyAssociateRelationship'
 import { graphEventParticipantSchema } from './eventParticipantRelationship'
-import { nodesRelationshipSchema } from './graphBaseRelationship';
+import { nodesRelationshipSchema } from './graphBaseRelationship'
 import { graphPersonalRelationship } from './personalRelationship'
 import { graphProceedingEntitySchema } from './proceedingEntityRelationship'
 import { graphPropertyOwnerSchema } from './propertyOwnerRelationship'

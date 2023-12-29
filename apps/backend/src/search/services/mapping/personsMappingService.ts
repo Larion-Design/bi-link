@@ -1,10 +1,10 @@
-import { PersonIndex } from '@modules/definitions';
-import { INDEX_PERSONS } from '@modules/search/constants';
-import { MappingValidatorService } from '@modules/search/services/mapping/mappingValidatorService';
-import { MappingInterface } from './mapping';
-import { MappingHelperService } from './mappingHelperService';
-import { Injectable, OnApplicationBootstrap } from '@nestjs/common';
-import { MappingProperty } from '@elastic/elasticsearch/lib/api/types';
+import { PersonIndex } from '@modules/definitions'
+import { INDEX_PERSONS } from '@modules/search/constants'
+import { MappingValidatorService } from '@modules/search/services/mapping/mappingValidatorService'
+import { MappingInterface } from './mapping'
+import { MappingHelperService } from './mappingHelperService'
+import { Injectable, OnApplicationBootstrap } from '@nestjs/common'
+import { MappingProperty } from '@elastic/elasticsearch/lib/api/types'
 
 @Injectable()
 export class PersonsMappingService
@@ -50,12 +50,9 @@ export class PersonsMappingService
         period: this.mappingHelperService.yearRange,
       },
     },
-  });
+  })
 
   async onApplicationBootstrap() {
-    await this.mappingValidatorService.initIndex(
-      INDEX_PERSONS,
-      this.getMapping(),
-    );
+    await this.mappingValidatorService.initIndex(INDEX_PERSONS, this.getMapping())
   }
 }

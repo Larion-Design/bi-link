@@ -30,7 +30,10 @@ export const propertyIndexSchema = propertySchema.pick({ name: true, type: true 
   }),
 )
 
-export const propertySearchIndexSchema = propertyIndexSchema.pick({ name: true, type: true })
+export const propertySearchIndexSchema = propertyIndexSchema.pick({
+  name: true,
+  type: true,
+})
 
 export type VehicleInfoIndex = z.infer<typeof vehicleIndexSchema>
 export type RealEstateInfoIndex = z.infer<typeof realEstateIndex>

@@ -1,12 +1,12 @@
-import { Args, ArgsType, Field, ID, Query, Resolver } from '@nestjs/graphql';
-import { GraphService } from '@modules/graph/services/graphService';
-import { Property } from '../dto/property';
-import { PropertyListRecord } from '../dto/propertyListRecord';
+import { Args, ArgsType, Field, ID, Query, Resolver } from '@nestjs/graphql'
+import { GraphService } from '@modules/graph/services/graphService'
+import { Property } from '../dto/property'
+import { PropertyListRecord } from '../dto/propertyListRecord'
 
 @ArgsType()
 class Params {
   @Field(() => ID)
-  personId: string;
+  personId: string
 }
 
 @Resolver(() => Property)
@@ -15,7 +15,7 @@ export class GetPropertiesByPerson {
 
   @Query(() => [PropertyListRecord])
   async getPropertiesByPerson(@Args() { personId }: Params) {
-    const graph = await this.graphService.getEntitiesGraph(personId, 1);
-    return [];
+    const graph = await this.graphService.getEntitiesGraph(personId, 1)
+    return []
   }
 }

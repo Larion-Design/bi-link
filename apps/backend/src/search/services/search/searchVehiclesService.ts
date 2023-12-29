@@ -1,14 +1,14 @@
-import { PropertySearchIndex } from '@modules/definitions';
-import { Injectable, Logger } from '@nestjs/common';
-import { ElasticsearchService } from '@nestjs/elasticsearch';
-import { INDEX_PROPERTIES } from '../../constants';
-import { QueryDslQueryContainer } from '@elastic/elasticsearch/lib/api/types';
-import { PropertyListRecord } from 'defs';
+import { PropertySearchIndex } from '@modules/definitions'
+import { Injectable, Logger } from '@nestjs/common'
+import { ElasticsearchService } from '@nestjs/elasticsearch'
+import { INDEX_PROPERTIES } from '../../constants'
+import { QueryDslQueryContainer } from '@elastic/elasticsearch/lib/api/types'
+import { PropertyListRecord } from 'defs'
 
 @Injectable()
 export class SearchVehiclesService {
-  private readonly index = INDEX_PROPERTIES;
-  private readonly logger = new Logger(SearchVehiclesService.name);
+  private readonly index = INDEX_PROPERTIES
+  private readonly logger = new Logger(SearchVehiclesService.name)
 
   constructor(private readonly elasticsearchService: ElasticsearchService) {}
 
@@ -22,19 +22,18 @@ export class SearchVehiclesService {
         query: {
           term: { 'vehicleInfo.vin': vin },
         },
-      });
-      return !!hits.map(({ _id }) => _id).filter((_id) => _id !== propertyId)
-        .length;
+      })
+      return !!hits.map(({ _id }) => _id).filter((_id) => _id !== propertyId).length
     } catch (error) {
-      this.logger.error(error);
+      this.logger.error(error)
     }
-  };
+  }
 
   getMakers = async (model?: string): Promise<string[] | undefined> => {
     try {
       const query: QueryDslQueryContainer = model
         ? { bool: { filter: { term: { model } } } }
-        : { match_all: {} };
+        : { match_all: {} }
 
       const { aggregations } = await this.elasticsearchService.search<
         unknown,
@@ -50,18 +49,18 @@ export class SearchVehiclesService {
             },
           },
         },
-      });
-      return aggregations?.makers?.buckets?.map(({ key }) => key).sort() ?? [];
+      })
+      return aggregations?.makers?.buckets?.map(({ key }) => key).sort() ?? []
     } catch (error) {
-      this.logger.error(error);
+      this.logger.error(error)
     }
-  };
+  }
 
   getModels = async (maker?: string): Promise<string[] | undefined> => {
     try {
       const query: QueryDslQueryContainer = maker
         ? { bool: { filter: { term: { maker } } } }
-        : { match_all: {} };
+        : { match_all: {} }
 
       const { aggregations } = await this.elasticsearchService.search<
         unknown,
@@ -77,18 +76,15 @@ export class SearchVehiclesService {
             },
           },
         },
-      });
-      return aggregations?.models?.buckets?.map(({ key }) => key).sort() ?? [];
+      })
+      return aggregations?.models?.buckets?.map(({ key }) => key).sort() ?? []
     } catch (error) {
-      this.logger.error(error);
+      this.logger.error(error)
     }
-  };
+  }
 
-  protected transformRecord = (
-    _id: string,
-    record: PropertySearchIndex,
-  ): PropertyListRecord => ({
+  protected transformRecord = (_id: string, record: PropertySearchIndex): PropertyListRecord => ({
     _id,
     ...record,
-  });
+  })
 }

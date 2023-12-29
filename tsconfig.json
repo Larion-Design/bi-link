@@ -19,16 +19,6 @@
     "importHelpers": true,
     "baseUrl": "./"
   },
-  "include": [
-    "apps",
-    "packages",
-    "playwright.config.ts"
-  ],
-  "exclude": [
-    "node_modules",
-    "dist",
-    "build",
-    ".turbo",
-    "out"
-  ]
+  "include": ["apps", "packages", "playwright.config.ts"],
+  "exclude": ["node_modules", "dist", "build", ".turbo", "out"]
 }

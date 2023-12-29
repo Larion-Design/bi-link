@@ -71,7 +71,11 @@ export class ReportModel implements Report {
   @Prop({ type: [ReportSectionSchema], default: [] })
   sections: ReportSectionModel[]
 
-  @Prop({ type: [{ type: Types.ObjectId, ref: FileModel.name }], default: [], index: true })
+  @Prop({
+    type: [{ type: Types.ObjectId, ref: FileModel.name }],
+    default: [],
+    index: true,
+  })
   oldReportFiles: FileModel[]
 
   @Prop({ type: [DataRefSchema], default: [] })

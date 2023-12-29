@@ -14,13 +14,11 @@ type Props = {
   title?: string
 }
 
-export const DashboardPage: React.FunctionComponent<
-  PropsWithChildren<Props>
-> = ({ children, title }) => {
-  const [drawerVisibility, setDrawerVisibility] = useLocalStorage<boolean>(
-    'drawerVisibility',
-    true,
-  )
+export const DashboardPage: React.FunctionComponent<PropsWithChildren<Props>> = ({
+  children,
+  title,
+}) => {
+  const [drawerVisibility, setDrawerVisibility] = useLocalStorage<boolean>('drawerVisibility', true)
 
   const toggleDrawer = () => setDrawerVisibility(!drawerVisibility)
 
@@ -31,8 +29,7 @@ export const DashboardPage: React.FunctionComponent<
       <Box
         component={'main'}
         sx={{
-          backgroundColor: ({ palette: { grey, mode } }) =>
-            grey[mode === 'light' ? 100 : 900],
+          backgroundColor: ({ palette: { grey, mode } }) => grey[mode === 'light' ? 100 : 900],
           flexGrow: 1,
           height: '100vh',
           overflow: 'auto',

@@ -18,13 +18,25 @@ export class PartyModel implements EventParticipant {
   @Prop()
   description: string
 
-  @Prop({ type: [{ type: Types.ObjectId, ref: PersonModel.name }], index: true, sparse: true })
+  @Prop({
+    type: [{ type: Types.ObjectId, ref: PersonModel.name }],
+    index: true,
+    sparse: true,
+  })
   persons: PersonDocument[]
 
-  @Prop({ type: [{ type: Types.ObjectId, ref: CompanyModel.name }], index: true, sparse: true })
+  @Prop({
+    type: [{ type: Types.ObjectId, ref: CompanyModel.name }],
+    index: true,
+    sparse: true,
+  })
   companies: CompanyDocument[]
 
-  @Prop({ type: [{ type: Types.ObjectId, ref: PropertyModel.name }], index: true, sparse: true })
+  @Prop({
+    type: [{ type: Types.ObjectId, ref: PropertyModel.name }],
+    index: true,
+    sparse: true,
+  })
   properties: PropertyDocument[]
 
   @Prop({ type: [CustomFieldSchema] })

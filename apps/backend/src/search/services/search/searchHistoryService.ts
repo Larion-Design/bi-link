@@ -1,12 +1,12 @@
-import { Injectable, Logger } from '@nestjs/common';
-import { ElasticsearchService } from '@nestjs/elasticsearch';
-import { INDEX_HISTORY } from '../../constants';
-import { ActivityEventIndex } from '@modules/definitions';
+import { Injectable, Logger } from '@nestjs/common'
+import { ElasticsearchService } from '@nestjs/elasticsearch'
+import { INDEX_HISTORY } from '../../constants'
+import { ActivityEventIndex } from '@modules/definitions'
 
 @Injectable()
 export class SearchHistoryService {
-  private readonly index = INDEX_HISTORY;
-  private readonly logger = new Logger(SearchHistoryService.name);
+  private readonly index = INDEX_HISTORY
+  private readonly logger = new Logger(SearchHistoryService.name)
 
   constructor(private readonly elasticsearchService: ElasticsearchService) {}
 
@@ -25,15 +25,15 @@ export class SearchHistoryService {
         query: {
           match_all: {},
         },
-      });
-      return hits.map(({ _id, _source }) => this.transformRecord(_id, _source));
+      })
+      return hits.map(({ _id, _source }) => this.transformRecord(_id, _source))
     } catch (error) {
-      this.logger.error(error);
+      this.logger.error(error)
     }
-  };
+  }
 
   private transformRecord = (_id: string, eventInfo: ActivityEventIndex) => ({
     _id,
     ...eventInfo,
-  });
+  })
 }

@@ -1,16 +1,12 @@
-import { Global, Module, Provider } from '@nestjs/common';
-import { ConfigModule, ConfigService } from '@nestjs/config';
-import { MinioModule } from 'nestjs-minio-client';
-import { CacheModule } from '../cache';
-import { FileImporterService } from './services/fileImporterService';
-import { FileStorageService } from './services/fileStorageService';
-import { TextExtractorService } from './services/textExtractorService';
+import { Global, Module, Provider } from '@nestjs/common'
+import { ConfigModule, ConfigService } from '@nestjs/config'
+import { MinioModule } from 'nestjs-minio-client'
+import { CacheModule } from '../cache'
+import { FileImporterService } from './services/fileImporterService'
+import { FileStorageService } from './services/fileStorageService'
+import { TextExtractorService } from './services/textExtractorService'
 
-const providers: Provider[] = [
-  FileImporterService,
-  FileStorageService,
-  TextExtractorService,
-];
+const providers: Provider[] = [FileImporterService, FileStorageService, TextExtractorService]
 
 @Global()
 @Module({

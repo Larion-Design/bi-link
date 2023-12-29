@@ -10,10 +10,20 @@ export class ProceedingEntityModel implements ProceedingEntityInvolved {
   @Prop({ type: MetadataSchema })
   metadata: MetadataModel
 
-  @Prop({ type: Types.ObjectId, ref: PersonModel.name, isRequired: false, index: true })
+  @Prop({
+    type: Types.ObjectId,
+    ref: PersonModel.name,
+    isRequired: false,
+    index: true,
+  })
   person?: PersonDocument
 
-  @Prop({ type: Types.ObjectId, ref: CompanyModel.name, isRequired: false, index: true })
+  @Prop({
+    type: Types.ObjectId,
+    ref: CompanyModel.name,
+    isRequired: false,
+    index: true,
+  })
   company?: CompanyDocument
 
   @Prop()

@@ -1,10 +1,10 @@
-import { INDEX_PROCEEDINGS } from '@modules/search/constants';
-import { MappingValidatorService } from '@modules/search/services/mapping/mappingValidatorService';
-import { Injectable, OnApplicationBootstrap } from '@nestjs/common';
-import { ProceedingIndex } from '@modules/definitions';
-import { MappingProperty } from '@elastic/elasticsearch/lib/api/types';
-import { MappingInterface } from './mapping';
-import { MappingHelperService } from './mappingHelperService';
+import { INDEX_PROCEEDINGS } from '@modules/search/constants'
+import { MappingValidatorService } from '@modules/search/services/mapping/mappingValidatorService'
+import { Injectable, OnApplicationBootstrap } from '@nestjs/common'
+import { ProceedingIndex } from '@modules/definitions'
+import { MappingProperty } from '@elastic/elasticsearch/lib/api/types'
+import { MappingInterface } from './mapping'
+import { MappingHelperService } from './mappingHelperService'
 
 @Injectable()
 export class ProceedingsMappingService
@@ -26,12 +26,9 @@ export class ProceedingsMappingService
     companies: this.mappingHelperService.connectedCompany,
     customFields: this.mappingHelperService.customFields,
     files: this.mappingHelperService.files,
-  });
+  })
 
   async onApplicationBootstrap() {
-    await this.mappingValidatorService.initIndex(
-      INDEX_PROCEEDINGS,
-      this.getMapping(),
-    );
+    await this.mappingValidatorService.initIndex(INDEX_PROCEEDINGS, this.getMapping())
   }
 }

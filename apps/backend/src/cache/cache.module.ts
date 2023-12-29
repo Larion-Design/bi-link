@@ -1,8 +1,8 @@
-import { CacheModule as NestCacheModule } from '@nestjs/cache-manager/dist/cache.module';
-import { Global, Module } from '@nestjs/common';
-import { ConfigModule, ConfigService } from '@nestjs/config';
-import { redisStore } from 'cache-manager-ioredis-yet';
-import { CacheService } from './cache.service';
+import { CacheModule as NestCacheModule } from '@nestjs/cache-manager/dist/cache.module'
+import { Global, Module } from '@nestjs/common'
+import { ConfigModule, ConfigService } from '@nestjs/config'
+import { redisStore } from 'cache-manager-ioredis-yet'
+import { CacheService } from './cache.service'
 
 @Global()
 @Module({

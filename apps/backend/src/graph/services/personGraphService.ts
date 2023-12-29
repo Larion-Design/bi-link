@@ -1,15 +1,12 @@
-import { Injectable, Logger } from '@nestjs/common';
-import { Location, Person } from 'defs';
-import {
-  PersonalRelationshipGraph,
-  PersonGraphNode,
-} from '@modules/definitions';
-import { GraphService } from './graphService';
-import { LocationGraphService } from './locationGraphService';
+import { Injectable, Logger } from '@nestjs/common'
+import { Location, Person } from 'defs'
+import { PersonalRelationshipGraph, PersonGraphNode } from '@modules/definitions'
+import { GraphService } from './graphService'
+import { LocationGraphService } from './locationGraphService'
 
 @Injectable()
 export class PersonGraphService {
-  private readonly logger = new Logger(PersonGraphService.name);
+  private readonly logger = new Logger(PersonGraphService.name)
 
   constructor(
     private readonly graphService: GraphService,
@@ -23,22 +20,20 @@ export class PersonGraphService {
         firstName: personDocument.firstName.value,
         lastName: personDocument.lastName.value,
         cnp: personDocument.cnp.value,
-        documents: personDocument.documents.map(
-          ({ documentNumber }) => documentNumber,
-        ),
+        documents: personDocument.documents.map(({ documentNumber }) => documentNumber),
         _confirmed: personDocument.metadata.confirmed,
         _trustworthiness: personDocument.metadata.trustworthiness.level,
       },
       'PERSON',
-    );
+    )
 
-    await this.upsertPersonRelationships(personDocument);
-    await this.upsertPersonLocations(personDocument);
-  };
+    await this.upsertPersonRelationships(personDocument)
+    await this.upsertPersonLocations(personDocument)
+  }
 
   private upsertPersonRelationships = async (personDocument: Person) => {
     try {
-      const map = new Map<string, PersonalRelationshipGraph>();
+      const map = new Map<string, PersonalRelationshipGraph>()
 
       personDocument.relationships.forEach(
         ({
@@ -56,46 +51,38 @@ export class PersonGraphService {
             _confirmed: confirmed,
             _trustworthiness: level,
           }),
-      );
+      )
 
       if (map.size) {
-        await this.graphService.replaceRelationships(
-          String(personDocument._id),
-          map,
-          'RELATED',
-        );
+        await this.graphService.replaceRelationships(String(personDocument._id), map, 'RELATED')
       }
     } catch (e) {
-      this.logger.error(e);
+      this.logger.error(e)
     }
-  };
+  }
 
-  private upsertPersonLocations = async ({
-    _id,
-    birthPlace,
-    homeAddress,
-  }: Person) => {
+  private upsertPersonLocations = async ({ _id, birthPlace, homeAddress }: Person) => {
     try {
-      const locations: Location[] = [];
+      const locations: Location[] = []
 
       if (homeAddress) {
-        locations.push(homeAddress);
+        locations.push(homeAddress)
       }
       if (birthPlace) {
-        locations.push(birthPlace);
+        locations.push(birthPlace)
       }
 
       if (locations.length) {
-        await this.locationGraphservice.upsertLocationNodes(locations);
+        await this.locationGraphservice.upsertLocationNodes(locations)
 
-        const personId = String(_id);
+        const personId = String(_id)
 
         if (homeAddress) {
           await this.locationGraphservice.upsertLocationRelationship(
             homeAddress.locationId,
             personId,
             'LIVES_AT',
-          );
+          )
         }
 
         if (birthPlace) {
@@ -103,11 +90,11 @@ export class PersonGraphService {
             birthPlace.locationId,
             personId,
             'BORN_IN',
-          );
+          )
         }
       }
     } catch (e) {
-      this.logger.error(e);
+      this.logger.error(e)
     }
-  };
+  }
 }

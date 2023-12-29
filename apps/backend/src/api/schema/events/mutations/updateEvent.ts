@@ -1,18 +1,18 @@
-import { Args, ArgsType, Field, ID, Mutation, Resolver } from '@nestjs/graphql';
-import { UseGuards } from '@nestjs/common';
-import { EventsService } from '@modules/central/schema/event/services/eventsService';
-import { EntityInfo, UpdateSource, User } from 'defs';
-import { CurrentUser, FirebaseAuthGuard } from '@modules/iam';
-import { EventInput } from '../dto/eventInput';
-import { Event } from '../dto/event';
+import { Args, ArgsType, Field, ID, Mutation, Resolver } from '@nestjs/graphql'
+import { UseGuards } from '@nestjs/common'
+import { EventsService } from '@modules/central/schema/event/services/eventsService'
+import { EntityInfo, UpdateSource, User } from 'defs'
+import { CurrentUser, FirebaseAuthGuard } from '@modules/iam'
+import { EventInput } from '../dto/eventInput'
+import { Event } from '../dto/event'
 
 @ArgsType()
 class Params {
   @Field(() => ID)
-  eventId: string;
+  eventId: string
 
   @Field(() => EventInput)
-  data: EventInput;
+  data: EventInput
 }
 
 @Resolver(() => Event)
@@ -21,20 +21,17 @@ export class UpdateEvent {
 
   @Mutation(() => Boolean)
   @UseGuards(FirebaseAuthGuard)
-  async updateEvent(
-    @CurrentUser() { _id, role }: User,
-    @Args() { eventId, data }: Params,
-  ) {
+  async updateEvent(@CurrentUser() { _id, role }: User, @Args() { eventId, data }: Params) {
     const source: UpdateSource = {
       sourceId: _id,
       type: 'USER',
-    };
+    }
 
     const entityInfo: EntityInfo = {
       entityId: eventId,
       entityType: 'EVENT',
-    };
+    }
 
-    return this.ingressService.update(eventId, data);
+    return this.ingressService.update(eventId, data)
   }
 }

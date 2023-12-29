@@ -13,13 +13,20 @@ import { PartyDocument, PartyModel } from '../models/partyModel'
 export class EventsService {
   private readonly logger = new Logger(EventsService.name)
   constructor(
-    @InjectModel(EventModel.name) private readonly eventModel: Model<EventDocument>,
-    @InjectModel(PartyModel.name) private readonly partyModel: Model<PartyDocument>,
-    @InjectModel(PersonModel.name) private readonly personModel: Model<PersonDocument>,
-    @InjectModel(PropertyModel.name) private readonly propertyModel: Model<PropertyDocument>,
-    @InjectModel(CompanyModel.name) private readonly companyModel: Model<CompanyDocument>,
-    @InjectModel(FileModel.name) private readonly fileModel: Model<FileDocument>,
-    @InjectModel(LocationModel.name) private readonly locationModel: Model<LocationDocument>,
+    @InjectModel(EventModel.name)
+    private readonly eventModel: Model<EventDocument>,
+    @InjectModel(PartyModel.name)
+    private readonly partyModel: Model<PartyDocument>,
+    @InjectModel(PersonModel.name)
+    private readonly personModel: Model<PersonDocument>,
+    @InjectModel(PropertyModel.name)
+    private readonly propertyModel: Model<PropertyDocument>,
+    @InjectModel(CompanyModel.name)
+    private readonly companyModel: Model<CompanyDocument>,
+    @InjectModel(FileModel.name)
+    private readonly fileModel: Model<FileDocument>,
+    @InjectModel(LocationModel.name)
+    private readonly locationModel: Model<LocationDocument>,
   ) {}
 
   create = async (eventModel: EventModel) => this.eventModel.create(eventModel)

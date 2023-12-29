@@ -1,17 +1,14 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
-import { PassportStrategy } from '@nestjs/passport';
-import { ExtractJwt, Strategy } from 'passport-jwt';
-import { AuthService } from '@modules/iam';
-import { passportJwtSecret } from 'jwks-rsa';
-import { ConfigService } from '@nestjs/config';
-import { DecodedIdToken } from 'firebase-admin/lib/auth';
-import { User, UserRole } from 'defs';
+import { Injectable, UnauthorizedException } from '@nestjs/common'
+import { PassportStrategy } from '@nestjs/passport'
+import { ExtractJwt, Strategy } from 'passport-jwt'
+import { AuthService } from '@modules/iam'
+import { passportJwtSecret } from 'jwks-rsa'
+import { ConfigService } from '@nestjs/config'
+import { DecodedIdToken } from 'firebase-admin/lib/auth'
+import { User, UserRole } from 'defs'
 
 @Injectable()
-export class FirebaseAuthStrategy extends PassportStrategy(
-  Strategy,
-  'firebase',
-) {
+export class FirebaseAuthStrategy extends PassportStrategy(Strategy, 'firebase') {
   constructor(configService: ConfigService) {
     super({
       secretOrKeyProvider: passportJwtSecret({
@@ -27,14 +24,12 @@ export class FirebaseAuthStrategy extends PassportStrategy(
       )}`,
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       algorithms: ['RS256'],
-    });
+    })
   }
 
-  validate = (
-    user?: DecodedIdToken & { role: UserRole; name: string },
-  ): User => {
+  validate = (user?: DecodedIdToken & { role: UserRole; name: string }): User => {
     if (!user?.sub) {
-      throw new UnauthorizedException(user);
+      throw new UnauthorizedException(user)
     }
     return {
       _id: user.sub,
@@ -42,6 +37,6 @@ export class FirebaseAuthStrategy extends PassportStrategy(
       email: String(user.email),
       role: user.role,
       active: true,
-    };
-  };
+    }
+  }
 }

@@ -9,10 +9,7 @@ type Props = {
   onRemove: () => void
 }
 
-export const RemovePerson: React.FunctionComponent<Props> = ({
-  name,
-  onRemove,
-}) => {
+export const RemovePerson: React.FunctionComponent<Props> = ({ name, onRemove }) => {
   const dialog = useDialog()
   const openDialog = useCallback(
     () =>

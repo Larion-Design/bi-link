@@ -3,9 +3,9 @@ import {
   ConnectedPersonIndex,
   ConnectedProceedingIndex,
   ConnectedPropertyIndex,
-} from '@modules/definitions';
-import { Injectable } from '@nestjs/common';
-import { MappingProperty } from '@elastic/elasticsearch/lib/api/types';
+} from '@modules/definitions'
+import { Injectable } from '@nestjs/common'
+import { MappingProperty } from '@elastic/elasticsearch/lib/api/types'
 
 @Injectable()
 export class MappingHelperService {
@@ -15,56 +15,56 @@ export class MappingHelperService {
     search_analyzer: 'romanian',
     index_options: 'docs',
     term_vector: 'yes',
-  };
+  }
 
-  readonly integerField: MappingProperty = { type: 'integer' };
+  readonly integerField: MappingProperty = { type: 'integer' }
 
-  readonly keywordField: MappingProperty = { type: 'keyword' };
+  readonly keywordField: MappingProperty = { type: 'keyword' }
 
   readonly textField: MappingProperty = {
     type: 'text',
     index_options: 'docs',
     term_vector: 'yes',
-  };
+  }
 
   nestedField = <T>(properties: Record<keyof T | string, MappingProperty>) => ({
     type: 'nested',
     properties,
-  });
+  })
 
   readonly date: MappingProperty = {
     type: 'date',
     format: 'yyyy-mm-dd',
-  };
+  }
 
   readonly dateTime: MappingProperty = {
     type: 'date',
     format: 'yyyy-MM-dd HH:mm:ss',
-  };
+  }
 
   readonly year: MappingProperty = {
     type: 'date',
     format: 'yyyy',
-  };
+  }
 
   readonly timestamp: MappingProperty = {
     type: 'date',
     format: 'epoch_second',
-  };
+  }
 
   readonly dateRange: MappingProperty = {
     type: 'date_range',
     format: 'yyyy-mm-dd',
-  };
+  }
 
   readonly yearRange: MappingProperty = {
     type: 'date_range',
     format: 'yyyy',
-  };
+  }
 
   readonly geoPoint: MappingProperty = {
     type: 'geo_point',
-  };
+  }
 
   readonly customFields: MappingProperty = {
     type: 'nested',
@@ -72,7 +72,7 @@ export class MappingHelperService {
       fieldName: this.keywordField,
       fieldValue: this.romanianTextProperty,
     },
-  };
+  }
 
   readonly files: MappingProperty = {
     type: 'nested',
@@ -81,7 +81,7 @@ export class MappingHelperService {
       description: this.romanianTextProperty,
       content: this.romanianTextProperty,
     },
-  };
+  }
 
   readonly location: MappingProperty = {
     type: 'nested',
@@ -97,7 +97,7 @@ export class MappingHelperService {
       otherInfo: this.textField,
       coordinates: this.geoPoint,
     },
-  };
+  }
 
   readonly connectedPerson: MappingProperty = {
     type: 'nested',
@@ -109,7 +109,7 @@ export class MappingHelperService {
       cnp: this.keywordField,
       documents: this.keywordField,
     } as Record<string | keyof ConnectedPersonIndex, MappingProperty>,
-  };
+  }
 
   readonly connectedCompany: MappingProperty = {
     type: 'nested',
@@ -120,7 +120,7 @@ export class MappingHelperService {
       registrationNumber: this.keywordField,
       customFields: this.customFields,
     } as Record<string | keyof ConnectedCompanyIndex, MappingProperty>,
-  };
+  }
 
   readonly connectedProperty: MappingProperty = {
     type: 'nested',
@@ -146,7 +146,7 @@ export class MappingHelperService {
         },
       },
     } as Record<keyof ConnectedPropertyIndex, MappingProperty>,
-  };
+  }
 
   readonly connectedProceeding: MappingProperty = {
     type: 'nested',
@@ -159,5 +159,5 @@ export class MappingHelperService {
       status: this.keywordField,
       fileNumber: this.keywordField,
     } as Record<keyof ConnectedProceedingIndex, MappingProperty>,
-  };
+  }
 }

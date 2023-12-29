@@ -1,15 +1,12 @@
-import { Injectable, Logger } from '@nestjs/common';
-import { Company } from 'defs';
-import {
-  AssociateGraphRelationship,
-  CompanyGraphNode,
-} from '@modules/definitions';
-import { GraphService } from './graphService';
-import { LocationGraphService } from './locationGraphService';
+import { Injectable, Logger } from '@nestjs/common'
+import { Company } from 'defs'
+import { AssociateGraphRelationship, CompanyGraphNode } from '@modules/definitions'
+import { GraphService } from './graphService'
+import { LocationGraphService } from './locationGraphService'
 
 @Injectable()
 export class CompanyGraphService {
-  private readonly logger = new Logger(CompanyGraphService.name);
+  private readonly logger = new Logger(CompanyGraphService.name)
 
   constructor(
     private readonly graphService: GraphService,
@@ -26,17 +23,17 @@ export class CompanyGraphService {
           registrationNumber: companyDocument.registrationNumber.value,
         },
         'COMPANY',
-      );
+      )
 
-      await this.upsertCompanyAssociates(companyDocument);
-      await this.upsertCompanyLocations(companyDocument);
+      await this.upsertCompanyAssociates(companyDocument)
+      await this.upsertCompanyLocations(companyDocument)
     } catch (e) {
-      this.logger.error(e);
+      this.logger.error(e)
     }
-  };
+  }
 
   private upsertCompanyAssociates = async (companyDocument: Company) => {
-    const map = new Map<string, AssociateGraphRelationship>();
+    const map = new Map<string, AssociateGraphRelationship>()
 
     companyDocument.associates.forEach(
       ({
@@ -60,43 +57,33 @@ export class CompanyGraphService {
           equity: equity.value,
           _confirmed: confirmed,
           _trustworthiness: level,
-        };
+        }
 
         if (person?._id) {
-          map.set(String(person?._id), data);
+          map.set(String(person?._id), data)
         } else if (company?._id) {
-          map.set(String(company?._id), data);
+          map.set(String(company?._id), data)
         }
       },
-    );
+    )
 
     if (map.size) {
-      return this.graphService.replaceRelationships(
-        String(companyDocument._id),
-        map,
-        'ASSOCIATE',
-      );
+      return this.graphService.replaceRelationships(String(companyDocument._id), map, 'ASSOCIATE')
     }
-  };
+  }
 
-  private upsertCompanyLocations = async ({
-    _id,
-    headquarters,
-    locations,
-  }: Company) => {
-    const companyLocations = new Set(locations);
+  private upsertCompanyLocations = async ({ _id, headquarters, locations }: Company) => {
+    const companyLocations = new Set(locations)
 
     if (headquarters) {
-      companyLocations.add(headquarters);
+      companyLocations.add(headquarters)
     }
 
     if (companyLocations.size) {
-      await this.locationGraphservice.upsertLocationNodes(
-        Array.from(companyLocations),
-      );
+      await this.locationGraphservice.upsertLocationNodes(Array.from(companyLocations))
 
-      const companyId = String(_id);
-      const relationshipsQueries: Promise<void>[] = [];
+      const companyId = String(_id)
+      const relationshipsQueries: Promise<void>[] = []
 
       if (headquarters) {
         relationshipsQueries.push(
@@ -105,7 +92,7 @@ export class CompanyGraphService {
             companyId,
             'HQ_AT',
           ),
-        );
+        )
       }
 
       if (locations.length) {
@@ -115,9 +102,9 @@ export class CompanyGraphService {
             locations.map(({ locationId }) => locationId),
             'BRANCH_AT',
           ),
-        );
+        )
       }
-      await Promise.allSettled(relationshipsQueries);
+      await Promise.allSettled(relationshipsQueries)
     }
-  };
+  }
 }

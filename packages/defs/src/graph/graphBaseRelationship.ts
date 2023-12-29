@@ -1,5 +1,5 @@
-import {z} from 'zod'
-import { entityInfoSchema } from "../entity";
+import { z } from 'zod'
+import { entityInfoSchema } from '../entity'
 
 export const graphRelationshipTypeSchema = z.enum([
   'RELATED',

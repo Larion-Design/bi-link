@@ -1,17 +1,14 @@
-import { Injectable } from '@nestjs/common';
-import { CustomField } from 'defs';
-import { CustomFieldIndex } from '@modules/definitions';
+import { Injectable } from '@nestjs/common'
+import { CustomField } from 'defs'
+import { CustomFieldIndex } from '@modules/definitions'
 
 @Injectable()
 export class CustomFieldsIndexerService {
-  createCustomFieldIndex = ({
+  createCustomFieldIndex = ({ fieldName, fieldValue }: CustomField): CustomFieldIndex => ({
     fieldName,
     fieldValue,
-  }: CustomField): CustomFieldIndex => ({
-    fieldName,
-    fieldValue,
-  });
+  })
 
   createCustomFieldsIndex = (customFields: CustomField[]) =>
-    customFields.map(this.createCustomFieldIndex);
+    customFields.map(this.createCustomFieldIndex)
 }

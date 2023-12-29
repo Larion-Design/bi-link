@@ -1,16 +1,16 @@
-import { FilesModule } from '@modules/files/files.module';
-import { Module } from '@nestjs/common';
-import { ConfigModule, ConfigService } from '@nestjs/config';
-import { APP_INTERCEPTOR } from '@nestjs/core';
-import { MongooseModule } from '@nestjs/mongoose';
-import { GraphqlInterceptor, SentryModule } from '@ntegral/nestjs-sentry';
-import { ApiModule } from '@modules/api';
-import { CacheModule } from '@modules/cache';
-import { CentralModule } from '@modules/central';
-import { GraphModule } from '@modules/graph';
-import { IamModule } from '@modules/iam';
-import { SearchModule } from '@modules/search';
-import { EntityEventsModule } from './entity-events';
+import { FilesModule } from '@modules/files/files.module'
+import { Module } from '@nestjs/common'
+import { ConfigModule, ConfigService } from '@nestjs/config'
+import { APP_INTERCEPTOR } from '@nestjs/core'
+import { MongooseModule } from '@nestjs/mongoose'
+import { GraphqlInterceptor, SentryModule } from '@ntegral/nestjs-sentry'
+import { ApiModule } from '@modules/api'
+import { CacheModule } from '@modules/cache'
+import { CentralModule } from '@modules/central'
+import { GraphModule } from '@modules/graph'
+import { IamModule } from '@modules/iam'
+import { SearchModule } from '@modules/search'
+import { EntityEventsModule } from './entity-events'
 
 @Module({
   imports: [
@@ -39,10 +39,7 @@ import { EntityEventsModule } from './entity-events';
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: async (configService: ConfigService) => {
-        const environment = configService.get<string>(
-          'NODE_ENV',
-          'development',
-        );
+        const environment = configService.get<string>('NODE_ENV', 'development')
         return Promise.resolve({
           dsn: configService.get<string>('SENTRY_DSN'),
           debug: false,
@@ -50,7 +47,7 @@ import { EntityEventsModule } from './entity-events';
           environment: environment,
           release: configService.getOrThrow<string>('APP_VERSION'),
           logLevel: 'debug',
-        });
+        })
       },
     }),
   ],

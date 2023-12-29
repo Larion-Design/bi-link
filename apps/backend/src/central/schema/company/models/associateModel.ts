@@ -1,40 +1,34 @@
-import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document, Types } from 'mongoose';
-import { Associate } from 'defs';
-import {
-  CustomFieldModel,
-  CustomFieldSchema,
-} from '../../customField/models/customFieldModel';
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
+import { Document, Types } from 'mongoose'
+import { Associate } from 'defs'
+import { CustomFieldModel, CustomFieldSchema } from '../../customField/models/customFieldModel'
 import {
   BooleanValueWithMetadataModel,
   BooleanValueWithMetadataSchema,
-} from '../../metadata/models/booleanValueWithMetadataModel';
-import {
-  MetadataModel,
-  MetadataSchema,
-} from '../../metadata/models/metadataModel';
+} from '../../metadata/models/booleanValueWithMetadataModel'
+import { MetadataModel, MetadataSchema } from '../../metadata/models/metadataModel'
 import {
   NumberValueWithMetadataModel,
   NumberValueWithMetadataSchema,
-} from '../../metadata/models/numberValueWithMetadataModel';
+} from '../../metadata/models/numberValueWithMetadataModel'
 import {
   OptionalDateValueWithMetadataModel,
   OptionalDateValueWithMetadataSchema,
-} from '../../metadata/models/optionalDateValueWithMetadataModel';
+} from '../../metadata/models/optionalDateValueWithMetadataModel'
 import {
   TextValueWithMetadataModel,
   TextValueWithMetadataSchema,
-} from '../../metadata/models/textValueWithMetadataModel';
-import { PersonDocument, PersonModel } from '../../person/models/personModel';
-import { CompanyDocument } from './companyModel';
+} from '../../metadata/models/textValueWithMetadataModel'
+import { PersonDocument, PersonModel } from '../../person/models/personModel'
+import { CompanyDocument } from './companyModel'
 
 @Schema({ timestamps: false })
 export class AssociateModel implements Associate {
   @Prop({ type: MetadataSchema })
-  metadata: MetadataModel;
+  metadata: MetadataModel
 
   @Prop({ type: TextValueWithMetadataSchema })
-  role: TextValueWithMetadataModel;
+  role: TextValueWithMetadataModel
 
   @Prop({
     type: Types.ObjectId,
@@ -43,7 +37,7 @@ export class AssociateModel implements Associate {
     index: true,
     sparse: true,
   })
-  person?: PersonDocument;
+  person?: PersonDocument
 
   @Prop({
     type: Types.ObjectId,
@@ -52,23 +46,23 @@ export class AssociateModel implements Associate {
     index: true,
     sparse: true,
   })
-  company?: CompanyDocument;
+  company?: CompanyDocument
 
   @Prop({ type: NumberValueWithMetadataSchema })
-  equity: NumberValueWithMetadataModel;
+  equity: NumberValueWithMetadataModel
 
   @Prop({ type: OptionalDateValueWithMetadataSchema })
-  startDate: OptionalDateValueWithMetadataModel;
+  startDate: OptionalDateValueWithMetadataModel
 
   @Prop({ type: OptionalDateValueWithMetadataSchema })
-  endDate: OptionalDateValueWithMetadataModel;
+  endDate: OptionalDateValueWithMetadataModel
 
   @Prop({ type: BooleanValueWithMetadataSchema })
-  isActive: BooleanValueWithMetadataModel;
+  isActive: BooleanValueWithMetadataModel
 
   @Prop({ type: [CustomFieldSchema], isRequired: false })
-  customFields: CustomFieldModel[];
+  customFields: CustomFieldModel[]
 }
 
-export type AssociateDocument = AssociateModel & Document;
-export const AssociateSchema = SchemaFactory.createForClass(AssociateModel);
+export type AssociateDocument = AssociateModel & Document
+export const AssociateSchema = SchemaFactory.createForClass(AssociateModel)

@@ -1,17 +1,15 @@
-import { Injectable } from '@nestjs/common';
-import { CompanyAPIOutput, PersonAPIOutput, PropertyAPIOutput } from 'defs';
+import { Injectable } from '@nestjs/common'
+import { CompanyAPIOutput, PersonAPIOutput, PropertyAPIOutput } from 'defs'
 import {
   ConnectedCompanyIndex,
   ConnectedPersonIndex,
   ConnectedPropertyIndex,
-} from '@modules/definitions';
-import { LocationIndexerService } from './locationIndexerService';
+} from '@modules/definitions'
+import { LocationIndexerService } from './locationIndexerService'
 
 @Injectable()
 export class ConnectedEntityIndexerService {
-  constructor(
-    private readonly locationIndexerService: LocationIndexerService,
-  ) {}
+  constructor(private readonly locationIndexerService: LocationIndexerService) {}
 
   createConnectedPersonIndex = ({
     _id,
@@ -25,7 +23,7 @@ export class ConnectedEntityIndexerService {
     lastName: lastName.value,
     cnp: cnp.value,
     documents: documents?.map(({ documentNumber }) => documentNumber) ?? [],
-  });
+  })
 
   createConnectedCompanyIndex = ({
     _id,
@@ -37,7 +35,7 @@ export class ConnectedEntityIndexerService {
     name: name.value,
     cui: cui.value,
     registrationNumber: registrationNumber.value,
-  });
+  })
 
   createConnectedPropertyIndex = ({
     _id,
@@ -51,15 +49,13 @@ export class ConnectedEntityIndexerService {
       _id: String(_id),
       type,
       name,
-    };
+    }
 
     if (vehicleInfo) {
-      const plateNumbers = new Set<string>();
+      const plateNumbers = new Set<string>()
       owners.forEach(({ vehicleOwnerInfo }) => {
-        vehicleOwnerInfo?.plateNumbers.forEach((plateNumber) =>
-          plateNumbers.add(plateNumber),
-        );
-      });
+        vehicleOwnerInfo?.plateNumbers.forEach((plateNumber) => plateNumbers.add(plateNumber))
+      })
 
       propertyIndex.vehicleInfo = {
         vin: vehicleInfo.vin.value,
@@ -67,7 +63,7 @@ export class ConnectedEntityIndexerService {
         model: vehicleInfo.model.value,
         color: vehicleInfo.color.value,
         plateNumbers: Array.from(plateNumbers),
-      };
+      }
     }
 
     if (realEstateInfo) {
@@ -75,12 +71,10 @@ export class ConnectedEntityIndexerService {
         surface: realEstateInfo.surface.value,
         townArea: realEstateInfo.townArea.value,
         location: realEstateInfo.location
-          ? this.locationIndexerService.createLocationIndexData(
-              realEstateInfo.location,
-            )
+          ? this.locationIndexerService.createLocationIndexData(realEstateInfo.location)
           : undefined,
-      };
+      }
     }
-    return propertyIndex;
-  };
+    return propertyIndex
+  }
 }

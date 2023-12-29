@@ -13,12 +13,18 @@ export class PropertiesService {
   private readonly logger = new Logger(PropertiesService.name)
 
   constructor(
-    @InjectModel(PropertyModel.name) private readonly propertyModel: Model<PropertyDocument>,
-    @InjectModel(CompanyModel.name) private readonly companyModel: Model<CompanyDocument>,
-    @InjectModel(FileModel.name) private readonly fileModel: Model<FileDocument>,
-    @InjectModel(PersonModel.name) private readonly personModel: Model<PersonDocument>,
-    @InjectModel(LocationModel.name) private readonly locationModel: Model<LocationDocument>,
-    @InjectModel(PropertyOwnerModel.name) private readonly ownerModel: Model<PropertyOwnerDocument>,
+    @InjectModel(PropertyModel.name)
+    private readonly propertyModel: Model<PropertyDocument>,
+    @InjectModel(CompanyModel.name)
+    private readonly companyModel: Model<CompanyDocument>,
+    @InjectModel(FileModel.name)
+    private readonly fileModel: Model<FileDocument>,
+    @InjectModel(PersonModel.name)
+    private readonly personModel: Model<PersonDocument>,
+    @InjectModel(LocationModel.name)
+    private readonly locationModel: Model<LocationDocument>,
+    @InjectModel(PropertyOwnerModel.name)
+    private readonly ownerModel: Model<PropertyOwnerDocument>,
   ) {}
 
   create = async (propertyModel: PropertyModel) => {

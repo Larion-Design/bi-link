@@ -1,11 +1,11 @@
-import { INDEX_PROPERTIES } from '@modules/search/constants';
-import { MappingValidatorService } from '@modules/search/services/mapping/mappingValidatorService';
-import { Injectable, OnApplicationBootstrap } from '@nestjs/common';
-import { MappingProperty } from '@elastic/elasticsearch/lib/api/types';
-import { PropertyIndex } from '@modules/definitions';
-import { Record } from 'neo4j-driver';
-import { MappingInterface } from './mapping';
-import { MappingHelperService } from './mappingHelperService';
+import { INDEX_PROPERTIES } from '@modules/search/constants'
+import { MappingValidatorService } from '@modules/search/services/mapping/mappingValidatorService'
+import { Injectable, OnApplicationBootstrap } from '@nestjs/common'
+import { MappingProperty } from '@elastic/elasticsearch/lib/api/types'
+import { PropertyIndex } from '@modules/definitions'
+import { Record } from 'neo4j-driver'
+import { MappingInterface } from './mapping'
+import { MappingHelperService } from './mappingHelperService'
 
 @Injectable()
 export class PropertiesMappingService
@@ -40,12 +40,9 @@ export class PropertiesMappingService
         location: this.mappingHelperService.location,
       },
     },
-  });
+  })
 
   async onApplicationBootstrap() {
-    await this.mappingValidatorService.initIndex(
-      INDEX_PROPERTIES,
-      this.getMapping(),
-    );
+    await this.mappingValidatorService.initIndex(INDEX_PROPERTIES, this.getMapping())
   }
 }

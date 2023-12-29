@@ -8,3 +8,6 @@ out
 test
 cypress.config.ts
 .parcel-cache
+pnpm-lock.yaml
+pnpm-workspace.yaml
+.nx

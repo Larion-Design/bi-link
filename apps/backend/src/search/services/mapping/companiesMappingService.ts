@@ -1,10 +1,10 @@
-import { CompanyIndex, BalanceSheetIndex } from '@modules/definitions';
-import { INDEX_COMPANIES, INDEX_PROPERTIES } from '@modules/search/constants';
-import { MappingValidatorService } from '@modules/search/services/mapping/mappingValidatorService';
-import { MappingInterface } from './mapping';
-import { MappingHelperService } from './mappingHelperService';
-import { Injectable, OnApplicationBootstrap } from '@nestjs/common';
-import { MappingProperty } from '@elastic/elasticsearch/lib/api/types';
+import { CompanyIndex, BalanceSheetIndex } from '@modules/definitions'
+import { INDEX_COMPANIES, INDEX_PROPERTIES } from '@modules/search/constants'
+import { MappingValidatorService } from '@modules/search/services/mapping/mappingValidatorService'
+import { MappingInterface } from './mapping'
+import { MappingHelperService } from './mappingHelperService'
+import { Injectable, OnApplicationBootstrap } from '@nestjs/common'
+import { MappingProperty } from '@elastic/elasticsearch/lib/api/types'
 
 @Injectable()
 export class CompaniesMappingService
@@ -31,12 +31,9 @@ export class CompaniesMappingService
       type: 'nested',
       properties: this.getBalanceSheetMapping(),
     },
-  });
+  })
 
-  private getBalanceSheetMapping = (): Record<
-    keyof BalanceSheetIndex,
-    MappingProperty
-  > => ({
+  private getBalanceSheetMapping = (): Record<keyof BalanceSheetIndex, MappingProperty> => ({
     year: this.mappingHelperService.integerField,
     fixedAssets: this.mappingHelperService.integerField,
     currentAssets: this.mappingHelperService.integerField,
@@ -62,12 +59,9 @@ export class CompaniesMappingService
     activityCode: this.mappingHelperService.integerField,
     activityType: this.mappingHelperService.keywordField,
     balanceType: this.mappingHelperService.keywordField,
-  });
+  })
 
   async onApplicationBootstrap() {
-    await this.mappingValidatorService.initIndex(
-      INDEX_COMPANIES,
-      this.getMapping(),
-    );
+    await this.mappingValidatorService.initIndex(INDEX_COMPANIES, this.getMapping())
   }
 }

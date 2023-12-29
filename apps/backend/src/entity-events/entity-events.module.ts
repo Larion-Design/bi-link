@@ -1,6 +1,6 @@
-import { Global, Module } from '@nestjs/common';
-import { EventEmitterModule } from '@nestjs/event-emitter';
-import { EntityEventDispatcherService } from './entity-event-dispatcher.service';
+import { Global, Module } from '@nestjs/common'
+import { EventEmitterModule } from '@nestjs/event-emitter'
+import { EntityEventDispatcherService } from './entity-event-dispatcher.service'
 
 @Global()
 @Module({

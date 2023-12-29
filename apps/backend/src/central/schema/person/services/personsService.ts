@@ -10,9 +10,12 @@ export class PersonsService {
   private readonly logger = new Logger(PersonsService.name)
 
   constructor(
-    @InjectModel(PersonModel.name) private readonly personModel: Model<PersonDocument>,
-    @InjectModel(FileModel.name) private readonly fileModel: Model<FileDocument>,
-    @InjectModel(LocationModel.name) private readonly locationModel: Model<LocationDocument>,
+    @InjectModel(PersonModel.name)
+    private readonly personModel: Model<PersonDocument>,
+    @InjectModel(FileModel.name)
+    private readonly fileModel: Model<FileDocument>,
+    @InjectModel(LocationModel.name)
+    private readonly locationModel: Model<LocationDocument>,
   ) {}
 
   create = async (personModel: PersonModel) => {

@@ -25,7 +25,10 @@ export class ReportContentModel implements ReportContent {
   @Prop({ type: [TextSchema], isRequired: false })
   text?: TextModel
 
-  @Prop({ type: [{ type: Types.ObjectId, ref: FileModel.name }], isRequired: false })
+  @Prop({
+    type: [{ type: Types.ObjectId, ref: FileModel.name }],
+    isRequired: false,
+  })
   images?: FileModel[]
 
   @Prop({ type: [TableSchema], isRequired: false })

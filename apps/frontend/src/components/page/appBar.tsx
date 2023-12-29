@@ -43,10 +43,7 @@ const AppBar = styled(MuiAppBar, {
   }),
 }))
 
-export const AppHeader: React.FunctionComponent<AppHeaderProps> = ({
-  open,
-  toggleDrawer,
-}) => {
+export const AppHeader: React.FunctionComponent<AppHeaderProps> = ({ open, toggleDrawer }) => {
   const { hasPrivilegedAccess } = getUserRole()
   const navigate = useNavigate()
 
@@ -68,10 +65,7 @@ export const AppHeader: React.FunctionComponent<AppHeaderProps> = ({
           <SearchOutlinedIcon />
         </IconButton>
         {hasPrivilegedAccess && (
-          <IconButton
-            onClick={() => navigate(routes.history)}
-            color={'inherit'}
-          >
+          <IconButton onClick={() => navigate(routes.history)} color={'inherit'}>
             <Badge badgeContent={0} color={'secondary'}>
               <NotificationsIcon />
             </Badge>

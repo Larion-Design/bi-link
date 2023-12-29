@@ -1,6 +1,6 @@
-import { Injectable } from '@nestjs/common';
-import { Location } from 'defs';
-import { LocationIndex } from '@modules/definitions';
+import { Injectable } from '@nestjs/common'
+import { Location } from 'defs'
+import { LocationIndex } from '@modules/definitions'
 
 @Injectable()
 export class LocationIndexerService {
@@ -29,8 +29,7 @@ export class LocationIndexerService {
       lat,
       lon,
     },
-  });
+  })
 
-  createLocationsIndexData = (locations: Location[]) =>
-    locations?.map(this.createLocationIndexData);
+  createLocationsIndexData = (locations: Location[]) => locations?.map(this.createLocationIndexData)
 }

@@ -28,14 +28,10 @@ export const ConfirmationDialog: React.FunctionComponent<Props> = ({
     data-cy={'confirmationDialog'}
     keepMounted
   >
-    {title && (
-      <DialogTitle data-cy={'confirmationDialogTitle'}>{title}</DialogTitle>
-    )}
+    {title && <DialogTitle data-cy={'confirmationDialogTitle'}>{title}</DialogTitle>}
     {description && (
       <DialogContent>
-        <DialogContentText data-cy={'confirmationDialogText'}>
-          {description}
-        </DialogContentText>
+        <DialogContentText data-cy={'confirmationDialogText'}>{description}</DialogContentText>
       </DialogContent>
     )}
     <DialogActions>

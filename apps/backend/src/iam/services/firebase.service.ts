@@ -11,7 +11,7 @@ export class FirebaseService {
       credential: firebaseAdmin.credential.cert({
         projectId: configService.get<string>('FIREBASE_PROJECT_ID'),
         clientEmail: configService.get<string>('FIREBASE_CLIENT_EMAIL'),
-        privateKey: configService.getOrThrow<string>('FIREBASE_SECRET_KEY').replace(/\\n/g, '\n')
+        privateKey: configService.getOrThrow<string>('FIREBASE_SECRET_KEY').replace(/\\n/g, '\n'),
       }),
     })
   }

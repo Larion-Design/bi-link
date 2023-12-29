@@ -21,7 +21,11 @@ export class RelationshipModel implements Relationship {
   @Prop({ type: Types.ObjectId, ref: 'PersonModel', index: true, sparse: true })
   person: PersonDocument
 
-  @Prop({ type: [{ type: Types.ObjectId, ref: 'PersonModel' }], index: true, sparse: true })
+  @Prop({
+    type: [{ type: Types.ObjectId, ref: 'PersonModel' }],
+    index: true,
+    sparse: true,
+  })
   relatedPersons: PersonDocument[]
 }
 

@@ -8,7 +8,10 @@ import { FileDocument, FileModel } from '../models/fileModel'
 export class FileAPIService {
   private readonly logger = new Logger(FileAPIService.name)
 
-  constructor(@InjectModel(FileModel.name) private readonly fileModel: Model<FileDocument>) {}
+  constructor(
+    @InjectModel(FileModel.name)
+    private readonly fileModel: Model<FileDocument>,
+  ) {}
 
   getUploadedFileModel = async (fileInfo: FileAPIInput, session?: ClientSession) => {
     try {

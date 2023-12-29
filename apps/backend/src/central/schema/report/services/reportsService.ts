@@ -15,13 +15,20 @@ export class ReportsService {
   private readonly logger = new Logger(ReportsService.name)
 
   constructor(
-    @InjectModel(ReportModel.name) private readonly reportModel: Model<ReportDocument>,
-    @InjectModel(EventModel.name) private readonly eventModel: Model<EventDocument>,
-    @InjectModel(PersonModel.name) private readonly personModel: Model<PersonDocument>,
-    @InjectModel(PropertyModel.name) private readonly propertyModel: Model<PropertyDocument>,
-    @InjectModel(CompanyModel.name) private readonly companyModel: Model<CompanyDocument>,
-    @InjectModel(ProceedingModel.name) private readonly proceedingModel: Model<ProceedingDocument>,
-    @InjectModel(LocationModel.name) private readonly locationModel: Model<LocationDocument>,
+    @InjectModel(ReportModel.name)
+    private readonly reportModel: Model<ReportDocument>,
+    @InjectModel(EventModel.name)
+    private readonly eventModel: Model<EventDocument>,
+    @InjectModel(PersonModel.name)
+    private readonly personModel: Model<PersonDocument>,
+    @InjectModel(PropertyModel.name)
+    private readonly propertyModel: Model<PropertyDocument>,
+    @InjectModel(CompanyModel.name)
+    private readonly companyModel: Model<CompanyDocument>,
+    @InjectModel(ProceedingModel.name)
+    private readonly proceedingModel: Model<ProceedingDocument>,
+    @InjectModel(LocationModel.name)
+    private readonly locationModel: Model<LocationDocument>,
   ) {}
 
   createReport = async (reportModel: ReportModel) => {
@@ -65,10 +72,16 @@ export class ReportsService {
           return this.reportModel.find({ person: entityId, isTemplate: false })
         }
         case 'COMPANY': {
-          return this.reportModel.find({ company: entityId, isTemplate: false })
+          return this.reportModel.find({
+            company: entityId,
+            isTemplate: false,
+          })
         }
         case 'PROPERTY': {
-          return this.reportModel.find({ property: entityId, isTemplate: false })
+          return this.reportModel.find({
+            property: entityId,
+            isTemplate: false,
+          })
         }
         case 'EVENT': {
           return this.reportModel.find({ event: entityId, isTemplate: false })

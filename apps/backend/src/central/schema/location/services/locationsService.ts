@@ -9,7 +9,8 @@ export class LocationsService {
   private readonly logger = new Logger(LocationsService.name)
 
   constructor(
-    @InjectModel(LocationModel.name) private readonly locationModel: Model<LocationDocument>,
+    @InjectModel(LocationModel.name)
+    private readonly locationModel: Model<LocationDocument>,
   ) {}
 
   getLocations = async (locationsIds: string[]) => {

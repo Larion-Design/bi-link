@@ -1,7 +1,7 @@
-import { SearchEventsHandlerService } from '@modules/search/services/search-events-handler.service';
-import { Global, Module, Provider } from '@nestjs/common';
-import { ConfigModule, ConfigService } from '@nestjs/config';
-import { ElasticsearchModule } from '@nestjs/elasticsearch';
+import { SearchEventsHandlerService } from '@modules/search/services/search-events-handler.service'
+import { Global, Module, Provider } from '@nestjs/common'
+import { ConfigModule, ConfigService } from '@nestjs/config'
+import { ElasticsearchModule } from '@nestjs/elasticsearch'
 import {
   CompaniesIndexerService,
   ConnectedEntityIndexerService,
@@ -13,7 +13,7 @@ import {
   PersonsIndexerService,
   PropertiesIndexerService,
   ProceedingsIndexerService,
-} from './services/index';
+} from './services/index'
 
 import {
   CompaniesMappingService,
@@ -25,7 +25,7 @@ import {
   PersonsMappingService,
   ProceedingsMappingService,
   PropertiesMappingService,
-} from './services/mapping';
+} from './services/mapping'
 import {
   SearchCompaniesService,
   SearchEventsService,
@@ -36,7 +36,7 @@ import {
   SearchProceedingsService,
   SearchPropertiesService,
   SearchVehiclesService,
-} from './services/search';
+} from './services/search'
 
 const providers: Provider[] = [
   SearchCompaniesService,
@@ -71,7 +71,7 @@ const providers: Provider[] = [
   ProceedingsIndexerService,
 
   SearchEventsHandlerService,
-];
+]
 
 @Global()
 @Module({

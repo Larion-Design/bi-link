@@ -10,9 +10,12 @@ export class ProceedingsService {
   private readonly logger = new Logger(ProceedingsService.name)
 
   constructor(
-    @InjectModel(PersonModel.name) private readonly personModel: Model<PersonDocument>,
-    @InjectModel(CompanyModel.name) private readonly companyModel: Model<CompanyDocument>,
-    @InjectModel(ProceedingModel.name) private readonly proceedingModel: Model<ProceedingDocument>,
+    @InjectModel(PersonModel.name)
+    private readonly personModel: Model<PersonDocument>,
+    @InjectModel(CompanyModel.name)
+    private readonly companyModel: Model<CompanyDocument>,
+    @InjectModel(ProceedingModel.name)
+    private readonly proceedingModel: Model<ProceedingDocument>,
   ) {}
 
   create = async (proceedingModel: ProceedingModel) => {

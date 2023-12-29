@@ -1,10 +1,10 @@
-import { ProcessedFileIndex } from '@modules/definitions';
-import { INDEX_FILES } from '@modules/search/constants';
-import { MappingValidatorService } from '@modules/search/services/mapping/mappingValidatorService';
-import { MappingInterface } from './mapping';
-import { MappingHelperService } from './mappingHelperService';
-import { Injectable, OnApplicationBootstrap } from '@nestjs/common';
-import { MappingProperty } from '@elastic/elasticsearch/lib/api/types';
+import { ProcessedFileIndex } from '@modules/definitions'
+import { INDEX_FILES } from '@modules/search/constants'
+import { MappingValidatorService } from '@modules/search/services/mapping/mappingValidatorService'
+import { MappingInterface } from './mapping'
+import { MappingHelperService } from './mappingHelperService'
+import { Injectable, OnApplicationBootstrap } from '@nestjs/common'
+import { MappingProperty } from '@elastic/elasticsearch/lib/api/types'
 
 @Injectable()
 export class FilesMappingService
@@ -18,12 +18,9 @@ export class FilesMappingService
   getMapping = (): Record<keyof ProcessedFileIndex, MappingProperty> => ({
     content: this.mappingHelperService.romanianTextProperty,
     processedDate: this.mappingHelperService.dateTime,
-  });
+  })
 
   async onApplicationBootstrap() {
-    await this.mappingValidatorService.initIndex(
-      INDEX_FILES,
-      this.getMapping(),
-    );
+    await this.mappingValidatorService.initIndex(INDEX_FILES, this.getMapping())
   }
 }

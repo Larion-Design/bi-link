@@ -101,7 +101,9 @@ export class SearchHelperService {
     caseInsensitive = false,
   ): QueryDslQueryContainer[] =>
     fields.map((field) => ({
-      term: { [field]: { value: searchTerm, case_insensitive: caseInsensitive } },
+      term: {
+        [field]: { value: searchTerm, case_insensitive: caseInsensitive },
+      },
     }))
 
   getFuzzySearchQuery = (field: string, searchTerm: string): QueryDslQueryContainer => ({

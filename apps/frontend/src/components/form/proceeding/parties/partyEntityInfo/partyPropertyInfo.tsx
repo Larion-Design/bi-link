@@ -7,10 +7,7 @@ type Props = {
   type: string
 }
 
-export const PartyPropertyInfo: React.FunctionComponent<Props> = ({
-  name,
-  type,
-}) => (
+export const PartyPropertyInfo: React.FunctionComponent<Props> = ({ name, type }) => (
   <Box>
     <Typography variant={'body2'}>{name}</Typography>
     <Typography variant={'caption'}>{type}</Typography>
