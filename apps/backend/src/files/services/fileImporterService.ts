@@ -1,3 +1,4 @@
+import { FilesService } from '@modules/central/schema/file/services/filesService'
 import { Injectable } from '@nestjs/common'
 import { extension as mimeTypeToExtension } from 'mime-types'
 import { createHash } from 'node:crypto'
@@ -5,11 +6,14 @@ import { FileStorageService } from './fileStorageService'
 
 @Injectable()
 export class FileImporterService {
-  constructor(private readonly fileStorageService: FileStorageService) {}
+  constructor(
+    private readonly fileStorageService: FileStorageService,
+    private readonly filesService: FilesService,
+  ) {}
 
   async upsertFile(buffer: Buffer, mimeType: string) {
     const hash = this.getFileContentHash(buffer)
-    const fileDocument = await this.getFileDocumentByHash(hash)
+    const fileDocument = await this.filesService.getFileDocumentByHash(hash)
 
     if (fileDocument) {
       return { fileId: fileDocument.fileId, created: false, hash }
@@ -29,8 +33,6 @@ export class FileImporterService {
       return fileId
     }
   }
-
-  private getFileDocumentByHash = (hash: string) => this.ingressService.getFileByHash(hash)
 
   private getFileContentHash = (buffer: Buffer) => createHash('sha256').update(buffer).digest('hex')
 

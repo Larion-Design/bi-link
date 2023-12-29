@@ -93,7 +93,10 @@ export class PersonsService {
     return null
   }
 
-  getPersons = async (personsIds: string[], fetchLinkedEntities: boolean) => {
+  async getPersons(
+    personsIds: string[],
+    fetchLinkedEntities: boolean,
+  ): Promise<PersonDocument[] | never> {
     try {
       if (personsIds.length) {
         const query = this.personModel.find({ _id: personsIds })

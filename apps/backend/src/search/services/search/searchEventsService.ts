@@ -4,7 +4,7 @@ import { ElasticsearchService } from '@nestjs/elasticsearch'
 import { SearchRequest, SearchTotalHits } from '@elastic/elasticsearch/lib/api/types'
 import { formatAddress } from 'tools'
 import { INDEX_EVENTS } from '../../constants'
-import { EventListRecord, EventsSuggestions, LocationAPIOutput, locationSchema } from 'defs'
+import { EventListRecord, EventsSuggestions, locationSchema } from 'defs'
 import { SearchHelperService } from './searchHelperService'
 
 @Injectable()

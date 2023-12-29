@@ -1,10 +1,11 @@
+import { CompanyAPIService } from '@modules/central/schema/company/services/companyAPIService'
+import { EntityEventDispatcherService } from '@modules/entity-events'
 import { Args, ArgsType, Field, ID, Mutation, Resolver } from '@nestjs/graphql'
-import { CompaniesService } from '@modules/central/schema/company/services/companiesService'
 import { CurrentUser, FirebaseAuthGuard } from '@modules/iam'
 import { CompanyInput } from '../dto/companyInput'
 import { Company } from '../dto/company'
 import { UseGuards } from '@nestjs/common'
-import { EntityInfo, UpdateSource, User } from 'defs'
+import { User } from 'defs'
 
 @ArgsType()
 class UpdateCompanyArgs {
@@ -17,14 +18,17 @@ class UpdateCompanyArgs {
 
 @Resolver(() => Company)
 export class UpdateCompany {
-  constructor(private readonly ingressService: CompaniesService) {}
+  constructor(
+    private readonly companiesService: CompanyAPIService,
+    private readonly entityEventDispatcherService: EntityEventDispatcherService,
+  ) {}
 
   @Mutation(() => Boolean)
   @UseGuards(FirebaseAuthGuard)
   async updateCompany(
-    @CurrentUser() { _id, role }: User,
+    @CurrentUser() { _id }: User,
     @Args() { companyId, companyInfo }: UpdateCompanyArgs,
   ) {
-    await this.ingressService.update(companyId, companyInfo)
+    await this.companiesService.update(companyId, companyInfo)
   }
 }

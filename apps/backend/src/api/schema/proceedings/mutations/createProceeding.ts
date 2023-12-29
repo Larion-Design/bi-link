@@ -1,3 +1,4 @@
+import { ProceedingAPIService } from '@modules/central/schema/proceeding/services/proceedingAPIService'
 import { UseGuards } from '@nestjs/common'
 import { Args, ArgsType, Field, ID, Mutation, Resolver } from '@nestjs/graphql'
 import { ProceedingsService } from '@modules/central/schema/proceeding/services/proceedingsService'
@@ -15,11 +16,11 @@ class Params {
 
 @Resolver(() => Proceeding)
 export class CreateProceeding {
-  constructor(private readonly ingressService: ProceedingsService) {}
+  constructor(private readonly proceedingsApiService: ProceedingAPIService) {}
 
   @Mutation(() => ID)
   @UseGuards(FirebaseAuthGuard)
   async createProceeding(@CurrentUser() { _id }: User, @Args() { data }: Params) {
-    return this.ingressService.create(data)
+    return this.proceedingsApiService.create(data)
   }
 }

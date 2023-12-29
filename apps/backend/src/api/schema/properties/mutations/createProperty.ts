@@ -1,5 +1,5 @@
+import { PropertyAPIService } from '@modules/central/schema/property/services/propertyAPIService'
 import { Args, ArgsType, Field, ID, Mutation, Resolver } from '@nestjs/graphql'
-import { PropertiesService } from '@modules/central/schema/property/services/propertiesService'
 import { CurrentUser, FirebaseAuthGuard } from '@modules/iam'
 import { Property } from '../dto/property'
 import { PropertyInput } from '../dto/propertyInput'
@@ -14,11 +14,11 @@ class Params {
 
 @Resolver(() => Property)
 export class CreateProperty {
-  constructor(private readonly ingressService: PropertiesService) {}
+  constructor(private readonly propertyAPIService: PropertyAPIService) {}
 
   @Mutation(() => ID)
   @UseGuards(FirebaseAuthGuard)
   async createProperty(@CurrentUser() { _id }: User, @Args() { data }: Params) {
-    return this.ingressService.create(data)
+    return this.propertyAPIService.createProperty(data)
   }
 }

@@ -1,7 +1,7 @@
+import { ProceedingAPIService } from '@modules/central/schema/proceeding/services/proceedingAPIService'
 import { UseGuards } from '@nestjs/common'
 import { Args, ArgsType, Field, ID, Mutation, Resolver } from '@nestjs/graphql'
-import { ProceedingsService } from '@modules/central/schema/proceeding/services/proceedingsService'
-import { EntityInfo, UpdateSource, User } from 'defs'
+import { User } from 'defs'
 import { CurrentUser, FirebaseAuthGuard } from '@modules/iam'
 import { Proceeding } from '../dto/proceeding'
 import { ProceedingInput } from '../dto/proceedingInput'
@@ -17,15 +17,12 @@ class Params {
 
 @Resolver(() => Proceeding)
 export class UpdateProceeding {
-  constructor(private readonly ingressService: ProceedingsService) {}
+  constructor(private readonly proceedingsApiService: ProceedingAPIService) {}
 
   @Mutation(() => Boolean)
   @UseGuards(FirebaseAuthGuard)
-  async updateProceeding(
-    @CurrentUser() { _id, role }: User,
-    @Args() { proceedingId, data }: Params,
-  ) {
-    await this.ingressService.update(proceedingId, data)
+  async updateProceeding(@CurrentUser() { _id }: User, @Args() { proceedingId, data }: Params) {
+    await this.proceedingsApiService.update(proceedingId, data)
     return proceedingId
   }
 }

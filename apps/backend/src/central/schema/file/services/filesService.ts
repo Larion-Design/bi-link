@@ -36,7 +36,7 @@ export class FilesService {
     }
   }
 
-  async create(fileInfo: FileModel) {
+  async create(fileInfo: Omit<FileModel, '_id'>) {
     return this.fileModel.create(fileInfo)
   }
 

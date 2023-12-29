@@ -1,3 +1,5 @@
+import { PersonAPIService } from '@modules/central/schema/person/services/personAPIService'
+import { EntityEventDispatcherService } from '@modules/entity-events'
 import { Args, ArgsType, Field, ID, Mutation, Resolver } from '@nestjs/graphql'
 import { PersonsService } from '@modules/central/schema/person/services/personsService'
 import { CurrentUser, FirebaseAuthGuard } from '@modules/iam'
@@ -17,12 +19,12 @@ class Params {
 
 @Resolver(() => Person)
 export class UpdatePerson {
-  constructor(private readonly ingressService: PersonsService) {}
+  constructor(private readonly personsService: PersonAPIService) {}
 
   @Mutation(() => Boolean)
   @UseGuards(FirebaseAuthGuard)
-  async updatePerson(@CurrentUser() { _id, role }: User, @Args() { personId, personInfo }: Params) {
-    await this.ingressService.update(personId, personInfo)
+  async updatePerson(@CurrentUser() { _id }: User, @Args() { personId, personInfo }: Params) {
+    await this.personsService.update(personId, personInfo)
     return true
   }
 }

@@ -1,7 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common'
 import { ElasticsearchService } from '@nestjs/elasticsearch'
-import { EmbeddedFileIndex, ProcessedFileIndex } from '@modules/definitions'
-import { EntityType, File } from 'defs'
+import { ProcessedFileIndex } from '@modules/definitions'
+import { EntityType } from 'defs'
 import { TextExtractorService } from '@modules/files/services/textExtractorService'
 import { formatDateTime } from 'tools'
 import {
@@ -21,65 +21,6 @@ export class FilesIndexerService {
     private readonly elasticsearchService: ElasticsearchService,
     private readonly textExtractService: TextExtractorService,
   ) {}
-
-  async appendFileContent({ fileId, linkedEntity }: FileEventInfo) {
-    try {
-      let indexedFileContent = await this.getFileContent(fileId)
-
-      if (!indexedFileContent?.length) {
-        const textContent = await this.textExtractService.parseFile(fileId, indexedFileContent)
-
-        if (textContent?.length) {
-          await this.indexFileContent(fileId, textContent)
-          indexedFileContent = textContent
-        }
-      }
-
-      if (linkedEntity) {
-        const fileModel = await this.ingressService.getEntity(
-          {
-            entityId: fileId,
-            entityType: 'FILE',
-          },
-          false,
-          AUTHOR,
-        )
-
-        if (fileModel) {
-          const { name, description } = fileModel as File
-
-          const docFileContent: EmbeddedFileIndex = {
-            name,
-            description,
-            content: indexedFileContent ?? '',
-          }
-
-          const { entityId, entityType } = linkedEntity
-          const index = this.getIndexByEntityType(entityType)
-
-          if (index) {
-            const { result } = await this.elasticsearchService.update({
-              id: entityId,
-              index,
-              refresh: true,
-              retry_on_conflict: 10,
-              script: {
-                source: 'ctx._source.files.addAll(params.files)',
-                lang: 'painless',
-                params: {
-                  files: [docFileContent],
-                },
-              },
-            })
-            return result === 'updated'
-          }
-        }
-      }
-      return true
-    } catch (error) {
-      this.logger.error(error)
-    }
-  }
 
   private async indexFileContent(fileId: string, fileContent: string) {
     try {

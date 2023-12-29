@@ -31,9 +31,6 @@ export class FileModel implements File {
   @Prop()
   mimeType: string
 
-  @Prop()
-  source: string
-
   @Prop({ isRequired: false, default: false })
   isHidden: boolean
 

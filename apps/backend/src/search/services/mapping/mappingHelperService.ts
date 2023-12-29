@@ -108,7 +108,7 @@ export class MappingHelperService {
       oldName: this.textField,
       cnp: this.keywordField,
       documents: this.keywordField,
-    } as Record<string | keyof ConnectedPersonIndex, MappingProperty>,
+    } as Record<keyof ConnectedPersonIndex | string, MappingProperty>,
   }
 
   readonly connectedCompany: MappingProperty = {

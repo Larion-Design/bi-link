@@ -3,7 +3,6 @@ import { UseGuards } from '@nestjs/common'
 import {
   Company,
   EntityInfo,
-  EntityType,
   Event,
   Graph,
   GraphEntities,
@@ -41,7 +40,7 @@ export class GetEntitiesGraph {
     const relationships = await this.graphService.getEntitiesGraph(id, depth)
 
     if (relationships) {
-      const entities = await this.fetchEntitiesInfo(relationships, _id)
+      const entities = await this.fetchEntitiesInfo(relationships)
 
       return {
         relationships,
@@ -50,10 +49,7 @@ export class GetEntitiesGraph {
     }
   }
 
-  private fetchEntitiesInfo = async (
-    relationships: GraphRelationships,
-    userId: string,
-  ): Promise<GraphEntities> => {
+  private fetchEntitiesInfo = async (relationships: GraphRelationships): Promise<GraphEntities> => {
     const entities: Record<keyof GraphEntities, Set<string>> = {
       persons: new Set<string>(),
       companies: new Set<string>(),
@@ -105,45 +101,16 @@ export class GetEntitiesGraph {
     )
 
     return {
-      persons: (await this.fetchEntities(
-        Array.from(entities.persons),
-        'PERSON',
-        userId,
-      )) as Person[],
-      companies: (await this.fetchEntities(
-        Array.from(entities.companies),
-        'COMPANY',
-        userId,
-      )) as Company[],
-      properties: (await this.fetchEntities(
-        Array.from(entities.properties),
-        'PROPERTY',
-        userId,
-      )) as Property[],
-      events: (await this.fetchEntities(Array.from(entities.events), 'EVENT', userId)) as Event[],
-      proceedings: (await this.fetchEntities(
-        Array.from(entities.proceedings),
-        'PROCEEDING',
-        userId,
-      )) as Proceeding[],
-      locations: (await this.fetchEntities(
-        Array.from(entities.locations),
-        'LOCATION',
-        userId,
-      )) as Location[],
-      reports: (await this.fetchEntities(
-        Array.from(entities.reports),
-        'REPORT',
-        userId,
-      )) as Report[],
+      persons: (await this.fetchEntities(Array.from(entities.persons))) as Person[],
+      companies: (await this.fetchEntities(Array.from(entities.companies))) as Company[],
+      properties: (await this.fetchEntities(Array.from(entities.properties))) as Property[],
+      events: (await this.fetchEntities(Array.from(entities.events))) as Event[],
+      proceedings: (await this.fetchEntities(Array.from(entities.proceedings))) as Proceeding[],
+      locations: (await this.fetchEntities(Array.from(entities.locations))) as Location[],
+      reports: (await this.fetchEntities(Array.from(entities.reports))) as Report[],
     }
   }
 
-  private fetchEntities = async (entitiesIds: string[], entityType: EntityType, userId: string) =>
-    entitiesIds.length
-      ? (await this.ingressService.getEntities(entitiesIds, entityType, false, {
-          type: 'USER',
-          sourceId: userId,
-        })) ?? []
-      : []
+  private fetchEntities = async (entitiesIds: string[]) =>
+    Promise.resolve(entitiesIds.length ? [] : [])
 }

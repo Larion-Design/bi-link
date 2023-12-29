@@ -43,16 +43,19 @@ export class CompaniesService {
     }
   }
 
-  getCompanies = async (companiesIds: string[], fetchLinkedEntities: boolean) => {
+  async getCompanies(
+    companiesIds: string[],
+    fetchLinkedEntities: boolean,
+  ): Promise<CompanyDocument[]> {
     try {
       if (companiesIds.length) {
         const query = this.companyModel.find({ _id: companiesIds })
         return (fetchLinkedEntities ? this.getLinkedEntities(query) : query).exec()
       }
-      return []
     } catch (error) {
       this.logger.error(error)
     }
+    return []
   }
 
   findByCUI = async (cui: string) => {

@@ -1,10 +1,9 @@
 import { Controller, Post, UploadedFile, UseInterceptors } from '@nestjs/common'
 import { FileInterceptor } from '@nestjs/platform-express'
 import { FilesService } from '@modules/central/schema/file/services/filesService'
-
 import { FileAPIInput, File } from 'defs'
 import { getDefaultFile } from 'default-values'
-import { FileImporterService } from '../../../../files/services/fileImporterService'
+import { FileImporterService } from '@modules/files/services/fileImporterService'
 
 @Controller()
 export class FileUploadController {

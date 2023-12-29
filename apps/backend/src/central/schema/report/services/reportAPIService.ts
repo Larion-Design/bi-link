@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common'
 import { ReportAPIInput } from 'defs'
-import { ReportSectionInput } from '../../../../../api/src/modules/api/reports/dto/reportSectionInput'
+import { ReportSectionInput } from '@modules/api/schema/reports/dto/reportSectionInput'
 import { CompaniesService } from '../../company/services/companiesService'
 import { EventsService } from '../../event/services/eventsService'
 import { PersonsService } from '../../person/services/personsService'

@@ -1,5 +1,5 @@
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo'
-import { Module } from '@nestjs/common'
+import { Global, Module } from '@nestjs/common'
 import { ConfigModule, ConfigService } from '@nestjs/config'
 import { GraphQLModule } from '@nestjs/graphql'
 import { MulterModule } from '@nestjs/platform-express'
@@ -59,6 +59,7 @@ import { DisableUser } from './schema/users/mutations/disableUser'
 import { UserRegistered } from './schema/users/mutations/userRegistered'
 import { GetUsers } from './schema/users/queries/getUsers'
 
+@Global()
 @Module({
   imports: [
     MulterModule.register({

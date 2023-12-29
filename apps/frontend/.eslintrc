@@ -7,7 +7,7 @@
     "serviceworker": true
   },
   "parserOptions": {
-    "project": ["./tsconfig.eslint.json"]
+    "project": ["apps/frontend/tsconfig.eslint.json"]
   },
   "plugins": []
 }

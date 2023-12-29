@@ -1,5 +1,5 @@
 import { CompanyIndex, BalanceSheetIndex } from '@modules/definitions'
-import { INDEX_COMPANIES, INDEX_PROPERTIES } from '@modules/search/constants'
+import { INDEX_COMPANIES } from '@modules/search/constants'
 import { MappingValidatorService } from '@modules/search/services/mapping/mappingValidatorService'
 import { MappingInterface } from './mapping'
 import { MappingHelperService } from './mappingHelperService'

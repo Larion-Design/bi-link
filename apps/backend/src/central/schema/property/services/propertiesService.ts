@@ -27,7 +27,7 @@ export class PropertiesService {
     private readonly ownerModel: Model<PropertyOwnerDocument>,
   ) {}
 
-  create = async (propertyModel: PropertyModel) => {
+  create = async (propertyModel: Omit<PropertyModel, '_id'>) => {
     try {
       return this.propertyModel.create(propertyModel)
     } catch (e) {
@@ -52,16 +52,19 @@ export class PropertiesService {
     }
   }
 
-  getProperties = async (propertiesIds: string[], fetchLinkedEntities: boolean) => {
+  async getProperties(
+    propertiesIds: string[],
+    fetchLinkedEntities: boolean,
+  ): Promise<PropertyDocument[]> {
     try {
       if (propertiesIds.length) {
         const query = this.propertyModel.find({ _id: propertiesIds })
         return (fetchLinkedEntities ? this.getLinkedEntities(query) : query).exec()
       }
-      return []
     } catch (e) {
       this.logger.error(e)
     }
+    return []
   }
 
   async *getAllProperties(fields: ProjectionFields<PropertyDocument> = { _id: 1 }) {
@@ -70,11 +73,12 @@ export class PropertiesService {
     }
   }
 
-  private getLinkedEntities = (query: Query<any, PropertyDocument>) =>
-    query
+  private getLinkedEntities<R, T>(query: Query<R, T>) {
+    return query
       .populate({ path: 'files', model: this.fileModel })
       .populate({ path: 'images', model: this.fileModel })
       .populate({ path: 'owners.person', model: this.personModel })
       .populate({ path: 'owners.company', model: this.companyModel })
       .populate({ path: 'realEstateInfo.location', model: this.locationModel })
+  }
 }

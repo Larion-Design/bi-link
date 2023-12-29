@@ -1,6 +1,7 @@
+import { PersonAPIService } from '@modules/central/schema/person/services/personAPIService'
+import { EntityEventDispatcherService } from '@modules/entity-events'
 import { Args, ArgsType, Field, ID, Mutation, Resolver } from '@nestjs/graphql'
 import { UseGuards } from '@nestjs/common'
-import { PersonsService } from '@modules/central/schema/person/services/personsService'
 import { User } from 'defs'
 import { CurrentUser, FirebaseAuthGuard } from '@modules/iam'
 
@@ -15,11 +16,11 @@ class Params {
 
 @Resolver(() => Person)
 export class CreatePerson {
-  constructor(private readonly ingressService: PersonsService) {}
+  constructor(private readonly personsService: PersonAPIService) {}
 
   @Mutation(() => ID)
   @UseGuards(FirebaseAuthGuard)
   async createPerson(@CurrentUser() { _id }: User, @Args() { data }: Params) {
-    return this.ingressService.create(data)
+    return this.personsService.create(data)
   }
 }

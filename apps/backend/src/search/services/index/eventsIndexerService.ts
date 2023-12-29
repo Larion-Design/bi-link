@@ -1,5 +1,4 @@
 import { Injectable, Logger } from '@nestjs/common'
-import { format } from 'date-fns'
 import { ElasticsearchService } from '@nestjs/elasticsearch'
 import {
   EventIndex,

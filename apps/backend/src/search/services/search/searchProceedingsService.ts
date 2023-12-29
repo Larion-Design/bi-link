@@ -57,7 +57,7 @@ export class SearchProceedingsService {
 
       return {
         total: (total as SearchTotalHits).value,
-        records: hits.map(({ _id, _source }) => this.transformRecord(_id, _source)),
+        records: hits.map(({ _id, _source }) => this.transformRecord(_id, _source!)),
       }
     } catch (e) {
       this.logger.error(e)

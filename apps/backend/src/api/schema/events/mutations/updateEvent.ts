@@ -1,7 +1,8 @@
+import { EventAPIService } from '@modules/central/schema/event/services/eventAPIService'
+import { EntityEventDispatcherService } from '@modules/entity-events'
 import { Args, ArgsType, Field, ID, Mutation, Resolver } from '@nestjs/graphql'
 import { UseGuards } from '@nestjs/common'
-import { EventsService } from '@modules/central/schema/event/services/eventsService'
-import { EntityInfo, UpdateSource, User } from 'defs'
+import { User } from 'defs'
 import { CurrentUser, FirebaseAuthGuard } from '@modules/iam'
 import { EventInput } from '../dto/eventInput'
 import { Event } from '../dto/event'
@@ -17,21 +18,14 @@ class Params {
 
 @Resolver(() => Event)
 export class UpdateEvent {
-  constructor(private readonly ingressService: EventsService) {}
+  constructor(
+    private readonly eventsService: EventAPIService,
+    private readonly entityEventDispatcherService: EntityEventDispatcherService,
+  ) {}
 
   @Mutation(() => Boolean)
   @UseGuards(FirebaseAuthGuard)
-  async updateEvent(@CurrentUser() { _id, role }: User, @Args() { eventId, data }: Params) {
-    const source: UpdateSource = {
-      sourceId: _id,
-      type: 'USER',
-    }
-
-    const entityInfo: EntityInfo = {
-      entityId: eventId,
-      entityType: 'EVENT',
-    }
-
-    return this.ingressService.update(eventId, data)
+  async updateEvent(@CurrentUser() { _id }: User, @Args() { eventId, data }: Params) {
+    return this.eventsService.update(eventId, data)
   }
 }

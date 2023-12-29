@@ -1,3 +1,4 @@
+import { LocationsService } from '@modules/central/schema/location/services/locationsService'
 import { UseGuards } from '@nestjs/common'
 import { Args, ArgsType, Field, Query, Resolver } from '@nestjs/graphql'
 import { User } from 'defs'
@@ -12,15 +13,10 @@ class Params {
 
 @Resolver(() => Location)
 export class GetLocations {
+  constructor(private readonly locationsService: LocationsService) {}
   @Query(() => Location)
   @UseGuards(FirebaseAuthGuard)
   async getLocations(@CurrentUser() { _id }: User, @Args() { locationsIds }: Params) {
-    if (locationsIds.length) {
-      return this.ingressService.getEntities(locationsIds, 'LOCATION', false, {
-        sourceId: _id,
-        type: 'USER',
-      })
-    }
-    return []
+    return locationsIds.length ? this.locationsService.getLocations(locationsIds) : []
   }
 }

@@ -1,6 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common'
 import { ProceedingGraphNode, ProceedingEntityRelationship } from '@modules/definitions'
-import { Proceeding, proceedingSchema } from 'defs'
+import { Proceeding } from 'defs'
 import { GraphService } from './graphService'
 
 @Injectable()
@@ -9,10 +9,8 @@ export class ProceedingGraphService {
 
   constructor(private readonly graphService: GraphService) {}
 
-  upsertProceedingNode = async (proceedingId: string) => {
+  upsertProceedingNode = async (proceedingId: string, proceedingDocument: Proceeding) => {
     try {
-      const proceedingDocument = await this.getProceedingInfo(proceedingId)
-
       await this.graphService.upsertEntity<ProceedingGraphNode>(
         {
           _id: proceedingId,
@@ -56,19 +54,4 @@ export class ProceedingGraphService {
       'INVOLVED_AS',
     )
   }
-
-  private getProceedingInfo = async (proceedingId: string) =>
-    proceedingSchema.parse(
-      await this.ingressService.getEntity(
-        {
-          entityId: proceedingId,
-          entityType: 'PROCEEDING',
-        },
-        true,
-        {
-          type: 'SERVICE',
-          sourceId: 'SERVICE_GRAPH',
-        },
-      ),
-    )
 }

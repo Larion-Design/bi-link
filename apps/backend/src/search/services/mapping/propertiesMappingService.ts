@@ -3,7 +3,6 @@ import { MappingValidatorService } from '@modules/search/services/mapping/mappin
 import { Injectable, OnApplicationBootstrap } from '@nestjs/common'
 import { MappingProperty } from '@elastic/elasticsearch/lib/api/types'
 import { PropertyIndex } from '@modules/definitions'
-import { Record } from 'neo4j-driver'
 import { MappingInterface } from './mapping'
 import { MappingHelperService } from './mappingHelperService'
 

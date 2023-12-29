@@ -55,7 +55,7 @@ export class SearchPropertiesService {
       } = await this.elasticsearchService.search<PropertySearchIndex>(request)
 
       return {
-        records: hits.map(({ _id, _source }) => this.transformRecord(_id, _source)) ?? [],
+        records: hits.map(({ _id, _source }) => this.transformRecord(_id, _source!)) ?? [],
         total: (total as SearchTotalHits).value,
       }
     } catch (error) {
@@ -81,7 +81,7 @@ export class SearchPropertiesService {
           },
         },
       })
-      return hits.map(({ _id, _source }) => this.transformRecord(_id, _source)) ?? []
+      return hits.map(({ _id, _source }) => this.transformRecord(_id, _source!)) ?? []
     } catch (error) {
       this.logger.error(error)
     }
@@ -105,7 +105,7 @@ export class SearchPropertiesService {
           },
         },
       })
-      return hits.map(({ _id, _source }) => this.transformRecord(_id, _source)) ?? []
+      return hits.map(({ _id, _source }) => this.transformRecord(_id, _source!)) ?? []
     } catch (error) {
       this.logger.error(error)
     }

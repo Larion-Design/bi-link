@@ -1,6 +1,6 @@
 import { ReportGraphNode, ReportTargetEntityRelationship } from '@modules/definitions'
 import { Injectable, Logger } from '@nestjs/common'
-import { Report, reportSchema } from 'defs'
+import { Report } from 'defs'
 import { GraphService } from './graphService'
 
 @Injectable()
@@ -9,10 +9,8 @@ export class ReportGraphService {
 
   constructor(private readonly graphService: GraphService) {}
 
-  upsertReportNode = async (reportId: string) => {
+  upsertReportNode = async (reportId: string, reportDocument: Report) => {
     try {
-      const reportDocument = await this.getReport(reportId)
-
       if (!reportDocument.isTemplate) {
         await this.graphService.upsertEntity<ReportGraphNode>(
           {
@@ -44,12 +42,4 @@ export class ReportGraphService {
       this.logger.error(e)
     }
   }
-
-  private getReport = async (reportId: string) =>
-    reportSchema.parse(
-      await this.ingressService.getEntity({ entityId: reportId, entityType: 'REPORT' }, true, {
-        type: 'SERVICE',
-        sourceId: 'SERVICE_GRAPH',
-      }),
-    )
 }

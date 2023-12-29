@@ -12,7 +12,7 @@
   ],
   "scripts": {
     "build": "parcel build",
-    "prepare": "pnpm pnpm exec parcel build"
+    "prepare": "pnpm exec parcel build"
   },
   "dependencies": {
     "date-fns": "^2.29.3",

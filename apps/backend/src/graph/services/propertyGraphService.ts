@@ -1,6 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common'
 import { PropertyGraphNode, PropertyOwnerGraphRelationship } from '@modules/definitions'
-import { Property, propertySchema } from 'defs'
+import { Property } from 'defs'
 import { formatDate } from 'tools'
 import { GraphService } from './graphService'
 import { LocationGraphService } from './locationGraphService'
@@ -14,22 +14,8 @@ export class PropertyGraphService {
     private readonly locationGraphService: LocationGraphService,
   ) {}
 
-  upsertPropertyNode = async (propertyId: string) => {
+  upsertPropertyNode = async (propertyId: string, propertyDocument: Property) => {
     try {
-      const propertyDocument = propertySchema.parse(
-        await this.ingressService.getEntity(
-          {
-            entityId: propertyId,
-            entityType: 'PROPERTY',
-          },
-          true,
-          {
-            type: 'SERVICE',
-            sourceId: 'SERVICE_GRAPH',
-          },
-        ),
-      )
-
       const propertyNode: PropertyGraphNode = {
         _id: propertyId,
         name: propertyDocument.name,

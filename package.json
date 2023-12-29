@@ -9,7 +9,7 @@
     "backend": "pnpm nx start backend",
     "frontend": "pnpm nx start frontend",
     "build": "pnpm nx affected --base=FETCH_HEAD -t build --parallel=3",
-    "docker:start": "pnpm nx up docker",
+    "docker": "pnpm nx up docker",
     "docker:stop": "pnpm nx stop docker",
     "test": "pnpm nx affected --base=FETCH_HEAD -t test --parallel=3",
     "lint": "eslint --cache .",

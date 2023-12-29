@@ -1,3 +1,4 @@
+import { EntityEventDispatcherService } from '@modules/entity-events'
 import { Injectable, Logger } from '@nestjs/common'
 import { EducationAPIInput, IdDocument, OldName, PersonAPIInput, UpdateSource } from 'defs'
 import { LocationAPIService } from '../../location/services/locationAPIService'
@@ -17,6 +18,7 @@ export class PersonAPIService {
   private readonly logger = new Logger(PersonAPIService.name)
 
   constructor(
+    private readonly entityEventDispatcherService: EntityEventDispatcherService,
     private readonly personsService: PersonsService,
     private readonly fileService: FileAPIService,
     private readonly customFieldsService: CustomFieldsService,

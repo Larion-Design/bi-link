@@ -6,10 +6,30 @@
     "es6": true
   },
   "parserOptions": {
-    "project": ["./tsconfig.eslint.json"],
-    "extraFileExtensions": [".json"]
+    "project": ["apps/backend/tsconfig.eslint.json"],
+    "extraFileExtensions": [".json"],
+    "sourceType": "module",
+    "allowImportExportEverywhere": true,
+    "ecmaVersion": "latest"
   },
   "rules": {
-    "@typescript-eslint/no-empty-interface": "off"
-  }
+    "@typescript-eslint/no-empty-interface": "off",
+    "@typescript-eslint/no-namespace": "off",
+    "@typescript-eslint/no-unsafe-assignment": "off",
+    "@typescript-eslint/no-unsafe-call": "off",
+    "prettier/prettier": "off",
+    "arrow-body-style": "off",
+    "prefer-arrow-callback": "off",
+    "@typescript-eslint/no-unsafe-argument": "off",
+    "@typescript-eslint/no-unused-vars": "warn",
+    "@typescript-eslint/no-redundant-type-constituents": "warn"
+  },
+  "parser": "@typescript-eslint/parser",
+  "plugins": ["@typescript-eslint", "simple-import-sort", "prettier"],
+  "extends": [
+    "eslint:recommended",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:@typescript-eslint/recommended-requiring-type-checking",
+    "prettier"
+  ]
 }
