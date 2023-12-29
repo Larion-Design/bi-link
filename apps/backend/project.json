@@ -8,23 +8,24 @@
       "options": {
         "cwd": "{projectRoot}",
         "commands": ["pnpm start"]
-      },
-      "dependsOn": ["^up"]
+      }
     },
     "build": {
       "executor": "nx:run-commands",
       "options": {
         "cwd": "{projectRoot}",
-        "commands": ["nest build"],
-        "parallel": true
+        "command": "nest build"
       }
     },
-    "executable": {
+    "deploy": {
       "executor": "nx:run-commands",
-      "depends_on": "build",
       "options": {
         "cwd": "{projectRoot}",
-        "command": " pnpm exec pkg -t node18-macos-arm64 dist/main.js"
+        "commands": [
+          "pnpm --filter backend --prod --no-optional deploy build",
+          "pnpm --filter backend exec pkg -t node18-macos-arm64 -c build/package.json --out-path build/.bin build/dist/main.js"
+        ],
+        "parallel": false
       }
     }
   }

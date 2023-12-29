@@ -51,6 +51,9 @@ importers:
       '@types/node':
         specifier: ^20.5.4
         version: 20.5.4
+      dotenv:
+        specifier: ^16.3.1
+        version: 16.3.1
       nx:
         specifier: 17.2.7
         version: 17.2.7
@@ -553,16 +556,16 @@ importers:
         version: 7.14.0
       default-values:
         specifier: workspace:*
-        version: file:packages/default-values
+        version: link:../../packages/default-values
       defs:
         specifier: workspace:*
-        version: file:packages/defs
+        version: link:../../packages/defs
       prop-types:
         specifier: ^15.8.1
         version: 15.8.1
       tools:
         specifier: workspace:*
-        version: file:packages/tools
+        version: link:../../packages/tools
       tslib:
         specifier: ^2.6.2
         version: 2.6.2
@@ -584,13 +587,6 @@ importers:
       webpack:
         specifier: ^5.88.2
         version: 5.88.2
-    dependenciesMeta:
-      default-values:
-        injected: true
-      defs:
-        injected: true
-      tools:
-        injected: true
 
   packages/default-values:
     dependencies:
@@ -10018,6 +10014,7 @@ packages:
     engines: {node: '>=0.11'}
     dependencies:
       '@babel/runtime': 7.22.11
+    dev: false
 
   /date-fns@3.0.6:
     resolution: {integrity: sha512-W+G99rycpKMMF2/YD064b2lE7jJGUe+EjOES7Q8BIGY8sbNdbgcs9XFTZwvzc9Jx1f3k7LB7gZaZa7f8Agzljg==}
@@ -16997,6 +16994,7 @@ packages:
   /uuid@8.3.2:
     resolution: {integrity: sha512-+NYs2QeMWy+GWFOEm9xnn6HCDp0l7QBD7ml8zLUmJ+93Q5NF0NocErnwkTkXVFNiX3/fpC6afS8Dhb/gz7R7eg==}
     hasBin: true
+    dev: false
 
   /uuid@9.0.0:
     resolution: {integrity: sha512-MXcSTerfPa4uqyzStbRoTgt5XIe3x5+42+q1sDuy3R5MDk66URdLMOZe5aPX/SQd+kuYAh0FdP/pO28IkQyTeg==}
@@ -17700,6 +17698,7 @@ packages:
 
   /zod@3.22.2:
     resolution: {integrity: sha512-wvWkphh5WQsJbVk1tbx1l1Ly4yg+XecD+Mq280uBGt9wa5BKSWf4Mhp6GmrkPixhMxmabYY7RbzlwVP32pbGCg==}
+    dev: false
 
   /zod@3.22.4:
     resolution: {integrity: sha512-iC+8Io04lddc+mVqQ9AZ7OQ2MrUKGN+oIQyq1vemgt46jwCwLfhq7/pwnBnNXXXZb8VTVLKwp9EDkx+ryxIWmg==}
@@ -17725,29 +17724,3 @@ packages:
       react: 18.2.0
       use-sync-external-store: 1.2.0(react@18.2.0)
     dev: false
-
-  file:packages/default-values:
-    resolution: {directory: packages/default-values, type: directory}
-    name: default-values
-    dependencies:
-      defs: link:packages/defs
-      tslib: 2.6.2
-      uuid: 8.3.2
-    dev: true
-
-  file:packages/defs:
-    resolution: {directory: packages/defs, type: directory}
-    name: defs
-    dependencies:
-      tslib: 2.6.2
-      zod: 3.22.2
-    dev: true
-
-  file:packages/tools:
-    resolution: {directory: packages/tools, type: directory}
-    name: tools
-    dependencies:
-      date-fns: 2.30.0
-      defs: link:packages/defs
-      tslib: 2.6.2
-    dev: true

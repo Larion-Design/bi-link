@@ -20,6 +20,7 @@
     "@parcel/transformer-typescript-types": "^2.10.3",
     "@playwright/test": "^1.37.1",
     "@types/node": "^20.5.4",
+    "dotenv": "^16.3.1",
     "nx": "17.2.7",
     "parcel": "^2.10.3",
     "rimraf": "^3.0.2",

@@ -53,6 +53,5 @@
       "@modules/entity-events/*": ["src/entity-events/*"]
     }
   },
-  "include": ["src"],
-  "exclude": ["src/termene"]
+  "include": ["src"]
 }

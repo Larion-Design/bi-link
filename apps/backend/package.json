@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "private": true,
   "main": "dist/main.js",
+  "files": ["dist"],
   "license": "UNLICENSED",
   "scripts": {
     "build": "nest build",
