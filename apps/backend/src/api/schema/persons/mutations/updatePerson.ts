@@ -1,12 +1,10 @@
 import { PersonAPIService } from '@modules/central/schema/person/services/personAPIService'
-import { EntityEventDispatcherService } from '@modules/entity-events'
 import { Args, ArgsType, Field, ID, Mutation, Resolver } from '@nestjs/graphql'
-import { PersonsService } from '@modules/central/schema/person/services/personsService'
 import { CurrentUser, FirebaseAuthGuard } from '@modules/iam'
 import { Person } from '../dto/person'
 import { PersonInput } from '../dto/personInput'
 import { UseGuards } from '@nestjs/common'
-import { EntityInfo, UpdateSource, User } from 'defs'
+import { User } from 'defs'
 
 @ArgsType()
 class Params {

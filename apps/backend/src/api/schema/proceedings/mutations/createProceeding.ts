@@ -1,7 +1,6 @@
 import { ProceedingAPIService } from '@modules/central/schema/proceeding/services/proceedingAPIService'
 import { UseGuards } from '@nestjs/common'
 import { Args, ArgsType, Field, ID, Mutation, Resolver } from '@nestjs/graphql'
-import { ProceedingsService } from '@modules/central/schema/proceeding/services/proceedingsService'
 import { User } from 'defs'
 import { CurrentUser, FirebaseAuthGuard } from '@modules/iam'
 

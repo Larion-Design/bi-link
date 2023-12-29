@@ -14,7 +14,7 @@ export class PropertyOwnerAPIService {
     private readonly customFieldsService: CustomFieldsService,
   ) {}
 
-  getPropertyOwnersModels = async (owners: PropertyOwnerAPI[]) => {
+  async getPropertyOwnersModels(owners: PropertyOwnerAPI[]): Promise<PropertyOwnerModel[]> {
     const personsIds = new Set<string>()
     const companiesIds = new Set<string>()
     const ownersMap = new Map<string, PropertyOwnerAPI>()
@@ -37,31 +37,33 @@ export class PropertyOwnerAPIService {
     ]
   }
 
-  private createPersonsOwners = async (
+  private async createPersonsOwners(
     personsIds: string[],
     ownersMap: Map<string, PropertyOwnerAPI>,
-  ) => {
-    if (personsIds) {
-      const persons = await this.personsService.getPersons(Array.from(personsIds), true)
+  ): Promise<PropertyOwnerModel[]> {
+    if (personsIds?.length) {
+      const persons = await this.personsService.getPersons(personsIds, true)
       return persons.map((personDocument) => {
         const ownerInfo = ownersMap.get(String(personDocument))!
         const ownerModel = this.createOwnerModel(ownerInfo)
         ownerModel.person = personDocument
+        return ownerModel
       })
     }
     return []
   }
 
-  private createCompaniesOwners = async (
+  private async createCompaniesOwners(
     companiesIds: string[],
     ownersMap: Map<string, PropertyOwnerAPI>,
-  ) => {
-    if (companiesIds) {
+  ): Promise<PropertyOwnerModel[]> {
+    if (companiesIds?.length) {
       const companies = await this.companiesService.getCompanies(companiesIds, true)
       return companies.map((companyDocument) => {
         const ownerInfo = ownersMap.get(String(companyDocument))!
         const ownerModel = this.createOwnerModel(ownerInfo)
         ownerModel.company = companyDocument
+        return ownerModel
       })
     }
     return []

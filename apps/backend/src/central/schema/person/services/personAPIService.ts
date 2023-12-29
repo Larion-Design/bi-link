@@ -40,6 +40,8 @@ export class PersonAPIService {
             personInfo.relationships,
           )
         }
+
+        this.entityEventDispatcherService.personCreated(personDocument)
         return String(personDocument._id)
       }
     } catch (error) {
@@ -47,7 +49,7 @@ export class PersonAPIService {
     }
   }
 
-  update = async (personId: string, personInfo: PersonAPIInput) => {
+  async update(personId: string, personInfo: PersonAPIInput) {
     try {
       const model = await this.createPersonDocument(personInfo)
       const personDocument = await this.personsService.update(personId, model)
@@ -57,11 +59,14 @@ export class PersonAPIService {
           personDocument,
           personInfo.relationships,
         )
+
+        this.entityEventDispatcherService.personUpdated(personDocument)
+        return true
       }
-      return true
     } catch (error) {
       this.logger.error(error)
     }
+    return false
   }
 
   createPendingSnapshot = async (personId: string, data: PersonAPIInput, source: UpdateSource) => {

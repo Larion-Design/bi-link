@@ -43,13 +43,17 @@ export class PropertiesService {
     }
   }
 
-  getProperty = async (propertyId: string, fetchLinkedEntities: boolean) => {
+  async getProperty(
+    propertyId: string,
+    fetchLinkedEntities: boolean,
+  ): Promise<PropertyDocument | undefined | null> {
     try {
       const query = this.propertyModel.findById(propertyId)
       return (fetchLinkedEntities ? this.getLinkedEntities(query) : query).exec()
     } catch (e) {
       this.logger.error(e)
     }
+    return null
   }
 
   async getProperties(

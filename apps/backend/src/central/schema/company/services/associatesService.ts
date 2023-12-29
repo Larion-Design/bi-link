@@ -13,47 +13,56 @@ export class AssociatesService {
     private readonly companiesService: CompaniesService,
   ) {}
 
-  private createPersonsAssociates = async (associates: Map<string, AssociateAPI>) => {
+  private async createPersonsAssociates(
+    associates: Map<string, AssociateAPI>,
+  ): Promise<AssociateModel[]> {
     if (associates.size) {
       const personsModels = await this.personService.getPersons(
         Array.from(associates.keys()),
         false,
       )
 
-      return personsModels.map((personModel) => {
+      const associatesModels: AssociateModel[] = []
+
+      personsModels.forEach((personModel) => {
         const associateInfo = associates.get(String(personModel._id))
 
         if (associateInfo) {
           const associate = this.createAssociateModel(associateInfo)
           associate.person = personModel
-          return associate
+          associatesModels.push(associate)
         }
       })
+      return associatesModels
     }
     return []
   }
 
-  private createCompaniesAssociates = async (associates: Map<string, AssociateAPI>) => {
+  private async createCompaniesAssociates(associates: Map<string, AssociateAPI>) {
     if (associates.size) {
       const companiesModels = await this.companiesService.getCompanies(
         Array.from(associates.keys()),
         false,
       )
 
-      return companiesModels.map((companyModel) => {
+      const associatesModels: AssociateModel[] = []
+
+      companiesModels.forEach((companyModel) => {
         const associateInfo = associates.get(String(companyModel._id))
 
         if (associateInfo) {
           const associate = this.createAssociateModel(associateInfo)
           associate.company = companyModel
-          return associate
+          associatesModels.push(associate)
         }
       })
+
+      return associatesModels
     }
     return []
   }
 
-  createAssociatesModels = async (associates: AssociateAPI[]) => {
+  async createAssociatesModels(associates: AssociateAPI[]) {
     const personsAssociatesMap = new Map<string, AssociateAPI>()
     const companiesAssociatesMap = new Map<string, AssociateAPI>()
 

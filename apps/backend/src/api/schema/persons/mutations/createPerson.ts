@@ -1,5 +1,4 @@
 import { PersonAPIService } from '@modules/central/schema/person/services/personAPIService'
-import { EntityEventDispatcherService } from '@modules/entity-events'
 import { Args, ArgsType, Field, ID, Mutation, Resolver } from '@nestjs/graphql'
 import { UseGuards } from '@nestjs/common'
 import { User } from 'defs'

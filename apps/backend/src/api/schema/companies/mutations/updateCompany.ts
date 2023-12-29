@@ -1,5 +1,4 @@
 import { CompanyAPIService } from '@modules/central/schema/company/services/companyAPIService'
-import { EntityEventDispatcherService } from '@modules/entity-events'
 import { Args, ArgsType, Field, ID, Mutation, Resolver } from '@nestjs/graphql'
 import { CurrentUser, FirebaseAuthGuard } from '@modules/iam'
 import { CompanyInput } from '../dto/companyInput'
@@ -18,10 +17,7 @@ class UpdateCompanyArgs {
 
 @Resolver(() => Company)
 export class UpdateCompany {
-  constructor(
-    private readonly companiesService: CompanyAPIService,
-    private readonly entityEventDispatcherService: EntityEventDispatcherService,
-  ) {}
+  constructor(private readonly companiesService: CompanyAPIService) {}
 
   @Mutation(() => Boolean)
   @UseGuards(FirebaseAuthGuard)

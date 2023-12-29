@@ -1,3 +1,4 @@
+import { EntityEventDispatcherService } from '@modules/entity-events'
 import { Injectable, Logger } from '@nestjs/common'
 import { CompanyAPIInput, UpdateSource } from 'defs'
 import { FileAPIService } from '../../file/services/fileAPIService'
@@ -14,6 +15,7 @@ export class CompanyAPIService {
   private readonly logger = new Logger(CompanyAPIService.name)
 
   constructor(
+    private readonly entityEventDispatcherService: EntityEventDispatcherService,
     private readonly locationAPIService: LocationAPIService,
     private readonly fileService: FileAPIService,
     private readonly customFieldsService: CustomFieldsService,
@@ -23,28 +25,26 @@ export class CompanyAPIService {
     private readonly companyHistorySnapshotService: CompanyHistorySnapshotService,
   ) {}
 
-  create = async (companyInfo: CompanyAPIInput) => {
-    try {
-      const companyModel = await this.createCompanyDocument(companyInfo)
+  async create(companyInfo: CompanyAPIInput) {
+    const companyModel = await this.createCompanyDocument(companyInfo)
 
-      if (companyModel) {
-        const companyDocument = await this.companiesService.create(companyModel)
+    if (companyModel) {
+      const companyDocument = await this.companiesService.create(companyModel)
 
-        if (companyDocument) {
-          return String(companyDocument._id)
-        }
+      if (companyDocument) {
+        this.entityEventDispatcherService.companyCreated(companyDocument)
+        return String(companyDocument._id)
       }
-    } catch (error) {
-      this.logger.error(error)
     }
   }
 
-  update = async (companyId: string, companyInfo: CompanyAPIInput) => {
+  async update(companyId: string, companyInfo: CompanyAPIInput) {
     try {
       const companyModel = await this.createCompanyDocument(companyInfo)
 
       if (companyModel) {
         await this.companiesService.update(companyId, companyModel)
+        this.entityEventDispatcherService.companyCreated(companyModel)
         return true
       }
     } catch (error) {
@@ -84,9 +84,14 @@ export class CompanyAPIService {
     }
   }
 
-  private createCompanyDocument = async (companyInfo: CompanyAPIInput) => {
+  private createCompanyDocument = async (companyInfo: CompanyAPIInput, companyId?: string) => {
     try {
       const companyModel = new CompanyModel()
+
+      if (companyId) {
+        companyModel._id = companyId
+      }
+
       companyModel.name = companyInfo.name
       companyModel.cui = companyInfo.cui
       companyModel.registrationNumber = companyInfo.registrationNumber

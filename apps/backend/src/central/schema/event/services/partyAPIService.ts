@@ -1,5 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common'
-import { ConnectedEntity, EventParticipantAPI, Person } from 'defs'
+import { CompanyDocument } from '@modules/central/schema/company/models/companyModel'
+import { PropertyDocument } from '@modules/central/schema/property/models/propertyModel'
+import { EventParticipantAPI } from 'defs'
 import { CompaniesService } from '../../company/services/companiesService'
 import { CustomFieldsService } from '../../customField/services/customFieldsService'
 import { PersonDocument } from '../../person/models/personModel'
@@ -18,7 +20,7 @@ export class PartyAPIService {
     private readonly companiesService: CompaniesService,
   ) {}
 
-  createPartiesModels = async (parties: EventParticipantAPI[]) => {
+  async createPartiesModels(parties: EventParticipantAPI[]) {
     const personsMap = await this.getPersonsModels(parties)
     const companiesModels = await this.getCompaniesModels(parties)
     const propertiesModels = await this.getPropertiesModels(parties)
@@ -37,13 +39,37 @@ export class PartyAPIService {
         partyModel.persons = partyInfo.persons.map(({ _id }) => personsMap.get(_id)!)
       }
 
-      partyModel.properties = partyInfo.properties.map(({ _id }) =>
-        propertiesModels.find((propertyDocument) => String(propertyDocument._id) === _id),
-      )
+      if (propertiesModels?.length) {
+        const models: PropertyDocument[] = []
 
-      partyModel.companies = partyInfo.companies.map(({ _id }) =>
-        companiesModels.find((companyDocument) => String(companyDocument._id) === _id),
-      )
+        partyInfo.properties.forEach(({ _id }) => {
+          const model = propertiesModels.find(
+            (propertyDocument) => String(propertyDocument._id) === _id,
+          )
+
+          if (model) {
+            models.push(model)
+          }
+        })
+
+        partyModel.properties = models
+      }
+
+      if (companiesModels?.length) {
+        const models: CompanyDocument[] = []
+
+        partyInfo.properties.forEach(({ _id }) => {
+          const model = companiesModels.find(
+            (companyDocument) => String(companyDocument._id) === _id,
+          )
+
+          if (model) {
+            models.push(model)
+          }
+        })
+
+        partyModel.companies = models
+      }
       return partyModel
     })
   }

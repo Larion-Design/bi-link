@@ -55,10 +55,14 @@ export class ReportAPIService {
         reportModel.event = await this.eventsService.getEvent(reportInput.event._id, false)
       }
       if (reportInput.property?._id) {
-        reportModel.property = await this.propertiesService.getProperty(
+        const propertyModel = await this.propertiesService.getProperty(
           reportInput.property._id,
           false,
         )
+
+        if (propertyModel) {
+          reportModel.property = propertyModel
+        }
       }
     }
 
