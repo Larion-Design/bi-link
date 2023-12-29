@@ -2,6 +2,7 @@
   "name": "defs",
   "version": "1.0.2",
   "private": true,
+  "type": "module",
   "description": "BI Link types and definitions",
   "source": "src/index.ts",
   "main": "dist/index.cjs",
@@ -9,15 +10,17 @@
   "types": "dist/index.d.ts",
   "files": ["dist"],
   "scripts": {
-    "build": "parcel build --no-cache",
-    "prepare": "pnpm build"
+    "build": "parcel build",
+    "prepare": "pnpm exec parcel build"
   },
   "devDependencies": {
     "@parcel/packager-ts": "2.10.3",
-    "typescript": "^5.0.4"
+    "typescript": "^5.0.4",
+    "parcel": "^2.10.3",
+    "@parcel/transformer-typescript-types": "^2.10.3"
   },
   "dependencies": {
     "tslib": "^2.5.0",
-    "zod": "^3.21.4"
+    "zod": "^3.22.4"
   }
 }

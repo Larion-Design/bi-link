@@ -1,11 +1,12 @@
 {
+  "root": true,
   "env": {
     "node": true,
     "jest": true,
     "es6": true
   },
   "parserOptions": {
-    "project": ["tsconfig.eslint.json"],
+    "project": ["./tsconfig.eslint.json"],
     "extraFileExtensions": [".json"]
   },
   "rules": {

@@ -1,9 +1,13 @@
 {
+  "root": true,
   "env": {
-    "es6": true
+    "es6": true,
+    "browser": true,
+    "worker": true,
+    "serviceworker": true
   },
   "parserOptions": {
-    "project": ["tsconfig.eslint.json"]
+    "project": ["./tsconfig.eslint.json"]
   },
   "plugins": []
 }

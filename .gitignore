@@ -10,3 +10,4 @@ out
 /playwright/.cache/
 .parcel-cache
 .nx/cache
+.eslintcache
