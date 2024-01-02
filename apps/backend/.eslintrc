@@ -25,7 +25,7 @@
     "@typescript-eslint/no-redundant-type-constituents": "warn"
   },
   "parser": "@typescript-eslint/parser",
-  "plugins": ["@typescript-eslint", "simple-import-sort", "prettier"],
+  "plugins": ["@typescript-eslint", "prettier"],
   "extends": [
     "eslint:recommended",
     "plugin:@typescript-eslint/recommended",

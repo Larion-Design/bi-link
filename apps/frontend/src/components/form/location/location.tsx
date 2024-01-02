@@ -1,8 +1,6 @@
-import Box from '@mui/material/Box'
 import React from 'react'
 import { useIntl } from 'react-intl'
 import { LocationAPIInput } from 'defs'
-import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
 import Grid from '@mui/material/Grid'
 import { TitleWithMetadata } from '@frontend/components/form/titleWithMetadata'

@@ -32,23 +32,19 @@ export class CompanyAPIService {
       const companyDocument = await this.companiesService.create(companyModel)
 
       if (companyDocument) {
-        this.entityEventDispatcherService.companyCreated(companyDocument)
+        await this.entityEventDispatcherService.companyCreated(companyDocument)
         return String(companyDocument._id)
       }
     }
   }
 
   async update(companyId: string, companyInfo: CompanyAPIInput) {
-    try {
-      const companyModel = await this.createCompanyDocument(companyInfo)
+    const companyModel = await this.createCompanyDocument(companyInfo)
 
-      if (companyModel) {
-        await this.companiesService.update(companyId, companyModel)
-        this.entityEventDispatcherService.companyCreated(companyModel)
-        return true
-      }
-    } catch (error) {
-      this.logger.error(error)
+    if (companyModel) {
+      await this.companiesService.update(companyId, companyModel)
+      await this.entityEventDispatcherService.companyUpdated(companyModel)
+      return true
     }
   }
 
@@ -84,45 +80,41 @@ export class CompanyAPIService {
     }
   }
 
-  private createCompanyDocument = async (companyInfo: CompanyAPIInput, companyId?: string) => {
-    try {
-      const companyModel = new CompanyModel()
+  private async createCompanyDocument(companyInfo: CompanyAPIInput, companyId?: string) {
+    const companyModel = new CompanyModel()
 
-      if (companyId) {
-        companyModel._id = companyId
-      }
-
-      companyModel.name = companyInfo.name
-      companyModel.cui = companyInfo.cui
-      companyModel.registrationNumber = companyInfo.registrationNumber
-
-      companyModel.headquarters = companyInfo.headquarters
-        ? (await this.locationAPIService.getLocationModel(companyInfo.headquarters)) ?? null
-        : null
-
-      companyModel.locations = companyInfo.locations.length
-        ? (await this.locationAPIService.getLocationsModels(companyInfo.locations)) ?? []
-        : []
-
-      companyModel.contactDetails = companyInfo.contactDetails.length
-        ? this.customFieldsService.createCustomFieldsModels(companyInfo.contactDetails)
-        : []
-
-      companyModel.customFields = companyInfo.customFields.length
-        ? this.customFieldsService.createCustomFieldsModels(companyInfo.customFields)
-        : []
-
-      companyModel.files = companyInfo.files.length
-        ? await this.fileService.getUploadedFilesModels(companyInfo.files)
-        : []
-
-      companyModel.associates = companyInfo.associates.length
-        ? await this.associatesService.createAssociatesModels(companyInfo.associates)
-        : []
-
-      return companyModel
-    } catch (e) {
-      this.logger.error(e)
+    if (companyId) {
+      companyModel._id = companyId
     }
+
+    companyModel.name = companyInfo.name
+    companyModel.cui = companyInfo.cui
+    companyModel.registrationNumber = companyInfo.registrationNumber
+
+    companyModel.headquarters = companyInfo.headquarters
+      ? (await this.locationAPIService.getLocationModel(companyInfo.headquarters)) ?? null
+      : null
+
+    companyModel.locations = companyInfo.locations.length
+      ? (await this.locationAPIService.getLocationsModels(companyInfo.locations)) ?? []
+      : []
+
+    companyModel.contactDetails = companyInfo.contactDetails.length
+      ? this.customFieldsService.createCustomFieldsModels(companyInfo.contactDetails)
+      : []
+
+    companyModel.customFields = companyInfo.customFields.length
+      ? this.customFieldsService.createCustomFieldsModels(companyInfo.customFields)
+      : []
+
+    companyModel.files = companyInfo.files.length
+      ? await this.fileService.getUploadedFilesModels(companyInfo.files)
+      : []
+
+    companyModel.associates = companyInfo.associates.length
+      ? await this.associatesService.createAssociatesModels(companyInfo.associates)
+      : []
+
+    return companyModel
   }
 }

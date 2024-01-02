@@ -9,7 +9,25 @@
   "parserOptions": {
     "project": ["apps/frontend/tsconfig.eslint.json"],
     "sourceType": "module",
-    "ecmaVersion": "latest"
+    "ecmaVersion": "latest",
+    "allowImportExportEverywhere": true,
+    "ecmaFeatures": {
+      "jsx": true
+    }
   },
-  "plugins": []
+  "parser": "@typescript-eslint/parser",
+  "plugins": ["@typescript-eslint", "react","prettier"],
+  "extends": [
+    "eslint:recommended",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:@typescript-eslint/recommended-requiring-type-checking",
+    "plugin:react/jsx-runtime",
+    "plugin:react/recommended", "plugin:react-hooks/recommended",
+    "prettier"
+  ],
+  "settings": {
+    "react": {
+      "version": "detect"
+    }
+  }
 }

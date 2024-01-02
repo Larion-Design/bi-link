@@ -13,11 +13,11 @@ class Params {
 
 @Resolver(() => Company)
 export class GetCompany {
-  constructor(private readonly ingressService: CompaniesService) {}
+  constructor(private readonly companiesService: CompaniesService) {}
 
   @Query(() => Company)
   @UseGuards(FirebaseAuthGuard)
   async getCompany(@CurrentUser() { _id }: User, @Args() { id }: Params) {
-    return this.ingressService.getCompany(id, true)
+    return this.companiesService.getCompany(id, true)
   }
 }

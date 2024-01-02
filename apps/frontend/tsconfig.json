@@ -28,7 +28,10 @@
       "@frontend/components/*": ["src/components/*"],
 
       "@frontend/utils": ["src/utils"],
-      "@frontend/utils/*": ["src/utils/*"]
+      "@frontend/utils/*": ["src/utils/*"],
+
+      "state": ["src/state"],
+      "state/*": ["src/state/*"]
     }
   },
   "include": ["src", "vite.config.ts"]

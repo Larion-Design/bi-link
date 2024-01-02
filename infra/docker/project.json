@@ -1,7 +1,7 @@
 {
   "name": "docker",
   "targets": {
-    "up": {
+    "start": {
       "cache": false,
       "executor": "nx:run-commands",
       "options": {

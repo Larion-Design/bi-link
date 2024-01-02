@@ -28,7 +28,7 @@ import GavelIcon from '@mui/icons-material/Gavel'
 import { useLocation, useNavigate } from 'react-router-dom'
 
 import { routes } from '../../router/routes'
-import { getUserRole } from '../../utils/auth'
+import { useUserRole } from '../../utils/auth'
 
 const drawerWidth = 240
 
@@ -67,7 +67,7 @@ interface AppDrawerProps {
 export const AppDrawer: React.FunctionComponent<AppDrawerProps> = ({ open, toggleDrawer }) => {
   const navigate = useNavigate()
   const { pathname } = useLocation()
-  const { hasPrivilegedAccess } = getUserRole()
+  const { hasPrivilegedAccess } = useUserRole()
 
   return (
     <Drawer variant={'permanent'} open={open}>

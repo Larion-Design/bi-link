@@ -5,6 +5,7 @@ import { PersistentCookiesService } from './persistentCookiesService'
 import { Global, Module, Provider } from '@nestjs/common'
 
 const providers: Provider[] = [BrowserService, BrowserPageService, PersistentCookiesService]
+
 @Global()
 @Module({
   imports: [CacheModule],

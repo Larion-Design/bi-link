@@ -116,5 +116,9 @@
     "@emotion/styled": "^11.10.5",
     "prop-types": "^15.8.1",
     "webpack": "^5.74.0"
+  },
+  "optionalDependencies": {
+    "eslint-plugin-react": "^7.33.2",
+    "eslint-plugin-react-hooks": "^4.6.0"
   }
 }

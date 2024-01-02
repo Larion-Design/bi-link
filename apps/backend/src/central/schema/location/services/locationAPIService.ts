@@ -18,23 +18,22 @@ export class LocationAPIService {
     }
   }
 
-  getLocationsModels = async (locationsInfo: LocationAPIInput[]) => {
-    if (locationsInfo.length) {
-      const locationsModels = locationsInfo
-        .map(this.createLocationModel)
-        .filter((locationModel) => !!locationModel)
+  async getLocationsModels(locationsInfo: LocationAPIInput[]) {
+    const locationsModels: LocationModel[] = []
 
-      return this.locationsService.upsertLocations(locationsModels)
-    }
-    return []
+    locationsInfo.forEach((location) => {
+      const model = this.createLocationModel(location)
+
+      if (model) {
+        locationsModels.push(model)
+      }
+    })
+
+    return locationsModels.length ? this.locationsService.upsertLocations(locationsModels) : []
   }
 
-  createLocationModel = (location: LocationAPIInput) => {
+  createLocationModel(location: LocationAPIInput) {
     const { lat, long } = location.coordinates
-    const coordinatesModel = new CoordinatesModel()
-    coordinatesModel.lat = lat ?? 0
-    coordinatesModel.long = long ?? 0
-
     const locationModel = new LocationModel()
     locationModel.street = location.street
     locationModel.number = location.number
@@ -45,7 +44,7 @@ export class LocationAPIService {
     locationModel.country = location.country
     locationModel.zipCode = location.zipCode
     locationModel.otherInfo = location.otherInfo
-    locationModel.coordinates = coordinatesModel
+    locationModel.coordinates = new CoordinatesModel(lat ?? 0, long ?? 0)
     locationModel.metadata = location.metadata
 
     if (this.locationsService.isValidLocation(locationModel)) {

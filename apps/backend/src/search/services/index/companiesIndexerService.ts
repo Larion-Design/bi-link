@@ -25,14 +25,14 @@ export class CompaniesIndexerService {
   ) {}
 
   async indexCompany(companyId: string, companyModel: Company) {
-    const { _id } = await this.elasticsearchService.index<CompanyIndex>({
+    await this.elasticsearchService.index<CompanyIndex>({
       index: this.index,
       id: companyId,
       document: this.createIndexData(companyModel),
       refresh: true,
     })
 
-    return _id === companyId
+    return true
   }
 
   private createIndexData = (company: Company): CompanyIndex => ({

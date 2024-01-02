@@ -34,57 +34,34 @@ export class CompaniesService {
     }
   }
 
-  getCompany = async (companyId: string, fetchLinkedEntities: boolean) => {
-    try {
-      const query = this.companyModel.findById(companyId)
-      return (fetchLinkedEntities ? this.getLinkedEntities(query) : query).exec()
-    } catch (error) {
-      this.logger.error(error)
-    }
+  async getCompany(companyId: string, fetchLinkedEntities: boolean) {
+    const query = this.companyModel.findById(companyId)
+    return (fetchLinkedEntities ? this.getLinkedEntities(query) : query).exec()
   }
 
   async getCompanies(
     companiesIds: string[],
     fetchLinkedEntities: boolean,
   ): Promise<CompanyDocument[]> {
-    try {
-      if (companiesIds.length) {
-        const query = this.companyModel.find({ _id: companiesIds })
-        return (fetchLinkedEntities ? this.getLinkedEntities(query) : query).exec()
-      }
-    } catch (error) {
-      this.logger.error(error)
+    if (companiesIds.length) {
+      const query = this.companyModel.find({ _id: companiesIds })
+      return (fetchLinkedEntities ? this.getLinkedEntities(query) : query).exec()
     }
     return []
   }
 
   findByCUI = async (cui: string) => {
-    try {
-      return this.companyModel.findOne({ 'cui.value': cui }, { _id: 1 }).exec()
-    } catch (error) {
-      this.logger.error(error)
-    }
-    return null
+    return this.companyModel.findOne({ 'cui.value': cui }, { _id: 1 }).exec()
   }
 
   findByName = async (name: string) => {
-    try {
-      return this.companyModel.findOne({ 'name.value': name }, { _id: 1 }).exec()
-    } catch (error) {
-      this.logger.error(error)
-    }
-    return null
+    return this.companyModel.findOne({ 'name.value': name }, { _id: 1 }).exec()
   }
 
   findByRegistrationNumber = async (registrationNumber: string) => {
-    try {
-      return this.companyModel
-        .findOne({ 'registrationNumber.value': registrationNumber }, { _id: 1 })
-        .exec()
-    } catch (error) {
-      this.logger.error(error)
-    }
-    return null
+    return this.companyModel
+      .findOne({ 'registrationNumber.value': registrationNumber }, { _id: 1 })
+      .exec()
   }
 
   async *getAllCompanies(fields: ProjectionFields<CompanyDocument> = { _id: 1 }) {
@@ -98,6 +75,10 @@ export class CompaniesService {
       .populate({ path: 'files' as keyof Company, model: this.fileModel })
       .populate({
         path: 'locations' as keyof Company,
+        model: this.locationModel,
+      })
+      .populate({
+        path: 'headquarters' as keyof Company,
         model: this.locationModel,
       })
       .populate({ path: 'associates.person', model: this.personModel })

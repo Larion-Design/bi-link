@@ -39,7 +39,7 @@ export class LocationModel implements Location {
   @Prop()
   otherInfo: string
 
-  @Prop({ type: [CoordinatesSchema], isRequired: false })
+  @Prop({ type: CoordinatesSchema })
   coordinates: CoordinatesModel
 }
 

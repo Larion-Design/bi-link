@@ -19,7 +19,7 @@ export class CompaniesMappingService
     name: this.mappingHelperService.textField,
     cui: this.mappingHelperService.keywordField,
     registrationNumber: this.mappingHelperService.keywordField,
-    headquarters: this.mappingHelperService.textField,
+    headquarters: this.mappingHelperService.location,
     locations: this.mappingHelperService.textField,
     files: this.mappingHelperService.files,
     contactDetails: this.mappingHelperService.customFields,

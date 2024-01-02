@@ -30,6 +30,7 @@ export const CompanyForm: React.FunctionComponent<Props> = ({ companyId, onSubmi
     name,
     cui,
     registrationNumber,
+    registrationDate,
     customFields,
     contactDetails,
     associates,

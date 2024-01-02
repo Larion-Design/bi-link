@@ -56,7 +56,7 @@ export const useAuth = () => {
 const userAuth = getAuth(firebaseApp)
 export const getAccessToken = async () => userAuth.currentUser?.getIdToken()
 
-export const getUserRole = () => {
+export const useUserRole = () => {
   const { user } = useAuth()
   const [role, setRole] = useState<UserRole | null>(null)
 
@@ -71,8 +71,8 @@ export const getUserRole = () => {
   return { role, hasPrivilegedAccess, isAdmin }
 }
 
-export const getUserRoleLocale = () => {
+export const useUserRoleLocale = () => {
   const intl = useIntl()
-  const { role } = getUserRole()
+  const { role } = useUserRole()
   return role ? intl.formatMessage({ id: String(role) }) : ''
 }

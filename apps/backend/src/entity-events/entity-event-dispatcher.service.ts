@@ -7,19 +7,19 @@ import { EVENT } from './events-handlers'
 export class EntityEventDispatcherService {
   constructor(private readonly eventEmitter: EventEmitter2) {}
 
-  personCreated(person: Person) {
-    return this.eventEmitter.emit(EVENT.PERSON_CREATED, person)
+  async personCreated(person: Person) {
+    await this.eventEmitter.emitAsync(EVENT.PERSON_CREATED, person)
   }
 
-  personUpdated(person: Person) {
-    return this.eventEmitter.emit(EVENT.PERSON_UPDATED, person)
+  async personUpdated(person: Person) {
+    await this.eventEmitter.emitAsync(EVENT.PERSON_UPDATED, person)
   }
 
-  companyCreated(company: Company) {
-    return this.eventEmitter.emit(EVENT.COMPANY_CREATED, company)
+  async companyCreated(company: Company) {
+    await this.eventEmitter.emitAsync(EVENT.COMPANY_CREATED, company)
   }
 
-  companyUpdated(company: Company) {
-    return this.eventEmitter.emit(EVENT.COMPANY_UPDATED, company)
+  async companyUpdated(company: Company) {
+    await this.eventEmitter.emitAsync(EVENT.COMPANY_UPDATED, company)
   }
 }

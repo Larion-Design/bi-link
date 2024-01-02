@@ -25,7 +25,7 @@ export class LocationIndexerService {
     zipCode,
     building,
     country,
-    coordinates: [lat, long],
+    coordinates: [Number(lat), Number(long)],
   })
 
   createLocationsIndexData = (locations: Location[]) => locations?.map(this.createLocationIndexData)

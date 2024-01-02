@@ -38,7 +38,7 @@ export const Associates: React.FunctionComponent<Props> = ({ sectionTitle }) => 
   )
   const [role, setRole] = useState<DefaultAssociateRole | null>(null)
 
-  const [associates, addAssociates, removeAssociate] = useCompanyState(
+  const [associates, addAssociates] = useCompanyState(
     ({ associates, addAssociates, removeAssociate }) => [
       associates,
       addAssociates,
@@ -106,10 +106,10 @@ export const Associates: React.FunctionComponent<Props> = ({ sectionTitle }) => 
     if (companiesIds.size) {
       void fetchCompanies({ variables: { companiesIds: Array.from(companiesIds) } })
     }
-  }, [])
+  }, [associates])
 
   const totalEquity = useMemo(
-    () => parseFloat(getShareholdersTotalEquity(associates)),
+    () => Number(parseFloat(getShareholdersTotalEquity(associates)).toFixed(2)),
     [associates],
   )
 
@@ -159,26 +159,10 @@ export const Associates: React.FunctionComponent<Props> = ({ sectionTitle }) => 
           </Stack>
         </Grid>
         <Grid xs={1} item container alignItems={'center'} spacing={1}>
-          <Grid item>
-            <InsertChartOutlinedIcon color={totalEquity > 100 ? 'error' : 'inherit'} />
-          </Grid>
-
-          <Grid item>
-            <Tooltip
-              title={
-                totalEquity > 100
-                  ? 'Procentul total detinut de actionari nu poate depasi 100%.'
-                  : 'Procentul total detinut de actionari'
-              }
-            >
-              <Typography variant={'subtitle1'} color={totalEquity > 100 ? 'error' : 'inherit'}>
-                {totalEquity}%
-              </Typography>
-            </Tooltip>
-          </Grid>
+          <Equity totalEquity={totalEquity} />
         </Grid>
       </Grid>
-      <Stack spacing={1}>
+      <Stack spacing={1} width={1}>
         <AssociatesCategory
           categoryName={'Administratori'}
           allowRoleChange={false}
@@ -261,3 +245,21 @@ const getAllAssociatesExceptRoles = (
   })
   return associatesIds
 }
+
+const Equity: React.FunctionComponent<{ totalEquity: number }> = ({ totalEquity }) => (
+  <Stack direction={'row'} spacing={1} alignItems={'center'}>
+    <InsertChartOutlinedIcon color={totalEquity > 100 ? 'error' : 'inherit'} />
+
+    <Tooltip
+      title={
+        totalEquity > 100
+          ? 'Procentul total detinut de actionari nu poate depasi 100%.'
+          : 'Procentul total detinut de actionari'
+      }
+    >
+      <Typography variant={'subtitle1'} color={totalEquity > 100 ? 'error' : 'inherit'}>
+        {totalEquity}%
+      </Typography>
+    </Tooltip>
+  </Stack>
+)

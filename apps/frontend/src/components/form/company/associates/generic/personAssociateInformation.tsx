@@ -1,15 +1,13 @@
-import { AutocompleteFieldWithMetadata } from '@frontend/components/form/autocompleteField/autocompleteFieldWithMetadata'
-import { InputNumberFieldWithMetadata } from '@frontend/components/form/inputNumberField/inputNumberFieldWithMetadata'
 import React from 'react'
 import Stack from '@mui/material/Stack'
 import Avatar from '@mui/material/Avatar'
 import Typography from '@mui/material/Typography'
-import TextField from '@mui/material/TextField'
+import { AutocompleteFieldWithMetadata } from '@frontend/components/form/autocompleteField/autocompleteFieldWithMetadata'
+import { InputNumberFieldWithMetadata } from '@frontend/components/form/inputNumberField/inputNumberFieldWithMetadata'
 import { useCompanyState } from '../../../../../state/company/companyState'
-import { AutocompleteField } from '../../../autocompleteField'
-import { DatePicker, DatePickerWithMetadata } from '../../../datePicker'
+import { DatePickerWithMetadata } from '../../../datePicker'
 import { getPersonFullName } from '@frontend/utils/person'
-import { AssociateAPI, PersonAPIOutput } from 'defs'
+import { PersonAPIOutput } from 'defs'
 import { ASSOCIATE_ROLES } from '@frontend/utils/constants'
 
 type Props = {
@@ -50,7 +48,7 @@ export const PersonAssociateInformation: React.FunctionComponent<Props> = ({
   const { _id, images } = personInfo
 
   return (
-    <>
+    <Stack spacing={3}>
       <Stack direction={'row'} spacing={1} alignItems={'center'}>
         <Avatar
           src={images[0]?.url?.url ?? ''}
@@ -90,6 +88,6 @@ export const PersonAssociateInformation: React.FunctionComponent<Props> = ({
           updateFieldInfo={(fieldInfo) => updateAssociateEquity(associateId, fieldInfo)}
         />
       </Stack>
-    </>
+    </Stack>
   )
 }

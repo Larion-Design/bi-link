@@ -1,9 +1,16 @@
 import { v4 } from 'uuid'
 import { create } from 'zustand'
-import { AssociateAPI, CompanyAPIInput, LocationAPIInput, TextWithMetadata } from 'defs'
+import {
+  AssociateAPI,
+  CompanyAPIInput,
+  LocationAPIInput,
+  OptionalDateWithMetadata,
+  TextWithMetadata,
+} from 'defs'
 import {
   getDefaultBooleanWithMetadata,
   getDefaultLocation,
+  getDefaultOptionalDateWithMetadata,
   getDefaultTextWithMetadata,
 } from 'default-values'
 import { CompanyAssociatesState, createCompanyAssociatesStore } from './companyAssociatesState'
@@ -24,6 +31,7 @@ type CompanyState = MetadataState &
     name: TextWithMetadata
     cui: TextWithMetadata
     registrationNumber: TextWithMetadata
+    registrationDate: OptionalDateWithMetadata
     headquarters: LocationAPIInput
     locations: Map<string, LocationAPIInput>
 
@@ -49,6 +57,7 @@ export const useCompanyState = create<CompanyState>((set, get, state) => ({
   name: getDefaultTextWithMetadata(),
   cui: getDefaultTextWithMetadata(),
   registrationNumber: getDefaultTextWithMetadata(),
+  registrationDate: getDefaultOptionalDateWithMetadata(),
   headquarters: getDefaultLocation(),
   locations: new Map(),
 
@@ -90,6 +99,7 @@ export const useCompanyState = create<CompanyState>((set, get, state) => ({
       name,
       cui,
       registrationNumber,
+      registrationDate,
       headquarters,
 
       getCustomFields,
@@ -104,6 +114,7 @@ export const useCompanyState = create<CompanyState>((set, get, state) => ({
       name,
       cui,
       registrationNumber,
+      registrationDate,
       headquarters,
       status: {
         vat: getDefaultTextWithMetadata(),
@@ -114,7 +125,6 @@ export const useCompanyState = create<CompanyState>((set, get, state) => ({
       customFields: getCustomFields(),
       contactDetails: getContactDetails(),
       associates: getAssociates(),
-      registrationDate: null,
       balanceSheets: [],
       active: {
         ministryOfFinance: getDefaultBooleanWithMetadata(),
