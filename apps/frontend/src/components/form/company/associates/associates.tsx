@@ -13,8 +13,8 @@ import { AssociateAPI, EntityType } from 'defs'
 import { getDefaultAssociate, getDefaultMetadata } from 'default-values'
 import { getPersonsBasicInfoMap } from '@frontend/graphql/persons/queries/getPersonsBasicInfo'
 import { getCompaniesInfoMap } from '@frontend/graphql/companies/queries/getCompanies'
-import { CompanyAssociateInfoState } from '../../../../state/company/companyAssociatesState'
-import { useCompanyState } from '../../../../state/company/companyState'
+import { CompanyAssociateInfoState } from 'state/company/companyAssociatesState'
+import { useCompanyState } from 'state/company/companyState'
 import { useModal } from '../../../modal/modalProvider'
 import { AssociatesCategory } from './generic/associatesCategory'
 import { getShareholdersTotalEquity } from './helpers'
@@ -128,40 +128,43 @@ export const Associates: React.FunctionComponent<Props> = ({ sectionTitle }) => 
           <MenuItem onClick={() => selectRoleHandler('')}>Alt rol</MenuItem>
         </Menu>
       )}
-      <Grid container sx={{ mt: 2, mb: 2 }} alignItems={'center'}>
-        <Grid item xs={11}>
-          <Stack direction={'row'} spacing={2} alignItems={'center'}>
-            <Typography variant={'h5'}>{sectionTitle}</Typography>
+      <Stack
+        sx={{ my: 3, width: 1 }}
+        direction={'row'}
+        alignItems={'center'}
+        justifyContent={'space-between'}
+      >
+        <Stack direction={'row'} spacing={2} alignItems={'center'}>
+          <Typography variant={'h5'}>{sectionTitle}</Typography>
 
-            <Button
-              variant={'contained'}
-              startIcon={<AddOutlinedIcon />}
-              onClick={({ currentTarget }) => {
-                buttonRef.current = currentTarget
-                setMenuState(true)
-                setEntityType('PERSON')
-              }}
-            >
-              Persoana
-            </Button>
+          <Button
+            variant={'contained'}
+            startIcon={<AddOutlinedIcon />}
+            onClick={({ currentTarget }) => {
+              buttonRef.current = currentTarget
+              setMenuState(true)
+              setEntityType('PERSON')
+            }}
+          >
+            Persoana
+          </Button>
 
-            <Button
-              variant={'contained'}
-              startIcon={<AddOutlinedIcon />}
-              onClick={({ currentTarget }) => {
-                buttonRef.current = currentTarget
-                setMenuState(true)
-                setEntityType('COMPANY')
-              }}
-            >
-              Companie
-            </Button>
-          </Stack>
-        </Grid>
-        <Grid xs={1} item container alignItems={'center'} spacing={1}>
-          <Equity totalEquity={totalEquity} />
-        </Grid>
-      </Grid>
+          <Button
+            variant={'contained'}
+            startIcon={<AddOutlinedIcon />}
+            onClick={({ currentTarget }) => {
+              buttonRef.current = currentTarget
+              setMenuState(true)
+              setEntityType('COMPANY')
+            }}
+          >
+            Companie
+          </Button>
+        </Stack>
+
+        <Equity totalEquity={totalEquity} />
+      </Stack>
+
       <Stack spacing={1} width={1}>
         <AssociatesCategory
           categoryName={'Administratori'}
