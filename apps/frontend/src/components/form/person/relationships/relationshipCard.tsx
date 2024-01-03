@@ -29,7 +29,7 @@ export const RelationshipCard: React.FunctionComponent<Props> = ({
   updateRelationship,
   removeRelationship,
 }) => {
-  const { _id: personId, images } = personInfo
+  const { _id: personId, images, cnp } = personInfo
   const fullName = getPersonFullName(personInfo)
 
   const relatedPersonsIds = useMemo(
@@ -39,17 +39,15 @@ export const RelationshipCard: React.FunctionComponent<Props> = ({
 
   return (
     <Card sx={{ width: 1 }} variant={'outlined'}>
-      <CardHeader sx={{ display: 'flex' }}>
-        <Avatar
-          src={images[0]?.url?.url ?? ''}
-          alt={fullName}
-          sx={{ width: 75, height: 75, mt: 2 }}
-        />
-        <Typography variant={'body1'} sx={{ mb: 3, mt: 2 }} gutterBottom>
-          {fullName}
-        </Typography>
-      </CardHeader>
       <CardContent>
+        <Stack direction={'row'} alignItems={'center'} mb={2} spacing={2} sx={{ mb: 5, mt: 2 }}>
+          <Avatar src={images[0]?.url?.url ?? ''} alt={fullName} sx={{ width: 50, height: 50 }} />
+          <Stack justifyContent={'center'}>
+            <Typography variant={'body1'}>{fullName}</Typography>
+
+            {cnp?.value?.length ? <Typography variant={'caption'}>{cnp.value}</Typography> : null}
+          </Stack>
+        </Stack>
         <Grid container spacing={4}>
           <Grid item xs={6}>
             <Stack spacing={4}>

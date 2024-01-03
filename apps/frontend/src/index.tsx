@@ -13,8 +13,8 @@ import roRO from 'date-fns/locale/ro'
 import { Router } from './router/router'
 import localeRo from './locale/ro.json'
 import { SnackbarProvider } from 'notistack'
-import { ModalProvider } from './components/modal/modalProvider'
-import { DialogProvider } from './components/dialog/dialogProvider'
+import { ModalProvider } from 'components/modal/modalProvider'
+import { DialogProvider } from 'components/dialog/dialogProvider'
 
 if (import.meta.env.PROD) {
   Sentry.init({

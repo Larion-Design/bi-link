@@ -31,7 +31,16 @@
       "@frontend/utils/*": ["src/utils/*"],
 
       "state": ["src/state"],
-      "state/*": ["src/state/*"]
+      "state/*": ["src/state/*"],
+
+      "components": ["src/components"],
+      "components/*": ["src/components/*"],
+
+      "utils": ["src/utils"],
+      "utils/*": ["src/utils/*"],
+
+      "api": ["src/graphql"],
+      "api/*": ["src/graphql/*"]
     }
   },
   "include": ["src", "vite.config.ts"]

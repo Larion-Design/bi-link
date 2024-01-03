@@ -62,7 +62,7 @@ export const Relationships: React.FunctionComponent<Props> = ({ personId }) => {
 
   return (
     <Stack sx={{ width: 1 }}>
-      <Stack direction={'row'} justifyContent={'space-between'}>
+      <Stack direction={'row'} justifyContent={'space-between'} mb={5}>
         <Typography variant={'h5'}>
           <FormattedMessage id={'Personal relationships'} />
         </Typography>

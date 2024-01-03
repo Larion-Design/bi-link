@@ -43,7 +43,7 @@ export const PersonsList: React.FunctionComponent<PropsWithChildren<Props>> = ({
               <Avatar
                 src={personInfo.images[0]?.url.url ?? ''}
                 variant={'circular'}
-                sx={{ height: 80, width: 80 }}
+                sx={{ height: 50, width: 50, mr: 2 }}
               />
             </ListItemAvatar>
             <ListItemText primary={fullName} secondary={personInfo.cnp.value} />

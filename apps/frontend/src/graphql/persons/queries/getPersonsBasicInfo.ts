@@ -20,6 +20,9 @@ const request = gql`
       lastName {
         value
       }
+      cnp {
+        value
+      }
       images {
         fileId
         url {

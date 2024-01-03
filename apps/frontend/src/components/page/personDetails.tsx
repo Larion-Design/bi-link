@@ -3,8 +3,8 @@ import Box from '@mui/material/Box'
 import MenuItem from '@mui/material/MenuItem'
 import Typography from '@mui/material/Typography'
 import { PersonAPIInput } from 'defs'
-import { usePersonState } from '../../state/personState'
-import { getPersonFullName } from '../../utils/person'
+import { usePersonState } from 'state/personState'
+import { getPersonFullName } from 'utils/person'
 import { Graph } from '../entityViews/graph'
 import { Reports } from '../entityViews/reports'
 import { PersonForm } from '../form/person/personForm'
@@ -46,10 +46,12 @@ export const PersonDetails: React.FunctionComponent<Props> = ({
         {!!personId && (
           <InputFieldMenu label={'Optiuni'}>
             <MenuItem onClick={() => setMainTabIndex(0)}>Informatii</MenuItem>
-            <MenuItem disabled={!canSwitchViews} onClick={() => setMainTabIndex(1)}>
+            <MenuItem disabled={true || !canSwitchViews} onClick={() => setMainTabIndex(1)}>
               Grafic relational
             </MenuItem>
-            <MenuItem onClick={() => setMainTabIndex(3)}>Rapoarte</MenuItem>
+            <MenuItem disabled onClick={() => setMainTabIndex(3)}>
+              Rapoarte
+            </MenuItem>
             <MenuItem disabled onClick={() => setMainTabIndex(2)}>
               Evenimente
             </MenuItem>

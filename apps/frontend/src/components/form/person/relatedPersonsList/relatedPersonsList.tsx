@@ -42,7 +42,7 @@ export const RelatedPersonsList: React.FunctionComponent<Props> = ({
   return (
     <PersonsList label={'Related persons'} personsInfo={personsInfo} removePerson={removePerson}>
       <Stack direction={'row'} justifyContent={'center'} alignItems={'center'} width={1} height={1}>
-        <AddOutlinedIcon fontSize={'large'} onClick={addPersons} />
+        <AddOutlinedIcon fontSize={'large'} onClick={addPersons} style={{ cursor: 'pointer' }} />
       </Stack>
     </PersonsList>
   )
