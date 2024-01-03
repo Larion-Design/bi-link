@@ -21,11 +21,7 @@ export const EditCompany: React.FunctionComponent = () => {
 
   useEffect(() => {
     if (!fetchLoading && companyId) {
-      void fetchCompanyInfo({
-        variables: {
-          id: companyId,
-        },
-      })
+      void fetchCompanyInfo({ variables: { id: companyId } })
     }
   }, [companyId])
 
@@ -53,16 +49,10 @@ export const EditCompany: React.FunctionComponent = () => {
       {!!fetchData?.getCompany && (
         <CompanyDetails
           companyId={companyId}
-          companyInfo={fetchData?.getCompany}
-          readonly={false}
+          companyInfo={fetchData.getCompany}
           onSubmit={(companyInfo) => {
             if (!updateLoading && companyId) {
-              void updateCompany({
-                variables: {
-                  companyId,
-                  companyInfo,
-                },
-              })
+              void updateCompany({ variables: { companyId, companyInfo } })
             }
           }}
         />

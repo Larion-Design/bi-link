@@ -7,8 +7,8 @@ import AccordionSummary from '@mui/material/AccordionSummary'
 import Grid from '@mui/material/Grid'
 import IconButton from '@mui/material/IconButton'
 import DragIndicatorOutlinedIcon from '@mui/icons-material/DragIndicatorOutlined'
-import { EntityType, ReportContentAPIInput } from 'defs'
-import { GeneratePreviewHandler } from '../../../utils/hooks/useDataRefProcessor'
+import { EntityType } from 'defs'
+import { useReportState } from '../../../state/report/reportState'
 import { ReportContentFile } from './reportContent/file/reportContentFile'
 import { ReportContentGraph } from './reportContent/reportContentGraph'
 import { ReportContentImages } from './reportContent/images/reportContentImages'
@@ -18,39 +18,36 @@ import { ReportContentText } from './reportContent/reportContentText'
 import { ReportContentTitle } from './reportContent/reportContentTitle'
 
 type Props = {
+  sectionId: string
   contentId: string
   entityId?: string
   entityType?: EntityType
-  contentInfo: ReportContentAPIInput
-  updateContentInfo: (contentInfo: ReportContentAPIInput) => void
-  removeContent: () => void
-  generateTextPreview: GeneratePreviewHandler
-  graphCreated: (graphId: string) => void
-  graphRemoved: (graphId: string) => void
 }
 
 export const ReportContentElement: React.FunctionComponent<Props> = ({
+  sectionId,
   contentId,
   entityId,
   entityType,
-  contentInfo,
-  updateContentInfo,
-  removeContent,
-  generateTextPreview,
-  graphCreated,
-  graphRemoved,
 }) => {
   const [expanded, setExpandedState] = useState(false)
   const toggleAccordion = useCallback(
     () => setExpandedState((expanded) => !expanded),
     [setExpandedState],
   )
-
   const { transition, listeners, attributes, setNodeRef, setActivatorNodeRef, isSorting } =
     useSortable({
       id: contentId,
       disabled: expanded,
     })
+
+  const [contentInfo, updateContent, removeContent] = useReportState(
+    ({ reportContent, updateContent, removeContent }) => [
+      reportContent.get(contentId),
+      updateContent,
+      removeContent,
+    ],
+  )
 
   const getContentElementTitle = () => {
     if (contentInfo.link) {
@@ -77,13 +74,14 @@ export const ReportContentElement: React.FunctionComponent<Props> = ({
   }
 
   const getContentElement = () => {
+    const remove = () => removeContent(sectionId, contentId)
+
     if (contentInfo.link) {
       return (
         <ReportContentLink
           linkInfo={contentInfo.link}
-          updateLink={(linkInfo) => updateContentInfo({ ...contentInfo, link: linkInfo })}
-          generateTextPreview={generateTextPreview}
-          removeContent={removeContent}
+          updateLink={(linkInfo) => updateContent(contentId, { ...contentInfo, link: linkInfo })}
+          removeContent={remove}
         />
       )
     }
@@ -91,9 +89,8 @@ export const ReportContentElement: React.FunctionComponent<Props> = ({
       return (
         <ReportContentText
           textInfo={contentInfo.text}
-          updateText={(textInfo) => updateContentInfo({ ...contentInfo, text: textInfo })}
-          generateTextPreview={generateTextPreview}
-          removeContent={removeContent}
+          updateText={(textInfo) => updateContent(contentId, { ...contentInfo, text: textInfo })}
+          removeContent={remove}
         />
       )
     }
@@ -101,9 +98,10 @@ export const ReportContentElement: React.FunctionComponent<Props> = ({
       return (
         <ReportContentTitle
           titleInfo={contentInfo.title}
-          updateTitle={(titleInfo) => updateContentInfo({ ...contentInfo, title: titleInfo })}
-          generateTextPreview={generateTextPreview}
-          removeContent={removeContent}
+          updateTitle={(titleInfo) =>
+            updateContent(contentId, { ...contentInfo, title: titleInfo })
+          }
+          removeContent={remove}
         />
       )
     }
@@ -113,8 +111,8 @@ export const ReportContentElement: React.FunctionComponent<Props> = ({
           entityId={entityId}
           entityType={entityType}
           selectedImages={contentInfo.images}
-          updateImages={(images) => updateContentInfo({ ...contentInfo, images })}
-          removeContent={removeContent}
+          updateImages={(images) => updateContent(contentId, { ...contentInfo, images })}
+          removeContent={remove}
         />
       )
     }
@@ -124,8 +122,8 @@ export const ReportContentElement: React.FunctionComponent<Props> = ({
           entityId={entityId}
           entityType={entityType}
           fileInfo={contentInfo.file}
-          updateFile={(file) => updateContentInfo({ ...contentInfo, file })}
-          removeContent={removeContent}
+          updateFile={(file) => updateContent(contentId, { ...contentInfo, file })}
+          removeContent={remove}
         />
       )
     }
@@ -135,8 +133,8 @@ export const ReportContentElement: React.FunctionComponent<Props> = ({
           entityId={entityId}
           entityType={entityType}
           tableInfo={contentInfo.table}
-          updateTable={(table) => updateContentInfo({ ...contentInfo, table })}
-          removeContent={removeContent}
+          updateTable={(table) => updateContent(contentId, { ...contentInfo, table })}
+          removeContent={remove}
         />
       )
     }
@@ -145,10 +143,8 @@ export const ReportContentElement: React.FunctionComponent<Props> = ({
         <ReportContentGraph
           entityId={entityId}
           graphInfo={contentInfo.graph}
-          updateGraph={(graph) => updateContentInfo({ ...contentInfo, graph })}
-          removeContent={removeContent}
-          graphCreated={graphCreated}
-          graphRemoved={graphRemoved}
+          updateGraph={(graph) => updateContent(contentId, { ...contentInfo, graph })}
+          removeContent={remove}
         />
       )
     }

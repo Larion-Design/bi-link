@@ -1,16 +1,16 @@
 import { gql, useLazyQuery } from '@apollo/client'
-import { PropertyListRecord } from 'defs'
+import { PropertyAPIOutput } from 'defs'
 
 type Params = {
   propertiesIds: string[]
 }
 
 type Response = {
-  getProperties: PropertyListRecord[]
+  getProperties: PropertyAPIOutput[]
 }
 
 const request = gql`
-  query GetProperties($propertiesIds: [String!]!) {
+  query GetProperties($propertiesIds: [ID!]!) {
     getProperties(propertiesIds: $propertiesIds) {
       _id
       name

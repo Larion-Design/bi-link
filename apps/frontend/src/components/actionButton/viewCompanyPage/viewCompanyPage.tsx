@@ -11,18 +11,11 @@ type Props = {
   companyId: string
 }
 
-export const ViewCompanyPage: React.FunctionComponent<Props> = ({
-  name,
-  companyId,
-}) => (
-  <Link
-    href={generatePath(routes.companyDetails, {
-      companyId,
-    })}
-  >
-    <IconButton>
+export const ViewCompanyPage: React.FunctionComponent<Props> = ({ name, companyId }) => (
+  <Link href={generatePath(routes.companyDetails, { companyId })}>
+    <IconButton size={'small'}>
       <Tooltip title={`Vezi detalii despre ${name}`}>
-        <OpenInNewOutlinedIcon fontSize={'small'} color={'secondary'} />
+        <OpenInNewOutlinedIcon color={'secondary'} />
       </Tooltip>
     </IconButton>
   </Link>

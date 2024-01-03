@@ -1,4 +1,4 @@
-import React, { useEffect, useId } from 'react'
+import React from 'react'
 import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined'
 import AccordionActions from '@mui/material/AccordionActions'
 import AccordionDetails from '@mui/material/AccordionDetails'
@@ -8,13 +8,11 @@ import { ActionButton } from '../../../button/actionButton'
 import { Graph } from '../../../entityViews/graph'
 import { InputField } from '../../inputField'
 
-type Props = {
+type Props<T = GraphAPI> = {
+  graphInfo: T
+  updateGraph: (graphInfo: T) => void
   entityId?: string
-  graphInfo: GraphAPI
-  updateGraph: (graphInfo: GraphAPI) => void
   removeContent: () => void
-  graphCreated: (graphId: string) => void
-  graphRemoved: (graphId: string) => void
 }
 
 export const ReportContentGraph: React.FunctionComponent<Props> = ({
@@ -22,16 +20,7 @@ export const ReportContentGraph: React.FunctionComponent<Props> = ({
   graphInfo: { label },
   updateGraph,
   removeContent,
-  graphCreated,
-  graphRemoved,
 }) => {
-  const graphId = useId()
-
-  useEffect(() => {
-    graphCreated(graphId)
-    return () => graphRemoved(graphId)
-  }, [graphId])
-
   return (
     <>
       <AccordionDetails>
@@ -51,7 +40,6 @@ export const ReportContentGraph: React.FunctionComponent<Props> = ({
                 disableControls={true}
                 disableTitle={!label.length}
                 title={label}
-                id={graphId}
               />
             </Grid>
           )}

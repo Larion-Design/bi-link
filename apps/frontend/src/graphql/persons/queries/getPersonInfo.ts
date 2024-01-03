@@ -9,17 +9,63 @@ type Response = {
   getPersonInfo: PersonAPIOutput
 }
 
-const getPersonInfo = gql`
-  query GetPerson($personId: String!) {
+const query = gql`
+  query GetPerson($personId: ID!) {
     getPersonInfo(id: $personId) {
-      firstName
-      lastName
+      firstName {
+        value
+        metadata {
+          confirmed
+          access
+          trustworthiness {
+            level
+            source
+          }
+        }
+      }
+      lastName {
+        value
+        metadata {
+          confirmed
+          access
+          trustworthiness {
+            level
+            source
+          }
+        }
+      }
       oldNames {
         name
         changeReason
+        metadata {
+          confirmed
+          access
+          trustworthiness {
+            level
+            source
+          }
+        }
       }
-      cnp
+      cnp {
+        value
+        metadata {
+          confirmed
+          access
+          trustworthiness {
+            level
+            source
+          }
+        }
+      }
       birthPlace {
+        metadata {
+          confirmed
+          access
+          trustworthiness {
+            level
+            source
+          }
+        }
         locationId
         street
         number
@@ -36,6 +82,14 @@ const getPersonInfo = gql`
         }
       }
       homeAddress {
+        metadata {
+          confirmed
+          access
+          trustworthiness {
+            level
+            source
+          }
+        }
         locationId
         street
         number
@@ -51,18 +105,52 @@ const getPersonInfo = gql`
           long
         }
       }
-      birthdate
+      birthdate {
+        value
+        metadata {
+          confirmed
+          access
+          trustworthiness {
+            level
+            source
+          }
+        }
+      }
       images {
         fileId
         name
         description
         isHidden
+        metadata {
+          confirmed
+          access
+          trustworthiness {
+            level
+            source
+          }
+        }
       }
       contactDetails {
         fieldName
         fieldValue
+        metadata {
+          confirmed
+          access
+          trustworthiness {
+            level
+            source
+          }
+        }
       }
       relationships {
+        metadata {
+          confirmed
+          access
+          trustworthiness {
+            level
+            source
+          }
+        }
         person {
           _id
         }
@@ -75,38 +163,65 @@ const getPersonInfo = gql`
         relatedPersons {
           _id
         }
-        _confirmed
       }
       customFields {
         fieldName
         fieldValue
+        metadata {
+          confirmed
+          access
+          trustworthiness {
+            level
+            source
+          }
+        }
       }
       files {
         fileId
         name
         description
         isHidden
+        metadata {
+          confirmed
+          access
+          trustworthiness {
+            level
+            source
+          }
+        }
       }
       documents {
         documentType
         documentNumber
         issueDate
         expirationDate
+        metadata {
+          confirmed
+          access
+          trustworthiness {
+            level
+            source
+          }
+        }
       }
       education {
         type
         school
         specialization
-        customFields {
-          fieldName
-          fieldValue
-        }
         startDate
         endDate
+        metadata {
+          confirmed
+          access
+          trustworthiness {
+            level
+            source
+          }
+        }
       }
     }
   }
 `
 
 export const getPersonInfoRequest = () =>
-  useLazyQuery<Response, Params>(getPersonInfo, { fetchPolicy: 'network-only' })
+  useLazyQuery<Response, Params>(query, { fetchPolicy: 'network-only' })

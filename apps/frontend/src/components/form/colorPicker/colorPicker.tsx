@@ -1,22 +1,16 @@
 import React from 'react'
 import { MuiColorInput } from 'mui-color-input'
+import { ColorPickerProps } from '@frontend/components/form/colorPicker/types'
 
-type Props = {
-  name: string
-  value: string
-  label: string
-  disabled?: boolean
-  onChange: (value: string) => void | Promise<void>
-  error?: string
-}
-
-export const ColorPicker: React.FunctionComponent<Props> = ({
+export const ColorPicker: React.FunctionComponent<ColorPickerProps> = ({
   name,
   label,
   value,
   disabled,
   error,
   onChange,
+  startIcon,
+  endIcon,
 }) => (
   <MuiColorInput
     name={name}
@@ -28,5 +22,9 @@ export const ColorPicker: React.FunctionComponent<Props> = ({
     error={!!error}
     helperText={error}
     onChange={onChange}
+    InputProps={{
+      startAdornment: startIcon,
+      endAdornment: endIcon,
+    }}
   />
 )

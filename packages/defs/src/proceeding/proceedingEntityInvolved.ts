@@ -1,21 +1,15 @@
-import { Company } from '../company'
-import { ConnectedEntity } from '../connectedEntity'
-import { NodesRelationship } from '../graphRelationships'
-import { Person } from '../person'
+import { z } from 'zod'
+import { connectedEntitySchema } from '../connectedEntity'
+import { withMetadataSchema } from '../metadata'
 
-export interface ProceedingEntityInvolved {
-  person?: Person
-  company?: Company
-  involvedAs: string
-  description: string
-}
+export const proceedingEntityInvolvedSchema = z
+  .object({
+    person: connectedEntitySchema.nullish(),
+    company: connectedEntitySchema.nullish(),
+    involvedAs: z.string(),
+    description: z.string(),
+  })
+  .merge(withMetadataSchema)
 
-export interface ProceedingEntityInvolvedAPI
-  extends Omit<ProceedingEntityInvolved, 'person' | 'company'> {
-  person?: ConnectedEntity
-  company?: ConnectedEntity
-}
-
-export interface ProceedingEntityRelationship
-  extends NodesRelationship,
-    Pick<ProceedingEntityInvolved, 'involvedAs'> {}
+export type ProceedingEntityInvolved = z.infer<typeof proceedingEntityInvolvedSchema>
+export type ProceedingEntityInvolvedAPI = ProceedingEntityInvolved

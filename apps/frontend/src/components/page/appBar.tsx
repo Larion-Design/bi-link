@@ -12,7 +12,7 @@ import { useNavigate } from 'react-router-dom'
 import { routes } from '../../router/routes'
 import { CurrentUserMenu } from '../menu/currentUserMenu'
 import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined'
-import { getUserRole } from '../../utils/auth'
+import { useUserRole } from '../../utils/auth'
 
 const drawerWidth = 240
 
@@ -43,11 +43,8 @@ const AppBar = styled(MuiAppBar, {
   }),
 }))
 
-export const AppHeader: React.FunctionComponent<AppHeaderProps> = ({
-  open,
-  toggleDrawer,
-}) => {
-  const { hasPrivilegedAccess } = getUserRole()
+export const AppHeader: React.FunctionComponent<AppHeaderProps> = ({ open, toggleDrawer }) => {
+  const { hasPrivilegedAccess } = useUserRole()
   const navigate = useNavigate()
 
   return (
@@ -68,10 +65,7 @@ export const AppHeader: React.FunctionComponent<AppHeaderProps> = ({
           <SearchOutlinedIcon />
         </IconButton>
         {hasPrivilegedAccess && (
-          <IconButton
-            onClick={() => navigate(routes.history)}
-            color={'inherit'}
-          >
+          <IconButton onClick={() => navigate(routes.history)} color={'inherit'}>
             <Badge badgeContent={0} color={'secondary'}>
               <NotificationsIcon />
             </Badge>

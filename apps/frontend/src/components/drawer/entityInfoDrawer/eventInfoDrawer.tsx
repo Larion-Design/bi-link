@@ -1,37 +1,30 @@
 import Box from '@mui/material/Box'
-import { format } from 'date-fns'
 import React, { useCallback, useMemo } from 'react'
 import { EventAPIInput } from 'defs'
 import { formatDate } from 'tools'
 import { useCopyToClipboard } from 'usehooks-ts'
-import { CreateDataRefHandler } from '../../../utils/hooks/useDataRefProcessor'
+import { useReportState } from '../../../state/report/reportState'
 import { EntityInfoTable } from './entityInfoTable'
 
 type Props = {
   eventId: string
   eventInfo: EventAPIInput
-  createDataRef: CreateDataRefHandler
 }
 
-export const EventInfoDrawer: React.FunctionComponent<Props> = ({
-  eventId,
-  eventInfo,
-  createDataRef,
-}) => {
+export const EventInfoDrawer: React.FunctionComponent<Props> = ({ eventId, eventInfo }) => {
   const [_, copy] = useCopyToClipboard()
+  const { addDataRef } = useReportState()
 
   const generalInfo = useMemo(
     () => ({
-      type: eventInfo.type,
-      date: eventInfo.date ? formatDate(eventInfo.date) : '',
+      type: eventInfo.type.value,
+      date: eventInfo.date.value ? formatDate(eventInfo.date.value) : '',
       description: eventInfo.description,
     }),
     [eventInfo],
   )
 
-  const locationInfo = useMemo(() => {
-    return eventInfo.location
-  }, [eventInfo])
+  const locationInfo = eventInfo?.location
 
   const extraInfo = useMemo(() => {
     const map = new Map<string, string>()
@@ -40,14 +33,14 @@ export const EventInfoDrawer: React.FunctionComponent<Props> = ({
   }, [eventInfo.customFields])
 
   const copyGeneralInfo = useCallback(
-    (key: string) => void copy(createDataRef({ entityType: 'EVENT', entityId: eventId }, key)),
+    (key: string) => void copy(addDataRef({ entityType: 'EVENT', entityId: eventId }, key)),
     [eventId],
   )
 
   const copyCustomField = useCallback(
     (key: string) =>
       void copy(
-        createDataRef({ entityType: 'EVENT', entityId: eventId }, 'fieldName', 'customFields', key),
+        addDataRef({ entityType: 'EVENT', entityId: eventId }, 'fieldName', 'customFields', key),
       ),
     [eventId],
   )

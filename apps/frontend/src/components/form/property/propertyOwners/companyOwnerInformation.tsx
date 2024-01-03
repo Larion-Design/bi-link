@@ -1,72 +1,62 @@
 import React from 'react'
-import Grid from '@mui/material/Grid'
+import Stack from '@mui/material/Stack'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
-import { DatePicker } from '../../datePicker'
-import { CompanyListRecord, PropertyOwnerAPI } from 'defs'
+import { usePropertyState } from '../../../../state/property/propertyState'
+import { DatePickerWithMetadata } from '../../datePicker'
+import { CompanyAPIOutput } from 'defs'
 import { ItemListInput } from '../../itemListInput'
 
 type Props = {
-  companyInfo: CompanyListRecord
-  ownerInfo: PropertyOwnerAPI
-  updateOwner: (ownerId: string, ownerInfo: PropertyOwnerAPI) => void
+  ownerId: string
+  companyInfo: CompanyAPIOutput
 }
 
 export const CompanyOwnerInformation: React.FunctionComponent<Props> = ({
-  ownerInfo,
+  ownerId,
   companyInfo,
-  updateOwner,
 }) => {
-  const { _id, name } = companyInfo
-  const { vehicleOwnerInfo, startDate, endDate } = ownerInfo
+  const {
+    name: { value: companyName },
+  } = companyInfo
+
+  const {
+    owners,
+    updateOwnerStartDate,
+    updateOwnerEndDate,
+    setVehicleOwnerPlateNumbers,
+    vehicleInfo,
+  } = usePropertyState()
+
+  const { startDate, endDate, vehicleOwnerInfo } = owners.get(ownerId)
 
   return (
     <>
       <Box display={'flex'} alignItems={'center'} mt={2} mb={4}>
-        <Typography variant={'h6'}>{name}</Typography>
+        <Typography variant={'h6'}>{companyName}</Typography>
       </Box>
 
-      <Grid container spacing={2}>
-        {!!vehicleOwnerInfo && (
-          <Grid item xs={12}>
-            <ItemListInput
-              label={'Numere de înmatriculare'}
-              items={vehicleOwnerInfo.plateNumbers}
-              onChange={(plateNumbers) =>
-                updateOwner(_id, {
-                  ...ownerInfo,
-                  vehicleOwnerInfo: { ...vehicleOwnerInfo, plateNumbers },
-                })
-              }
-            />
-          </Grid>
+      <Stack spacing={2}>
+        {!!vehicleInfo && !!vehicleOwnerInfo?.plateNumbers && (
+          <ItemListInput
+            items={vehicleOwnerInfo.plateNumbers}
+            label={'Numere de inmatriculare'}
+            onChange={(plateNumbers) => setVehicleOwnerPlateNumbers(ownerId, plateNumbers)}
+          />
         )}
-        <Grid item xs={12}>
-          <DatePicker
-            label={'De la data'}
-            value={startDate ?? null}
-            onChange={(startDate) =>
-              updateOwner(_id, {
-                ...ownerInfo,
-                startDate: startDate ? new Date(startDate) : null,
-              })
-            }
-          />
-        </Grid>
 
-        <Grid item xs={12}>
-          <DatePicker
-            label={'Pana la data'}
-            value={endDate ?? null}
-            onChange={(endDate) =>
-              updateOwner(_id, {
-                ...ownerInfo,
-                endDate: endDate ? new Date(endDate) : null,
-              })
-            }
-          />
-        </Grid>
-      </Grid>
+        <DatePickerWithMetadata
+          label={'fromDate'}
+          fieldInfo={startDate}
+          updateFieldInfo={(startDate) => updateOwnerStartDate(ownerId, startDate)}
+        />
+
+        <DatePickerWithMetadata
+          label={'untilDate'}
+          fieldInfo={endDate}
+          updateFieldInfo={(endDate) => updateOwnerEndDate(ownerId, endDate)}
+        />
+      </Stack>
     </>
   )
 }

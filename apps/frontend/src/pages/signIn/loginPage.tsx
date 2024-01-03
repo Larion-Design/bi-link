@@ -24,7 +24,10 @@ export const LoginPage: React.FunctionComponent = () => {
       <LoginForm
         disabled={loading}
         error={error?.message}
-        onSubmit={({ email, password }) => login(email, password)}
+        onSubmit={({ email, password }) => {
+          console.debug('logging in')
+          login(email, password)
+        }}
       />
     </Container>
   )

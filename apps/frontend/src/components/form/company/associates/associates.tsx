@@ -1,114 +1,114 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import Box from '@mui/material/Box'
+import Stack from '@mui/material/Stack'
 import AddOutlinedIcon from '@mui/icons-material/AddOutlined'
 import Button from '@mui/material/Button'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import Divider from '@mui/material/Divider'
 import Typography from '@mui/material/Typography'
-import Grid from '@mui/material/Grid'
 import Tooltip from '@mui/material/Tooltip'
 import InsertChartOutlinedIcon from '@mui/icons-material/InsertChartOutlined'
-import { getPersonsBasicInfoRequest } from '@frontend/graphql/persons/queries/getPersonsBasicInfo'
-import { AssociateAPIInput } from 'defs'
-import { getCompaniesInfoRequest } from '@frontend/graphql/companies/queries/getCompanies'
-import { useDebouncedMap } from '@frontend/utils/hooks/useMap'
+import { AssociateAPI, EntityType } from 'defs'
+import { getDefaultAssociate, getDefaultMetadata } from 'default-values'
+import { getPersonsBasicInfoMap } from '@frontend/graphql/persons/queries/getPersonsBasicInfo'
+import { getCompaniesInfoMap } from '@frontend/graphql/companies/queries/getCompanies'
+import { CompanyAssociateInfoState } from 'state/company/companyAssociatesState'
+import { useCompanyState } from 'state/company/companyState'
 import { useModal } from '../../../modal/modalProvider'
 import { AssociatesCategory } from './generic/associatesCategory'
 import { getShareholdersTotalEquity } from './helpers'
 
 type Props = {
   sectionTitle: string
-  error?: string
-  associates: AssociateAPIInput[]
-  updateAssociatesField: (associates: AssociateAPIInput[]) => Promise<void> | void
 }
 
 type DefaultAssociateRole = 'Actionar' | 'Administrator' | ''
 
-export const Associates: React.FunctionComponent<Props> = ({
-  associates,
-  updateAssociatesField,
-}) => {
+export const Associates: React.FunctionComponent<Props> = ({ sectionTitle }) => {
   const modal = useModal()
-  const [fetchPersonsInfo, { data: personsInfo }] = getPersonsBasicInfoRequest()
-  const [fetchCompaniesInfo, { data: companiesInfo }] = getCompaniesInfoRequest()
+
+  const { fetchPersons, personsMap } = getPersonsBasicInfoMap()
+  const { fetchCompanies, companiesMap } = getCompaniesInfoMap()
 
   const [isMenuOpen, setMenuState] = useState<boolean>(false)
   const buttonRef = useRef<Element | null>()
-  const [entityType, setEntityType] = useState<'PERSON' | 'COMPANY' | null>(null)
-  const [role, setRole] = useState<DefaultAssociateRole | null>(null)
-  const { uid, values, keys, addBulk, update, remove } = useDebouncedMap(
-    1000,
-    associates,
-    ({ person, company }) => person?._id ?? company?._id,
+  const [entityType, setEntityType] = useState<Extract<EntityType, 'PERSON' | 'COMPANY'> | null>(
+    null,
   )
-  const associatesList = useMemo(() => values(), [uid])
+  const [role, setRole] = useState<DefaultAssociateRole | null>(null)
+
+  const [associates, addAssociates] = useCompanyState(
+    ({ associates, addAssociates, removeAssociate }) => [
+      associates,
+      addAssociates,
+      removeAssociate,
+    ],
+  )
 
   const selectRoleHandler = useCallback(
     (newRole: DefaultAssociateRole) => {
       setRole(newRole)
       setMenuState(false)
 
-      const associatesIds = keys()
-      const closeModal = () => null
+      const personsIds = new Set<string>()
+      const companiesIds = new Set<string>()
 
-      const addSelectedPersonsAssociates = (personsIds: string[]) => {
-        if (personsIds.length) {
-          addBulk(createPersonsAssociatesByRole(personsIds, newRole), ({ person }) => person?._id)
+      associates.forEach(({ person, company }) => {
+        if (person?._id) {
+          personsIds.add(person._id)
+        } else {
+          companiesIds.add(company._id)
         }
-      }
-
-      const addSelectedCompaniesAssociates = (companiesIds: string[]) => {
-        if (companiesIds.length) {
-          addBulk(
-            createCompaniesAssociatesByRole(companiesIds, newRole),
-            ({ company }) => company?._id,
-          )
-        }
-      }
+      })
 
       switch (entityType) {
         case 'PERSON': {
-          return modal?.openPersonSelector(addSelectedPersonsAssociates, associatesIds, closeModal)
+          const addSelectedPersonsAssociates = (selectedPersonsIds: string[]) => {
+            if (selectedPersonsIds.length) {
+              addAssociates(createPersonsAssociatesByRole(selectedPersonsIds, newRole))
+            }
+          }
+          return modal?.openPersonSelector(addSelectedPersonsAssociates, Array.from(personsIds))
         }
         case 'COMPANY': {
+          const addSelectedCompaniesAssociates = (selectedCompaniesIds: string[]) => {
+            if (selectedCompaniesIds.length) {
+              addAssociates(createCompaniesAssociatesByRole(selectedCompaniesIds, newRole))
+            }
+          }
           return modal?.openCompanySelector(
             addSelectedCompaniesAssociates,
-            associatesIds,
-            closeModal,
+            Array.from(companiesIds),
           )
         }
       }
     },
-    [uid, entityType, role],
+    [entityType, role],
   )
 
   useEffect(() => {
-    const personsIds: string[] = []
-    const companiesIds: string[] = []
+    const personsIds = new Set<string>()
+    const companiesIds = new Set<string>()
 
-    values().forEach(({ person, company }) => {
+    associates.forEach(({ person, company }) => {
       if (person?._id) {
-        personsIds.push(person._id)
+        personsIds.add(person._id)
       } else if (company?._id) {
-        companiesIds.push(company._id)
+        companiesIds.add(company._id)
       }
     })
 
-    if (personsIds.length) {
-      void fetchPersonsInfo({ variables: { personsIds } })
+    if (personsIds.size) {
+      void fetchPersons({ variables: { personsIds: Array.from(personsIds) } })
     }
 
-    if (companiesIds.length) {
-      void fetchCompaniesInfo({ variables: { companiesIds } })
+    if (companiesIds.size) {
+      void fetchCompanies({ variables: { companiesIds: Array.from(companiesIds) } })
     }
-
-    void updateAssociatesField(values())
-  }, [uid])
+  }, [associates])
 
   const totalEquity = useMemo(
-    () => parseFloat(getShareholdersTotalEquity(associates)),
+    () => Number(parseFloat(getShareholdersTotalEquity(associates)).toFixed(2)),
     [associates],
   )
 
@@ -127,124 +127,141 @@ export const Associates: React.FunctionComponent<Props> = ({
           <MenuItem onClick={() => selectRoleHandler('')}>Alt rol</MenuItem>
         </Menu>
       )}
-      <Grid container sx={{ mt: 2, mb: 2 }} alignItems={'center'}>
-        <Grid item xs={11}>
-          <Box sx={{ display: 'flex', alignItems: 'center' }}>
-            <Button
-              variant={'contained'}
-              startIcon={<AddOutlinedIcon />}
-              onClick={(event) => {
-                buttonRef.current = event.currentTarget
-                setMenuState(true)
-                setEntityType('PERSON')
-              }}
-            >
-              Persoana
-            </Button>
+      <Stack
+        sx={{ my: 3, width: 1 }}
+        direction={'row'}
+        alignItems={'center'}
+        justifyContent={'space-between'}
+      >
+        <Stack direction={'row'} spacing={2} alignItems={'center'}>
+          <Typography variant={'h5'}>{sectionTitle}</Typography>
 
-            <Button
-              sx={{ ml: 1 }}
-              variant={'contained'}
-              startIcon={<AddOutlinedIcon />}
-              onClick={(event) => {
-                buttonRef.current = event.currentTarget
-                setMenuState(true)
-                setEntityType('COMPANY')
-              }}
-            >
-              Companie
-            </Button>
-          </Box>
-        </Grid>
-        <Grid xs={1} item container alignItems={'center'} spacing={1}>
-          <Grid item>
-            <InsertChartOutlinedIcon color={totalEquity > 100 ? 'error' : 'inherit'} />
-          </Grid>
+          <Button
+            variant={'contained'}
+            startIcon={<AddOutlinedIcon />}
+            onClick={({ currentTarget }) => {
+              buttonRef.current = currentTarget
+              setMenuState(true)
+              setEntityType('PERSON')
+            }}
+          >
+            Persoana
+          </Button>
 
-          <Grid item>
-            <Tooltip
-              title={
-                totalEquity > 100
-                  ? 'Procentul total detinut de actionari nu poate depasi 100%.'
-                  : 'Procentul total detinut de actionari'
-              }
-            >
-              <Typography variant={'subtitle1'} color={totalEquity > 100 ? 'error' : 'inherit'}>
-                {totalEquity}%
-              </Typography>
-            </Tooltip>
-          </Grid>
-        </Grid>
-      </Grid>
-      <Box sx={{ width: 1, mb: 1 }}>
+          <Button
+            variant={'contained'}
+            startIcon={<AddOutlinedIcon />}
+            onClick={({ currentTarget }) => {
+              buttonRef.current = currentTarget
+              setMenuState(true)
+              setEntityType('COMPANY')
+            }}
+          >
+            Companie
+          </Button>
+        </Stack>
+
+        <Equity totalEquity={totalEquity} />
+      </Stack>
+
+      <Stack spacing={1} width={1}>
         <AssociatesCategory
           categoryName={'Administratori'}
           allowRoleChange={false}
-          personsInfo={personsInfo?.getPersonsInfo}
-          companiesInfo={companiesInfo?.getCompanies}
-          associates={getAssociatesByRole(associatesList, 'Administrator')}
-          removeAssociate={remove}
-          updateAssociate={update}
+          personsInfo={personsMap}
+          companiesInfo={companiesMap}
+          associatesIds={getAssociatesByRole(associates, 'Administrator')}
         />
-      </Box>
-      <Box sx={{ width: 1, mb: 1 }}>
+
         <AssociatesCategory
           categoryName={'Actionari'}
           allowRoleChange={false}
-          personsInfo={personsInfo?.getPersonsInfo}
-          companiesInfo={companiesInfo?.getCompanies}
-          associates={getAssociatesByRole(associatesList, 'Actionar')}
-          removeAssociate={remove}
-          updateAssociate={update}
+          personsInfo={personsMap}
+          companiesInfo={companiesMap}
+          associatesIds={getAssociatesByRole(associates, 'Actionar')}
         />
-      </Box>
-      <Box sx={{ width: 1 }}>
+
         <AssociatesCategory
           categoryName={'Alte entitati conexate'}
           allowRoleChange={true}
-          personsInfo={personsInfo?.getPersonsInfo}
-          companiesInfo={companiesInfo?.getCompanies}
-          associates={getAllAssociatesExceptRoles(associatesList, ['Administrator', 'Actionar'])}
-          removeAssociate={remove}
-          updateAssociate={update}
+          personsInfo={personsMap}
+          companiesInfo={companiesMap}
+          associatesIds={getAllAssociatesExceptRoles(associates, ['Administrator', 'Actionar'])}
         />
-      </Box>
+      </Stack>
     </>
   )
 }
 
-const createPersonsAssociatesByRole = (
-  personsIds: string[],
-  role: string | null,
-): AssociateAPIInput[] =>
-  personsIds.map((_id) => ({
-    person: { _id },
-    role: role ?? '',
-    isActive: true,
-    customFields: [],
-    startDate: null,
-    endDate: null,
-    equity: 0,
-    _confirmed: true,
-  }))
+const createPersonsAssociatesByRole = (personsIds: string[], role: string | null) =>
+  personsIds.map(
+    (personId): AssociateAPI => ({
+      ...getDefaultAssociate(),
+      person: {
+        _id: personId,
+      },
+      role: {
+        value: role ?? '',
+        metadata: getDefaultMetadata(),
+      },
+    }),
+  )
 
-const createCompaniesAssociatesByRole = (
-  companiesIds: string[],
-  role: string | null,
-): AssociateAPIInput[] =>
-  companiesIds.map((_id) => ({
-    company: { _id },
-    role: role ?? '',
-    isActive: true,
-    customFields: [],
-    startDate: null,
-    endDate: null,
-    equity: 0,
-    _confirmed: true,
-  }))
+const createCompaniesAssociatesByRole = (companiesIds: string[], role: string | null) =>
+  companiesIds.map(
+    (companyId): AssociateAPI => ({
+      ...getDefaultAssociate(),
+      company: {
+        _id: companyId,
+      },
+      role: {
+        value: role ?? '',
+        metadata: getDefaultMetadata(),
+      },
+    }),
+  )
 
-const getAssociatesByRole = (associates: AssociateAPIInput[], associateRole: string) =>
-  associates.filter(({ role }) => role === associateRole)
+const getAssociatesByRole = (
+  associates: Map<string, CompanyAssociateInfoState>,
+  associateRole: string,
+) => {
+  const associatesIds: string[] = []
 
-const getAllAssociatesExceptRoles = (associates: AssociateAPIInput[], excludedRoles: string[]) =>
-  associates.filter(({ role }) => !excludedRoles.includes(role))
+  associates.forEach((associate, uid) => {
+    if (associate.role.value === associateRole) {
+      associatesIds.push(uid)
+    }
+  })
+  return associatesIds
+}
+
+const getAllAssociatesExceptRoles = (
+  associates: Map<string, CompanyAssociateInfoState>,
+  excludedRoles: string[],
+) => {
+  const associatesIds: string[] = []
+  associates.forEach((associate, uid) => {
+    if (!excludedRoles.includes(associate.role.value)) {
+      associatesIds.push(uid)
+    }
+  })
+  return associatesIds
+}
+
+const Equity: React.FunctionComponent<{ totalEquity: number }> = ({ totalEquity }) => (
+  <Stack direction={'row'} spacing={1} alignItems={'center'}>
+    <InsertChartOutlinedIcon color={totalEquity > 100 ? 'error' : 'inherit'} />
+
+    <Tooltip
+      title={
+        totalEquity > 100
+          ? 'Procentul total detinut de actionari nu poate depasi 100%.'
+          : 'Procentul total detinut de actionari'
+      }
+    >
+      <Typography variant={'subtitle1'} color={totalEquity > 100 ? 'error' : 'inherit'}>
+        {totalEquity}%
+      </Typography>
+    </Tooltip>
+  </Stack>
+)

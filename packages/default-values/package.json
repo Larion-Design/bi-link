@@ -1,0 +1,29 @@
+{
+  "name": "default-values",
+  "version": "0.0.2",
+  "private": true,
+  "description": "BI Link default values",
+  "source": "src/index.ts",
+  "main": "dist/index.cjs",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "parcel build",
+    "prepare": "pnpm pnpm exec parcel build"
+  },
+  "dependencies": {
+    "defs": "workspace:*",
+    "uuid": "^8.3.2",
+    "tslib": "^2.5.0"
+  },
+  "devDependencies": {
+    "@types/uuid": "^8.3.4",
+    "typescript": "^5.0.4",
+    "parcel": "^2.10.3",
+    "@parcel/transformer-typescript-types": "^2.10.3",
+    "@parcel/packager-ts": "2.10.3"
+  }
+}

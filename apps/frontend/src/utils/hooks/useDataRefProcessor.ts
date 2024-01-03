@@ -111,100 +111,6 @@ export const useDataRefs = (refs: DataRefAPI[]) => {
     propertiesInfo?.getProperties,
     eventsInfo?.getEvents,
   ])
-
-  const transform: GeneratePreviewHandler = useCallback(
-    (text) => {
-      if (text.length) {
-        let missingRef = false
-        const transformedText = text.replaceAll(/[^{]+(?=}})/gm, (ref) => {
-          if (!missingRef) {
-            if (dataRefsMap.has(ref)) {
-              return dataRefsMap.get(ref)
-            } else missingRef = true
-          }
-          return ref
-        })
-
-        return missingRef ? text : transformedText.replace(/{{|}}/gm, '')
-      }
-      return ''
-    },
-    [dataRefsMap],
-  )
-
-  const createDataRef: CreateDataRefHandler = useCallback(
-    ({ entityType, entityId }, field, path, targetId) => {
-      const refId = md5(
-        `${entityType}-${entityId}-${field}-${path ?? ''}-${targetId ?? ''}`,
-      ).toString()
-
-      if (map.has(refId)) return refId
-
-      const dataRef: DataRefAPI = {
-        _id: refId,
-        field,
-        path,
-        targetId,
-      }
-
-      const entity: ConnectedEntity = { _id: entityId }
-
-      switch (entityType) {
-        case 'PERSON': {
-          dataRef.person = entity
-          break
-        }
-        case 'COMPANY': {
-          dataRef.company = entity
-          break
-        }
-        case 'PROPERTY': {
-          dataRef.property = entity
-          break
-        }
-        case 'EVENT': {
-          dataRef.event = entity
-          break
-        }
-      }
-
-      add(dataRef, ({ _id }) => _id)
-      return refId
-    },
-    [uid],
-  )
-
-  const extractRefsIds = useCallback(
-    (text: string) => {
-      const set = new Set<string>()
-      text.match(/[^{]+(?=}})/gm)?.forEach((refId) => set.add(refId))
-      return Array.from(set)
-    },
-    [uid],
-  )
-
-  const removeAllRefsExcept = useCallback(
-    (refsIds: string[]) => {
-      const allRefsIds = new Set(refsIds)
-      const missingsRefs = new Set<string>()
-      keys().forEach((refId) => {
-        if (!allRefsIds.has(refId)) {
-          missingsRefs.add(refId)
-        }
-      })
-
-      if (missingsRefs.size) {
-        const removableRefs = Array.from(missingsRefs)
-        removeBulk(removableRefs)
-        setDataRefsMap((dataRefsMap) => {
-          refsIds.forEach((refId) => dataRefsMap.delete(refId))
-          return new Map(dataRefsMap)
-        })
-      }
-    },
-    [uid],
-  )
-  return { transform, createDataRef, extractRefsIds, removeAllRefsExcept, uid, getRefs: values }
 }
 
 type EntityInfoHandler<T> = (
@@ -235,7 +141,7 @@ const getPersonInfoValue: EntityInfoHandler<PersonAPIOutput> = (
             case 'expirationDate':
             case 'issueDate': {
               const date = idDocument?.[field]
-              return date ? formatDate(date) : ''
+              return date ? formatDate(date as Date) : ''
             }
           }
           break
@@ -244,19 +150,19 @@ const getPersonInfoValue: EntityInfoHandler<PersonAPIOutput> = (
           const customField = personInfo.customFields.find(
             ({ fieldName }) => fieldName === targetId,
           )
-          return customField?.[field] ?? ''
+          return customField?.[field] ? String(customField?.[field]) : ''
         }
         case 'contactDetails': {
           const contactInfo = personInfo.contactDetails.find(
             ({ fieldName }) => fieldName === targetId,
           )
-          return contactInfo?.[field] ?? ''
+          return contactInfo?.[field] ? String(contactInfo?.[field]) : ''
         }
         case 'relationships': {
           const relationship = personInfo.relationships.find(
             ({ person: { _id } }) => targetId === _id,
           )
-          return relationship?.[field] ?? ''
+          return relationship?.[field] ? String(relationship?.[field]) : ''
         }
       }
     }
@@ -265,13 +171,12 @@ const getPersonInfoValue: EntityInfoHandler<PersonAPIOutput> = (
       case 'cnp':
       case 'firstName':
       case 'lastName':
-      case 'oldName':
       case 'homeAddress': {
-        return personInfo[field] ?? ''
+        return personInfo[field] ? String(personInfo[field]) : ''
       }
       case 'birthdate': {
         const { birthdate } = personInfo
-        return birthdate ? formatDate(birthdate) : ''
+        return birthdate ? formatDate(birthdate.value) : ''
       }
       case 'age': {
         return getPersonAge(personInfo).toString()
@@ -297,19 +202,19 @@ const getCompanyInfoValue: EntityInfoHandler<CompanyAPIOutput> = (
           const customField = companyInfo.customFields.find(
             ({ fieldName }) => fieldName === targetId,
           )
-          return customField?.[field] ?? ''
+          return customField?.[field] ? String(customField?.[field]) : ''
         }
         case 'contactDetails': {
           const contactInfo = companyInfo.contactDetails.find(
             ({ fieldName }) => fieldName === targetId,
           )
-          return contactInfo?.[field] ?? ''
+          return contactInfo?.[field] ? String(contactInfo?.[field]) : ''
         }
         case 'associates': {
-          const contactInfo = companyInfo.associates.find(
+          const associateInfo = companyInfo.associates.find(
             ({ person, company }) => person?._id === targetId || company?._id === targetId,
           )
-          return contactInfo?.[field] ?? ''
+          return associateInfo?.[field] ? String(associateInfo?.[field]) : ''
         }
       }
     }
@@ -318,7 +223,7 @@ const getCompanyInfoValue: EntityInfoHandler<CompanyAPIOutput> = (
       case 'name':
       case 'cui':
       case 'registrationNumber': {
-        return companyInfo[field] ?? ''
+        return String(companyInfo[field]) ?? ''
       }
     }
   }
@@ -338,19 +243,19 @@ const getPropertyInfoValue: EntityInfoHandler<PropertyAPIOutput> = (
           const customField = propertyInfo.customFields.find(
             ({ fieldName }) => fieldName === targetId,
           )
-          return customField?.[field] ?? ''
+          return customField?.[field] ? String(customField?.[field]) : ''
         }
         case 'owners': {
           const ownerInfo = propertyInfo.owners.find(
             ({ person, company }) => person?._id === targetId || company?._id === targetId,
           )
-          return ownerInfo?.[field] ?? ''
+          return ownerInfo?.[field] ? String(ownerInfo?.[field]) : ''
         }
       }
     } else {
       switch (path) {
         case 'vehicleInfo': {
-          return propertyInfo.vehicleInfo[field] ?? ''
+          return propertyInfo.vehicleInfo[field] ? String(propertyInfo.vehicleInfo[field]) : ''
         }
       }
     }
@@ -371,7 +276,7 @@ const getEventInfoValue: EntityInfoHandler<EventAPIOutput> = (eventInfo, field, 
       switch (path) {
         case 'customFields': {
           const customField = eventInfo.customFields.find(({ fieldName }) => fieldName === targetId)
-          return customField?.[field] ?? ''
+          return customField?.[field] ? String(customField?.[field]) : ''
         }
       }
     }
@@ -380,7 +285,7 @@ const getEventInfoValue: EntityInfoHandler<EventAPIOutput> = (eventInfo, field, 
       case 'description':
       case 'date': {
         const { date } = eventInfo
-        return date ? formatDate(date) : ''
+        return date ? formatDate(date.value) : ''
       }
     }
   }

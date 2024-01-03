@@ -16,10 +16,10 @@ import { Textarea } from '../../dataGrid/textArea'
 import { RemoveRowsToolbarButton } from '../../dataGrid/removeRowsToolbarButton'
 import { FileAPIInput } from 'defs'
 
-type Props = {
-  files: FileAPIInput[]
+type Props<T = FileAPIInput> = {
+  files: Map<string, T>
+  updateFile: (file: T) => void
   keepDeletedFiles: boolean
-  updateFile: (id: string, file: FileAPIInput) => void | Promise<void>
   removeFiles: (ids: string[]) => void
 }
 
@@ -83,14 +83,17 @@ export const FilesList: React.FunctionComponent<Props> = ({ files, updateFile, r
     [],
   )
 
-  const processRowUpdate = useCallback(async (newRow: GridRowModel<FileAPIInput>) => {
-    await updateFile(newRow.fileId, newRow)
-    return Promise.resolve(newRow)
-  }, [])
+  const processRowUpdate = useCallback(
+    async (newRow: GridRowModel<FileAPIInput>) => {
+      updateFile(newRow)
+      return Promise.resolve(newRow)
+    },
+    [updateFile],
+  )
 
   const removeSelectedRows = useCallback(
     () => removeFiles(selectedRows as string[]),
-    [selectedRows],
+    [removeFiles, selectedRows],
   )
 
   const updateSelectedRows = useCallback(
@@ -108,7 +111,9 @@ export const FilesList: React.FunctionComponent<Props> = ({ files, updateFile, r
       disableColumnFilter
       disableIgnoreModificationsIfProcessingProps
       hideFooterPagination
-      rows={files}
+      hideFooterSelectedRowCount
+      hideFooter
+      rows={Array.from(files.values())}
       columns={columns}
       experimentalFeatures={{ newEditingApi: true }}
       getRowId={({ fileId }: GridRowModel<FileAPIInput>) => fileId}

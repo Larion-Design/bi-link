@@ -1,0 +1,39 @@
+{
+  "name": "frontend",
+  "projectType": "application",
+  "implicitDependencies": ["backend"],
+  "targets": {
+    "start": {
+      "executor": "nx:run-commands",
+      "depends_on": ["^start"],
+      "options": {
+        "cwd": "{projectRoot}",
+        "commands": ["pnpm start"]
+      }
+    },
+    "type-check": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "{projectRoot}",
+        "command": "tsc --noEmit"
+      }
+    },
+    "build": {
+      "executor": "nx:run-commands",
+      "depends_on": ["type-check"],
+      "options": {
+        "cwd": "{projectRoot}",
+        "commands": ["pnpm build"]
+      }
+    },
+    "test": {
+      "executor": "nx:run-commands",
+      "depends_on": "type-check",
+      "options": {
+        "cwd": "{projectRoot}",
+        "commands": ["pnpm test:unit", "pnpm test:e2e"],
+        "parallel": true
+      }
+    }
+  }
+}

@@ -1,4 +1,5 @@
 import { FormikErrors } from 'formik'
+import { CompanyAssociateInfoState } from '../../../../../state/company/companyAssociatesState'
 import { validateContactDetails } from '../../../contactDetails/validation'
 import { validateCustomFields } from '../../../customInputFields/validation'
 import { validateFilesFormat } from '../../../fileField/validation'
@@ -8,7 +9,7 @@ import { validateCompanyName } from './name'
 import { validateCompanyCUI } from './cui'
 import { validateRegistrationNumber } from './registrationNumber'
 import {
-  AssociateAPIInput,
+  AssociateAPI,
   CompanyAPIInput,
   CustomFieldAPI,
   FileAPIInput,
@@ -18,12 +19,6 @@ import {
 
 export const validateCompanyForm = async (values: CompanyAPIInput, companyId?: string) => {
   const errors: FormikErrors<CompanyAPIInput> = {
-    name: await companyFormValidation.name(values.name),
-    cui: await companyFormValidation.cui(values.cui, companyId),
-    registrationNumber: await companyFormValidation.registrationNumber(
-      values.registrationNumber,
-      companyId,
-    ),
     files: await companyFormValidation.files(values.files),
     contactDetails: await companyFormValidation.contactDetails(values.contactDetails),
     customFields: await companyFormValidation.customFields(values.customFields),
@@ -60,8 +55,8 @@ export const companyFormValidation = {
       return validateFilesFormat(files)
     }
   },
-  associates: async (associates: AssociateAPIInput[]) => {
-    if (associates.length) {
+  associates: async (associates: Map<string, CompanyAssociateInfoState>) => {
+    if (associates.size) {
       return validateAssociates(associates)
     }
   },

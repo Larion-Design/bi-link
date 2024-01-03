@@ -1,25 +1,9 @@
 {
+  "extends": "../tsconfig.package.json",
+  "include": ["src"],
+  "exclude": ["dist", "node_modules"],
   "compilerOptions": {
     "baseUrl": "./src",
-    "outDir": "./dist",
-    "module": "CommonJS",
-    "target": "ESNext",
-    "strict": true,
-    "declaration": true,
-    "esModuleInterop": true,
-    "removeComments": true,
-    "emitDecoratorMetadata": true,
-    "experimentalDecorators": true,
-    "allowSyntheticDefaultImports": true,
-    "preserveWatchOutput": true,
-    "incremental": true,
-    "skipLibCheck": true,
-    "strictNullChecks": false,
-    "noImplicitAny": false,
-    "noUncheckedIndexedAccess": true,
-    "forceConsistentCasingInFileNames": true,
-    "noFallthroughCasesInSwitch": true
-  },
-  "include": ["src"],
-  "exclude": ["dist", "node_modules"]
+    "outDir": "./dist"
+  }
 }

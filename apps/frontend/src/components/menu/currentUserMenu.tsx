@@ -8,7 +8,7 @@ import ListItem from '@mui/material/ListItem'
 import Box from '@mui/material/Box'
 import Divider from '@mui/material/Divider'
 import { useNavigate } from 'react-router-dom'
-import { getUserRoleLocale, useAuth } from '../../utils/auth'
+import { useUserRoleLocale, useAuth } from '../../utils/auth'
 import { routes } from '../../router/routes'
 
 export const CurrentUserMenu: React.FunctionComponent = () => {
@@ -16,7 +16,7 @@ export const CurrentUserMenu: React.FunctionComponent = () => {
   const navigate = useNavigate()
   const [isMenuOpen, setMenuOpen] = React.useState<boolean>(false)
   const buttonRef = useRef<Element | null>(null)
-  const role = getUserRoleLocale()
+  const role = useUserRoleLocale()
 
   return (
     <>

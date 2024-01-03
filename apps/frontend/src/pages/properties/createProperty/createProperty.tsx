@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react'
 import { useNotification } from '@frontend/utils/hooks/useNotification'
 import { useNavigate } from 'react-router-dom'
+import { getDefaultProperty } from 'default-values'
 import { DashboardPage } from '../../../components/page/DashboardPage'
 import { routes } from '../../../router/routes'
 import { PropertyDetails } from '../../../components/page/propertyDetails'
@@ -27,14 +28,10 @@ export const CreateProperty: React.FunctionComponent = () => {
   return (
     <DashboardPage title={'Creaza o proprietate'}>
       <PropertyDetails
-        readonly={false}
-        onSubmit={(propertyInfo) => {
+        propertyInfo={getDefaultProperty()}
+        onSubmit={(data) => {
           if (!loading) {
-            void createProperty({
-              variables: {
-                data: propertyInfo,
-              },
-            })
+            void createProperty({ variables: { data } })
           }
         }}
       />

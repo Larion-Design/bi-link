@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
-import { CompanyListRecord, ConnectedEntity } from 'defs'
+import { CompanyAPIOutput } from 'defs'
 import { PartyEntity } from './partyEntity'
 import { generatePath, useNavigate } from 'react-router-dom'
 import { routes } from '../../../../router/routes'
@@ -9,8 +9,8 @@ import { PartyEntitiesPlaceholder } from './partyEntitiesPlaceholder'
 import { PartyCompanyInfo } from './partyEntityInfo/partyCompanyInfo'
 
 type Props = {
-  companies: ConnectedEntity[]
-  companiesInfo?: CompanyListRecord[]
+  companies: Set<string>
+  companiesInfo?: Map<string, CompanyAPIOutput>
   removeCompany: (companyId: string) => void
 }
 
@@ -30,11 +30,15 @@ export const PartyCompanies: React.FunctionComponent<Props> = ({
       <Box sx={{ width: 1, mb: 2 }}>
         <Typography variant={'h6'}>Companii</Typography>
       </Box>
-      {companies.length > 0 ? (
-        companies.map(({ _id }) => {
-          const companyInfo = companiesInfo?.find(({ _id: companyId }) => companyId === _id)
+      {companies.size > 0 ? (
+        Array.from(companies).map((_id) => {
+          const companyInfo = companiesInfo?.get(_id)
           if (companyInfo) {
-            const { _id, name, cui } = companyInfo
+            const {
+              _id,
+              name: { value: companyName },
+              cui: { value: companyCui },
+            } = companyInfo
             return (
               <PartyEntity
                 key={_id}
@@ -42,7 +46,7 @@ export const PartyCompanies: React.FunctionComponent<Props> = ({
                 viewEntityDetails={viewCompanyDetails}
                 removeEntity={removeCompany}
               >
-                <PartyCompanyInfo name={name} cui={cui} />
+                <PartyCompanyInfo name={companyName} cui={companyCui} />
               </PartyEntity>
             )
           }

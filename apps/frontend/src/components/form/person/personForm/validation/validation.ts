@@ -1,6 +1,5 @@
 import { validateLocation } from '@frontend/components/form/locations/validation'
 import { FormikErrors } from 'formik'
-import * as yup from 'yup'
 import { validateCNP } from './cnp'
 import { validateContactDetails } from '../../../contactDetails/validation'
 import { validateCustomFields } from '../../../customInputFields/validation'
@@ -13,15 +12,11 @@ import {
   IdDocument,
   LocationAPIInput,
   PersonAPIInput,
-  RelationshipAPIInput,
+  RelationshipAPI,
 } from 'defs'
 
 export const validatePersonForm = async (values: PersonAPIInput, personId?: string) => {
   const errors: FormikErrors<PersonAPIInput> = {
-    firstName: await personFormValidation.firstName(values.firstName),
-    lastName: await personFormValidation.lastName(values.lastName),
-    cnp: await personFormValidation.cnp(values.cnp, personId),
-    birthdate: await personFormValidation.birthdate(values.birthdate),
     images: await personFormValidation.files(values.images),
     files: await personFormValidation.files(values.files),
     relationships: await personFormValidation.relationships(values.relationships),
@@ -55,18 +50,14 @@ export const personFormValidation = {
   },
   cnp: async (cnp: string, personId?: string) => validateCNP(cnp, personId),
   birthdate: async (birthdate: Date | string | null) => {
-    const isValid = await yup.date().optional().nullable().isValid(birthdate)
-
-    if (!isValid) {
-      return Promise.resolve('Data nasterii este invalida.')
-    }
+    return Promise.resolve(undefined)
   },
   files: async (files: FileAPIInput[]) => {
     if (files.length) {
       return validateFilesFormat(files)
     }
   },
-  relationships: async (relationships: RelationshipAPIInput[]) => {
+  relationships: async (relationships: RelationshipAPI[]) => {
     if (relationships.length) {
       return validatePersonRelationships(relationships)
     }

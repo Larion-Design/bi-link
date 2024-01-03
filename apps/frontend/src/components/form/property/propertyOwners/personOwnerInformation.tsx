@@ -1,85 +1,64 @@
-import { ItemListInput } from '@frontend/components/form/itemListInput'
 import React from 'react'
-import Grid from '@mui/material/Grid'
-import Box from '@mui/material/Box'
+import { ItemListInput } from '@frontend/components/form/itemListInput'
+import Stack from '@mui/material/Stack'
 import Avatar from '@mui/material/Avatar'
 import Typography from '@mui/material/Typography'
-import { DatePicker } from '../../datePicker'
+import { usePropertyState } from '../../../../state/property/propertyState'
+import { DatePickerWithMetadata } from '../../datePicker'
 import { getPersonFullName } from '@frontend/utils/person'
-import { PersonListRecordWithImage, PropertyOwnerAPI } from 'defs'
-import { useIntl } from 'react-intl'
+import { PersonAPIOutput } from 'defs'
 
 type Props = {
-  personInfo: PersonListRecordWithImage
-  ownerInfo: PropertyOwnerAPI
-  updateOwner: (ownerId: string, ownerInfo: PropertyOwnerAPI) => void
+  ownerId: string
+  personInfo: PersonAPIOutput
 }
 
-export const PersonOwnerInformation: React.FunctionComponent<Props> = ({
-  ownerInfo,
-  personInfo,
-  updateOwner,
-}) => {
-  const intl = useIntl()
+export const PersonOwnerInformation: React.FunctionComponent<Props> = ({ ownerId, personInfo }) => {
   const fullName = getPersonFullName(personInfo)
-  const { vehicleOwnerInfo, startDate, endDate } = ownerInfo
-  const { _id, images } = personInfo
+  const { images } = personInfo
+
+  const {
+    owners,
+    updateOwnerStartDate,
+    updateOwnerEndDate,
+    setVehicleOwnerPlateNumbers,
+    vehicleInfo,
+  } = usePropertyState()
+
+  const { startDate, endDate, vehicleOwnerInfo } = owners.get(ownerId)
 
   return (
     <>
-      <Box sx={{ display: 'flex', alignItems: 'center', mt: 2, mb: 4 }}>
+      <Stack direction={'row'} spacing={1} mt={2} mb={4} alignItems={'center'}>
         <Avatar
           src={images[0]?.url?.url ?? ''}
           alt={`${fullName}`}
-          sx={{ width: 30, height: 30, mr: 1 }}
+          sx={{ width: 30, height: 30 }}
         />
         <Typography variant={'h6'}>{fullName}</Typography>
-      </Box>
+      </Stack>
 
-      <Grid container spacing={2}>
-        {!!vehicleOwnerInfo && (
-          <Grid item xs={12}>
-            <ItemListInput
-              items={vehicleOwnerInfo.plateNumbers}
-              label={'Numere de inmatriculare'}
-              onChange={(plateNumbers) =>
-                updateOwner(_id, {
-                  ...ownerInfo,
-                  vehicleOwnerInfo: { ...vehicleOwnerInfo, plateNumbers },
-                })
-              }
-            />
-          </Grid>
+      <Stack spacing={2}>
+        {!!vehicleInfo && !!vehicleOwnerInfo?.plateNumbers && (
+          <ItemListInput
+            items={vehicleOwnerInfo.plateNumbers}
+            label={'Numere de inmatriculare'}
+            onChange={(plateNumbers) => setVehicleOwnerPlateNumbers(ownerId, plateNumbers)}
+          />
         )}
 
-        <Grid item xs={12}>
-          <DatePicker
-            disableFuture
-            label={intl.formatMessage({ id: 'fromDate' })}
-            value={startDate ?? null}
-            onChange={(startDate) =>
-              updateOwner(_id, {
-                ...ownerInfo,
-                startDate: startDate ? new Date(startDate) : null,
-              })
-            }
-          />
-        </Grid>
+        <DatePickerWithMetadata
+          label={'fromDate'}
+          fieldInfo={startDate}
+          updateFieldInfo={(startDate) => updateOwnerStartDate(ownerId, startDate)}
+        />
 
-        <Grid item xs={12}>
-          <DatePicker
-            disableFuture
-            label={intl.formatMessage({ id: 'untilDate' })}
-            value={endDate ?? null}
-            onChange={(endDate) =>
-              updateOwner(_id, {
-                ...ownerInfo,
-                endDate: endDate ? new Date(endDate) : null,
-              })
-            }
-          />
-        </Grid>
-      </Grid>
+        <DatePickerWithMetadata
+          label={'untilDate'}
+          fieldInfo={endDate}
+          updateFieldInfo={(endDate) => updateOwnerEndDate(ownerId, endDate)}
+        />
+      </Stack>
     </>
   )
 }

@@ -1,14 +1,6 @@
-import { ApolloError } from '@apollo/client'
-import {
-  createRealEstateInfo,
-  createVehicleInfo,
-  getDefaultProperty,
-} from '@frontend/components/form/property/constants'
-import {
-  propertyTypes,
-  realEstatePropertyTypes,
-} from '@frontend/components/form/property/propertyForm/constants'
-import { RealEstateInfo } from '@frontend/components/form/property/realEstateInfo'
+import React, { useEffect, useState } from 'react'
+import { propertyTypes, realEstatePropertyTypes } from './constants'
+import { RealEstateInfo } from '../realEstateInfo'
 import { useCancelDialog } from '@frontend/utils/hooks/useCancelDialog'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
@@ -17,10 +9,10 @@ import Step from '@mui/material/Step'
 import StepButton from '@mui/material/StepButton'
 import Stepper from '@mui/material/Stepper'
 import { PropertyAPIInput } from 'defs'
-import { FormikProps, withFormik } from 'formik'
-import React, { useState } from 'react'
+import { useFormik } from 'formik'
 import { FormattedMessage } from 'react-intl'
 import { routes } from '../../../../router/routes'
+import { usePropertyState } from '../../../../state/property/propertyState'
 import { AutocompleteField } from '../../autocompleteField'
 import { CustomInputFields } from '../../customInputFields'
 import { FilesManager } from '../../fileField'
@@ -28,45 +20,79 @@ import { Images } from '../../images'
 import { InputField } from '../../inputField'
 import { PropertyOwners } from '../propertyOwners'
 import { VehicleInfo } from '../vehicleInfo'
-import { propertyFormValidation, validatePropertyForm } from './validation/validation'
+import { validatePropertyForm } from './validation/validation'
 
-type Props = {
+type Props<T = PropertyAPIInput> = {
   propertyId?: string
-  propertyInfo?: PropertyAPIInput
-  readonly?: boolean
-  onSubmit: (formData: PropertyAPIInput) => Promise<void> | void
-  error?: ApolloError
+  onSubmit: (formData: T) => void
 }
 
-const Form: React.FunctionComponent<Props & FormikProps<PropertyAPIInput>> = ({
-  propertyId,
-  setFieldError,
-  setFieldValue,
-  values,
-  errors,
-  isSubmitting,
-  isValidating,
-  submitForm,
-}) => {
+export const PropertyForm: React.FunctionComponent<Props> = ({ propertyId, onSubmit }) => {
   const [step, setStep] = useState(0)
   const cancelChanges = useCancelDialog(routes.properties)
+  const {
+    metadata,
+    name,
+    type,
+    images,
+    files,
+    owners,
+    ownersCustomFields,
+    customFields,
+    vehicleInfo,
+    realEstateInfo,
+
+    getProperty,
+    getOwners,
+    getCustomFields,
+    getImages,
+    getFiles,
+
+    setFiles,
+    setImages,
+    addCustomField,
+    addImage,
+    addFile,
+
+    updateName,
+    updateType,
+    updateImage,
+    updateFile,
+    updateCustomField,
+    disableRealEstateInfo,
+    enableRealEstateInfo,
+    enableVehicleInfo,
+    disableVehicleInfo,
+    removeImages,
+    removeFiles,
+    removeCustomFields,
+  } = usePropertyState()
+
+  const { submitForm, isSubmitting, isValidating, setFieldValue } = useFormik<PropertyAPIInput>({
+    initialValues: getProperty(),
+    validate: async (values) => validatePropertyForm(values, propertyId),
+    validateOnChange: false,
+    validateOnMount: false,
+    validateOnBlur: false,
+    enableReinitialize: true,
+    onSubmit,
+  })
+
+  useEffect(() => void setFieldValue('metadata', metadata), [metadata])
+  useEffect(() => void setFieldValue('type', type), [type])
+  useEffect(() => void setFieldValue('name', name), [name])
+  useEffect(() => void setFieldValue('vehicleInfo', vehicleInfo), [vehicleInfo])
+  useEffect(() => void setFieldValue('realEstateInfo', realEstateInfo), [realEstateInfo])
+  useEffect(() => void setFieldValue('files', getFiles()), [files])
+  useEffect(() => void setFieldValue('images', getImages()), [images])
+  useEffect(() => void setFieldValue('customFields', getCustomFields()), [customFields])
+  useEffect(() => void setFieldValue('owners', getOwners()), [owners, ownersCustomFields])
 
   const renderPropertyFieldsByType = () => {
-    if (values.type === 'Vehicul') {
-      return (
-        <VehicleInfo
-          vehicleInfo={values.vehicleInfo ?? createVehicleInfo()}
-          updateVehicleInfo={(vehicleInfo) => setFieldValue('vehicleInfo', vehicleInfo)}
-          error={errors.vehicleInfo as string}
-        />
-      )
-    } else if (realEstatePropertyTypes.includes(values.type)) {
-      return (
-        <RealEstateInfo
-          realEstateInfo={values.realEstateInfo ?? createRealEstateInfo()}
-          updateRealEstateInfo={(realEstateInfo) => setFieldValue('realEstateInfo', realEstateInfo)}
-        />
-      )
+    if (type === 'Vehicul') {
+      return <VehicleInfo />
+    } else if (realEstatePropertyTypes.includes(type)) {
+      return <RealEstateInfo />
     }
     return null
   }
@@ -103,42 +129,31 @@ const Form: React.FunctionComponent<Props & FormikProps<PropertyAPIInput>> = ({
             <Grid container spacing={2}>
               <Grid item xs={3}>
                 <Images
-                  images={values.images}
-                  updateImages={async (images) => {
-                    const error = await propertyFormValidation.files(images)
-                    setFieldError('images', error)
-                    setFieldValue('images', images)
-                  }}
-                  error={errors.images}
+                  images={images}
+                  updateImage={updateImage}
+                  removeImages={removeImages}
+                  addImage={addImage}
+                  setImages={setImages}
                 />
               </Grid>
               <Grid container item xs={9} spacing={3}>
                 <Grid item xs={6}>
-                  <InputField
-                    name={'name'}
-                    label={'Nume'}
-                    value={values.name}
-                    error={errors.name}
-                    onChange={async (value) => {
-                      void setFieldValue('name', value)
-                    }}
-                  />
+                  <InputField name={'name'} label={'Nume'} value={name} onChange={updateName} />
                 </Grid>
 
                 <Grid item xs={6}>
                   <AutocompleteField
-                    label={'Tip de proprietate sau bun'}
+                    label={'Tip de bun / proprietate'}
                     suggestions={propertyTypes}
-                    value={values.type}
-                    onValueChange={(value) => {
-                      setFieldValue('type', value, false)
-
-                      if (value === 'Vehicul') {
-                        setFieldValue('vehicleInfo', createVehicleInfo(), false)
-                        setFieldValue('realEstateInfo', null, false)
-                      } else if (realEstatePropertyTypes.includes(value)) {
-                        setFieldValue('vehicleInfo', null, false)
-                        setFieldValue('realEstateInfo', createRealEstateInfo(), false)
+                    value={type}
+                    onChange={(type) => {
+                      updateType(type)
+                      if (type === 'Vehicul') {
+                        enableVehicleInfo()
+                        disableRealEstateInfo()
+                      } else if (realEstatePropertyTypes.includes(type)) {
+                        disableVehicleInfo()
+                        enableRealEstateInfo()
                       }
                     }}
                   />
@@ -151,14 +166,10 @@ const Form: React.FunctionComponent<Props & FormikProps<PropertyAPIInput>> = ({
             <Grid container spacing={2}>
               <Grid item xs={12}>
                 <CustomInputFields
-                  fields={values.customFields}
-                  setFieldValue={async (customFields) => {
-                    const error = await propertyFormValidation.customFields(customFields)
-
-                    setFieldValue('customFields', customFields)
-                    setFieldError('customFields', error)
-                  }}
-                  error={errors.customFields as string}
+                  customFields={customFields}
+                  updateCustomField={updateCustomField}
+                  addCustomField={addCustomField}
+                  removeCustomFields={removeCustomFields}
                 />
               </Grid>
             </Grid>
@@ -166,28 +177,19 @@ const Form: React.FunctionComponent<Props & FormikProps<PropertyAPIInput>> = ({
           {step === 2 && (
             <Grid container spacing={2}>
               <Grid item xs={12}>
-                <PropertyOwners
-                  isVehicle={!!values.vehicleInfo}
-                  owners={values.owners}
-                  updateOwners={async (owners) => {
-                    // const error = await propertyFormValidation.owners(owners)
-                    // setFieldError('owners', error)
-                    setFieldValue('owners', owners)
-                  }}
-                />
+                <PropertyOwners />
               </Grid>
             </Grid>
           )}
           {step === 3 && (
             <Grid container spacing={2}>
               <FilesManager
-                files={values.files}
+                removeFiles={removeFiles}
                 keepDeletedFiles={!!propertyId}
-                updateFiles={async (uploadedFiles) => {
-                  const error = await propertyFormValidation.files(uploadedFiles)
-                  setFieldValue('files', uploadedFiles)
-                  setFieldError('files', error)
-                }}
+                files={files}
+                updateFiles={setFiles}
+                updateFile={updateFile}
+                addFile={addFile}
               />
             </Grid>
           )}
@@ -219,13 +221,3 @@ const Form: React.FunctionComponent<Props & FormikProps<PropertyAPIInput>> = ({
     </form>
   )
 }
-
-export const PropertyForm = withFormik<Props, PropertyAPIInput>({
-  mapPropsToValues: ({ propertyInfo }) => propertyInfo ?? getDefaultProperty(),
-  validate: async (values, { propertyId }) => validatePropertyForm(values, propertyId),
-  validateOnChange: false,
-  validateOnMount: false,
-  validateOnBlur: false,
-  enableReinitialize: true,
-  handleSubmit: (values, { props: { onSubmit } }) => onSubmit(values),
-})(Form)

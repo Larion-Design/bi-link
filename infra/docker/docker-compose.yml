@@ -1,0 +1,100 @@
+version: '3.8'
+services:
+  minio:
+    container_name: 'minio'
+    image: minio/minio
+    ports:
+      - '9000:9000'
+      - '9001:9001'
+    volumes:
+      - 'minio_data:/data'
+    environment:
+      - MINIO_ROOT_USER=link-app
+      - MINIO_ROOT_PASSWORD=RVvVi!UH383Am
+      - MINIO_BROWSER=on
+    restart: unless-stopped
+    command: server --console-address ":9001" /data
+    healthcheck:
+      test: ['CMD', 'curl', '-f', 'http://localhost:9000/minio/health/live']
+      interval: 5s
+      timeout: 10s
+      retries: 10
+      start_period: 10s
+  mongo:
+    container_name: mongo
+    image: mongo
+    ports:
+      - '27017:27017'
+    volumes:
+      - 'mongodb_data:/data/db'
+    environment:
+      - MONGO_INITDB_DATABASE=link
+    healthcheck:
+      test: echo 'db.runCommand({serverStatus:1}).ok' | mongo admin --quiet | grep 1
+      interval: 5s
+      timeout: 10s
+      retries: 30
+      start_period: 10s
+    restart: unless-stopped
+    command: mongod --quiet --logpath /dev/null
+  graph:
+    image: memgraph/memgraph-platform
+    container_name: 'graph'
+    ports:
+      - '7687:7687'
+      - '3000:3000'
+      - '7444:7444'
+    volumes:
+      - 'memgraph_lib:/var/lib/memgraph'
+      - 'memgraph_log:/var/log/memgraph'
+      - 'memgraph_etc:/etc/memgraph'
+    environment:
+      - MEMGRAPH="--log-level=TRACE"
+    entrypoint: ['/usr/bin/supervisord']
+  elasticsearch:
+    container_name: 'elasticsearch'
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.2.3
+    ports:
+      - '9200:9200'
+      - '9300:9300'
+    environment:
+      - xpack.security.enabled=false
+      - discovery.type=single-node
+    volumes:
+      - 'elasticsearch_data:/usr/share/elasticsearch/data'
+    healthcheck:
+      test: ['CMD-SHELL', 'curl -s "http://localhost:9200/_cat/health?h=status" | grep -v red']
+      interval: 3s
+      timeout: 5s
+      retries: 10
+      start_period: 15s
+    restart: unless-stopped
+  redis:
+    container_name: 'redis'
+    image: rapidfort/redis-official:7.2.3-alpine3.19
+    ports:
+      - '6379:6379'
+    volumes:
+      - 'redis_data:/data'
+    healthcheck:
+      test: ['CMD-SHELL', 'redis-cli --no-auth-warning ping | grep PONG']
+      interval: 3s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    restart: unless-stopped
+volumes:
+  minio_data:
+    driver: local
+  redis_data:
+    driver: local
+  memgraph_lib:
+    driver: local
+  memgraph_log:
+    driver: local
+  memgraph_etc:
+    driver: local
+  elasticsearch_data:
+    driver: local
+  mongodb_data:
+    driver: local

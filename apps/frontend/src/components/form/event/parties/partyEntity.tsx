@@ -55,10 +55,7 @@ export const PartyEntity: React.FunctionComponent<PropsWithChildren<Props>> = ({
         }}
       >
         {children}
-        <IconButton
-          onClick={() => setMenuOpenState(true)}
-          ref={(ref) => (buttonRef.current = ref)}
-        >
+        <IconButton onClick={() => setMenuOpenState(true)} ref={(ref) => (buttonRef.current = ref)}>
           <MoreVertOutlinedIcon />
         </IconButton>
       </Box>

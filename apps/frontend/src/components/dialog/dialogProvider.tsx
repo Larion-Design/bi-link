@@ -20,9 +20,7 @@ const DialogContext = React.createContext<Context>({
 
 export const useDialog = () => useContext(DialogContext)
 
-export const DialogProvider: React.FunctionComponent<PropsWithChildren> = ({
-  children,
-}) => {
+export const DialogProvider: React.FunctionComponent<PropsWithChildren> = ({ children }) => {
   const [dialogInfo, setDialogInfo] = useState<DialogOptions | null>(null)
   const [isDialogOpen, setDialogState] = useState<boolean>(false)
 

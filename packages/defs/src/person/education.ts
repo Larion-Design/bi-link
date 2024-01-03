@@ -1,13 +1,20 @@
-import { CustomField } from '../customField'
+import { z } from 'zod'
+import { connectedEntitySchema } from '../connectedEntity'
+import { dateSchema } from '../date'
+import { withMetadataSchema } from '../metadata'
 
-export interface Education {
-  type: string
-  school: string
-  specialization: string
-  customFields: CustomField[]
-  startDate: Date | string | null
-  endDate: Date | string | null
-}
+export const educationSchema = z
+  .object({
+    _id: z.string().optional(),
+    type: z.string(),
+    school: z.string(),
+    specialization: z.string(),
+    startDate: dateSchema.nullish(),
+    endDate: dateSchema.nullish(),
+    company: connectedEntitySchema.nullish(),
+  })
+  .merge(withMetadataSchema)
 
-export interface EducationAPIInput extends Education {}
-export interface EducationAPIOutput extends Education {}
+export type Education = z.infer<typeof educationSchema>
+export type EducationAPIInput = Education
+export type EducationAPIOutput = Education

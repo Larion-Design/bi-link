@@ -9,12 +9,12 @@ type Params = {
 }
 
 const request = gql`
-  query GetFileContent($fileId: String!) {
+  query GetFileContent($fileId: ID!) {
     getFileContent(fileId: $fileId)
   }
 `
 
 export const getFileContentRequest = () =>
   useLazyQuery<Response, Params>(request, {
-    fetchPolicy: 'cache-and-network',
+    fetchPolicy: 'cache-first',
   })

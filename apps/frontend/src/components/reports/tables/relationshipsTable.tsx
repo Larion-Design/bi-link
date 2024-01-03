@@ -6,7 +6,7 @@ import TableContainer from '@mui/material/TableContainer'
 import TableHead from '@mui/material/TableHead'
 import TableRow from '@mui/material/TableRow'
 import Typography from '@mui/material/Typography'
-import { RelationshipAPIInput } from 'defs'
+import { RelationshipAPI } from 'defs'
 import { getPersonInfoRequest } from '../../../graphql/persons/queries/getPersonInfo'
 import { getPersonsBasicInfoRequest } from '../../../graphql/persons/queries/getPersonsBasicInfo'
 import { getPersonFullName } from '../../../utils/person'
@@ -15,7 +15,7 @@ type Props = {
   personId: string
 }
 
-type RelationshipInfo = { name: string } & Pick<RelationshipAPIInput, 'type' | 'proximity'>
+type RelationshipInfo = { name: string } & Pick<RelationshipAPI, 'type' | 'proximity'>
 
 export const RelationshipsTable: React.FunctionComponent<Props> = ({ personId }) => {
   const [fetchPerson, { data: personData }] = getPersonInfoRequest()

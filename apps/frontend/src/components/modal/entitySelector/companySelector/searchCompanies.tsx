@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react'
+import Stack from '@mui/material/Stack'
 import CardContent from '@mui/material/CardContent'
 import Box from '@mui/material/Box'
 import TextField from '@mui/material/TextField'
@@ -6,7 +7,7 @@ import Button from '@mui/material/Button'
 import AddOutlinedIcon from '@mui/icons-material/AddOutlined'
 import CardActions from '@mui/material/CardActions'
 import { DataGrid, GridColDef, GridSelectionModel } from '@mui/x-data-grid'
-import { searchCompaniesRequest } from '../../../../graphql/companies/queries/searchCompanies'
+import { searchCompaniesRequest } from '@frontend/graphql/companies/queries/searchCompanies'
 import { useDebounce } from 'usehooks-ts'
 import { CompanyListRecord } from 'defs'
 import { CompanySelectorView } from './companySelector'
@@ -132,10 +133,11 @@ export const SearchCompanies: React.FunctionComponent<Props> = ({
           Creaza companie
         </Button>
 
-        <Box display={'flex'}>
-          <Button variant={'outlined'} color={'error'} onClick={closeModal} sx={{ mr: 2 }}>
+        <Stack direction={'row'} spacing={2}>
+          <Button variant={'outlined'} color={'error'} onClick={closeModal}>
             Inchide
           </Button>
+
           <Button
             variant={'contained'}
             color={'primary'}
@@ -144,7 +146,7 @@ export const SearchCompanies: React.FunctionComponent<Props> = ({
           >
             Selectează
           </Button>
-        </Box>
+        </Stack>
       </CardActions>
     </>
   )

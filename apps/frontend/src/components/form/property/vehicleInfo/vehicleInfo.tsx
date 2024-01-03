@@ -1,30 +1,26 @@
 import React, { useEffect } from 'react'
-import { VehicleInfo as VehicleInfoType } from 'defs'
 import Grid from '@mui/material/Grid'
-import { InputField } from '../../inputField'
-import { AutocompleteField } from '../../autocompleteField'
+import { usePropertyState } from '../../../../state/property/propertyState'
+import { InputFieldWithMetadata } from '../../inputField'
 import { getMakersRequest } from '@frontend/graphql/properties/queries/vehicles/getMakers'
 import { getModelsRequest } from '@frontend/graphql/properties/queries/vehicles/getModels'
-import { ColorPicker } from '../../colorPicker'
+import { ColorPickerWithMetadata } from '../../colorPicker'
+import { AutocompleteFieldWithMetadata } from '@frontend/components/form/autocompleteField/autocompleteFieldWithMetadata'
 
-type Props = {
-  vehicleInfo: VehicleInfoType
-  updateVehicleInfo: (vehicleInfo: VehicleInfoType) => void | Promise<void>
-  error?: string
-}
-
-export const VehicleInfo: React.FunctionComponent<Props> = ({
-  vehicleInfo,
-  updateVehicleInfo,
-  error,
-}) => {
+export const VehicleInfo: React.FunctionComponent = () => {
   const [fetchMakers, { data: makers }] = getMakersRequest()
   const [fetchModels, { data: models }] = getModelsRequest()
 
-  useEffect(() => {
-    void fetchMakers()
-    void fetchModels()
-  }, [])
+  const [vehicleInfo, updateVehicleMaker, updateVehicleModel, updateVin, updateColor] =
+    usePropertyState(
+      ({ vehicleInfo, updateVehicleMaker, updateVehicleModel, updateVin, updateColor }) => [
+        vehicleInfo,
+        updateVehicleMaker,
+        updateVehicleModel,
+        updateVin,
+        updateColor,
+      ],
+    )
 
   useEffect(() => {
     if (vehicleInfo && !makers && !models) {
@@ -34,53 +30,55 @@ export const VehicleInfo: React.FunctionComponent<Props> = ({
   }, [vehicleInfo])
 
   useEffect(() => {
-    if (vehicleInfo?.maker.length) {
-      void fetchModels({ variables: { maker: vehicleInfo.maker } })
+    const maker = vehicleInfo?.maker.value
+    if (maker?.length) {
+      void fetchModels({ variables: { maker } })
     }
-  }, [vehicleInfo?.maker])
+  }, [vehicleInfo?.maker.value])
 
   useEffect(() => {
-    if (vehicleInfo?.model.length) {
-      void fetchMakers({ variables: { model: vehicleInfo.model } })
+    const model = vehicleInfo?.model.value
+    if (model?.length) {
+      void fetchMakers({ variables: { model } })
     }
-  }, [vehicleInfo?.model])
+  }, [vehicleInfo?.model.value])
+
+  if (!vehicleInfo) {
+    return null
+  }
+
+  const { model, maker, vin, color } = vehicleInfo
 
   return (
     <>
       <Grid item xs={6}>
-        <InputField
-          name={'vin'}
-          label={'VIN'}
-          value={vehicleInfo?.vin}
-          error={error}
-          onChange={(vin) => updateVehicleInfo({ ...vehicleInfo, vin })}
-        />
+        <InputFieldWithMetadata label={'VIN'} fieldInfo={vin} updateFieldInfo={updateVin} />
       </Grid>
+
       <Grid item xs={6}>
-        <AutocompleteField
+        <AutocompleteFieldWithMetadata
           label={'Marca'}
-          value={vehicleInfo.maker}
-          error={error}
+          fieldInfo={maker}
+          updateFieldInfo={updateVehicleMaker}
           suggestions={makers?.getMakers ?? []}
-          onValueChange={async (maker) => updateVehicleInfo({ ...vehicleInfo, maker })}
         />
       </Grid>
+
       <Grid item xs={6}>
-        <AutocompleteField
+        <AutocompleteFieldWithMetadata
           label={'Model'}
-          value={vehicleInfo.model}
-          error={error}
-          suggestions={models?.getModels ?? []}
-          onValueChange={async (model) => updateVehicleInfo({ ...vehicleInfo, model })}
+          fieldInfo={model}
+          updateFieldInfo={updateVehicleModel}
+          suggestions={makers?.getMakers ?? []}
         />
       </Grid>
+
       <Grid item xs={6}>
-        <ColorPicker
-          name={'color'}
-          value={vehicleInfo?.color}
+        <ColorPickerWithMetadata
           label={'Culoare'}
-          error={error}
-          onChange={async (color) => updateVehicleInfo({ ...vehicleInfo, color })}
+          name={'color'}
+          fieldInfo={color}
+          updateFieldInfo={updateColor}
         />
       </Grid>
     </>

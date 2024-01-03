@@ -1,15 +1,11 @@
+import { CustomNodeProps } from '@frontend/components/entityViews/graph/nodes/type'
 import React from 'react'
 import { Handle, NodeProps, Position } from 'reactflow'
 import Typography from '@mui/material/Typography'
 import Paper from '@mui/material/Paper'
 import GavelOutlinedIcon from '@mui/icons-material/GavelOutlined'
 
-type Props = {
-  label: string
-  isRootNode?: boolean
-}
-
-export const ProceedingNode: React.FunctionComponent<NodeProps<Props>> = ({
+export const ProceedingNode: React.FunctionComponent<NodeProps<CustomNodeProps>> = ({
   data: { label, isRootNode },
 }) => (
   <>

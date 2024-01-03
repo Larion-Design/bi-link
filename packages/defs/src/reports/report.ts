@@ -1,44 +1,60 @@
-import { Company } from '../company'
-import { NodesRelationship } from '../graphRelationships'
-import { Person } from '../person'
-import { Event } from '../event'
-import { Property } from '../property'
-import { DataRef, DataRefAPI } from './dataRef'
-import { ReportSection, ReportSectionAPIInput, ReportSectionAPIOutput } from './reportSection'
-import { ConnectedEntity } from '../connectedEntity'
+import { z } from 'zod'
+import { dataRefAPISchema, dataRefSchema } from './dataRef'
+import { fileInputSchema, fileOutputSchema, fileSchema } from '../file'
+import { withTimestamps } from '../timestamps'
+import {
+  reportSectionAPIInputSchema,
+  reportSectionAPIOutputSchema,
+  reportSectionSchema,
+} from './reportSection'
+import { connectedEntitySchema } from '../connectedEntity'
 
-export interface Report {
-  _id?: string
-  name: string
-  type: string
-  isTemplate: boolean
-  company?: Company
-  person?: Person
-  event?: Event
-  property?: Property
-  sections: ReportSection[]
-  createdAt?: Date
-  updatedAt?: Date
-  refs: DataRef[]
-}
+export const reportSchema = z
+  .object({
+    _id: z.string().uuid(),
+    name: z.string(),
+    type: z.string(),
+    isTemplate: z.boolean(),
+    company: connectedEntitySchema.nullish(),
+    person: connectedEntitySchema.nullish(),
+    event: connectedEntitySchema.nullish(),
+    property: connectedEntitySchema.nullish(),
+    proceeding: connectedEntitySchema.nullish(),
+    sections: reportSectionSchema.array(),
+    refs: dataRefSchema.array(),
+    oldReportFiles: fileSchema.array(),
+  })
+  .merge(withTimestamps)
 
-interface ReportAPI
-  extends Omit<Report, 'sections' | 'person' | 'company' | 'property' | 'event' | 'refs'> {
-  person?: ConnectedEntity
-  company?: ConnectedEntity
-  property?: ConnectedEntity
-  event?: ConnectedEntity
-  refs: DataRefAPI[]
-}
+const reportAPISchema = reportSchema.merge(
+  z.object({
+    refs: dataRefAPISchema.array(),
+  }),
+)
 
-export interface ReportAPIInput extends Omit<ReportAPI, '_id'> {
-  sections: ReportSectionAPIInput[]
-}
+export const reportAPIOutputSchema = reportAPISchema.merge(
+  z.object({
+    sections: reportSectionAPIOutputSchema.array(),
+    oldReportFiles: fileOutputSchema.array(),
+  }),
+)
 
-export interface ReportAPIOutput extends ReportAPI {
-  sections: ReportSectionAPIOutput[]
-}
+export const reportAPIInputSchema = reportAPISchema
+  .omit({
+    _id: true,
+    createdAt: true,
+    updatedAt: true,
+  })
+  .merge(
+    z.object({
+      sections: reportSectionAPIInputSchema.array(),
+      oldReportFiles: fileInputSchema.array(),
+    }),
+  )
 
-export interface ReportedEntityRelationship extends NodesRelationship {}
+export const reportListRecordSchema = reportAPISchema.pick({ _id: true, name: true, type: true })
 
-export interface ReportListRecord extends Pick<Report, '_id' | 'name' | 'type'> {}
+export type Report = z.infer<typeof reportSchema>
+export type ReportAPIInput = z.infer<typeof reportAPIInputSchema>
+export type ReportAPIOutput = z.infer<typeof reportAPIOutputSchema>
+export type ReportListRecord = z.infer<typeof reportListRecordSchema>

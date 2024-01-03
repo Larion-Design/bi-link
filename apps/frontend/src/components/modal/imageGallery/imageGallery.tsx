@@ -12,9 +12,9 @@ import { imageTypeRegex } from '../../../utils/mimeTypes'
 import { FileUploadBox } from '../../form/fileField/FileUploadBox'
 import { ModalHeader } from '../modalHeader'
 
-type Props = {
-  images: FileAPIInput[]
-  setImages: (images: FileAPIInput[]) => void
+type Props<T = FileAPIInput> = {
+  images: T[]
+  setImages: (images: T[]) => void
   closeModal: () => void
 }
 

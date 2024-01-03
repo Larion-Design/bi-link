@@ -1,6 +1,7 @@
 import React from 'react'
 import Button from '@mui/material/Button'
 import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined'
+import { FormattedMessage } from 'react-intl'
 import { useDialog } from '../dialog/dialogProvider'
 
 type Props = {
@@ -32,7 +33,7 @@ export const RemoveRowsToolbarButton: React.FunctionComponent<Props> = ({
       onClick={confirmHandler}
       sx={{ ml: 1 }}
     >
-      Sterge
+      <FormattedMessage id={'Remove'} />
     </Button>
   )
 }

@@ -1,14 +1,9 @@
 import { gql, useLazyQuery } from '@apollo/client'
+import { SearchParams } from '@frontend/graphql/shared/types/searchParams'
 import { PersonListRecord, PersonsSuggestions } from 'defs'
 
 type Response = {
   searchPersons: PersonsSuggestions<PersonListRecord>
-}
-
-type Params = {
-  searchTerm: string
-  limit: number
-  skip: number
 }
 
 const SearchPersons = gql`
@@ -26,6 +21,6 @@ const SearchPersons = gql`
 `
 
 export const searchPersonsRequest = () =>
-  useLazyQuery<Response, Params>(SearchPersons, {
+  useLazyQuery<Response, SearchParams>(SearchPersons, {
     fetchPolicy: 'cache-and-network',
   })

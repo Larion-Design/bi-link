@@ -1,7 +1,0 @@
-export * from './company'
-export * from './event'
-export * from './file'
-export * from './person'
-export * from './property'
-export * from './report'
-export * from './proceeding'

@@ -1,12 +1,11 @@
+import { CustomNodeProps } from '@frontend/components/entityViews/graph/nodes/type'
 import Avatar from '@mui/material/Avatar'
 import React from 'react'
 import { Handle, NodeProps, Position } from 'reactflow'
 import Typography from '@mui/material/Typography'
 import Paper from '@mui/material/Paper'
 
-type Props = {
-  label: string
-  isRootNode: boolean
+type Props = CustomNodeProps & {
   image?: string
 }
 
@@ -29,9 +28,7 @@ export const PersonNode: React.FunctionComponent<NodeProps<Props>> = ({
         })}
       >
         <Avatar src={image} />
-        <Typography sx={{ ml: 1 }} variant={'body2'}>
-          {label}
-        </Typography>
+        <Typography variant={'body2'}>{label}</Typography>
       </Paper>
       <Handle type={'source'} position={Position.Bottom} />
     </>

@@ -10,7 +10,7 @@ type Response = {
 }
 
 const request = gql`
-  query GetPropertiesByCompany($companyId: String!) {
+  query GetPropertiesByCompany($companyId: ID!) {
     getPropertiesByCompany(companyId: $companyId) {
       _id
       name
@@ -20,4 +20,4 @@ const request = gql`
 `
 
 export const getPropertiesByCompanyRequest = () =>
-  useLazyQuery<Response, Params>(request, { fetchPolicy: 'cache-and-network' })
+  useLazyQuery<Response, Params>(request, { fetchPolicy: 'cache-first' })

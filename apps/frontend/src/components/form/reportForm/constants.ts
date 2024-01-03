@@ -1,4 +1,5 @@
 import { ConnectedEntity, EntityType, ReportAPIInput } from 'defs'
+import { getDefaultReport } from 'default-values'
 
 export const addEntityToReport = (
   entityId: string,
@@ -15,20 +16,10 @@ export const addEntityToReport = (
       return { ...reportInfo, property: connectedEntity }
     case 'EVENT':
       return { ...reportInfo, event: connectedEntity }
+    case 'PROCEEDING':
+      return { ...reportInfo, proceeding: connectedEntity }
   }
 }
 
-export const createReportInitialValues = (
-  type: string,
-  entityId: string,
-  entityType: EntityType,
-): ReportAPIInput => {
-  const reportInfo: ReportAPIInput = {
-    name: '',
-    type,
-    isTemplate: false,
-    sections: [],
-    refs: [],
-  }
-  return addEntityToReport(entityId, entityType, reportInfo)
-}
+export const createReportInitialValues = (type: string, entityId: string, entityType: EntityType) =>
+  addEntityToReport(entityId, entityType, getDefaultReport())

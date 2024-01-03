@@ -1,5 +1,6 @@
-import { FormControl, InputLabel } from '@mui/material'
 import React, { useCallback, useId, useMemo } from 'react'
+import FormControl from '@mui/material/FormControl'
+import InputLabel from '@mui/material/InputLabel'
 import Chip from '@mui/material/Chip'
 import Box from '@mui/material/Box'
 import Select from '@mui/material/Select'

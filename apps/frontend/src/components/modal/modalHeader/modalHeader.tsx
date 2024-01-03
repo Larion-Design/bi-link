@@ -8,10 +8,7 @@ type Props = {
   closeModal?: () => void
 }
 
-export const ModalHeader: React.FunctionComponent<Props> = ({
-  title,
-  closeModal,
-}) => (
+export const ModalHeader: React.FunctionComponent<Props> = ({ title, closeModal }) => (
   <CardHeader
     title={title}
     action={

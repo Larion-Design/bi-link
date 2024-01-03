@@ -1,35 +1,43 @@
 {
-  "name": "link",
+  "name": "bi-link",
   "version": "0.0.9",
   "private": true,
+  "packageManager": "pnpm@8.12.1",
   "description": "BI Link Monorepo",
   "scripts": {
-    "start": "pnpm turbo dev",
-    "backend": "pnpm turbo backend",
-    "frontend": "pnpm turbo frontend",
-    "build": "pnpm --filter {./apps/**} build",
-    "test": "turbo run test --parallel --stream --concurency=4",
-    "lint": "eslint --ext=.tsx,.ts --quiet ."
+    "start": "pnpm nx run-many -t start",
+    "backend": "pnpm nx start backend",
+    "frontend": "pnpm nx start frontend",
+    "build": "pnpm nx affected --base=FETCH_HEAD -t build --parallel=3",
+    "docker": "pnpm nx start docker",
+    "docker:stop": "pnpm nx stop docker",
+    "test": "pnpm nx affected --base=FETCH_HEAD -t test --parallel=3",
+    "lint": "eslint --quiet --cache .",
+    "prettier": "prettier --check --cache ."
   },
-  "keywords": [],
   "author": "alextudor@duck.com",
   "license": "proprietary",
   "devDependencies": {
-    "@typescript-eslint/eslint-plugin": "^5.47.1",
-    "@typescript-eslint/parser": "^5.47.1",
-    "babel-loader": "^8.3.0",
-    "babel-plugin-formatjs": "^10.3.35",
-    "eslint": "^8.30.0",
-    "eslint-config-prettier": "^8.5.0",
-    "eslint-plugin-mui-unused-classes": "^1.0.3",
-    "eslint-plugin-prettier": "^4.2.1",
-    "eslint-plugin-react-hooks": "^4.6.0",
-    "eslint-plugin-simple-import-sort": "^7.0.0",
-    "prettier": "^2.8.1",
-    "typescript": "^4.9.4",
-    "rimraf": "^3.0.2"
+    "@playwright/test": "^1.37.1",
+    "@types/node": "^20.5.4",
+    "dotenv": "^16.3.1",
+    "nx": "17.2.7",
+    "rimraf": "^5",
+    "typescript": "^5.2.2"
   },
   "optionalDependencies": {
-    "turbo": "^1.6.3"
+    "@typescript-eslint/eslint-plugin": "^5.57.1",
+    "@typescript-eslint/parser": "^5.57.1",
+    "babel-loader": "^8.3.0",
+    "babel-plugin-formatjs": "^10.4.0",
+    "eslint": "^8.38.0",
+    "eslint-config-prettier": "^8.8.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "prettier": "^2.8.7"
+  },
+  "pnpm": {
+    "requiredScripts": [
+      "build"
+    ]
   }
 }

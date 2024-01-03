@@ -1,5 +1,8 @@
-export interface Title {
-  content: string
-}
+import { z } from 'zod'
 
-export interface TitleAPI extends Title {}
+export const titleSchema = z.object({
+  content: z.string(),
+})
+
+export type Title = z.infer<typeof titleSchema>
+export type TitleAPI = Title

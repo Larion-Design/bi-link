@@ -1,12 +1,16 @@
-import { EntityType } from './index'
+import { z } from 'zod'
+import { entityInfoSchema } from './entity'
+import { updateSourceSchema } from './updateSource'
 
-export interface ActivityEvent {
-  _id: string
-  timestamp: number
-  eventType: string
-  author?: string
-  target: string
-  targetType: EntityType
-}
+export const activityEventSchema = z.object({
+  _id: z.string(),
+  timestamp: z.number(),
+  eventType: z.string(),
+  author: updateSourceSchema,
+  targetEntityInfo: entityInfoSchema,
+})
 
-export type ActivityEventIndex = Omit<ActivityEvent, '_id'>
+export const activityEventInputSchema = activityEventSchema.omit({ _id: true })
+
+export type ActivityEvent = z.infer<typeof activityEventSchema>
+export type ActivityEventInput = z.infer<typeof activityEventInputSchema>

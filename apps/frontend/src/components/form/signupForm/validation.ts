@@ -1,22 +1,17 @@
-import * as yup from 'yup'
+import { z } from 'zod'
 
-export const signupValidationSchema = yup.object().shape({
-  email: yup
+export const signupValidationSchema = z.object({
+  name: z.string().nonempty('Nu ai completat campul de nume.'),
+  email: z
     .string()
     .email('Adresa de email este invalida.')
-    .required('Nu ai completat campul de email.'),
-  password: yup
+    .nonempty('Nu ai completat campul de email.'),
+  password: z
     .string()
     .min(8, 'Parola trebuie sa aiba intre 8 si 30 de caractere.')
     .max(30, 'Parola trebuie sa aiba intre 8 si 30 de caractere.')
-    .required('Nu ai completat campul pentru parola.'),
-  confirmPassword: yup
-    .string()
-    .test(
-      'passwords-match',
-      'Parola trebuie sa fie identica cu cea introdusa anterior.',
-      function (value) {
-        return this.parent.password === value
-      },
-    ),
+    .nonempty('Nu ai completat campul pentru parola.'),
+  confirmPassword: z.string().nonempty(),
 })
+
+export type SignupInfo = z.infer<typeof signupValidationSchema>

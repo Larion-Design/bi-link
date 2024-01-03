@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import Card from '@mui/material/Card'
 import { SearchCompanies } from './searchCompanies'
-import { FastCreateCompany } from './fastCreateCompany'
+import { FastCreateCompany } from '@frontend/components/form/company/companyForm/fastCreateCompany'
 
 export type CompanySelectorView = 'search' | 'createCompany'
 

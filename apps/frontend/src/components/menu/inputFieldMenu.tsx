@@ -9,9 +9,10 @@ type Props = {
   label?: string
 }
 
-export const InputFieldMenu: React.FunctionComponent<
-  PropsWithChildren<Props>
-> = ({ label, children }) => {
+export const InputFieldMenu: React.FunctionComponent<PropsWithChildren<Props>> = ({
+  label,
+  children,
+}) => {
   const buttonRef = useRef<Element | null>()
   const [open, setOpenState] = useState(false)
   const closeMenu = useCallback(() => {
@@ -43,12 +44,7 @@ export const InputFieldMenu: React.FunctionComponent<
         </IconButton>
       )}
       {!!buttonRef.current && (
-        <Menu
-          open={true}
-          anchorEl={buttonRef.current}
-          onClose={closeMenu}
-          onClick={closeMenu}
-        >
+        <Menu open={true} anchorEl={buttonRef.current} onClose={closeMenu} onClick={closeMenu}>
           {children}
         </Menu>
       )}

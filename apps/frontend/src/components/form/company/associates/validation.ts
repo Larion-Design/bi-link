@@ -1,27 +1,9 @@
-import * as yup from 'yup'
-import { AssociateAPIInput } from 'defs'
+import { AssociateAPI, associateAPISchema } from 'defs'
 import { isDatesOrderValid } from '@frontend/utils/date'
-import { connectedEntityValidationSchema } from '../../validation/connectedEntityValidationSchema'
+import { CompanyAssociateInfoState } from '../../../../state/company/companyAssociatesState'
 import { getShareholdersTotalEquity } from './helpers'
 
-const associatesDataStructure = yup.array().of(
-  yup.object({
-    person: connectedEntityValidationSchema.optional(),
-    company: connectedEntityValidationSchema.optional(),
-    isActive: yup.boolean().required(),
-    startDate: yup.date().optional().nullable(),
-    endDate: yup.date().optional().nullable(),
-    equity: yup.number(),
-    customFields: yup.array(
-      yup.object({
-        fieldName: yup.string().required(),
-        fieldValue: yup.string().required(),
-      }),
-    ),
-  }),
-)
-
-export const validateAssociates = async (associates: AssociateAPIInput[]) => {
+export const validateAssociates = async (associates: Map<string, CompanyAssociateInfoState>) => {
   let error = await validateAssociatesStructure(associates)
 
   if (!error) {
@@ -33,15 +15,17 @@ export const validateAssociates = async (associates: AssociateAPIInput[]) => {
   return error
 }
 
-export const validateAssociatesStructure = async (associates: AssociateAPIInput[]) => {
-  const isValid = await associatesDataStructure.isValid(associates)
+export const validateAssociatesStructure = async (
+  associates: Map<string, CompanyAssociateInfoState>,
+) => {
+  const isValid = await associateAPISchema.array().parseAsync(associates)
 
   if (!isValid) {
     return 'Nu ai furnizat unele informatii obligatorii.'
   }
 }
 
-export const validateShareholdersEquity = (associates: AssociateAPIInput[]) => {
+export const validateShareholdersEquity = (associates: Map<string, CompanyAssociateInfoState>) => {
   const totalEquity = parseFloat(getShareholdersTotalEquity(associates))
 
   if (totalEquity > 100) {
@@ -49,9 +33,11 @@ export const validateShareholdersEquity = (associates: AssociateAPIInput[]) => {
   }
 }
 
-export const validateAssociatesDates = (associates: AssociateAPIInput[]) => {
-  const isValid = associates.every(({ startDate, endDate }) =>
-    startDate && endDate ? isDatesOrderValid(new Date(startDate), new Date(endDate)) : true,
+export const validateAssociatesDates = (associates: Map<string, CompanyAssociateInfoState>) => {
+  const isValid = Array.from(associates.values()).every(({ startDate, endDate }) =>
+    startDate && endDate
+      ? isDatesOrderValid(new Date(startDate.value), new Date(endDate.value))
+      : true,
   )
 
   if (!isValid) {

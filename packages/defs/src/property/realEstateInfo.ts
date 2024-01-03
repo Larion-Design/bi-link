@@ -1,15 +1,11 @@
-import { Location, LocationAPIInput, LocationAPIOutput } from '../geolocation'
+import { z } from 'zod'
+import { booleanWithMetadataSchema, numberWithMetadataSchema } from '../generic'
+import { locationSchema } from '../geolocation'
 
-export interface RealEstateInfo {
-  surface: number
-  townArea: boolean
-  location: Location
-}
+export const realEstateSchema = z.object({
+  surface: numberWithMetadataSchema,
+  townArea: booleanWithMetadataSchema,
+  location: locationSchema.nullable(),
+})
 
-export interface RealEstateAPIInput extends RealEstateInfo {
-  location: LocationAPIInput
-}
-
-export interface RealEstateAPIOutput extends RealEstateInfo {
-  location: LocationAPIOutput
-}
+export type RealEstateInfo = z.infer<typeof realEstateSchema>

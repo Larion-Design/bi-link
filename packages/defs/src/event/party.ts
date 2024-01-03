@@ -1,24 +1,29 @@
-import { Company } from '../company'
-import { ConnectedEntity } from '../connectedEntity'
-import { CustomField } from '../customField'
-import { NodesRelationship } from '../graphRelationships'
-import { Person } from '../person'
-import { Property } from '../property'
+import { z } from 'zod'
+import { companySchema } from '../company'
+import { connectedEntitySchema } from '../connectedEntity'
+import { customFieldSchema } from '../customField'
+import { withMetadataSchema } from '../metadata'
+import { personSchema } from '../person'
+import { propertySchema } from '../property'
 
-export interface Party {
-  name: string
-  description: string
-  persons: Person[]
-  companies: Company[]
-  properties: Property[]
-  customFields: CustomField[]
-  _confirmed: boolean
-}
+export const eventParticipantSchema = z
+  .object({
+    type: z.string(),
+    description: z.string(),
+    persons: z.array(personSchema),
+    companies: z.array(companySchema),
+    properties: z.array(propertySchema),
+    customFields: z.array(customFieldSchema),
+  })
+  .merge(withMetadataSchema)
 
-export interface PartyAPI extends Omit<Party, 'persons' | 'companies' | 'properties'> {
-  persons: ConnectedEntity[]
-  companies: ConnectedEntity[]
-  properties: ConnectedEntity[]
-}
+export const eventParticipantAPISchema = eventParticipantSchema.merge(
+  z.object({
+    persons: connectedEntitySchema.array(),
+    companies: connectedEntitySchema.array(),
+    properties: connectedEntitySchema.array(),
+  }),
+)
 
-export interface IncidentPartyRelationship extends NodesRelationship, Pick<Party, 'name'> {}
+export type EventParticipant = z.infer<typeof eventParticipantSchema>
+export type EventParticipantAPI = z.infer<typeof eventParticipantAPISchema>

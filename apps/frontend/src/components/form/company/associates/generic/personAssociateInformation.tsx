@@ -1,107 +1,93 @@
 import React from 'react'
-import Box from '@mui/material/Box'
+import Stack from '@mui/material/Stack'
 import Avatar from '@mui/material/Avatar'
 import Typography from '@mui/material/Typography'
-import Grid from '@mui/material/Grid'
-import { AutocompleteField } from '../../../autocompleteField'
-import { DatePicker } from '../../../datePicker'
+import { AutocompleteFieldWithMetadata } from '@frontend/components/form/autocompleteField/autocompleteFieldWithMetadata'
+import { InputNumberFieldWithMetadata } from '@frontend/components/form/inputNumberField/inputNumberFieldWithMetadata'
+import { useCompanyState } from '../../../../../state/company/companyState'
+import { DatePickerWithMetadata } from '../../../datePicker'
 import { getPersonFullName } from '@frontend/utils/person'
-import { AssociateAPIInput, PersonListRecordWithImage } from 'defs'
+import { PersonAPIOutput } from 'defs'
 import { ASSOCIATE_ROLES } from '@frontend/utils/constants'
-import TextField from '@mui/material/TextField'
 
 type Props = {
-  personId: string
-  personInfo: PersonListRecordWithImage
-  associateInfo: AssociateAPIInput
+  associateId: string
+  personInfo: PersonAPIOutput
   allowRoleChange: boolean
-  updateAssociate: (personId: string, associateInfo: AssociateAPIInput) => void
 }
 
 export const PersonAssociateInformation: React.FunctionComponent<Props> = ({
-  associateInfo,
+  associateId,
   personInfo,
   allowRoleChange,
-  updateAssociate,
 }) => {
+  const [
+    associateInfo,
+    updateAssociateRole,
+    updateAssociateEquity,
+    updateAssociateStartDate,
+    updateAssociateEndDate,
+  ] = useCompanyState(
+    ({
+      associates,
+      updateAssociateRole,
+      updateAssociateEquity,
+      updateAssociateStartDate,
+      updateAssociateEndDate,
+    }) => [
+      associates.get(associateId),
+      updateAssociateRole,
+      updateAssociateEquity,
+      updateAssociateStartDate,
+      updateAssociateEndDate,
+    ],
+  )
+
   const fullName = getPersonFullName(personInfo)
   const { role, startDate, endDate, isActive, equity } = associateInfo
   const { _id, images } = personInfo
 
   return (
-    <>
-      <Box display={'flex'} alignItems={'center'} mt={2} mb={4}>
+    <Stack spacing={3}>
+      <Stack direction={'row'} spacing={1} alignItems={'center'}>
         <Avatar
           src={images[0]?.url?.url ?? ''}
           alt={`${fullName}`}
-          sx={{ width: 30, height: 30, mr: 1 }}
+          sx={{ width: 30, height: 30 }}
         />
-        <Typography variant={'h6'}>{fullName}</Typography>
-      </Box>
 
-      <Grid container spacing={2}>
+        <Typography variant={'h6'}>{fullName}</Typography>
+      </Stack>
+
+      <Stack spacing={2}>
         {allowRoleChange && (
-          <Grid item xs={12}>
-            <AutocompleteField
-              label={'Rol'}
-              value={role}
-              onValueChange={(value) =>
-                updateAssociate(_id, {
-                  ...associateInfo,
-                  role: value,
-                  person: {
-                    _id,
-                  },
-                })
-              }
-              suggestions={ASSOCIATE_ROLES}
-            />
-          </Grid>
+          <AutocompleteFieldWithMetadata
+            label={'Rol'}
+            fieldInfo={role}
+            updateFieldInfo={(fieldInfo) => updateAssociateRole(associateId, fieldInfo)}
+            suggestions={ASSOCIATE_ROLES}
+          />
         )}
 
-        <Grid item xs={12}>
-          <DatePicker
-            label={'De la data'}
-            value={startDate ?? null}
-            onChange={(startDate) =>
-              updateAssociate(_id, {
-                ...associateInfo,
-                startDate: startDate ? new Date(startDate) : null,
-              })
-            }
-          />
-        </Grid>
+        <DatePickerWithMetadata
+          label={'fromDate'}
+          fieldInfo={startDate}
+          updateFieldInfo={(startDate) => updateAssociateStartDate(associateId, startDate)}
+        />
 
-        <Grid item xs={12}>
-          <DatePicker
-            label={'Pana la data'}
-            value={endDate ?? null}
-            onChange={(endDate) =>
-              updateAssociate(_id, {
-                ...associateInfo,
-                endDate: endDate ? new Date(endDate) : null,
-                isActive: endDate ? new Date(endDate) > new Date() : isActive,
-              })
-            }
-          />
-        </Grid>
+        <DatePickerWithMetadata
+          label={'untilDate'}
+          fieldInfo={endDate}
+          updateFieldInfo={(endDate) => updateAssociateEndDate(associateId, endDate)}
+        />
 
-        <Grid item xs={12}>
-          <TextField
-            fullWidth
-            label={'% Actiuni'}
-            type={'number'}
-            inputProps={{ step: 0.01 }}
-            value={equity.toFixed(2)}
-            onChange={({ target: { value } }) =>
-              updateAssociate(_id, {
-                ...associateInfo,
-                equity: parseFloat(value),
-              })
-            }
-          />
-        </Grid>
-      </Grid>
-    </>
+        <InputNumberFieldWithMetadata
+          label={'% Actiuni'}
+          inputProps={{ step: 0.01 }}
+          fieldInfo={equity}
+          updateFieldInfo={(fieldInfo) => updateAssociateEquity(associateId, fieldInfo)}
+        />
+      </Stack>
+    </Stack>
   )
 }

@@ -5,6 +5,7 @@ node_modules
 build
 out
 target
+cypress
 
 # Logs
 
@@ -12,8 +13,8 @@ target
 .DS_Store
 
 # Tests
-/coverage
-/.nyc_output
+coverage
+.nyc_output
 
 # IDEs and editors
 /.idea
@@ -37,3 +38,4 @@ target
 .eslintrc
 .eslintignore
 .github
+.parcel-cache

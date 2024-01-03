@@ -11,18 +11,12 @@ export type Params = {
 }
 
 const companyIdentifierExists = gql`
-  query CompanyCUIExists($registrationNumber: String!, $companyId: String) {
-    companyRegistrationNumberExists(
-      registrationNumber: $registrationNumber
-      companyId: $companyId
-    )
+  query CompanyCUIExists($registrationNumber: String!, $companyId: ID) {
+    companyRegistrationNumberExists(registrationNumber: $registrationNumber, companyId: $companyId)
   }
 `
 
-export const companyRegistrationNumberRequest = (
-  registrationNumber: string,
-  companyId?: string,
-) =>
+export const companyRegistrationNumberRequest = (registrationNumber: string, companyId?: string) =>
   apolloClient.query<Response, Params>({
     query: companyIdentifierExists,
     variables: {

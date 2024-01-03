@@ -1,6 +1,8 @@
 import React, { ReactNode } from 'react'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
-import { CreateProceeding } from '../pages/proceedings/createProceeding/createProceeding'
+import { TermeneIntegration } from '../pages/companies/termeneIntegration'
+import { CreateProceeding } from '../pages/proceedings/createProceeding'
+import { ProceedingsList } from '../pages/proceedings/proceedingsList'
 import { routes } from './routes'
 import { InvalidPage } from '../pages/invalidPage'
 import { Page } from '../components/page/Page'
@@ -28,16 +30,18 @@ const privateRoutes: Record<string, ReactNode> = {
   [routes.newPerson]: <CreatePerson />,
   [routes.personDetails]: <EditPerson />,
   [routes.companies]: <CompaniesList />,
+  [routes.companiesIntegrationTermene]: <TermeneIntegration />,
   [routes.newCompany]: <CreateCompany />,
   [routes.companyDetails]: <EditCompany />,
-  [routes.events]: <EventsList />,
+  /*  [routes.events]: <EventsList />,
   [routes.newEvent]: <CreateEvent />,
   [routes.eventDetails]: <EditEvent />,
   [routes.users]: <UsersList />,
   [routes.properties]: <PropertiesList />,
   [routes.newProperty]: <CreateProperty />,
   [routes.propertyDetails]: <EditProperty />,
-  [routes.newProceeding]: <CreateProceeding />,
+  [routes.proceedings]: <ProceedingsList />,
+  [routes.newProceeding]: <CreateProceeding />,*/
 }
 
 const publicRoutes: Record<string, ReactNode> = {

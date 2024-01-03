@@ -4,95 +4,80 @@ import Button from '@mui/material/Button'
 import Timeline from '@mui/lab/Timeline'
 import AddOutlinedIcon from '@mui/icons-material/AddOutlined'
 import Typography from '@mui/material/Typography'
-import { timelineOppositeContentClasses } from '@mui/lab/TimelineOppositeContent'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
-import { getPersonsBasicInfoRequest } from '@frontend/graphql/persons/queries/getPersonsBasicInfo'
-import { getCompaniesInfoRequest } from '@frontend/graphql/companies/queries/getCompanies'
+import { PropertyOwnerAPI } from 'defs'
+import { timelineOppositeContentClasses } from '@mui/lab/TimelineOppositeContent'
+import { getPersonsBasicInfoMap } from '@frontend/graphql/persons/queries/getPersonsBasicInfo'
+import { getCompaniesInfoMap } from '@frontend/graphql/companies/queries/getCompanies'
+import { getDefaultOwner } from 'default-values'
+import { PropertyOwnerInfoState } from '../../../../state/property/propertyOwnerState'
+import { usePropertyState } from '../../../../state/property/propertyState'
 import { useModal } from '../../../modal/modalProvider'
 import { PersonOwnerCard } from './personOwnerCard'
 import { CompanyOwnerCard } from './companyOwnerCard'
-import { useDebouncedMap } from '@frontend/utils/hooks/useMap'
-import { PropertyOwnerAPI } from 'defs'
 
-type Props = {
-  isVehicle: boolean
-  owners: PropertyOwnerAPI[]
-  updateOwners: (owners: PropertyOwnerAPI[]) => void | Promise<void>
-}
-
-export const PropertyOwners: React.FunctionComponent<Props> = ({
-  isVehicle,
-  owners,
-  updateOwners,
-}) => {
+export const PropertyOwners: React.FunctionComponent = () => {
+  const { owners, vehicleInfo, addOwners } = usePropertyState()
   const modal = useModal()
-  const { uid, values, addBulk, remove, update } = useDebouncedMap(
-    1000,
-    owners,
-    ({ person, company }) => person?._id ?? company?._id,
-  )
-
   const menuButtonRef = useRef<Element | null>(null)
   const [isMenuOpen, setMenuOpenState] = useState(false)
 
-  const [fetchPersons, { data: personsInfo }] = getPersonsBasicInfoRequest()
-  const [fetchCompanies, { data: companiesInfo }] = getCompaniesInfoRequest()
+  const { fetchPersons, personsMap } = getPersonsBasicInfoMap()
+  const { fetchCompanies, companiesMap } = getCompaniesInfoMap()
 
   useEffect(() => {
-    const personsIds: string[] = []
-    const companiesIds: string[] = []
-    const updatedOwners = values()
+    const personsIds = new Set<string>()
+    const companiesIds = new Set<string>()
 
-    updatedOwners.forEach(({ person, company }) => {
+    owners.forEach(({ person, company }) => {
       if (person?._id) {
-        personsIds.push(person._id)
+        personsIds.add(person._id)
       } else if (company?._id) {
-        companiesIds.push(company._id)
+        companiesIds.add(company._id)
       }
     })
 
-    if (personsIds.length) {
-      void fetchPersons({ variables: { personsIds } })
+    if (personsIds.size) {
+      void fetchPersons({ variables: { personsIds: Array.from(personsIds) } })
     }
 
-    if (companiesIds.length) {
-      void fetchCompanies({ variables: { companiesIds } })
+    if (companiesIds.size) {
+      void fetchCompanies({ variables: { companiesIds: Array.from(companiesIds) } })
     }
-    updateOwners(updatedOwners)
-  }, [uid])
+  }, [owners])
 
   const openPersonsModal = useCallback(() => {
-    const personsIds: string[] = []
+    const personsIds = new Set<string>()
 
-    values().forEach(({ person }) => {
+    owners.forEach(({ person }) => {
       if (person?._id) {
-        personsIds.push(person._id)
+        personsIds.add(person._id)
       }
     })
 
     modal?.openPersonSelector((personsIds: string[]) => {
       if (personsIds.length) {
-        addBulk(createPersonsOwners(personsIds, isVehicle), ({ person }) => person?._id)
+        addOwners(createPersonsOwners(personsIds, !!vehicleInfo))
       }
-    }, personsIds)
-  }, [uid, isVehicle])
+    }, Array.from(personsIds))
+  }, [owners, vehicleInfo])
 
   const openCompaniesModal = useCallback(() => {
-    const companiesIds: string[] = []
+    const companiesIds = new Set<string>()
 
-    values().forEach(({ company }) => {
+    owners.forEach(({ company }) => {
       if (company?._id) {
-        companiesIds.push(company._id)
+        companiesIds.add(company._id)
       }
     })
 
     modal?.openCompanySelector((companiesIds: string[]) => {
       if (companiesIds.length) {
-        addBulk(createCompaniesOwners(companiesIds, isVehicle), ({ company }) => company?._id)
+        addOwners(createCompaniesOwners(companiesIds, !!vehicleInfo))
       }
-    }, companiesIds)
-  }, [uid, isVehicle])
+    }, Array.from(companiesIds))
+  }, [owners, vehicleInfo])
 
   const closeMenu = useCallback(() => setMenuOpenState(false), [setMenuOpenState])
 
@@ -122,7 +107,7 @@ export const PropertyOwners: React.FunctionComponent<Props> = ({
           </Button>
         </Box>
       </Box>
-      {owners.length ? (
+      {owners.size ? (
         <Timeline
           sx={{
             [`& .${timelineOppositeContentClasses.root}`]: {
@@ -130,44 +115,29 @@ export const PropertyOwners: React.FunctionComponent<Props> = ({
             },
           }}
         >
-          {values()
-            .sort(sortByOwnershipPeriod)
-            .map((owner) => {
+          {Array.from(owners.entries())
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
+            .sort(([uidA, ownerInfoA], [uidB, ownerInfoB]) =>
+              sortByOwnershipPeriod(ownerInfoA, ownerInfoB),
+            )
+            .map(([uid, owner]) => {
               const personId = owner.person?._id
 
               if (personId) {
-                const personInfo = personsInfo?.getPersonsInfo?.find(({ _id }) => _id === personId)
+                const personInfo = personsMap?.get(personId)
 
                 if (personInfo) {
-                  return (
-                    <PersonOwnerCard
-                      key={personId}
-                      ownerInfo={owner}
-                      personInfo={personInfo}
-                      updateOwnerInfo={update}
-                      removeOwner={remove}
-                    />
-                  )
+                  return <PersonOwnerCard key={uid} ownerId={uid} personInfo={personInfo} />
                 }
               }
 
               const companyId = owner.company?._id
 
               if (companyId) {
-                const companyInfo = companiesInfo?.getCompanies?.find(
-                  ({ _id }) => _id === companyId,
-                )
+                const companyInfo = companiesMap?.get(companyId)
 
                 if (companyInfo) {
-                  return (
-                    <CompanyOwnerCard
-                      key={companyId}
-                      ownerInfo={owner}
-                      companyInfo={companyInfo}
-                      updateOwnerInfo={update}
-                      removeOwner={remove}
-                    />
-                  )
+                  return <CompanyOwnerCard key={uid} ownerId={uid} companyInfo={companyInfo} />
                 }
               }
               return null
@@ -190,45 +160,41 @@ export const PropertyOwners: React.FunctionComponent<Props> = ({
   )
 }
 
-const createPersonsOwners = (personsIds: string[], isVehicle: boolean): PropertyOwnerAPI[] =>
-  personsIds.map((_id) => ({
-    person: {
-      _id,
-    },
-    customFields: [],
-    startDate: null,
-    endDate: null,
-    _confirmed: true,
-    vehicleOwnerInfo: isVehicle ? { plateNumbers: [] } : null,
-  }))
+const createPersonsOwners = (personsIds: string[], isVehicle: boolean) =>
+  personsIds.map(
+    (_id): PropertyOwnerAPI => ({
+      ...getDefaultOwner(),
+      person: { _id },
+      customFields: [],
+      startDate: null,
+      endDate: null,
+      vehicleOwnerInfo: isVehicle ? { plateNumbers: [] } : null,
+    }),
+  )
 
-const createCompaniesOwners = (companiesIds: string[], isVehicle: boolean): PropertyOwnerAPI[] =>
-  companiesIds.map((_id) => ({
-    company: {
-      _id,
-    },
-    registrationNumber: '',
-    customFields: [],
-    startDate: null,
-    endDate: null,
-    _confirmed: true,
-    vehicleOwnerInfo: isVehicle ? { plateNumbers: [] } : null,
-  }))
+const createCompaniesOwners = (companiesIds: string[], isVehicle: boolean) =>
+  companiesIds.map(
+    (_id): PropertyOwnerAPI => ({
+      ...getDefaultOwner(),
+      company: { _id },
+      vehicleOwnerInfo: isVehicle ? { plateNumbers: [] } : null,
+    }),
+  )
 
-const sortByOwnershipPeriod = (ownerA: PropertyOwnerAPI, ownerB: PropertyOwnerAPI) => {
-  if (ownerA.startDate) {
-    if (ownerB.startDate) {
-      return ownerA.startDate <= ownerB.startDate ? -1 : 1
+const sortByOwnershipPeriod = (ownerA: PropertyOwnerInfoState, ownerB: PropertyOwnerInfoState) => {
+  if (ownerA.startDate?.value) {
+    if (ownerB.startDate?.value) {
+      return ownerA.startDate?.value <= ownerB.startDate?.value ? -1 : 1
     }
-    if (ownerB.endDate) {
-      return ownerA.startDate <= ownerB.endDate ? -1 : 1
+    if (ownerB.endDate?.value) {
+      return ownerA.startDate?.value <= ownerB.endDate?.value ? -1 : 1
     }
   }
-  if (ownerA.endDate) {
-    if (ownerB.startDate) {
-      return ownerA.endDate <= ownerB.startDate ? -1 : 1
+  if (ownerA.endDate?.value) {
+    if (ownerB.startDate?.value) {
+      return ownerA.endDate?.value <= ownerB.startDate?.value ? -1 : 1
     }
-    if (ownerB.endDate) {
+    if (ownerB.endDate?.value) {
       return ownerA.endDate <= ownerB.endDate ? -1 : 1
     }
   }

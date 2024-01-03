@@ -1,0 +1,32 @@
+{
+  "name": "backend",
+  "projectType": "application",
+  "implicitDependencies": ["docker"],
+  "targets": {
+    "start": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "{projectRoot}",
+        "commands": ["pnpm start"]
+      }
+    },
+    "build": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "{projectRoot}",
+        "command": "nest build"
+      }
+    },
+    "deploy": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "{projectRoot}",
+        "commands": [
+          "pnpm --filter backend --prod --no-optional deploy build",
+          "pnpm --filter backend exec pkg -t node18-macos-arm64 -c build/package.json --out-path build/.bin build/dist/main.js"
+        ],
+        "parallel": false
+      }
+    }
+  }
+}

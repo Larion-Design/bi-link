@@ -1,32 +1,3 @@
-import { getDefaultLocation } from '@frontend/components/form/location'
-import { PersonAPIInput, RelationshipAPIInput } from 'defs'
-
-export const getDefaultPerson = (): PersonAPIInput => ({
-  firstName: '',
-  lastName: '',
-  oldNames: [],
-  cnp: '',
-  birthdate: null,
-  birthPlace: getDefaultLocation(),
-  homeAddress: getDefaultLocation(),
-  customFields: [],
-  contactDetails: [],
-  images: [],
-  documents: [],
-  files: [],
-  relationships: [],
-  education: [],
-})
-
-export const createRelationship = (_id: string): RelationshipAPIInput => ({
-  person: { _id },
-  type: '',
-  description: '',
-  proximity: 1,
-  _confirmed: true,
-  relatedPersons: [],
-})
-
 export const relationshipsTypes = {
   1: 'Membru de familie',
   2: 'Ruda sau membru din familia extinsa',

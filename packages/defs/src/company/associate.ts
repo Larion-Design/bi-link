@@ -1,30 +1,34 @@
-import { CustomField } from '../customField'
-import { Person } from '../person'
-import { Company } from './company'
-import { ConnectedEntity } from '../connectedEntity'
-import { NodesRelationship } from '../graphRelationships'
+import { z } from 'zod'
+import {
+  booleanWithMetadataSchema,
+  numberWithMetadataSchema,
+  optionalDateWithMetadataSchema,
+  textWithMetadataSchema,
+} from '../generic'
+import { withMetadataSchema } from '../metadata'
+import { customFieldSchema } from '../customField'
+import { personSchema } from '../person'
+import { connectedEntitySchema } from '../connectedEntity'
 
-export interface Associate {
-  role: string
-  startDate: Date | null
-  endDate: Date | null
-  isActive: boolean
-  customFields: CustomField[]
-  person?: Person
-  company?: Company
-  equity: number
-  _confirmed: boolean
-}
+export const associateSchema = z
+  .object({
+    role: textWithMetadataSchema,
+    startDate: optionalDateWithMetadataSchema,
+    endDate: optionalDateWithMetadataSchema,
+    isActive: booleanWithMetadataSchema,
+    customFields: customFieldSchema.array(),
+    person: personSchema.nullish(),
+    company: connectedEntitySchema.nullish(),
+    equity: numberWithMetadataSchema,
+  })
+  .merge(withMetadataSchema)
 
-interface AssociateAPI extends Omit<Associate, 'person' | 'company'> {
-  person?: ConnectedEntity
-  company?: ConnectedEntity
-}
+export const associateAPISchema = associateSchema.merge(
+  z.object({
+    person: connectedEntitySchema.nullish(),
+    company: connectedEntitySchema.nullish(),
+  }),
+)
 
-export interface AssociateAPIOutput extends AssociateAPI {}
-
-export interface AssociateAPIInput extends Readonly<AssociateAPI> {}
-
-export interface CompanyAssociateRelationship
-  extends NodesRelationship,
-    Pick<Associate, 'role' | 'equity'> {}
+export type Associate = z.infer<typeof associateSchema>
+export type AssociateAPI = z.infer<typeof associateAPISchema>

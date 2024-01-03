@@ -1,4 +1,6 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import { DocumentStatusSelectOptions } from '@frontend/components/form/person/idDocuments/documentStatus'
+import React, { useCallback, useMemo, useState } from 'react'
+import { createDatagridItems, getDatagridItemInfo, Unique } from '@frontend/utils/datagridHelpers'
 import {
   DataGrid,
   GridColDef,
@@ -8,36 +10,39 @@ import {
 } from '@mui/x-data-grid'
 import Box from '@mui/material/Box'
 import { IdDocumentAPI, IdDocumentStatus } from 'defs'
-import { GridSetItem, useGridSet } from '@frontend/utils/hooks/useGridSet'
+import { usePersonState } from '../../../../state/personState'
 import { AddSuggestionsToolbarButton } from '../../../dataGrid/addSuggestionsToolbarButton'
 import { RemoveRowsToolbarButton } from '../../../dataGrid/removeRowsToolbarButton'
 
-type Props = {
-  documents: IdDocumentAPI[]
+type Props<T = IdDocumentAPI> = {
   suggestions: string[]
-  setFieldValue: (documents: IdDocumentAPI[]) => Promise<void>
-  readonly?: boolean
-  error?: string
 }
 
-export const IdDocuments: React.FunctionComponent<Props> = ({
-  documents,
-  suggestions,
-  setFieldValue,
-}) => {
-  const { values, rawValues, create, update, removeBulk, uid } = useGridSet(documents)
+export const IdDocuments: React.FunctionComponent<Props> = ({ suggestions }) => {
+  const [documents, updateDocument, addDocument, removeDocuments] = usePersonState(
+    ({ documents, updateDocument, addDocument, removeDocuments }) => [
+      documents,
+      updateDocument,
+      addDocument,
+      removeDocuments,
+    ],
+  )
   const [selectedRows, setSelectedRows] = useState<GridSelectionModel>([])
+  const datagridItems = useMemo(() => createDatagridItems(documents), [documents])
 
-  const processRowUpdate = useCallback(async (newRow: GridSetItem<IdDocumentAPI>) => {
-    update(newRow)
-    return Promise.resolve(newRow)
-  }, [])
+  const processRowUpdate = useCallback(
+    async (newRow: Unique<IdDocumentAPI>) => {
+      const { id, item } = getDatagridItemInfo(newRow)
+      updateDocument(id, item)
+      return Promise.resolve(newRow)
+    },
+    [updateDocument],
+  )
 
-  const removeSelectedRows = useCallback(() => removeBulk(selectedRows as string[]), [selectedRows])
-
-  useEffect(() => {
-    void setFieldValue(rawValues())
-  }, [uid])
+  const removeSelectedRows = useCallback(
+    () => removeDocuments(selectedRows as string[]),
+    [removeDocuments],
+  )
 
   const columns: GridColDef[] = useMemo(
     () => [
@@ -87,18 +92,9 @@ export const IdDocuments: React.FunctionComponent<Props> = ({
         editable: true,
         type: 'singleSelect',
         valueOptions: [
-          {
-            value: IdDocumentStatus.VALID,
-            label: DocumentStatusSelectOptions.VALID,
-          },
-          {
-            value: IdDocumentStatus.EXPIRED,
-            label: DocumentStatusSelectOptions.EXPIRED,
-          },
-          {
-            value: IdDocumentStatus.LOST_OR_STOLEN,
-            label: DocumentStatusSelectOptions.LOST_OR_STOLEN,
-          },
+          { value: 'VALID', label: DocumentStatusSelectOptions.VALID },
+          { value: 'EXPIRED', label: DocumentStatusSelectOptions.EXPIRED },
+          { value: 'LOST_OR_STOLEN', label: DocumentStatusSelectOptions.LOST_OR_STOLEN },
         ],
       },
     ],
@@ -113,7 +109,9 @@ export const IdDocuments: React.FunctionComponent<Props> = ({
         disableSelectionOnClick
         disableIgnoreModificationsIfProcessingProps
         hideFooterPagination
-        rows={values()}
+        hideFooterSelectedRowCount
+        hideFooter
+        rows={datagridItems}
         columns={columns}
         experimentalFeatures={{ newEditingApi: true }}
         getRowId={({ _id }) => String(_id)}
@@ -125,13 +123,7 @@ export const IdDocuments: React.FunctionComponent<Props> = ({
               <AddSuggestionsToolbarButton
                 defaultOption={''}
                 options={suggestions}
-                optionSelected={(documentType) =>
-                  create({
-                    documentType,
-                    documentNumber: '',
-                    status: IdDocumentStatus.VALID,
-                  })
-                }
+                optionSelected={addDocument}
               />
 
               {!!selectedRows.length && (
@@ -147,10 +139,4 @@ export const IdDocuments: React.FunctionComponent<Props> = ({
       />
     </Box>
   )
-}
-
-export const DocumentStatusSelectOptions: Record<IdDocumentStatus, string> = {
-  [IdDocumentStatus.VALID]: 'Valid',
-  [IdDocumentStatus.EXPIRED]: 'Expirat',
-  [IdDocumentStatus.LOST_OR_STOLEN]: 'Pierdut sau furat',
 }

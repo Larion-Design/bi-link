@@ -10,7 +10,7 @@ type Props = {
 }
 
 export const AddItemButton: React.FunctionComponent<Props> = ({ label, onClick, disabled }) => (
-  <Button disabled={disabled} variant={'contained'} sx={{ flex: 1 }} onClick={onClick}>
+  <Button disabled={disabled} variant={'contained'} onClick={onClick}>
     <Tooltip title={label}>
       <AddOutlinedIcon />
     </Tooltip>

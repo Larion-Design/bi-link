@@ -7,27 +7,27 @@ import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined'
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined'
 import { TextAPI } from 'defs'
 import { useIntl } from 'react-intl'
-import { GeneratePreviewHandler } from '../../../../utils/hooks/useDataRefProcessor'
+import { GeneratePreviewHandler } from '@frontend/utils/hooks/useDataRefProcessor'
+import { useReportState } from '../../../../state/report/reportState'
 import { ActionButton } from '../../../button/actionButton'
 import { InputField } from '../../inputField'
 
 type Props = {
   textInfo: TextAPI
   updateText: (textInfo: TextAPI) => void
-  generateTextPreview: GeneratePreviewHandler
   removeContent: () => void
 }
 
 export const ReportContentText: React.FunctionComponent<Props> = ({
   textInfo: { content },
   updateText,
-  generateTextPreview,
   removeContent,
 }) => {
   const intl = useIntl()
+  const { computeRefsValues } = useReportState()
   const [preview, setPreview] = useState(false)
   const togglePreview = useCallback(() => setPreview((preview) => !preview), [setPreview])
-  const contentPreview = useMemo(() => generateTextPreview(content), [content])
+  const contentPreview = useMemo(() => computeRefsValues(content), [content, computeRefsValues])
 
   return (
     <>

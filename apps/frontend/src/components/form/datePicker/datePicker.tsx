@@ -1,19 +1,10 @@
+import { DatePickerProps } from '@frontend/components/form/datePicker/types'
 import React from 'react'
 import TextField from '@mui/material/TextField'
 import { MobileDatePicker } from '@mui/x-date-pickers/MobileDatePicker'
+import { useIntl } from 'react-intl'
 
-type Props = {
-  name?: string
-  label: string
-  error?: string
-  value: string | Date | null
-  onChange: (value: string | null) => Promise<void> | void
-  readonly?: boolean
-  disableHighlightToday?: boolean
-  disableFuture?: boolean
-}
-
-export const DatePicker: React.FunctionComponent<Props> = ({
+export const DatePicker: React.FunctionComponent<DatePickerProps> = ({
   name,
   label,
   error,
@@ -22,27 +13,49 @@ export const DatePicker: React.FunctionComponent<Props> = ({
   readonly,
   disableHighlightToday,
   disableFuture,
-}) => (
-  <MobileDatePicker
-    readOnly={!!readonly}
-    disableFuture={!!disableFuture}
-    disableHighlightToday={!!disableHighlightToday}
-    toolbarTitle={label}
-    label={label}
-    inputFormat={'dd/MM/yyyy'}
-    value={value}
-    onChange={(newValue) => void onChange(newValue?.toString?.() ?? null)}
-    renderInput={(params) => (
-      <TextField
-        {...params}
-        fullWidth
-        onReset={() => void onChange(null)}
-        name={name}
-        label={label}
-        variant={'outlined'}
-        error={!!error}
-        helperText={error}
-      />
-    )}
-  />
-)
+  disablePast,
+  minDate,
+  maxDate,
+  disabled,
+  startIcon,
+  endIcon,
+  views,
+}) => {
+  const intl = useIntl()
+  const fieldLabel = label?.length ? intl.formatMessage({ id: label, defaultMessage: label }) : ''
+
+  return (
+    <MobileDatePicker
+      views={views}
+      readOnly={readonly}
+      disableFuture={disableFuture}
+      disablePast={disablePast}
+      disableHighlightToday={disableHighlightToday}
+      showDaysOutsideCurrentMonth={false}
+      toolbarTitle={label}
+      label={fieldLabel}
+      inputFormat={'dd/MM/yyyy'}
+      value={value}
+      minDate={minDate}
+      maxDate={maxDate}
+      disabled={disabled}
+      onChange={(value) => void onChange(value)}
+      InputProps={{
+        startAdornment: startIcon,
+        endAdornment: endIcon,
+      }}
+      renderInput={(params) => (
+        <TextField
+          {...params}
+          fullWidth
+          onReset={() => void onChange(null)}
+          name={name}
+          label={fieldLabel}
+          variant={'outlined'}
+          error={!!error}
+          helperText={error}
+        />
+      )}
+    />
+  )
+}

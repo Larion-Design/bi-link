@@ -56,6 +56,7 @@ export const EventsTable: React.FunctionComponent<Props> = ({ events: { records,
         type: 'actions',
         getActions: ({ row: { _id } }: GridRowParams<EventListRecord>) => [
           <GridActionsCellItem
+            key={'view-details'}
             showInMenu={false}
             icon={<OpenInNewOutlinedIcon />}
             label={'Vezi detalii despre event'}
@@ -78,6 +79,8 @@ export const EventsTable: React.FunctionComponent<Props> = ({ events: { records,
         autoHeight
         rowCount={total}
         hideFooterPagination
+        hideFooter
+        hideFooterSelectedRowCount
         disableExtendRowFullWidth
         disableSelectionOnClick
         disableColumnMenu

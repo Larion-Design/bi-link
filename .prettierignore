@@ -5,3 +5,5 @@ node_modules
 .github
 .idea
 nginx
+target
+.nx

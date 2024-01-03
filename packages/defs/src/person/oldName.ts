@@ -1,7 +1,12 @@
-export interface OldName {
-  name: string
-  changeReason: string
-}
+import { z } from 'zod'
+import { withMetadataSchema } from '../metadata'
 
-export interface OldNameAPIInput extends OldName {}
-export interface OldNameAPIOutput extends OldName {}
+export const oldNameSchema = z
+  .object({
+    _id: z.string().optional(),
+    name: z.string(),
+    changeReason: z.string(),
+  })
+  .merge(withMetadataSchema)
+
+export type OldName = z.infer<typeof oldNameSchema>

@@ -26,11 +26,7 @@ export const EditProperty: React.FunctionComponent = () => {
 
   useEffect(() => {
     if (propertyId) {
-      void fetchPropertyInfo({
-        variables: {
-          propertyId,
-        },
-      })
+      void fetchPropertyInfo({ variables: { propertyId } })
     }
   }, [propertyId])
 
@@ -40,15 +36,14 @@ export const EditProperty: React.FunctionComponent = () => {
     }
   }, [fetchError?.message, updateError?.message])
 
-  if (fetchLoading) {
+  if (fetchLoading && !fetchData?.getProperty) {
     return <Loader visible={true} message={'Informatiile sunt incarcate...'} />
   }
   return (
     <DashboardPage title={'Creaza o proprietate'}>
       <PropertyDetails
-        readonly={false}
         propertyId={propertyId}
-        propertyInfo={fetchData?.getProperty}
+        propertyInfo={fetchData.getProperty}
         onSubmit={(propertyInfo) => {
           if (!updateLoading) {
             void updateProperty({ variables: { data: propertyInfo } })

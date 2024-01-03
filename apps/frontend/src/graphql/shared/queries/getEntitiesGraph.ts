@@ -11,31 +11,31 @@ type Params = {
 }
 
 const request = gql`
-  query GetEntitiesGraph($id: String!, $depth: Int!) {
+  query GetEntitiesGraph($id: ID!, $depth: Int!) {
     getEntitiesGraph(id: $id, depth: $depth) {
       relationships {
         companiesBranches {
           _confirmed
           _type
           startNode {
-            _id
-            _type
+            entityId
+            entityType
           }
           endNode {
-            _id
-            _type
+            entityId
+            entityType
           }
         }
         companiesHeadquarters {
           _confirmed
           _type
           startNode {
-            _id
-            _type
+            entityId
+            entityType
           }
           endNode {
-            _id
-            _type
+            entityId
+            entityType
           }
         }
         companiesAssociates {
@@ -44,12 +44,12 @@ const request = gql`
           role
           equity
           startNode {
-            _id
-            _type
+            entityId
+            entityType
           }
           endNode {
-            _id
-            _type
+            entityId
+            entityType
           }
         }
         personalRelationships {
@@ -57,48 +57,48 @@ const request = gql`
           _confirmed
           type
           startNode {
-            _id
-            _type
+            entityId
+            entityType
           }
           endNode {
-            _id
-            _type
+            entityId
+            entityType
           }
         }
         personsBirthPlace {
           _type
           _confirmed
           startNode {
-            _id
-            _type
+            entityId
+            entityType
           }
           endNode {
-            _id
-            _type
+            entityId
+            entityType
           }
         }
         personsHomeAddress {
           _type
           _confirmed
           startNode {
-            _id
-            _type
+            entityId
+            entityType
           }
           endNode {
-            _id
-            _type
+            entityId
+            entityType
           }
         }
         propertiesLocation {
           _type
           _confirmed
           startNode {
-            _id
-            _type
+            entityId
+            entityType
           }
           endNode {
-            _id
-            _type
+            entityId
+            entityType
           }
         }
         propertiesRelationships {
@@ -107,12 +107,12 @@ const request = gql`
           startDate
           endDate
           startNode {
-            _id
-            _type
+            entityId
+            entityType
           }
           endNode {
-            _id
-            _type
+            entityId
+            entityType
           }
         }
         eventsParties {
@@ -120,36 +120,36 @@ const request = gql`
           _confirmed
           name
           startNode {
-            _id
-            _type
+            entityId
+            entityType
           }
           endNode {
-            _id
-            _type
+            entityId
+            entityType
           }
         }
         eventsOccurrencePlace {
           _confirmed
           _type
           startNode {
-            _id
-            _type
+            entityId
+            entityType
           }
           endNode {
-            _id
-            _type
+            entityId
+            entityType
           }
         }
         entitiesInvolvedInProceeding {
           _confirmed
           _type
           startNode {
-            _id
-            _type
+            entityId
+            entityType
           }
           endNode {
-            _id
-            _type
+            entityId
+            entityType
           }
           involvedAs
         }
@@ -157,20 +157,24 @@ const request = gql`
           _confirmed
           _type
           startNode {
-            _id
-            _type
+            entityId
+            entityType
           }
           endNode {
-            _id
-            _type
+            entityId
+            entityType
           }
         }
       }
       entities {
         persons {
           _id
-          firstName
-          lastName
+          firstName {
+            value
+          }
+          lastName {
+            value
+          }
           images {
             fileId
             url {
@@ -180,9 +184,15 @@ const request = gql`
         }
         companies {
           _id
-          name
-          cui
-          registrationNumber
+          name {
+            value
+          }
+          cui {
+            value
+          }
+          registrationNumber {
+            value
+          }
         }
         properties {
           _id
@@ -191,8 +201,12 @@ const request = gql`
         }
         events {
           _id
-          date
-          type
+          date {
+            value
+          }
+          type {
+            value
+          }
         }
         locations {
           locationId
@@ -213,10 +227,14 @@ const request = gql`
         }
         proceedings {
           _id
-          fileNumber
+          fileNumber {
+            value
+          }
           name
           type
-          year
+          year {
+            value
+          }
         }
       }
     }
@@ -225,5 +243,5 @@ const request = gql`
 
 export const getEntitiesGraphRequest = () =>
   useLazyQuery<Response, Params>(request, {
-    fetchPolicy: 'cache-and-network',
+    fetchPolicy: 'cache-first',
   })

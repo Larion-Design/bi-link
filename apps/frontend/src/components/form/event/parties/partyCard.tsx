@@ -1,5 +1,5 @@
-import React, { useCallback, useEffect } from 'react'
-import Grid from '@mui/material/Grid'
+import React, { useCallback, useEffect, useMemo } from 'react'
+import { CompanyAPIOutput, CustomFieldAPI, PersonAPIOutput, PropertyAPIOutput } from 'defs'
 import CardContent from '@mui/material/CardContent'
 import Card from '@mui/material/Card'
 import Box from '@mui/material/Box'
@@ -9,8 +9,9 @@ import Divider from '@mui/material/Divider'
 import CardActions from '@mui/material/CardActions'
 import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined'
 import Stack from '@mui/material/Stack'
-import { PartyAPI } from 'defs'
 import { getPersonsBasicInfoRequest } from '@frontend/graphql/persons/queries/getPersonsBasicInfo'
+import { FormattedMessage } from 'react-intl'
+import { useEventState } from '../../../../state/eventState'
 import { useModal } from '../../../modal/modalProvider'
 import { PartyCardGeneralInformation } from './partyCardGeneralInformation'
 import { LinkedEntityCustomFields } from '../../linkedEntityCustomFields'
@@ -19,167 +20,168 @@ import { getCompaniesInfoRequest } from '@frontend/graphql/companies/queries/get
 import { PartyPersons } from './partyPersons'
 import { PartyCompanies } from './partyCompanies'
 import { PartyProperties } from './partyProperties'
-import {
-  createConnectedEntities,
-  findEntityIndex,
-  getEntitiesIds,
-} from '@frontend/utils/connectedEntityHelpers'
 import { getPropertiesRequest } from '@frontend/graphql/properties/queries/getProperties'
 
 type Props = {
   partyId: string
-  partyInfo: PartyAPI
-  removeParty: (partyId: string) => void
-  updateParty: (partyId: string, partyInfo: PartyAPI) => void
 }
 
-export const PartyCard: React.FunctionComponent<Props> = ({
-  partyId,
-  partyInfo,
-  updateParty,
-  removeParty,
-}) => {
+export const PartyCard: React.FunctionComponent<Props> = ({ partyId }) => {
   const modal = useModal()
   const { openDialog } = useDialog()
+  const {
+    parties,
+    participantsCustomFields,
+    removeParticipant,
+    setParticipantPersons,
+    setParticipantCompanies,
+    setParticipantProperties,
+    addParticipantCustomField,
+    updateParticipantCustomField,
+    removeParticipantCustomFields,
+  } = useEventState()
 
   const showRemovePartyPrompt = useCallback(
     () =>
       openDialog({
         title: 'Esti sigur(a) ca vrei sa stergi informatiile selectate?',
         description: 'Odata sterse, acestea nu vor mai putea fi recuperate.',
-        onConfirm: () => removeParty(partyId),
+        onConfirm: () => removeParticipant(partyId),
       }),
-    [openDialog],
+    [openDialog, removeParticipant],
   )
 
   const [fetchPersons, { data: personsInfo }] = getPersonsBasicInfoRequest()
   const [fetchProperties, { data: propertiesInfo }] = getPropertiesRequest()
   const [fetchCompanies, { data: companiesInfo }] = getCompaniesInfoRequest()
 
-  const openPersonsModal = useCallback(() => {
-    const personsIds = getEntitiesIds(partyInfo.persons)
-    modal?.openPersonSelector((selectedPersonsIds) => {
-      const updatedPersons = createConnectedEntities(
-        Array.from(new Set([...personsIds, ...selectedPersonsIds])),
+  const personsInfoMap = useMemo(() => {
+    if (personsInfo?.getPersonsInfo) {
+      const map = new Map<string, PersonAPIOutput>()
+      personsInfo.getPersonsInfo.forEach((personInfo) => map.set(personInfo._id, personInfo))
+      return map
+    }
+  }, [personsInfo?.getPersonsInfo])
+
+  const companiesInfoMap = useMemo(() => {
+    if (companiesInfo?.getCompanies) {
+      const map = new Map<string, CompanyAPIOutput>()
+      companiesInfo.getCompanies.forEach((companyInfo) => map.set(companyInfo._id, companyInfo))
+      return map
+    }
+  }, [companiesInfo?.getCompanies])
+
+  const propertiesInfoMap = useMemo(() => {
+    if (propertiesInfo?.getProperties) {
+      const map = new Map<string, PropertyAPIOutput>()
+      propertiesInfo.getProperties.forEach((propertyInfo) =>
+        map.set(propertyInfo._id, propertyInfo),
       )
-      updateParty(partyId, { ...partyInfo, persons: updatedPersons })
-    }, personsIds)
-  }, [partyInfo])
+      return map
+    }
+  }, [propertiesInfo?.getProperties])
+
+  const partyInfo = useMemo(() => parties.get(partyId), [parties])
+  const customFields = useMemo(() => {
+    const customFieldsMap = new Map<string, CustomFieldAPI>()
+    partyInfo.customFields.forEach((uid) =>
+      customFieldsMap.set(uid, participantsCustomFields.get(uid)),
+    )
+    return customFieldsMap
+  }, [partyInfo.customFields, participantsCustomFields])
+
+  const openPersonsModal = useCallback(() => {
+    const personsIds = Array.from(partyInfo.persons)
+    modal?.openPersonSelector(
+      (selectedPersonsIds) =>
+        setParticipantPersons(partyId, Array.from(new Set([...personsIds, ...selectedPersonsIds]))),
+      personsIds,
+    )
+  }, [parties, setParticipantPersons])
 
   const openPropertiesModal = useCallback(() => {
-    const propertiesIds = getEntitiesIds(partyInfo.properties)
+    const propertiesIds = Array.from(partyInfo.properties)
 
-    modal?.openPropertySelector((selectedPropertiesIds) => {
-      const updateProperties = createConnectedEntities(
-        Array.from(new Set([...propertiesIds, ...selectedPropertiesIds])),
-      )
-      updateParty(partyId, { ...partyInfo, properties: updateProperties })
-    }, propertiesIds)
-  }, [partyInfo])
+    modal?.openPropertySelector(
+      (selectedPropertiesIds) =>
+        setParticipantProperties(
+          partyId,
+          Array.from(new Set([...propertiesIds, ...selectedPropertiesIds])),
+        ),
+      propertiesIds,
+    )
+  }, [partyId, setParticipantProperties])
 
   const openCompaniesModal = useCallback(() => {
-    const companiesIds = getEntitiesIds(partyInfo.companies)
-
-    modal?.openCompanySelector((selectedCompaniesIds) => {
-      const updatedCompanies = createConnectedEntities(
-        Array.from(new Set([...companiesIds, ...selectedCompaniesIds])),
-      )
-      updateParty(partyId, { ...partyInfo, companies: updatedCompanies })
-    }, companiesIds)
-  }, [partyInfo])
+    const companiesIds = Array.from(partyInfo.companies)
+    modal?.openCompanySelector(
+      (selectedCompaniesIds) =>
+        setParticipantCompanies(
+          partyId,
+          Array.from(new Set([...companiesIds, ...selectedCompaniesIds])),
+        ),
+      companiesIds,
+    )
+  }, [partyId, setParticipantCompanies])
 
   const removePerson = useCallback(
     (personId: string) => {
-      const personIndex = findEntityIndex(personId, partyInfo.persons)
-
-      if (personIndex > -1) {
-        partyInfo.persons.splice(personIndex, 1)
-        updateParty(partyId, {
-          ...partyInfo,
-          persons: [...partyInfo.persons],
-        })
+      if (partyInfo.persons.delete(personId)) {
+        setParticipantPersons(partyId, Array.from(partyInfo.persons))
       }
     },
-    [partyInfo.persons],
+    [partyId, partyInfo.persons, setParticipantPersons],
   )
 
   const removeCompany = useCallback(
     (companyId: string) => {
-      const companyIndex = findEntityIndex(companyId, partyInfo.companies)
-
-      if (companyIndex > -1) {
-        partyInfo.companies.splice(companyIndex, 1)
-        updateParty(partyId, {
-          ...partyInfo,
-          companies: [...partyInfo.companies],
-        })
+      if (partyInfo.companies.delete(companyId)) {
+        setParticipantCompanies(partyId, Array.from(partyInfo.companies))
       }
     },
-    [partyInfo.companies],
+    [partyId, partyInfo.companies, setParticipantPersons],
   )
 
   const removeProperty = useCallback(
     (propertyId: string) => {
-      const propertyIndex = findEntityIndex(propertyId, partyInfo.properties)
-
-      if (propertyIndex > -1) {
-        partyInfo.properties.splice(propertyIndex, 1)
-        updateParty(partyId, {
-          ...partyInfo,
-          properties: [...partyInfo.properties],
-        })
+      if (partyInfo.properties.delete(propertyId)) {
+        setParticipantProperties(partyId, Array.from(partyInfo.properties))
       }
     },
-    [partyInfo.properties],
+    [partyId, partyInfo.properties, setParticipantCompanies],
   )
 
   useEffect(() => {
-    const personsIds = getEntitiesIds(partyInfo.persons)
-
-    if (personsIds.length) {
-      void fetchPersons({ variables: { personsIds } })
+    if (partyInfo.persons.size) {
+      void fetchPersons({ variables: { personsIds: Array.from(partyInfo.persons) } })
     }
   }, [partyInfo.persons])
 
   useEffect(() => {
-    const propertiesIds = getEntitiesIds(partyInfo.properties)
-
-    if (propertiesIds.length) {
-      void fetchProperties({ variables: { propertiesIds } })
+    if (partyInfo.properties.size) {
+      void fetchProperties({ variables: { propertiesIds: Array.from(partyInfo.properties) } })
     }
   }, [partyInfo.properties])
 
   useEffect(() => {
-    const companiesIds = getEntitiesIds(partyInfo.companies)
-
-    if (companiesIds.length) {
-      void fetchCompanies({ variables: { companiesIds } })
+    if (partyInfo.companies.size) {
+      void fetchCompanies({ variables: { companiesIds: Array.from(partyInfo.companies) } })
     }
   }, [partyInfo.companies])
 
   return (
     <Card sx={{ p: 1, mt: 4 }} variant={'outlined'}>
       <CardContent>
-        <Grid container spacing={5}>
-          <Grid item xs={6}>
-            <PartyCardGeneralInformation
-              partyId={partyId}
-              partyInfo={partyInfo}
-              updateParty={updateParty}
-            />
-          </Grid>
-          <Grid item xs={6}>
-            <LinkedEntityCustomFields
-              customFields={partyInfo.customFields}
-              updateCustomFields={(customFields) =>
-                updateParty(partyId, {
-                  ...partyInfo,
-                  customFields,
-                })
-              }
-            />
-          </Grid>
-        </Grid>
+        <Stack direction={'row'} spacing={5}>
+          <PartyCardGeneralInformation partyId={partyId} />
+
+          <LinkedEntityCustomFields
+            customFields={customFields}
+            updateCustomField={updateParticipantCustomField}
+            addCustomField={() => addParticipantCustomField(partyId)}
+            removeCustomFields={(ids) => removeParticipantCustomFields(partyId, ids)}
+          />
+        </Stack>
 
         <Stack spacing={2} direction={'row'} mt={2}>
           <Button
@@ -211,10 +213,10 @@ export const PartyCard: React.FunctionComponent<Props> = ({
           </Button>
         </Stack>
 
-        <Stack direction={'row'} spacing={8} mt={4}>
+        <Stack sx={{ width: 1 }} direction={'row'} spacing={8} mt={4}>
           <Box width={0.33}>
             <PartyPersons
-              personsInfo={personsInfo?.getPersonsInfo}
+              personsInfo={personsInfoMap}
               persons={partyInfo.persons}
               removePerson={removePerson}
             />
@@ -223,7 +225,7 @@ export const PartyCard: React.FunctionComponent<Props> = ({
           <Box width={0.33}>
             <PartyCompanies
               companies={partyInfo.companies}
-              companiesInfo={companiesInfo?.getCompanies}
+              companiesInfo={companiesInfoMap}
               removeCompany={removeCompany}
             />
           </Box>
@@ -231,12 +233,12 @@ export const PartyCard: React.FunctionComponent<Props> = ({
           <Box width={0.33}>
             <PartyProperties
               properties={partyInfo.properties}
-              propertiesInfo={propertiesInfo?.getProperties}
+              propertiesInfo={propertiesInfoMap}
               removeProperty={removeProperty}
             />
           </Box>
         </Stack>
-        <Divider sx={{ mt: 2, mb: 2 }} />
+        <Divider sx={{ mt: 2, mb: 2 }} variant={'fullWidth'} />
       </CardContent>
       <CardActions>
         <Button
@@ -246,7 +248,7 @@ export const PartyCard: React.FunctionComponent<Props> = ({
           startIcon={<DeleteOutlinedIcon />}
           onClick={showRemovePartyPrompt}
         >
-          Sterge
+          <FormattedMessage id={'remove'} />
         </Button>
       </CardActions>
     </Card>

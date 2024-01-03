@@ -10,7 +10,7 @@ type Response = {
 }
 
 const request = gql`
-  query GetPropertiesByPerson($personId: String!) {
+  query GetPropertiesByPerson($personId: ID!) {
     getPropertiesByPerson(personId: $personId) {
       _id
       name
@@ -20,4 +20,4 @@ const request = gql`
 `
 
 export const getPropertiesByPersonRequest = () =>
-  useLazyQuery<Response, Params>(request, { fetchPolicy: 'cache-and-network' })
+  useLazyQuery<Response, Params>(request, { fetchPolicy: 'cache-first' })

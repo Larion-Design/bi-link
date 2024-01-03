@@ -1,8 +1,8 @@
-import React, { useMemo, useState } from 'react'
-import { getDefaultProceeding } from '@frontend/components/form/proceeding/constants'
+import { DatePickerWithMetadata } from '@frontend/components/form/datePicker'
+import React, { useEffect, useState } from 'react'
+import { AutocompleteFieldWithMetadata } from '@frontend/components/form/autocompleteField/autocompleteFieldWithMetadata'
+import { useFormik } from 'formik'
 import { useCancelDialog } from '@frontend/utils/hooks/useCancelDialog'
-import { ApolloError } from '@apollo/client'
-import { FormikProps, withFormik } from 'formik'
 import { FormattedMessage } from 'react-intl'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
@@ -12,43 +12,76 @@ import StepButton from '@mui/material/StepButton'
 import Stepper from '@mui/material/Stepper'
 import { ProceedingAPIInput } from 'defs'
 import { routes } from '../../../../router/routes'
+import { useProceedingState } from '../../../../state/proceedingState'
 import { AutocompleteField } from '../../autocompleteField'
 import { CustomInputFields } from '../../customInputFields'
 import { FilesManager } from '../../fileField'
 import { InputField } from '../../inputField'
-import { personFormValidation } from '../../person/personForm/validation/validation'
 import { Parties } from '../parties'
 
 type Props = {
   proceedingId?: string
-  proceedingInfo?: ProceedingAPIInput
-  onSubmit: (formData: ProceedingAPIInput) => void | Promise<void>
-  error?: ApolloError
+  onSubmit: (formData: ProceedingAPIInput) => void
 }
 
-const Form: React.FunctionComponent<Props & FormikProps<ProceedingAPIInput>> = ({
-  proceedingId,
-  setFieldError,
-  setFieldValue,
-  values,
-  errors,
-  isSubmitting,
-  isValidating,
-  submitForm,
-}) => {
+export const ProceedingForm: React.FunctionComponent<Props> = ({ proceedingId, onSubmit }) => {
   const [step, setStep] = useState(0)
   const cancelChanges = useCancelDialog(routes.events)
 
-  const proceedingYears = useMemo(() => {
-    const years: string[] = ['']
-    let year = 1970
-    const currentYear = new Date().getFullYear()
+  const {
+    metadata,
+    name,
+    type,
+    year,
+    description,
+    entitiesInvolved,
+    reason,
+    fileNumber,
+    files,
+    customFields,
 
-    while (++year <= currentYear) {
-      years.push(year.toString())
-    }
-    return years
-  }, [])
+    getProceeding,
+    getEntitiesInvolved,
+    getFiles,
+    getCustomFields,
+
+    updateYear,
+    updateName,
+    updateDescription,
+    updateReason,
+    updateType,
+    updateFile,
+    updateFileNumber,
+    updateCustomField,
+
+    setFiles,
+    addFile,
+    addCustomField,
+
+    removeFiles,
+    removeCustomFields,
+  } = useProceedingState()
+
+  const { isValidating, isSubmitting, submitForm, setFieldValue } = useFormik<ProceedingAPIInput>({
+    initialValues: getProceeding(),
+    validate: (values) => void {},
+    validateOnChange: false,
+    validateOnMount: false,
+    validateOnBlur: false,
+    enableReinitialize: true,
+    onSubmit,
+  })
+
+  useEffect(() => void setFieldValue('metadata', metadata), [metadata])
+  useEffect(() => void setFieldValue('name', name), [name])
+  useEffect(() => void setFieldValue('type', type), [type])
+  useEffect(() => void setFieldValue('year', year), [year])
+  useEffect(() => void setFieldValue('description', description), [description])
+  useEffect(() => void setFieldValue('reason', reason), [reason])
+  useEffect(() => void setFieldValue('fileNumber', fileNumber), [fileNumber])
+  useEffect(() => void setFieldValue('entitiesInvolved', getEntitiesInvolved()), [entitiesInvolved])
+  useEffect(() => void setFieldValue('files', getFiles()), [files])
+  useEffect(() => void setFieldValue('customFields', getCustomFields()), [customFields])
 
   return (
     <form data-cy={'proceedingForm'}>
@@ -84,9 +117,8 @@ const Form: React.FunctionComponent<Props & FormikProps<ProceedingAPIInput>> = (
                 <AutocompleteField
                   name={'name'}
                   label={'Nume'}
-                  value={values.name}
-                  error={errors.name}
-                  onValueChange={(value) => setFieldValue('name', value)}
+                  value={name}
+                  onChange={updateName}
                 />
               </Grid>
 
@@ -94,40 +126,37 @@ const Form: React.FunctionComponent<Props & FormikProps<ProceedingAPIInput>> = (
                 <AutocompleteField
                   name={'type'}
                   label={'Tip de dosar'}
-                  value={values.type}
-                  error={errors.type}
-                  onValueChange={(value) => setFieldValue('type', value)}
+                  value={type}
+                  onChange={updateType}
                 />
               </Grid>
 
               <Grid item xs={4}>
-                <AutocompleteField
+                <AutocompleteFieldWithMetadata
                   name={'fileNumber'}
                   label={'Numar dosar'}
-                  value={values.type}
-                  error={errors.type}
-                  onValueChange={(value) => setFieldValue('fileNumber', value)}
+                  fieldInfo={fileNumber}
+                  updateFieldInfo={updateFileNumber}
                 />
               </Grid>
 
               <Grid item xs={4}>
-                <AutocompleteField
+                <AutocompleteFieldWithMetadata
                   name={'reason'}
                   label={'Motivul investigatiei'}
-                  value={values.reason}
-                  error={errors.reason}
-                  onValueChange={(value) => setFieldValue('reason', value)}
+                  fieldInfo={reason}
+                  updateFieldInfo={updateReason}
                 />
               </Grid>
 
               <Grid item xs={4}>
-                <AutocompleteField
-                  name={'year'}
+                <DatePickerWithMetadata
                   label={'Anul deschiderii dosarului'}
-                  value={values.year ? values.year.toString() : ''}
-                  error={errors.reason}
-                  onValueChange={(value) => setFieldValue('year', parseInt(value) ?? 0)}
-                  suggestions={proceedingYears}
+                  fieldInfo={year}
+                  updateFieldInfo={updateYear}
+                  views={['year']}
+                  minDate={new Date(1970)}
+                  disableFuture
                 />
               </Grid>
 
@@ -137,9 +166,8 @@ const Form: React.FunctionComponent<Props & FormikProps<ProceedingAPIInput>> = (
                   label={'Descriere'}
                   multiline
                   rows={10}
-                  value={values.description}
-                  error={errors.description}
-                  onChange={(value) => setFieldValue('description', value)}
+                  value={description}
+                  onChange={updateDescription}
                 />
               </Grid>
             </Grid>
@@ -147,34 +175,27 @@ const Form: React.FunctionComponent<Props & FormikProps<ProceedingAPIInput>> = (
           {step === 1 && (
             <Grid item xs={12} container spacing={2}>
               <CustomInputFields
-                fields={values.customFields}
-                setFieldValue={async (customFields) => {
-                  const error = await personFormValidation.customFields(customFields)
-                  setFieldValue('customFields', customFields)
-                  setFieldError('customFields', error)
-                }}
-                error={errors.customFields as string}
+                customFields={customFields}
+                updateCustomField={updateCustomField}
+                addCustomField={addCustomField}
+                removeCustomFields={removeCustomFields}
               />
             </Grid>
           )}
           {step === 2 && (
             <Grid item xs={12} container spacing={2}>
-              <Parties
-                parties={values.entitiesInvolved}
-                updateParties={(parties) => setFieldValue('entitiesInvolved', parties)}
-              />
+              <Parties />
             </Grid>
           )}
           {step === 3 && (
             <Grid item xs={12} container spacing={2}>
               <FilesManager
-                files={values.files}
+                removeFiles={removeFiles}
                 keepDeletedFiles={!!proceedingId}
-                updateFiles={async (uploadedFiles) => {
-                  const error = await personFormValidation.files(uploadedFiles)
-                  setFieldValue('files', uploadedFiles)
-                  setFieldError('files', error)
-                }}
+                files={files}
+                updateFiles={setFiles}
+                updateFile={updateFile}
+                addFile={addFile}
               />
             </Grid>
           )}
@@ -206,13 +227,3 @@ const Form: React.FunctionComponent<Props & FormikProps<ProceedingAPIInput>> = (
     </form>
   )
 }
-
-export const ProceedingForm = withFormik<Props, ProceedingAPIInput>({
-  mapPropsToValues: ({ proceedingInfo }) => proceedingInfo ?? getDefaultProceeding(),
-  validate: (values, { proceedingId }) => void {},
-  validateOnChange: false,
-  validateOnMount: false,
-  validateOnBlur: false,
-  enableReinitialize: true,
-  handleSubmit: (values, { props: { onSubmit } }) => void onSubmit(values),
-})(Form)

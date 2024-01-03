@@ -11,7 +11,7 @@ type Params = {
 }
 
 const request = gql`
-  query GetFilesInfo($filesIds: [String!]!) {
+  query GetFilesInfo($filesIds: [ID!]!) {
     getFilesInfo(filesIds: $filesIds) {
       fileId
       name
@@ -28,5 +28,5 @@ const request = gql`
 export const getFilesInfo = (entityId: string, entityType: EntityType) =>
   useLazyQuery<Response, Params>(request, {
     variables: { entityId, entityType },
-    fetchPolicy: 'cache-and-network',
+    fetchPolicy: 'cache-first',
   })

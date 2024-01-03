@@ -1,7 +1,7 @@
-import Box from '@mui/material/Box'
-import React, { useCallback, useEffect, useState } from 'react'
+import { createDatagridItems, getDatagridItemInfo, Unique } from '@frontend/utils/datagridHelpers'
+import React, { useCallback, useMemo, useState } from 'react'
+import Container from '@mui/material/Container'
 import { CustomFieldAPI } from 'defs'
-import { GridSetItem, useGridSet } from '../../../utils/hooks/useGridSet'
 import {
   DataGrid,
   GridColDef,
@@ -15,50 +15,50 @@ import { AddSuggestionsToolbarButton } from '../../dataGrid/addSuggestionsToolba
 import { RemoveRowsToolbarButton } from '../../dataGrid/removeRowsToolbarButton'
 
 type Props = {
-  readonly?: boolean
-  fields: CustomFieldAPI[]
-  setFieldValue: (values: CustomFieldAPI[]) => void | Promise<void>
-  error?: string
+  customFields: Map<string, CustomFieldAPI>
+  updateCustomField: (uid: string, value: CustomFieldAPI) => void
+  addCustomField: (fieldName: string) => void
+  removeCustomFields: (uids: string[]) => void
   suggestions?: string[]
 }
 
 export const CustomInputFields: React.FunctionComponent<Props> = ({
-  fields,
-  setFieldValue,
+  customFields,
+  updateCustomField,
+  addCustomField,
+  removeCustomFields,
   suggestions,
 }) => {
-  const { values, rawValues, create, update, removeBulk, uid } = useGridSet(
-    fields,
-    ({ _id }) => _id,
-  )
   const [selectedRows, setSelectedRows] = useState<GridSelectionModel>([])
+  const datagridItems = useMemo(() => createDatagridItems(customFields), [customFields])
 
   const processRowUpdate = useCallback(
-    async (newRow: GridRowModel<GridSetItem<CustomFieldAPI>>) => {
-      update(newRow)
+    async (newRow: GridRowModel<Unique<CustomFieldAPI>>) => {
+      const { id, item } = getDatagridItemInfo(newRow)
+      updateCustomField(id, item)
       return Promise.resolve(newRow)
     },
-    [],
+    [updateCustomField],
   )
 
-  const removeSelectedRows = useCallback(() => removeBulk(selectedRows as string[]), [selectedRows])
-
-  useEffect(() => {
-    void setFieldValue(rawValues())
-  }, [uid])
+  const removeSelectedRows = useCallback(
+    () => removeCustomFields(selectedRows as string[]),
+    [selectedRows, removeCustomFields],
+  )
 
   return (
-    <Box sx={{ height: 1, width: 1 }}>
+    <Container sx={{ height: 1, width: 1 }}>
       <DataGrid
         autoHeight
         checkboxSelection
         disableSelectionOnClick
         disableIgnoreModificationsIfProcessingProps
         hideFooterPagination
-        rows={values()}
+        hideFooterSelectedRowCount
+        rows={datagridItems}
         columns={columns}
+        getRowId={({ id }: Unique<CustomFieldAPI>) => id}
         experimentalFeatures={{ newEditingApi: true }}
-        getRowId={({ _id }) => _id}
         processRowUpdate={processRowUpdate}
         onSelectionModelChange={(selectedRows) => setSelectedRows(selectedRows)}
         components={{
@@ -67,12 +67,7 @@ export const CustomInputFields: React.FunctionComponent<Props> = ({
               <AddSuggestionsToolbarButton
                 defaultOption={''}
                 options={suggestions}
-                optionSelected={(fieldName) =>
-                  create({
-                    fieldName,
-                    fieldValue: '',
-                  })
-                }
+                optionSelected={addCustomField}
               />
 
               {!!selectedRows.length && (
@@ -86,7 +81,7 @@ export const CustomInputFields: React.FunctionComponent<Props> = ({
           footerRowSelected: () => '',
         }}
       />
-    </Box>
+    </Container>
   )
 }
 

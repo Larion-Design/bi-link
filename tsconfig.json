@@ -17,25 +17,8 @@
     "forceConsistentCasingInFileNames": true,
     "noFallthroughCasesInSwitch": true,
     "importHelpers": true,
-    "baseUrl": "./",
-    "paths": {
-      "@app/scheduler-module": [
-        "libs/scheduler-module/src"
-      ],
-      "@app/scheduler-module/*": [
-        "libs/scheduler-module/src/*"
-      ]
-    }
+    "baseUrl": "./"
   },
-  "include": [
-    "apps",
-    "packages"
-  ],
-  "exclude": [
-    "node_modules",
-    "dist",
-    "build",
-    ".turbo",
-    "out"
-  ]
+  "include": ["apps", "packages", "playwright.config.ts"],
+  "exclude": ["node_modules", "dist", "build", ".turbo", "out"]
 }

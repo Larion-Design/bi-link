@@ -1,40 +1,38 @@
 import React from 'react'
+import { toFormikValidationSchema } from 'zod-formik-adapter'
 import AssignmentIndOutlinedIcon from '@mui/icons-material/AssignmentIndOutlined'
 import Avatar from '@mui/material/Avatar'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import Typography from '@mui/material/Typography'
-import { FormikProps, withFormik } from 'formik'
+import { useFormik } from 'formik'
 import { InputField } from '../inputField'
 import { InputPassword } from '../inputPassword'
-import { signupValidationSchema } from './validation'
-
-type SignupInfo = {
-  name: string
-  email: string
-  password: string
-  confirmPassword: string
-}
+import { SignupInfo, signupValidationSchema } from './validation'
 
 type Props = {
   error?: string
   disabled?: boolean
-  onSubmit: (signupInfo: SignupInfo) => void | Promise<void>
+  onSubmit: (signupInfo: SignupInfo) => Promise<void>
 }
 
-export const Signup: React.FunctionComponent<
-  Props & FormikProps<SignupInfo>
-> = ({
-  error,
-  disabled,
-  values,
-  errors,
-  isSubmitting,
-  isValidating,
-  setFieldValue,
-  setSubmitting,
-  handleSubmit,
-}) => {
+export const SignupForm: React.FunctionComponent<Props> = ({ error, disabled, onSubmit }) => {
+  const { values, errors, isSubmitting, isValidating, setSubmitting, setFieldValue, submitForm } =
+    useFormik<SignupInfo>({
+      initialValues: {
+        name: '',
+        email: '',
+        password: '',
+        confirmPassword: '',
+      },
+      onSubmit,
+      enableReinitialize: true,
+      validateOnChange: false,
+      validateOnMount: false,
+      validateOnBlur: false,
+      validate: (values) => toFormikValidationSchema(signupValidationSchema).validate(values),
+    })
+
   if (error) {
     setSubmitting(false)
   }
@@ -49,14 +47,14 @@ export const Signup: React.FunctionComponent<
         Autentificare
       </Typography>
 
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={() => void submitForm()}>
         <Box sx={{ mt: 2, width: 1 }}>
           <InputField
             required
             name={'name'}
             label={'Nume'}
             value={values.name}
-            onChange={(value) => setFieldValue('name', value)}
+            onChange={(value) => void setFieldValue('name', value)}
             error={errors?.name}
             disabled={isDisabled}
           />
@@ -68,7 +66,7 @@ export const Signup: React.FunctionComponent<
             name={'email'}
             label={'Email'}
             value={values.email}
-            onChange={(value) => setFieldValue('email', value)}
+            onChange={(value) => void setFieldValue('email', value)}
             error={errors?.email}
             disabled={isDisabled}
           />
@@ -77,7 +75,7 @@ export const Signup: React.FunctionComponent<
         <Box sx={{ mt: 4, width: 1 }}>
           <InputPassword
             label={'Parola'}
-            onChange={(value) => setFieldValue('password', value)}
+            onChange={(value) => void setFieldValue('password', value)}
             error={errors?.password}
             disabled={isDisabled}
           />
@@ -86,17 +84,13 @@ export const Signup: React.FunctionComponent<
         <Box sx={{ mt: 4, width: 1 }}>
           <InputPassword
             label={'Confirma parola'}
-            onChange={(value) => setFieldValue('confirmPassword', value)}
+            onChange={(value) => void setFieldValue('confirmPassword', value)}
             error={errors?.confirmPassword}
             disabled={isDisabled}
           />
         </Box>
 
-        <Box
-          display={'flex'}
-          justifyContent={'flex-end'}
-          alignItems={'baseline'}
-        >
+        <Box display={'flex'} justifyContent={'flex-end'} alignItems={'baseline'}>
           <Button
             type={'submit'}
             variant={'contained'}
@@ -111,17 +105,3 @@ export const Signup: React.FunctionComponent<
     </Box>
   )
 }
-
-export const SignupForm = withFormik<Props, SignupInfo>({
-  mapPropsToValues: () => ({
-    name: '',
-    email: '',
-    password: '',
-    confirmPassword: '',
-  }),
-  validationSchema: signupValidationSchema,
-  validateOnChange: false,
-  validateOnMount: false,
-  validateOnBlur: false,
-  handleSubmit: (values, { props: { onSubmit } }) => onSubmit(values),
-})(Signup)

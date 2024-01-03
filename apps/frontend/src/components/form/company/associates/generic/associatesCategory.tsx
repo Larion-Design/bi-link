@@ -1,97 +1,103 @@
 import React, { useMemo, useState } from 'react'
+import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
 import AccordionSummary from '@mui/material/AccordionSummary'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import AccordionDetails from '@mui/material/AccordionDetails'
 import Accordion from '@mui/material/Accordion'
-import Box from '@mui/material/Box'
 import Divider from '@mui/material/Divider'
-import { AssociateAPIInput, CompanyListRecord, PersonListRecordWithImage } from 'defs'
+import { CompanyAPIOutput, PersonAPIOutput } from 'defs'
+import { CompanyAssociateInfoState } from 'state/company/companyAssociatesState'
+import { useCompanyState } from 'state/company/companyState'
 import { PersonAssociateCard } from './personAssociateCard'
 import { CompanyAssociateCard } from './companyAssociateCard'
 import { countEntities } from '../helpers'
 
 type Props = {
+  associatesIds: string[]
   categoryName: string
-  personsInfo?: PersonListRecordWithImage[]
-  companiesInfo?: CompanyListRecord[]
-  associates: AssociateAPIInput[]
-  removeAssociate: (associateId: string) => void
+  personsInfo?: Map<string, PersonAPIOutput>
+  companiesInfo?: Map<string, CompanyAPIOutput>
   allowRoleChange: boolean
-  updateAssociate: (associateId: string, associateInfo: AssociateAPIInput) => void
 }
 
 export const AssociatesCategory: React.FunctionComponent<Props> = ({
   categoryName,
-  associates,
+  associatesIds,
   personsInfo,
   companiesInfo,
-  removeAssociate,
-  updateAssociate,
   allowRoleChange,
 }) => {
   const [expanded, setExpandedState] = useState(false)
-  const { persons, companies } = useMemo(() => countEntities(associates), [associates])
+  const { associates } = useCompanyState()
+
+  const categoryAssociates = useMemo(() => {
+    if (associatesIds.length) {
+      const map = new Map<string, CompanyAssociateInfoState>()
+      associatesIds.forEach((associateId) => map.set(associateId, associates.get(associateId)))
+      return map
+    }
+    return null
+  }, [associatesIds, associates])
+
+  const { persons, companies } = categoryAssociates
+    ? countEntities(categoryAssociates)
+    : { persons: 0, companies: 0 }
+
   return (
     <Accordion
       variant={'outlined'}
-      expanded={!!associates.length && expanded}
-      onChange={() => setExpandedState((expanded) => (associates.length ? !expanded : expanded))}
+      expanded={!!associates.size && expanded}
+      onChange={() => setExpandedState((expanded) => (associates.size ? !expanded : expanded))}
     >
       <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-        <Box
-          sx={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            width: 0.5,
-          }}
+        <Stack
+          sx={{ width: 0.5 }}
+          direction={'row'}
+          spacing={2}
+          alignItems={'center'}
+          divider={<Divider orientation={'vertical'} flexItem />}
         >
-          <Box sx={{ width: 0.4 }}>
-            <Typography variant={'h6'}>{categoryName}</Typography>
-          </Box>
-          <Divider orientation={'vertical'} />
+          <Typography sx={{ width: 0.4 }} variant={'h6'}>
+            {categoryName}
+          </Typography>
           <Typography variant={'caption'}>{persons} persoane</Typography>
-          <Divider orientation={'vertical'} />
           <Typography variant={'caption'}>{companies} companii</Typography>
-        </Box>
+        </Stack>
       </AccordionSummary>
       <AccordionDetails>
-        {associates.map((associate) => {
-          const personId = associate.person?._id
+        <Stack spacing={2} sx={{ width: 1 }}>
+          {categoryAssociates
+            ? Array.from(categoryAssociates.entries()).map(([uid, associate]) => {
+                const personId = associate.person?._id
+                if (personId) {
+                  const personInfo = personsInfo?.get(personId)
+                  return personInfo ? (
+                    <PersonAssociateCard
+                      key={uid}
+                      associateId={uid}
+                      personInfo={personInfo}
+                      allowRoleChange={allowRoleChange}
+                    />
+                  ) : null
+                }
 
-          if (personId) {
-            const personInfo = personsInfo?.find(({ _id }) => _id === personId)
-            return personInfo ? (
-              <Box key={personId} sx={{ width: 1, mb: 1 }}>
-                <PersonAssociateCard
-                  associateInfo={associate}
-                  personInfo={personInfo}
-                  removeAssociate={removeAssociate}
-                  updateAssociate={updateAssociate}
-                  allowRoleChange={allowRoleChange}
-                />
-              </Box>
-            ) : null
-          }
+                const companyId = associate.company?._id
 
-          const companyId = associate.company?._id
-
-          if (companyId) {
-            const companyInfo = companiesInfo?.find(({ _id }) => _id === companyId)
-            return companyInfo ? (
-              <Box key={personId} sx={{ width: 1, mb: 1 }}>
-                <CompanyAssociateCard
-                  associateInfo={associate}
-                  companyInfo={companyInfo}
-                  removeAssociate={removeAssociate}
-                  updateAssociate={updateAssociate}
-                  allowRoleChange={allowRoleChange}
-                />
-              </Box>
-            ) : null
-          }
-        })}
+                if (companyId) {
+                  const companyInfo = companiesInfo?.get(companyId)
+                  return companyInfo ? (
+                    <CompanyAssociateCard
+                      key={uid}
+                      associateId={uid}
+                      companyInfo={companyInfo}
+                      allowRoleChange={allowRoleChange}
+                    />
+                  ) : null
+                }
+              })
+            : null}
+        </Stack>
       </AccordionDetails>
     </Accordion>
   )

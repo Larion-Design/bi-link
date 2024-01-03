@@ -31,9 +31,7 @@ export const SignupPage: React.FunctionComponent = () => {
         error={error?.message ?? userRegisteredError?.message}
         onSubmit={async ({ email, password, name }) => {
           await signup(email, password)
-          await updateProfile({
-            displayName: name,
-          })
+          await updateProfile({ displayName: name })
           await userRegistered()
         }}
       />

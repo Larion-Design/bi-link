@@ -24,10 +24,11 @@ import ListItemText from '@mui/material/ListItemText'
 import { styled } from '@mui/material/styles'
 import Toolbar from '@mui/material/Toolbar'
 import GavelOutlinedIcon from '@mui/icons-material/GavelOutlined'
+import GavelIcon from '@mui/icons-material/Gavel'
 import { useLocation, useNavigate } from 'react-router-dom'
 
 import { routes } from '../../router/routes'
-import { getUserRole } from '../../utils/auth'
+import { useUserRole } from '../../utils/auth'
 
 const drawerWidth = 240
 
@@ -66,7 +67,7 @@ interface AppDrawerProps {
 export const AppDrawer: React.FunctionComponent<AppDrawerProps> = ({ open, toggleDrawer }) => {
   const navigate = useNavigate()
   const { pathname } = useLocation()
-  const { hasPrivilegedAccess } = getUserRole()
+  const { hasPrivilegedAccess } = useUserRole()
 
   return (
     <Drawer variant={'permanent'} open={open}>
@@ -115,7 +116,7 @@ export const AppDrawer: React.FunctionComponent<AppDrawerProps> = ({ open, toggl
           </ListItemIcon>
           <ListItemText primary="Companii" />
         </ListItemButton>
-        <ListItemButton onClick={() => navigate(routes.properties)}>
+        <ListItemButton onClick={() => navigate(routes.properties)} disabled>
           <ListItemIcon>
             {pathname === routes.properties ? (
               <AddHomeWorkIcon color={'primary'} />
@@ -123,9 +124,9 @@ export const AppDrawer: React.FunctionComponent<AppDrawerProps> = ({ open, toggl
               <AddHomeWorkOutlinedIcon />
             )}
           </ListItemIcon>
-          <ListItemText primary="Bunuri si Proprietati" />
+          <ListItemText primary={'Bunuri si proprietati'} />
         </ListItemButton>
-        <ListItemButton onClick={() => navigate(routes.events)}>
+        <ListItemButton onClick={() => navigate(routes.events)} disabled>
           <ListItemIcon>
             {pathname === routes.events ? (
               <LocalHospitalIcon color={'primary'} />
@@ -135,15 +136,19 @@ export const AppDrawer: React.FunctionComponent<AppDrawerProps> = ({ open, toggl
           </ListItemIcon>
           <ListItemText primary="Evenimente" />
         </ListItemButton>
-        <ListItemButton onClick={() => navigate(routes.newProceeding)}>
+        <ListItemButton onClick={() => navigate(routes.proceedings)} disabled>
           <ListItemIcon>
-            <GavelOutlinedIcon />
+            {pathname === routes.proceedings ? (
+              <GavelIcon color={'primary'} />
+            ) : (
+              <GavelOutlinedIcon />
+            )}
           </ListItemIcon>
-          <ListItemText primary="Dosare" />
+          <ListItemText primary={'Procese in instanta'} />
         </ListItemButton>
         {hasPrivilegedAccess && (
           <>
-            <ListItemButton onClick={() => navigate(routes.users)}>
+            <ListItemButton onClick={() => navigate(routes.users)} disabled>
               <ListItemIcon>
                 {pathname === routes.users ? (
                   <ManageAccountsIcon color={'primary'} />
@@ -153,7 +158,7 @@ export const AppDrawer: React.FunctionComponent<AppDrawerProps> = ({ open, toggl
               </ListItemIcon>
               <ListItemText primary={'Utilizatori'} />
             </ListItemButton>
-            <ListItemButton onClick={() => navigate(routes.history)}>
+            <ListItemButton onClick={() => navigate(routes.history)} disabled>
               <ListItemIcon>
                 {pathname === routes.history ? (
                   <WorkHistoryIcon color={'primary'} />

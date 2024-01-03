@@ -9,20 +9,9 @@ type Props = {
   message: string
 }
 
-export const Loader: React.FunctionComponent<Props> = ({
-  visible,
-  message,
-}) => (
-  <Backdrop
-    sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
-    open={visible}
-  >
-    <Box
-      display={'flex'}
-      flexDirection={'column'}
-      alignItems={'center'}
-      justifyContent={'center'}
-    >
+export const Loader: React.FunctionComponent<Props> = ({ visible, message }) => (
+  <Backdrop sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }} open={visible}>
+    <Box display={'flex'} flexDirection={'column'} alignItems={'center'} justifyContent={'center'}>
       <CircularProgress variant={'indeterminate'} color={'inherit'} />
       <Typography variant={'h5'} mt={2}>
         {message}

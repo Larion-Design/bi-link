@@ -15,10 +15,7 @@ export function formatBytes(bytes: number) {
   do {
     bytes /= thresh
     ++u
-  } while (
-    Math.round(Math.abs(bytes) * 10) / 10 >= thresh &&
-    u < units.length - 1
-  )
+  } while (Math.round(Math.abs(bytes) * 10) / 10 >= thresh && u < units.length - 1)
   return `${bytes.toFixed(1)} ${units[u] ?? ''}`
 }
 
@@ -32,11 +29,9 @@ export function formatMimeType(mimeType: string) {
     'application/pdf': 'Document',
     'application/rtf': 'Document',
     'application/msword': 'Document',
-    'application/vnd.openxmlformats-officedocument.wordprocessingml.document':
-      'Document',
+    'application/vnd.openxmlformats-officedocument.wordprocessingml.document': 'Document',
     'application/vnd.ms-excel': 'Document',
-    'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet':
-      'Document',
+    'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': 'Document',
   }
   return mimeTypes[mimeType] ?? 'Generic'
 }

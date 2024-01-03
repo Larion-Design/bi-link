@@ -11,7 +11,7 @@ type Response = {
 }
 
 const mutation = gql`
-  mutation UpdateCompany($companyId: String!, $companyInfo: CompanyInput!) {
+  mutation UpdateCompany($companyId: ID!, $companyInfo: CompanyInput!) {
     updateCompany(companyId: $companyId, companyInfo: $companyInfo)
   }
 `

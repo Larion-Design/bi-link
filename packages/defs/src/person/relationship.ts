@@ -1,22 +1,16 @@
-import { Person } from './person'
-import { ConnectedEntity } from '../connectedEntity'
-import { NodesRelationship } from '../graphRelationships'
+import { z } from 'zod'
+import { withMetadataSchema } from '../metadata'
+import { connectedEntitySchema } from '../connectedEntity'
 
-export interface Relationship {
-  type: string
-  proximity: number
-  person: Person
-  _confirmed: boolean
-  description: string
-  relatedPersons: Person[]
-}
+export const relationshipSchema = z
+  .object({
+    type: z.string(),
+    proximity: z.number(),
+    description: z.string(),
+    relatedPersons: connectedEntitySchema.array(),
+    person: connectedEntitySchema,
+  })
+  .merge(withMetadataSchema)
 
-interface RelationshipAPI extends Omit<Relationship, 'person' | 'relatedPersons'> {
-  person: ConnectedEntity
-  relatedPersons: ConnectedEntity[]
-}
-
-export interface RelationshipAPIOutput extends RelationshipAPI {}
-export interface RelationshipAPIInput extends Readonly<RelationshipAPI> {}
-
-export interface PersonalRelationship extends NodesRelationship, Pick<Relationship, 'type'> {}
+export type Relationship = z.infer<typeof relationshipSchema>
+export type RelationshipAPI = Relationship

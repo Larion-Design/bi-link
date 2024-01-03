@@ -1,6 +1,6 @@
+import { getPersonFullName } from '@frontend/utils/person'
 import React, { PropsWithChildren } from 'react'
 import { RemovePerson } from '@frontend/components/actionButton/removePerson'
-import { getPersonFullName } from '@frontend/utils/person'
 import Avatar from '@mui/material/Avatar'
 import Box from '@mui/material/Box'
 import Divider from '@mui/material/Divider'
@@ -9,12 +9,12 @@ import ListItem from '@mui/material/ListItem'
 import ListItemAvatar from '@mui/material/ListItemAvatar'
 import ListItemText from '@mui/material/ListItemText'
 import Typography from '@mui/material/Typography'
-import { PersonListRecordWithImage } from 'defs'
+import { PersonAPIOutput } from 'defs'
 import { FormattedMessage } from 'react-intl'
 
 type Props = {
   label: string
-  personsInfo: PersonListRecordWithImage[]
+  personsInfo: Map<string, PersonAPIOutput>
   removePerson: (personId: string) => void
 }
 
@@ -25,16 +25,15 @@ export const PersonsList: React.FunctionComponent<PropsWithChildren<Props>> = ({
   removePerson,
 }) => (
   <Box sx={{ width: 1 }}>
-    <Typography variant={'h5'} gutterBottom>
-      <FormattedMessage id={label} defaultMessage={label} />
+    <Typography variant={'h6'} gutterBottom>
+      <FormattedMessage id={label} />
     </Typography>
     <Divider variant={'fullWidth'} />
 
     <List>
-      {personsInfo.map((personInfo) => {
+      {Array.from(personsInfo.values()).map((personInfo) => {
         const { _id } = personInfo
         const fullName = getPersonFullName(personInfo)
-
         return (
           <ListItem
             key={_id}
@@ -44,15 +43,14 @@ export const PersonsList: React.FunctionComponent<PropsWithChildren<Props>> = ({
               <Avatar
                 src={personInfo.images[0]?.url.url ?? ''}
                 variant={'circular'}
-                sx={{ height: 80, width: 80 }}
+                sx={{ height: 50, width: 50, mr: 2 }}
               />
             </ListItemAvatar>
-            <ListItemText primary={fullName} secondary={personInfo.cnp} />
+            <ListItemText primary={fullName} secondary={personInfo.cnp.value} />
           </ListItem>
         )
       })}
     </List>
-
     {children}
   </Box>
 )

@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react'
-import { ConnectedEntity, PersonListRecordWithImage } from 'defs'
+import { ConnectedEntity, PersonAPIOutput } from 'defs'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import { PartyEntity } from './partyEntity'
@@ -10,8 +10,8 @@ import { PartyPersonInfo } from './partyEntityInfo/partyPersonInfo'
 import { PartyEntitiesPlaceholder } from './partyEntitiesPlaceholder'
 
 type Props = {
-  persons: ConnectedEntity[]
-  personsInfo?: PersonListRecordWithImage[]
+  persons: Set<string>
+  personsInfo?: Map<string, PersonAPIOutput>
   removePerson: (personId: string) => void
 }
 
@@ -30,9 +30,9 @@ export const PartyPersons: React.FunctionComponent<Props> = ({
       <Box sx={{ width: 1, mb: 2 }}>
         <Typography variant={'h6'}>Persoane</Typography>
       </Box>
-      {persons.length > 0 ? (
-        persons.map(({ _id }) => {
-          const personInfo = personsInfo?.find(({ _id: personId }) => personId === _id)
+      {persons.size > 0 ? (
+        Array.from(persons).map((_id) => {
+          const personInfo = personsInfo?.get(_id)
           if (personInfo) {
             const fullName = getPersonFullName(personInfo)
             const { _id, images, cnp } = personInfo
@@ -43,7 +43,11 @@ export const PartyPersons: React.FunctionComponent<Props> = ({
                 viewEntityDetails={viewPersonDetails}
                 removeEntity={removePerson}
               >
-                <PartyPersonInfo name={fullName} cnp={cnp} imageUrl={images[0]?.url?.url ?? ''} />
+                <PartyPersonInfo
+                  name={fullName}
+                  cnp={cnp.value}
+                  imageUrl={images[0]?.url?.url ?? ''}
+                />
               </PartyEntity>
             )
           }

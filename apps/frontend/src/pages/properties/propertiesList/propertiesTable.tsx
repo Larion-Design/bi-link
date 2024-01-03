@@ -74,6 +74,8 @@ export const PropertiesTable: React.FunctionComponent<Props> = ({
         autoHeight
         rowCount={total}
         hideFooterPagination
+        hideFooter
+        hideFooterSelectedRowCount
         disableExtendRowFullWidth
         disableSelectionOnClick
         disableColumnMenu

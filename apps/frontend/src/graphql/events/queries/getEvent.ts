@@ -10,10 +10,14 @@ type Response = {
 }
 
 const request = gql`
-  query GetEvent($eventId: String!) {
+  query GetEvent($eventId: ID!) {
     getEvent(eventId: $eventId) {
-      date
-      type
+      date {
+        value
+      }
+      type {
+        value
+      }
       location {
         locationId
         street
@@ -36,7 +40,7 @@ const request = gql`
         fieldValue
       }
       parties {
-        name
+        type
         description
         customFields {
           fieldName
@@ -51,7 +55,6 @@ const request = gql`
         companies {
           _id
         }
-        _confirmed
       }
       files {
         fileId
@@ -65,5 +68,5 @@ const request = gql`
 
 export const getEventRequest = () =>
   useLazyQuery<Response, Params>(request, {
-    fetchPolicy: 'cache-and-network',
+    fetchPolicy: 'cache-first',
   })

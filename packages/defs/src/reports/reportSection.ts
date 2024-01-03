@@ -1,16 +1,27 @@
-import { ReportContent, ReportContentAPIInput, ReportContentAPIOutput } from './reportContent'
+import { z } from 'zod'
+import {
+  reportContentAPIInputSchema,
+  reportContentAPIOutputSchema,
+  reportContentSchema,
+} from './reportContent'
 
-export interface ReportSection {
-  name: string
-  content: ReportContent[]
-}
+export const reportSectionSchema = z.object({
+  name: z.string(),
+  content: reportContentSchema.array(),
+})
 
-export interface ReportSectionAPI extends Omit<ReportSection, 'content'> {}
+export const reportSectionAPIInputSchema = reportSectionSchema.merge(
+  z.object({
+    content: reportContentAPIInputSchema.array(),
+  }),
+)
 
-export interface ReportSectionAPIInput extends ReportSectionAPI {
-  content: ReportContentAPIInput[]
-}
+export const reportSectionAPIOutputSchema = reportSectionSchema.merge(
+  z.object({
+    content: reportContentAPIOutputSchema.array(),
+  }),
+)
 
-export interface ReportSectionAPIOutput extends ReportSectionAPI {
-  content: ReportContentAPIOutput[]
-}
+export type ReportSection = z.infer<typeof reportSectionSchema>
+export type ReportSectionAPIInput = z.infer<typeof reportSectionAPIInputSchema>
+export type ReportSectionAPIOutput = z.infer<typeof reportSectionAPIOutputSchema>

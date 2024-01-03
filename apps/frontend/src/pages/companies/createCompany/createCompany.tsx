@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { getDefaultCompany } from 'default-values'
 import { DashboardPage } from '../../../components/page/DashboardPage'
 import { createCompanyRequest } from '../../../graphql/companies/mutations/createCompany'
 import { routes } from '../../../router/routes'
@@ -20,21 +21,17 @@ export const CreateCompany: React.FunctionComponent = () => {
 
   useEffect(() => {
     if (error?.message) {
-      showNotification('O eroare a intervenit in timpul comunicarii cu serverul.', 'error')
+      showNotification('ServerError', 'error')
     }
   }, [error?.message])
 
   return (
     <DashboardPage title={'Creaza o companie'}>
       <CompanyDetails
-        readonly={false}
+        companyInfo={getDefaultCompany()}
         onSubmit={(companyInfo) => {
           if (!loading) {
-            void createCompany({
-              variables: {
-                companyInfo,
-              },
-            })
+            void createCompany({ variables: { companyInfo } })
           }
         }}
       />

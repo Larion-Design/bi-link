@@ -29,7 +29,7 @@ export const FilterPanel: React.FunctionComponent<Props> = ({
   relationshipsTypes,
   filterUpdated,
 }) => {
-  const { formatMessage } = useIntl()
+  const intl = useIntl()
   const [open, setOpen] = useState(false)
   const togglePanel = useCallback(() => setOpen((open) => !open), [setOpen])
   const [depthValue, setDepthValue] = useState(depth)
@@ -64,7 +64,7 @@ export const FilterPanel: React.FunctionComponent<Props> = ({
             disabled={!entitiesTypes.size}
             options={Array.from(entitiesTypes.entries()).map(([entityType, selected]) => ({
               value: entityType,
-              label: formatMessage({ id: entityType, defaultMessage: entityType }),
+              label: intl.formatMessage({ id: entityType, defaultMessage: entityType }),
               selected,
             }))}
             onSelectedOptionsChange={(options) => {
@@ -81,7 +81,7 @@ export const FilterPanel: React.FunctionComponent<Props> = ({
             options={Array.from(relationshipsTypes.entries()).map(
               ([relationshipType, selected]) => ({
                 value: relationshipType,
-                label: formatMessage({
+                label: intl.formatMessage({
                   id: relationshipType,
                   defaultMessage: relationshipType,
                 }),
@@ -108,7 +108,7 @@ export const FilterPanel: React.FunctionComponent<Props> = ({
 }
 
 const depthSliderSteps = (() => {
-  const sliderValues = []
+  const sliderValues: Array<{ value: number; label: number }> = []
   let current = 0
   do {
     current += 1

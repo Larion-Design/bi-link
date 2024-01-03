@@ -10,7 +10,7 @@ type Response = {
 }
 
 const request = gql`
-  query GetProperty($propertyId: String!) {
+  query GetProperty($propertyId: ID!) {
     getProperty(propertyId: $propertyId) {
       name
       type
@@ -19,13 +19,20 @@ const request = gql`
         isHidden
       }
       vehicleInfo {
-        vin
-        maker
-        model
-        color
+        vin {
+          value
+        }
+        maker {
+          value
+        }
+        model {
+          value
+        }
+        color {
+          value
+        }
       }
       customFields {
-        _id
         fieldName
         fieldValue
       }
@@ -36,17 +43,19 @@ const request = gql`
         company {
           _id
         }
-        startDate
-        endDate
+        startDate {
+          value
+        }
+        endDate {
+          value
+        }
         customFields {
-          _id
           fieldName
           fieldValue
         }
         vehicleOwnerInfo {
           plateNumbers
         }
-        _confirmed
       }
       files {
         fileId
@@ -60,5 +69,5 @@ const request = gql`
 
 export const getPropertyRequest = () =>
   useLazyQuery<Response, Params>(request, {
-    fetchPolicy: 'cache-and-network',
+    fetchPolicy: 'cache-first',
   })

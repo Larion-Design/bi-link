@@ -1,28 +1,33 @@
-import { Person } from '../person'
-import { Company } from '../company'
-import { CustomField } from '../customField'
-import { ConnectedEntity } from '../connectedEntity'
-import { NodesRelationship } from '../graphRelationships'
+import { z } from 'zod'
+import { optionalDateWithMetadataSchema } from '../generic'
+import { withMetadataSchema } from '../metadata'
+import { personSchema } from '../person'
+import { companySchema } from '../company'
+import { customFieldSchema } from '../customField'
+import { connectedEntitySchema } from '../connectedEntity'
 
-export interface PropertyOwner {
-  person?: Person | null
-  company?: Company | null
-  startDate: Date | null
-  endDate: Date | null
-  customFields: CustomField[]
-  _confirmed: boolean
-  vehicleOwnerInfo: VehicleOwnerInfo | null
-}
+export const vehicleOwnerSchema = z.object({
+  plateNumbers: z.string().nonempty().array(),
+})
 
-export interface VehicleOwnerInfo {
-  plateNumbers: string[]
-}
+export const propertyOwnerSchema = z
+  .object({
+    person: personSchema.nullish(),
+    company: companySchema.nullish(),
+    startDate: optionalDateWithMetadataSchema,
+    endDate: optionalDateWithMetadataSchema,
+    customFields: customFieldSchema.array(),
+    vehicleOwnerInfo: vehicleOwnerSchema.nullish(),
+  })
+  .merge(withMetadataSchema)
 
-export interface PropertyOwnerAPI extends Omit<PropertyOwner, 'person' | 'company'> {
-  person?: ConnectedEntity
-  company?: ConnectedEntity
-}
+export const propertyOwnerAPISchema = propertyOwnerSchema.merge(
+  z.object({
+    person: connectedEntitySchema.nullish(),
+    company: connectedEntitySchema.nullish(),
+  }),
+)
 
-export interface PropertyOwnerRelationship
-  extends NodesRelationship,
-    Pick<PropertyOwner, 'startDate' | 'endDate'> {}
+export type PropertyOwner = z.infer<typeof propertyOwnerSchema>
+export type PropertyOwnerAPI = z.infer<typeof propertyOwnerAPISchema>
+export type VehicleOwnerInfo = z.infer<typeof vehicleOwnerSchema>

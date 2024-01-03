@@ -1,9 +1,9 @@
 import { gql, useLazyQuery } from '@apollo/client'
-
-import { PersonListRecordWithImage } from 'defs'
+import { PersonAPIOutput } from 'defs'
+import { useMemo } from 'react'
 
 type Response = {
-  getPersonsInfo: PersonListRecordWithImage[]
+  getPersonsInfo: PersonAPIOutput[]
 }
 
 type Params = {
@@ -11,11 +11,18 @@ type Params = {
 }
 
 const request = gql`
-  query PersonBasicInfo($personsIds: [String!]!) {
+  query PersonBasicInfo($personsIds: [ID!]!) {
     getPersonsInfo(personsIds: $personsIds) {
       _id
-      firstName
-      lastName
+      firstName {
+        value
+      }
+      lastName {
+        value
+      }
+      cnp {
+        value
+      }
       images {
         fileId
         url {
@@ -27,3 +34,17 @@ const request = gql`
 `
 
 export const getPersonsBasicInfoRequest = () => useLazyQuery<Response, Params>(request)
+
+export const getPersonsBasicInfoMap = () => {
+  const [fetchPersons, { loading, error, data }] = getPersonsBasicInfoRequest()
+
+  const personsMap = useMemo(() => {
+    if (data?.getPersonsInfo) {
+      const map = new Map<string, PersonAPIOutput>()
+      data?.getPersonsInfo?.forEach((personInfo) => map.set(personInfo._id, personInfo))
+      return map
+    }
+  }, [data?.getPersonsInfo])
+
+  return { fetchPersons, personsMap, error, loading }
+}

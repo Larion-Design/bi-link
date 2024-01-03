@@ -10,7 +10,7 @@ type Response = {
 }
 
 const request = gql`
-  mutation UpdateProperty($propertyId: String!, $data: PropertyInput!) {
+  mutation UpdateProperty($propertyId: ID!, $data: PropertyInput!) {
     updateProperty(propertyId: $propertyId, data: $data)
   }
 `

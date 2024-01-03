@@ -10,12 +10,50 @@ type Response = {
 }
 
 const getCompany = gql`
-  query GetCompany($id: String!) {
+  query GetCompany($id: ID!) {
     getCompany(id: $id) {
-      name
-      cui
-      registrationNumber
+      name {
+        value
+        metadata {
+          access
+          confirmed
+          trustworthiness {
+            level
+            source
+          }
+        }
+      }
+      cui {
+        value
+        metadata {
+          access
+          confirmed
+          trustworthiness {
+            level
+            source
+          }
+        }
+      }
+      registrationNumber {
+        value
+        metadata {
+          access
+          confirmed
+          trustworthiness {
+            level
+            source
+          }
+        }
+      }
       headquarters {
+        metadata {
+          access
+          confirmed
+          trustworthiness {
+            level
+            source
+          }
+        }
         locationId
         street
         number
@@ -32,6 +70,14 @@ const getCompany = gql`
         }
       }
       locations {
+        metadata {
+          access
+          confirmed
+          trustworthiness {
+            level
+            source
+          }
+        }
         locationId
         street
         number
@@ -48,33 +94,121 @@ const getCompany = gql`
         }
       }
       associates {
+        metadata {
+          access
+          confirmed
+          trustworthiness {
+            level
+            source
+          }
+        }
         person {
           _id
         }
         company {
           _id
         }
-        role
-        startDate
-        endDate
-        isActive
-        equity
+        role {
+          value
+          metadata {
+            access
+            confirmed
+            trustworthiness {
+              level
+              source
+            }
+          }
+        }
+        startDate {
+          value
+          metadata {
+            access
+            confirmed
+            trustworthiness {
+              level
+              source
+            }
+          }
+        }
+        endDate {
+          value
+          metadata {
+            access
+            confirmed
+            trustworthiness {
+              level
+              source
+            }
+          }
+        }
+        isActive {
+          value
+          metadata {
+            access
+            confirmed
+            trustworthiness {
+              level
+              source
+            }
+          }
+        }
+        equity {
+          value
+          metadata {
+            access
+            confirmed
+            trustworthiness {
+              level
+              source
+            }
+          }
+        }
         customFields {
-          _id
+          metadata {
+            access
+            confirmed
+            trustworthiness {
+              level
+              source
+            }
+          }
           fieldName
           fieldValue
         }
-        _confirmed
       }
       contactDetails {
+        metadata {
+          access
+          confirmed
+          trustworthiness {
+            level
+            source
+          }
+        }
         fieldName
         fieldValue
       }
       customFields {
+        metadata {
+          access
+          confirmed
+          trustworthiness {
+            level
+            source
+          }
+        }
         fieldName
         fieldValue
       }
       files {
+        metadata {
+          access
+          confirmed
+          trustworthiness {
+            level
+            source
+          }
+        }
         fileId
         name
         description

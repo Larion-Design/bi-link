@@ -1,80 +1,64 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react'
-import { useDebouncedMap } from '@frontend/utils/hooks/useMap'
-import { DragOverlay, defaultDropAnimationSideEffects } from '@dnd-kit/core'
-import { DndContext, KeyboardSensor, PointerSensor, useSensor, useSensors } from '@dnd-kit/core'
-import { SortableContext, sortableKeyboardCoordinates } from '@dnd-kit/sortable'
+import React, { useCallback, useState } from 'react'
+import { Editor } from '@frontend/components/editor'
 import Grid from '@mui/material/Grid'
 import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined'
 import Box from '@mui/material/Box'
 import AddCardOutlinedIcon from '@mui/icons-material/AddCardOutlined'
-import { EntityType, ReportSectionAPIInput } from 'defs'
+import { EntityType } from 'defs'
+import { useReportState } from '../../../state/report/reportState'
 import { ActionButton } from '../../button/actionButton'
 import { useDialog } from '../../dialog/dialogProvider'
 import { ToolbarMenu } from '../../menu/toolbarMenu'
 import { InputField } from '../inputField'
-import { ReportContentElement } from './reportContentElement'
 
 type Props = {
   entityId?: string
   entityType?: EntityType
-  sectionInfo: ReportSectionAPIInput
-  updateSectionInfo: (sectionInfo: ReportSectionAPIInput) => void
-  removeSection: () => void
-  generateTextPreview: (text: string) => string
-  graphCreated: (graphId: string) => void
-  graphRemoved: (graphId: string) => void
+  sectionId: string
 }
 
 export const ReportSection: React.FunctionComponent<Props> = ({
   entityId,
   entityType,
-  sectionInfo,
-  updateSectionInfo,
-  removeSection,
-  generateTextPreview,
-  graphCreated,
-  graphRemoved,
+  sectionId,
 }) => {
   const dialog = useDialog()
-  const { values, uid, add, update, updateBulk, remove, size, keys, entries, map } =
-    useDebouncedMap(1000, sectionInfo.content)
-  const [draggingElement, setDraggingElement] = useState<string | null>(null)
-  const deps = [uid]
-  const addTitle = useCallback(() => add({ order: size, title: { content: '' } }), deps)
-  const addText = useCallback(() => add({ order: size, text: { content: '' } }), deps)
-  const addLink = useCallback(() => add({ order: size, link: { label: '', url: '' } }), deps)
-  const addTable = useCallback(() => add({ order: size, table: { id: '' } }), deps)
-  const addGraph = useCallback(() => add({ order: size, graph: { label: '' } }), deps)
-  const addImages = useCallback(() => add({ order: size, images: [] }), deps)
-  const addFile = useCallback(() => add({ order: size, file: null }), deps)
+  const [sections, updateSectionName, updateContent, addContent, reportContent, removeSection] =
+    useReportState(
+      ({
+        sections,
+        updateSectionName,
+        updateContent,
+        addContent,
+        reportContent,
+        removeSection,
+      }) => [sections, updateSectionName, updateContent, addContent, reportContent, removeSection],
+    )
+  const sectionInfo = sections.get(sectionId)
 
-  useEffect(() => updateSectionInfo({ ...sectionInfo, content: values() }), deps)
+  const addContentElement = useCallback(
+    (type: 'TEXT' | 'TITLE' | 'GRAPH' | 'LINK' | 'TABLE' | 'IMAGES' | 'FILE') => {
+      const order = sectionInfo.content.size
+      const isActive = true
 
-  const sortedSections = useMemo(() => {
-    const sections = entries()
-
-    if (size > 1) {
-      sections.sort(([_, { order: firstSectionOrder }], [__, { order: secondSectionOrder }]) => {
-        if (firstSectionOrder < secondSectionOrder) {
-          return -1
-        }
-        if (firstSectionOrder > secondSectionOrder) {
-          return 1
-        }
-        return 0
-      })
-    }
-    return sections
-  }, deps)
-
-  const removeElement = useCallback(
-    (elementId: string) =>
-      dialog.openDialog({
-        title: 'Esti sigur ca vrei sa stergi acest element?',
-        description: 'Odata sters, elementul nu mai poate fi recuperat',
-        onConfirm: () => remove(elementId),
-      }),
-    [dialog, uid],
+      switch (type) {
+        case 'TEXT':
+          return addContent(sectionId, { isActive, order, text: { content: '' } })
+        case 'TITLE':
+          return addContent(sectionId, { isActive, order, title: { content: '' } })
+        case 'LINK':
+          return addContent(sectionId, { isActive, order, link: { label: '', url: '' } })
+        case 'TABLE':
+          return addContent(sectionId, { isActive, order, table: { id: '' } })
+        case 'GRAPH':
+          return addContent(sectionId, { isActive, order, graph: { label: '' } })
+        case 'FILE':
+          return addContent(sectionId, { isActive, order, file: null })
+        case 'IMAGES':
+          return addContent(sectionId, { isActive, order, images: [] })
+      }
+    },
+    [sectionId, addContent, sectionInfo.content],
   )
 
   const openDialogToRemoveSection = useCallback(
@@ -82,16 +66,9 @@ export const ReportSection: React.FunctionComponent<Props> = ({
       dialog.openDialog({
         title: 'Esti sigur ca vrei sa stergi acest capitol?',
         description: 'Tot continutul din capitol nu mai poate fi recuperat.',
-        onConfirm: removeSection,
+        onConfirm: () => removeSection(sectionId),
       }),
-    [dialog, uid],
-  )
-
-  const sensors = useSensors(
-    useSensor(PointerSensor),
-    useSensor(KeyboardSensor, {
-      coordinateGetter: sortableKeyboardCoordinates,
-    }),
+    [dialog, removeSection],
   )
 
   return (
@@ -109,7 +86,7 @@ export const ReportSection: React.FunctionComponent<Props> = ({
           <InputField
             label={'Nume capitol'}
             value={sectionInfo.name}
-            onChange={(value) => updateSectionInfo({ ...sectionInfo, name: value })}
+            onChange={(value) => updateSectionName(sectionId, value)}
           />
         </Box>
         <Box sx={{ display: 'flex' }}>
@@ -117,13 +94,13 @@ export const ReportSection: React.FunctionComponent<Props> = ({
             label={'Adauga element'}
             icon={<AddCardOutlinedIcon color={'primary'} />}
             menuOptions={[
-              { label: 'Fisier', onClick: addFile },
-              { label: 'Grafic relational', onClick: addGraph },
-              { label: 'Imagini', onClick: addImages },
-              { label: 'Link', onClick: addLink },
-              { label: 'Tabel', onClick: addTable },
-              { label: 'Text', onClick: addText },
-              { label: 'Titlu', onClick: addTitle },
+              { label: 'Fisier', onClick: () => addContentElement('TEXT') },
+              { label: 'Grafic relational', onClick: () => addContentElement('GRAPH') },
+              { label: 'Imagini', onClick: () => addContentElement('IMAGES') },
+              { label: 'Link', onClick: () => addContentElement('LINK') },
+              { label: 'Tabel', onClick: () => addContentElement('TABLE') },
+              { label: 'Text', onClick: () => addContentElement('TEXT') },
+              { label: 'Titlu', onClick: () => addContentElement('TITLE') },
             ]}
           />
 
@@ -135,70 +112,7 @@ export const ReportSection: React.FunctionComponent<Props> = ({
         </Box>
       </Box>
       <Grid container spacing={2}>
-        <DndContext
-          sensors={sensors}
-          onDragStart={({ active }) => setDraggingElement(String(active.id))}
-          onDragEnd={({ active, over }) => {
-            if (over && active && active?.id !== over?.id) {
-              const firstItemId = String(active.id)
-              const secondItemId = String(over.id)
-
-              updateBulk((map) => {
-                if (map.has(firstItemId) && map.has(secondItemId)) {
-                  const { order: firstItemOrder, ...firstItemInfo } = map.get(firstItemId)
-                  const { order: secondItemOrder, ...secondItemInfo } = map.get(secondItemId)
-
-                  map.set(firstItemId, { ...firstItemInfo, order: secondItemOrder })
-                  map.set(secondItemId, { ...secondItemInfo, order: firstItemOrder })
-                }
-              })
-            }
-            setDraggingElement(null)
-          }}
-          onDragCancel={() => setDraggingElement(null)}
-        >
-          <SortableContext items={keys()} disabled={size < 2}>
-            {sortedSections.map(([uid, content]) => (
-              <ReportContentElement
-                key={uid}
-                contentId={uid}
-                entityId={entityId}
-                entityType={entityType}
-                contentInfo={content}
-                updateContentInfo={(contentInfo) => update(uid, contentInfo)}
-                removeContent={() => removeElement(uid)}
-                generateTextPreview={generateTextPreview}
-                graphRemoved={graphRemoved}
-                graphCreated={graphCreated}
-              />
-            ))}
-          </SortableContext>
-          {size > 1 && !!draggingElement && (
-            <DragOverlay
-              dropAnimation={{
-                sideEffects: defaultDropAnimationSideEffects({
-                  styles: {
-                    active: {
-                      opacity: '0.6',
-                    },
-                  },
-                }),
-              }}
-            >
-              <ReportContentElement
-                contentId={draggingElement}
-                entityId={entityId}
-                entityType={entityType}
-                contentInfo={map.get(draggingElement)}
-                updateContentInfo={(contentInfo) => update(draggingElement, contentInfo)}
-                removeContent={() => removeElement(uid)}
-                generateTextPreview={generateTextPreview}
-                graphRemoved={graphRemoved}
-                graphCreated={graphCreated}
-              />
-            </DragOverlay>
-          )}
-        </DndContext>
+        <Editor data={[]} />
       </Grid>
     </Box>
   )
