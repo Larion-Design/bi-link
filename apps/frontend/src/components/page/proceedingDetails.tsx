@@ -36,7 +36,7 @@ export const ProceedingDetails: React.FunctionComponent<Props> = ({
           alignItems: 'center',
         }}
       >
-        <Typography variant={'h5'} data-cy={'pageTitle'} gutterBottom>
+        <Typography variant={'h5'} data-testid={'pageTitle'} gutterBottom>
           {!!proceedingId && !!proceedingInfo ? 'Detalii despre event' : 'Creaza un event'}
         </Typography>
         {!!proceedingId && (

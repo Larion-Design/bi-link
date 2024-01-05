@@ -29,7 +29,7 @@ export const UsersList: React.FunctionComponent = () => {
             flexWrap={'nowrap'}
             alignItems={'center'}
           >
-            <Typography variant={'h5'} data-cy={'pageTitle'}>
+            <Typography variant={'h5'} data-testid={'pageTitle'}>
               Utilizatori
             </Typography>
           </Box>

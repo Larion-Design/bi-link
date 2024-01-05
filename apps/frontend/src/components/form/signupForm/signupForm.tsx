@@ -96,7 +96,7 @@ export const SignupForm: React.FunctionComponent<Props> = ({ error, disabled, on
             variant={'contained'}
             sx={{ mt: 3, mb: 2 }}
             disabled={isDisabled}
-            data-cy={'signupButton'}
+            data-testid={'signupButton'}
           >
             Înregistrare
           </Button>

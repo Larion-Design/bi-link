@@ -42,14 +42,20 @@ export class CompaniesIndexerService {
     headquarters: company.headquarters
       ? this.locationIndexerService.createLocationIndexData(company.headquarters)
       : undefined,
-    customFields: this.customFieldsIndexerService.createCustomFieldsIndex(company.customFields),
-    contactDetails: this.customFieldsIndexerService.createCustomFieldsIndex(company.contactDetails),
+    customFields: company.customFields
+      ? this.customFieldsIndexerService.createCustomFieldsIndex(company.customFields)
+      : [],
+    contactDetails: company.contactDetails
+      ? this.customFieldsIndexerService.createCustomFieldsIndex(company.contactDetails)
+      : [],
     locations: this.locationIndexerService.createLocationsIndexData(company.locations),
     associatedPersons: this.createAssociatedPersonsIndex(company.associates),
     associatedCompanies: this.createAssociatedCompaniesIndex(company.associates),
     files: [],
     balanceSheets: this.createBalanceSheetIndex(company.balanceSheets),
-    activityCodes: this.customFieldsIndexerService.createCustomFieldsIndex(company.activityCodes),
+    activityCodes: company.activityCodes
+      ? this.customFieldsIndexerService.createCustomFieldsIndex(company.activityCodes)
+      : [],
   })
 
   private createAssociatedPersonsIndex(associates: Associate[]) {

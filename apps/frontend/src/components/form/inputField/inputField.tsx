@@ -36,7 +36,7 @@ export const InputField: React.FunctionComponent<InputFieldProps> = ({
       autoComplete={autoComplete}
       size={size}
       required={required}
-      data-cy={name}
+      data-testid={name}
       autoCapitalize={'on'}
       fullWidth
       name={name}

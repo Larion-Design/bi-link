@@ -10,7 +10,7 @@ services:
       - 'minio_data:/data'
     environment:
       - MINIO_ROOT_USER=link-app
-      - MINIO_ROOT_PASSWORD=RVvVi!UH383Am
+      - MINIO_ROOT_PASSWORD=3Eu2wRnip%hqqsi3
       - MINIO_BROWSER=on
     restart: unless-stopped
     command: server --console-address ":9001" /data

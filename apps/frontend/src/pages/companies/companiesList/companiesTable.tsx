@@ -11,7 +11,7 @@ import { GridActionsColDef } from '@mui/x-data-grid/models/colDef/gridColDef'
 import { CompaniesSuggestions, CompanyListRecord } from 'defs'
 import React, { useMemo } from 'react'
 import { generatePath, useNavigate } from 'react-router-dom'
-import { PaginationParams } from '../../../graphql/shared/types/paginationParams'
+import { PaginationParams } from 'api/shared/types/paginationParams'
 import { routes } from '../../../router/routes'
 
 type Props = {

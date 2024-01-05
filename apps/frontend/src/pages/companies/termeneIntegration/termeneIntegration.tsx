@@ -24,7 +24,7 @@ export const TermeneIntegration: React.FunctionComponent = () => {
         <Grid item xs={12} mb={4}>
           <Grid container spacing={2} alignItems={'center'}>
             <Grid item xs={4}>
-              <Typography variant={'h5'} data-cy={'pageTitle'}>
+              <Typography variant={'h5'} data-testid={'pageTitle'}>
                 Integrare{' '}
                 <Link
                   underline={'always'}

@@ -121,7 +121,7 @@ export const PersonForm: React.FunctionComponent<Props> = ({ personId, onSubmit 
   useEffect(() => void setFieldValue('documents', getDocuments()), [documents])
 
   return (
-    <form data-cy={'personsForm'}>
+    <form data-testid={'personsForm'}>
       <Grid container spacing={10}>
         <Grid item xs={12}>
           <Stepper nonLinear alternativeLabel activeStep={step}>
@@ -289,7 +289,7 @@ export const PersonForm: React.FunctionComponent<Props> = ({ personId, onSubmit 
       <Grid item xs={12} justifyContent={'flex-end'} mt={4}>
         <Stack direction={'row'} justifyContent={'flex-end'} spacing={4}>
           <Button
-            data-cy={'cancelForm'}
+            data-testid={'cancelForm'}
             color={'error'}
             disabled={isSubmitting || isValidating}
             variant={'text'}
@@ -302,7 +302,7 @@ export const PersonForm: React.FunctionComponent<Props> = ({ personId, onSubmit 
             disabled={isSubmitting || isValidating}
             variant={'contained'}
             onClick={() => void submitForm()}
-            data-cy={'submitForm'}
+            data-testid={'submitForm'}
           >
             <FormattedMessage id={'save'} />
           </Button>

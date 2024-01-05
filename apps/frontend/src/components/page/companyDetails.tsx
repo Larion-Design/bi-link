@@ -36,7 +36,7 @@ export const CompanyDetails: React.FunctionComponent<Props> = ({
         alignItems={'center'}
         sx={{ width: 1 }}
       >
-        <Typography variant={'h5'} data-cy={'pageTitle'} gutterBottom>
+        <Typography variant={'h5'} data-testid={'pageTitle'} gutterBottom>
           {!!companyId && !!companyInfo
             ? `Detalii despre ${companyInfo.name.value}`
             : 'Creaza o companie'}

@@ -22,5 +22,5 @@ const SearchPersons = gql`
 
 export const searchPersonsRequest = () =>
   useLazyQuery<Response, SearchParams>(SearchPersons, {
-    fetchPolicy: 'cache-and-network',
+    fetchPolicy: 'network-only',
   })

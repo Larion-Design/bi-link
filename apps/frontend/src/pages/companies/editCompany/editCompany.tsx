@@ -1,12 +1,12 @@
 import React, { useEffect } from 'react'
-import { DashboardPage } from '../../../components/page/DashboardPage'
+import { DashboardPage } from 'components/page/DashboardPage'
 import { useNavigate, useParams } from 'react-router-dom'
-import { getCompanyInfoRequest } from '../../../graphql/companies/queries/getCompany'
-import { updateCompanyRequest } from '../../../graphql/companies/mutations/updateCompany'
+import { getCompanyInfoRequest } from 'api/companies/queries/getCompany'
+import { updateCompanyRequest } from 'api/companies/mutations/updateCompany'
 import { routes } from '../../../router/routes'
 import { useSnackbar } from 'notistack'
 import { Loader } from '@frontend/components/loader'
-import { CompanyDetails } from '../../../components/page/companyDetails'
+import { CompanyDetails } from 'components/page/companyDetails'
 
 export const EditCompany: React.FunctionComponent = () => {
   const { companyId } = useParams()

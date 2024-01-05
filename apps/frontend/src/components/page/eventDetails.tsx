@@ -28,7 +28,7 @@ export const EventDetails: React.FunctionComponent<Props> = ({ eventId, eventInf
           alignItems: 'center',
         }}
       >
-        <Typography variant={'h5'} data-cy={'pageTitle'} gutterBottom>
+        <Typography variant={'h5'} data-testid={'pageTitle'} gutterBottom>
           {!!eventId && !!eventInfo ? 'Detalii despre eveniment' : 'Creaza un eveniment'}
         </Typography>
         {!!eventId && (

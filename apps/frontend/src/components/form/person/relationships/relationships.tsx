@@ -4,8 +4,8 @@ import Typography from '@mui/material/Typography'
 import Stack from '@mui/material/Stack'
 import { FormattedMessage } from 'react-intl'
 import { PersonAPIOutput } from 'defs'
-import { getPersonsBasicInfoRequest } from '@frontend/graphql/persons/queries/getPersonsBasicInfo'
-import { usePersonState } from '../../../../state/personState'
+import { getPersonsBasicInfoRequest } from 'api/persons/queries/getPersonsBasicInfo'
+import { usePersonState } from 'state/personState'
 import { RelationshipCard } from './relationshipCard'
 import { useModal } from '../../../modal/modalProvider'
 import { AddItemButton } from '@frontend/components/button/addItemButton'
@@ -61,8 +61,8 @@ export const Relationships: React.FunctionComponent<Props> = ({ personId }) => {
   )
 
   return (
-    <Stack sx={{ width: 1 }}>
-      <Stack direction={'row'} justifyContent={'space-between'} mb={5}>
+    <Stack width={1}>
+      <Stack width={1} direction={'row'} justifyContent={'space-between'} mb={5}>
         <Typography variant={'h5'}>
           <FormattedMessage id={'Personal relationships'} />
         </Typography>
@@ -75,7 +75,7 @@ export const Relationships: React.FunctionComponent<Props> = ({ personId }) => {
         </Box>
       </Stack>
 
-      <Stack spacing={6}>
+      <Stack spacing={6} minHeight={'30vh'}>
         {!!personsInfo &&
           Array.from(relationships.entries()).map(([personId, relationship]) => {
             const personInfo = personsInfo?.get(personId)

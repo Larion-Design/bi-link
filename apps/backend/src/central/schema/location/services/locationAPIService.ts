@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common'
+import { Injectable } from '@nestjs/common'
 import { LocationAPIInput } from 'defs'
 import { CoordinatesModel } from '../models/coordinatesModel'
 import { LocationModel } from '../models/locationModel'
@@ -6,8 +6,6 @@ import { LocationsService } from './locationsService'
 
 @Injectable()
 export class LocationAPIService {
-  private readonly logger = new Logger(LocationAPIService.name)
-
   constructor(private readonly locationsService: LocationsService) {}
 
   async getLocationModel(location: LocationAPIInput) {

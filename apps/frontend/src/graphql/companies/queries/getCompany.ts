@@ -12,6 +12,14 @@ type Response = {
 const getCompany = gql`
   query GetCompany($id: ID!) {
     getCompany(id: $id) {
+      metadata {
+        confirmed
+        access
+        trustworthiness {
+          level
+          source
+        }
+      }
       name {
         value
         metadata {

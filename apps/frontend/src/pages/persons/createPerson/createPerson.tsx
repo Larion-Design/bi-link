@@ -1,12 +1,12 @@
 import React, { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { getDefaultPerson } from 'default-values'
-import { DashboardPage } from '../../../components/page/DashboardPage'
-import { createPersonRequest } from '../../../graphql/persons/mutations/createPerson'
+import { DashboardPage } from 'components/page/DashboardPage'
+import { createPersonRequest } from 'api/persons/mutations/createPerson'
 import { routes } from '../../../router/routes'
 import { PersonAPIInput } from 'defs'
-import { PersonDetails } from '../../../components/page/personDetails'
-import { useNotification } from '../../../utils/hooks/useNotification'
+import { PersonDetails } from 'components/page/personDetails'
+import { useNotification } from 'utils/hooks/useNotification'
 
 export const CreatePerson: React.FunctionComponent = () => {
   const navigate = useNavigate()

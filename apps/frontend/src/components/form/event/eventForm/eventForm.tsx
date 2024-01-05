@@ -83,7 +83,7 @@ export const EventForm: React.FunctionComponent<Props> = ({ eventId, onSubmit })
   }, [parties, participantsCustomFields])
 
   return (
-    <form data-cy={'eventForm'}>
+    <form data-testid={'eventForm'}>
       <Grid container spacing={10}>
         <Grid item xs={12}>
           <Stepper nonLinear alternativeLabel activeStep={step}>
@@ -179,7 +179,7 @@ export const EventForm: React.FunctionComponent<Props> = ({ eventId, onSubmit })
         <Grid item xs={12} justifyContent={'flex-end'}>
           <Box display={'flex'} justifyContent={'flex-end'}>
             <Button
-              data-cy={'cancelForm'}
+              data-testid={'cancelForm'}
               color={'error'}
               disabled={isSubmitting || isValidating}
               variant={'text'}
@@ -192,7 +192,7 @@ export const EventForm: React.FunctionComponent<Props> = ({ eventId, onSubmit })
               disabled={isSubmitting || isValidating}
               variant={'contained'}
               onClick={() => void submitForm()}
-              data-cy={'submitForm'}
+              data-testid={'submitForm'}
             >
               <FormattedMessage id={'save'} />
             </Button>

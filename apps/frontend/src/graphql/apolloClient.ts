@@ -1,7 +1,7 @@
 import { ApolloClient, HttpLink, InMemoryCache } from '@apollo/client'
 import ApolloLinkTimeout from 'apollo-link-timeout'
 import { setContext } from '@apollo/client/link/context'
-import { getAccessToken } from '../utils/auth'
+import { getAccessToken } from 'utils/auth'
 import { RetryLink } from '@apollo/client/link/retry'
 import { createPersistedQueryLink } from '@apollo/client/link/persisted-queries'
 import sha256 from 'crypto-js/sha256'
@@ -13,7 +13,7 @@ const persistedQueriesLink = createPersistedQueryLink({
 const httpLink = new HttpLink({
   uri: import.meta.env.VITE_BACKEND_API_URL,
   // credentials: 'include',
-  useGETForQueries: true,
+  useGETForQueries: false,
 })
 
 const retryLink = new RetryLink()

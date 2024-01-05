@@ -59,7 +59,7 @@ export const ProceedingsList: React.FunctionComponent = () => {
             flexWrap={'nowrap'}
             alignItems={'center'}
           >
-            <Typography variant={'h5'} data-cy={'pageTitle'}>
+            <Typography variant={'h5'} data-testid={'pageTitle'}>
               Procese juridice
             </Typography>
             <Box display={'flex'} sx={{ width: 0.7 }}>
@@ -75,13 +75,13 @@ export const ProceedingsList: React.FunctionComponent = () => {
                       : paginationParams,
                   )
                 }}
-                data-cy={'searchProceedingsInput'}
+                data-testid={'searchProceedingsInput'}
               />
               <Button
                 variant={'contained'}
                 sx={{ flex: 1 }}
                 onClick={() => navigate(routes.newProceeding)}
-                data-cy={'createProceeding'}
+                data-testid={'createProceeding'}
               >
                 <Tooltip title={'Creaza un proces juridic'}>
                   <AddOutlinedIcon />

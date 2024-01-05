@@ -25,7 +25,7 @@ export const InputNumberField: React.FunctionComponent<NumberInputProps> = ({
     <TextField
       type={'number'}
       required={required}
-      data-cy={name ?? label}
+      data-testid={name ?? label}
       fullWidth
       name={name}
       label={label}

@@ -1,5 +1,5 @@
+import { Injectable } from '@nestjs/common'
 import { EntityEventDispatcherService } from '@modules/entity-events'
-import { Injectable, Logger } from '@nestjs/common'
 import { CompanyAPIInput, UpdateSource } from 'defs'
 import { FileAPIService } from '../../file/services/fileAPIService'
 import { CustomFieldsService } from '../../customField/services/customFieldsService'
@@ -12,8 +12,6 @@ import { CompanyPendingSnapshotService } from './companyPendingSnapshotService'
 
 @Injectable()
 export class CompanyAPIService {
-  private readonly logger = new Logger(CompanyAPIService.name)
-
   constructor(
     private readonly entityEventDispatcherService: EntityEventDispatcherService,
     private readonly locationAPIService: LocationAPIService,
@@ -42,41 +40,32 @@ export class CompanyAPIService {
     const companyModel = await this.createCompanyDocument(companyInfo)
 
     if (companyModel) {
-      await this.companiesService.update(companyId, companyModel)
-      await this.entityEventDispatcherService.companyUpdated(companyModel)
-      return true
+      const updatedCompany = await this.companiesService.update(companyId, companyModel)
+
+      if (updatedCompany) {
+        await this.entityEventDispatcherService.companyUpdated(updatedCompany)
+        return true
+      }
     }
   }
 
   createPendingSnapshot = async (entityId: string, data: CompanyAPIInput, source: UpdateSource) => {
-    try {
-      const model = await this.createCompanyDocument(data)
+    const model = await this.createCompanyDocument(data)
 
-      if (model) {
-        const snapshotModel = await this.companyPendingSnapshotService.create(
-          entityId,
-          model,
-          source,
-        )
+    if (model) {
+      const snapshotModel = await this.companyPendingSnapshotService.create(entityId, model, source)
 
-        if (snapshotModel) {
-          return String(snapshotModel._id)
-        }
+      if (snapshotModel) {
+        return String(snapshotModel._id)
       }
-    } catch (e) {
-      this.logger.error(e)
     }
   }
 
   createHistorySnapshot = async (entityId: string, data: CompanyAPIInput, source: UpdateSource) => {
-    try {
-      const model = await this.createCompanyDocument(data)
+    const model = await this.createCompanyDocument(data)
 
-      if (model) {
-        return this.companyHistorySnapshotService.create(entityId, model, source)
-      }
-    } catch (e) {
-      this.logger.error(e)
+    if (model) {
+      return this.companyHistorySnapshotService.create(entityId, model, source)
     }
   }
 
@@ -87,9 +76,11 @@ export class CompanyAPIService {
       companyModel._id = companyId
     }
 
+    companyModel.metadata = companyInfo.metadata
     companyModel.name = companyInfo.name
     companyModel.cui = companyInfo.cui
     companyModel.registrationNumber = companyInfo.registrationNumber
+    companyModel.registrationDate = companyInfo.registrationDate
 
     companyModel.headquarters = companyInfo.headquarters
       ? (await this.locationAPIService.getLocationModel(companyInfo.headquarters)) ?? null

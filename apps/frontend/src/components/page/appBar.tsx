@@ -12,7 +12,7 @@ import { useNavigate } from 'react-router-dom'
 import { routes } from '../../router/routes'
 import { CurrentUserMenu } from '../menu/currentUserMenu'
 import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined'
-import { useUserRole } from '../../utils/auth'
+import { useUserRole } from 'utils/auth'
 
 const drawerWidth = 240
 
@@ -58,7 +58,7 @@ export const AppHeader: React.FunctionComponent<AppHeaderProps> = ({ open, toggl
         >
           <MenuIcon />
         </IconButton>
-        <Typography variant={'h6'} noWrap flexGrow={1} data-cy={'appTitle'}>
+        <Typography variant={'h6'} noWrap flexGrow={1} data-testid={'appTitle'}>
           BI Link
         </Typography>
         <IconButton onClick={() => navigate(routes.search)} color={'inherit'}>

@@ -26,12 +26,8 @@ export class CompaniesService {
     return this.companyModel.create(companyModel)
   }
 
-  update = async (companyId: string, companyModel: CompanyModel) => {
-    try {
-      return this.companyModel.findByIdAndUpdate(companyId, companyModel)
-    } catch (e) {
-      this.logger.error(e)
-    }
+  async update(companyId: string, companyModel: CompanyModel) {
+    return this.companyModel.findByIdAndUpdate(companyId, companyModel, { new: true })
   }
 
   async getCompany(companyId: string, fetchLinkedEntities: boolean) {

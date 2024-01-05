@@ -38,7 +38,7 @@ export const PersonDetails: React.FunctionComponent<Props> = ({
           alignItems: 'center',
         }}
       >
-        <Typography variant={'h5'} data-cy={'pageTitle'} gutterBottom>
+        <Typography variant={'h5'} data-testid={'pageTitle'} gutterBottom>
           {!!personId && !!personInfo
             ? `Detalii despre ${getPersonFullName(personInfo)}`
             : 'Creaza o persoana'}

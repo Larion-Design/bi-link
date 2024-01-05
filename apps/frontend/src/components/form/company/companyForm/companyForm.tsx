@@ -1,3 +1,4 @@
+import { DatePickerWithMetadata } from 'components/form/datePicker'
 import React, { useEffect, useState } from 'react'
 import { CompanyAPIInput } from 'defs'
 import { useFormik } from 'formik'
@@ -43,6 +44,7 @@ export const CompanyForm: React.FunctionComponent<Props> = ({ companyId, onSubmi
     updateName,
     updateCui,
     updateRegistrationNumber,
+    updateRegistrationDate,
     updateHeadquarters,
     updateBranch,
     updateFile,
@@ -103,7 +105,7 @@ export const CompanyForm: React.FunctionComponent<Props> = ({ companyId, onSubmi
   }, [associates, getAssociates])
 
   return (
-    <form data-cy={'companyForm'}>
+    <form data-testid={'companyForm'}>
       <Grid container item xs={12} spacing={10}>
         <Grid item xs={12}>
           <Stepper nonLinear alternativeLabel activeStep={step}>
@@ -170,6 +172,15 @@ export const CompanyForm: React.FunctionComponent<Props> = ({ companyId, onSubmi
               />
             </Grid>
 
+            <Grid item xs={4}>
+              <DatePickerWithMetadata
+                disableFuture
+                label={'Data inregistrarii'}
+                fieldInfo={registrationDate}
+                updateFieldInfo={updateRegistrationDate}
+              />
+            </Grid>
+
             <Grid item xs={12}>
               <Location
                 label={'Sediu social'}
@@ -231,7 +242,7 @@ export const CompanyForm: React.FunctionComponent<Props> = ({ companyId, onSubmi
       <Grid item xs={12} justifyContent={'flex-end'} mt={4}>
         <Stack direction={'row'} justifyContent={'flex-end'} spacing={4}>
           <Button
-            data-cy={'cancelForm'}
+            data-testid={'cancelForm'}
             color={'error'}
             disabled={isSubmitting || isValidating}
             variant={'text'}
@@ -243,7 +254,7 @@ export const CompanyForm: React.FunctionComponent<Props> = ({ companyId, onSubmi
             disabled={isSubmitting || isValidating}
             variant={'contained'}
             onClick={() => void submitForm()}
-            data-cy={'submitForm'}
+            data-testid={'submitForm'}
           >
             <FormattedMessage id={'save'} />
           </Button>

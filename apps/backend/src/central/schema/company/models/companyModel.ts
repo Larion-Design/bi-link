@@ -18,7 +18,7 @@ import { BalanceSheetModel, BalanceSheetSchema } from './balanceSheetModel'
 import { CompanyActiveStateModel, CompanyActiveStateSchema } from './companyActiveStateModel'
 import { CompanyStatusModel, CompanyStatusSchema } from './companyStatusModel'
 
-@Schema({ timestamps: true })
+@Schema({ timestamps: true, strict: 'throw' })
 export class CompanyModel implements Company {
   _id: string
 

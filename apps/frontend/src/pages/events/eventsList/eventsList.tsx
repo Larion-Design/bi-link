@@ -73,7 +73,7 @@ export const EventsList: React.FunctionComponent = () => {
             flexWrap={'nowrap'}
             alignItems={'center'}
           >
-            <Typography variant={'h5'} data-cy={'pageTitle'}>
+            <Typography variant={'h5'} data-testid={'pageTitle'}>
               Evenimente
             </Typography>
             <Box display={'flex'} sx={{ width: 0.7 }}>
@@ -82,13 +82,13 @@ export const EventsList: React.FunctionComponent = () => {
                 label={'Cauta evenimente'}
                 sx={{ flex: 12, mr: 2 }}
                 onChange={({ target: { value } }) => setSearchTerm(value)}
-                data-cy={'searchEventsInput'}
+                data-testid={'searchEventsInput'}
               />
               <Button
                 variant={'contained'}
                 sx={{ flex: 1 }}
                 onClick={() => navigate(routes.newEvent)}
-                data-cy={'createEvent'}
+                data-testid={'createEvent'}
               >
                 <Tooltip title={'Creaza un eveniment'}>
                   <AddOutlinedIcon />

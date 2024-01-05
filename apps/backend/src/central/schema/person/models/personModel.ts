@@ -18,7 +18,7 @@ import {
 } from '../../metadata/models/textValueWithMetadataModel'
 import { OldNameModel, OldNameSchema } from './oldNameModel'
 
-@Schema({ timestamps: true })
+@Schema({ timestamps: true, strict: 'throw' })
 export class PersonModel implements Person {
   _id: string
 

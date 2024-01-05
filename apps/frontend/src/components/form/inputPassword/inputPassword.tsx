@@ -45,7 +45,7 @@ export const InputPassword: React.FunctionComponent<Props> = ({
       helperText={error ?? ''}
       onChange={({ target: { value } }) => setValue(value)}
       disabled={disabled}
-      data-cy={name}
+      data-testid={name}
       InputProps={{
         endAdornment: (
           <InputAdornment position={'end'}>

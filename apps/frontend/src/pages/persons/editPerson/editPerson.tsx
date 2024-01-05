@@ -1,14 +1,14 @@
 import React, { useEffect } from 'react'
 import { useNotification } from '@frontend/utils/hooks/useNotification'
 import { useNavigate, useParams } from 'react-router-dom'
-import { DashboardPage } from '../../../components/page/DashboardPage'
-import { updatePersonRequest } from '../../../graphql/persons/mutations/updatePerson'
-import { getPersonInfoRequest } from '../../../graphql/persons/queries/getPersonInfo'
+import { DashboardPage } from 'components/page/DashboardPage'
+import { updatePersonRequest } from 'api/persons/mutations/updatePerson'
+import { getPersonInfoRequest } from 'api/persons/queries/getPersonInfo'
 import { routes } from '../../../router/routes'
-import { Loader } from '@frontend/components/loader'
+import { Loader } from 'components/loader'
 import { PersonAPIInput } from 'defs'
-import { PersonDetails } from '../../../components/page/personDetails'
-import { getPersonFullName } from '../../../utils/person'
+import { PersonDetails } from 'components/page/personDetails'
+import { getPersonFullName } from 'utils/person'
 
 export const EditPerson: React.FunctionComponent = () => {
   const { personId } = useParams()
@@ -51,6 +51,7 @@ export const EditPerson: React.FunctionComponent = () => {
           personInfo={fetchData.getPersonInfo}
           onSubmit={(personInfo: PersonAPIInput) => {
             if (personId) {
+              console.debug(personInfo)
               void updatePerson({ variables: { personId, personInfo } })
             }
           }}

@@ -6,13 +6,12 @@ import { useNotification } from '@frontend/utils/hooks/useNotification'
 import AddOutlinedIcon from '@mui/icons-material/AddOutlined'
 import LanguageOutlinedIcon from '@mui/icons-material/LanguageOutlined'
 import Button from '@mui/material/Button'
-import Grid from '@mui/material/Grid'
 import TextField from '@mui/material/TextField'
 import Tooltip from '@mui/material/Tooltip'
 import Typography from '@mui/material/Typography'
-import { DashboardPage } from '../../../components/page/DashboardPage'
-import { searchCompaniesRequest } from '../../../graphql/companies/queries/searchCompanies'
-import { PaginationParams } from '../../../graphql/shared/types/paginationParams'
+import { DashboardPage } from 'components/page/DashboardPage'
+import { searchCompaniesRequest } from 'api/companies/queries/searchCompanies'
+import { PaginationParams } from 'api/shared/types/paginationParams'
 import { routes } from '../../../router/routes'
 import { CompaniesTable } from './companiesTable'
 
@@ -57,61 +56,52 @@ export const CompaniesList: React.FunctionComponent = () => {
 
   return (
     <DashboardPage title={'Companii'}>
-      <Grid container spacing={2} sx={{ width: 1, p: 4 }}>
-        <Grid item xs={12} mb={4}>
-          <Grid container spacing={1} alignItems={'center'}>
-            <Grid item xs={2}>
-              <Typography variant={'h5'} data-cy={'pageTitle'}>
-                Companii
-              </Typography>
-            </Grid>
+      <Stack p={4} width={1} spacing={4}>
+        <Stack direction={'row'} justifyContent={'space-between'} alignItems={'center'}>
+          <Typography variant={'h5'} data-testid={'pageTitle'} flex={2}>
+            Companii
+          </Typography>
 
-            <Grid item xs={8}>
-              <TextField
-                fullWidth
-                size={'small'}
-                value={searchTerm}
-                label={'Cauta companii'}
-                onChange={({ target: { value } }) => setSearchTerm(value)}
-                data-cy={'searchCompaniesInput'}
-              />
-            </Grid>
+          <Stack spacing={1} alignItems={'center'} direction={'row'} flex={8}>
+            <TextField
+              fullWidth
+              size={'small'}
+              value={searchTerm}
+              label={'Cauta companii'}
+              onChange={({ target: { value } }) => setSearchTerm(value)}
+              data-testid={'searchCompaniesInput'}
+            />
 
-            <Grid item xs={1}>
-              <Stack spacing={1} direction={'row'}>
-                <Button
-                  size={'medium'}
-                  variant={'contained'}
-                  onClick={() => navigate(routes.newCompany)}
-                  data-cy={'createCompany'}
-                >
-                  <Tooltip title={'Creaza o companie'}>
-                    <AddOutlinedIcon />
-                  </Tooltip>
-                </Button>
+            <Button
+              size={'medium'}
+              variant={'contained'}
+              onClick={() => navigate(routes.newCompany)}
+              data-testid={'createCompany'}
+            >
+              <Tooltip title={'Creaza o companie'}>
+                <AddOutlinedIcon />
+              </Tooltip>
+            </Button>
 
-                <Button
-                  size={'medium'}
-                  variant={'contained'}
-                  onClick={() => navigate(routes.companiesIntegrationTermene)}
-                  data-cy={'createCompany'}
-                >
-                  <Tooltip title={'Cauta companii pe termene.ro'}>
-                    <LanguageOutlinedIcon />
-                  </Tooltip>
-                </Button>
-              </Stack>
-            </Grid>
-          </Grid>
-        </Grid>
-        <Grid item xs={12}>
-          <CompaniesTable
-            paginationParams={paginationParams}
-            setPaginationParams={setPaginationParams}
-            companies={data?.searchCompanies ?? { total: 0, records: [] }}
-          />
-        </Grid>
-      </Grid>
+            <Button
+              size={'medium'}
+              variant={'contained'}
+              onClick={() => navigate(routes.companiesIntegrationTermene)}
+              data-testid={'searchCompaniesTermene'}
+            >
+              <Tooltip title={'Cauta companii pe termene.ro'}>
+                <LanguageOutlinedIcon />
+              </Tooltip>
+            </Button>
+          </Stack>
+        </Stack>
+
+        <CompaniesTable
+          paginationParams={paginationParams}
+          setPaginationParams={setPaginationParams}
+          companies={data?.searchCompanies ?? { total: 0, records: [] }}
+        />
+      </Stack>
     </DashboardPage>
   )
 }

@@ -7,124 +7,84 @@ import CardActions from '@mui/material/CardActions'
 import CardContent from '@mui/material/CardContent'
 import CardMedia from '@mui/material/CardMedia'
 import { useNavigate } from 'react-router-dom'
-import { DashboardPage } from '../../components/page/DashboardPage'
+import { DashboardPage } from 'components/page/DashboardPage'
 import { routes } from '../../router/routes'
 import companiesImage from '../../../assets/images/companies.jpg'
 import personsImage from '../../../assets/images/people.jpg'
 import vehiclesImage from '../../../assets/images/vehicles.jpg'
 import eventsImage from '../../../assets/images/events.jpg'
 
-export const Home: React.FunctionComponent = () => {
+export const Home: React.FunctionComponent = () => (
+  <DashboardPage title={'Pagina principala'}>
+    <Grid container spacing={4} padding={4} mt={3}>
+      <EntityCard
+        title={'Persoane'}
+        image={personsImage}
+        newEntityRoute={routes.newPerson}
+        searchEntitiesRoute={routes.persons}
+      />
+
+      <EntityCard
+        title={'Companii'}
+        image={companiesImage}
+        newEntityRoute={routes.newCompany}
+        searchEntitiesRoute={routes.companies}
+      />
+
+      <EntityCard
+        title={'Bunuri si proprietati'}
+        image={vehiclesImage}
+        newEntityRoute={routes.newProperty}
+        searchEntitiesRoute={routes.properties}
+      />
+
+      <EntityCard
+        title={'Evenimente'}
+        image={eventsImage}
+        newEntityRoute={routes.newEvent}
+        searchEntitiesRoute={routes.events}
+      />
+    </Grid>
+  </DashboardPage>
+)
+
+type EntityCardProps = {
+  title: string
+  image: string
+  newEntityRoute: string
+  searchEntitiesRoute: string
+}
+
+const EntityCard: React.FunctionComponent<EntityCardProps> = ({
+  image,
+  title,
+  searchEntitiesRoute,
+  newEntityRoute,
+}) => {
   const navigate = useNavigate()
 
   return (
-    <DashboardPage title={'Pagina principala'}>
-      <Grid container spacing={4} padding={4} mt={3}>
-        <Grid item xs={3}>
-          <Card sx={{ maxWidth: 400 }}>
-            <CardMedia component={'img'} height={300} image={personsImage} alt={'Persoane'} />
-            <CardContent>
-              <Typography gutterBottom variant={'h6'}>
-                Persoane
-              </Typography>
-            </CardContent>
-            <CardActions sx={{ p: 2 }}>
-              <Button
-                variant={'contained'}
-                size={'small'}
-                onClick={() => navigate(routes.newPerson)}
-              >
-                Creaza
-              </Button>
-              <Button variant={'contained'} size={'small'} onClick={() => navigate(routes.persons)}>
-                Cauta
-              </Button>
-            </CardActions>
-          </Card>
-        </Grid>
-        <Grid item xs={3}>
-          <Card sx={{ maxWidth: 400 }}>
-            <CardMedia component={'img'} height={300} image={companiesImage} alt={'Companii'} />
-            <CardContent>
-              <Typography gutterBottom variant={'h6'}>
-                Companii
-              </Typography>
-            </CardContent>
-            <CardActions sx={{ p: 2 }}>
-              <Button
-                variant={'contained'}
-                size={'small'}
-                onClick={() => navigate(routes.newCompany)}
-              >
-                Creaza
-              </Button>
-              <Button
-                variant={'contained'}
-                size={'small'}
-                onClick={() => navigate(routes.companies)}
-              >
-                Cauta
-              </Button>
-            </CardActions>
-          </Card>
-        </Grid>
-        <Grid item xs={3}>
-          <Card sx={{ maxWidth: 400 }}>
-            <CardMedia component={'img'} height={300} image={vehiclesImage} alt={'Vehicule'} />
-            <CardContent>
-              <Typography gutterBottom variant={'h6'}>
-                Bunuri si proprietati
-              </Typography>
-            </CardContent>
-            <CardActions sx={{ p: 2 }}>
-              <Button
-                disabled
-                variant={'contained'}
-                size={'small'}
-                onClick={() => navigate(routes.newProperty)}
-              >
-                Creaza
-              </Button>
-              <Button
-                disabled
-                variant={'contained'}
-                size={'small'}
-                onClick={() => navigate(routes.properties)}
-              >
-                Cauta
-              </Button>
-            </CardActions>
-          </Card>
-        </Grid>
-        <Grid item xs={3}>
-          <Card sx={{ maxWidth: 400 }}>
-            <CardMedia component={'img'} height={300} image={eventsImage} alt={'Incidente'} />
-            <CardContent>
-              <Typography gutterBottom variant={'h6'}>
-                Evenimente
-              </Typography>
-            </CardContent>
-            <CardActions sx={{ p: 2 }}>
-              <Button
-                disabled
-                variant={'contained'}
-                size={'small'}
-                onClick={() => navigate(routes.newEvent)}
-              >
-                Creaza
-              </Button>
-              <Button
-                variant={'contained'}
-                size={'small'}
-                onClick={() => navigate(routes.events)}
-                disabled
-              >
-                Cauta
-              </Button>
-            </CardActions>
-          </Card>
-        </Grid>
-      </Grid>
-    </DashboardPage>
+    <Grid item xs={12} sm={6} lg={3} justifyContent={'center'}>
+      <Card sx={{ maxWidth: 400 }}>
+        <CardMedia component={'img'} height={300} image={image} alt={title} />
+        <CardContent>
+          <Typography gutterBottom variant={'h6'}>
+            {title}
+          </Typography>
+        </CardContent>
+        <CardActions sx={{ p: 2 }}>
+          <Button variant={'contained'} size={'small'} onClick={() => navigate(newEntityRoute)}>
+            Creaza
+          </Button>
+          <Button
+            variant={'contained'}
+            size={'small'}
+            onClick={() => navigate(searchEntitiesRoute)}
+          >
+            Cauta
+          </Button>
+        </CardActions>
+      </Card>
+    </Grid>
   )
 }

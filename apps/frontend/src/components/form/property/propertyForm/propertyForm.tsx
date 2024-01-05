@@ -98,7 +98,7 @@ export const PropertyForm: React.FunctionComponent<Props> = ({ propertyId, onSub
   }
 
   return (
-    <form data-cy={'propertyForm'}>
+    <form data-testid={'propertyForm'}>
       <Grid container spacing={10}>
         <Grid item xs={12}>
           <Stepper nonLinear alternativeLabel activeStep={step}>
@@ -197,7 +197,7 @@ export const PropertyForm: React.FunctionComponent<Props> = ({ propertyId, onSub
           <Grid item xs={12} justifyContent={'flex-end'} mt={4}>
             <Box display={'flex'} justifyContent={'flex-end'}>
               <Button
-                data-cy={'cancelForm'}
+                data-testid={'cancelForm'}
                 color={'error'}
                 disabled={isSubmitting || isValidating}
                 variant={'text'}
@@ -210,7 +210,7 @@ export const PropertyForm: React.FunctionComponent<Props> = ({ propertyId, onSub
                 disabled={isSubmitting || isValidating}
                 variant={'contained'}
                 onClick={() => void submitForm()}
-                data-cy={'submitForm'}
+                data-testid={'submitForm'}
               >
                 <FormattedMessage id={'save'} />
               </Button>

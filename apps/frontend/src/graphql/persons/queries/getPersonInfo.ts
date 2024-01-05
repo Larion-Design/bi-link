@@ -12,6 +12,14 @@ type Response = {
 const query = gql`
   query GetPerson($personId: ID!) {
     getPersonInfo(id: $personId) {
+      metadata {
+        confirmed
+        access
+        trustworthiness {
+          level
+          source
+        }
+      }
       firstName {
         value
         metadata {

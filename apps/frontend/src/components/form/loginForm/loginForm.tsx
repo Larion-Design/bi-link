@@ -78,7 +78,7 @@ export const Login: React.FunctionComponent<Props & FormikProps<LoginInfo>> = ({
             variant={'contained'}
             sx={{ mt: 3, mb: 2 }}
             disabled={isDisabled}
-            data-cy={'loginButton'}
+            data-testid={'loginButton'}
           >
             Intra
           </Button>

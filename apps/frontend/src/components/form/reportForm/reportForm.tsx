@@ -63,7 +63,7 @@ export const ReportForm: React.FunctionComponent<Props> = ({
   const actionDisabled = isSubmitting || isValidating
 
   return (
-    <form data-cy={'reportForm'}>
+    <form data-testid={'reportForm'}>
       <Grid container spacing={4}>
         <Grid item xs={4}>
           <InputField label={'Nume'} value={name} onChange={updateName} />
@@ -108,7 +108,7 @@ export const ReportForm: React.FunctionComponent<Props> = ({
         <Grid item xs={12} justifyContent={'flex-end'} mt={4}>
           <Box display={'flex'} justifyContent={'flex-end'}>
             <Button
-              data-cy={'cancelForm'}
+              data-testid={'cancelForm'}
               color={'error'}
               disabled={actionDisabled}
               variant={'text'}
@@ -118,7 +118,7 @@ export const ReportForm: React.FunctionComponent<Props> = ({
               <FormattedMessage id={'cancel'} />
             </Button>
             <Button
-              data-cy={'generateDocument'}
+              data-testid={'generateDocument'}
               disabled={true}
               variant={'contained'}
               onClick={onCancel}
@@ -130,7 +130,7 @@ export const ReportForm: React.FunctionComponent<Props> = ({
               disabled={actionDisabled}
               variant={'contained'}
               onClick={() => void submitForm()}
-              data-cy={'submitForm'}
+              data-testid={'submitForm'}
             >
               <FormattedMessage id={'save'} />
             </Button>

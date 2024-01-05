@@ -84,7 +84,7 @@ export const ProceedingForm: React.FunctionComponent<Props> = ({ proceedingId, o
   useEffect(() => void setFieldValue('customFields', getCustomFields()), [customFields])
 
   return (
-    <form data-cy={'proceedingForm'}>
+    <form data-testid={'proceedingForm'}>
       <Grid container spacing={10}>
         <Grid item xs={12}>
           <Stepper nonLinear alternativeLabel activeStep={step}>
@@ -204,7 +204,7 @@ export const ProceedingForm: React.FunctionComponent<Props> = ({ proceedingId, o
         <Grid item xs={12} justifyContent={'flex-end'}>
           <Box display={'flex'} justifyContent={'flex-end'}>
             <Button
-              data-cy={'cancelForm'}
+              data-testid={'cancelForm'}
               color={'error'}
               disabled={isSubmitting || isValidating}
               variant={'text'}
@@ -217,7 +217,7 @@ export const ProceedingForm: React.FunctionComponent<Props> = ({ proceedingId, o
               disabled={isSubmitting || isValidating}
               variant={'contained'}
               onClick={() => void submitForm()}
-              data-cy={'submitForm'}
+              data-testid={'submitForm'}
             >
               <FormattedMessage id={'save'} />
             </Button>

@@ -73,7 +73,7 @@ export const PropertiesList: React.FunctionComponent = () => {
             flexWrap={'nowrap'}
             alignItems={'center'}
           >
-            <Typography variant={'h5'} data-cy={'pageTitle'}>
+            <Typography variant={'h5'} data-testid={'pageTitle'}>
               Bunuri si proprietati
             </Typography>
             <Box display={'flex'} sx={{ width: 0.7 }}>
@@ -82,13 +82,13 @@ export const PropertiesList: React.FunctionComponent = () => {
                 label={'Cauta proprietati'}
                 sx={{ flex: 12, mr: 2 }}
                 onChange={({ target: { value } }) => setSearchTerm(value)}
-                data-cy={'searchPropertiesInput'}
+                data-testid={'searchPropertiesInput'}
               />
               <Button
                 variant={'contained'}
                 sx={{ flex: 1 }}
                 onClick={() => navigate(routes.newProperty)}
-                data-cy={'createProperty'}
+                data-testid={'createProperty'}
               >
                 <Tooltip title={'Creaza o proprietate'}>
                   <AddOutlinedIcon />

@@ -23,7 +23,7 @@
         "cwd": "{projectRoot}",
         "commands": [
           "pnpm --filter backend --prod --no-optional deploy build",
-          "pnpm --filter backend exec pkg -t node18-macos-arm64 -c build/package.json --out-path build/.bin build/dist/main.js"
+          "pnpm --filter backend exec pkg -t latest-alpine-x64,latest-macos-arm64 -c build/package.json --out-path build/.bin build/dist/main.js -C Gzip"
         ],
         "parallel": false
       }

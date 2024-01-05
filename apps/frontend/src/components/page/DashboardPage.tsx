@@ -37,7 +37,7 @@ export const DashboardPage: React.FunctionComponent<PropsWithChildren<Props>> = 
       >
         <Toolbar />
         <Container maxWidth={'lg'} sx={{ mb: 2, mt: 4 }}>
-          <Grid container spacing={4}>
+          <Grid container spacing={4} justifyContent={'center'}>
             {children}
           </Grid>
           <Box sx={{ pt: 4 }}>

@@ -86,7 +86,7 @@ export const ReportsList: React.FunctionComponent<Props> = ({
             <ToolbarMenu
               icon={<AddOutlinedIcon />}
               menuOptions={reportTemplates}
-              data-cy={'createReport'}
+              data-testid={'createReport'}
             />
           </>
         </Tooltip>

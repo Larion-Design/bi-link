@@ -2,7 +2,7 @@ import React, { useMemo } from 'react'
 import Box from '@mui/material/Box'
 import OpenInNewOutlinedIcon from '@mui/icons-material/OpenInNewOutlined'
 import { PersonListRecord, PersonsSuggestions } from 'defs'
-import { PaginationParams } from '../../../graphql/shared/types/paginationParams'
+import { PaginationParams } from 'api/shared/types/paginationParams'
 import {
   DataGrid,
   GridActionsCellItem,

@@ -1,5 +1,5 @@
-import { EntityEventDispatcherService } from '@modules/entity-events'
 import { Injectable, Logger } from '@nestjs/common'
+import { EntityEventDispatcherService } from '@modules/entity-events'
 import { EducationAPIInput, IdDocument, OldName, PersonAPIInput, UpdateSource } from 'defs'
 import { LocationAPIService } from '../../location/services/locationAPIService'
 import { CustomFieldsService } from '../../customField/services/customFieldsService'
@@ -40,7 +40,7 @@ export class PersonAPIService {
         )
       }
 
-      this.entityEventDispatcherService.personCreated(personDocument)
+      await this.entityEventDispatcherService.personCreated(personDocument)
       return String(personDocument._id)
     }
   }
@@ -56,7 +56,7 @@ export class PersonAPIService {
           personInfo.relationships,
         )
 
-        this.entityEventDispatcherService.personUpdated(personDocument)
+        await this.entityEventDispatcherService.personUpdated(personDocument)
         return true
       }
     } catch (error) {
@@ -66,19 +66,15 @@ export class PersonAPIService {
   }
 
   createPendingSnapshot = async (personId: string, data: PersonAPIInput, source: UpdateSource) => {
-    try {
-      const personModel = await this.createPersonDocument(data)
-      const snapshotModel = await this.personPendingSnapshotService.create(
-        personId,
-        personModel,
-        source,
-      )
+    const personModel = await this.createPersonDocument(data)
+    const snapshotModel = await this.personPendingSnapshotService.create(
+      personId,
+      personModel,
+      source,
+    )
 
-      if (snapshotModel) {
-        return String(snapshotModel._id)
-      }
-    } catch (e) {
-      this.logger.error(e)
+    if (snapshotModel) {
+      return String(snapshotModel._id)
     }
   }
 
@@ -86,36 +82,29 @@ export class PersonAPIService {
     this.personPendingSnapshotService.remove(snapshotId)
 
   createHistorySnapshot = async (personId: string, source: UpdateSource) => {
-    try {
-      const personDocument = await this.personsService.find(personId, false)
+    const personDocument = await this.personsService.find(personId, false)
 
-      if (personDocument) {
-        return this.personHistorySnapshotService.create(personId, personDocument, source)
-      }
-    } catch (e) {
-      this.logger.error(e)
+    if (personDocument) {
+      return this.personHistorySnapshotService.create(personId, personDocument, source)
     }
   }
 
   applyPendingSnapshot = async (snapshotId: string, source: UpdateSource) => {
-    try {
-      const snapshotDocument = await this.personPendingSnapshotService.getSnapshot(snapshotId)
+    const snapshotDocument = await this.personPendingSnapshotService.getSnapshot(snapshotId)
 
-      if (snapshotDocument) {
-        const personId = String(snapshotDocument.entityId)
-        await this.createHistorySnapshot(personId, source)
-        await this.personsService.update(personId, snapshotDocument.entityInfo)
-        await this.removePendingSnapshot(snapshotId)
-        return true
-      }
-    } catch (e) {
-      this.logger.error(e)
+    if (snapshotDocument) {
+      const personId = String(snapshotDocument.entityId)
+      await this.createHistorySnapshot(personId, source)
+      await this.personsService.update(personId, snapshotDocument.entityInfo)
+      await this.removePendingSnapshot(snapshotId)
+      return true
     }
     return false
   }
 
-  private createPersonDocument = async (personInfo: PersonAPIInput) => {
+  private async createPersonDocument(personInfo: PersonAPIInput) {
     const personModel = new PersonModel()
+    personModel.metadata = personInfo.metadata
     personModel.firstName = personInfo.firstName
     personModel.lastName = personInfo.lastName
     personModel.cnp = personInfo.cnp

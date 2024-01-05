@@ -25,13 +25,13 @@ export const ConfirmationDialog: React.FunctionComponent<Props> = ({
   <Dialog
     open={!!open && (!!title?.length || !!description?.length)}
     onClose={closeDialog}
-    data-cy={'confirmationDialog'}
+    data-testid={'confirmationDialog'}
     keepMounted
   >
-    {title && <DialogTitle data-cy={'confirmationDialogTitle'}>{title}</DialogTitle>}
+    {title && <DialogTitle data-testid={'confirmationDialogTitle'}>{title}</DialogTitle>}
     {description && (
       <DialogContent>
-        <DialogContentText data-cy={'confirmationDialogText'}>{description}</DialogContentText>
+        <DialogContentText data-testid={'confirmationDialogText'}>{description}</DialogContentText>
       </DialogContent>
     )}
     <DialogActions>
@@ -39,7 +39,7 @@ export const ConfirmationDialog: React.FunctionComponent<Props> = ({
         color={'error'}
         onClick={closeDialog}
         sx={{ mr: 2 }}
-        data-cy={'confirmationDialogCancel'}
+        data-testid={'confirmationDialogCancel'}
       >
         <FormattedMessage id={'cancel'} />
       </Button>
@@ -50,7 +50,7 @@ export const ConfirmationDialog: React.FunctionComponent<Props> = ({
           closeDialog?.()
           confirmAction?.()
         }}
-        data-cy={'confirmationDialogProceed'}
+        data-testid={'confirmationDialogProceed'}
       >
         <FormattedMessage id={'confirm'} />
       </Button>

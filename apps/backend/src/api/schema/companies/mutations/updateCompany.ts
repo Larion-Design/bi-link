@@ -26,5 +26,6 @@ export class UpdateCompany {
     @Args() { companyId, companyInfo }: UpdateCompanyArgs,
   ) {
     await this.companiesService.update(companyId, companyInfo)
+    return true
   }
 }

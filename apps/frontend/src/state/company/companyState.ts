@@ -38,6 +38,7 @@ type CompanyState = MetadataState &
     updateName: (name: TextWithMetadata) => void
     updateCui: (cui: TextWithMetadata) => void
     updateRegistrationNumber: (registrationNumber: TextWithMetadata) => void
+    updateRegistrationDate: (registrationDate: OptionalDateWithMetadata) => void
     updateHeadquarters: (headquarters: LocationAPIInput) => void
     updateBranch: (uid: string, branch: LocationAPIInput) => void
 
@@ -85,6 +86,7 @@ export const useCompanyState = create<CompanyState>((set, get, state) => ({
   updateName: (name) => set({ name }),
   updateCui: (cui) => set({ cui }),
   updateRegistrationNumber: (registrationNumber) => set({ registrationNumber }),
+  updateRegistrationDate: (registrationDate) => set({ registrationDate }),
   updateBranch: (uid, branch) => set({ locations: new Map(get().locations).set(uid, branch) }),
   updateHeadquarters: (headquarters) => set({ headquarters }),
 
