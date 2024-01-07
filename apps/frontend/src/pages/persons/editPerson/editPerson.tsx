@@ -51,7 +51,6 @@ export const EditPerson: React.FunctionComponent = () => {
           personInfo={fetchData.getPersonInfo}
           onSubmit={(personInfo: PersonAPIInput) => {
             if (personId) {
-              console.debug(personInfo)
               void updatePerson({ variables: { personId, personInfo } })
             }
           }}

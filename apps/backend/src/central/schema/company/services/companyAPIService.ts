@@ -37,13 +37,14 @@ export class CompanyAPIService {
   }
 
   async update(companyId: string, companyInfo: CompanyAPIInput) {
-    const companyModel = await this.createCompanyDocument(companyInfo)
+    const companyModel = await this.createCompanyDocument(companyInfo, companyId)
 
     if (companyModel) {
       const updatedCompany = await this.companiesService.update(companyId, companyModel)
 
       if (updatedCompany) {
-        await this.entityEventDispatcherService.companyUpdated(updatedCompany)
+        const companyDocument = await this.companiesService.getCompany(updatedCompany._id, true)
+        await this.entityEventDispatcherService.companyUpdated(companyDocument)
         return true
       }
     }
@@ -81,6 +82,10 @@ export class CompanyAPIService {
     companyModel.cui = companyInfo.cui
     companyModel.registrationNumber = companyInfo.registrationNumber
     companyModel.registrationDate = companyInfo.registrationDate
+    companyModel.active = companyInfo.active
+    companyModel.balanceSheets = []
+    companyModel.activityCodes = []
+    companyModel.status = companyInfo.status
 
     companyModel.headquarters = companyInfo.headquarters
       ? (await this.locationAPIService.getLocationModel(companyInfo.headquarters)) ?? null

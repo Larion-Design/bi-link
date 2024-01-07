@@ -3,8 +3,8 @@ import Grid from '@mui/material/Grid'
 import Card from '@mui/material/Card'
 import CardContent from '@mui/material/CardContent'
 import { CompanyAPIOutput, CustomFieldAPI } from 'defs'
-import { useCompanyState } from '../../../../../state/company/companyState'
-import { PersonCardActions } from '../../../../card/personCardActions'
+import { useCompanyState } from 'state/company/companyState'
+import { PersonCardActions } from 'components/card/personCardActions'
 import { AssociateSwitchAction } from './associateSwitchAction'
 import { CompanyAssociateInformation } from './companyAssociateInformation'
 import { LinkedEntityCustomFields } from '../../../linkedEntityCustomFields'
@@ -81,7 +81,11 @@ export const CompanyAssociateCard: React.FunctionComponent<Props> = ({
           </Grid>
         </Grid>
       </CardContent>
-      <PersonCardActions personId={_id} name={name.value} onRemove={() => removeAssociate(_id)}>
+      <PersonCardActions
+        personId={_id}
+        name={name.value}
+        onRemove={() => removeAssociate(associateId)}
+      >
         <AssociateSwitchAction
           isActive={isActive}
           onStateChange={(isActive) => updateAssociateActive(associateId, isActive)}

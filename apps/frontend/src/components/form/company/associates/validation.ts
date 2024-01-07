@@ -1,6 +1,6 @@
-import { AssociateAPI, associateAPISchema } from 'defs'
+import { associateAPISchema } from 'defs'
 import { isDatesOrderValid } from '@frontend/utils/date'
-import { CompanyAssociateInfoState } from '../../../../state/company/companyAssociatesState'
+import { CompanyAssociateInfoState } from 'state/company/companyAssociatesState'
 import { getShareholdersTotalEquity } from './helpers'
 
 export const validateAssociates = async (associates: Map<string, CompanyAssociateInfoState>) => {
@@ -18,7 +18,7 @@ export const validateAssociates = async (associates: Map<string, CompanyAssociat
 export const validateAssociatesStructure = async (
   associates: Map<string, CompanyAssociateInfoState>,
 ) => {
-  const isValid = await associateAPISchema.array().parseAsync(associates)
+  const isValid = associateAPISchema.array().parse(associates)
 
   if (!isValid) {
     return 'Nu ai furnizat unele informatii obligatorii.'

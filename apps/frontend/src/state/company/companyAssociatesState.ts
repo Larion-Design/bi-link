@@ -184,6 +184,8 @@ export const createCompanyAssociatesStore: StateCreator<
       isActive: associate.isActive,
       startDate: associate.startDate,
       endDate: associate.endDate,
+      person: associate.person,
+      company: associate.company,
       customFields: Array.from(associate.customFields).map((customFieldId) =>
         associatesCustomFields.get(customFieldId),
       ),

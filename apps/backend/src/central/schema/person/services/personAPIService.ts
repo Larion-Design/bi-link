@@ -46,23 +46,19 @@ export class PersonAPIService {
   }
 
   async update(personId: string, personInfo: PersonAPIInput) {
-    try {
-      const model = await this.createPersonDocument(personInfo)
-      const personDocument = await this.personsService.update(personId, model)
+    const model = await this.createPersonDocument(personInfo)
+    const personDocument = await this.personsService.update(personId, model)
 
-      if (personDocument && personInfo.relationships.length) {
-        await this.relationshipsService.addRelationshipToConnectedPersons(
-          personDocument,
-          personInfo.relationships,
-        )
+    if (personDocument && personInfo.relationships.length) {
+      await this.relationshipsService.addRelationshipToConnectedPersons(
+        personDocument,
+        personInfo.relationships,
+      )
 
-        await this.entityEventDispatcherService.personUpdated(personDocument)
-        return true
-      }
-    } catch (error) {
-      this.logger.error(error)
+      const personWithRelationships = await this.personsService.find(personId, true)
+      await this.entityEventDispatcherService.personUpdated(personWithRelationships)
+      return true
     }
-    return false
   }
 
   createPendingSnapshot = async (personId: string, data: PersonAPIInput, source: UpdateSource) => {

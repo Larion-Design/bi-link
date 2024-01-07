@@ -19,7 +19,7 @@ import {
   TextValueWithMetadataModel,
   TextValueWithMetadataSchema,
 } from '../../metadata/models/textValueWithMetadataModel'
-import { PersonDocument, PersonModel } from '../../person/models/personModel'
+import { PersonDocument } from '../../person/models/personModel'
 import { CompanyDocument } from './companyModel'
 
 @Schema({ timestamps: false })

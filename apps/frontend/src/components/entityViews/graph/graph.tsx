@@ -400,10 +400,6 @@ export const Graph: React.FunctionComponent<PropsWithRef<Props>> = ({
       .catch((error) => console.error(error))
   }, [data?.getEntitiesGraph, setNodes, setEdges, width, height, entityId])
 
-  useEffect(() => {
-    nodes.map(({ position }) => console.debug(position))
-  }, [nodes])
-
   return loading || (nodes.length === 0 && edges.length === 0) ? null : (
     <Box sx={{ width: 1, height: 1 }} ref={containerRef}>
       <ReactFlowProvider>

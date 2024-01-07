@@ -82,6 +82,7 @@ export class AssociatesService {
 
   private createAssociateModel = (associateInfo: AssociateAPI) => {
     const associate = new AssociateModel()
+    associate.metadata = associateInfo.metadata
     associate.role = associateInfo.role
     associate.startDate = associateInfo.startDate
     associate.endDate = associateInfo.endDate

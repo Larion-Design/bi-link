@@ -24,7 +24,7 @@ export class PersonsService {
     return this.personModel.findByIdAndUpdate(personId, personModel)
   }
 
-  async find(personId: string, fetchLinkedEntities: boolean) {
+  async find(personId: string, fetchLinkedEntities: boolean): Promise<PersonDocument | never> {
     const query = this.personModel.findById(personId)
     return (fetchLinkedEntities ? this.getLinkedEntities(query) : query).exec()
   }

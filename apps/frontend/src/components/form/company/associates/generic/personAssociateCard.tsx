@@ -3,8 +3,8 @@ import Grid from '@mui/material/Grid'
 import Card from '@mui/material/Card'
 import CardContent from '@mui/material/CardContent'
 import { getPersonFullName } from '@frontend/utils/person'
-import { useCompanyState } from '../../../../../state/company/companyState'
-import { PersonCardActions } from '../../../../card/personCardActions'
+import { useCompanyState } from 'state/company/companyState'
+import { PersonCardActions } from 'components/card/personCardActions'
 import { AssociateSwitchAction } from './associateSwitchAction'
 import { PersonAssociateInformation } from './personAssociateInformation'
 import { CustomFieldAPI, PersonAPIOutput } from 'defs'
@@ -84,7 +84,11 @@ export const PersonAssociateCard: React.FunctionComponent<Props> = ({
           </Grid>
         </Grid>
       </CardContent>
-      <PersonCardActions personId={_id} name={fullName} onRemove={() => removeAssociate(_id)}>
+      <PersonCardActions
+        personId={_id}
+        name={fullName}
+        onRemove={() => removeAssociate(associateId)}
+      >
         <AssociateSwitchAction
           isActive={isActive}
           onStateChange={(isActive) => updateAssociateActive(associateId, isActive)}
