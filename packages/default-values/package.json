@@ -8,11 +8,12 @@
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
   "files": [
-    "dist"
+    "dist",
+    "package.json"
   ],
   "scripts": {
-    "build": "parcel build",
-    "prepare": "pnpm pnpm exec parcel build"
+    "build": "pnpm exec parcel build --cache-dir .parcel-cache",
+    "prepare": "pnpm build"
   },
   "dependencies": {
     "defs": "workspace:*",
@@ -21,9 +22,6 @@
   },
   "devDependencies": {
     "@types/uuid": "^8.3.4",
-    "typescript": "^5.0.4",
-    "parcel": "^2.10.3",
-    "@parcel/transformer-typescript-types": "^2.10.3",
-    "@parcel/packager-ts": "2.10.3"
+    "typescript": "^5.0.4"
   }
 }

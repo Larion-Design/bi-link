@@ -23,7 +23,10 @@
     "dotenv": "^16.3.1",
     "nx": "17.2.7",
     "rimraf": "^5",
-    "typescript": "^5.2.2"
+    "typescript": "^5.2.2",
+    "parcel": "^2.10.3",
+    "@parcel/transformer-typescript-types": "^2.10.3",
+    "@parcel/packager-ts": "2.10.3"
   },
   "optionalDependencies": {
     "@typescript-eslint/eslint-plugin": "^5.57.1",
