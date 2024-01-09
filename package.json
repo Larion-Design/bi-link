@@ -42,5 +42,9 @@
     "requiredScripts": [
       "build"
     ]
+  },
+  "volta": {
+    "node": "18.5.0",
+    "pnpm": "8.14.0"
   }
 }
