@@ -1,4 +1,5 @@
 version: '3.8'
+name: 'bi-link'
 services:
   minio:
     container_name: 'minio'
