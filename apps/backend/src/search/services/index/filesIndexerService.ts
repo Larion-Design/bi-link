@@ -2,7 +2,7 @@ import { Injectable, Logger } from '@nestjs/common'
 import { ElasticsearchService } from '@nestjs/elasticsearch'
 import { ProcessedFileIndex } from '@modules/definitions'
 import { EntityType } from 'defs'
-import { TextExtractorService } from '@modules/files/services/textExtractorService'
+import { TextExtractorService } from '@modules/files/services/text-extractor.service'
 import { formatDateTime } from 'tools'
 import {
   INDEX_EVENTS,

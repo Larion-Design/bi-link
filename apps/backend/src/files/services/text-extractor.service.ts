@@ -1,4 +1,5 @@
-import { Injectable, Logger } from '@nestjs/common'
+import { Injectable } from '@nestjs/common'
+import path from 'path'
 import XLSX from 'xlsx'
 import pdf from 'pdf-parse'
 import WordExtractor from 'word-extractor'
@@ -6,13 +7,6 @@ import { recognize } from 'tesseract.js'
 
 @Injectable()
 export class TextExtractorService {
-  private readonly logger = new Logger(TextExtractorService.name)
-
-  private getFileExtension = (fileName: string) => {
-    const dotIndex = fileName.lastIndexOf('.')
-    return dotIndex == -1 ? '' : fileName.substring(dotIndex + 1, fileName.length)
-  }
-
   private parsePdf = async (fileContent: Buffer) => (await pdf(fileContent)).text
 
   private parseDocx = (fileContent: string) =>
@@ -51,29 +45,26 @@ export class TextExtractorService {
     return text
   }
 
-  parseFile = async (fileName: string, fileContent: Buffer): Promise<string> => {
-    try {
-      switch (this.getFileExtension(fileName)) {
-        case 'pdf':
-          return this.parsePdf(fileContent)
-        case 'docx':
-          return this.parseDocx(fileContent.toString())
-        case 'doc':
-          return this.parseDoc(fileContent)
-        case 'xlsx':
-        case 'xls':
-        case 'csv':
-          return this.parseSpreadsheet(fileContent)
-        case 'jpg':
-        case 'png':
-        case 'webp':
-        case 'jpeg':
-        case 'bmp':
-          return this.parseImage(fileContent)
-      }
-    } catch (error) {
-      this.logger.error(error)
+  async parseFile(fileName: string, fileContent: Buffer): Promise<string> {
+    switch (path.extname(fileName)) {
+      case 'pdf':
+        return this.parsePdf(fileContent)
+      case 'docx':
+        return this.parseDocx(fileContent.toString())
+      case 'doc':
+        return this.parseDoc(fileContent)
+      case 'xlsx':
+      case 'xls':
+      case 'csv':
+        return this.parseSpreadsheet(fileContent)
+      case 'jpg':
+      case 'png':
+      case 'webp':
+      case 'jpeg':
+      case 'bmp':
+        return this.parseImage(fileContent)
+      default:
+        return fileContent.toString()
     }
-    return fileContent.toString()
   }
 }

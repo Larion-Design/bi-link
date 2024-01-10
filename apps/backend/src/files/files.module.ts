@@ -2,9 +2,9 @@ import { Global, Module, Provider } from '@nestjs/common'
 import { ConfigModule, ConfigService } from '@nestjs/config'
 import { MinioModule } from 'nestjs-minio-client'
 import { CacheModule } from '../cache'
-import { FileImporterService } from './services/fileImporterService'
-import { FileStorageService } from './services/fileStorageService'
-import { TextExtractorService } from './services/textExtractorService'
+import { FileImporterService } from './services/file-importer.service'
+import { FileStorageService } from './services/file-storage.service'
+import { TextExtractorService } from './services/text-extractor.service'
 
 const providers: Provider[] = [FileImporterService, FileStorageService, TextExtractorService]
 

@@ -3,11 +3,12 @@ import { customFieldSchema } from '../customField'
 import { fileInputSchema, fileOutputSchema, fileSchema } from '../file'
 import { optionalDateWithMetadataSchema, textWithMetadataSchema } from '../generic'
 import { locationSchema } from '../geolocation'
-import { metadataSchema, withMetadataSchema } from '../metadata'
+import { withMetadataSchema } from '../metadata'
 import { withTimestamps } from '../timestamps'
 import { SearchSuggestions } from '../searchSuggestions'
 import { associateAPISchema, associateSchema } from './associate'
 import { balanceSheetSchema } from './balanceSheet'
+import { companyRelationship } from './company-relationships'
 import { companyActiveStateSchema } from './companyActiveState'
 import { companyStatusSchema } from './companyStatus'
 
@@ -28,6 +29,7 @@ export const companySchema = z
     active: companyActiveStateSchema,
     status: companyStatusSchema,
     activityCodes: customFieldSchema.array(),
+    relationships: companyRelationship.array().optional(),
   })
   .merge(withMetadataSchema)
   .merge(withTimestamps)

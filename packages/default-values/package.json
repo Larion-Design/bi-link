@@ -12,7 +12,7 @@
     "package.json"
   ],
   "scripts": {
-    "build": "pnpm exec parcel build --cache-dir .parcel-cache",
+    "build": "pnpm exec parcel build --no-cache",
     "prepare": "pnpm build"
   },
   "dependencies": {

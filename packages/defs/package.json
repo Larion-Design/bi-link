@@ -13,11 +13,11 @@
     "package.json"
   ],
   "scripts": {
-    "build": "pnpm exec parcel build --cache-dir .parcel-cache",
+    "build": "pnpm exec parcel build --no-cache",
     "prepare": "pnpm build"
   },
   "devDependencies": {
-    "typescript": "^5.0.4"
+    "typescript": "^5"
   },
   "dependencies": {
     "tslib": "^2.5.0",

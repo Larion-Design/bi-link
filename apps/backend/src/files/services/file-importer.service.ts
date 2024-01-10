@@ -2,7 +2,7 @@ import { FilesService } from '@modules/central/schema/file/services/filesService
 import { Injectable } from '@nestjs/common'
 import { extension as mimeTypeToExtension } from 'mime-types'
 import { createHash } from 'node:crypto'
-import { FileStorageService } from './fileStorageService'
+import { FileStorageService } from './file-storage.service'
 
 @Injectable()
 export class FileImporterService {

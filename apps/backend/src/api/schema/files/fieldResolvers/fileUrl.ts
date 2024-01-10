@@ -1,6 +1,6 @@
 import { Parent, ResolveField, Resolver } from '@nestjs/graphql'
 import { FileAPIOutput } from 'defs'
-import { FileStorageService } from '@modules/files/services//fileStorageService'
+import { FileStorageService } from '@modules/files/services/file-storage.service'
 import { File } from '../dto/file'
 import { DownloadUrl } from '../dto/downloadUrl'
 

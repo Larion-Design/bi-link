@@ -46,6 +46,7 @@
     "@sentry/browser": "^7.64.0",
     "@sentry/react": "^7.64.0",
     "@sentry/tracing": "^7.64.0",
+    "@tanstack/react-query": "^5.17.9",
     "apollo-link-timeout": "^4.0.0",
     "crypto-js": "^4.1.1",
     "date-fns": "^2.30.0",
@@ -116,9 +117,9 @@
     "webpack": "^5.74.0"
   },
   "optionalDependencies": {
-    "eslint-plugin-react": "^7.33.2",
-    "eslint-plugin-react-hooks": "^4.6.0",
     "@typescript-eslint/eslint-plugin": "^5.62.0",
-    "@typescript-eslint/parser": "^5.62.0"
+    "@typescript-eslint/parser": "^5.62.0",
+    "eslint-plugin-react": "^7.33.2",
+    "eslint-plugin-react-hooks": "^4.6.0"
   }
 }

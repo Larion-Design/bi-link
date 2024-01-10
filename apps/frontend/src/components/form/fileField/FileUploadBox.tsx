@@ -31,7 +31,7 @@ export const FileUploadBox: React.FunctionComponent<PropsWithChildren<Props>> = 
 
       const abortController = new AbortController()
 
-      fetch(`${import.meta.env.VITE_BACKEND_API}/fileUpload`, {
+      fetch(`${import.meta.env.VITE_BACKEND_API}/file-upload`, {
         method: 'POST',
         body: formData,
         signal: abortController.signal,

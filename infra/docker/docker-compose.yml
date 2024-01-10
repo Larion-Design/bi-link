@@ -37,7 +37,7 @@ services:
       retries: 30
       start_period: 10s
     restart: unless-stopped
-    command: mongod --quiet --logpath /dev/null
+    command: mongod --quiet --noscripting
   graph:
     image: memgraph/memgraph-platform
     container_name: 'graph'

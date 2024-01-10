@@ -28,12 +28,8 @@ export class FilesService {
     }
   }
 
-  getFileDocumentByHash = async (hash: string) => {
-    try {
-      return this.fileModel.findOne({ hash }).exec()
-    } catch (e) {
-      this.logger.error(e)
-    }
+  async getFileDocumentByHash(hash: string) {
+    return this.fileModel.findOne({ hash }).exec()
   }
 
   async create(fileInfo: Omit<FileModel, '_id'>) {

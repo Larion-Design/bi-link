@@ -1,4 +1,10 @@
-import { AssociateAPI, BalanceSheet, CompanyAPIInput } from 'defs'
+import {
+  AssociateAPI,
+  BalanceSheet,
+  CompanyAPIInput,
+  CompanyRelationship,
+  CompanyRelationshipType,
+} from 'defs'
 import { getDefaultLocation } from './location'
 import { getDefaultMetadata } from './metadata'
 import {
@@ -30,6 +36,7 @@ export const getDefaultCompany = (): CompanyAPIInput => ({
     tradeRegister: getDefaultBooleanWithMetadata(),
   },
   activityCodes: [],
+  relationships: [],
 })
 
 export const getDefaultAssociate = (): AssociateAPI => ({
@@ -79,4 +86,16 @@ export const getDefaultBalanceSheet = (): BalanceSheet => ({
   activityCode: 0,
   activityType: '',
   balanceType: '',
+})
+
+export const getCompanyRelationship = (
+  _id: string,
+  type: CompanyRelationshipType,
+): CompanyRelationship => ({
+  metadata: getDefaultMetadata(),
+  type,
+  customFields: [],
+  company: {
+    _id,
+  },
 })

@@ -3,16 +3,16 @@ import { FileInterceptor } from '@nestjs/platform-express'
 import { FilesService } from '@modules/central/schema/file/services/filesService'
 import { FileAPIInput, File } from 'defs'
 import { getDefaultFile } from 'default-values'
-import { FileImporterService } from '@modules/files/services/fileImporterService'
+import { FileImporterService } from '@modules/files/services/file-importer.service'
 
 @Controller()
 export class FileUploadController {
   constructor(
     private readonly filesManagerService: FileImporterService,
-    private readonly ingressService: FilesService,
+    private readonly filesService: FilesService,
   ) {}
 
-  @Post('fileUpload')
+  @Post('file-upload')
   @UseInterceptors(FileInterceptor('file'))
   async uploadFile(@UploadedFile() file: Express.Multer.File): Promise<FileAPIInput | void> {
     if (file?.size) {
@@ -27,7 +27,9 @@ export class FileUploadController {
           mimeType: mimetype,
         }
 
-        await this.ingressService.create(fileModel)
+        if (uploadedFile.created) {
+          await this.filesService.create(fileModel)
+        }
         return fileModel
       }
     }
