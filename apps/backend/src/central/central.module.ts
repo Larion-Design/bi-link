@@ -1,3 +1,4 @@
+import { CompanyRelationshipsService } from '@modules/central/schema/company/services/company-relationships.service'
 import { Global, Module, Provider } from '@nestjs/common'
 import { MongooseModule } from '@nestjs/mongoose'
 import { AssociateModel, AssociateSchema } from './schema/company/models/associateModel'
@@ -149,6 +150,7 @@ const providers: Provider[] = [
   CompanyPendingSnapshotService,
   CompanyAPIService,
   AssociatesService,
+  CompanyRelationshipsService,
 
   EventsService,
   EventHistorySnapshotService,
