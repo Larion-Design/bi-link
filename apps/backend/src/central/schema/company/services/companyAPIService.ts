@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common'
+import { CompanyRelationshipsService } from '@modules/central/schema/company/services/company-relationships.service'
 import { EntityEventDispatcherService } from '@modules/entity-events'
 import { CompanyAPIInput, UpdateSource } from 'defs'
 import { FileAPIService } from '../../file/services/fileAPIService'
@@ -19,6 +20,7 @@ export class CompanyAPIService {
     private readonly customFieldsService: CustomFieldsService,
     private readonly companiesService: CompaniesService,
     private readonly associatesService: AssociatesService,
+    private readonly companyRelationshipsService: CompanyRelationshipsService,
     private readonly companyPendingSnapshotService: CompanyPendingSnapshotService,
     private readonly companyHistorySnapshotService: CompanyHistorySnapshotService,
   ) {}
@@ -107,8 +109,18 @@ export class CompanyAPIService {
       ? await this.fileService.getUploadedFilesModels(companyInfo.files)
       : []
 
+    companyModel.images = companyInfo.images?.length
+      ? await this.fileService.getUploadedFilesModels(companyInfo.files)
+      : []
+
     companyModel.associates = companyInfo.associates.length
       ? await this.associatesService.createAssociatesModels(companyInfo.associates)
+      : []
+
+    companyModel.relationships = companyInfo.relationships?.length
+      ? await this.companyRelationshipsService.createCompanyRelationshipsModels(
+          companyInfo.relationships,
+        )
       : []
 
     return companyModel

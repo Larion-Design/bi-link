@@ -7,7 +7,8 @@ const companyRelationshipType = z.enum(['SUPPLIER', 'COMPETITOR', 'DISPUTING'])
 
 export const companyRelationship = z
   .object({
-    company: connectedEntitySchema,
+    company: connectedEntitySchema.optional(),
+    person: connectedEntitySchema.optional(),
     type: z.enum(['SUPPLIER', 'COMPETITOR', 'DISPUTING']),
     customFields: customFieldSchema.array(),
   })

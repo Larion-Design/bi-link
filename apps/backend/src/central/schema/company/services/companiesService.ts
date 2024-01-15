@@ -1,7 +1,6 @@
 import { Model, ProjectionFields, Query } from 'mongoose'
 import { Injectable, Logger } from '@nestjs/common'
 import { InjectModel } from '@nestjs/mongoose'
-import { Company } from 'defs'
 import { FileDocument, FileModel } from '../../file/models/fileModel'
 import { LocationDocument, LocationModel } from '../../location/models/locationModel'
 import { PersonDocument, PersonModel } from '../../person/models/personModel'
@@ -22,12 +21,15 @@ export class CompaniesService {
     private readonly locationModel: Model<LocationDocument>,
   ) {}
 
-  create = async (companyModel: CompanyModel) => {
+  async create(companyModel: CompanyModel) {
     return this.companyModel.create(companyModel)
   }
 
   async update(companyId: string, companyModel: CompanyModel) {
-    return this.companyModel.findByIdAndUpdate(companyId, companyModel, { new: true })
+    return this.companyModel.findByIdAndUpdate(companyId, companyModel, {
+      new: true,
+      upsert: false,
+    })
   }
 
   async getCompany(companyId: string, fetchLinkedEntities: boolean) {
@@ -68,15 +70,12 @@ export class CompaniesService {
 
   private getLinkedEntities = (query: Query<any, CompanyDocument>) =>
     query
-      .populate({ path: 'files' as keyof Company, model: this.fileModel })
-      .populate({
-        path: 'locations' as keyof Company,
-        model: this.locationModel,
-      })
-      .populate({
-        path: 'headquarters' as keyof Company,
-        model: this.locationModel,
-      })
+      .populate({ path: 'files', model: this.fileModel })
+      .populate({ path: 'images', model: this.fileModel })
+      .populate({ path: 'locations', model: this.locationModel })
+      .populate({ path: 'headquarters', model: this.locationModel })
       .populate({ path: 'associates.person', model: this.personModel })
       .populate({ path: 'associates.company', model: this.companyModel })
+      .populate({ path: 'relationships.person', model: this.personModel })
+      .populate({ path: 'relationships.company', model: this.companyModel })
 }

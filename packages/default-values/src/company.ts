@@ -37,6 +37,7 @@ export const getDefaultCompany = (): CompanyAPIInput => ({
   },
   activityCodes: [],
   relationships: [],
+  images: [],
 })
 
 export const getDefaultAssociate = (): AssociateAPI => ({
@@ -88,14 +89,10 @@ export const getDefaultBalanceSheet = (): BalanceSheet => ({
   balanceType: '',
 })
 
-export const getCompanyRelationship = (
-  _id: string,
+export const getDefaultCompanyRelationship = (
   type: CompanyRelationshipType,
 ): CompanyRelationship => ({
   metadata: getDefaultMetadata(),
   type,
   customFields: [],
-  company: {
-    _id,
-  },
 })

@@ -1,3 +1,4 @@
+import { CompanyRelationship } from '@modules/api/schema/companies/dto/company-relationship'
 import { Field, ID, ObjectType, PickType } from '@nestjs/graphql'
 import { CompanyAPIOutput } from 'defs'
 import { CustomField } from '../../customFields/dto/customField'
@@ -66,4 +67,10 @@ export class Company
 
   @Field(() => CompanyStatus)
   status: CompanyStatus
+
+  @Field(() => [File], { nullable: true })
+  images?: File[]
+
+  @Field(() => [CompanyRelationship], { nullable: true })
+  relationships?: CompanyRelationship[]
 }

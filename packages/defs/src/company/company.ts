@@ -30,6 +30,7 @@ export const companySchema = z
     status: companyStatusSchema,
     activityCodes: customFieldSchema.array(),
     relationships: companyRelationship.array().optional(),
+    images: fileSchema.array().optional(),
   })
   .merge(withMetadataSchema)
   .merge(withTimestamps)
@@ -50,6 +51,7 @@ export const companyAPIOutputSchema = companySchema.merge(
   z.object({
     associates: associateAPISchema.array(),
     files: fileOutputSchema.array(),
+    images: fileOutputSchema.array().optional(),
   }),
 )
 
@@ -57,6 +59,7 @@ export const companyAPIInputSchema = companySchema.omit({ _id: true }).merge(
   z.object({
     associates: associateAPISchema.array(),
     files: fileInputSchema.array(),
+    images: fileInputSchema.array().optional(),
   }),
 )
 

@@ -1,18 +1,14 @@
-import { Injectable, Logger } from '@nestjs/common'
+import { Injectable } from '@nestjs/common'
 import { RelationshipAPI } from 'defs'
 import { ClientSession, Model } from 'mongoose'
 import { InjectModel } from '@nestjs/mongoose'
 import { PersonDocument, PersonModel } from '../models/personModel'
-import { RelationshipDocument, RelationshipModel } from '../models/relationshipModel'
+import { RelationshipModel } from '../models/relationshipModel'
 import { PersonsService } from './personsService'
 
 @Injectable()
 export class RelationshipsAPIService {
-  private readonly logger = new Logger(RelationshipsAPIService.name)
-
   constructor(
-    @InjectModel(RelationshipModel.name)
-    private readonly relationshipModel: Model<RelationshipDocument>,
     @InjectModel(PersonModel.name)
     private readonly personModel: Model<PersonDocument>,
     private readonly personsService: PersonsService,
@@ -33,49 +29,48 @@ export class RelationshipsAPIService {
       relationshipsMap.set(_id, relationshipInfo)
     })
 
-    const personsDocuments = await this.personsService.getPersons(Array.from(personsIds), false)
-    const personsDocumentsMap = new Map<string, PersonDocument>()
-    personsDocuments.forEach((personDocument) =>
-      personsDocumentsMap.set(String(personDocument._id), personDocument),
-    )
-
-    return Array.from(relationshipsMap.entries()).map(([personId, relationshipInfo]) => {
-      const relationshipModel = this.createRelationshipModel(relationshipInfo)
-      relationshipModel.person = personsDocumentsMap.get(personId)!
-      relationshipModel.relatedPersons = relationshipInfo.relatedPersons.map(
-        ({ _id }) => personsDocumentsMap.get(_id)!,
+    if (personsIds.size) {
+      const personsDocuments = await this.personsService.getPersons(Array.from(personsIds), false)
+      const personsDocumentsMap = new Map<string, PersonDocument>()
+      personsDocuments.forEach((personDocument) =>
+        personsDocumentsMap.set(String(personDocument._id), personDocument),
       )
-      return relationshipModel
-    })
+
+      return Array.from(relationshipsMap.entries()).map(([personId, relationshipInfo]) => {
+        const relationshipModel = this.createRelationshipModel(relationshipInfo)
+        relationshipModel.person = personsDocumentsMap.get(personId)!
+        relationshipModel.relatedPersons = relationshipInfo.relatedPersons.map(
+          ({ _id }) => personsDocumentsMap.get(_id)!,
+        )
+        return relationshipModel
+      })
+    }
+    return []
   }
 
-  addRelationshipToConnectedPersons = async (
+  async addRelationshipToConnectedPersons(
     person: PersonDocument,
     personsRelations: RelationshipAPI[],
-  ) => {
-    try {
-      const session = await this.personModel.startSession()
-      const relatedPersons = await this.personModel
-        .find({ _id: personsRelations.map(({ person: { _id } }) => _id) }, null, { session })
-        .exec()
+  ) {
+    const session = await this.personModel.startSession()
+    const relatedPersons = await this.personModel
+      .find({ _id: personsRelations.map(({ person: { _id } }) => _id) }, null, { session })
+      .exec()
 
-      if (relatedPersons?.length) {
-        await Promise.all(
-          relatedPersons.map(async (relatedPerson) => {
-            const relationship = personsRelations.find(
-              ({ person: { _id } }) => _id === String(relatedPerson._id),
-            )
+    if (relatedPersons?.length) {
+      await Promise.all(
+        relatedPersons.map(async (relatedPerson) => {
+          const relationship = personsRelations.find(
+            ({ person: { _id } }) => _id === String(relatedPerson._id),
+          )
 
-            if (relationship) {
-              return this.upsertRelationship(person, relatedPerson, relationship, session)
-            }
-          }),
-        )
-      }
-      return await session.endSession()
-    } catch (e) {
-      this.logger.error(e)
+          if (relationship) {
+            return this.upsertRelationship(person, relatedPerson, relationship, session)
+          }
+        }),
+      )
     }
+    return await session.endSession()
   }
 
   private upsertRelationship = async (
@@ -104,7 +99,7 @@ export class RelationshipsAPIService {
     )
   }
 
-  private createRelationshipModel = (relationshipInfo: RelationshipAPI) => {
+  private createRelationshipModel(relationshipInfo: RelationshipAPI) {
     const { proximity, type, description, metadata } = relationshipInfo
     const relationshipModel = new RelationshipModel()
     relationshipModel.metadata = metadata

@@ -1,7 +1,11 @@
+import {
+  CompanyRelationshipModel,
+  CompanyRelationshipSchema,
+} from '@modules/central/schema/company/models/company-relationship.model'
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
-import { Document, Types } from 'mongoose'
+import { Document, HydratedDocument, Types } from 'mongoose'
 import { CustomFieldModel, CustomFieldSchema } from '../../customField/models/customFieldModel'
-import { FileModel } from '../../file/models/fileModel'
+import { FileModel, FileSchema } from '../../file/models/fileModel'
 import { MetadataModel, MetadataSchema } from '../../metadata/models/metadataModel'
 import {
   OptionalDateValueWithMetadataModel,
@@ -18,9 +22,11 @@ import { BalanceSheetModel, BalanceSheetSchema } from './balanceSheetModel'
 import { CompanyActiveStateModel, CompanyActiveStateSchema } from './companyActiveStateModel'
 import { CompanyStatusModel, CompanyStatusSchema } from './companyStatusModel'
 
-@Schema({ timestamps: true, strict: 'throw' })
+@Schema({ _id: true, timestamps: true, strict: 'throw' })
 export class CompanyModel implements Company {
   _id: string
+  createdAt?: Date
+  updatedAt?: Date
 
   @Prop({ type: MetadataSchema })
   metadata: MetadataModel
@@ -54,12 +60,6 @@ export class CompanyModel implements Company {
   @Prop({ type: [CustomFieldSchema], isRequired: false })
   customFields: CustomFieldModel[]
 
-  @Prop()
-  createdAt?: Date
-
-  @Prop()
-  updatedAt?: Date
-
   @Prop({ type: [BalanceSheetSchema] })
   balanceSheets: BalanceSheetModel[]
 
@@ -74,7 +74,13 @@ export class CompanyModel implements Company {
 
   @Prop({ type: [CustomFieldSchema], default: [] })
   activityCodes: CustomFieldModel[]
+
+  @Prop({ type: [FileSchema] })
+  images?: FileModel[]
+
+  @Prop({ type: [CompanyRelationshipSchema] })
+  relationships?: CompanyRelationshipModel[]
 }
 
-export type CompanyDocument = CompanyModel & Document<string>
+export type CompanyDocument = HydratedDocument<CompanyModel>
 export const CompanySchema = SchemaFactory.createForClass(CompanyModel)

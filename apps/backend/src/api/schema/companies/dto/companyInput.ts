@@ -1,3 +1,4 @@
+import { CompanyRelationshipInput } from '@modules/api/schema/companies/dto/company-relationship.input'
 import { Field, InputType, PickType } from '@nestjs/graphql'
 import { CustomFieldInput } from '../../customFields/dto/customFieldInput'
 import { FileInput } from '../../files/dto/fileInput'
@@ -57,4 +58,10 @@ export class CompanyInput
 
   @Field(() => [CustomFieldInput])
   readonly activityCodes: CustomFieldInput[]
+
+  @Field(() => [FileInput], { nullable: true })
+  readonly images?: FileInput[]
+
+  @Field(() => [CompanyRelationshipInput], { nullable: true })
+  readonly relationships?: CompanyRelationshipInput[]
 }
