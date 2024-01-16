@@ -68,9 +68,9 @@ export class Company
   @Field(() => CompanyStatus)
   status: CompanyStatus
 
-  @Field(() => [File], { nullable: true })
+  @Field(() => [File], { nullable: true, defaultValue: [] })
   images?: File[]
 
-  @Field(() => [CompanyRelationship], { nullable: true })
+  @Field(() => [CompanyRelationship], { nullable: true, defaultValue: [] })
   relationships?: CompanyRelationship[]
 }

@@ -59,9 +59,9 @@ export class CompanyInput
   @Field(() => [CustomFieldInput])
   readonly activityCodes: CustomFieldInput[]
 
-  @Field(() => [FileInput], { nullable: true })
+  @Field(() => [FileInput], { nullable: true, defaultValue: [] })
   readonly images?: FileInput[]
 
-  @Field(() => [CompanyRelationshipInput], { nullable: true })
+  @Field(() => [CompanyRelationshipInput], { nullable: true, defaultValue: [] })
   readonly relationships?: CompanyRelationshipInput[]
 }
