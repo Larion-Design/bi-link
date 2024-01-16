@@ -6,19 +6,27 @@ import { graphPersonalRelationship } from './personalRelationship'
 import { graphProceedingEntitySchema } from './proceedingEntityRelationship'
 import { graphPropertyOwnerSchema } from './propertyOwnerRelationship'
 
+const nodesRelationship = nodesRelationshipSchema.array()
+
 export const graphRelationshipsSchema = z.object({
   companiesAssociates: graphCompanyAssociateSchema.array(),
   eventsParties: graphEventParticipantSchema.array(),
   personalRelationships: graphPersonalRelationship.array(),
-  propertiesLocation: nodesRelationshipSchema.array(),
-  companiesHeadquarters: nodesRelationshipSchema.array(),
-  companiesBranches: nodesRelationshipSchema.array(),
-  personsBirthPlace: nodesRelationshipSchema.array(),
-  personsHomeAddress: nodesRelationshipSchema.array(),
-  eventsOccurrencePlace: nodesRelationshipSchema.array(),
+  propertiesLocation: nodesRelationship,
+  companiesHeadquarters: nodesRelationship,
+  companiesBranches: nodesRelationship,
+  personsBirthPlace: nodesRelationship,
+  personsHomeAddress: nodesRelationship,
+  eventsOccurrencePlace: nodesRelationship,
   propertiesRelationships: graphPropertyOwnerSchema.array(),
-  entitiesReported: nodesRelationshipSchema.array(),
+  entitiesReported: nodesRelationship,
   entitiesInvolvedInProceeding: graphProceedingEntitySchema.array(),
+  companiesSuppliers: nodesRelationship,
+  personsSuppliers: nodesRelationship,
+  companiesDisputing: nodesRelationship,
+  personsDisputing: nodesRelationship,
+  companiesCompetitors: nodesRelationship,
+  personsCompetitors: nodesRelationship,
 })
 
 export type GraphRelationships = z.infer<typeof graphRelationshipsSchema>

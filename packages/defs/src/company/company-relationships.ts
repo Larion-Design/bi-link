@@ -3,7 +3,7 @@ import { connectedEntitySchema } from '../connectedEntity'
 import { customFieldSchema } from '../customField'
 import { withMetadataSchema } from '../metadata'
 
-const companyRelationshipType = z.enum(['SUPPLIER', 'COMPETITOR', 'DISPUTING'])
+export const companyRelationshipType = z.enum(['SUPPLIER', 'COMPETITOR', 'DISPUTING'])
 
 export const companyRelationship = z
   .object({

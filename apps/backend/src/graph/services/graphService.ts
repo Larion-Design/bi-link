@@ -6,6 +6,7 @@ import {
   GraphRelationship,
   RelationshipMetadata,
   EntityInfo,
+  NodesRelationship,
 } from 'defs'
 import { Path } from 'neo4j-driver'
 import { Neo4jService } from 'nest-neo4j/dist'
@@ -31,25 +32,17 @@ export class GraphService {
   }
 
   upsertEntity = async <T extends EntityMetadata>(data: T, type: EntityType) => {
-    try {
-      await this.neo4jService.write(
-        `MERGE (n:${type} {_id: $data._id}) ON CREATE SET n = $data ON MATCH SET n = $data`,
-        { data },
-      )
-    } catch (e) {
-      this.logger.error(e)
-    }
+    await this.neo4jService.write(
+      `MERGE (n:${type} {_id: $data._id}) ON CREATE SET n = $data ON MATCH SET n = $data`,
+      { data },
+    )
   }
 
   upsertEntities = async <T extends EntityMetadata>(entitiesInfo: T[], type: EntityType) => {
-    try {
-      await this.neo4jService.write(
-        `UNWIND $entitiesInfo AS data MERGE (n:${type} {_id: data._id}) ON CREATE SET n = data ON MATCH SET n = data`,
-        { entitiesInfo },
-      )
-    } catch (e) {
-      this.logger.error(e)
-    }
+    await this.neo4jService.write(
+      `UNWIND $entitiesInfo AS data MERGE (n:${type} {_id: data._id}) ON CREATE SET n = data ON MATCH SET n = data`,
+      { entitiesInfo },
+    )
   }
 
   deleteEntity = async (entityId: string) => {
@@ -63,14 +56,10 @@ export class GraphService {
   }
 
   deleteEntities = async (entitiesIds: string[]) => {
-    try {
-      await this.neo4jService.write(
-        `OPTIONAL MATCH (n) WHERE n._id IN $entitiesIds DETACH DELETE n`,
-        { entitiesIds },
-      )
-    } catch (e) {
-      this.logger.error(e)
-    }
+    await this.neo4jService.write(
+      `OPTIONAL MATCH (n) WHERE n._id IN $entitiesIds DETACH DELETE n`,
+      { entitiesIds },
+    )
   }
 
   upsertRelationship = async <T extends RelationshipMetadata>(
@@ -79,20 +68,16 @@ export class GraphService {
     relationship: GraphRelationship,
     data?: T,
   ) => {
-    try {
-      if (data) {
-        await this.neo4jService.write(
-          `MATCH (n {_id: $entityId}), (s {_id: $targetEntityId}) MERGE (n)-[r:${relationship}]-(s) SET r = $data`,
-          { entityId, targetEntityId, data },
-        )
-      } else {
-        await this.neo4jService.write(
-          `MATCH (n {_id: $entityId}), (s {_id: $targetEntityId}) MERGE (n)-[:${relationship}]-(s)`,
-          { entityId, targetEntityId },
-        )
-      }
-    } catch (e) {
-      this.logger.error(e)
+    if (data) {
+      await this.neo4jService.write(
+        `MATCH (n {_id: $entityId}), (s {_id: $targetEntityId}) MERGE (n)-[r:${relationship}]-(s) SET r = $data`,
+        { entityId, targetEntityId, data },
+      )
+    } else {
+      await this.neo4jService.write(
+        `MATCH (n {_id: $entityId}), (s {_id: $targetEntityId}) MERGE (n)-[:${relationship}]-(s)`,
+        { entityId, targetEntityId },
+      )
     }
   }
 
@@ -117,8 +102,8 @@ export class GraphService {
       )
       return transaction.commit()
     } catch (e) {
-      this.logger.error(e)
-      return transaction.rollback()
+      await transaction.rollback()
+      throw e
     }
   }
 
@@ -140,37 +125,30 @@ export class GraphService {
       return transaction.commit()
     } catch (e) {
       this.logger.error(e)
-      return transaction.rollback()
+      await transaction.rollback()
+      throw e
     }
   }
 
-  deleteRelationship = async (
+  async deleteRelationship(
     entityId: string,
     targetEntityId: string,
     relationship: GraphRelationship,
-  ) => {
-    try {
-      await this.neo4jService.write(
-        `OPTIONAL MATCH (n {_id: $entityId})-[r:${relationship}]->(s {_id: $targetEntityId}) DELETE r`,
-        { entityId, targetEntityId },
-      )
-    } catch (e) {
-      this.logger.error(e)
-    }
+  ) {
+    await this.neo4jService.write(
+      `OPTIONAL MATCH (n {_id: $entityId})-[r:${relationship}]->(s {_id: $targetEntityId}) DELETE r`,
+      { entityId, targetEntityId },
+    )
   }
 
-  deleteRelationshipType = async (entityId: string, relationship: GraphRelationship) => {
-    try {
-      await this.neo4jService.write(
-        `OPTIONAL MATCH (n {_id: $entityId})-[r:${relationship}]->(s) DELETE r`,
-        { entityId },
-      )
-    } catch (e) {
-      this.logger.error(e)
-    }
+  async deleteRelationshipType(entityId: string, relationship: GraphRelationship) {
+    await this.neo4jService.write(
+      `OPTIONAL MATCH (n {_id: $entityId})-[r:${relationship}]->(s) DELETE r`,
+      { entityId },
+    )
   }
 
-  getEntitiesGraph = async (entityId: string, depth = 1, relationshipType?: GraphRelationship) => {
+  async getEntitiesGraph(entityId: string, depth = 1, relationshipType?: GraphRelationship) {
     const result = await this.neo4jService.read(
       `OPTIONAL MATCH p=(n {_id: $entityId})-[${
         relationshipType ? `:${relationshipType}` : ''
@@ -193,6 +171,12 @@ export class GraphService {
       propertiesLocation: [],
       entitiesReported: [],
       entitiesInvolvedInProceeding: [],
+      companiesSuppliers: [],
+      personsSuppliers: [],
+      companiesDisputing: [],
+      personsDisputing: [],
+      companiesCompetitors: [],
+      personsCompetitors: [],
     }
 
     result.records.forEach((record) => {
@@ -260,56 +244,6 @@ export class GraphService {
             })
             break
           }
-          case 'LOCATED_AT': {
-            relationships.propertiesLocation.push({
-              startNode,
-              endNode,
-              _type: type as GraphRelationship,
-              _confirmed: Boolean(properties._confirmed),
-              _trustworthiness: parseInt(properties._trustworthiness),
-            })
-            break
-          }
-          case 'BORN_IN': {
-            relationships.personsBirthPlace.push({
-              startNode,
-              endNode,
-              _type: type as GraphRelationship,
-              _confirmed: Boolean(properties._confirmed),
-              _trustworthiness: parseInt(properties._trustworthiness),
-            })
-            break
-          }
-          case 'HQ_AT': {
-            relationships.companiesHeadquarters.push({
-              startNode,
-              endNode,
-              _type: type as GraphRelationship,
-              _confirmed: Boolean(properties._confirmed),
-              _trustworthiness: parseInt(properties._trustworthiness),
-            })
-            break
-          }
-          case 'BRANCH_AT': {
-            relationships.companiesBranches.push({
-              startNode,
-              endNode,
-              _type: type as GraphRelationship,
-              _confirmed: Boolean(properties._confirmed),
-              _trustworthiness: parseInt(properties._trustworthiness),
-            })
-            break
-          }
-          case 'LIVES_AT': {
-            relationships.personsHomeAddress.push({
-              startNode,
-              endNode,
-              _type: type as GraphRelationship,
-              _confirmed: Boolean(properties._confirmed),
-              _trustworthiness: parseInt(properties._trustworthiness),
-            })
-            break
-          }
           case 'INVOLVED_AS': {
             relationships.entitiesInvolvedInProceeding.push({
               startNode,
@@ -321,24 +255,66 @@ export class GraphService {
             })
             break
           }
-          case 'REPORTED': {
-            relationships.entitiesReported.push({
+          default: {
+            const relationship: NodesRelationship = {
               startNode,
               endNode,
               _type: type as GraphRelationship,
               _confirmed: Boolean(properties._confirmed),
               _trustworthiness: parseInt(properties._trustworthiness),
-            })
-            break
-          }
-          case 'OCCURED_AT': {
-            relationships.eventsOccurrencePlace.push({
-              startNode,
-              endNode,
-              _type: type as GraphRelationship,
-              _confirmed: Boolean(properties._confirmed),
-              _trustworthiness: parseInt(properties._trustworthiness),
-            })
+            }
+
+            switch (type as GraphRelationship) {
+              case 'LOCATED_AT': {
+                relationships.propertiesLocation.push(relationship)
+                break
+              }
+              case 'BORN_IN': {
+                relationships.personsBirthPlace.push(relationship)
+                break
+              }
+              case 'HQ_AT': {
+                relationships.companiesHeadquarters.push(relationship)
+                break
+              }
+              case 'BRANCH_AT': {
+                relationships.companiesBranches.push(relationship)
+                break
+              }
+              case 'LIVES_AT': {
+                relationships.personsHomeAddress.push(relationship)
+                break
+              }
+              case 'REPORTED': {
+                relationships.entitiesReported.push(relationship)
+                break
+              }
+              case 'OCCURED_AT': {
+                relationships.eventsOccurrencePlace.push(relationship)
+                break
+              }
+              case 'COMPETITOR': {
+                if ([startNode.entityType, endNode.entityType].includes('PERSON')) {
+                  relationships.personsCompetitors.push(relationship)
+                } else relationships.companiesCompetitors.push(relationship)
+
+                break
+              }
+              case 'SUPPLIER': {
+                if ([startNode.entityType, endNode.entityType].includes('PERSON')) {
+                  relationships.personsSuppliers.push(relationship)
+                } else relationships.companiesSuppliers.push(relationship)
+
+                break
+              }
+              case 'DISPUTING': {
+                if ([startNode.entityType, endNode.entityType].includes('PERSON')) {
+                  relationships.personsDisputing.push(relationship)
+                } else relationships.companiesDisputing.push(relationship)
+
+                break
+              }
+            }
             break
           }
         }

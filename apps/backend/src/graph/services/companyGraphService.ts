@@ -1,19 +1,17 @@
-import { Injectable, Logger } from '@nestjs/common'
-import { Company } from 'defs'
+import { Injectable } from '@nestjs/common'
+import { Company, RelationshipMetadata } from 'defs'
 import { AssociateGraphRelationship, CompanyGraphNode } from '@modules/definitions'
 import { GraphService } from './graphService'
 import { LocationGraphService } from './locationGraphService'
 
 @Injectable()
 export class CompanyGraphService {
-  private readonly logger = new Logger(CompanyGraphService.name)
-
   constructor(
     private readonly graphService: GraphService,
-    private readonly locationGraphservice: LocationGraphService,
+    private readonly locationGraphService: LocationGraphService,
   ) {}
 
-  upsertCompanyNode = async (companyId: string, companyDocument: Company) => {
+  async upsertCompanyNode(companyId: string, companyDocument: Company) {
     await this.graphService.upsertEntity<CompanyGraphNode>(
       {
         _id: companyId,
@@ -24,11 +22,14 @@ export class CompanyGraphService {
       'COMPANY',
     )
 
-    await this.upsertCompanyAssociates(companyDocument)
-    await this.upsertCompanyLocations(companyDocument)
+    await Promise.all([
+      this.upsertCompanyAssociates(companyDocument),
+      this.upsertCompanyLocations(companyDocument),
+      this.upsertCompanyRelationships(companyDocument),
+    ])
   }
 
-  private upsertCompanyAssociates = async (companyDocument: Company) => {
+  private async upsertCompanyAssociates(companyDocument: Company) {
     const map = new Map<string, AssociateGraphRelationship>()
 
     companyDocument.associates.forEach(
@@ -68,7 +69,92 @@ export class CompanyGraphService {
     }
   }
 
-  private upsertCompanyLocations = async ({ _id, headquarters, locations }: Company) => {
+  private async upsertCompanyRelationships({ _id, relationships }: Company) {
+    if (!relationships?.length) return
+
+    const competitorsCompanies = new Map<string, RelationshipMetadata>()
+    const competitorsPersons = new Map<string, RelationshipMetadata>()
+    const suppliersPersons = new Map<string, RelationshipMetadata>()
+    const suppliersCompanies = new Map<string, RelationshipMetadata>()
+    const disputingCompanies = new Map<string, RelationshipMetadata>()
+    const disputingPersons = new Map<string, RelationshipMetadata>()
+
+    relationships?.forEach(({ person, company, metadata, type }) => {
+      const relationshipData: RelationshipMetadata = {
+        _confirmed: metadata.confirmed,
+        _trustworthiness: metadata.trustworthiness.level,
+      }
+
+      switch (type) {
+        case 'DISPUTING': {
+          if (person?._id) {
+            disputingPersons.set(person._id, relationshipData)
+          } else if (company?._id) {
+            disputingCompanies.set(company._id, relationshipData)
+          }
+          break
+        }
+        case 'COMPETITOR': {
+          if (person?._id) {
+            competitorsPersons.set(person._id, relationshipData)
+          } else if (company?._id) {
+            competitorsCompanies.set(company._id, relationshipData)
+          }
+          break
+        }
+        case 'SUPPLIER': {
+          if (person?._id) {
+            suppliersPersons.set(person._id, relationshipData)
+          } else if (company?._id) {
+            suppliersCompanies.set(company._id, relationshipData)
+          }
+          break
+        }
+      }
+    })
+
+    const companyId = String(_id)
+    const relationshipsQueries: Promise<void>[] = []
+
+    if (suppliersCompanies.size) {
+      relationshipsQueries.push(
+        this.graphService.replaceRelationships(companyId, suppliersCompanies, 'SUPPLIER'),
+      )
+    }
+    if (suppliersPersons.size) {
+      relationshipsQueries.push(
+        this.graphService.replaceRelationships(companyId, suppliersPersons, 'SUPPLIER'),
+      )
+    }
+
+    if (competitorsPersons.size) {
+      relationshipsQueries.push(
+        this.graphService.replaceRelationships(companyId, competitorsPersons, 'COMPETITOR'),
+      )
+    }
+    if (competitorsCompanies.size) {
+      relationshipsQueries.push(
+        this.graphService.replaceRelationships(companyId, competitorsCompanies, 'COMPETITOR'),
+      )
+    }
+
+    if (disputingPersons.size) {
+      relationshipsQueries.push(
+        this.graphService.replaceRelationships(companyId, disputingPersons, 'DISPUTING'),
+      )
+    }
+    if (disputingCompanies.size) {
+      relationshipsQueries.push(
+        this.graphService.replaceRelationships(companyId, disputingCompanies, 'DISPUTING'),
+      )
+    }
+
+    if (relationshipsQueries.length) {
+      await Promise.all(relationshipsQueries)
+    }
+  }
+
+  private async upsertCompanyLocations({ _id, headquarters, locations }: Company) {
     const companyLocations = new Set(locations)
 
     if (headquarters) {
@@ -76,14 +162,14 @@ export class CompanyGraphService {
     }
 
     if (companyLocations.size) {
-      await this.locationGraphservice.upsertLocationNodes(Array.from(companyLocations))
+      await this.locationGraphService.upsertLocationNodes(Array.from(companyLocations))
 
       const companyId = String(_id)
       const relationshipsQueries: Promise<void>[] = []
 
       if (headquarters) {
         relationshipsQueries.push(
-          this.locationGraphservice.upsertLocationRelationship(
+          this.locationGraphService.upsertLocationRelationship(
             headquarters.locationId,
             companyId,
             'HQ_AT',
@@ -93,14 +179,17 @@ export class CompanyGraphService {
 
       if (locations.length) {
         relationshipsQueries.push(
-          this.locationGraphservice.upsertLocationsRelationships(
+          this.locationGraphService.upsertLocationsRelationships(
             companyId,
             locations.map(({ locationId }) => locationId),
             'BRANCH_AT',
           ),
         )
       }
-      await Promise.allSettled(relationshipsQueries)
+
+      if (relationshipsQueries.length) {
+        await Promise.all(relationshipsQueries)
+      }
     }
   }
 }

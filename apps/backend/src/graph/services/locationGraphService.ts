@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common'
+import { Injectable } from '@nestjs/common'
 import { GraphRelationship, Location, RelationshipMetadata } from 'defs'
 import { formatAddress } from 'tools'
 import { LocationGraphNode } from '@modules/definitions'
@@ -6,63 +6,45 @@ import { GraphService } from './graphService'
 
 @Injectable()
 export class LocationGraphService {
-  private readonly logger = new Logger(LocationGraphService.name)
-
   constructor(private readonly graphService: GraphService) {}
 
-  upsertLocationNodes = async (locationDocuments: Location[]) => {
-    try {
-      await this.graphService.upsertEntities<LocationGraphNode>(
-        locationDocuments.map(this.createLocationData),
-        'LOCATION',
-      )
-    } catch (e) {
-      this.logger.error(e)
-    }
+  async upsertLocationNodes(locationDocuments: Location[]) {
+    await this.graphService.upsertEntities<LocationGraphNode>(
+      locationDocuments.map(this.createLocationData),
+      'LOCATION',
+    )
   }
 
-  upsertLocationNode = async (locationDocument: Location) => {
-    try {
-      await this.graphService.upsertEntity<LocationGraphNode>(
-        this.createLocationData(locationDocument),
-        'LOCATION',
-      )
-    } catch (e) {
-      this.logger.error(e)
-    }
+  async upsertLocationNode(locationDocument: Location) {
+    await this.graphService.upsertEntity<LocationGraphNode>(
+      this.createLocationData(locationDocument),
+      'LOCATION',
+    )
   }
 
-  upsertLocationRelationship = async (
+  async upsertLocationRelationship(
     locationId: string,
     entityId: string,
     relationshipType: GraphRelationship,
-  ) => {
-    try {
-      const map = new Map<string, RelationshipMetadata>()
-      map.set(locationId, { _confirmed: true, _trustworthiness: 0 })
-      return this.graphService.replaceRelationships(entityId, map, relationshipType)
-    } catch (e) {
-      this.logger.error(e)
-    }
+  ) {
+    const map = new Map<string, RelationshipMetadata>()
+    map.set(locationId, { _confirmed: true, _trustworthiness: 0 })
+    return this.graphService.replaceRelationships(entityId, map, relationshipType)
   }
 
-  upsertLocationsRelationships = async (
+  async upsertLocationsRelationships(
     entityId: string,
     locationsIds: string[],
     relationshipType: GraphRelationship,
-  ) => {
-    try {
-      const map = new Map<string, RelationshipMetadata>()
-      locationsIds.forEach((locationId) =>
-        map.set(locationId, { _confirmed: true, _trustworthiness: 0 }),
-      )
-      return this.graphService.replaceRelationships(entityId, map, relationshipType)
-    } catch (e) {
-      this.logger.error(e)
-    }
+  ) {
+    const map = new Map<string, RelationshipMetadata>()
+    locationsIds.forEach((locationId) =>
+      map.set(locationId, { _confirmed: true, _trustworthiness: 0 }),
+    )
+    return this.graphService.replaceRelationships(entityId, map, relationshipType)
   }
 
-  private createLocationData = (locationDocument: Location): LocationGraphNode => {
+  private createLocationData(locationDocument: Location): LocationGraphNode {
     const locationData: LocationGraphNode = {
       _id: locationDocument.locationId,
       address: formatAddress(locationDocument),
