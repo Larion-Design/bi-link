@@ -22,6 +22,9 @@ export class FileInput
   @Field()
   readonly hash: string
 
+  @Field({ nullable: true })
+  readonly mimeType?: string
+
   @Field()
   readonly category: string
 
