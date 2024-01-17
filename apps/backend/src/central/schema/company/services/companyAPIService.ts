@@ -109,9 +109,7 @@ export class CompanyAPIService {
       ? await this.fileService.getUploadedFilesModels(companyInfo.files)
       : []
 
-    companyModel.images = companyInfo.images?.length
-      ? await this.fileService.getUploadedFilesModels(companyInfo.images)
-      : []
+    companyModel.images = []
 
     companyModel.associates = companyInfo.associates.length
       ? await this.associatesService.createAssociatesModels(companyInfo.associates)
