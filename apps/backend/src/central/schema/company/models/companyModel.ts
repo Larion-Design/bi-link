@@ -75,7 +75,7 @@ export class CompanyModel implements Company {
   @Prop({ type: [CustomFieldSchema], default: [] })
   activityCodes: CustomFieldModel[]
 
-  @Prop({ type: [FileSchema] })
+  @Prop({ type: [FileSchema], default: [] })
   images?: FileModel[]
 
   @Prop({ type: [CompanyRelationshipSchema] })
