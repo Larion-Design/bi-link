@@ -3,9 +3,9 @@ import {
   CompanyRelationshipSchema,
 } from '@modules/central/schema/company/models/company-relationship.model'
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
-import { Document, HydratedDocument, Types } from 'mongoose'
+import { HydratedDocument, Types } from 'mongoose'
 import { CustomFieldModel, CustomFieldSchema } from '../../customField/models/customFieldModel'
-import { FileModel, FileSchema } from '../../file/models/fileModel'
+import { FileModel } from '../../file/models/fileModel'
 import { MetadataModel, MetadataSchema } from '../../metadata/models/metadataModel'
 import {
   OptionalDateValueWithMetadataModel,

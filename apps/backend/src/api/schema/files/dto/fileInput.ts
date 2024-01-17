@@ -20,6 +20,9 @@ export class FileInput
   readonly isHidden: boolean
 
   @Field()
+  readonly hash: string
+
+  @Field()
   readonly category: string
 
   @Field(() => [String])

@@ -25,7 +25,6 @@ export const fileSchema = z
 export const fileInputSchema = fileSchema.omit({
   createdAt: true,
   updatedAt: true,
-  hash: true,
   mimeType: true,
 })
 
