@@ -32,14 +32,12 @@ export class FileAPIService {
     }
   }
 
-  getUploadedFilesModels = async (files: FileAPIInput[]) => {
+  async getUploadedFilesModels(files: FileAPIInput[]) {
     try {
-      const transactionSession = await this.fileModel.startSession()
       const fileModels = await Promise.all(
-        files.map(async (fileInfo) => this.getUploadedFileModel(fileInfo, transactionSession)),
+        files.map(async (fileInfo) => this.getUploadedFileModel(fileInfo)),
       )
-      await transactionSession.endSession()
-      return fileModels as FileModel[]
+      return fileModels.filter((fileModel) => !!fileModel) as FileModel[]
     } catch (error) {
       this.logger.error(error)
     }
