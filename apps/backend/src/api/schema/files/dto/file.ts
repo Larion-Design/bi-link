@@ -23,7 +23,7 @@ export class File extends PickType(WithMetadata, ['metadata'] as const) implemen
   @Field()
   isHidden: boolean
 
-  @Field()
+  @Field({ defaultValue: '' })
   category: string
 
   @Field(() => [String])

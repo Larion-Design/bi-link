@@ -25,7 +25,7 @@ export class FileInput
   @Field({ nullable: true })
   readonly mimeType?: string
 
-  @Field()
+  @Field({ defaultValue: '' })
   readonly category: string
 
   @Field(() => [String])
