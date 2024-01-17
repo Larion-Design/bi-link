@@ -1,3 +1,4 @@
+import { NodesRelationship } from '@modules/api/schema/graph/dto/nodesRelationship'
 import { Field, ObjectType } from '@nestjs/graphql'
 import {
   Graph,
@@ -56,6 +57,24 @@ export class GraphRelationships implements GraphRelationshipsType {
 
   @Field(() => [ProceedingEntityRelationship])
   entitiesInvolvedInProceeding: ProceedingEntityRelationship[]
+
+  @Field(() => [NodesRelationship])
+  companiesSuppliers: NodesRelationship[]
+
+  @Field(() => [NodesRelationship])
+  personsSuppliers: NodesRelationship[]
+
+  @Field(() => [NodesRelationship])
+  companiesCompetitors: NodesRelationship[]
+
+  @Field(() => [NodesRelationship])
+  personsCompetitors: NodesRelationship[]
+
+  @Field(() => [NodesRelationship])
+  companiesDisputing: NodesRelationship[]
+
+  @Field(() => [NodesRelationship])
+  personsDisputing: NodesRelationship[]
 }
 
 @ObjectType()
