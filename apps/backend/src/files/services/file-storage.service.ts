@@ -65,8 +65,13 @@ export class FileStorageService implements OnApplicationBootstrap {
     return Promise.all(filesIds.map((fileId) => this.getDownloadUrl(fileId, ttl)))
   }
 
-  private transformUrl = (privateUrl: string) =>
-    privateUrl.replace(this.minioInternalUrl, this.minioPublicUrl)
+  private transformUrl(privateUrl: string) {
+    const internalUrl = new URL(privateUrl)
+    const publicUrl = new URL(this.minioPublicUrl)
+
+    internalUrl.hostname = publicUrl.hostname
+    return internalUrl.toString()
+  }
 
   async onApplicationBootstrap() {
     await this.validateBucket()
