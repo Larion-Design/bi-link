@@ -13,7 +13,8 @@
     "docker:stop": "pnpm nx stop docker",
     "test": "pnpm nx affected --base=FETCH_HEAD -t test --parallel=3",
     "lint": "eslint --quiet --cache .",
-    "prettier": "prettier --check --cache ."
+    "prettier": "prettier --check --cache .",
+    "backup": "~/Documents/mongo/bin/mongodump --archive --host='localhost:27017' --db='bi-link'"
   },
   "author": "alextudor@duck.com",
   "license": "proprietary",
