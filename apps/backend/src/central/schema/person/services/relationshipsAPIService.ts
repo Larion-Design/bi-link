@@ -80,6 +80,7 @@ export class RelationshipsAPIService {
     session?: ClientSession,
   ) => {
     const relationship = new RelationshipModel()
+    relationship.metadata = relationshipInfo.metadata
     relationship.person = relatingPerson
     relationship.proximity = relationshipInfo.proximity
     relationship.type = relationshipInfo.type
