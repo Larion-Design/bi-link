@@ -13,7 +13,7 @@ import CardActions from '@mui/material/CardActions'
 import Button from '@mui/material/Button'
 import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined'
 import Box from '@mui/material/Box'
-import { useCompanyState } from '../../../../state/company/companyState'
+import { useCompanyState } from 'state/company/companyState'
 
 type Props = {
   closeModal: () => void

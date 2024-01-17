@@ -1,3 +1,8 @@
+import {
+  CompanyRelationshipsState,
+  createCompanyRelationshipsStore,
+} from 'state/company/company-relationships.state'
+import { createImagesStore, ImagesState } from 'state/imagesStore'
 import { v4 } from 'uuid'
 import { create } from 'zustand'
 import {
@@ -21,10 +26,12 @@ import { createMetadataStore, MetadataState } from '../metadataStore'
 import { removeMapItems } from '../utils'
 
 type CompanyState = MetadataState &
+  ImagesState &
   FilesState &
   CustomFieldsState &
   ContactDetailsState &
-  CompanyAssociatesState & {
+  CompanyAssociatesState &
+  CompanyRelationshipsState & {
     setCompanyInfo: (company: CompanyAPIInput) => void
     getCompany: () => CompanyAPIInput
 
@@ -51,9 +58,11 @@ type CompanyState = MetadataState &
 export const useCompanyState = create<CompanyState>((set, get, state) => ({
   ...createMetadataStore(set, get, state),
   ...createFilesStore(set, get, state),
+  ...createImagesStore(set, get, state),
   ...createCustomFieldsStore(set, get, state),
   ...createContactDetailsStore(set, get, state),
   ...createCompanyAssociatesStore(set, get, state),
+  ...createCompanyRelationshipsStore(set, get, state),
 
   name: getDefaultTextWithMetadata(),
   cui: getDefaultTextWithMetadata(),
@@ -109,6 +118,7 @@ export const useCompanyState = create<CompanyState>((set, get, state) => ({
       getContactDetails,
       getAssociates,
       getBranches,
+      getRelationships,
     } = get()
 
     return {
@@ -133,6 +143,7 @@ export const useCompanyState = create<CompanyState>((set, get, state) => ({
         tradeRegister: getDefaultBooleanWithMetadata(),
       },
       activityCodes: [],
+      relationships: getRelationships(),
     }
   },
 }))

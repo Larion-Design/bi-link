@@ -1,4 +1,6 @@
+import { CompanyRelationships } from 'components/form/company/company-relationships'
 import { DatePickerWithMetadata } from 'components/form/datePicker'
+import { Images } from 'components/form/images'
 import React, { useEffect, useState } from 'react'
 import { CompanyAPIInput } from 'defs'
 import { useFormik } from 'formik'
@@ -12,7 +14,7 @@ import { FormattedMessage } from 'react-intl'
 import { useCancelDialog } from '@frontend/utils/hooks/useCancelDialog'
 import { routes } from '../../../../router/routes'
 import { CONTACT_METHODS } from '@frontend/utils/constants'
-import { useCompanyState } from '../../../../state/company/companyState'
+import { useCompanyState } from 'state/company/companyState'
 import { Associates } from '../associates'
 import { CustomInputFields } from '../../customInputFields'
 import { FilesManager } from '../../fileField'
@@ -38,8 +40,11 @@ export const CompanyForm: React.FunctionComponent<Props> = ({ companyId, onSubmi
     locations,
     headquarters,
     files,
+    images,
+    relationships,
 
     setFiles,
+    setImages,
 
     updateName,
     updateCui,
@@ -48,15 +53,18 @@ export const CompanyForm: React.FunctionComponent<Props> = ({ companyId, onSubmi
     updateHeadquarters,
     updateBranch,
     updateFile,
+    updateImage,
     updateCustomField,
     updateContactDetails,
 
     addBranch,
     addFile,
+    addImage,
     addContactDetails,
     addCustomField,
 
     removeFiles,
+    removeImages,
     removeCustomFields,
     removeBranches,
     removeContactDetails,
@@ -65,8 +73,10 @@ export const CompanyForm: React.FunctionComponent<Props> = ({ companyId, onSubmi
     getAssociates,
     getBranches,
     getFiles,
+    getImages,
     getCustomFields,
     getContactDetails,
+    getRelationships,
   } = useCompanyState()
 
   const [step, setStep] = useState(0)
@@ -89,6 +99,7 @@ export const CompanyForm: React.FunctionComponent<Props> = ({ companyId, onSubmi
     [registrationNumber],
   )
   useEffect(() => void setFieldValue('files', getFiles()), [files, getFiles])
+  useEffect(() => void setFieldValue('images', getImages()), [images])
   useEffect(
     () => void setFieldValue('customFields', getCustomFields()),
     [customFields, getCustomFields],
@@ -103,6 +114,10 @@ export const CompanyForm: React.FunctionComponent<Props> = ({ companyId, onSubmi
   useEffect(() => {
     void setFieldValue('associates', getAssociates())
   }, [associates, getAssociates])
+
+  useEffect(() => {
+    void setFieldValue('relationships', getRelationships())
+  }, [relationships, getRelationships])
 
   return (
     <form data-testid={'companyForm'}>
@@ -131,11 +146,16 @@ export const CompanyForm: React.FunctionComponent<Props> = ({ companyId, onSubmi
             </Step>
             <Step completed={false}>
               <StepButton color={'inherit'} onClick={() => setStep(4)}>
-                <FormattedMessage id={'Files'} />
+                <FormattedMessage id={'Relationships'} defaultMessage={'Relatii'} />
               </StepButton>
             </Step>
             <Step completed={false}>
               <StepButton color={'inherit'} onClick={() => setStep(5)}>
+                <FormattedMessage id={'Files'} />
+              </StepButton>
+            </Step>
+            <Step completed={false}>
+              <StepButton color={'inherit'} onClick={() => setStep(6)}>
                 <FormattedMessage id={'Additional Information'} />
               </StepButton>
             </Step>
@@ -144,41 +164,52 @@ export const CompanyForm: React.FunctionComponent<Props> = ({ companyId, onSubmi
       </Grid>
       <Grid item xs={12} mt={7}>
         {step === 0 && (
-          <Grid container spacing={2}>
+          <Grid container spacing={10} alignItems={'flex-start'}>
             <Grid item xs={4}>
-              <InputFieldWithMetadata
-                name={'name'}
-                label={'Nume'}
-                fieldInfo={name}
-                updateFieldInfo={updateName}
+              <Images
+                images={images}
+                setImages={setImages}
+                updateImage={updateImage}
+                removeImages={removeImages}
+                addImage={addImage}
               />
             </Grid>
+            <Grid item xs={8} container spacing={4}>
+              <Grid item xs={6}>
+                <InputFieldWithMetadata
+                  name={'name'}
+                  label={'Nume'}
+                  fieldInfo={name}
+                  updateFieldInfo={updateName}
+                />
+              </Grid>
 
-            <Grid item xs={4}>
-              <InputFieldWithMetadata
-                name={'cui'}
-                label={'CIF / CUI'}
-                fieldInfo={cui}
-                updateFieldInfo={updateCui}
-              />
-            </Grid>
+              <Grid item xs={6}>
+                <InputFieldWithMetadata
+                  name={'cui'}
+                  label={'CIF / CUI'}
+                  fieldInfo={cui}
+                  updateFieldInfo={updateCui}
+                />
+              </Grid>
 
-            <Grid item xs={4}>
-              <InputFieldWithMetadata
-                name={'registrationNumber'}
-                label={'Numar de inregistrare'}
-                fieldInfo={registrationNumber}
-                updateFieldInfo={updateRegistrationNumber}
-              />
-            </Grid>
+              <Grid item xs={6}>
+                <InputFieldWithMetadata
+                  name={'registrationNumber'}
+                  label={'Numar de inregistrare'}
+                  fieldInfo={registrationNumber}
+                  updateFieldInfo={updateRegistrationNumber}
+                />
+              </Grid>
 
-            <Grid item xs={4}>
-              <DatePickerWithMetadata
-                disableFuture
-                label={'Data inregistrarii'}
-                fieldInfo={registrationDate}
-                updateFieldInfo={updateRegistrationDate}
-              />
+              <Grid item xs={6}>
+                <DatePickerWithMetadata
+                  disableFuture
+                  label={'Data inregistrarii'}
+                  fieldInfo={registrationDate}
+                  updateFieldInfo={updateRegistrationDate}
+                />
+              </Grid>
             </Grid>
 
             <Grid item xs={12}>
@@ -218,6 +249,11 @@ export const CompanyForm: React.FunctionComponent<Props> = ({ companyId, onSubmi
         )}
         {step === 4 && (
           <Grid container spacing={2}>
+            <CompanyRelationships sectionTitle={'Relatii cu alte companii sau persoane'} />
+          </Grid>
+        )}
+        {step === 5 && (
+          <Grid container spacing={2}>
             <FilesManager
               removeFiles={removeFiles}
               keepDeletedFiles={!!companyId}
@@ -228,7 +264,7 @@ export const CompanyForm: React.FunctionComponent<Props> = ({ companyId, onSubmi
             />
           </Grid>
         )}
-        {step === 5 && (
+        {step === 6 && (
           <Grid container spacing={2}>
             <CustomInputFields
               customFields={customFields}

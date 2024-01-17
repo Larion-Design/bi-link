@@ -3,7 +3,7 @@ import Stack from '@mui/material/Stack'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import { CompanyAPIOutput } from 'defs'
-import { useCompanyState } from '../../../../../state/company/companyState'
+import { useCompanyState } from 'state/company/companyState'
 import { DatePickerWithMetadata } from '../../../datePicker'
 import { ASSOCIATE_ROLES } from '@frontend/utils/constants'
 import { AutocompleteFieldWithMetadata } from '@frontend/components/form/autocompleteField/autocompleteFieldWithMetadata'
@@ -41,7 +41,7 @@ export const CompanyAssociateInformation: React.FunctionComponent<Props> = ({
       updateAssociateEquity,
     ],
   )
-  const { role, startDate, endDate, isActive, equity } = associateInfo
+  const { role, startDate, endDate, equity } = associateInfo
 
   return (
     <>

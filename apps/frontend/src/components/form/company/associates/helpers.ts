@@ -1,4 +1,4 @@
-import { CompanyAssociateInfoState } from '../../../../state/company/companyAssociatesState'
+import { CompanyAssociateInfoState } from 'state/company/companyAssociatesState'
 
 export const countEntities = (associates: Map<string, CompanyAssociateInfoState>) =>
   Array.from(associates.values()).reduce(
