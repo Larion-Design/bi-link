@@ -10,7 +10,7 @@ export class FileModel implements File {
   @Prop({ type: MetadataSchema })
   metadata: MetadataModel
 
-  @Prop({ unique: true, required: true })
+  @Prop({ required: true })
   fileId: string
 
   @Prop({ isRequired: false, default: '' })
