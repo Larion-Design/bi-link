@@ -110,7 +110,7 @@ export class CompanyAPIService {
       : []
 
     companyModel.images = companyInfo.images?.length
-      ? await this.fileService.getUploadedFilesModels(companyInfo.files)
+      ? await this.fileService.getUploadedFilesModels(companyInfo.images)
       : []
 
     companyModel.associates = companyInfo.associates.length
