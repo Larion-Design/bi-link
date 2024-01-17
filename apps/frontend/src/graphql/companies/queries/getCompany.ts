@@ -222,6 +222,37 @@ const getCompany = gql`
         description
         isHidden
       }
+      images {
+        metadata {
+          access
+          confirmed
+          trustworthiness {
+            level
+            source
+          }
+        }
+        fileId
+        name
+        description
+        isHidden
+      }
+      relationships {
+        metadata {
+          access
+          confirmed
+          trustworthiness {
+            level
+            source
+          }
+        }
+        person {
+          _id
+        }
+        company {
+          _id
+        }
+        type
+      }
     }
   }
 `
