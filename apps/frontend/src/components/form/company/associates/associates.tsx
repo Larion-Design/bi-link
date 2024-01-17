@@ -87,23 +87,25 @@ export const Associates: React.FunctionComponent<Props> = ({ sectionTitle }) => 
   )
 
   useEffect(() => {
-    const personsIds = new Set<string>()
-    const companiesIds = new Set<string>()
+    if (associates.size) {
+      const personsIds = new Set<string>()
+      const companiesIds = new Set<string>()
 
-    associates.forEach(({ person, company }) => {
-      if (person?._id) {
-        personsIds.add(person._id)
-      } else if (company?._id) {
-        companiesIds.add(company._id)
+      associates.forEach(({ person, company }) => {
+        if (person?._id) {
+          personsIds.add(person._id)
+        } else if (company?._id) {
+          companiesIds.add(company._id)
+        }
+      })
+
+      if (personsIds.size) {
+        void fetchPersons({ variables: { personsIds: Array.from(personsIds) } })
       }
-    })
 
-    if (personsIds.size) {
-      void fetchPersons({ variables: { personsIds: Array.from(personsIds) } })
-    }
-
-    if (companiesIds.size) {
-      void fetchCompanies({ variables: { companiesIds: Array.from(companiesIds) } })
+      if (companiesIds.size) {
+        void fetchCompanies({ variables: { companiesIds: Array.from(companiesIds) } })
+      }
     }
   }, [associates])
 
@@ -133,9 +135,8 @@ export const Associates: React.FunctionComponent<Props> = ({ sectionTitle }) => 
         alignItems={'center'}
         justifyContent={'space-between'}
       >
-        <Stack direction={'row'} spacing={2} alignItems={'center'}>
-          <Typography variant={'h5'}>{sectionTitle}</Typography>
-
+        <Typography variant={'h5'}>{sectionTitle}</Typography>
+        <Stack spacing={2} direction={'row'}>
           <Button
             variant={'contained'}
             startIcon={<AddOutlinedIcon />}
@@ -160,8 +161,6 @@ export const Associates: React.FunctionComponent<Props> = ({ sectionTitle }) => 
             Companie
           </Button>
         </Stack>
-
-        <Equity totalEquity={totalEquity} />
       </Stack>
 
       <Stack spacing={1} width={1}>
@@ -188,6 +187,9 @@ export const Associates: React.FunctionComponent<Props> = ({ sectionTitle }) => 
           companiesInfo={companiesMap}
           associatesIds={getAllAssociatesExceptRoles(associates, ['Administrator', 'Actionar'])}
         />
+      </Stack>
+      <Stack width={1} direction={'row'} justifyContent={'flex-end'} mt={2}>
+        <Equity totalEquity={totalEquity} />
       </Stack>
     </>
   )
