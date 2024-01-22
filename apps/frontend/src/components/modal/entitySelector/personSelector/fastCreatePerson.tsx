@@ -27,15 +27,15 @@ export const FastCreatePerson: React.FunctionComponent<Props> = ({
   personsSelected,
   changeView,
 }) => {
-  const [createPerson, { data }] = createPersonRequest()
+  const [createPerson, { data, loading }] = createPersonRequest()
   const { firstName, lastName, cnp, updateFirstName, updateCnp, updateLastName } =
     useSecondaryPersonState()
 
   const { submitForm, setFieldValue, isSubmitting, isValidating } = useFormik<PersonAPIInput>({
     enableReinitialize: true,
+    validateOnMount: false,
     validateOnBlur: false,
     validateOnChange: false,
-    validateOnMount: true,
     validate: (values) => ({}),
     onSubmit: (data) => createPerson({ variables: { data } }),
     initialValues: getDefaultPerson(),
@@ -46,11 +46,11 @@ export const FastCreatePerson: React.FunctionComponent<Props> = ({
   useEffect(() => void setFieldValue('cnp', cnp), [cnp])
 
   useEffect(() => {
-    if (data?.createPerson) {
+    if (!loading && data?.createPerson) {
       personsSelected?.([data.createPerson])
       closeModal()
     }
-  }, [data?.createPerson])
+  }, [loading, data?.createPerson])
 
   return (
     <>
@@ -103,7 +103,7 @@ export const FastCreatePerson: React.FunctionComponent<Props> = ({
           <Button
             variant={'contained'}
             color={'primary'}
-            disabled={isSubmitting || isValidating}
+            disabled={loading || isSubmitting || isValidating}
             onClick={() => void submitForm()}
           >
             <FormattedMessage id={'save'} />
