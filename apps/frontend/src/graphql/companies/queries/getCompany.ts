@@ -252,6 +252,18 @@ const getCompany = gql`
           _id
         }
         type
+        customFields {
+          metadata {
+            access
+            confirmed
+            trustworthiness {
+              level
+              source
+            }
+          }
+          fieldName
+          fieldValue
+        }
       }
     }
   }

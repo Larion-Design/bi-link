@@ -13,7 +13,7 @@ import CardActions from '@mui/material/CardActions'
 import Button from '@mui/material/Button'
 import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined'
 import Box from '@mui/material/Box'
-import { useCompanyState } from 'state/company/companyState'
+import { useSecondaryCompanyState } from 'state/company/companyState'
 
 type Props = {
   closeModal: () => void
@@ -37,7 +37,7 @@ export const FastCreateCompany: React.FunctionComponent<Props> = ({
   })
 
   const { name, cui, registrationNumber, updateName, updateCui, updateRegistrationNumber } =
-    useCompanyState()
+    useSecondaryCompanyState()
 
   useEffect(() => void setFieldValue('name', name), [name])
   useEffect(() => void setFieldValue('cui', cui), [cui])

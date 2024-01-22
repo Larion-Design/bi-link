@@ -201,3 +201,132 @@ export const usePersonState = create<PersonState>((set, get, state) => ({
   removeOldNames: (ids) => set({ oldNames: removeMapItems(get().oldNames, ids) }),
   removeEducation: (ids) => set({ education: removeMapItems(get().education, ids) }),
 }))
+
+export const useSecondaryPersonState = create<PersonState>((set, get, state) => ({
+  ...createMetadataStore(set, get, state),
+  ...createFilesStore(set, get, state),
+  ...createImagesStore(set, get, state),
+  ...createCustomFieldsStore(set, get, state),
+  ...createContactDetailsStore(set, get, state),
+
+  firstName: getDefaultTextWithMetadata(),
+  lastName: getDefaultTextWithMetadata(),
+  cnp: getDefaultTextWithMetadata(),
+  birthdate: getDefaultOptionalDateWithMetadata(),
+  birthPlace: getDefaultLocation(),
+  homeAddress: getDefaultLocation(),
+  oldNames: new Map(),
+  documents: new Map(),
+  relationships: new Map(),
+  education: new Map(),
+
+  setPersonInfo: (personInfo) => {
+    const relationshipsMap = new Map<string, RelationshipAPI>()
+    personInfo.relationships.forEach((relationshipInfo) =>
+      relationshipsMap.set(relationshipInfo.person._id, relationshipInfo),
+    )
+
+    const oldNamesMap = new Map<string, OldName>()
+    personInfo.oldNames.forEach((oldName) => oldNamesMap.set(v4(), oldName))
+
+    const documentsMap = new Map<string, IdDocumentAPI>()
+    personInfo.documents.forEach((documentInfo) => documentsMap.set(v4(), documentInfo))
+
+    const educationMap = new Map<string, EducationAPIInput>()
+    personInfo.education.forEach((educationInfo) => educationMap.set(v4(), educationInfo))
+
+    set({
+      firstName: personInfo.firstName,
+      lastName: personInfo.lastName,
+      cnp: personInfo.cnp,
+      birthdate: personInfo.birthdate,
+      birthPlace: personInfo.birthPlace,
+      homeAddress: personInfo.homeAddress,
+      relationships: relationshipsMap,
+      oldNames: oldNamesMap,
+      documents: documentsMap,
+      education: educationMap,
+    })
+
+    get().updateMetadata(personInfo.metadata)
+    get().setContactDetails(personInfo.contactDetails)
+    get().setCustomFields(personInfo.customFields)
+    get().setFiles(personInfo.files)
+    get().setImages(personInfo.images)
+  },
+
+  getPerson: () => {
+    const {
+      metadata,
+      firstName,
+      lastName,
+      cnp,
+      birthdate,
+      birthPlace,
+      homeAddress,
+      getOldNames,
+      getDocuments,
+      getEducation,
+      getRelationships,
+      getCustomFields,
+      getContactDetails,
+      getFiles,
+      getImages,
+    } = get()
+
+    return {
+      metadata,
+      firstName,
+      lastName,
+      cnp,
+      birthdate,
+      birthPlace,
+      homeAddress,
+      documents: getDocuments(),
+      education: getEducation(),
+      oldNames: getOldNames(),
+      relationships: getRelationships(),
+      contactDetails: getContactDetails(),
+      customFields: getCustomFields(),
+      files: getFiles(),
+      images: getImages(),
+    }
+  },
+
+  getRelationships: () => Array.from(get().relationships.values()),
+  getEducation: () => Array.from(get().education.values()),
+  getDocuments: () => Array.from(get().documents.values()),
+  getOldNames: () => Array.from(get().oldNames.values()),
+
+  updateFirstName: (firstName) => set({ firstName }),
+  updateLastName: (lastName) => set({ lastName }),
+  updateCnp: (cnp) => set({ cnp }),
+  updateBirthdate: (birthdate) => set({ birthdate }),
+  updateBirthPlace: (birthPlace) => set({ birthPlace }),
+  updateHomeAddress: (homeAddress) => set({ homeAddress }),
+  updateRelationship: (relationship) =>
+    set({
+      relationships: new Map(get().relationships).set(relationship.person._id, relationship),
+    }),
+  updateOldName: (uid, oldName) => set({ oldNames: new Map(get().oldNames).set(uid, oldName) }),
+  updateDocument: (uid, document) =>
+    set({ documents: new Map(get().documents).set(uid, document) }),
+  updateEducation: (uid, education) =>
+    set({ education: new Map(get().education).set(uid, education) }),
+
+  addRelationships: (personsIds) => {
+    const relationshipsMap = get().relationships
+    personsIds.forEach((personId) =>
+      relationshipsMap.set(personId, getDefaultRelationship(personId)),
+    )
+    set({ relationships: new Map(relationshipsMap) })
+  },
+  addOldName: () => set({ oldNames: new Map(get().oldNames).set(v4(), getDefaultOldName()) }),
+  addDocument: () => set({ documents: new Map(get().documents).set(v4(), getDefaultIdDocument()) }),
+  addEducation: () => set({ education: new Map(get().education).set(v4(), getDefaultEducation()) }),
+
+  removeRelationships: (ids) => set({ relationships: removeMapItems(get().relationships, ids) }),
+  removeDocuments: (ids) => set({ documents: removeMapItems(get().documents, ids) }),
+  removeOldNames: (ids) => set({ oldNames: removeMapItems(get().oldNames, ids) }),
+  removeEducation: (ids) => set({ education: removeMapItems(get().education, ids) }),
+}))

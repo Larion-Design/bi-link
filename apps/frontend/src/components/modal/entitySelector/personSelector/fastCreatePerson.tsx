@@ -9,7 +9,7 @@ import CardActions from '@mui/material/CardActions'
 import { useFormik } from 'formik'
 import { FormattedMessage } from 'react-intl'
 import { getDefaultPerson } from 'default-values'
-import { usePersonState } from '../../../../state/personState'
+import { useSecondaryPersonState } from 'state/personState'
 import { InputFieldWithMetadata } from '../../../form/inputField'
 import { OldNames } from '../../../form/person/oldNames'
 import { PersonSelectorView } from './personSelector'
@@ -28,7 +28,8 @@ export const FastCreatePerson: React.FunctionComponent<Props> = ({
   changeView,
 }) => {
   const [createPerson, { data }] = createPersonRequest()
-  const { firstName, lastName, cnp, updateFirstName, updateCnp, updateLastName } = usePersonState()
+  const { firstName, lastName, cnp, updateFirstName, updateCnp, updateLastName } =
+    useSecondaryPersonState()
 
   const { submitForm, setFieldValue, isSubmitting, isValidating } = useFormik<PersonAPIInput>({
     enableReinitialize: true,
