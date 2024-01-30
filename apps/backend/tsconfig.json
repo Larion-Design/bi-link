@@ -14,6 +14,8 @@
     "outDir": "./dist",
     "baseUrl": "./",
     "incremental": true,
+    "inlineSourceMap": false,
+    "inlineSources": false,
     "skipLibCheck": true,
     "noImplicitAny": false,
     "noUncheckedIndexedAccess": true,

@@ -2,28 +2,5 @@
   "name": "backend",
   "projectType": "application",
   "implicitDependencies": ["docker"],
-  "targets": {
-    "start": {
-      "executor": "nx:run-commands",
-      "options": {
-        "cwd": "{projectRoot}",
-        "commands": ["pnpm start"]
-      }
-    },
-    "build": {
-      "executor": "nx:run-commands",
-      "options": {
-        "cwd": "{projectRoot}",
-        "command": "nest build"
-      }
-    },
-    "deploy": {
-      "executor": "nx:run-commands",
-      "options": {
-        "cwd": "{projectRoot}",
-        "command": "pnpm --filter backend exec pkg -t latest-alpine-x64 -c build/package.json --out-path build/bin build/dist/main.js -C Gzip",
-        "parallel": false
-      }
-    }
-  }
+  "targets": {}
 }

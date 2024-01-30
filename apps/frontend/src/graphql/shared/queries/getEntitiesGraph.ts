@@ -165,6 +165,78 @@ const request = gql`
             entityType
           }
         }
+        personsCompetitors {
+          _confirmed
+          _type
+          startNode {
+            entityId
+            entityType
+          }
+          endNode {
+            entityId
+            entityType
+          }
+        }
+        companiesCompetitors {
+          _confirmed
+          _type
+          startNode {
+            entityId
+            entityType
+          }
+          endNode {
+            entityId
+            entityType
+          }
+        }
+        personsDisputing {
+          _confirmed
+          _type
+          startNode {
+            entityId
+            entityType
+          }
+          endNode {
+            entityId
+            entityType
+          }
+        }
+        companiesDisputing {
+          _confirmed
+          _type
+          startNode {
+            entityId
+            entityType
+          }
+          endNode {
+            entityId
+            entityType
+          }
+        }
+        personsSuppliers {
+          _confirmed
+          _type
+          startNode {
+            entityId
+            entityType
+          }
+          endNode {
+            entityId
+            entityType
+          }
+        }
+        companiesSuppliers {
+          _confirmed
+          _type
+          startNode {
+            entityId
+            entityType
+          }
+          endNode {
+            entityId
+            entityType
+          }
+        }
       }
       entities {
         persons {
@@ -243,5 +315,5 @@ const request = gql`
 
 export const getEntitiesGraphRequest = () =>
   useLazyQuery<Response, Params>(request, {
-    fetchPolicy: 'cache-first',
+    fetchPolicy: 'cache-and-network',
   })

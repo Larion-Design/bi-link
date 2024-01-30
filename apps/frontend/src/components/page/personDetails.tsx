@@ -46,7 +46,7 @@ export const PersonDetails: React.FunctionComponent<Props> = ({
         {!!personId && (
           <InputFieldMenu label={'Optiuni'}>
             <MenuItem onClick={() => setMainTabIndex(0)}>Informatii</MenuItem>
-            <MenuItem disabled={true || !canSwitchViews} onClick={() => setMainTabIndex(1)}>
+            <MenuItem disabled={!canSwitchViews} onClick={() => setMainTabIndex(1)}>
               Grafic relational
             </MenuItem>
             <MenuItem disabled onClick={() => setMainTabIndex(3)}>

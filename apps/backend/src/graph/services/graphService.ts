@@ -17,57 +17,47 @@ export class GraphService {
 
   constructor(private readonly neo4jService: Neo4jService) {}
 
-  entityExists = async (entityId: string) => {
-    try {
-      const result = await this.neo4jService.read(
-        'OPTIONAL MATCH (n {_id: $entityId}) RETURN n IS NOT NULL AS NODE_EXISTS',
-        {
-          entityId,
-        },
-      )
-      return Boolean(result.records[0]?.get('NODE_EXISTS'))
-    } catch (e) {
-      this.logger.error(e)
-    }
+  async entityExists(entityId: string) {
+    const result = await this.neo4jService.read(
+      'OPTIONAL MATCH (n {_id: $entityId}) RETURN n IS NOT NULL AS NODE_EXISTS',
+      { entityId },
+    )
+    return Boolean(result.records[0]?.get('NODE_EXISTS'))
   }
 
-  upsertEntity = async <T extends EntityMetadata>(data: T, type: EntityType) => {
+  async upsertEntity<T extends EntityMetadata>(data: T, type: EntityType) {
     await this.neo4jService.write(
       `MERGE (n:${type} {_id: $data._id}) ON CREATE SET n = $data ON MATCH SET n = $data`,
       { data },
     )
   }
 
-  upsertEntities = async <T extends EntityMetadata>(entitiesInfo: T[], type: EntityType) => {
+  async upsertEntities<T extends EntityMetadata>(entitiesInfo: T[], type: EntityType) {
     await this.neo4jService.write(
       `UNWIND $entitiesInfo AS data MERGE (n:${type} {_id: data._id}) ON CREATE SET n = data ON MATCH SET n = data`,
       { entitiesInfo },
     )
   }
 
-  deleteEntity = async (entityId: string) => {
-    try {
-      await this.neo4jService.write(`OPTIONAL MATCH (n {_id: $entityId}) DETACH DELETE n`, {
-        entityId,
-      })
-    } catch (e) {
-      this.logger.error(e)
-    }
+  async deleteEntity(entityId: string) {
+    await this.neo4jService.write(`OPTIONAL MATCH (n {_id: $entityId}) DETACH DELETE n`, {
+      entityId,
+    })
   }
 
-  deleteEntities = async (entitiesIds: string[]) => {
+  async deleteEntities(entitiesIds: string[]) {
     await this.neo4jService.write(
       `OPTIONAL MATCH (n) WHERE n._id IN $entitiesIds DETACH DELETE n`,
       { entitiesIds },
     )
   }
 
-  upsertRelationship = async <T extends RelationshipMetadata>(
+  async upsertRelationship<T extends RelationshipMetadata>(
     entityId: string,
     targetEntityId: string,
     relationship: GraphRelationship,
     data?: T,
-  ) => {
+  ) {
     if (data) {
       await this.neo4jService.write(
         `MATCH (n {_id: $entityId}), (s {_id: $targetEntityId}) MERGE (n)-[r:${relationship}]-(s) SET r = $data`,
@@ -149,13 +139,11 @@ export class GraphService {
   }
 
   async getEntitiesGraph(entityId: string, depth = 1, relationshipType?: GraphRelationship) {
+    const relationshipLabel = relationshipType ? `:${relationshipType}` : ''
+
     const result = await this.neo4jService.read(
-      `OPTIONAL MATCH p=(n {_id: $entityId})-[${
-        relationshipType ? `:${relationshipType}` : ''
-      }*1..${depth}]-() RETURN p`,
-      {
-        entityId,
-      },
+      `OPTIONAL MATCH p=(n {_id: $entityId})-[${relationshipLabel}*1..${depth}]-() RETURN p`,
+      { entityId },
     )
 
     const relationships: GraphRelationships = {
@@ -320,7 +308,6 @@ export class GraphService {
         }
       })
     })
-
     return relationships
   }
 }

@@ -44,7 +44,7 @@ export const CompanyDetails: React.FunctionComponent<Props> = ({
         {!!companyId && (
           <InputFieldMenu label={'Optiuni'}>
             <MenuItem onClick={() => setMainTabIndex(0)}>Informatii</MenuItem>
-            <MenuItem disabled={true || !canChangeView} onClick={() => setMainTabIndex(1)}>
+            <MenuItem disabled={!canChangeView} onClick={() => setMainTabIndex(1)}>
               Grafic relational
             </MenuItem>
             <MenuItem disabled onClick={() => setMainTabIndex(3)}>

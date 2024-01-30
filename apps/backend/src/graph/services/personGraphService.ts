@@ -61,40 +61,45 @@ export class PersonGraphService {
     }
   }
 
-  private upsertPersonLocations = async ({ _id, birthPlace, homeAddress }: Person) => {
-    try {
-      const locations: Location[] = []
+  private async upsertPersonLocations({ _id, birthPlace, homeAddress }: Person) {
+    const locations: Location[] = []
+
+    if (homeAddress) {
+      locations.push(homeAddress)
+    }
+    if (birthPlace) {
+      locations.push(birthPlace)
+    }
+
+    if (locations.length) {
+      await this.locationGraphService.upsertLocationNodes(locations)
+
+      const personId = String(_id)
+      const promises: Promise<unknown>[] = []
 
       if (homeAddress) {
-        locations.push(homeAddress)
-      }
-      if (birthPlace) {
-        locations.push(birthPlace)
-      }
-
-      if (locations.length) {
-        await this.locationGraphService.upsertLocationNodes(locations)
-
-        const personId = String(_id)
-
-        if (homeAddress) {
-          await this.locationGraphService.upsertLocationRelationship(
+        promises.push(
+          this.locationGraphService.upsertLocationRelationship(
             homeAddress.locationId,
             personId,
             'LIVES_AT',
-          )
-        }
+          ),
+        )
+      }
 
-        if (birthPlace) {
-          await this.locationGraphService.upsertLocationRelationship(
+      if (birthPlace) {
+        promises.push(
+          this.locationGraphService.upsertLocationRelationship(
             birthPlace.locationId,
             personId,
             'BORN_IN',
-          )
-        }
+          ),
+        )
       }
-    } catch (e) {
-      this.logger.error(e)
+
+      if (promises.length) {
+        await Promise.all(promises)
+      }
     }
   }
 }

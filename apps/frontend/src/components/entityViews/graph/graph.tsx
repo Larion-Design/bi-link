@@ -3,7 +3,7 @@ import Box from '@mui/material/Box'
 import ELK, { ElkNode } from 'elkjs'
 import { useIntl } from 'react-intl'
 import { ConnectionLineType, Edge, Node, Position, ReactFlowProvider } from 'reactflow'
-import { relationshipsTypes } from '@frontend/components/form/person/constants'
+import { relationshipsTypes } from 'components/form/person/constants'
 import {
   CompanyAPIOutput,
   EntityLocationRelationship,
@@ -18,8 +18,8 @@ import {
 import { formatAddress } from 'tools'
 import { useElementSize } from 'usehooks-ts'
 import { v4 } from 'uuid'
-import { getEntitiesGraphRequest } from '../../../graphql/shared/queries/getEntitiesGraph'
-import { useNotification } from '../../../utils/hooks/useNotification'
+import { getEntitiesGraphRequest } from 'api/shared/queries/getEntitiesGraph'
+import { useNotification } from 'utils/hooks/useNotification'
 import { EntityGraph } from './entityGraph'
 import { Graph as GraphType } from 'defs'
 
@@ -40,7 +40,7 @@ export const Graph: React.FunctionComponent<PropsWithRef<Props>> = ({
   id,
   title,
   entityId,
-  depth,
+  depth = 2,
   onEntitySelected,
   onRelationshipSelected,
   disableFilters,
@@ -51,7 +51,7 @@ export const Graph: React.FunctionComponent<PropsWithRef<Props>> = ({
   const intl = useIntl()
   const showNotification = useNotification()
   const [fetchGraph, { data, error, loading }] = getEntitiesGraphRequest()
-  const [graphDepth, updateDepth] = useState(depth ?? 2)
+  const [graphDepth, updateDepth] = useState(depth)
 
   const [nodes, setNodes] = useState<Node<unknown>[]>([])
   const [edges, setEdges] = useState<Edge<unknown>[]>([])
