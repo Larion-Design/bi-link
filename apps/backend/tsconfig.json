@@ -1,11 +1,11 @@
 {
   "compilerOptions": {
-    "module": "CommonJS",
+    "module": "esnext",
+    "moduleResolution": "node",
     "strictNullChecks": true,
     "strictPropertyInitialization": false,
     "declaration": false,
     "removeComments": true,
-    "moduleResolution": "Node",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "allowSyntheticDefaultImports": true,
