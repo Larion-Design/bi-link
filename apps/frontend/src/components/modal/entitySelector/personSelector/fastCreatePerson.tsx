@@ -28,22 +28,32 @@ export const FastCreatePerson: React.FunctionComponent<Props> = ({
   changeView,
 }) => {
   const [createPerson, { data, loading }] = createPersonRequest()
-  const { firstName, lastName, cnp, updateFirstName, updateCnp, updateLastName } =
-    useSecondaryPersonState()
+  const { getPerson, firstName, lastName, cnp, updateFirstName, updateCnp, updateLastName } =
+    useSecondaryPersonState(({ getPerson, firstName, lastName, cnp, updateFirstName, updateCnp, updateLastName }) => ({ getPerson, firstName, lastName, cnp, updateFirstName, updateCnp, updateLastName }))
 
   const { submitForm, setFieldValue, isSubmitting, isValidating } = useFormik<PersonAPIInput>({
     enableReinitialize: true,
     validateOnMount: false,
     validateOnBlur: false,
     validateOnChange: false,
+    isInitialValid: true,
     validate: (values) => ({}),
-    onSubmit: (data) => createPerson({ variables: { data } }),
+    onSubmit: () => void createPerson({ variables: { data: getPerson() } }),
     initialValues: getDefaultPerson(),
   })
 
-  useEffect(() => void setFieldValue('firstName', firstName), [firstName])
-  useEffect(() => void setFieldValue('lastName', lastName), [lastName])
-  useEffect(() => void setFieldValue('cnp', cnp), [cnp])
+  useEffect(() => {
+    void setFieldValue('firstName', firstName)
+    console.debug('updated firstname to:', firstName.value)
+  }, [firstName])
+  useEffect(() => {
+    void setFieldValue('lastName', lastName)
+    console.debug('updated lastName')
+  }, [lastName])
+  useEffect(() => {
+    void setFieldValue('cnp', cnp)
+    console.debug('updated cnp')
+  }, [cnp])
 
   useEffect(() => {
     if (!loading && data?.createPerson) {
