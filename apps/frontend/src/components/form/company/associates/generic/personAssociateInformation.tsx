@@ -72,12 +72,14 @@ export const PersonAssociateInformation: React.FunctionComponent<Props> = ({
         <DatePickerWithMetadata
           label={'fromDate'}
           fieldInfo={startDate}
+          disableFuture
           updateFieldInfo={(startDate) => updateAssociateStartDate(associateId, startDate)}
         />
 
         <DatePickerWithMetadata
           label={'untilDate'}
           fieldInfo={endDate}
+          disableFuture
           updateFieldInfo={(endDate) => updateAssociateEndDate(associateId, endDate)}
         />
 
