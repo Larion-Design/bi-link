@@ -52,7 +52,7 @@ export const PersonRelationshipCard: React.FunctionComponent<Props> = ({
           <DropdownList
             value={relationship.type}
             options={{
-              SUPPLIER: 'Furnizor',
+              SUPPLIER: 'Partener',
               COMPETITOR: 'Competitor',
               DISPUTING: 'Parte aflata in litigii',
             }}

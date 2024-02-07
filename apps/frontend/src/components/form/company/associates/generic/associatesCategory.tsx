@@ -28,7 +28,7 @@ export const AssociatesCategory: React.FunctionComponent<Props> = ({
   companiesInfo,
   allowRoleChange,
 }) => {
-  const [expanded, setExpandedState] = useState(false)
+  const [expanded, setExpandedState] = useState(!!associatesIds.length)
   const { associates } = useCompanyState()
 
   const categoryAssociates = useMemo(() => {
@@ -47,7 +47,7 @@ export const AssociatesCategory: React.FunctionComponent<Props> = ({
   return (
     <Accordion
       variant={'outlined'}
-      expanded={!!associates.size && expanded}
+      expanded={expanded || !!associates.size}
       onChange={() => setExpandedState((expanded) => (associates.size ? !expanded : expanded))}
     >
       <AccordionSummary expandIcon={<ExpandMoreIcon />}>

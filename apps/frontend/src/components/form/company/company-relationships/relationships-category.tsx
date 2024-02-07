@@ -1,5 +1,5 @@
 import { PersonRelationshipCard } from 'components/form/company/company-relationships/person-relationship-card'
-import React, { useMemo } from 'react'
+import React, { useMemo, useState } from 'react'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
 import AccordionSummary from '@mui/material/AccordionSummary'
@@ -24,6 +24,7 @@ export const RelationshipsCategory: React.FunctionComponent<Props> = ({
   personsInfo,
   companiesInfo,
 }) => {
+  const [expanded, setExpanded] = useState(!!relationshipsIds.length)
   const relationships = useCompanyState(({ relationships }) => relationships)
 
   const relationshipsMap = useMemo(() => {
@@ -37,7 +38,11 @@ export const RelationshipsCategory: React.FunctionComponent<Props> = ({
     : { persons: 0, companies: 0 }
 
   return (
-    <Accordion variant={'outlined'} expanded={!!relationshipsMap?.size}>
+    <Accordion
+      variant={'outlined'}
+      expanded={expanded || !!relationshipsMap?.size}
+      onChange={() => setExpanded((expanded) => (relationshipsMap.size ? !expanded : expanded))}
+    >
       <AccordionSummary expandIcon={<ExpandMoreIcon />}>
         <Stack
           sx={{ width: 0.5 }}
