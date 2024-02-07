@@ -1,5 +1,5 @@
 import React, { useCallback, useRef, useState } from 'react'
-import { NumberWithMetadata, TextWithMetadata } from 'defs'
+import { TextWithMetadata } from 'defs'
 import IconButton from '@mui/material/IconButton'
 import { AutocompleteInputField } from '@frontend/components/form/autocompleteField/autocompleteInputField'
 import { AutocompleteFieldProps } from '@frontend/components/form/autocompleteField/types'
@@ -47,6 +47,7 @@ export const AutocompleteFieldWithMetadata: React.FunctionComponent<Props> = ({
           onChange={(value) => updateFieldInfo({ ...fieldInfo, value })}
           readonly={readonly}
           error={error}
+          suggestions={suggestions}
           endIcon={
             <IconButton
               ref={(ref) => (metadataElementRef.current = ref)}

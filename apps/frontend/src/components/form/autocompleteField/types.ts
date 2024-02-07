@@ -1,5 +1,5 @@
 import { InputFieldProps } from '@frontend/components/form/inputField'
 
 export type AutocompleteFieldProps = InputFieldProps & {
-  suggestions?: string[]
+  suggestions?: string[] | Readonly<string[]>
 }
