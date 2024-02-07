@@ -10,16 +10,16 @@ export class FileInput
   @Field(() => ID)
   readonly fileId: string
 
-  @Field({ nullable: true })
+  @Field({ nullable: true, defaultValue: '' })
   readonly name: string
 
-  @Field({ nullable: true })
+  @Field({ nullable: true, defaultValue: '' })
   readonly description: string
 
-  @Field()
+  @Field({ nullable: true, defaultValue: false })
   readonly isHidden: boolean
 
-  @Field()
+  @Field({ nullable: true, defaultValue: '' })
   readonly hash: string
 
   @Field({ nullable: true })
@@ -28,6 +28,6 @@ export class FileInput
   @Field({ defaultValue: '' })
   readonly category: string
 
-  @Field(() => [String])
+  @Field(() => [String], { nullable: true, defaultValue: [] })
   readonly tags: string[]
 }
