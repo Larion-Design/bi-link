@@ -176,6 +176,7 @@ export const useCompanyState = create<CompanyState>((set, get, state) => ({
       cui: company.cui,
       registrationNumber: company.registrationNumber,
       locations: locationsMap,
+      headquarters: company.headquarters,
     })
 
     get().setAssociates(company.associates)
