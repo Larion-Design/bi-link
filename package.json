@@ -11,6 +11,7 @@
     "build": "pnpm nx affected --base=FETCH_HEAD -t build --parallel=3",
     "docker": "pnpm nx start docker",
     "docker:stop": "pnpm nx stop docker",
+    "docker:restart": "pnpm nx restart docker",
     "test": "pnpm nx affected --base=FETCH_HEAD -t test --parallel=3",
     "lint": "eslint --quiet --cache .",
     "prettier": "prettier --check --cache ."
