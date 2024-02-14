@@ -68,7 +68,7 @@ export const Associates: React.FunctionComponent<Props> = ({ sectionTitle }) => 
               addAssociates(createPersonsAssociatesByRole(selectedPersonsIds, newRole))
             }
           }
-          return modal?.openPersonSelector(addSelectedPersonsAssociates, [])
+          return modal?.openPersonSelector(addSelectedPersonsAssociates)
         }
         case 'COMPANY': {
           const addSelectedCompaniesAssociates = (selectedCompaniesIds: string[]) => {
@@ -76,7 +76,7 @@ export const Associates: React.FunctionComponent<Props> = ({ sectionTitle }) => 
               addAssociates(createCompaniesAssociatesByRole(selectedCompaniesIds, newRole))
             }
           }
-          return modal?.openCompanySelector(addSelectedCompaniesAssociates, [])
+          return modal?.openCompanySelector(addSelectedCompaniesAssociates)
         }
       }
     },

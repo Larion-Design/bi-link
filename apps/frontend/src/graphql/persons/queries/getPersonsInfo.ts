@@ -83,4 +83,4 @@ const request = gql`
 `
 
 export const getPersonsInfoRequest = () =>
-  useLazyQuery<Response, Params>(request, { fetchPolicy: 'cache-first' })
+  useLazyQuery<Response, Params>(request, { fetchPolicy: 'cache-and-network' })

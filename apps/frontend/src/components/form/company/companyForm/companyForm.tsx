@@ -87,7 +87,7 @@ export const CompanyForm: React.FunctionComponent<Props> = ({ companyId, onSubmi
     validateOnMount: false,
     validateOnBlur: false,
     enableReinitialize: true,
-    onSubmit,
+    onSubmit: async () => onSubmit?.(getCompany()),
     initialValues: getCompany(),
   })
 
@@ -225,7 +225,7 @@ export const CompanyForm: React.FunctionComponent<Props> = ({ companyId, onSubmi
           <Grid container spacing={2}>
             <CustomInputFields
               customFields={contactDetails}
-              suggestions={CONTACT_METHODS}
+              suggestions={CONTACT_METHODS as unknown as string[]}
               updateCustomField={updateContactDetails}
               addCustomField={addContactDetails}
               removeCustomFields={removeContactDetails}

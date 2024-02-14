@@ -271,5 +271,5 @@ const getCompany = gql`
 
 export const getCompanyInfoRequest = () =>
   useLazyQuery<Response, Params>(getCompany, {
-    fetchPolicy: 'cache-and-network',
+    fetchPolicy: 'network-only',
   })
