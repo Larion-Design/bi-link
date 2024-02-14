@@ -103,8 +103,8 @@ export class LocationsService {
         lat,
         long,
       ]
-        .map((locationDetail) => String(locationDetail).trim())
-        .join(' ')
+        .map((locationDetail) => String(locationDetail).toLowerCase().trim())
+        .join()
 
       hash.update(formattedLocationString)
     } else if (otherInfo.length) {
