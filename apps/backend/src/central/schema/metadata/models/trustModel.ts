@@ -3,10 +3,10 @@ import { Trustworthiness } from 'defs'
 
 @Schema({ _id: false, timestamps: false })
 export class TrustModel implements Trustworthiness {
-  @Prop()
+  @Prop({ default: '' })
   source: string
 
-  @Prop()
+  @Prop({ default: 0 })
   level: number
 }
 
