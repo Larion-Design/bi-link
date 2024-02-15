@@ -81,6 +81,7 @@ export const useSecondaryCompanyState = create<CompanyState>((set, get, state) =
     set({
       name: company.name,
       cui: company.cui,
+      registrationDate: company.registrationDate,
       registrationNumber: company.registrationNumber,
       locations: locationsMap,
     })
