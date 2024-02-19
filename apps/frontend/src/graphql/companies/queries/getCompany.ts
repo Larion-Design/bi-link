@@ -53,6 +53,17 @@ const getCompany = gql`
           }
         }
       }
+      registrationDate {
+        value
+        metadata {
+          access
+          confirmed
+          trustworthiness {
+            level
+            source
+          }
+        }
+      }
       headquarters {
         metadata {
           access
