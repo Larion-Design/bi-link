@@ -78,8 +78,6 @@ export const PersonsTable: React.FunctionComponent<Props> = ({ persons: { total,
       <DataGrid
         autoHeight
         rowCount={total}
-        hideFooterPagination
-        hideFooter
         hideFooterSelectedRowCount
         disableExtendRowFullWidth
         disableSelectionOnClick
