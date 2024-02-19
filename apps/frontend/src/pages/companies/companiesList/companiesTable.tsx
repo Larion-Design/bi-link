@@ -80,8 +80,6 @@ export const CompaniesTable: React.FunctionComponent<Props> = ({
       <DataGrid
         autoHeight
         rowCount={total}
-        hideFooterPagination
-        hideFooter
         hideFooterSelectedRowCount
         disableExtendRowFullWidth
         disableSelectionOnClick
