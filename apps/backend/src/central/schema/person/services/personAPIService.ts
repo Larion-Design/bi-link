@@ -142,9 +142,10 @@ export class PersonAPIService {
   }
 
   private createOldNamesModels = (oldNames: OldName[]) =>
-    oldNames.map(({ name, changeReason }) => {
+    oldNames.map(({ name, changeReason, metadata }) => {
       const oldNameModel = new OldNameModel()
       oldNameModel.name = name
+      oldNameModel.metadata = metadata
       oldNameModel.changeReason = changeReason
       return oldNameModel
     })
