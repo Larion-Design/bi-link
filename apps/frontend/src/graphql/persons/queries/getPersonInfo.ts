@@ -203,6 +203,7 @@ const query = gql`
         documentNumber
         issueDate
         expirationDate
+        status
         metadata {
           confirmed
           access
