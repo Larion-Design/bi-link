@@ -43,7 +43,7 @@ export const PersonForm: React.FunctionComponent<Props> = ({ personId, onSubmit 
     homeAddress,
     images,
     files,
-    documents,
+    idDocuments,
     relationships,
     customFields,
     contactDetails,
@@ -53,7 +53,7 @@ export const PersonForm: React.FunctionComponent<Props> = ({ personId, onSubmit 
     getRelationships,
     getEducation,
     getOldNames,
-    getDocuments,
+    getIdDocuments,
     getFiles,
     getImages,
     getCustomFields,
@@ -88,7 +88,6 @@ export const PersonForm: React.FunctionComponent<Props> = ({ personId, onSubmit 
     validateOnBlur: false,
     validateOnChange: false,
     validateOnMount: true,
-    validate: (values) => ({}),
     onSubmit,
     initialValues: getPerson(),
   })
@@ -118,7 +117,7 @@ export const PersonForm: React.FunctionComponent<Props> = ({ personId, onSubmit 
   useEffect(() => void setFieldValue('images', getImages()), [images])
   useEffect(() => void setFieldValue('customFields', getCustomFields()), [customFields])
   useEffect(() => void setFieldValue('contactDetails', getContactDetails()), [contactDetails])
-  useEffect(() => void setFieldValue('documents', getDocuments()), [documents])
+  useEffect(() => void setFieldValue('documents', getIdDocuments()), [idDocuments])
 
   return (
     <form data-testid={'personsForm'}>
@@ -239,7 +238,7 @@ export const PersonForm: React.FunctionComponent<Props> = ({ personId, onSubmit 
             <Grid container spacing={2}>
               <CustomInputFields
                 customFields={contactDetails}
-                suggestions={CONTACT_METHODS}
+                suggestions={CONTACT_METHODS as unknown as string[]}
                 updateCustomField={updateContactDetails}
                 addCustomField={addContactDetails}
                 removeCustomFields={removeContactDetails}
@@ -248,7 +247,7 @@ export const PersonForm: React.FunctionComponent<Props> = ({ personId, onSubmit 
           )}
           {step === 2 && (
             <Grid container spacing={2}>
-              <IdDocuments suggestions={ID_DOCUMENT_TYPES} />
+              <IdDocuments suggestions={ID_DOCUMENT_TYPES as unknown as string[]} />
             </Grid>
           )}
           {step === 3 && (

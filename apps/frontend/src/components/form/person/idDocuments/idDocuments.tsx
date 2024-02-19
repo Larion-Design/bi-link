@@ -9,40 +9,34 @@ import {
   GridToolbarContainer,
 } from '@mui/x-data-grid'
 import Box from '@mui/material/Box'
-import { IdDocumentAPI, IdDocumentStatus } from 'defs'
-import { usePersonState } from '../../../../state/personState'
+import { IdDocumentAPI } from 'defs'
+import { usePersonState } from 'state/personState'
 import { AddSuggestionsToolbarButton } from '../../../dataGrid/addSuggestionsToolbarButton'
 import { RemoveRowsToolbarButton } from '../../../dataGrid/removeRowsToolbarButton'
 
-type Props<T = IdDocumentAPI> = {
+type Props = {
   suggestions: string[]
 }
 
 export const IdDocuments: React.FunctionComponent<Props> = ({ suggestions }) => {
-  const [documents, updateDocument, addDocument, removeDocuments] = usePersonState(
-    ({ documents, updateDocument, addDocument, removeDocuments }) => [
-      documents,
-      updateDocument,
-      addDocument,
-      removeDocuments,
-    ],
-  )
+  const { idDocuments, updateIdDocument, addIdDocuments, removeIdDocuments } = usePersonState()
   const [selectedRows, setSelectedRows] = useState<GridSelectionModel>([])
-  const datagridItems = useMemo(() => createDatagridItems(documents), [documents])
+  const dataGridItems = useMemo(() => createDatagridItems(idDocuments), [idDocuments])
 
   const processRowUpdate = useCallback(
     async (newRow: Unique<IdDocumentAPI>) => {
       const { id, item } = getDatagridItemInfo(newRow)
-      updateDocument(id, item)
+      updateIdDocument(id, item)
       return Promise.resolve(newRow)
     },
-    [updateDocument],
+    [updateIdDocument],
   )
 
-  const removeSelectedRows = useCallback(
-    () => removeDocuments(selectedRows as string[]),
-    [removeDocuments],
-  )
+  const removeSelectedRows = useCallback(() => {
+    if (selectedRows.length) {
+      removeIdDocuments(selectedRows as string[])
+    }
+  }, [removeIdDocuments, selectedRows])
 
   const columns: GridColDef[] = useMemo(
     () => [
@@ -111,10 +105,10 @@ export const IdDocuments: React.FunctionComponent<Props> = ({ suggestions }) => 
         hideFooterPagination
         hideFooterSelectedRowCount
         hideFooter
-        rows={datagridItems}
+        rows={dataGridItems}
         columns={columns}
         experimentalFeatures={{ newEditingApi: true }}
-        getRowId={({ _id }) => String(_id)}
+        getRowId={({ id }) => id}
         processRowUpdate={processRowUpdate}
         onSelectionModelChange={(selectedRows) => setSelectedRows(selectedRows)}
         components={{
@@ -123,7 +117,7 @@ export const IdDocuments: React.FunctionComponent<Props> = ({ suggestions }) => 
               <AddSuggestionsToolbarButton
                 defaultOption={''}
                 options={suggestions}
-                optionSelected={addDocument}
+                optionSelected={addIdDocuments}
               />
 
               {!!selectedRows.length && (
