@@ -21,7 +21,7 @@ export const CompaniesList: React.FunctionComponent = () => {
   const showNotification = useNotification()
   const [paginationParams, setPaginationParams] = useState<PaginationParams>({
     currentPage: 0,
-    itemsPerPage: 20,
+    itemsPerPage: 10000,
   })
 
   const [searchTerm, setSearchTerm] = useState('')
