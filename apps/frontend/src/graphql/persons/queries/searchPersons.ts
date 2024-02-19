@@ -7,7 +7,7 @@ type Response = {
 }
 
 const SearchPersons = gql`
-  query SearchPerson($searchTerm: String!, $limit: Int! = 20, $skip: Int! = 0) {
+  query SearchPerson($searchTerm: String!, $limit: Int! = 1000, $skip: Int! = 0) {
     searchPersons(searchTerm: $searchTerm, skip: $skip, limit: $limit) {
       total
       records {
