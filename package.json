@@ -27,11 +27,13 @@
     "typescript": "^5.2.2",
     "parcel": "^2.10.3",
     "@parcel/transformer-typescript-types": "^2.10.3",
-    "@parcel/packager-ts": "2.10.3"
+    "@parcel/packager-ts": "2.10.3",
+    "@nx/eslint": "17.2.8",
+    "@nx/eslint-plugin": "17.2.8"
   },
   "optionalDependencies": {
-    "@typescript-eslint/eslint-plugin": "^5.57.1",
-    "@typescript-eslint/parser": "^5.57.1",
+    "@typescript-eslint/eslint-plugin": "^6.21.0",
+    "@typescript-eslint/parser": "^6.21.0",
     "babel-loader": "^8.3.0",
     "babel-plugin-formatjs": "^10.4.0",
     "eslint": "^8.38.0",

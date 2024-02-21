@@ -14,7 +14,7 @@ export class AssociatesService {
   ) {}
 
   private async createPersonsAssociates(
-    associates: Map<string, AssociateAPI>,
+    associates: Map<string, AssociateAPI[]>,
   ): Promise<AssociateModel[]> {
     if (associates.size) {
       const personsModels = await this.personService.getPersons(
@@ -25,12 +25,16 @@ export class AssociatesService {
       const associatesModels: AssociateModel[] = []
 
       personsModels.forEach((personModel) => {
-        const associateInfo = associates.get(String(personModel._id))
+        const associatesInfo = associates.get(String(personModel._id))
 
-        if (associateInfo) {
-          const associate = this.createAssociateModel(associateInfo)
-          associate.person = personModel
-          associatesModels.push(associate)
+        if (associatesInfo?.length) {
+          associatesModels.push(
+            ...associatesInfo.map((associateInfo) => {
+              const associate = this.createAssociateModel(associateInfo)
+              associate.person = personModel
+              return associate
+            }),
+          )
         }
       })
       return associatesModels
@@ -38,7 +42,7 @@ export class AssociatesService {
     return []
   }
 
-  private async createCompaniesAssociates(associates: Map<string, AssociateAPI>) {
+  private async createCompaniesAssociates(associates: Map<string, AssociateAPI[]>) {
     if (associates.size) {
       const companiesModels = await this.companiesService.getCompanies(
         Array.from(associates.keys()),
@@ -48,30 +52,44 @@ export class AssociatesService {
       const associatesModels: AssociateModel[] = []
 
       companiesModels.forEach((companyModel) => {
-        const associateInfo = associates.get(String(companyModel._id))
+        const associatesInfo = associates.get(String(companyModel._id))
 
-        if (associateInfo) {
-          const associate = this.createAssociateModel(associateInfo)
-          associate.company = companyModel
-          associatesModels.push(associate)
+        if (associatesInfo?.length) {
+          associatesModels.push(
+            ...associatesInfo.map((associateInfo) => {
+              const associate = this.createAssociateModel(associateInfo)
+              associate.company = companyModel
+              return associate
+            }),
+          )
         }
       })
-
       return associatesModels
     }
     return []
   }
 
   async createAssociatesModels(associates: AssociateAPI[]) {
-    const personsAssociatesMap = new Map<string, AssociateAPI>()
-    const companiesAssociatesMap = new Map<string, AssociateAPI>()
+    const personsAssociatesMap = new Map<string, AssociateAPI[]>()
+    const companiesAssociatesMap = new Map<string, AssociateAPI[]>()
 
     associates.forEach((associateInfo) => {
-      if (associateInfo.person?._id) {
-        personsAssociatesMap.set(associateInfo.person?._id, associateInfo)
-      } else if (associateInfo.company?._id) {
-        companiesAssociatesMap.set(associateInfo.company?._id, associateInfo)
-      }
+      const personId = associateInfo.person?._id
+      const companyId = associateInfo.company?._id
+
+      if (personId) {
+        const personAssociates = personsAssociatesMap.get(personId)
+
+        if (!personAssociates) {
+          personsAssociatesMap.set(personId, [associateInfo])
+        } else personAssociates.push(associateInfo)
+      } else if (companyId) {
+        const companyAssociates = companiesAssociatesMap.get(companyId)
+
+        if (!companyAssociates) {
+          companiesAssociatesMap.set(companyId, [associateInfo])
+        } else companyAssociates.push(associateInfo)
+      } else throw new Error('Associates must be mapped to a person or a company.')
     })
 
     return [
