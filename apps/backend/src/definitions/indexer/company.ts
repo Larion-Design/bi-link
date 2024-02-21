@@ -1,3 +1,4 @@
+import { nonEmptyString } from 'defs/dist/helpers'
 import { balanceSheetIndex } from 'src/definitions/indexer/company/balanceSheet'
 import { z } from 'zod'
 import { companySchema } from 'defs'
@@ -13,7 +14,7 @@ export const companyIndexSchema = z.object({
   contactDetails: customFieldIndexSchema.array(),
   customFields: customFieldIndexSchema.array(),
   headquarters: locationIndexSchema.nullish(),
-  locations: locationIndexSchema.array(),
+  locations: nonEmptyString.array(),
   files: embeddedFileIndexSchema.array(),
   associatedCompanies: connectedCompanyIndexSchema.array(),
   associatedPersons: connectedPersonIndexSchema.array(),

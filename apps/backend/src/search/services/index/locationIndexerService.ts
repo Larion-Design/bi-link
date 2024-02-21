@@ -29,4 +29,20 @@ export class LocationIndexerService {
   })
 
   createLocationsIndexData = (locations: Location[]) => locations?.map(this.createLocationIndexData)
+
+  createLocationsFullAddressIndex = (locations: Location[]) =>
+    locations?.map(
+      ({
+        street,
+        number,
+        door,
+        otherInfo,
+        county,
+        locality,
+        zipCode,
+        building,
+        country,
+      }: Location): string =>
+        [street, number, door, otherInfo, county, locality, zipCode, building, country].join(' '),
+    )
 }

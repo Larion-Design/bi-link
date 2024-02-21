@@ -48,7 +48,7 @@ export class CompaniesIndexerService {
     contactDetails: company.contactDetails
       ? this.customFieldsIndexerService.createCustomFieldsIndex(company.contactDetails)
       : [],
-    locations: this.locationIndexerService.createLocationsIndexData(company.locations),
+    locations: this.locationIndexerService.createLocationsFullAddressIndex(company.locations),
     associatedPersons: this.createAssociatedPersonsIndex(company.associates),
     associatedCompanies: this.createAssociatedCompaniesIndex(company.associates),
     files: [],
