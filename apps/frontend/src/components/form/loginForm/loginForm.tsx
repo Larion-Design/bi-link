@@ -63,7 +63,7 @@ export const Login: React.FunctionComponent<Props & FormikProps<LoginInfo>> = ({
         <Box sx={{ mt: 4, width: 1 }}>
           <InputPassword
             label={'Parola'}
-            onChange={(value) => setFieldValue('password', value)}
+            onChange={(value) => void setFieldValue('password', value)}
             error={errors.password}
             disabled={isDisabled}
           />

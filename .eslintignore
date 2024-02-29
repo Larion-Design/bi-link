@@ -4,9 +4,7 @@ node_modules
 .husky
 .github
 dist
-.wrangler
 .vscode
 .eslintcache
 .sst
-cdk.out
 build

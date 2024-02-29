@@ -1,6 +1,3 @@
-import 'tslib'
-import 'tsconfig-paths/register'
-
 import * as compression from 'compression'
 import { NestFactory } from '@nestjs/core'
 import { AppModule } from './app.module'

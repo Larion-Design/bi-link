@@ -87,7 +87,7 @@ export const CompanyForm: React.FunctionComponent<Props> = ({ companyId, onSubmi
     validateOnMount: false,
     validateOnBlur: false,
     enableReinitialize: true,
-    onSubmit: async () => onSubmit?.(getCompany()),
+    onSubmit: async () => void onSubmit?.(getCompany()),
     initialValues: getCompany(),
   })
 

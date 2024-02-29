@@ -10,7 +10,7 @@ export class LocationGraphService {
 
   async upsertLocationNodes(locationDocuments: Location[]) {
     await this.graphService.upsertEntities<LocationGraphNode>(
-      locationDocuments.map(this.createLocationData),
+      locationDocuments.map((location) => this.createLocationData(location)),
       'LOCATION',
     )
   }

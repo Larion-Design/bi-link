@@ -1,16 +1,8 @@
 {
   "name": "frontend",
   "projectType": "application",
-  "implicitDependencies": ["backend"],
+  "implicitDependencies": ["defs", "tools", "default-values"],
   "targets": {
-    "start": {
-      "executor": "nx:run-commands",
-      "depends_on": ["^start"],
-      "options": {
-        "cwd": "{projectRoot}",
-        "commands": ["pnpm start"]
-      }
-    },
     "type-check": {
       "executor": "nx:run-commands",
       "options": {
@@ -18,12 +10,15 @@
         "command": "tsc --noEmit"
       }
     },
+    "lint": {
+      "executor": "@nx/eslint:lint"
+    },
     "build": {
       "executor": "nx:run-commands",
-      "depends_on": ["type-check"],
+      "depends_on": ["type-check", "^build"],
       "options": {
         "cwd": "{projectRoot}",
-        "commands": ["pnpm build"]
+        "commands": ["vite build"]
       }
     },
     "test": {

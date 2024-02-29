@@ -9,8 +9,6 @@
     "build": "tsc && vite build",
     "preview": "vite preview --host",
     "test": "vitest",
-    "lint": "eslint --ext=.tsx,.ts --cache --quiet ./src",
-    "lint:fix": "eslint --ext=.tsx,.ts --cache --quiet --fix ./src",
     "webstorm-integration": "vitest --watch --reporter=dot --reporter=json --outputFile=.vitest-result.json"
   },
   "dependencies": {

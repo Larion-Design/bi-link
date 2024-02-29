@@ -1,18 +1,13 @@
 {
   "root": true,
   "env": {
-    "node": true,
-    "jest": true,
     "es6": true,
-    "shared-node-browser": true,
-    "browser": true
+    "browser": true,
+    "worker": true,
+    "shared-node-browser": true
   },
   "parserOptions": {
-    "project": ["packages/default-values/tsconfig.eslint.json"],
-    "extraFileExtensions": [".json"],
-    "sourceType": "module",
-    "allowImportExportEverywhere": true,
-    "ecmaVersion": "latest"
+    "project": ["tsconfig.eslint.json"]
   },
   "parser": "@typescript-eslint/parser",
   "plugins": ["@typescript-eslint", "prettier"],
@@ -20,12 +15,10 @@
     "eslint:recommended",
     "plugin:@typescript-eslint/recommended",
     "plugin:@typescript-eslint/recommended-requiring-type-checking",
-    "prettier"
+    "plugin:prettier/recommended"
   ],
   "rules": {
     "@typescript-eslint/no-namespace": "off",
-    "simple-import-sort/imports": "off",
-    "simple-import-sort/exports": "off",
     "@typescript-eslint/no-unsafe-assignment": "off",
     "@typescript-eslint/no-unsafe-call": "off",
     "@typescript-eslint/no-empty-interface": "off",

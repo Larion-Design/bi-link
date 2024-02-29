@@ -52,7 +52,7 @@ export const CompanyRelationships: React.FunctionComponent<Props> = ({ sectionTi
 
       switch (entityType) {
         case 'PERSON': {
-          function addSelectedRelationshipsWithPersons(selectedPersonsIds: string[]) {
+          const addSelectedRelationshipsWithPersons = (selectedPersonsIds: string[]) => {
             if (selectedPersonsIds.length) {
               addRelationships(createPersonsRelationshipsWithType(selectedPersonsIds, newRole))
             }
@@ -63,7 +63,7 @@ export const CompanyRelationships: React.FunctionComponent<Props> = ({ sectionTi
           )
         }
         case 'COMPANY': {
-          function addSelectedCompaniesRelationships(selectedCompaniesIds: string[]) {
+          const addSelectedCompaniesRelationships = (selectedCompaniesIds: string[]) => {
             if (selectedCompaniesIds.length) {
               addRelationships(createCompaniesRelationshipsWithType(selectedCompaniesIds, newRole))
             }
