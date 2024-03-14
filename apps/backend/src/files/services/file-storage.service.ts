@@ -55,9 +55,9 @@ export class FileStorageService implements OnApplicationBootstrap {
   }
 
   async getDownloadUrl(fileId: string, ttl = 120) {
-    const newUrl = this.transformUrl(
-      await this.minioService.client.presignedGetObject(this.bucketName, fileId, ttl),
-    )
+    const fileUrl = await this.minioService.client.presignedGetObject(this.bucketName, fileId, ttl)
+    this.logger.debug(`Retrieved url ${fileUrl}`)
+    const newUrl = this.transformUrl(fileUrl)
     return { url: newUrl, ttl }
   }
 
