@@ -22,15 +22,15 @@ export class EducationModel implements Education {
     type: Types.ObjectId,
     ref: CompanyModel.name,
     isRequired: false,
-    index: true,
     sparse: true,
+    default: null,
   })
   company: CompanyDocument | null
 
-  @Prop({ type: SchemaTypes.Date, default: true })
+  @Prop({ type: SchemaTypes.Date, default: null })
   startDate: Date | string | null
 
-  @Prop({ type: SchemaTypes.Date, default: true })
+  @Prop({ type: SchemaTypes.Date, default: null })
   endDate: Date | string | null
 }
 
