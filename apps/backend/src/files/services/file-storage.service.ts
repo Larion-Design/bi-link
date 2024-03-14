@@ -58,6 +58,8 @@ export class FileStorageService implements OnApplicationBootstrap {
     const fileUrl = await this.minioService.client.presignedGetObject(this.bucketName, fileId, ttl)
     this.logger.debug(`Retrieved url ${fileUrl}`)
     const newUrl = this.transformUrl(fileUrl)
+
+    this.logger.debug(`Transformed url to ${newUrl}`)
     return { url: newUrl, ttl }
   }
 
