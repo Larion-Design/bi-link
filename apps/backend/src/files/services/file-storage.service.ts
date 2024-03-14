@@ -66,11 +66,7 @@ export class FileStorageService implements OnApplicationBootstrap {
   }
 
   private transformUrl(privateUrl: string) {
-    const internalUrl = new URL(privateUrl)
-    const publicUrl = new URL(this.minioPublicUrl)
-
-    internalUrl.hostname = publicUrl.hostname
-    return internalUrl.toString()
+    return privateUrl.replace('http://localhost:9000', this.minioPublicUrl)
   }
 
   async onApplicationBootstrap() {
