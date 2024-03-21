@@ -145,7 +145,7 @@ export const AppDrawer: React.FunctionComponent<AppDrawerProps> = ({ open, toggl
               <GavelOutlinedIcon />
             )}
           </ListItemIcon>
-          <ListItemText primary="Setari" />
+          <ListItemText primary="Procese in instanta" />
         </ListItemButton>
         <ListItemButton onClick={() => navigate(routes.settings)}>
           <ListItemIcon>
@@ -155,7 +155,7 @@ export const AppDrawer: React.FunctionComponent<AppDrawerProps> = ({ open, toggl
               <SettingsOutlinedIcon />
             )}
           </ListItemIcon>
-          <ListItemText primary={'Procese in instanta'} />
+          <ListItemText primary={'Setari'} />
         </ListItemButton>
         {hasPrivilegedAccess && (
           <>
