@@ -1,4 +1,4 @@
-import { Model, ProjectionFields, Query } from 'mongoose'
+import { Model, Query } from 'mongoose'
 import { Injectable } from '@nestjs/common'
 import { InjectModel } from '@nestjs/mongoose'
 import { PersonDocument, PersonModel } from '../models/personModel'

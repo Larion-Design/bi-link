@@ -1,3 +1,4 @@
+import Box from '@mui/material/Box'
 import { useRegenerateGraph } from 'api/system/regenerate-graph'
 import { useRegenerateIndex } from 'api/system/regenerate-index'
 import React from 'react'
@@ -19,33 +20,34 @@ export function SettingsPage() {
             Setari
           </Typography>
         </Stack>
-      </Stack>
-      <Stack alignContent="flex-start" spacing={4}>
-        <Button
-          size={'medium'}
-          variant={'contained'}
-          onClick={() => void regenerateGraph()}
-          disabled={regenerateGraphLoading}
-        >
-          <Tooltip title={'Regenereaza grafic relational'}>
-            <Typography variant={'caption'} data-testid={'pageTitle'} flex={2}>
-              Regenereaza grafic relational
-            </Typography>
-          </Tooltip>
-        </Button>
 
-        <Button
-          size={'medium'}
-          variant={'contained'}
-          onClick={() => void regenerateIndex()}
-          disabled={regenerateIndexLoading}
-        >
-          <Tooltip title={'Regenereaza index cautare'}>
-            <Typography variant={'caption'} data-testid={'pageTitle'} flex={2}>
-              Regenereaza index cautare
-            </Typography>
-          </Tooltip>
-        </Button>
+        <Box display={'flex'} flexDirection={'column'} gap={2} width={'30%'}>
+          <Button
+            size={'medium'}
+            variant={'contained'}
+            onClick={() => void regenerateGraph()}
+            disabled={regenerateGraphLoading}
+          >
+            <Tooltip title={'Regenereaza grafic relational'}>
+              <Typography variant={'caption'} data-testid={'pageTitle'} flex={2}>
+                Regenereaza grafic relational
+              </Typography>
+            </Tooltip>
+          </Button>
+
+          <Button
+            size={'medium'}
+            variant={'contained'}
+            onClick={() => void regenerateIndex()}
+            disabled={regenerateIndexLoading}
+          >
+            <Tooltip title={'Regenereaza index cautare'}>
+              <Typography variant={'caption'} data-testid={'pageTitle'} flex={2}>
+                Regenereaza index cautare
+              </Typography>
+            </Tooltip>
+          </Button>
+        </Box>
       </Stack>
     </DashboardPage>
   )

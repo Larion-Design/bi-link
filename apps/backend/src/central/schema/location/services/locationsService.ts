@@ -24,6 +24,10 @@ export class LocationsService implements OnApplicationBootstrap {
     )
   }
 
+  async getAllLocations(): Promise<LocationDocument[]> {
+    return this.locationModel.find().exec()
+  }
+
   async getLocations(locationsIds: string[]) {
     if (locationsIds.length) {
       return this.locationModel.find({ locationId: locationsIds }).exec()

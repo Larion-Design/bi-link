@@ -1,6 +1,8 @@
 import { CompaniesService } from '@modules/central/schema/company/services/companiesService'
+import { LocationsService } from '@modules/central/schema/location/services/locationsService'
 import { PersonsService } from '@modules/central/schema/person/services/personsService'
 import { CompanyGraphService } from '@modules/graph/services/companyGraphService'
+import { LocationGraphService } from '@modules/graph/services/locationGraphService'
 import { PersonGraphService } from '@modules/graph/services/personGraphService'
 import { FirebaseAuthGuard } from '@modules/iam'
 import { UseGuards } from '@nestjs/common'
@@ -11,15 +13,27 @@ export class RegenerateGraph {
   constructor(
     private readonly personsService: PersonsService,
     private readonly companiesService: CompaniesService,
+    private readonly locationsService: LocationsService,
     private readonly companyGraphService: CompanyGraphService,
     private readonly personGraphService: PersonGraphService,
+    private readonly locationGraphService: LocationGraphService,
   ) {}
 
   @Mutation(() => Boolean)
   @UseGuards(FirebaseAuthGuard)
   async regenerateGraph() {
-    await Promise.all([this.regeneratePersons(), this.regenerateCompanies()])
+    await this.regenerateLocations()
+    await this.regeneratePersons()
+    await this.regenerateCompanies()
     return true
+  }
+
+  private async regenerateLocations() {
+    const locations = await this.locationsService.getAllLocations()
+
+    if (locations.length) {
+      await this.locationGraphService.upsertLocationNodes(locations)
+    }
   }
 
   private async regeneratePersons() {

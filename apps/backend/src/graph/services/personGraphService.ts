@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common'
+import { Injectable } from '@nestjs/common'
 import { Location, Person } from 'defs'
 import { PersonalRelationshipGraph, PersonGraphNode } from '@modules/definitions'
 import { GraphService } from './graphService'
@@ -6,8 +6,6 @@ import { LocationGraphService } from './locationGraphService'
 
 @Injectable()
 export class PersonGraphService {
-  private readonly logger = new Logger(PersonGraphService.name)
-
   constructor(
     private readonly graphService: GraphService,
     private readonly locationGraphService: LocationGraphService,
@@ -27,41 +25,41 @@ export class PersonGraphService {
       'PERSON',
     )
 
-    await this.upsertPersonRelationships(personDocument)
-    await this.upsertPersonLocations(personDocument)
+    await Promise.all([
+      this.upsertPersonRelationships(personDocument),
+      this.upsertPersonLocations(personDocument),
+    ])
   }
 
-  private upsertPersonRelationships = async (personDocument: Person) => {
-    try {
-      const map = new Map<string, PersonalRelationshipGraph>()
+  async upsertRelationships() {}
 
-      personDocument.relationships.forEach(
-        ({
-          person: { _id },
+  async upsertPersonRelationships(personDocument: Person) {
+    const map = new Map<string, PersonalRelationshipGraph>()
+
+    personDocument.relationships.forEach(
+      ({
+        person: { _id },
+        type,
+        proximity,
+        metadata: {
+          confirmed,
+          trustworthiness: { level },
+        },
+      }) =>
+        map.set(String(_id), {
           type,
           proximity,
-          metadata: {
-            confirmed,
-            trustworthiness: { level },
-          },
-        }) =>
-          map.set(String(_id), {
-            type,
-            proximity,
-            _confirmed: confirmed,
-            _trustworthiness: level,
-          }),
-      )
+          _confirmed: confirmed,
+          _trustworthiness: level,
+        }),
+    )
 
-      if (map.size) {
-        await this.graphService.replaceRelationships(String(personDocument._id), map, 'RELATED')
-      }
-    } catch (e) {
-      this.logger.error(e)
+    if (map.size) {
+      await this.graphService.replaceRelationships(String(personDocument._id), map, 'RELATED')
     }
   }
 
-  private async upsertPersonLocations({ _id, birthPlace, homeAddress }: Person) {
+  async upsertPersonLocations({ _id, birthPlace, homeAddress }: Person) {
     const locations: Location[] = []
 
     if (homeAddress) {
