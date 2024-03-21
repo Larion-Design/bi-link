@@ -1,7 +1,6 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common'
 import { PassportStrategy } from '@nestjs/passport'
 import { ExtractJwt, Strategy } from 'passport-jwt'
-import { AuthService } from '@modules/iam'
 import { passportJwtSecret } from 'jwks-rsa'
 import { ConfigService } from '@nestjs/config'
 import { DecodedIdToken } from 'firebase-admin/lib/auth'

@@ -46,9 +46,7 @@
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.4.5",
     "eslint-plugin-spellcheck": "^0.0.20",
-    "eslint-plugin-storybook": "^0.6.15",
-    "@nx/eslint": "17.2.8",
-    "@nx/eslint-plugin": "17.2.8"
+    "eslint-plugin-storybook": "^0.6.15"
   },
   "pnpm": {
     "requiredScripts": [

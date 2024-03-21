@@ -26,14 +26,6 @@ import { EntityEventsModule } from './entity-events'
       ignoreEnvVars: true,
       cache: true,
     }),
-    MongooseModule.forRootAsync({
-      imports: [ConfigModule],
-      inject: [ConfigService],
-      useFactory: async (configService: ConfigService) =>
-        Promise.resolve({
-          uri: configService.getOrThrow<string>('MONGODB_URI'),
-        }),
-    }),
     SentryModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],

@@ -1,5 +1,4 @@
 import { Args, ArgsType, Field, ID, Int, Query, Resolver } from '@nestjs/graphql'
-import { UseGuards } from '@nestjs/common'
 import {
   Company,
   EntityInfo,
@@ -12,10 +11,8 @@ import {
   Proceeding,
   Property,
   Report,
-  User,
 } from 'defs'
 import { GraphService } from '@modules/graph/services/graphService'
-import { CurrentUser, FirebaseAuthGuard } from '@modules/iam'
 import { EntitiesGraph } from '../dto/entitiesGraph'
 
 @ArgsType()
@@ -32,11 +29,7 @@ export class GetEntitiesGraph {
   constructor(private readonly graphService: GraphService) {}
 
   @Query(() => EntitiesGraph)
-  @UseGuards(FirebaseAuthGuard)
-  async getEntitiesGraph(
-    @CurrentUser() { _id }: User,
-    @Args() { id, depth }: Params,
-  ): Promise<Graph | undefined> {
+  async getEntitiesGraph(@Args() { id, depth }: Params): Promise<Graph | undefined> {
     const relationships = await this.graphService.getEntitiesGraph(id, depth)
 
     if (relationships) {

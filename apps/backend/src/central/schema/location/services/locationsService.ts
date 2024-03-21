@@ -1,11 +1,11 @@
-import { Injectable, Logger } from '@nestjs/common'
+import { Injectable, Logger, OnApplicationBootstrap } from '@nestjs/common'
 import { InjectModel } from '@nestjs/mongoose'
 import { createHash } from 'crypto'
 import { ClientSession, Model } from 'mongoose'
 import { LocationDocument, LocationModel } from '../models/locationModel'
 
 @Injectable()
-export class LocationsService {
+export class LocationsService implements OnApplicationBootstrap {
   private readonly logger = new Logger(LocationsService.name)
 
   constructor(
@@ -13,54 +13,48 @@ export class LocationsService {
     private readonly locationModel: Model<LocationDocument>,
   ) {}
 
-  getLocations = async (locationsIds: string[]) => {
-    try {
-      if (locationsIds.length) {
-        return this.locationModel.find({ locationId: locationsIds }).exec()
-      }
-    } catch (e) {
-      this.logger.error(e)
+  async onApplicationBootstrap() {
+    const locationDocuments = await this.locationModel.find()
+
+    await Promise.all(
+      locationDocuments.map(async (locationDocument) => {
+        locationDocument.locationId = this.getLocationId(locationDocument)
+        await locationDocument.save()
+      }),
+    )
+  }
+
+  async getLocations(locationsIds: string[]) {
+    if (locationsIds.length) {
+      return this.locationModel.find({ locationId: locationsIds }).exec()
     }
     return []
   }
 
-  getLocation = async (locationId: string) => {
-    try {
-      return this.locationModel.findOne({ locationId }).exec()
-    } catch (e) {
-      this.logger.error(e)
-    }
+  async getLocation(locationId: string) {
+    return this.locationModel.findOne({ locationId }).exec()
   }
 
-  upsertLocation = async (
+  async upsertLocation(
     locationModel: LocationModel,
     session?: ClientSession,
-  ): Promise<LocationDocument | null> => {
-    try {
-      return this.locationModel.findOneAndUpdate(
-        { locationId: this.getLocationId(locationModel) },
-        locationModel,
-        { new: true, upsert: true, session },
-      )
-    } catch (e) {
-      this.logger.error(e)
-    }
-    return null
+  ): Promise<LocationDocument | null> {
+    return this.locationModel.findOneAndUpdate(
+      { locationId: this.getLocationId(locationModel) },
+      locationModel,
+      { new: true, upsert: true, session },
+    )
   }
 
-  upsertLocations = async (locations: LocationModel[]) => {
-    try {
-      const transactionSession = await this.locationModel.startSession()
-      const locationsModels = await Promise.all(
-        locations.map(async (location) => this.upsertLocation(location, transactionSession)),
-      )
-      await transactionSession.endSession()
+  async upsertLocations(locations: LocationModel[]) {
+    const transactionSession = await this.locationModel.startSession()
+    const locationsModels = await Promise.all(
+      locations.map(async (location) => this.upsertLocation(location, transactionSession)),
+    )
+    await transactionSession.endSession()
 
-      if (locationsModels) {
-        return locationsModels.filter((location) => !!location) as LocationDocument[]
-      }
-    } catch (error) {
-      this.logger.error(error)
+    if (locationsModels) {
+      return locationsModels.filter((location) => !!location) as LocationDocument[]
     }
   }
 
@@ -74,43 +68,25 @@ export class LocationsService {
     locality,
     otherInfo,
     zipCode,
-    coordinates: { lat, long },
+    coordinates: { lat = 0, long = 0 },
   }: LocationModel) => {
-    const hash = createHash('sha256')
+    const formattedLocationString = [
+      street,
+      number,
+      building,
+      door,
+      locality,
+      county,
+      country,
+      zipCode,
+      otherInfo,
+      lat,
+      long,
+    ]
+      .map((locationDetail) => String(locationDetail).toLowerCase().trim())
+      .join('')
 
-    if (
-      street.length ||
-      number.length ||
-      door.length ||
-      building.length ||
-      county.length ||
-      country.length ||
-      locality.length ||
-      zipCode.length ||
-      lat ||
-      long
-    ) {
-      const formattedLocationString = [
-        street,
-        number,
-        building,
-        door,
-        locality,
-        county,
-        country,
-        zipCode,
-        otherInfo,
-        lat,
-        long,
-      ]
-        .map((locationDetail) => String(locationDetail).toLowerCase().trim())
-        .join()
-
-      hash.update(formattedLocationString)
-    } else if (otherInfo.length) {
-      hash.update(otherInfo)
-    }
-    return hash.digest('hex')
+    return createHash('sha256').update(formattedLocationString).digest('hex')
   }
 
   isValidLocation = ({

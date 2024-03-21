@@ -71,10 +71,9 @@ export class PersonsService {
     return []
   }
 
-  async *getAllPersons(fields: ProjectionFields<PersonDocument> = { _id: 1 }) {
-    for await (const personModel of this.personModel.find({}, fields)) {
-      yield personModel
-    }
+  async getAllPersons(): Promise<PersonDocument[]> | never {
+    const query = this.personModel.find()
+    return await this.getLinkedEntities(query).exec()
   }
 
   private getLinkedEntities = (query: Query<any, PersonDocument>) =>

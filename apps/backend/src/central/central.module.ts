@@ -1,5 +1,6 @@
 import { CompanyRelationshipsService } from '@modules/central/schema/company/services/company-relationships.service'
 import { Global, Module, Provider } from '@nestjs/common'
+import { ConfigModule, ConfigService } from '@nestjs/config'
 import { MongooseModule } from '@nestjs/mongoose'
 import { AssociateModel, AssociateSchema } from './schema/company/models/associateModel'
 import {
@@ -188,6 +189,14 @@ const providers: Provider[] = [
 @Global()
 @Module({
   imports: [
+    MongooseModule.forRootAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: async (configService: ConfigService) =>
+        Promise.resolve({
+          uri: configService.getOrThrow<string>('MONGODB_URI'),
+        }),
+    }),
     MongooseModule.forFeature([
       { name: TrustModel.name, schema: TrustSchema },
       { name: MetadataModel.name, schema: MetadataSchema },
