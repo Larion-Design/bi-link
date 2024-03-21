@@ -62,10 +62,9 @@ export class CompaniesService {
       .exec()
   }
 
-  async *getAllCompanies(fields: ProjectionFields<CompanyDocument> = { _id: 1 }) {
-    for await (const companyModel of this.companyModel.find({}, fields)) {
-      yield companyModel
-    }
+  async getAllCompanies(): Promise<CompanyDocument[]> | never {
+    const query = this.companyModel.find()
+    return await this.getLinkedEntities(query).exec()
   }
 
   private getLinkedEntities = (query: Query<any, CompanyDocument>) =>

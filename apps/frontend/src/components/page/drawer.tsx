@@ -25,10 +25,11 @@ import { styled } from '@mui/material/styles'
 import Toolbar from '@mui/material/Toolbar'
 import GavelOutlinedIcon from '@mui/icons-material/GavelOutlined'
 import GavelIcon from '@mui/icons-material/Gavel'
+import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined'
+import SettingsIcon from '@mui/icons-material/Settings'
 import { useLocation, useNavigate } from 'react-router-dom'
-
 import { routes } from '../../router/routes'
-import { useUserRole } from '../../utils/auth'
+import { useUserRole } from 'utils/auth'
 
 const drawerWidth = 240
 
@@ -142,6 +143,16 @@ export const AppDrawer: React.FunctionComponent<AppDrawerProps> = ({ open, toggl
               <GavelIcon color={'primary'} />
             ) : (
               <GavelOutlinedIcon />
+            )}
+          </ListItemIcon>
+          <ListItemText primary="Setari" />
+        </ListItemButton>
+        <ListItemButton onClick={() => navigate(routes.settings)}>
+          <ListItemIcon>
+            {pathname === routes.settings ? (
+              <SettingsIcon color={'primary'} />
+            ) : (
+              <SettingsOutlinedIcon />
             )}
           </ListItemIcon>
           <ListItemText primary={'Procese in instanta'} />

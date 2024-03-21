@@ -3,6 +3,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import { TermeneIntegration } from '../pages/companies/termeneIntegration'
 import { CreateProceeding } from '../pages/proceedings/createProceeding'
 import { ProceedingsList } from '../pages/proceedings/proceedingsList'
+import { SettingsPage } from '../pages/settings'
 import { routes } from './routes'
 import { InvalidPage } from '../pages/invalidPage'
 import { Page } from '../components/page/Page'
@@ -33,15 +34,7 @@ const privateRoutes: Record<string, ReactNode> = {
   [routes.companiesIntegrationTermene]: <TermeneIntegration />,
   [routes.newCompany]: <CreateCompany />,
   [routes.companyDetails]: <EditCompany />,
-  /*  [routes.events]: <EventsList />,
-  [routes.newEvent]: <CreateEvent />,
-  [routes.eventDetails]: <EditEvent />,
-  [routes.users]: <UsersList />,
-  [routes.properties]: <PropertiesList />,
-  [routes.newProperty]: <CreateProperty />,
-  [routes.propertyDetails]: <EditProperty />,
-  [routes.proceedings]: <ProceedingsList />,
-  [routes.newProceeding]: <CreateProceeding />,*/
+  [routes.settings]: <SettingsPage />,
 }
 
 const publicRoutes: Record<string, ReactNode> = {
