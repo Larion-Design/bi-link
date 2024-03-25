@@ -2,6 +2,7 @@ import { CompaniesService } from '@modules/central/schema/company/services/compa
 import { LocationsService } from '@modules/central/schema/location/services/locationsService'
 import { PersonsService } from '@modules/central/schema/person/services/personsService'
 import { CompanyGraphService } from '@modules/graph/services/companyGraphService'
+import { GraphService } from '@modules/graph/services/graphService'
 import { LocationGraphService } from '@modules/graph/services/locationGraphService'
 import { PersonGraphService } from '@modules/graph/services/personGraphService'
 import { FirebaseAuthGuard } from '@modules/iam'
@@ -17,11 +18,13 @@ export class RegenerateGraph {
     private readonly companyGraphService: CompanyGraphService,
     private readonly personGraphService: PersonGraphService,
     private readonly locationGraphService: LocationGraphService,
+    private readonly graphService: GraphService,
   ) {}
 
   @Mutation(() => Boolean)
   @UseGuards(FirebaseAuthGuard)
   async regenerateGraph() {
+    await this.graphService.resetGraph()
     await this.regenerateLocations()
     await this.regeneratePersons()
     await this.regenerateCompanies()
@@ -40,11 +43,7 @@ export class RegenerateGraph {
     const persons = await this.personsService.getAllPersons()
 
     if (persons.length) {
-      await Promise.all(
-        persons.map(async (personDocument) =>
-          this.personGraphService.upsertPersonNode(personDocument._id, personDocument),
-        ),
-      )
+      await this.personGraphService.upsertPersonsNodes(persons)
     }
   }
 

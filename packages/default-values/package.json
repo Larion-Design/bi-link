@@ -4,9 +4,17 @@
   "private": true,
   "description": "BI Link default values",
   "source": "src/index.ts",
-  "main": "src/index.ts",
-  "module": "src/index.ts",
-  "types": "src/index.ts",
+  "main": "dist/index.cjs",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "package.json"
+  ],
+  "scripts": {
+    "build": "pnpm exec parcel build --no-cache",
+    "prepare": "pnpm build"
+  },
   "dependencies": {
     "defs": "workspace:*",
     "uuid": "^8.3.2",

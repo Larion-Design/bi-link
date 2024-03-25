@@ -5,10 +5,17 @@
   "type": "module",
   "description": "BI Link types and definitions",
   "source": "src/index.ts",
-  "main": "src/index.ts",
-  "module": "src/index.ts",
-  "types": "src/index.ts",
-  "scripts": {},
+  "main": "dist/index.cjs",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "package.json"
+  ],
+  "scripts": {
+    "build": "pnpm exec parcel build --no-cache",
+    "prepare": "pnpm build"
+  },
   "devDependencies": {
     "typescript": "^5"
   },

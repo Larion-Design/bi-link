@@ -2,7 +2,9 @@ import { BeforeApplicationShutdown, Injectable } from '@nestjs/common'
 import { Driver, ManagedTransaction, driver, auth, EagerResult, RecordShape } from 'neo4j-driver'
 import { ConfigService } from '@nestjs/config'
 
-type TransactionHandler<T> = (transaction: ManagedTransaction) => Promise<T | never>
+export type TransactionHandler<T = unknown> = (
+  transaction: ManagedTransaction,
+) => Promise<T | never>
 
 @Injectable()
 export class MemgraphService implements BeforeApplicationShutdown {

@@ -11,6 +11,28 @@ export class PersonGraphService {
     private readonly locationGraphService: LocationGraphService,
   ) {}
 
+  async upsertPersonsNodes(personsDocuments: Person[]) {
+    await this.graphService.upsertEntities<PersonGraphNode>(
+      personsDocuments.map((personDocument) => ({
+        _id: personDocument._id,
+        firstName: personDocument.firstName.value,
+        lastName: personDocument.lastName.value,
+        cnp: personDocument.cnp.value,
+        documents: personDocument.documents.map(({ documentNumber }) => documentNumber),
+        _confirmed: personDocument.metadata?.confirmed ?? true,
+        _trustworthiness: personDocument.metadata?.trustworthiness.level ?? 0,
+      })),
+      'PERSON',
+    )
+
+    await Promise.all([
+      ...personsDocuments.map(async (personDocument) => {
+        await this.upsertPersonRelationships(personDocument)
+        await this.upsertPersonLocations(personDocument)
+      }),
+    ])
+  }
+
   async upsertPersonNode(personId: string, personDocument: Person) {
     await this.graphService.upsertEntity<PersonGraphNode>(
       {
@@ -30,8 +52,6 @@ export class PersonGraphService {
       this.upsertPersonLocations(personDocument),
     ])
   }
-
-  async upsertRelationships() {}
 
   async upsertPersonRelationships(personDocument: Person) {
     const map = new Map<string, PersonalRelationshipGraph>()

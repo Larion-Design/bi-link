@@ -1,5 +1,5 @@
 import { MemgraphService } from '@modules/graph/services/memgraph.service'
-import { Injectable, Logger } from '@nestjs/common'
+import { Injectable } from '@nestjs/common'
 import {
   EntityMetadata,
   EntityType,
@@ -14,6 +14,10 @@ import { isPath, Path } from 'neo4j-driver'
 @Injectable()
 export class GraphService {
   constructor(private readonly memgraphService: MemgraphService) {}
+
+  async resetGraph() {
+    await this.memgraphService.mutate((transaction) => transaction.run('MATCH (n) DETACH DELETE n'))
+  }
 
   async entityExists(entityId: string) {
     const result = await this.memgraphService.query(
