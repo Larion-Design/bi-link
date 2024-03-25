@@ -9,7 +9,7 @@ import {
   EntityInfo,
   NodesRelationship,
 } from 'defs'
-import { isPath, Path } from 'neo4j-driver'
+import { isPath, Path, RecordShape } from 'neo4j-driver'
 
 @Injectable()
 export class GraphService {
@@ -88,18 +88,42 @@ export class GraphService {
     relationship: GraphRelationship,
   ) {
     await this.memgraphService.mutate(async (transaction) => {
+      /*
+      const existingRelationships = (await transaction.run(
+        `OPTIONAL MATCH (n {_id: $entityId})-[r:${relationship}]-(s) RETURN s`,
+        { entityId },
+      )) as unknown as RecordShape[]
+
+      if (existingRelationships?.length) {
+        const redundantConnections: string[] = []
+
+        existingRelationships.forEach((record) => {
+          const connectedEntityId = String(record._fields[0].properties._id)
+
+          if (!targetEntities.has(connectedEntityId)) {
+            redundantConnections.push(connectedEntityId)
+          }
+        })
+
+        if (redundantConnections.length) {
+          await transaction.run(
+            `OPTIONAL MATCH (n {_id: $entityId})-[r:${relationship}]->(s) WHERE NOT s._id IN $entitiesIds DELETE r`,
+            { entityId, entitiesIds: redundantConnections },
+          )
+        }
+      }
+*/
       await transaction.run(
         `OPTIONAL MATCH (n {_id: $entityId})-[r:${relationship}]->(s) WHERE NOT s._id IN $entitiesIds DELETE r`,
         { entityId, entitiesIds: Array.from(targetEntities.keys()) },
       )
 
       await Promise.all(
-        Array.from(targetEntities.entries()).map(
-          ([targetEntityId, data]) =>
-            void transaction.run(
-              `MATCH (n {_id: $entityId}), (s {_id: $targetEntityId}) MERGE (n)-[r:${relationship}]-(s) SET r = $data`,
-              { entityId, targetEntityId, data },
-            ),
+        Array.from(targetEntities.entries()).map(async ([targetEntityId, data]) =>
+          transaction.run(
+            `MERGE (n {_id: $entityId})-[r:${relationship}]-(s {_id: $targetEntityId}) SET r = $data`,
+            { entityId, targetEntityId, data },
+          ),
         ),
       )
     })
@@ -147,10 +171,10 @@ export class GraphService {
   async getEntitiesGraph(entityId: string, depth = 1, relationshipType?: GraphRelationship) {
     const relationshipLabel = relationshipType ? `:${relationshipType}` : ''
 
-    const result = await this.memgraphService.query(
+    const result = (await this.memgraphService.query(
       `OPTIONAL MATCH p=(n {_id: $entityId})-[${relationshipLabel}*1..${depth}]-() RETURN p`,
       { entityId },
-    )
+    )) as unknown as RecordShape[]
 
     const relationships: GraphRelationships = {
       companiesBranches: [],
@@ -173,11 +197,9 @@ export class GraphService {
       personsCompetitors: [],
     }
 
-    result.records.forEach((record) => {
-      const path = record.get('p') as Path | null
-
-      if (isPath(path)) {
-        path?.segments.forEach(({ start, end, relationship: { type, properties } }) => {
+    result.forEach((record) => {
+      record?._fields.forEach(({ segments }) => {
+        segments.forEach(({ start, end, relationship: { type, properties } }) => {
           const startEntityId = String(start.properties._id)
           const endEntityId = String(end.properties._id)
 
@@ -314,7 +336,7 @@ export class GraphService {
             }
           }
         })
-      }
+      })
     })
     return relationships
   }

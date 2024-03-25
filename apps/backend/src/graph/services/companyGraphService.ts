@@ -14,7 +14,7 @@ export class CompanyGraphService {
   async upsertCompanyNode(companyId: string, companyDocument: Company) {
     await this.graphService.upsertEntity<CompanyGraphNode>(
       {
-        _id: companyId,
+        _id: String(companyId),
         name: companyDocument.name.value,
         cui: companyDocument.cui.value,
         registrationNumber: companyDocument.registrationNumber.value,
@@ -57,9 +57,9 @@ export class CompanyGraphService {
         }
 
         if (person?._id) {
-          map.set(String(person?._id), data)
+          map.set(String(person._id), data)
         } else if (company?._id) {
-          map.set(String(company?._id), data)
+          map.set(String(company._id), data)
         }
       },
     )

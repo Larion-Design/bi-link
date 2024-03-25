@@ -14,7 +14,7 @@ export class PersonGraphService {
   async upsertPersonsNodes(personsDocuments: Person[]) {
     await this.graphService.upsertEntities<PersonGraphNode>(
       personsDocuments.map((personDocument) => ({
-        _id: personDocument._id,
+        _id: String(personDocument._id),
         firstName: personDocument.firstName.value,
         lastName: personDocument.lastName.value,
         cnp: personDocument.cnp.value,
@@ -36,7 +36,7 @@ export class PersonGraphService {
   async upsertPersonNode(personId: string, personDocument: Person) {
     await this.graphService.upsertEntity<PersonGraphNode>(
       {
-        _id: personId,
+        _id: String(personId),
         firstName: personDocument.firstName.value,
         lastName: personDocument.lastName.value,
         cnp: personDocument.cnp.value,
