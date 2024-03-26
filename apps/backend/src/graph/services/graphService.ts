@@ -9,7 +9,7 @@ import {
   EntityInfo,
   NodesRelationship,
 } from 'defs'
-import { isPath, Path, RecordShape } from 'neo4j-driver'
+import { RecordShape } from 'neo4j-driver'
 
 @Injectable()
 export class GraphService {

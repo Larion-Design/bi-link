@@ -23,13 +23,11 @@ export class CompanyGraphService {
       'COMPANY',
     )
 
-    await Promise.all([
-      ...companyDocuments.map(async (companyDocument) => {
-        await this.upsertCompanyAssociates(companyDocument)
-        await this.upsertCompanyLocations(companyDocument)
-        await this.upsertCompanyRelationships(companyDocument)
-      }),
-    ])
+    for await (const companyDocument of companyDocuments) {
+      await this.upsertCompanyAssociates(companyDocument)
+      await this.upsertCompanyLocations(companyDocument)
+      await this.upsertCompanyRelationships(companyDocument)
+    }
   }
 
   async upsertCompanyNode(companyId: string, companyDocument: Company) {
@@ -164,6 +162,7 @@ export class CompanyGraphService {
         this.graphService.replaceRelationships(companyId, disputingPersons, 'DISPUTING'),
       )
     }
+
     if (disputingCompanies.size) {
       relationshipsQueries.push(
         this.graphService.replaceRelationships(companyId, disputingCompanies, 'DISPUTING'),

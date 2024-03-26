@@ -2,7 +2,7 @@ import { z } from 'zod'
 
 export const trustworthinessSchema = z.object({
   source: z.string(),
-  level: z.number().gte(1).lte(5),
+  level: z.number().gte(0).lte(5),
 })
 
 export const metadataSchema = z.object({
