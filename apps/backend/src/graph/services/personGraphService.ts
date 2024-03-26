@@ -25,12 +25,10 @@ export class PersonGraphService {
       'PERSON',
     )
 
-    await Promise.all([
-      ...personsDocuments.map(async (personDocument) => {
-        await this.upsertPersonRelationships(personDocument)
-        await this.upsertPersonLocations(personDocument)
-      }),
-    ])
+    for await (const personDocument of personsDocuments) {
+      await this.upsertPersonRelationships(personDocument)
+      await this.upsertPersonLocations(personDocument)
+    }
   }
 
   async upsertPersonNode(personId: string, personDocument: Person) {
