@@ -24,9 +24,16 @@ export class RegenerateGraph {
   @Mutation(() => Boolean)
   @UseGuards(FirebaseAuthGuard)
   async regenerateGraph() {
+    console.debug('Resetting graph...')
     await this.graphService.resetGraph()
+
+    console.debug('Regenerating locations...')
     await this.regenerateLocations()
+
+    console.debug('Regenerating persons...')
     await this.regeneratePersons()
+
+    console.debug('Regenerating companies...')
     await this.regenerateCompanies()
     return true
   }

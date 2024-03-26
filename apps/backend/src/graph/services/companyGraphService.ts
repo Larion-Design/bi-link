@@ -24,8 +24,13 @@ export class CompanyGraphService {
     )
 
     for await (const companyDocument of companyDocuments) {
+      console.debug('Regenerating associates for', companyDocument.name.value)
       await this.upsertCompanyAssociates(companyDocument)
+
+      console.debug('Regenerating locations for', companyDocument.name.value)
       await this.upsertCompanyLocations(companyDocument)
+
+      console.debug('Regenerating relationships for', companyDocument.name.value)
       await this.upsertCompanyRelationships(companyDocument)
     }
   }
