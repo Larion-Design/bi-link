@@ -26,7 +26,10 @@ export class PersonGraphService {
     )
 
     for await (const personDocument of personsDocuments) {
+      console.debug('Regenerating relationships for person', personDocument._id)
       await this.upsertPersonRelationships(personDocument)
+
+      console.debug('Regenerating locations for person', personDocument._id)
       await this.upsertPersonLocations(personDocument)
     }
   }
