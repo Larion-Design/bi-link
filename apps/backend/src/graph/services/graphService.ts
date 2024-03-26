@@ -88,31 +88,6 @@ export class GraphService {
     relationship: GraphRelationship,
   ) {
     await this.memgraphService.mutate(async (transaction) => {
-      /*
-      const existingRelationships = (await transaction.run(
-        `OPTIONAL MATCH (n {_id: $entityId})-[r:${relationship}]-(s) RETURN s`,
-        { entityId },
-      )) as unknown as RecordShape[]
-
-      if (existingRelationships?.length) {
-        const redundantConnections: string[] = []
-
-        existingRelationships.forEach((record) => {
-          const connectedEntityId = String(record._fields[0].properties._id)
-
-          if (!targetEntities.has(connectedEntityId)) {
-            redundantConnections.push(connectedEntityId)
-          }
-        })
-
-        if (redundantConnections.length) {
-          await transaction.run(
-            `OPTIONAL MATCH (n {_id: $entityId})-[r:${relationship}]->(s) WHERE NOT s._id IN $entitiesIds DELETE r`,
-            { entityId, entitiesIds: redundantConnections },
-          )
-        }
-      }
-*/
       await transaction.run(
         `OPTIONAL MATCH (n {_id: $entityId})-[r:${relationship}]->(s) WHERE NOT s._id IN $entitiesIds DELETE r`,
         { entityId, entitiesIds: Array.from(targetEntities.keys()) },

@@ -51,11 +51,7 @@ export class RegenerateGraph {
     const companies = await this.companiesService.getAllCompanies()
 
     if (companies.length) {
-      await Promise.all(
-        companies.map(async (companyDocument) =>
-          this.companyGraphService.upsertCompanyNode(companyDocument._id, companyDocument),
-        ),
-      )
+      await this.companyGraphService.upsertCompaniesNodes(companies)
     }
   }
 }

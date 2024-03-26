@@ -1,3 +1,4 @@
+import { CompanyDocument } from '@modules/central/schema/company/models/companyModel'
 import { Injectable } from '@nestjs/common'
 import { Company, RelationshipMetadata } from 'defs'
 import { AssociateGraphRelationship, CompanyGraphNode } from '@modules/definitions'
@@ -10,6 +11,26 @@ export class CompanyGraphService {
     private readonly graphService: GraphService,
     private readonly locationGraphService: LocationGraphService,
   ) {}
+
+  async upsertCompaniesNodes(companyDocuments: CompanyDocument[]) {
+    await this.graphService.upsertEntities<CompanyGraphNode>(
+      companyDocuments.map((companyDocument) => ({
+        _id: String(companyDocument._id),
+        name: companyDocument.name.value,
+        cui: companyDocument.cui.value,
+        registrationNumber: companyDocument.registrationNumber.value,
+      })),
+      'COMPANY',
+    )
+
+    await Promise.all([
+      ...companyDocuments.map(async (companyDocument) => {
+        await this.upsertCompanyAssociates(companyDocument)
+        await this.upsertCompanyLocations(companyDocument)
+        await this.upsertCompanyRelationships(companyDocument)
+      }),
+    ])
+  }
 
   async upsertCompanyNode(companyId: string, companyDocument: Company) {
     await this.graphService.upsertEntity<CompanyGraphNode>(
